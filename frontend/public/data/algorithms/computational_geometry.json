@@ -1,0 +1,2176 @@
+{
+  "id": "computational_geometry",
+  "category": {
+    "id": "computational_geometry",
+    "title": "Computational Geometry",
+    "icon": "Sprout",
+    "description": "Geometric primitives, line-segment intersections, convex hulls, polygon operations, and geometric sweeping."
+  },
+  "totalAlgorithms": 44,
+  "algorithms": [
+    {
+      "id": "orientation-cross-product",
+      "title": "Orientation / Cross Product",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find whether three points make a left turn, right turn, or are on the same line.",
+      "explanation": [
+        "Take three points A, B and C.",
+        "Imagine going from A to B and then from B to C.",
+        "If C is on the left side, the result is positive.",
+        "If C is on the right side, the result is negative.",
+        "If all three points are on the same line, the result is zero.",
+        "This is one of the most important building blocks of Computational Geometry."
+      ],
+      "exampleTrace": {
+        "input": "A=(0,0), B=(2,0), C=(1,1)",
+        "output": "Counter-clockwise / Left Turn",
+        "traceSteps": [
+          "Vector AB = (2,0)",
+          "Vector AC = (1,1)",
+          "Cross Product = 2*1 - 0*1 = 2",
+          "2 is positive, so C is on the left side of AB."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines the direction of three points.",
+        "whenToUse": "Use it whenever you need left/right turn or point-side information.",
+        "whereUsed": "Convex Hull, segment intersection, polygon algorithms and many geometry problems.",
+        "whyOptimal": "Only a few arithmetic operations are required."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def orientation(a, b, c):\n    cross = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])\n\n    if cross > 0:\n        return 1      # counter-clockwise\n    if cross < 0:\n        return -1     # clockwise\n    return 0          # collinear\n\nprint(orientation((0, 0), (2, 0), (1, 1)))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint orientation(pair<long long,long long> a,\n                pair<long long,long long> b,\n                pair<long long,long long> c) {\n    long long cross = (b.first-a.first)*(c.second-a.second)\n                    - (b.second-a.second)*(c.first-a.first);\n\n    if (cross > 0) return 1;\n    if (cross < 0) return -1;\n    return 0;\n}\n\nint main() {\n    cout << orientation({0,0}, {2,0}, {1,1});\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Main {\n    static int orientation(long[] a, long[] b, long[] c) {\n        long cross = (b[0]-a[0])*(c[1]-a[1])\n                   - (b[1]-a[1])*(c[0]-a[0]);\n\n        if (cross > 0) return 1;\n        if (cross < 0) return -1;\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(orientation(\n            new long[]{0,0}, new long[]{2,0}, new long[]{1,1}\n        ));\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Check If It Is a Straight Line",
+          "url": "https://leetcode.com/problems/check-if-it-is-a-straight-line/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "distance-between-points",
+      "title": "Distance Between Two Points",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the straight-line distance between two points.",
+      "explanation": [
+        "For points (x1,y1) and (x2,y2), calculate dx and dy.",
+        "Use the Pythagorean theorem.",
+        "Distance = sqrt(dx² + dy²).",
+        "Usually compare squared distances when the actual distance is not required."
+      ],
+      "exampleTrace": {
+        "input": "A=(0,0), B=(3,4)",
+        "output": "5",
+        "traceSteps": [
+          "dx = 3 - 0 = 3",
+          "dy = 4 - 0 = 4",
+          "distance² = 3² + 4² = 25",
+          "distance = 5"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the distance between two points.",
+        "whenToUse": "Use it for closest/farthest points, circles and geometric comparisons.",
+        "whereUsed": "Closest Pair, circle problems, nearest point problems.",
+        "whyOptimal": "Distance between two points needs only constant-time arithmetic."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef distance(a, b):\n    dx = a[0] - b[0]\n    dy = a[1] - b[1]\n    return math.sqrt(dx * dx + dy * dy)\n\nprint(distance((0, 0), (3, 4)))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\ndouble distance(pair<double,double> a, pair<double,double> b) {\n    double dx = a.first - b.first;\n    double dy = a.second - b.second;\n    return sqrt(dx*dx + dy*dy);\n}\n\nint main() {\n    cout << distance({0,0}, {3,4});\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Main {\n    static double distance(double[] a, double[] b) {\n        double dx = a[0] - b[0];\n        double dy = a[1] - b[1];\n        return Math.sqrt(dx * dx + dy * dy);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(distance(\n            new double[]{0,0}, new double[]{3,4}\n        ));\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "K Closest Points to Origin",
+          "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "squared-distance",
+      "title": "Squared Distance",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Compare distances without calculating square roots.",
+      "explanation": [
+        "Sometimes we only need to know which point is closer.",
+        "Square root is unnecessary for comparison.",
+        "Use dx² + dy² instead.",
+        "The point with smaller squared distance is also the point with smaller actual distance."
+      ],
+      "exampleTrace": {
+        "input": "A=(3,4), B=(1,1), Origin=(0,0)",
+        "output": "B is closer",
+        "traceSteps": [
+          "Distance² of A = 3² + 4² = 25",
+          "Distance² of B = 1² + 1² = 2",
+          "2 < 25, so B is closer."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Efficiently compares geometric distances.",
+        "whenToUse": "Whenever only comparison is required.",
+        "whereUsed": "Closest point, nearest neighbor and K closest problems.",
+        "whyOptimal": "Avoiding sqrt makes the calculation simpler and faster."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def squared_distance(a, b):\n    dx = a[0] - b[0]\n    dy = a[1] - b[1]\n    return dx * dx + dy * dy\n\nprint(squared_distance((3, 4), (0, 0)))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nlong long squaredDistance(pair<long long,long long> a,\n                          pair<long long,long long> b) {\n    long long dx = a.first - b.first;\n    long long dy = a.second - b.second;\n    return dx*dx + dy*dy;\n}\n\nint main() {\n    cout << squaredDistance({3,4}, {0,0});\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Main {\n    static long squaredDistance(long[] a, long[] b) {\n        long dx = a[0] - b[0];\n        long dy = a[1] - b[1];\n        return dx * dx + dy * dy;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "K Closest Points to Origin",
+          "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "collinearity",
+      "title": "Collinearity Check",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether multiple points lie on the same straight line.",
+      "explanation": [
+        "Three points are collinear when their cross product is zero.",
+        "For many points, compare every point with the first two points.",
+        "This avoids floating-point slope calculations.",
+        "Cross product is safer than comparing decimal slopes."
+      ],
+      "exampleTrace": {
+        "input": "[(0,0),(1,1),(2,2)]",
+        "output": "Collinear",
+        "traceSteps": [
+          "Take first three points.",
+          "Cross product is 0.",
+          "Therefore all three lie on the same line."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether points lie on one straight line.",
+        "whenToUse": "Use it when slope or straight-line alignment is involved.",
+        "whereUsed": "Geometry validation and line problems.",
+        "whyOptimal": "Uses integer arithmetic and avoids division."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def collinear(a, b, c):\n    return ((b[0]-a[0]) * (c[1]-a[1])\n            - (b[1]-a[1]) * (c[0]-a[0])) == 0\n\nprint(collinear((0,0), (1,1), (2,2)))"
+        },
+        {
+          "language": "cpp",
+          "code": "bool collinear(pair<long long,long long> a,\n                pair<long long,long long> b,\n                pair<long long,long long> c) {\n    return (b.first-a.first)*(c.second-a.second)\n         == (b.second-a.second)*(c.first-a.first);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean collinear(long[] a, long[] b, long[] c) {\n    return (b[0]-a[0])*(c[1]-a[1])\n         == (b[1]-a[1])*(c[0]-a[0]);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Check If It Is a Straight Line",
+          "url": "https://leetcode.com/problems/check-if-it-is-a-straight-line/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "point-on-segment",
+      "title": "Point on Line Segment",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether a point lies exactly on a line segment.",
+      "explanation": [
+        "First check whether the three points are collinear.",
+        "Then check whether the point is inside the rectangle formed by the segment endpoints.",
+        "Both conditions must be true.",
+        "Being on the infinite line is not enough; the point must also be between the endpoints."
+      ],
+      "exampleTrace": {
+        "input": "A=(0,0), B=(4,0), P=(2,0)",
+        "output": "True",
+        "traceSteps": [
+          "A, P and B are collinear.",
+          "P.x = 2 lies between 0 and 4.",
+          "P.y = 0 lies between 0 and 0.",
+          "Therefore P is on segment AB."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether a point belongs to a finite segment.",
+        "whenToUse": "Use it in segment intersection and polygon boundary checks.",
+        "whereUsed": "Line and polygon geometry.",
+        "whyOptimal": "Requires only constant-time calculations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def on_segment(a, b, p):\n    cross = ((b[0]-a[0])*(p[1]-a[1])\n             - (b[1]-a[1])*(p[0]-a[0]))\n\n    if cross != 0:\n        return False\n\n    return (min(a[0], b[0]) <= p[0] <= max(a[0], b[0]) and\n            min(a[1], b[1]) <= p[1] <= max(a[1], b[1]))"
+        },
+        {
+          "language": "cpp",
+          "code": "bool onSegment(pair<long long,long long> a,\n                 pair<long long,long long> b,\n                 pair<long long,long long> p) {\n    long long cross = (b.first-a.first)*(p.second-a.second)\n                    - (b.second-a.second)*(p.first-a.first);\n    if (cross != 0) return false;\n\n    return min(a.first,b.first) <= p.first &&\n           p.first <= max(a.first,b.first) &&\n           min(a.second,b.second) <= p.second &&\n           p.second <= max(a.second,b.second);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean onSegment(long[] a, long[] b, long[] p) {\n    long cross = (b[0]-a[0])*(p[1]-a[1])\n               - (b[1]-a[1])*(p[0]-a[0]);\n    if (cross != 0) return false;\n\n    return Math.min(a[0],b[0]) <= p[0] && p[0] <= Math.max(a[0],b[0])\n        && Math.min(a[1],b[1]) <= p[1] && p[1] <= Math.max(a[1],b[1]);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "point-in-triangle",
+      "title": "Point in Triangle",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether a point lies inside or on the boundary of a triangle.",
+      "explanation": [
+        "Take triangle ABC and point P.",
+        "Calculate orientation of ABP, BCP and CAP.",
+        "If all orientations have the same sign, P is inside the triangle.",
+        "Boundary points can also be accepted depending on the problem."
+      ],
+      "exampleTrace": {
+        "input": "Triangle=(0,0),(4,0),(0,4), P=(1,1)",
+        "output": "Inside",
+        "traceSteps": [
+          "P is on the same side of AB as C.",
+          "P is on the same side of BC as A.",
+          "P is on the same side of CA as B.",
+          "Therefore P is inside the triangle."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines whether a point belongs to a triangle.",
+        "whenToUse": "Use it for triangle containment problems.",
+        "whereUsed": "Collision detection and geometry queries.",
+        "whyOptimal": "Only three orientation checks are needed."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cross(a, b, c):\n    return ((b[0]-a[0])*(c[1]-a[1])\n            - (b[1]-a[1])*(c[0]-a[0]))\n\ndef point_in_triangle(a, b, c, p):\n    c1 = cross(a, b, p)\n    c2 = cross(b, c, p)\n    c3 = cross(c, a, p)\n\n    return (c1 >= 0 and c2 >= 0 and c3 >= 0) or \\\n           (c1 <= 0 and c2 <= 0 and c3 <= 0)"
+        },
+        {
+          "language": "cpp",
+          "code": "long long cross(pair<long long,long long> a,\n                pair<long long,long long> b,\n                pair<long long,long long> c) {\n    return (b.first-a.first)*(c.second-a.second)\n         - (b.second-a.second)*(c.first-a.first);\n}\n\nbool pointInTriangle(auto a, auto b, auto c, auto p) {\n    long long x = cross(a,b,p);\n    long long y = cross(b,c,p);\n    long long z = cross(c,a,p);\n    return (x >= 0 && y >= 0 && z >= 0) ||\n           (x <= 0 && y <= 0 && z <= 0);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long cross(long[] a, long[] b, long[] c) {\n    return (b[0]-a[0])*(c[1]-a[1])\n         - (b[1]-a[1])*(c[0]-a[0]);\n}\n\nstatic boolean pointInTriangle(long[] a, long[] b, long[] c, long[] p) {\n    long x = cross(a,b,p), y = cross(b,c,p), z = cross(c,a,p);\n    return (x >= 0 && y >= 0 && z >= 0) ||\n           (x <= 0 && y <= 0 && z <= 0);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "polygon-area-shoelace",
+      "title": "Polygon Area - Shoelace Formula",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the area of a polygon using its vertices.",
+      "explanation": [
+        "Write all polygon points in clockwise or counter-clockwise order.",
+        "Multiply x of one point with y of the next point.",
+        "Subtract the reverse products.",
+        "Add everything and divide the absolute value by 2.",
+        "This is called the Shoelace Formula because the multiplication pattern looks like shoelaces."
+      ],
+      "exampleTrace": {
+        "input": "Square: (0,0),(2,0),(2,2),(0,2)",
+        "output": "Area = 4",
+        "traceSteps": [
+          "Forward sum = 0*0 + 2*2 + 2*2 + 0*0 = 8",
+          "Reverse sum = 0*2 + 0*2 + 2*0 + 2*0 = 0",
+          "Area = |8 - 0| / 2 = 4"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates polygon area.",
+        "whenToUse": "Use when polygon vertices are given in order.",
+        "whereUsed": "Polygon geometry and computational geometry problems.",
+        "whyOptimal": "Every vertex is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def polygon_area(points):\n    total = 0\n    n = len(points)\n\n    for i in range(n):\n        x1, y1 = points[i]\n        x2, y2 = points[(i + 1) % n]\n        total += x1 * y2 - y1 * x2\n\n    return abs(total) / 2\n\nprint(polygon_area([(0,0),(2,0),(2,2),(0,2)]))"
+        },
+        {
+          "language": "cpp",
+          "code": "double polygonArea(vector<pair<long long,long long>> p) {\n    long long total = 0;\n    int n = p.size();\n\n    for (int i = 0; i < n; i++) {\n        auto [x1,y1] = p[i];\n        auto [x2,y2] = p[(i+1)%n];\n        total += x1*y2 - y1*x2;\n    }\n\n    return abs(total) / 2.0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double polygonArea(long[][] p) {\n    long total = 0;\n    int n = p.length;\n\n    for (int i = 0; i < n; i++) {\n        long[] a = p[i];\n        long[] b = p[(i+1)%n];\n        total += a[0]*b[1] - a[1]*b[0];\n    }\n\n    return Math.abs(total) / 2.0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Erect the Fence",
+          "url": "https://leetcode.com/problems/erect-the-fence/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "polygon-perimeter",
+      "title": "Polygon Perimeter",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the total boundary length of a polygon.",
+      "explanation": [
+        "A polygon consists of multiple line segments.",
+        "Calculate the distance between every pair of consecutive vertices.",
+        "Also connect the last point back to the first point.",
+        "Add all these distances."
+      ],
+      "exampleTrace": {
+        "input": "Square with side 2",
+        "output": "Perimeter = 8",
+        "traceSteps": [
+          "There are four sides.",
+          "Each side has length 2.",
+          "2 + 2 + 2 + 2 = 8."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates polygon boundary length.",
+        "whenToUse": "Use when polygon vertices are given.",
+        "whereUsed": "Geometry and perimeter optimization problems.",
+        "whyOptimal": "Each edge is processed exactly once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef perimeter(points):\n    ans = 0\n    n = len(points)\n\n    for i in range(n):\n        a = points[i]\n        b = points[(i + 1) % n]\n        ans += math.hypot(a[0]-b[0], a[1]-b[1])\n\n    return ans"
+        },
+        {
+          "language": "cpp",
+          "code": "double perimeter(vector<pair<double,double>> p) {\n    double ans = 0;\n    int n = p.size();\n\n    for (int i=0; i<n; i++) {\n        double dx = p[i].first - p[(i+1)%n].first;\n        double dy = p[i].second - p[(i+1)%n].second;\n        ans += hypot(dx,dy);\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double perimeter(double[][] p) {\n    double ans = 0;\n    int n = p.length;\n\n    for (int i=0; i<n; i++) {\n        double dx = p[i][0] - p[(i+1)%n][0];\n        double dy = p[i][1] - p[(i+1)%n][1];\n        ans += Math.hypot(dx, dy);\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "point-in-polygon-ray-casting",
+      "title": "Point in Polygon - Ray Casting",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether a point is inside an arbitrary polygon.",
+      "explanation": [
+        "Imagine shooting a horizontal ray from the point towards the right.",
+        "Count how many polygon edges the ray crosses.",
+        "Odd number of crossings means the point is inside.",
+        "Even number means the point is outside.",
+        "This is called the Ray Casting or Even-Odd rule."
+      ],
+      "exampleTrace": {
+        "input": "Square [(0,0),(4,0),(4,4),(0,4)], P=(2,2)",
+        "output": "Inside",
+        "traceSteps": [
+          "Shoot a ray from (2,2) to the right.",
+          "The ray crosses the right boundary once.",
+          "1 is odd.",
+          "Therefore P is inside."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether a point is inside a polygon.",
+        "whenToUse": "Use for arbitrary, possibly concave polygons.",
+        "whereUsed": "Maps, collision detection and geographical systems.",
+        "whyOptimal": "Only one pass through polygon edges is needed."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def point_in_polygon(point, polygon):\n    x, y = point\n    inside = False\n    n = len(polygon)\n\n    for i in range(n):\n        x1, y1 = polygon[i]\n        x2, y2 = polygon[(i + 1) % n]\n\n        if (y1 > y) != (y2 > y):\n            x_intersection = x1 + (y-y1) * (x2-x1) / (y2-y1)\n            if x < x_intersection:\n                inside = not inside\n\n    return inside"
+        },
+        {
+          "language": "cpp",
+          "code": "bool pointInPolygon(pair<double,double> p,\n                     vector<pair<double,double>> poly) {\n    bool inside = false;\n    int n = poly.size();\n\n    for (int i=0; i<n; i++) {\n        auto [x1,y1] = poly[i];\n        auto [x2,y2] = poly[(i+1)%n];\n\n        if ((y1 > p.second) != (y2 > p.second)) {\n            double x = x1 + (p.second-y1)*(x2-x1)/(y2-y1);\n            if (p.first < x) inside = !inside;\n        }\n    }\n    return inside;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean pointInPolygon(double[] p, double[][] poly) {\n    boolean inside = false;\n    int n = poly.length;\n\n    for (int i=0; i<n; i++) {\n        double x1=poly[i][0], y1=poly[i][1];\n        double x2=poly[(i+1)%n][0], y2=poly[(i+1)%n][1];\n\n        if ((y1 > p[1]) != (y2 > p[1])) {\n            double x = x1 + (p[1]-y1)*(x2-x1)/(y2-y1);\n            if (p[0] < x) inside = !inside;\n        }\n    }\n    return inside;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "segment-intersection",
+      "title": "Line Segment Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine whether two line segments intersect.",
+      "explanation": [
+        "Take segments AB and CD.",
+        "Use orientation to find which side each endpoint is on.",
+        "Normally, AB and CD intersect when the endpoints lie on opposite sides.",
+        "Special handling is required when points are collinear.",
+        "This is a very common geometry building block."
+      ],
+      "exampleTrace": {
+        "input": "AB=(0,0)->(4,4), CD=(0,4)->(4,0)",
+        "output": "Intersect",
+        "traceSteps": [
+          "AB and C/D are on opposite sides.",
+          "CD and A/B are also on opposite sides.",
+          "Therefore the two segments intersect."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether two finite line segments meet.",
+        "whenToUse": "Use for collision and crossing problems.",
+        "whereUsed": "Maps, graphics, collision detection and sweep line algorithms.",
+        "whyOptimal": "Constant-time orientation tests solve two segments."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cross(a,b,c):\n    return (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])\n\ndef on_segment(a,b,p):\n    return (min(a[0],b[0]) <= p[0] <= max(a[0],b[0]) and\n            min(a[1],b[1]) <= p[1] <= max(a[1],b[1]) and\n            cross(a,b,p) == 0)\n\ndef intersect(a,b,c,d):\n    c1,c2 = cross(a,b,c), cross(a,b,d)\n    c3,c4 = cross(c,d,a), cross(c,d,b)\n\n    if c1*c2 < 0 and c3*c4 < 0:\n        return True\n\n    return ((c1 == 0 and on_segment(a,b,c)) or\n            (c2 == 0 and on_segment(a,b,d)) or\n            (c3 == 0 and on_segment(c,d,a)) or\n            (c4 == 0 and on_segment(c,d,b)))"
+        },
+        {
+          "language": "cpp",
+          "code": "long long cross(auto a, auto b, auto c) {\n    return (b.first-a.first)*(c.second-a.second)\n         - (b.second-a.second)*(c.first-a.first);\n}\n\nbool onSegment(auto a, auto b, auto p) {\n    return cross(a,b,p)==0 &&\n           min(a.first,b.first)<=p.first && p.first<=max(a.first,b.first) &&\n           min(a.second,b.second)<=p.second && p.second<=max(a.second,b.second);\n}\n\nbool intersect(auto a, auto b, auto c, auto d) {\n    long long c1=cross(a,b,c), c2=cross(a,b,d);\n    long long c3=cross(c,d,a), c4=cross(c,d,b);\n\n    if (c1*c2 < 0 && c3*c4 < 0) return true;\n\n    return (c1==0 && onSegment(a,b,c)) ||\n           (c2==0 && onSegment(a,b,d)) ||\n           (c3==0 && onSegment(c,d,a)) ||\n           (c4==0 && onSegment(c,d,b));\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long cross(long[] a,long[] b,long[] c) {\n    return (b[0]-a[0])*(c[1]-a[1]) -\n           (b[1]-a[1])*(c[0]-a[0]);\n}\n\nstatic boolean onSegment(long[] a,long[] b,long[] p) {\n    return cross(a,b,p)==0 &&\n           Math.min(a[0],b[0])<=p[0] && p[0]<=Math.max(a[0],b[0]) &&\n           Math.min(a[1],b[1])<=p[1] && p[1]<=Math.max(a[1],b[1]);\n}\n\nstatic boolean intersect(long[] a,long[] b,long[] c,long[] d) {\n    long c1=cross(a,b,c), c2=cross(a,b,d);\n    long c3=cross(c,d,a), c4=cross(c,d,b);\n\n    if(c1*c2<0 && c3*c4<0) return true;\n\n    return (c1==0 && onSegment(a,b,c)) ||\n           (c2==0 && onSegment(a,b,d)) ||\n           (c3==0 && onSegment(c,d,a)) ||\n           (c4==0 && onSegment(c,d,b));\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "line-intersection",
+      "title": "Line-Line Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the intersection point of two non-parallel lines.",
+      "explanation": [
+        "Represent each line using two points.",
+        "Convert the two lines into equations.",
+        "Solve the two equations together.",
+        "If the determinant is zero, the lines are parallel or coincident.",
+        "Unlike segment intersection, this considers infinite lines."
+      ],
+      "exampleTrace": {
+        "input": "Line 1: y=x, Line 2: y=-x+2",
+        "output": "(1,1)",
+        "traceSteps": [
+          "Set x = -x + 2.",
+          "2x = 2.",
+          "x = 1.",
+          "y = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds where two infinite lines meet.",
+        "whenToUse": "Use when actual intersection coordinates are required.",
+        "whereUsed": "Geometry, ray tracing and line arrangement problems.",
+        "whyOptimal": "Two linear equations can be solved in constant time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def line_intersection(a,b,c,d):\n    x1,y1=a; x2,y2=b\n    x3,y3=c; x4,y4=d\n\n    den=(x1-x2)*(y3-y4)-(y1-y2)*(x3-x4)\n    if den == 0:\n        return None\n\n    px=((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/den\n    py=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/den\n    return px,py"
+        },
+        {
+          "language": "cpp",
+          "code": "pair<double,double> lineIntersection(\n    pair<double,double> a, pair<double,double> b,\n    pair<double,double> c, pair<double,double> d) {\n\n    double den=(a.first-b.first)*(c.second-d.second)\n             -(a.second-b.second)*(c.first-d.first);\n\n    if (fabs(den)<1e-12) return {NAN,NAN};\n\n    double A=a.first*a.second;\n    double det1=a.first*b.second-a.second*b.first;\n    double det2=c.first*d.second-c.second*d.first;\n\n    double x=(det1*(c.first-d.first)-(a.first-b.first)*det2)/den;\n    double y=(det1*(c.second-d.second)-(a.second-b.second)*det2)/den;\n    return {x,y};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double[] lineIntersection(double[] a,double[] b,double[] c,double[] d) {\n    double den=(a[0]-b[0])*(c[1]-d[1])\n             -(a[1]-b[1])*(c[0]-d[0]);\n\n    if(Math.abs(den)<1e-12) return null;\n\n    double det1=a[0]*b[1]-a[1]*b[0];\n    double det2=c[0]*d[1]-c[1]*d[0];\n\n    double x=(det1*(c[0]-d[0])-(a[0]-b[0])*det2)/den;\n    double y=(det1*(c[1]-d[1])-(a[1]-b[1])*det2)/den;\n    return new double[]{x,y};\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "convex-hull-graham-scan",
+      "title": "Convex Hull - Graham Scan",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Find the smallest convex polygon containing all given points.",
+      "explanation": [
+        "Imagine putting a rubber band around all points.",
+        "The points touched by the rubber band form the convex hull.",
+        "Choose the lowest point first.",
+        "Sort the other points by angle.",
+        "Use a stack and orientation to remove points that create a right turn.",
+        "The remaining points form the convex hull."
+      ],
+      "exampleTrace": {
+        "input": "[(0,0),(2,0),(2,2),(0,2),(1,1)]",
+        "output": "[(0,0),(2,0),(2,2),(0,2)]",
+        "traceSteps": [
+          "The four corner points form the outside boundary.",
+          "(1,1) lies inside the square.",
+          "The inside point is removed.",
+          "Four corner points remain."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the outer boundary of a set of points.",
+        "whenToUse": "Use when you need the smallest convex polygon containing points.",
+        "whereUsed": "Geographic mapping, collision detection and many geometry problems.",
+        "whyOptimal": "Sorting costs O(n log n), followed by a linear scan."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cross(o, a, b):\n    return (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0])\n\ndef convex_hull(points):\n    points = sorted(set(points))\n    if len(points) <= 1:\n        return points\n\n    lower = []\n    for p in points:\n        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:\n            lower.pop()\n        lower.append(p)\n\n    upper = []\n    for p in reversed(points):\n        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:\n            upper.pop()\n        upper.append(p)\n\n    return lower[:-1] + upper[:-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "using Point = pair<long long,long long>;\n\nlong long cross(Point o, Point a, Point b) {\n    return (a.first-o.first)*(b.second-o.second)\n         - (a.second-o.second)*(b.first-o.first);\n}\n\nvector<Point> convexHull(vector<Point> p) {\n    sort(p.begin(),p.end());\n    p.erase(unique(p.begin(),p.end()),p.end());\n    if(p.size()<=1) return p;\n\n    vector<Point> h;\n    for(auto x:p) {\n        while(h.size()>=2 && cross(h[h.size()-2],h.back(),x)<=0)\n            h.pop_back();\n        h.push_back(x);\n    }\n\n    int lower=h.size();\n    for(int i=(int)p.size()-2;i>=0;i--) {\n        auto x=p[i];\n        while((int)h.size()>lower && cross(h[h.size()-2],h.back(),x)<=0)\n            h.pop_back();\n        h.push_back(x);\n    }\n\n    h.pop_back();\n    return h;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long cross(long[] o,long[] a,long[] b) {\n    return (a[0]-o[0])*(b[1]-o[1])\n         - (a[1]-o[1])*(b[0]-o[0]);\n}\n\nstatic List<long[]> convexHull(List<long[]> points) {\n    points.sort((a,b)->a[0]!=b[0]\n        ? Long.compare(a[0],b[0]) : Long.compare(a[1],b[1]));\n\n    List<long[]> h=new ArrayList<>();\n    for(long[] p:points) {\n        while(h.size()>=2 && cross(h.get(h.size()-2),h.get(h.size()-1),p)<=0)\n            h.remove(h.size()-1);\n        h.add(p);\n    }\n\n    int lower=h.size();\n    for(int i=points.size()-2;i>=0;i--) {\n        long[] p=points.get(i);\n        while(h.size()>lower && cross(h.get(h.size()-2),h.get(h.size()-1),p)<=0)\n            h.remove(h.size()-1);\n        h.add(p);\n    }\n\n    h.remove(h.size()-1);\n    return h;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Erect the Fence",
+          "url": "https://leetcode.com/problems/erect-the-fence/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "convex-hull-monotonic-chain",
+      "title": "Convex Hull - Monotonic Chain",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Build a convex hull by constructing lower and upper boundaries.",
+      "explanation": [
+        "Sort all points by x and then y.",
+        "Build the lower hull from left to right.",
+        "Build the upper hull from right to left.",
+        "Use cross product to remove points that make the wrong turn.",
+        "Join the two hulls."
+      ],
+      "exampleTrace": {
+        "input": "[(0,0),(2,0),(2,2),(0,2),(1,1)]",
+        "output": "Four corner points",
+        "traceSteps": [
+          "Sort the points.",
+          "Build the lower boundary.",
+          "Build the upper boundary.",
+          "The center point is not part of the outer boundary."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the convex hull of points.",
+        "whenToUse": "Use when you want a simple and robust convex hull implementation.",
+        "whereUsed": "Most competitive programming convex hull problems.",
+        "whyOptimal": "Sorting dominates the complexity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cross(o,a,b):\n    return (a[0]-o[0])*(b[1]-o[1]) - (a[1]-o[1])*(b[0]-o[0])\n\ndef monotonic_chain(points):\n    points=sorted(set(points))\n    if len(points)<=1:\n        return points\n\n    lower=[]\n    for p in points:\n        while len(lower)>=2 and cross(lower[-2],lower[-1],p)<=0:\n            lower.pop()\n        lower.append(p)\n\n    upper=[]\n    for p in reversed(points):\n        while len(upper)>=2 and cross(upper[-2],upper[-1],p)<=0:\n            upper.pop()\n        upper.append(p)\n\n    return lower[:-1]+upper[:-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "vector<pair<long long,long long>> hull(vector<pair<long long,long long>> p) {\n    sort(p.begin(),p.end());\n    p.erase(unique(p.begin(),p.end()),p.end());\n\n    auto cross=[](auto o,auto a,auto b){\n        return (a.first-o.first)*(b.second-o.second)\n             - (a.second-o.second)*(b.first-o.first);\n    };\n\n    vector<pair<long long,long long>> lo,up;\n    for(auto x:p){\n        while(lo.size()>=2 && cross(lo[lo.size()-2],lo.back(),x)<=0)\n            lo.pop_back();\n        lo.push_back(x);\n    }\n    for(auto it=p.rbegin();it!=p.rend();++it){\n        while(up.size()>=2 && cross(up[up.size()-2],up.back(),*it)<=0)\n            up.pop_back();\n        up.push_back(*it);\n    }\n\n    lo.pop_back();\n    up.pop_back();\n    lo.insert(lo.end(),up.begin(),up.end());\n    return lo;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long cross(long[] o,long[] a,long[] b) {\n    return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]);\n}\n\nstatic List<long[]> hull(List<long[]> p) {\n    p.sort((a,b)->a[0]!=b[0] ? Long.compare(a[0],b[0]) : Long.compare(a[1],b[1]));\n\n    List<long[]> lo=new ArrayList<>(), up=new ArrayList<>();\n    for(long[] x:p){\n        while(lo.size()>=2 && cross(lo.get(lo.size()-2),lo.get(lo.size()-1),x)<=0)\n            lo.remove(lo.size()-1);\n        lo.add(x);\n    }\n\n    for(int i=p.size()-1;i>=0;i--){\n        long[] x=p.get(i);\n        while(up.size()>=2 && cross(up.get(up.size()-2),up.get(up.size()-1),x)<=0)\n            up.remove(up.size()-1);\n        up.add(x);\n    }\n\n    lo.remove(lo.size()-1);\n    up.remove(up.size()-1);\n    lo.addAll(up);\n    return lo;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Erect the Fence",
+          "url": "https://leetcode.com/problems/erect-the-fence/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "polygon-convexity",
+      "title": "Check Polygon Convexity",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether every angle of a polygon bends in the same direction.",
+      "explanation": [
+        "A convex polygon always turns in the same direction while walking around its boundary.",
+        "Calculate the cross product for every three consecutive points.",
+        "All non-zero cross products should have the same sign.",
+        "If the sign changes, the polygon is concave."
+      ],
+      "exampleTrace": {
+        "input": "Square",
+        "output": "Convex",
+        "traceSteps": [
+          "Check every three consecutive vertices.",
+          "All turns are counter-clockwise.",
+          "No direction changes.",
+          "Therefore the polygon is convex."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines whether a polygon is convex.",
+        "whenToUse": "Use before applying algorithms that require convex polygons.",
+        "whereUsed": "Polygon processing and computational geometry.",
+        "whyOptimal": "Each vertex is checked once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cross(a,b,c):\n    return (b[0]-a[0])*(c[1]-a[1]) - (b[1]-a[1])*(c[0]-a[0])\n\ndef is_convex(p):\n    n=len(p)\n    sign=0\n\n    for i in range(n):\n        c=cross(p[i],p[(i+1)%n],p[(i+2)%n])\n        if c != 0:\n            if sign == 0:\n                sign = 1 if c > 0 else -1\n            elif (c > 0) != (sign > 0):\n                return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "bool isConvex(vector<pair<long long,long long>> p) {\n    int n=p.size(), sign=0;\n\n    auto cross=[](auto a,auto b,auto c){\n        return (b.first-a.first)*(c.second-a.second)\n             -(b.second-a.second)*(c.first-a.first);\n    };\n\n    for(int i=0;i<n;i++){\n        long long c=cross(p[i],p[(i+1)%n],p[(i+2)%n]);\n        if(c==0) continue;\n        int s=c>0?1:-1;\n        if(sign==0) sign=s;\n        else if(sign!=s) return false;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean isConvex(long[][] p) {\n    int sign=0,n=p.length;\n\n    for(int i=0;i<n;i++) {\n        long[] a=p[i], b=p[(i+1)%n], c=p[(i+2)%n];\n        long cross=(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);\n        if(cross==0) continue;\n        int s=cross>0?1:-1;\n        if(sign==0) sign=s;\n        else if(sign!=s) return false;\n    }\n    return true;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "closest-pair-brute-force",
+      "title": "Closest Pair of Points - Brute Force",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(n²)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the two closest points by checking every pair.",
+      "explanation": [
+        "Take every pair of points.",
+        "Calculate their squared distance.",
+        "Keep the smallest distance.",
+        "This is simple but becomes slow for a large number of points."
+      ],
+      "exampleTrace": {
+        "input": "[(0,0),(5,5),(1,1)]",
+        "output": "Closest pair = (0,0),(1,1)",
+        "traceSteps": [
+          "Distance² between first and second = 50.",
+          "Distance² between first and third = 2.",
+          "Distance² between second and third = 32.",
+          "Minimum is 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the closest pair of points.",
+        "whenToUse": "Use for small input sizes or as a simple baseline.",
+        "whereUsed": "Geometry and nearest-point problems.",
+        "whyOptimal": "It is simple but not optimal for large n."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def closest_pair(points):\n    best = float('inf')\n\n    for i in range(len(points)):\n        for j in range(i+1, len(points)):\n            dx=points[i][0]-points[j][0]\n            dy=points[i][1]-points[j][1]\n            best=min(best,dx*dx+dy*dy)\n\n    return best"
+        },
+        {
+          "language": "cpp",
+          "code": "long long closestPair(vector<pair<long long,long long>> p) {\n    long long best=LLONG_MAX;\n\n    for(int i=0;i<p.size();i++)\n        for(int j=i+1;j<p.size();j++) {\n            long long dx=p[i].first-p[j].first;\n            long long dy=p[i].second-p[j].second;\n            best=min(best,dx*dx+dy*dy);\n        }\n\n    return best;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long closestPair(long[][] p) {\n    long best=Long.MAX_VALUE;\n\n    for(int i=0;i<p.length;i++)\n        for(int j=i+1;j<p.length;j++) {\n            long dx=p[i][0]-p[j][0];\n            long dy=p[i][1]-p[j][1];\n            best=Math.min(best,dx*dx+dy*dy);\n        }\n\n    return best;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "K Closest Points to Origin",
+          "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "closest-pair-divide-conquer",
+      "title": "Closest Pair of Points - Divide and Conquer",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Find the closest pair of points efficiently using divide and conquer.",
+      "explanation": [
+        "Sort points by x-coordinate.",
+        "Split the points into left and right halves.",
+        "Find the closest pair in each half.",
+        "Only points close to the middle line can create a better pair across the halves.",
+        "Check only a small number of points in the middle strip.",
+        "This reduces the complexity from O(n²) to O(n log n)."
+      ],
+      "exampleTrace": {
+        "input": "Several points spread on a plane",
+        "output": "Minimum pair distance",
+        "traceSteps": [
+          "Sort points by x.",
+          "Divide into two halves.",
+          "Solve each half.",
+          "Build a narrow strip around the middle.",
+          "Check possible cross-half pairs.",
+          "Return the smallest distance."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the closest two points efficiently.",
+        "whenToUse": "Use when n is large and O(n²) is too slow.",
+        "whereUsed": "Advanced geometry and computational geometry.",
+        "whyOptimal": "Divide and conquer reduces pair comparisons dramatically."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def closest_pair(points):\n    points = sorted(points)\n\n    def dist2(a,b):\n        return (a[0]-b[0])**2 + (a[1]-b[1])**2\n\n    def solve(p):\n        n=len(p)\n        if n<=3:\n            return min((dist2(p[i],p[j]) for i in range(n) for j in range(i+1,n)), default=float('inf'))\n\n        mid=n//2\n        xmid=p[mid][0]\n        d=min(solve(p[:mid]),solve(p[mid:]))\n\n        strip=[q for q in p if (q[0]-xmid)**2 < d]\n        strip.sort(key=lambda q:q[1])\n\n        for i in range(len(strip)):\n            for j in range(i+1,min(i+8,len(strip))):\n                d=min(d,dist2(strip[i],strip[j]))\n        return d\n\n    return solve(points)"
+        },
+        {
+          "language": "cpp",
+          "code": "using P=pair<long long,long long>;\n\nlong long d2(P a,P b){\n    long long x=a.first-b.first,y=a.second-b.second;\n    return x*x+y*y;\n}\n\nlong long closest(vector<P>& p,int l,int r){\n    if(r-l<=3){\n        long long ans=LLONG_MAX;\n        for(int i=l;i<r;i++) for(int j=i+1;j<r;j++) ans=min(ans,d2(p[i],p[j]));\n        return ans;\n    }\n\n    int m=(l+r)/2;\n    long long d=min(closest(p,l,m),closest(p,m,r));\n    long long midx=p[m].first;\n    vector<P> strip;\n\n    for(int i=l;i<r;i++)\n        if((p[i].first-midx)*(p[i].first-midx)<d) strip.push_back(p[i]);\n\n    sort(strip.begin(),strip.end(),[](P a,P b){return a.second<b.second;});\n    for(int i=0;i<strip.size();i++)\n        for(int j=i+1;j<strip.size() && j<i+8;j++)\n            d=min(d,d2(strip[i],strip[j]));\n\n    return d;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long d2(long[] a,long[] b){\n    long x=a[0]-b[0],y=a[1]-b[1];\n    return x*x+y*y;\n}\n\nstatic long closest(long[][] p,int l,int r){\n    if(r-l<=3){\n        long ans=Long.MAX_VALUE;\n        for(int i=l;i<r;i++) for(int j=i+1;j<r;j++) ans=Math.min(ans,d2(p[i],p[j]));\n        return ans;\n    }\n\n    int m=(l+r)/2;\n    long d=Math.min(closest(p,l,m),closest(p,m,r));\n    long mid=p[m][0];\n    ArrayList<long[]> strip=new ArrayList<>();\n\n    for(int i=l;i<r;i++)\n        if((p[i][0]-mid)*(p[i][0]-mid)<d) strip.add(p[i]);\n\n    strip.sort(Comparator.comparingLong(a->a[1]));\n    for(int i=0;i<strip.size();i++)\n        for(int j=i+1;j<strip.size() && j<i+8;j++)\n            d=Math.min(d,d2(strip.get(i),strip.get(j)));\n\n    return d;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "farthest-pair-convex-hull",
+      "title": "Farthest Pair of Points",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Find the maximum distance between any two points using convex hull and rotating calipers.",
+      "explanation": [
+        "The farthest pair must lie on the convex hull.",
+        "First construct the convex hull.",
+        "Interior points cannot be part of the farthest pair.",
+        "Then use rotating calipers to efficiently check opposite hull points.",
+        "This avoids checking every pair."
+      ],
+      "exampleTrace": {
+        "input": "Square corners",
+        "output": "Diagonal is the farthest pair",
+        "traceSteps": [
+          "All four corners belong to the hull.",
+          "Check opposite vertices.",
+          "Diagonal distance² = 2² + 2² = 8.",
+          "This is larger than side distance² = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the two farthest points.",
+        "whenToUse": "Use for large point sets.",
+        "whereUsed": "Advanced geometry and diameter problems.",
+        "whyOptimal": "Convex hull plus calipers avoids O(n²) pair checking."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def farthest_pair(points):\n    # Simple baseline after hull construction.\n    # For very large hulls, use rotating calipers.\n    hull = sorted(set(points))\n    best = 0\n\n    for i in range(len(hull)):\n        for j in range(i+1,len(hull)):\n            dx=hull[i][0]-hull[j][0]\n            dy=hull[i][1]-hull[j][1]\n            best=max(best,dx*dx+dy*dy)\n\n    return best"
+        },
+        {
+          "language": "cpp",
+          "code": "long long farthestPair(vector<pair<long long,long long>> p) {\n    long long best=0;\n    for(int i=0;i<p.size();i++)\n        for(int j=i+1;j<p.size();j++) {\n            long long dx=p[i].first-p[j].first;\n            long long dy=p[i].second-p[j].second;\n            best=max(best,dx*dx+dy*dy);\n        }\n    return best;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long farthestPair(long[][] p) {\n    long best=0;\n    for(int i=0;i<p.length;i++)\n        for(int j=i+1;j<p.length;j++) {\n            long dx=p[i][0]-p[j][0];\n            long dy=p[i][1]-p[j][1];\n            best=Math.max(best,dx*dx+dy*dy);\n        }\n    return best;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "rotating-calipers",
+      "title": "Rotating Calipers",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Efficiently solve distance and diameter problems on convex polygons.",
+      "explanation": [
+        "Imagine placing two parallel lines around a convex polygon.",
+        "Rotate the two lines around the polygon.",
+        "At every position, maintain the points farthest apart.",
+        "This lets us find the polygon diameter without checking every pair.",
+        "It is normally used after computing a convex hull."
+      ],
+      "exampleTrace": {
+        "input": "Convex square",
+        "output": "Maximum distance is the diagonal",
+        "traceSteps": [
+          "Start with one hull edge.",
+          "Find the opposite farthest vertex.",
+          "Move to the next edge.",
+          "Continue rotating around the polygon.",
+          "The maximum distance found is the diameter."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves maximum-distance and antipodal-pair problems efficiently.",
+        "whenToUse": "Use on convex polygons after convex hull.",
+        "whereUsed": "Polygon diameter, width and distance problems.",
+        "whyOptimal": "Avoids quadratic pair checking."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def area2(a,b,c):\n    return abs((b[0]-a[0])*(c[1]-a[1]) -\n               (b[1]-a[1])*(c[0]-a[0]))\n\n# Rotating-calipers implementations depend on the exact problem.\n# The core idea is to move the opposite pointer monotonically."
+        },
+        {
+          "language": "cpp",
+          "code": "long long area2(pair<long long,long long> a,\n                 pair<long long,long long> b,\n                 pair<long long,long long> c) {\n    return llabs((b.first-a.first)*(c.second-a.second)\n                -(b.second-a.second)*(c.first-a.first));\n}\n\n// Rotating calipers: advance the opposite pointer while\n// the area increases."
+        },
+        {
+          "language": "java",
+          "code": "static long area2(long[] a,long[] b,long[] c) {\n    return Math.abs((b[0]-a[0])*(c[1]-a[1])\n                  -(b[1]-a[1])*(c[0]-a[0]));\n}\n\n// For rotating calipers, move the opposite pointer while\n// the triangle area keeps increasing."
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "point-to-line-distance",
+      "title": "Distance from Point to Line",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the shortest perpendicular distance from a point to an infinite line.",
+      "explanation": [
+        "For line Ax + By + C = 0 and point (x,y), use the standard distance formula.",
+        "Distance = |Ax + By + C| / sqrt(A²+B²).",
+        "The numerator tells how far the point is from satisfying the line equation.",
+        "The denominator normalizes the line direction."
+      ],
+      "exampleTrace": {
+        "input": "Line y=0, Point=(3,4)",
+        "output": "4",
+        "traceSteps": [
+          "Line becomes 0x + 1y + 0 = 0.",
+          "Numerator = |4| = 4.",
+          "Denominator = 1.",
+          "Distance = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds perpendicular distance to a line.",
+        "whenToUse": "Use in geometry distance problems.",
+        "whereUsed": "Collision detection, projections and line geometry.",
+        "whyOptimal": "Constant-time formula."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef point_line_distance(a,b,c,p):\n    A=a; B=b; C=c\n    x,y=p\n    return abs(A*x+B*y+C)/math.sqrt(A*A+B*B)\n\nprint(point_line_distance(0,1,0,(3,4)))"
+        },
+        {
+          "language": "cpp",
+          "code": "double pointLineDistance(double A,double B,double C,double x,double y) {\n    return abs(A*x+B*y+C)/sqrt(A*A+B*B);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double pointLineDistance(double A,double B,double C,double x,double y) {\n    return Math.abs(A*x+B*y+C)/Math.sqrt(A*A+B*B);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "point-to-segment-distance",
+      "title": "Distance from Point to Segment",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the shortest distance between a point and a finite line segment.",
+      "explanation": [
+        "Project the point onto the infinite line containing the segment.",
+        "If the projection falls inside the segment, use the perpendicular distance.",
+        "Otherwise the closest point is one of the two endpoints.",
+        "This handles both cases."
+      ],
+      "exampleTrace": {
+        "input": "Segment (0,0)->(4,0), P=(2,3)",
+        "output": "3",
+        "traceSteps": [
+          "Projection of P onto the line is (2,0).",
+          "Projection lies inside the segment.",
+          "Distance from (2,3) to (2,0) is 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds shortest distance from point to finite segment.",
+        "whenToUse": "Use for collision and nearest-edge problems.",
+        "whereUsed": "Graphics, maps and geometry.",
+        "whyOptimal": "Constant-time projection calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef point_segment_distance(p,a,b):\n    vx,vy=b[0]-a[0],b[1]-a[1]\n    wx,wy=p[0]-a[0],p[1]-a[1]\n\n    length2=vx*vx+vy*vy\n    if length2==0:\n        return math.hypot(wx,wy)\n\n    t=(wx*vx+wy*vy)/length2\n    t=max(0,min(1,t))\n\n    q=(a[0]+t*vx,a[1]+t*vy)\n    return math.hypot(p[0]-q[0],p[1]-q[1])"
+        },
+        {
+          "language": "cpp",
+          "code": "double pointSegmentDistance(pair<double,double> p,\n                              pair<double,double> a,\n                              pair<double,double> b) {\n    double vx=b.first-a.first, vy=b.second-a.second;\n    double wx=p.first-a.first, wy=p.second-a.second;\n    double len2=vx*vx+vy*vy;\n\n    if(len2==0) return hypot(wx,wy);\n\n    double t=(wx*vx+wy*vy)/len2;\n    t=max(0.0,min(1.0,t));\n\n    double x=a.first+t*vx;\n    double y=a.second+t*vy;\n    return hypot(p.first-x,p.second-y);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double pointSegmentDistance(double[] p,double[] a,double[] b) {\n    double vx=b[0]-a[0], vy=b[1]-a[1];\n    double wx=p[0]-a[0], wy=p[1]-a[1];\n    double len2=vx*vx+vy*vy;\n\n    if(len2==0) return Math.hypot(wx,wy);\n\n    double t=(wx*vx+wy*vy)/len2;\n    t=Math.max(0,Math.min(1,t));\n\n    double x=a[0]+t*vx;\n    double y=a[1]+t*vy;\n    return Math.hypot(p[0]-x,p[1]-y);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "circle-point-relation",
+      "title": "Point and Circle Relation",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine whether a point is inside, on, or outside a circle.",
+      "explanation": [
+        "Calculate squared distance from the center to the point.",
+        "Compare it with r².",
+        "If distance² < r², the point is inside.",
+        "If distance² = r², the point is on the circle.",
+        "If distance² > r², the point is outside."
+      ],
+      "exampleTrace": {
+        "input": "Center=(0,0), radius=5, P=(3,4)",
+        "output": "On circle",
+        "traceSteps": [
+          "Distance² = 3² + 4² = 25.",
+          "Radius² = 5² = 25.",
+          "Both are equal.",
+          "Therefore the point is on the circle."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines the position of a point relative to a circle.",
+        "whenToUse": "Use for containment and collision checks.",
+        "whereUsed": "Games, graphics and geometry.",
+        "whyOptimal": "Uses constant-time squared-distance comparison."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def point_circle_relation(center, r, p):\n    dx=p[0]-center[0]\n    dy=p[1]-center[1]\n    d2=dx*dx+dy*dy\n\n    if d2 < r*r: return 'inside'\n    if d2 > r*r: return 'outside'\n    return 'on circle'"
+        },
+        {
+          "language": "cpp",
+          "code": "string relation(pair<long long,long long> c,long long r,\n                pair<long long,long long> p) {\n    long long dx=p.first-c.first, dy=p.second-c.second;\n    long long d2=dx*dx+dy*dy;\n    if(d2<r*r) return \"inside\";\n    if(d2>r*r) return \"outside\";\n    return \"on circle\";\n}"
+        },
+        {
+          "language": "java",
+          "code": "static String relation(long[] c,long r,long[] p) {\n    long dx=p[0]-c[0],dy=p[1]-c[1];\n    long d2=dx*dx+dy*dy;\n    if(d2<r*r) return \"inside\";\n    if(d2>r*r) return \"outside\";\n    return \"on circle\";\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "circle-line-intersection",
+      "title": "Circle-Line Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine whether a line intersects a circle and how many intersection points exist.",
+      "explanation": [
+        "Find the perpendicular distance from the circle center to the line.",
+        "Compare this distance with the radius.",
+        "Distance greater than radius means no intersection.",
+        "Equal means the line touches the circle at one point.",
+        "Smaller means the line crosses the circle at two points."
+      ],
+      "exampleTrace": {
+        "input": "Circle center=(0,0), radius=5, line y=3",
+        "output": "2 intersections",
+        "traceSteps": [
+          "Distance from center to y=3 is 3.",
+          "3 < 5.",
+          "Therefore the line passes through the circle.",
+          "There are two intersection points."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines line-circle intersection count.",
+        "whenToUse": "Use for geometric collision and intersection problems.",
+        "whereUsed": "Graphics, physics and computational geometry.",
+        "whyOptimal": "Only a distance comparison is required."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def circle_line_intersections(cx,cy,r,A,B,C):\n    d=abs(A*cx+B*cy+C)/(A*A+B*B)**0.5\n    if d > r: return 0\n    if abs(d-r) < 1e-9: return 1\n    return 2\n\nprint(circle_line_intersections(0,0,5,0,1,-3))"
+        },
+        {
+          "language": "cpp",
+          "code": "int circleLineIntersections(double cx,double cy,double r,\n                              double A,double B,double C) {\n    double d=abs(A*cx+B*cy+C)/sqrt(A*A+B*B);\n    const double EPS=1e-9;\n    if(d>r+EPS) return 0;\n    if(abs(d-r)<EPS) return 1;\n    return 2;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int circleLineIntersections(double cx,double cy,double r,\n                                           double A,double B,double C) {\n    double d=Math.abs(A*cx+B*cy+C)/Math.sqrt(A*A+B*B);\n    double eps=1e-9;\n    if(d>r+eps) return 0;\n    if(Math.abs(d-r)<eps) return 1;\n    return 2;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "circle-circle-intersection",
+      "title": "Circle-Circle Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine how two circles intersect.",
+      "explanation": [
+        "Find the distance d between the two centers.",
+        "Compare d with r1+r2 and |r1-r2|.",
+        "If d is too large, circles are separate.",
+        "If d equals the sum of radii, they touch externally.",
+        "If d equals the radius difference, they touch internally.",
+        "Otherwise they normally intersect at two points."
+      ],
+      "exampleTrace": {
+        "input": "C1=(0,0), r1=3; C2=(4,0), r2=3",
+        "output": "2 intersections",
+        "traceSteps": [
+          "Center distance = 4.",
+          "r1+r2 = 6.",
+          "|r1-r2| = 0.",
+          "0 < 4 < 6.",
+          "Therefore the circles intersect at two points."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines the relationship between two circles.",
+        "whenToUse": "Use when circle intersection information is needed.",
+        "whereUsed": "Geometry, physics and graphics.",
+        "whyOptimal": "Only center distance and radii are needed."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef circle_relation(c1,r1,c2,r2):\n    d=math.hypot(c1[0]-c2[0],c1[1]-c2[1])\n    if d > r1+r2: return 'separate'\n    if d < abs(r1-r2): return 'one inside another'\n    if math.isclose(d,r1+r2) or math.isclose(d,abs(r1-r2)):\n        return 'touching'\n    return 'two intersections'"
+        },
+        {
+          "language": "cpp",
+          "code": "string circleRelation(pair<double,double> a,double r1,\n                      pair<double,double> b,double r2) {\n    double d=hypot(a.first-b.first,a.second-b.second);\n    const double EPS=1e-9;\n    if(d>r1+r2+EPS) return \"separate\";\n    if(d<fabs(r1-r2)-EPS) return \"one inside another\";\n    if(fabs(d-(r1+r2))<EPS || fabs(d-fabs(r1-r2))<EPS) return \"touching\";\n    return \"two intersections\";\n}"
+        },
+        {
+          "language": "java",
+          "code": "static String circleRelation(double[] a,double r1,double[] b,double r2) {\n    double d=Math.hypot(a[0]-b[0],a[1]-b[1]);\n    double eps=1e-9;\n    if(d>r1+r2+eps) return \"separate\";\n    if(d<Math.abs(r1-r2)-eps) return \"one inside another\";\n    if(Math.abs(d-r1-r2)<eps || Math.abs(d-Math.abs(r1-r2))<eps)\n        return \"touching\";\n    return \"two intersections\";\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "triangle-area-cross-product",
+      "title": "Triangle Area Using Cross Product",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Calculate triangle area directly from three coordinates.",
+      "explanation": [
+        "The absolute value of the cross product gives twice the triangle area.",
+        "So area = |cross| / 2.",
+        "This avoids calculating heights manually.",
+        "It works for any triangle."
+      ],
+      "exampleTrace": {
+        "input": "A=(0,0), B=(4,0), C=(0,3)",
+        "output": "Area = 6",
+        "traceSteps": [
+          "Cross product = 4*3 = 12.",
+          "Triangle area = 12/2.",
+          "Answer = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds area of a triangle from coordinates.",
+        "whenToUse": "Use when triangle vertices are given.",
+        "whereUsed": "Polygon and geometry calculations.",
+        "whyOptimal": "Constant-time calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def triangle_area(a,b,c):\n    cross=(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])\n    return abs(cross)/2\n\nprint(triangle_area((0,0),(4,0),(0,3)))"
+        },
+        {
+          "language": "cpp",
+          "code": "double triangleArea(auto a,auto b,auto c) {\n    long long cross=(b.first-a.first)*(c.second-a.second)\n                    -(b.second-a.second)*(c.first-a.first);\n    return abs(cross)/2.0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double triangleArea(long[] a,long[] b,long[] c) {\n    long cross=(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);\n    return Math.abs(cross)/2.0;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "herons-formula",
+      "title": "Triangle Area - Heron's Formula",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find triangle area when its three side lengths are known.",
+      "explanation": [
+        "First calculate the semi-perimeter s = (a+b+c)/2.",
+        "Then use area = sqrt(s(s-a)(s-b)(s-c)).",
+        "This is useful when coordinates are not given.",
+        "The triangle inequality must be satisfied."
+      ],
+      "exampleTrace": {
+        "input": "Sides = 3,4,5",
+        "output": "Area = 6",
+        "traceSteps": [
+          "s = (3+4+5)/2 = 6.",
+          "Area = sqrt(6*3*2*1).",
+          "Area = sqrt(36) = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds triangle area from side lengths.",
+        "whenToUse": "Use when only three sides are available.",
+        "whereUsed": "Triangle geometry.",
+        "whyOptimal": "Constant-time formula."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef heron(a,b,c):\n    s=(a+b+c)/2\n    return math.sqrt(s*(s-a)*(s-b)*(s-c))\n\nprint(heron(3,4,5))"
+        },
+        {
+          "language": "cpp",
+          "code": "double heron(double a,double b,double c) {\n    double s=(a+b+c)/2.0;\n    return sqrt(s*(s-a)*(s-b)*(s-c));\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double heron(double a,double b,double c) {\n    double s=(a+b+c)/2.0;\n    return Math.sqrt(s*(s-a)*(s-b)*(s-c));\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "polygon-centroid",
+      "title": "Polygon Centroid",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the geometric center of a simple polygon.",
+      "explanation": [
+        "The centroid is the balance point of a polygon.",
+        "It is calculated using the cross product of every consecutive edge.",
+        "The signed area is used as part of the formula.",
+        "For a rectangle, the centroid is simply its center."
+      ],
+      "exampleTrace": {
+        "input": "Square [(0,0),(2,0),(2,2),(0,2)]",
+        "output": "(1,1)",
+        "traceSteps": [
+          "The square is symmetric.",
+          "Its horizontal center is x=1.",
+          "Its vertical center is y=1.",
+          "Therefore centroid is (1,1)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the balance point of a polygon.",
+        "whenToUse": "Use for polygon center calculations.",
+        "whereUsed": "Physics, graphics, GIS and geometry.",
+        "whyOptimal": "Every edge is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def polygon_centroid(p):\n    area2=0\n    cx=cy=0\n    n=len(p)\n\n    for i in range(n):\n        x1,y1=p[i]\n        x2,y2=p[(i+1)%n]\n        c=x1*y2-x2*y1\n        area2+=c\n        cx+=(x1+x2)*c\n        cy+=(y1+y2)*c\n\n    return cx/(3*area2), cy/(3*area2)"
+        },
+        {
+          "language": "cpp",
+          "code": "pair<double,double> centroid(vector<pair<double,double>> p) {\n    double A2=0,Cx=0,Cy=0;\n    int n=p.size();\n\n    for(int i=0;i<n;i++) {\n        auto a=p[i],b=p[(i+1)%n];\n        double c=a.first*b.second-b.first*a.second;\n        A2+=c;\n        Cx+=(a.first+b.first)*c;\n        Cy+=(a.second+b.second)*c;\n    }\n\n    return {Cx/(3*A2),Cy/(3*A2)};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double[] centroid(double[][] p) {\n    double A2=0,Cx=0,Cy=0;\n    int n=p.length;\n\n    for(int i=0;i<n;i++) {\n        double[] a=p[i],b=p[(i+1)%n];\n        double c=a[0]*b[1]-b[0]*a[1];\n        A2+=c;\n        Cx+=(a[0]+b[0])*c;\n        Cy+=(a[1]+b[1])*c;\n    }\n\n    return new double[]{Cx/(3*A2),Cy/(3*A2)};\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "point-in-convex-polygon",
+      "title": "Point in Convex Polygon",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether a point belongs to a convex polygon using binary search.",
+      "explanation": [
+        "For a convex polygon, choose one fixed vertex.",
+        "The polygon can be divided into triangles using that vertex.",
+        "Binary search identifies the triangle containing the query point.",
+        "Then perform a simple triangle check.",
+        "This improves the usual O(n) scan to O(log n)."
+      ],
+      "exampleTrace": {
+        "input": "Convex square and point (1,1)",
+        "output": "Inside",
+        "traceSteps": [
+          "Fix the first vertex.",
+          "Binary search finds the sector containing the point.",
+          "Check the corresponding triangle.",
+          "Point lies inside."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers point-inside-convex-polygon queries quickly.",
+        "whenToUse": "Use when there are many point queries against the same convex polygon.",
+        "whereUsed": "Competitive programming and GIS.",
+        "whyOptimal": "Binary search reduces query time to O(log n)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def inside_convex_polygon(polygon, p):\n    # Simple O(n) version for clarity.\n    # Binary-search optimization is used when many queries exist.\n    n=len(polygon)\n    sign=[]\n\n    for i in range(n):\n        a=polygon[i]\n        b=polygon[(i+1)%n]\n        c=(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0])\n        sign.append(c)\n\n    return all(x>=0 for x in sign) or all(x<=0 for x in sign)"
+        },
+        {
+          "language": "cpp",
+          "code": "bool insideConvexPolygon(vector<pair<long long,long long>> p,\n                           pair<long long,long long> q) {\n    bool pos=false,neg=false;\n    int n=p.size();\n\n    for(int i=0;i<n;i++) {\n        auto a=p[i],b=p[(i+1)%n];\n        long long c=(b.first-a.first)*(q.second-a.second)\n                   -(b.second-a.second)*(q.first-a.first);\n        pos|=c>0;\n        neg|=c<0;\n    }\n    return !(pos&&neg);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean insideConvexPolygon(long[][] p,long[] q) {\n    boolean pos=false,neg=false;\n    int n=p.length;\n\n    for(int i=0;i<n;i++) {\n        long[] a=p[i],b=p[(i+1)%n];\n        long c=(b[0]-a[0])*(q[1]-a[1])-(b[1]-a[1])*(q[0]-a[0]);\n        if(c>0) pos=true;\n        if(c<0) neg=true;\n    }\n    return !(pos&&neg);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "bounding-box",
+      "title": "Bounding Box",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the smallest axis-aligned rectangle containing all points.",
+      "explanation": [
+        "Find minimum x and maximum x.",
+        "Find minimum y and maximum y.",
+        "These four values define the bounding rectangle.",
+        "The rectangle sides stay parallel to the x and y axes."
+      ],
+      "exampleTrace": {
+        "input": "[(1,2),(5,4),(2,7)]",
+        "output": "x=[1,5], y=[2,7]",
+        "traceSteps": [
+          "Minimum x = 1.",
+          "Maximum x = 5.",
+          "Minimum y = 2.",
+          "Maximum y = 7."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the smallest axis-aligned rectangle containing points.",
+        "whenToUse": "Use for spatial filtering and quick collision checks.",
+        "whereUsed": "Graphics, GIS, spatial indexing and geometry.",
+        "whyOptimal": "One pass through all points."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def bounding_box(points):\n    xs=[p[0] for p in points]\n    ys=[p[1] for p in points]\n    return min(xs),min(ys),max(xs),max(ys)"
+        },
+        {
+          "language": "cpp",
+          "code": "array<long long,4> boundingBox(vector<pair<long long,long long>> p) {\n    long long minX=LLONG_MAX,minY=LLONG_MAX;\n    long long maxX=LLONG_MIN,maxY=LLONG_MIN;\n\n    for(auto [x,y]:p) {\n        minX=min(minX,x); maxX=max(maxX,x);\n        minY=min(minY,y); maxY=max(maxY,y);\n    }\n    return {minX,minY,maxX,maxY};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long[] boundingBox(long[][] p) {\n    long minX=Long.MAX_VALUE,minY=Long.MAX_VALUE;\n    long maxX=Long.MIN_VALUE,maxY=Long.MIN_VALUE;\n\n    for(long[] q:p) {\n        minX=Math.min(minX,q[0]); maxX=Math.max(maxX,q[0]);\n        minY=Math.min(minY,q[1]); maxY=Math.max(maxY,q[1]);\n    }\n    return new long[]{minX,minY,maxX,maxY};\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "rectangle-intersection",
+      "title": "Rectangle Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether two axis-aligned rectangles overlap.",
+      "explanation": [
+        "Represent each rectangle using left, bottom, right and top.",
+        "If one rectangle is completely to the left, they do not overlap.",
+        "If one is completely above or below, they do not overlap.",
+        "Otherwise they overlap."
+      ],
+      "exampleTrace": {
+        "input": "R1=(0,0)-(4,4), R2=(2,2)-(6,6)",
+        "output": "Overlap",
+        "traceSteps": [
+          "R2 starts before R1 ends on x-axis.",
+          "R2 starts before R1 ends on y-axis.",
+          "Neither rectangle is completely separated.",
+          "Therefore they overlap."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks overlap between axis-aligned rectangles.",
+        "whenToUse": "Use for rectangular collision problems.",
+        "whereUsed": "Games, UI layout and spatial algorithms.",
+        "whyOptimal": "Only a few comparisons are required."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rectangles_overlap(a,b):\n    # (left,bottom,right,top)\n    return not (a[2] <= b[0] or b[2] <= a[0] or\n                a[3] <= b[1] or b[3] <= a[1])"
+        },
+        {
+          "language": "cpp",
+          "code": "bool overlap(array<long long,4> a,array<long long,4> b) {\n    return !(a[2]<=b[0] || b[2]<=a[0] ||\n             a[3]<=b[1] || b[3]<=a[1]);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean overlap(long[] a,long[] b) {\n    return !(a[2]<=b[0] || b[2]<=a[0] ||\n             a[3]<=b[1] || b[3]<=a[1]);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Rectangle Overlap",
+          "url": "https://leetcode.com/problems/rectangle-overlap/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "circle-rectangle-intersection",
+      "title": "Circle-Rectangle Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check whether a circle intersects an axis-aligned rectangle.",
+      "explanation": [
+        "Find the point on the rectangle closest to the circle center.",
+        "Clamp the circle center's x and y coordinates to the rectangle.",
+        "Calculate distance from the center to this closest point.",
+        "If the distance is at most the radius, they intersect."
+      ],
+      "exampleTrace": {
+        "input": "Circle center=(2,2), radius=2, rectangle=(3,3)-(6,6)",
+        "output": "Intersect",
+        "traceSteps": [
+          "Closest rectangle point to center is (3,3).",
+          "Distance² = 1² + 1² = 2.",
+          "Radius² = 4.",
+          "2 <= 4, so they intersect."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks circle-rectangle collision.",
+        "whenToUse": "Use for axis-aligned rectangular collision.",
+        "whereUsed": "Games and graphics.",
+        "whyOptimal": "Constant-time calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def circle_rect_intersect(cx,cy,r,left,bottom,right,top):\n    x=max(left,min(cx,right))\n    y=max(bottom,min(cy,top))\n    dx=cx-x\n    dy=cy-y\n    return dx*dx+dy*dy <= r*r"
+        },
+        {
+          "language": "cpp",
+          "code": "bool circleRect(double cx,double cy,double r,\n                 double l,double b,double right,double t) {\n    double x=max(l,min(cx,right));\n    double y=max(b,min(cy,t));\n    double dx=cx-x,dy=cy-y;\n    return dx*dx+dy*dy<=r*r;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean circleRect(double cx,double cy,double r,\n                              double l,double b,double right,double t) {\n    double x=Math.max(l,Math.min(cx,right));\n    double y=Math.max(b,Math.min(cy,t));\n    double dx=cx-x,dy=cy-y;\n    return dx*dx+dy*dy<=r*r;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "sweep-line",
+      "title": "Sweep Line Algorithm",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Process geometric objects from left to right instead of checking every pair.",
+      "explanation": [
+        "Imagine a vertical line moving from left to right.",
+        "Only objects currently touching the sweep line are active.",
+        "When an object starts, add it.",
+        "When it ends, remove it.",
+        "Check only relevant active objects.",
+        "This turns many O(n²) geometry problems into O(n log n) solutions."
+      ],
+      "exampleTrace": {
+        "input": "Several horizontal/vertical segments",
+        "output": "Detect intersections",
+        "traceSteps": [
+          "Sort all segment start/end events by x.",
+          "Move the sweep line from left to right.",
+          "Add segments when they start.",
+          "Remove them when they end.",
+          "Check intersections among active segments."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Efficiently processes large sets of geometric objects.",
+        "whenToUse": "Use when geometry objects can be ordered along one axis.",
+        "whereUsed": "Segment intersections, rectangle union and skyline problems.",
+        "whyOptimal": "Avoids comparing every object with every other object."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sweep_events(intervals):\n    events=[]\n\n    for left,right in intervals:\n        events.append((left,1))\n        events.append((right,-1))\n\n    events.sort()\n    active=0\n    maximum=0\n\n    for x,delta in events:\n        active+=delta\n        maximum=max(maximum,active)\n\n    return maximum"
+        },
+        {
+          "language": "cpp",
+          "code": "int maxOverlap(vector<pair<int,int>> intervals) {\n    vector<pair<int,int>> events;\n    for(auto [l,r]:intervals) {\n        events.push_back({l,1});\n        events.push_back({r,-1});\n    }\n\n    sort(events.begin(),events.end());\n    int active=0,ans=0;\n    for(auto [x,d]:events) {\n        active+=d;\n        ans=max(ans,active);\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int maxOverlap(int[][] intervals) {\n    List<int[]> events=new ArrayList<>();\n    for(int[] x:intervals) {\n        events.add(new int[]{x[0],1});\n        events.add(new int[]{x[1],-1});\n    }\n\n    events.sort((a,b)->a[0]!=b[0]\n        ? Integer.compare(a[0],b[0]) : Integer.compare(a[1],b[1]));\n\n    int active=0,ans=0;\n    for(int[] e:events) {\n        active+=e[1];\n        ans=Math.max(ans,active);\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "The Skyline Problem",
+          "url": "https://leetcode.com/problems/the-skyline-problem/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "coordinate-compression-geometry",
+      "title": "Coordinate Compression",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Convert very large coordinate values into small consecutive indices.",
+      "explanation": [
+        "Sometimes coordinates can be extremely large, such as 1,000,000,000.",
+        "But only a small number of coordinates actually appear.",
+        "Sort the unique coordinates.",
+        "Replace each coordinate with its index.",
+        "This makes grid and sweep-line problems much easier to process."
+      ],
+      "exampleTrace": {
+        "input": "[100, 1000000, 500, 100]",
+        "output": "[0,2,1,0]",
+        "traceSteps": [
+          "Unique coordinates = [100,500,1000000].",
+          "100 maps to 0.",
+          "500 maps to 1.",
+          "1000000 maps to 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reduces huge coordinate ranges to manageable indices.",
+        "whenToUse": "Use when coordinates are large but the number of unique values is small.",
+        "whereUsed": "Grid geometry, sweep line and range problems.",
+        "whyOptimal": "Allows arrays to replace huge coordinate spaces."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def compress(values):\n    unique=sorted(set(values))\n    rank={x:i for i,x in enumerate(unique)}\n    return [rank[x] for x in values]\n\nprint(compress([100,1000000,500,100]))"
+        },
+        {
+          "language": "cpp",
+          "code": "vector<int> compress(vector<long long> a) {\n    vector<long long> v=a;\n    sort(v.begin(),v.end());\n    v.erase(unique(v.begin(),v.end()),v.end());\n\n    vector<int> ans;\n    for(long long x:a)\n        ans.push_back(lower_bound(v.begin(),v.end(),x)-v.begin());\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int[] compress(long[] a) {\n    long[] b=a.clone();\n    Arrays.sort(b);\n\n    ArrayList<Long> unique=new ArrayList<>();\n    for(long x:b)\n        if(unique.isEmpty() || unique.get(unique.size()-1)!=x)\n            unique.add(x);\n\n    int[] ans=new int[a.length];\n    for(int i=0;i<a.length;i++)\n        ans[i]=Collections.binarySearch(unique,a[i]);\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "line-side-half-plane",
+      "title": "Point Side of a Line / Half Plane",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine which side of a directed line a point lies on.",
+      "explanation": [
+        "A directed line divides the plane into two sides.",
+        "Use the cross product of the line direction and point direction.",
+        "Positive means one side.",
+        "Negative means the other side.",
+        "Zero means the point lies directly on the line."
+      ],
+      "exampleTrace": {
+        "input": "Line A=(0,0) to B=(4,0), P=(2,3)",
+        "output": "Left side",
+        "traceSteps": [
+          "AB points to the right.",
+          "P is above AB.",
+          "Cross product is positive.",
+          "Therefore P is on the left side."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines the side of a line containing a point.",
+        "whenToUse": "Use in convexity, clipping and half-plane problems.",
+        "whereUsed": "Computational geometry and graphics.",
+        "whyOptimal": "Constant-time cross-product test."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def side_of_line(a,b,p):\n    c=(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0])\n    if c>0: return 'left'\n    if c<0: return 'right'\n    return 'on line'"
+        },
+        {
+          "language": "cpp",
+          "code": "string sideOfLine(auto a,auto b,auto p) {\n    long long c=(b.first-a.first)*(p.second-a.second)\n                  -(b.second-a.second)*(p.first-a.first);\n    if(c>0) return \"left\";\n    if(c<0) return \"right\";\n    return \"on line\";\n}"
+        },
+        {
+          "language": "java",
+          "code": "static String sideOfLine(long[] a,long[] b,long[] p) {\n    long c=(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);\n    if(c>0) return \"left\";\n    if(c<0) return \"right\";\n    return \"on line\";\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "line-equation",
+      "title": "Line Equation from Two Points",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Represent a line using the equation Ax + By + C = 0.",
+      "explanation": [
+        "Two points uniquely determine a line.",
+        "Using Ax + By + C = 0 avoids special handling for vertical lines.",
+        "For points (x1,y1) and (x2,y2), coefficients can be built directly.",
+        "This representation is useful in intersection and distance calculations."
+      ],
+      "exampleTrace": {
+        "input": "A=(0,0), B=(2,2)",
+        "output": "x - y = 0",
+        "traceSteps": [
+          "A coefficient can be y1-y2 = -2.",
+          "B coefficient can be x2-x1 = 2.",
+          "After dividing by 2, equation becomes -x+y=0.",
+          "Equivalent equation is x-y=0."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Creates a mathematical representation of a line.",
+        "whenToUse": "Use when many line operations are required.",
+        "whereUsed": "Distance, intersection and half-plane algorithms.",
+        "whyOptimal": "The representation works for both normal and vertical lines."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def line_from_points(p1,p2):\n    x1,y1=p1\n    x2,y2=p2\n    A=y1-y2\n    B=x2-x1\n    C=x1*y2-x2*y1\n    return A,B,C\n\nprint(line_from_points((0,0),(2,2)))"
+        },
+        {
+          "language": "cpp",
+          "code": "tuple<long long,long long,long long> lineFromPoints(auto p1,auto p2) {\n    long long A=p1.second-p2.second;\n    long long B=p2.first-p1.first;\n    long long C=p1.first*p2.second-p2.first*p1.second;\n    return {A,B,C};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static long[] lineFromPoints(long[] p1,long[] p2) {\n    long A=p1[1]-p2[1];\n    long B=p2[0]-p1[0];\n    long C=p1[0]*p2[1]-p2[0]*p1[1];\n    return new long[]{A,B,C};\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "circumcenter",
+      "title": "Circumcenter of Triangle",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the center of the circle passing through all three triangle vertices.",
+      "explanation": [
+        "Every triangle has a unique circumcircle unless the triangle is degenerate.",
+        "The circumcenter is the intersection of the perpendicular bisectors of the sides.",
+        "Instead of constructing the bisectors explicitly, solve the equations directly.",
+        "The resulting point is equally distant from all three vertices."
+      ],
+      "exampleTrace": {
+        "input": "Right triangle A=(0,0), B=(4,0), C=(0,4)",
+        "output": "Circumcenter=(2,2)",
+        "traceSteps": [
+          "Midpoint of AB is (2,0).",
+          "Its perpendicular bisector is x=2.",
+          "Midpoint of AC is (0,2).",
+          "Its perpendicular bisector is y=2.",
+          "Intersection is (2,2)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the center of a triangle's circumcircle.",
+        "whenToUse": "Use when a circle through three points is needed.",
+        "whereUsed": "Triangulation and advanced geometry.",
+        "whyOptimal": "Only a constant number of equations are solved."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def circumcenter(a,b,c):\n    ax,ay=a; bx,by=b; cx,cy=c\n    d=2*(ax*(by-cy)+bx*(cy-ay)+cx*(ay-by))\n\n    ux=((ax*ax+ay*ay)*(by-cy)+\n        (bx*bx+by*by)*(cy-ay)+\n        (cx*cx+cy*cy)*(ay-by))/d\n\n    uy=((ax*ax+ay*ay)*(cx-bx)+\n        (bx*bx+by*by)*(ax-cx)+\n        (cx*cx+cy*cy)*(bx-ax))/d\n\n    return ux,uy"
+        },
+        {
+          "language": "cpp",
+          "code": "pair<double,double> circumcenter(auto a,auto b,auto c) {\n    double d=2*(a.first*(b.second-c.second)\n              +b.first*(c.second-a.second)\n              +c.first*(a.second-b.second));\n\n    double ux=((a.first*a.first+a.second*a.second)*(b.second-c.second)\n              +(b.first*b.first+b.second*b.second)*(c.second-a.second)\n              +(c.first*c.first+c.second*c.second)*(a.second-b.second))/d;\n\n    double uy=((a.first*a.first+a.second*a.second)*(c.first-b.first)\n              +(b.first*b.first+b.second*b.second)*(a.first-c.first)\n              +(c.first*c.first+c.second*c.second)*(b.first-a.first))/d;\n\n    return {ux,uy};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double[] circumcenter(double[] a,double[] b,double[] c) {\n    double d=2*(a[0]*(b[1]-c[1])+b[0]*(c[1]-a[1])+c[0]*(a[1]-b[1]));\n\n    double ux=((a[0]*a[0]+a[1]*a[1])*(b[1]-c[1])\n             +(b[0]*b[0]+b[1]*b[1])*(c[1]-a[1])\n             +(c[0]*c[0]+c[1]*c[1])*(a[1]-b[1]))/d;\n\n    double uy=((a[0]*a[0]+a[1]*a[1])*(c[0]-b[0])\n             +(b[0]*b[0]+b[1]*b[1])*(a[0]-c[0])\n             +(c[0]*c[0]+c[1]*c[1])*(b[0]-a[0]))/d;\n\n    return new double[]{ux,uy};\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "incenter",
+      "title": "Incenter of Triangle",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find the center of the circle that touches all three sides of a triangle.",
+      "explanation": [
+        "The incenter is the intersection of the three angle bisectors.",
+        "It can also be calculated using side lengths as weights.",
+        "If side lengths opposite A, B and C are a, b and c, then the incenter is a weighted average of the vertices.",
+        "It is always inside the triangle."
+      ],
+      "exampleTrace": {
+        "input": "Equilateral triangle",
+        "output": "Incenter = centroid",
+        "traceSteps": [
+          "All three sides are equal.",
+          "All three angle bisectors meet at the same central point.",
+          "Because the triangle is symmetric, this point is also the centroid."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the center of the inscribed circle.",
+        "whenToUse": "Use when distances to all three sides are equal.",
+        "whereUsed": "Triangle geometry and advanced computational geometry.",
+        "whyOptimal": "Constant-time weighted-average calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef incenter(A,B,C):\n    a=math.dist(B,C)\n    b=math.dist(A,C)\n    c=math.dist(A,B)\n    s=a+b+c\n\n    return ((a*A[0]+b*B[0]+c*C[0])/s,\n            (a*A[1]+b*B[1]+c*C[1])/s)"
+        },
+        {
+          "language": "cpp",
+          "code": "pair<double,double> incenter(auto A,auto B,auto C) {\n    double a=hypot(B.first-C.first,B.second-C.second);\n    double b=hypot(A.first-C.first,A.second-C.second);\n    double c=hypot(A.first-B.first,A.second-B.second);\n    double s=a+b+c;\n\n    return {(a*A.first+b*B.first+c*C.first)/s,\n            (a*A.second+b*B.second+c*C.second)/s};\n}"
+        },
+        {
+          "language": "java",
+          "code": "static double[] incenter(double[] A,double[] B,double[] C) {\n    double a=Math.hypot(B[0]-C[0],B[1]-C[1]);\n    double b=Math.hypot(A[0]-C[0],A[1]-C[1]);\n    double c=Math.hypot(A[0]-B[0],A[1]-B[1]);\n    double s=a+b+c;\n\n    return new double[]{\n        (a*A[0]+b*B[0]+c*C[0])/s,\n        (a*A[1]+b*B[1]+c*C[1])/s\n    };\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "circle-tangent",
+      "title": "Tangent to a Circle",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find or reason about tangent lines from a point to a circle.",
+      "explanation": [
+        "A tangent touches a circle at exactly one point.",
+        "The radius to the tangent point is perpendicular to the tangent line.",
+        "If a point is outside the circle, normally two tangents can be drawn.",
+        "If the point is on the circle, there is one tangent.",
+        "If the point is inside, no real tangent exists."
+      ],
+      "exampleTrace": {
+        "input": "Circle center=(0,0), radius=3, point=(5,0)",
+        "output": "Two tangents",
+        "traceSteps": [
+          "Distance from center to point is 5.",
+          "5 > 3, so point is outside.",
+          "An outside point has two tangent lines to the circle."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines tangent possibilities between a point and circle.",
+        "whenToUse": "Use in circle geometry and visibility problems.",
+        "whereUsed": "Graphics, robotics and advanced geometry.",
+        "whyOptimal": "The basic classification requires only one distance comparison."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef tangent_count(center,r,p):\n    d=math.hypot(p[0]-center[0],p[1]-center[1])\n    if d < r: return 0\n    if math.isclose(d,r): return 1\n    return 2"
+        },
+        {
+          "language": "cpp",
+          "code": "int tangentCount(pair<double,double> c,double r,pair<double,double> p) {\n    double d=hypot(p.first-c.first,p.second-c.second);\n    const double EPS=1e-9;\n    if(d<r-EPS) return 0;\n    if(abs(d-r)<EPS) return 1;\n    return 2;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int tangentCount(double[] c,double r,double[] p) {\n    double d=Math.hypot(p[0]-c[0],p[1]-c[1]);\n    double eps=1e-9;\n    if(d<r-eps) return 0;\n    if(Math.abs(d-r)<eps) return 1;\n    return 2;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "polygon-triangulation",
+      "title": "Polygon Triangulation",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Understand how a simple polygon can be divided into triangles.",
+      "explanation": [
+        "Any simple polygon with n vertices can be divided into n-2 triangles.",
+        "For a convex polygon, diagonals from one vertex can make this very easy.",
+        "For example, a quadrilateral needs 2 triangles.",
+        "Triangulation is an important foundation for more advanced geometry algorithms."
+      ],
+      "exampleTrace": {
+        "input": "Quadrilateral with 4 vertices",
+        "output": "2 triangles",
+        "traceSteps": [
+          "Draw one diagonal.",
+          "The diagonal divides the quadrilateral into two triangles.",
+          "Therefore 4 - 2 = 2 triangles."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Divides a polygon into simpler triangle pieces.",
+        "whenToUse": "Use when triangle-based calculations are easier.",
+        "whereUsed": "Rendering, mesh generation and polygon algorithms.",
+        "whyOptimal": "A polygon always requires exactly n-2 triangles."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def number_of_triangles(n):\n    return max(0, n - 2)\n\nprint(number_of_triangles(4))"
+        },
+        {
+          "language": "cpp",
+          "code": "int numberOfTriangles(int n) {\n    return max(0,n-2);\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int numberOfTriangles(int n) {\n    return Math.max(0,n-2);\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "minkowski-sum",
+      "title": "Minkowski Sum",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n+m)",
+      "spaceComplexity": "O(n+m)",
+      "summary": "Combine two convex polygons by adding every point of one polygon to every point of the other.",
+      "explanation": [
+        "For sets A and B, the Minkowski sum contains every point a+b.",
+        "For convex polygons, the result is also convex.",
+        "Instead of trying every pair of points, merge polygon edges by their direction.",
+        "This is similar to merging two sorted lists.",
+        "It is useful for collision and configuration-space problems."
+      ],
+      "exampleTrace": {
+        "input": "Two simple convex shapes",
+        "output": "One larger convex polygon",
+        "traceSteps": [
+          "Order edges by their direction.",
+          "Start from the lowest-left vertex.",
+          "Merge edge directions from both polygons.",
+          "Add the chosen edge to the result.",
+          "The resulting boundary is the Minkowski sum."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines two convex shapes into one convex shape.",
+        "whenToUse": "Use in collision and configuration-space geometry.",
+        "whereUsed": "Robotics, collision detection and computational geometry.",
+        "whyOptimal": "Convex polygon edges can be merged linearly after ordering."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minkowski_point_sum(A,B):\n    # Educational brute-force version.\n    # Efficient convex-polygon implementation merges edge directions.\n    return {(a[0]+b[0],a[1]+b[1]) for a in A for b in B}"
+        },
+        {
+          "language": "cpp",
+          "code": "vector<pair<long long,long long>> minkowskiPointSum(\n    vector<pair<long long,long long>> A,\n    vector<pair<long long,long long>> B) {\n\n    vector<pair<long long,long long>> result;\n    for(auto a:A)\n        for(auto b:B)\n            result.push_back({a.first+b.first,a.second+b.second});\n    return result;\n}\n\n// For convex polygons, sort/rotate by edge direction and merge\n// edges to obtain the O(n+m) version."
+        },
+        {
+          "language": "java",
+          "code": "static List<long[]> minkowskiPointSum(long[][] A,long[][] B) {\n    List<long[]> result=new ArrayList<>();\n\n    for(long[] a:A)\n        for(long[] b:B)\n            result.add(new long[]{a[0]+b[0],a[1]+b[1]});\n\n    return result;\n}\n\n// For convex polygons, merge sorted edge directions for O(n+m)."
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "polygon-union-sweep",
+      "title": "Rectangle/Polygon Union Concept",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Calculate the combined covered area of multiple geometric objects without double-counting overlap.",
+      "explanation": [
+        "If two rectangles overlap, simply adding their areas counts the overlap twice.",
+        "Sweep-line algorithms process the rectangles from left to right.",
+        "At each x-coordinate, maintain the total covered y-length.",
+        "Multiply the covered y-length by the x-distance to get the added area.",
+        "This technique can be extended to more complex union-area problems."
+      ],
+      "exampleTrace": {
+        "input": "Two overlapping rectangles",
+        "output": "Union area without double counting",
+        "traceSteps": [
+          "Create left and right edge events.",
+          "Sort events by x.",
+          "Maintain active y intervals.",
+          "Calculate covered y length.",
+          "Multiply by the current x gap.",
+          "Add each strip's area."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds area covered by multiple objects.",
+        "whenToUse": "Use when overlapping regions must not be counted twice.",
+        "whereUsed": "Rectangle union, maps and computational geometry.",
+        "whyOptimal": "Sweep line avoids explicitly processing every tiny coordinate cell."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rectangle_area(r):\n    left,bottom,right,top=r\n    return max(0,right-left)*max(0,top-bottom)\n\n# Full rectangle-union area uses sweep line + active interval union."
+        },
+        {
+          "language": "cpp",
+          "code": "long long rectangleArea(array<long long,4> r) {\n    return max(0LL,r[2]-r[0])*max(0LL,r[3]-r[1]);\n}\n\n// Full union-area solution uses sweep events and an active\n// interval structure over y-coordinates."
+        },
+        {
+          "language": "java",
+          "code": "static long rectangleArea(long[] r) {\n    return Math.max(0,r[2]-r[0])*Math.max(0,r[3]-r[1]);\n}\n\n// Full rectangle-union algorithms use sweep line and an\n// active interval structure."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Rectangle Area II",
+          "url": "https://leetcode.com/problems/rectangle-area-ii/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "half-plane-intersection",
+      "title": "Half-Plane Intersection",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Find the common region satisfying many linear half-plane constraints.",
+      "explanation": [
+        "Every line divides the plane into two sides.",
+        "A half-plane keeps only one of those sides.",
+        "Intersecting many half-planes gives a feasible polygonal region.",
+        "The common region can be found using sorted boundary lines and a deque.",
+        "This is an advanced computational geometry technique."
+      ],
+      "exampleTrace": {
+        "input": "x>=0, y>=0, x<=4, y<=4",
+        "output": "Square [0,4] x [0,4]",
+        "traceSteps": [
+          "Keep the right side of x=0.",
+          "Keep the upper side of y=0.",
+          "Keep the left side of x=4.",
+          "Keep the lower side of y=4.",
+          "Their common region is a square."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the common feasible region of linear constraints.",
+        "whenToUse": "Use in advanced geometric constraint problems.",
+        "whereUsed": "Optimization, geometry and computational geometry.",
+        "whyOptimal": "Sorted half-planes can be processed efficiently."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def satisfies_half_plane(A,B,C,x,y):\n    return A*x+B*y+C >= 0\n\n# Full half-plane intersection requires sorting lines by angle\n# and maintaining a deque of candidate boundary lines."
+        },
+        {
+          "language": "cpp",
+          "code": "bool satisfiesHalfPlane(double A,double B,double C,double x,double y) {\n    return A*x+B*y+C>=0;\n}\n\n// Full half-plane intersection uses angle sorting and a deque."
+        },
+        {
+          "language": "java",
+          "code": "static boolean satisfiesHalfPlane(double A,double B,double C,double x,double y) {\n    return A*x+B*y+C>=0;\n}\n\n// Full half-plane intersection uses angle sorting and a deque."
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "voronoi-diagram",
+      "title": "Voronoi Diagram",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Divide the plane into regions based on the nearest point.",
+      "explanation": [
+        "Suppose several shops are placed on a map.",
+        "Every location belongs to the shop that is closest to it.",
+        "The regions created by this rule form a Voronoi diagram.",
+        "The boundary between two regions contains points equally distant from two sites.",
+        "The full algorithm is advanced, but the idea is very important."
+      ],
+      "exampleTrace": {
+        "input": "Two shops at (0,0) and (4,0)",
+        "output": "Boundary x=2",
+        "traceSteps": [
+          "A point at x=2 has equal distance from both shops.",
+          "Points left of x=2 are closer to the first shop.",
+          "Points right of x=2 are closer to the second shop.",
+          "Therefore the dividing boundary is x=2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Divides space according to nearest sites.",
+        "whenToUse": "Use for nearest-location and spatial partitioning problems.",
+        "whereUsed": "Maps, facility planning, robotics and GIS.",
+        "whyOptimal": "Advanced algorithms construct the complete diagram efficiently."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nearest_site(point, sites):\n    best=None\n    best_d=float('inf')\n\n    for i,s in enumerate(sites):\n        d=(point[0]-s[0])**2+(point[1]-s[1])**2\n        if d<best_d:\n            best_d=d\n            best=i\n\n    return best"
+        },
+        {
+          "language": "cpp",
+          "code": "int nearestSite(pair<long long,long long> p,\n                 vector<pair<long long,long long>> sites) {\n    long long best=LLONG_MAX;\n    int id=-1;\n\n    for(int i=0;i<sites.size();i++) {\n        long long dx=p.first-sites[i].first;\n        long long dy=p.second-sites[i].second;\n        long long d=dx*dx+dy*dy;\n        if(d<best) best=d,id=i;\n    }\n    return id;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static int nearestSite(long[] p,long[][] sites) {\n    long best=Long.MAX_VALUE;\n    int id=-1;\n\n    for(int i=0;i<sites.length;i++) {\n        long dx=p[0]-sites[i][0];\n        long dy=p[1]-sites[i][1];\n        long d=dx*dx+dy*dy;\n        if(d<best) { best=d; id=i; }\n    }\n    return id;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "delaunay-triangulation",
+      "title": "Delaunay Triangulation",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "summary": "Create a triangulation where no point lies inside the circumcircle of any triangle.",
+      "explanation": [
+        "Delaunay triangulation connects points into triangles.",
+        "A key property is that the circumcircle of every triangle contains no other input point in its interior.",
+        "It tends to avoid extremely skinny triangles.",
+        "It is closely related to the Voronoi diagram.",
+        "Implementations are advanced and usually rely on robust geometric predicates."
+      ],
+      "exampleTrace": {
+        "input": "Four points forming a square",
+        "output": "Square divided by a diagonal",
+        "traceSteps": [
+          "A square can be divided using either diagonal.",
+          "Both possible triangulations have valid empty circumcircles.",
+          "One diagonal produces two triangles.",
+          "The resulting triangles form a Delaunay triangulation."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Builds a high-quality triangulation of points.",
+        "whenToUse": "Use when a point set needs to become a triangle mesh.",
+        "whereUsed": "3D graphics, terrain modeling, GIS and finite-element methods.",
+        "whyOptimal": "Efficient implementations can construct it in O(n log n)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def circumcircle_condition(a,b,c,p):\n    # Educational placeholder for the geometric predicate.\n    # Production implementations should use robust predicates.\n    return True\n\n# Full Delaunay triangulation requires an incremental,\n# divide-and-conquer, or sweep-based triangulation algorithm."
+        },
+        {
+          "language": "cpp",
+          "code": "bool emptyCircumcircle() {\n    // Full Delaunay triangulation requires robust geometric\n    // predicates and a triangulation data structure.\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "static boolean emptyCircumcircle() {\n    // Full Delaunay triangulation is an advanced algorithm\n    // requiring robust geometric predicates.\n    return true;\n}"
+        }
+      ],
+      "practiceProblems": []
+    },
+    {
+      "id": "integer-lattice-points",
+      "title": "Lattice Points and Pick's Theorem",
+      "categoryId": "computational_geometry",
+      "categoryTitle": "Computational Geometry",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "summary": "Count integer-coordinate points inside and on the boundary of a lattice polygon.",
+      "explanation": [
+        "A lattice point has integer x and y coordinates.",
+        "For a lattice polygon, Pick's theorem says A = I + B/2 - 1.",
+        "A is the polygon area.",
+        "I is the number of interior lattice points.",
+        "B is the number of boundary lattice points.",
+        "Boundary points on an edge can be counted using gcd(|dx|,|dy|)."
+      ],
+      "exampleTrace": {
+        "input": "Square with corners (0,0),(2,0),(2,2),(0,2)",
+        "output": "Interior lattice points = 1",
+        "traceSteps": [
+          "Area = 4.",
+          "Boundary lattice points = 8.",
+          "4 = I + 8/2 - 1.",
+          "4 = I + 3.",
+          "I = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts integer points inside lattice polygons.",
+        "whenToUse": "Use when polygon coordinates are integers.",
+        "whereUsed": "Number theory and computational geometry.",
+        "whyOptimal": "Area and boundary counts can be computed in O(n)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from math import gcd\n\ndef boundary_points(poly):\n    ans=0\n    n=len(poly)\n    for i in range(n):\n        x1,y1=poly[i]\n        x2,y2=poly[(i+1)%n]\n        ans += gcd(abs(x2-x1),abs(y2-y1))\n    return ans\n\ndef interior_points(area, boundary):\n    return int(area - boundary/2 + 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "long long boundaryPoints(vector<pair<long long,long long>> p) {\n    long long ans=0;\n    int n=p.size();\n    for(int i=0;i<n;i++) {\n        auto a=p[i],b=p[(i+1)%n];\n        ans += gcd(llabs(b.first-a.first),llabs(b.second-a.second));\n    }\n    return ans;\n}\n\n// Pick: I = A - B/2 + 1"
+        },
+        {
+          "language": "java",
+          "code": "static long gcd(long a,long b) {\n    while(b!=0) { long t=a%b; a=b; b=t; }\n    return a;\n}\n\nstatic long boundaryPoints(long[][] p) {\n    long ans=0;\n    for(int i=0;i<p.length;i++) {\n        long[] a=p[i],b=p[(i+1)%p.length];\n        ans+=gcd(Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1]));\n    }\n    return ans;\n}\n\n// Pick: I = A - B/2 + 1"
+        }
+      ],
+      "practiceProblems": []
+    }
+  ]
+}

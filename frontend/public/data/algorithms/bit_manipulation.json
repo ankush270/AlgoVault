@@ -1,0 +1,723 @@
+{
+  "id": "bit_manipulation",
+  "category": {
+    "id": "bit_manipulation",
+    "title": "Bit Manipulation",
+    "icon": "Cpu",
+    "description": "Bitwise XOR, masking, subset generation, and bitwise tricks."
+  },
+  "totalAlgorithms": 14,
+  "algorithms": [
+    {
+      "id": "brian-kernighan-algorithm",
+      "title": "Brian Kernighan's Algorithm (Counting Set Bits)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(K) where K = set bits",
+      "spaceComplexity": "O(1)",
+      "summary": "Counts set bits (1s) in an integer in O(K) time by repeatedly clearing the lowest set bit using n &= (n - 1).",
+      "explanation": [
+        "Subtracting 1 from a number n flips the lowest set bit (1 -> 0) and all trailing 0s to 1s.",
+        "Performing `n = n & (n - 1)` clears the rightmost set bit in n.",
+        "Repeat this operation in a loop until n becomes 0.",
+        "Count the number of iterations; this equals the total number of set bits (population count)."
+      ],
+      "exampleTrace": {
+        "input": "n = 12 (Binary: 1100)",
+        "output": "2 set bits",
+        "traceSteps": [
+          "Initialize count = 0.",
+          "Iteration 1: n = 12 (1100). Clear lowest set bit: n = n & (n - 1) = 12 & 11 = 1100 & 1011 = 1000 (8). count = 1.",
+          "Iteration 2: n = 8 (1000). Clear lowest set bit: n = n & (n - 1) = 8 & 7 = 1000 & 0111 = 0000 (0). count = 2.",
+          "Loop terminates because n == 0.",
+          "Number of set bits (weight) = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts set bits in a binary integer in time proportional to the number of set bits rather than total bits.",
+        "whenToUse": "When calculating Hamming weight, population count, or checking bit densities.",
+        "whereUsed": "Error detection codes (Hamming distance), bitmap index cardinalities, cryptography.",
+        "whyOptimal": "Skips all 0 bits entirely, running in O(K) steps instead of checking all 32 or 64 bit positions."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_set_bits(n):\n    count = 0\n    while n:\n        n &= (n - 1)\n        count += 1\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nint countSetBits(int n) {\n    int count = 0;\n    while (n > 0) {\n        n &= (n - 1);\n        count++;\n    }\n    return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 191 - Number of 1 Bits",
+          "url": "https://leetcode.com/problems/number-of-1-bits/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 338 - Counting Bits",
+          "url": "https://leetcode.com/problems/counting-bits/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "xor-single-number-pattern",
+      "title": "Single Number & XOR Cancellation Pattern",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the unique element in an array where every other element appears twice using XOR identity properties (X ^ X = 0 and X ^ 0 = X).",
+      "explanation": [
+        "Initialize `result = 0`.",
+        "Iterate through all elements `x` in the array and perform `result ^= x`.",
+        "Because XOR is commutative and associative, paired identical elements cancel out: `A ^ A = 0`.",
+        "The remaining value in `result` is the single unique number (`0 ^ Unique = Unique`)."
+      ],
+      "exampleTrace": {
+        "input": "nums = [4, 1, 2, 1, 2]",
+        "output": "4 (The element that appears only once)",
+        "traceSteps": [
+          "Initialize result = 0.",
+          "Step 1: result ^= 4 -> 0 ^ 4 = 4.",
+          "Step 2: result ^= 1 -> 4 ^ 1 = 5.",
+          "Step 3: result ^= 2 -> 5 ^ 2 = 7.",
+          "Step 4: result ^= 1 -> 7 ^ 1 = 6 (since 1 ^ 1 = 0 cancels out).",
+          "Step 5: result ^= 2 -> 6 ^ 2 = 4 (since 2 ^ 2 = 0 cancels out).",
+          "All duplicate pairs cancelled out via XOR identity a ^ a = 0. Single number = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies an unpaired number in O(N) time with zero extra memory O(1).",
+        "whenToUse": "When elements occur in pairs except for one, or when finding missing/duplicate numbers.",
+        "whereUsed": "RAID 5 parity calculation, data integrity checking, memory efficient duplicate detection.",
+        "whyOptimal": "Requires 0 extra memory (O(1) space) whereas Hash Set approaches require O(N) auxiliary space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def single_number(nums):\n    res = 0\n    for num in nums:\n        res ^= num\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nint singleNumber(vector<int>& nums) {\n    int res = 0;\n    for (int num : nums) res ^= num;\n    return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 136 - Single Number",
+          "url": "https://leetcode.com/problems/single-number/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 268 - Missing Number",
+          "url": "https://leetcode.com/problems/missing-number/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "two-single-numbers-bitmask",
+      "title": "Two Single Numbers (Bitmask Partitioning)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds two unique numbers in an array where all other elements appear twice, using the rightmost set bit mask (diff & -diff).",
+      "explanation": [
+        "XOR all elements in array: `xor_sum = A ^ B` (where A and B are the two single numbers).",
+        "Find rightmost set bit in `xor_sum`: `rightmost_bit = xor_sum & (-xor_sum)`.",
+        "This bit MUST be set (1) in one single number and unset (0) in the other.",
+        "Partition array elements into two groups based on whether this bit is set.",
+        "XOR all elements in group 1 to get `num1`, and group 2 to get `num2`."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 2, 1, 3, 2, 5]",
+        "output": "[3, 5] (The two elements appearing once)",
+        "traceSteps": [
+          "Step 1: XOR all elements -> overall_xor = 3 ^ 5 = 011 ^ 101 = 110 (6).",
+          "Step 2: Find rightmost set bit -> diff_bit = 6 & (-6) = 110 & 010 = 010 (2).",
+          "Step 3: Divide numbers into 2 groups based on 2nd bit being set or 0:",
+          "Group 1 (2nd bit IS set): [2, 3, 2] -> XOR sum = 2 ^ 3 ^ 2 = 3.",
+          "Group 2 (2nd bit IS NOT set): [1, 1, 5] -> XOR sum = 1 ^ 1 ^ 5 = 5.",
+          "The two unique single numbers are 3 and 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds two distinct non-repeating numbers among paired duplicates in O(N) time and O(1) space.",
+        "whenToUse": "When two items appear once while all others appear in pairs.",
+        "whereUsed": "Advanced error-correcting codes, signal demuxing, memory allocation debugging.",
+        "whyOptimal": "Partitions data virtually using bitwise mask without extra space allocation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def single_number_iii(nums):\n    xor_sum = 0\n    for num in nums:\n        xor_sum ^= num\n    # Rightmost set bit\n    diff_bit = xor_sum & (-xor_sum)\n    num1 = num2 = 0\n    for num in nums:\n        if num & diff_bit:\n            num1 ^= num\n        else:\n            num2 ^= num\n    return [num1, num2]"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 260 - Single Number III",
+          "url": "https://leetcode.com/problems/single-number-iii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "power-of-two-bit-tricks",
+      "title": "Power of Two & Bitwise Fundamental Manipulations",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Core O(1) bitwise operations: Check Power of 2, Set k-th bit, Clear k-th bit, Toggle k-th bit, and Extract Rightmost Set Bit.",
+      "explanation": [
+        "Check if N is Power of 2: `(n > 0) and (n & (n - 1)) == 0`.",
+        "Set k-th bit: `n | (1 << k)`.",
+        "Clear k-th bit: `n & ~(1 << k)`.",
+        "Toggle k-th bit: `n ^ (1 << k)`.",
+        "Check if k-th bit is set: `(n & (1 << k)) != 0`.",
+        "Extract rightmost set bit: `n & (-n)`."
+      ],
+      "exampleTrace": {
+        "input": "n = 16 (Binary: 10000)",
+        "output": "True (16 is a power of 2)",
+        "traceSteps": [
+          "Check condition: n > 0 (16 > 0 is True).",
+          "Compute n & (n - 1):",
+          "n = 16 (10000 in binary)",
+          "n - 1 = 15 (01111 in binary)",
+          "16 & 15 = 10000 & 01111 = 00000 (0).",
+          "Since n > 0 and (n & (n - 1)) == 0, 16 is verified as a power of 2!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs fundamental bit manipulations in constant O(1) CPU instruction time.",
+        "whenToUse": "When optimizing flags, permission masks, or mathematical power constraints.",
+        "whereUsed": "Linux OS file permissions (chmod rwx bitmask), graphics rendering flags, embedded systems.",
+        "whyOptimal": "Executes directly as single low-level ALU assembly instructions (AND, OR, XOR, SHIFT)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def is_power_of_two(n):\n    return n > 0 and (n & (n - 1)) == 0\n\ndef set_bit(n, k):\n    return n | (1 << k)\n\ndef clear_bit(n, k):\n    return n & ~(1 << k)\n\ndef toggle_bit(n, k):\n    return n ^ (1 << k)\n\ndef check_bit(n, k):\n    return bool(n & (1 << k))"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 231 - Power of Two",
+          "url": "https://leetcode.com/problems/power-of-two/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "subsets-bitmask-generation",
+      "title": "Power Set Generation via Bitmasking",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N * 2^N)",
+      "spaceComplexity": "O(1) Auxiliary",
+      "summary": "Generates all 2^N subsets of a set using integer bitmasks from 0 to 2^N - 1.",
+      "explanation": [
+        "For a set of N elements, there are 2^N total subsets.",
+        "Iterate integer `mask` from `0` to `(1 << N) - 1`.",
+        "For each bit position `i` from `0` to `N - 1`:",
+        "  - If `(mask & (1 << i))` is non-zero, include `nums[i]` in the current subset.",
+        "Append current subset to final output list."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 2, 3] (N = 3 elements)",
+        "output": "8 Subsets: [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3]]",
+        "traceSteps": [
+          "Total subsets = 2^3 = 8 (mask from 0 to 7):",
+          "mask = 0 (000): []",
+          "mask = 1 (001): [nums[0]] = [1]",
+          "mask = 2 (010): [nums[1]] = [2]",
+          "mask = 3 (011): [nums[0], nums[1]] = [1, 2]",
+          "mask = 4 (100): [nums[2]] = [3]",
+          "mask = 5 (101): [nums[0], nums[2]] = [1, 3]",
+          "mask = 6 (110): [nums[1], nums[2]] = [2, 3]",
+          "mask = 7 (111): [nums[0], nums[1], nums[2]] = [1, 2, 3]",
+          "All 2^N subsets generated using bitwise mask iterations."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Enumerates all combinations and subsets without recursive call stack overhead.",
+        "whenToUse": "When N <= 20 and problem asks for all subsets, combinations, or Traveling Salesperson states.",
+        "whereUsed": "NP-hard problem state representation, Bitmask Dynamic Programming (TSP), feature selection.",
+        "whyOptimal": "Iterative bitmasking avoids recursive call stack space and overhead of backtracking."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subsets(nums):\n    n = len(nums)\n    total = 1 << n\n    res = []\n    for mask in range(total):\n        sub = []\n        for i in range(n):\n            if mask & (1 << i):\n                sub.append(nums[i])\n        res.append(sub)\n    return res"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 78 - Subsets",
+          "url": "https://leetcode.com/problems/subsets/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bitwise-addition-subtraction",
+      "title": "Bitwise Addition & Subtraction (Sum of Two Integers)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(32) = O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes the sum of two integers without using arithmetic operators (+, -) using bitwise XOR and AND operations.",
+      "explanation": [
+        "Sum without carry: `a ^ b`.",
+        "Carry bits: `(a & b) << 1`.",
+        "Repeat `a = a ^ b` and `b = carry` until `b == 0` (no carry remains).",
+        "Return `a` as the final sum."
+      ],
+      "exampleTrace": {
+        "input": "a = 5 (0101), b = 7 (0111)",
+        "output": "12",
+        "traceSteps": [
+          "Iteration 1: sum_without_carry = a ^ b = 0101 ^ 0111 = 0010 (2). carry = (a & b) << 1 = (0101 & 0111) << 1 = 0101 << 1 = 1010 (10). a = 2, b = 10.",
+          "Iteration 2: sum_without_carry = 2 ^ 10 = 0010 ^ 1010 = 1000 (8). carry = (2 & 10) << 1 = (0010 & 1010) << 1 = 0010 << 1 = 0100 (4). a = 8, b = 4.",
+          "Iteration 3: sum_without_carry = 8 ^ 4 = 1000 ^ 0100 = 1100 (12). carry = (8 & 4) << 1 = 0 << 1 = 0. a = 12, b = 0.",
+          "b == 0 -> Loop ends. Result = 12."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Adds two integers at hardware gate level without standard `+` operator.",
+        "whenToUse": "In hardware adder design, software emulation, or restricted operator interview constraints.",
+        "whereUsed": "CPU Half-Adder & Full-Adder digital circuits, VM execution engines.",
+        "whyOptimal": "Emulates hardware logic gates (XOR for sum, AND for carry) in O(bit length) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def get_sum(a, b):\n    MASK = 0xFFFFFFFF\n    MAX_INT = 0x7FFFFFFF\n    while b != 0:\n        carry = (a & b) << 1\n        a = (a ^ b) & MASK\n        b = carry & MASK\n    return a if a <= MAX_INT else ~(a ^ MASK)"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 371 - Sum of Two Integers",
+          "url": "https://leetcode.com/problems/sum-of-two-integers/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "submask-enumeration-trick",
+      "title": "Submask Enumeration Trick (Iterating All Submasks in O(3^N))",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Hard",
+      "timeComplexity": "O(3^N) Total for All Masks",
+      "spaceComplexity": "O(1)",
+      "summary": "Iterates over all submasks of a bitmask in O(submasks) time using `submask = (submask - 1) & mask` without checking non-submask numbers.",
+      "explanation": [
+        "Given a bitmask `mask`:",
+        "Initialize `submask = mask`.",
+        "In loop: process `submask`, then update `submask = (submask - 1) & mask`.",
+        "Terminate loop when `submask == 0`.",
+        "Total iterations over all possible masks `0` to `2^N - 1` is exactly sum `C(N, k) * 2^k = 3^N` instead of naive O(4^N)."
+      ],
+      "exampleTrace": {
+        "input": "mask = 13 (Binary: 1101, elements {0, 2, 3})",
+        "output": "Submasks: [13, 12, 9, 8, 5, 4, 1, 0]",
+        "traceSteps": [
+          "Initialize submask = mask = 13 (1101).",
+          "submask = 13 (1101): process -> next submask = (13 - 1) & 13 = 12 & 13 = 12 (1100).",
+          "submask = 12 (1100): process -> next submask = (12 - 1) & 13 = 11 & 13 = 1011 & 1101 = 9 (1001).",
+          "submask = 9 (1001): process -> next submask = (9 - 1) & 13 = 8 & 13 = 1000 (8).",
+          "submask = 8 (1000): process -> next submask = (8 - 1) & 13 = 7 & 13 = 0111 & 1101 = 5 (0101).",
+          "submask = 5 (0101): process -> next submask = (5 - 1) & 13 = 4 & 13 = 0100 (4).",
+          "submask = 4 (0100): process -> next submask = (4 - 1) & 13 = 3 & 13 = 0011 & 1101 = 1 (0001).",
+          "submask = 1 (0001): process -> next submask = (1 - 1) & 13 = 0.",
+          "submask = 0: process -> loop terminates. All 2^popcount submasks iterated without checking invalid masks!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Iterates strictly over set bits of a mask in submask DP transitions without inspecting invalid integers.",
+        "whenToUse": "In Bitmask DP problems like partitioning items, set cover, graph clique enumeration.",
+        "whereUsed": "Competitive programming Bit DP, optimal matching algorithms.",
+        "whyOptimal": "Reduces total state transitions from O(4^N) to O(3^N), making N=15 solvable in under 15ms."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def enumerate_submasks(mask):\n    submask = mask\n    submasks = []\n    while True:\n        submasks.append(submask)\n        if submask == 0:\n            break\n        submask = (submask - 1) & mask\n    return submasks"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GFG - Submask Enumeration Technique",
+          "url": "https://cp-algorithms.com/algebra/all-submasks.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "reverse-bits-algorithm",
+      "title": "Reverse Bits of 32-bit Integer",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Reverses the 32 binary bits of an unsigned integer using bit shifting or divide-and-conquer bit swaps.",
+      "explanation": [
+        "Initialize `res = 0`.",
+        "Loop `i` from 0 to 31:",
+        "  - Shift `res` left by 1 bit: `res = (res << 1)`.",
+        "  - Add lowest bit of `n`: `res |= (n & 1)`.",
+        "  - Shift `n` right by 1 bit: `n >>= 1`.",
+        "Return 32-bit integer `res`."
+      ],
+      "exampleTrace": {
+        "input": "n = 43261596 (Binary: 00000010100101000001111010011100)",
+        "output": "964176192 (Binary: 00111001011110000010100101000000)",
+        "traceSteps": [
+          "Initialize ans = 0.",
+          "Loop i from 0 to 31:",
+          "Extract last bit of n: bit = (n >> i) & 1.",
+          "Append bit to reversed position: ans = ans | (bit << (31 - i)).",
+          "After 32 loop iterations, all 32 bits are reversed in O(1) time.",
+          "Resulting reversed 32-bit integer = 964176192."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reverses binary digit positions of a 32-bit integer.",
+        "whenToUse": "In signal processing (Fast Fourier Transform bit-reversals) and binary file formatting.",
+        "whereUsed": "Cooley-Tukey FFT algorithm indexing, networking protocols, image processing.",
+        "whyOptimal": "Runs in fixed 32 iterations O(1) or O(log 32) using bitwise mask swaps."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def reverse_bits(n):\n    res = 0\n    for _ in range(32):\n        res = (res << 1) | (n & 1)\n        n >>= 1\n    return res"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 190 - Reverse Bits",
+          "url": "https://leetcode.com/problems/reverse-bits/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bitwise-and-operator-techniques",
+      "title": "Bitwise AND (&) Techniques (Odd/Even, Mask Checking, Clear Bit)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Master patterns using the AND (&) operator: Checking Odd/Even (n & 1), checking k-th bit, clearing k-th bit, and resetting lowest set bit.",
+      "explanation": [
+        "1. Odd/Even Check: `(n & 1) == 1` for Odd, `(n & 1) == 0` for Even (faster than modulo `% 2`).",
+        "2. Check k-th Bit: `(n & (1 << k)) != 0` or `(n >> k) & 1` returns 1 if set, 0 if unset.",
+        "3. Clear k-th Bit: `n & ~(1 << k)` flips the k-th bit to 0 while keeping all other bits unchanged.",
+        "4. Reset Lowest Set Bit: `n & (n - 1)` clears the rightmost 1-bit.",
+        "5. Extract Lowest Set Bit: `n & (-n)` isolates the rightmost 1-bit as a single bitmask."
+      ],
+      "exampleTrace": {
+        "input": "n = 14 (1110), Technique: Clear k-th bit (k=1) & Check Odd/Even",
+        "output": "Clear Bit 1: 12 (1100), Odd Check: False (Even)",
+        "traceSteps": [
+          "Check Odd/Even: 14 & 1 = 1110 & 0001 = 0 -> 14 is EVEN.",
+          "Clear Bit k=1 (val 2): mask = ~(1 << 1) = ~(0010) = 1101.",
+          "Perform AND: 14 & mask = 1110 & 1101 = 1100 (12).",
+          "Bit 1 cleared successfully to yield 12."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs fundamental bit filtering, bit testing, and selective bit clearing in O(1) time.",
+        "whenToUse": "Whenever inspecting specific bits, filtering flags, or determining parity of numbers.",
+        "whereUsed": "Network IP subnet masking (IP & SubnetMask), OS file permissions, CPU flag registers.",
+        "whyOptimal": "Executes in a single CPU clock cycle (ALU AND instruction)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def is_odd(n):\n    return bool(n & 1)\n\ndef is_kth_bit_set(n, k):\n    return bool((n >> k) & 1)\n\ndef clear_kth_bit(n, k):\n    return n & ~(1 << k)\n\ndef extract_lowest_set_bit(n):\n    return n & (-n)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nbool isOdd(int n) { return n & 1; }\nbool isKthBitSet(int n, int k) { return (n >> k) & 1; }\nint clearKthBit(int n, int k) { return n & ~(1 << k); }\nint extractLowestSetBit(int n) { return n & (-n); }"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 191 - Number of 1 Bits",
+          "url": "https://leetcode.com/problems/number-of-1-bits/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bitwise-or-operator-techniques",
+      "title": "Bitwise OR (|) Techniques (Setting Bits, Merging Masks, Flags)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Master patterns using the OR (|) operator: Setting the k-th bit to 1, merging permission bitmasks, and tracking visited state flags.",
+      "explanation": [
+        "1. Set k-th Bit to 1: `n | (1 << k)` turns the k-th bit ON regardless of its previous value.",
+        "2. Merge Two Bitmasks: `maskA | maskB` combines all set bits from both masks.",
+        "3. Set Lowest Unset Bit: `n | (n + 1)` turns the rightmost 0-bit into 1.",
+        "4. State Tracking: Use integer bits as boolean flags (e.g. `visited_mask |= (1 << city_id)`)."
+      ],
+      "exampleTrace": {
+        "input": "mask = 4 (0100), Technique: Set Bit k=1 & Merge Permission Flags",
+        "output": "Set Bit 1: 6 (0110), Merged Flags (READ|WRITE): 3 (0011)",
+        "traceSteps": [
+          "Set Bit k=1: compute 4 | (1 << 1) = 0100 | 0010 = 0110 (6).",
+          "Permission Flags: READ = 1 (0001), WRITE = 2 (0010).",
+          "Merge flags with OR: combined = READ | WRITE = 0001 | 0010 = 0011 (3).",
+          "Bit 1 set and flags merged seamlessly."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sets specific bit positions to 1 and merges multiple bitmask sets without iteration.",
+        "whenToUse": "When configuring feature flags, enabling permissions, or building subset states in Bitwise DP.",
+        "whereUsed": "Linux `chmod` file permission aggregation (`READ | WRITE | EXECUTE`), graphics render flags.",
+        "whyOptimal": "Merges up to 32/64 boolean states into a single bitwise OR operation in 1 clock cycle."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def set_kth_bit(n, k):\n    return n | (1 << k)\n\ndef merge_masks(mask1, mask2):\n    return mask1 | mask2\n\ndef add_item_to_bitset(mask, item_id):\n    return mask | (1 << item_id)"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1486 - XOR Operation in an Array",
+          "url": "https://leetcode.com/problems/xor-operation-in-an-array/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bitwise-xor-operator-techniques",
+      "title": "Bitwise XOR (^) Techniques (In-Place Swap, Parity & Range XOR)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Master patterns using the XOR (^) operator: Swapping variables without temporary storage, toggling bits, and O(1) Range XOR sum.",
+      "explanation": [
+        "1. In-Place Swap: `a ^= b; b ^= a; a ^= b` swaps `a` and `b` without temporary variable.",
+        "2. Toggle k-th Bit: `n ^ (1 << k)` flips 0 -> 1 and 1 -> 0 at index k.",
+        "3. XOR Range Sum 1..N in O(1):",
+        "   - `if N % 4 == 0`: return `N`",
+        "   - `if N % 4 == 1`: return `1`",
+        "   - `if N % 4 == 2`: return `N + 1`",
+        "   - `if N % 4 == 3`: return `0`",
+        "4. Self Cancellation: `x ^ x = 0` and `x ^ 0 = x`."
+      ],
+      "exampleTrace": {
+        "input": "In-place Swap: a = 5, b = 9",
+        "output": "a = 9, b = 5 (Swapped without temporary variable)",
+        "traceSteps": [
+          "Initial: a = 5 (0101), b = 9 (1001).",
+          "Step 1: a = a ^ b = 5 ^ 9 = 0101 ^ 1001 = 1100 (12).",
+          "Step 2: b = a ^ b = 12 ^ 9 = 1100 ^ 1001 = 0101 (5).",
+          "Step 3: a = a ^ b = 12 ^ 5 = 1100 ^ 0101 = 1001 (9).",
+          "Variables swapped in O(1) memory: a is now 9, b is now 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs bit toggling, variable swapping, and 1..N prefix XOR sums in constant time.",
+        "whenToUse": "When swapping variables, flipping specific bits, or solving parity and missing element problems.",
+        "whereUsed": "RAID 5 parity storage, cryptographic stream ciphers (RC4, One-Time Pad), checksums.",
+        "whyOptimal": "Provides 100% reversible bit transformation without integer overflow or extra memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def swap_without_temp(a, b):\n    a ^= b\n    b ^= a\n    a ^= b\n    return a, b\n\ndef toggle_kth_bit(n, k):\n    return n ^ (1 << k)\n\ndef xor_1_to_n(n):\n    rem = n % 4\n    if rem == 0: return n\n    if rem == 1: return 1\n    if rem == 2: return n + 1\n    return 0"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1720 - Decode XORed Array",
+          "url": "https://leetcode.com/problems/decode-xored-array/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 2425 - Bitwise XOR of All Pairings",
+          "url": "https://leetcode.com/problems/bitwise-xor-of-all-pairings/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bitwise-not-twos-complement",
+      "title": "Bitwise NOT (~) & Two's Complement Mechanics (-N = ~N + 1)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Master NOT (~) and Two's Complement binary representation: ~x = -(x + 1), finding -n = ~n + 1, and bitwise complement.",
+      "explanation": [
+        "1. Bitwise NOT (`~x`): Inverts all bits (0 -> 1, 1 -> 0). In 2's complement: `~x = -(x + 1)`.",
+        "2. Two's Complement Representation: Negative of a number `n` is `-n = ~n + 1`.",
+        "3. Extract Rightmost Set Bit: `n & (-n)` works because `-n` flips all bits to the left of the lowest set bit.",
+        "4. Bitmask Complement: Use `~mask` combined with bit length limit `((1 << length) - 1) & (~n)` to prevent negative sign extension."
+      ],
+      "exampleTrace": {
+        "input": "n = 5 (0000...0101)",
+        "output": "Bitwise NOT ~5 = -6, Two's Complement -5 = ~5 + 1 = -6 + 1 = -5",
+        "traceSteps": [
+          "Bitwise NOT (~n): ~5 = ~(00000101) = 11111010 = -6 in 32-bit signed 2's complement.",
+          "Formula check: ~n = -(n + 1) -> ~(5) = -(5 + 1) = -6.",
+          "Two's Complement Negation (-n): ~5 + 1 = -6 + 1 = -5.",
+          "Demonstrates fundamental CPU integer representation rules."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes bitwise negations, two's complement arithmetic, and isolates rightmost 1-bits.",
+        "whenToUse": "When clearing all bits except rightmost, or finding 1's and 2's complements of binary numbers.",
+        "whereUsed": "CPU signed integer arithmetic units, Fenwick Tree (Binary Indexed Tree) index navigation.",
+        "whyOptimal": "Fenwick Tree index step `i += (i & -i)` runs in 1 CPU cycle using two's complement."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def get_twos_complement(n):\n    return (~n) + 1\n\ndef find_complement(num):\n    # LeetCode 476: Find Number Complement\n    bit_length = num.bit_length()\n    mask = (1 << bit_length) - 1\n    return num ^ mask"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 476 - Number Complement",
+          "url": "https://leetcode.com/problems/number-complement/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 1009 - Complement of Base 10 Integer",
+          "url": "https://leetcode.com/problems/complement-of-base-10-integer/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-exponentiation-bit-shifts",
+      "title": "Binary Exponentiation (Fast Power x^n via Bitwise Shifts)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes x^n in O(log N) time using binary expansion of exponent n with right shifts (n >>= 1) and bit checks (n & 1).",
+      "explanation": [
+        "Express exponent `n` in binary form: `n = b_k * 2^k + ... + b_1 * 2^1 + b_0 * 2^0`.",
+        "Initialize `result = 1` and `current_base = x`.",
+        "While exponent `n > 0`:",
+        "  - Check lowest bit: If `(n & 1) == 1`, multiply `result = (result * current_base) % MOD`.",
+        "  - Square base: `current_base = (current_base * current_base) % MOD`.",
+        "  - Right shift exponent: `n >>= 1` (equivalent to `n //= 2`).",
+        "Return `result`."
+      ],
+      "exampleTrace": {
+        "input": "x = 2, n = 10 (Binary: 1010)",
+        "output": "1024",
+        "traceSteps": [
+          "Initialize ans = 1, base = 2, exp = 10.",
+          "Iteration 1: exp = 10 (1010). Last bit (10 & 1) = 0. base = 2 * 2 = 4, exp = exp >> 1 = 5 (0101).",
+          "Iteration 2: exp = 5 (0101). Last bit (5 & 1) = 1 -> ans = 1 * 4 = 4. base = 4 * 4 = 16, exp = exp >> 1 = 2 (0010).",
+          "Iteration 3: exp = 2 (0010). Last bit (2 & 1) = 0. base = 16 * 16 = 256, exp = exp >> 1 = 1 (0001).",
+          "Iteration 4: exp = 1 (0001). Last bit (1 & 1) = 1 -> ans = 4 * 256 = 1024. base = 65536, exp = 0.",
+          "Loop ends. Computed 2^10 = 1024 in log2(10) = 4 steps."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes high powers x^n and (x^n) % MOD in logarithmic O(log N) multiplications.",
+        "whenToUse": "Whenever computing modular powers x^n % MOD, matrix exponentiation, or large powers.",
+        "whereUsed": "RSA Public Key Encryption (modular exponentiation), Fibonnaci O(log N) matrix multiplication.",
+        "whyOptimal": "Reduces 1,000,000,000 multiplications to just 30 multiplications using bitwise right shifts."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def fast_power(x, n, mod=10**9 + 7):\n    res = 1\n    x = x % mod\n    while n > 0:\n        if n & 1:\n            res = (res * x) % mod\n        x = (x * x) % mod\n        n >>= 1\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nlong long fastPower(long long x, long long n, long long mod = 1e9+7) {\n    long long res = 1;\n    x %= mod;\n    while (n > 0) {\n        if (n & 1) res = (res * x) % mod;\n        x = (x * x) % mod;\n        n >>= 1;\n    }\n    return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 50 - Pow(x, n)",
+          "url": "https://leetcode.com/problems/powx-n/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "fast-multiplication-division-bit-shifts",
+      "title": "Fast Division & Multiplication via Bit Shifting (<< and >>)",
+      "categoryId": "bit_manipulation",
+      "categoryTitle": "Bit Manipulation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Multiplies by 2^k using x << k and divides by 2^k using x >> k. Divides two integers without / or * operators using exponential bit shifting.",
+      "explanation": [
+        "Multiplication by 2^k: `x << k` shifts bits left by k positions (equivalent to `x * 2^k`).",
+        "Division by 2^k: `x >> k` shifts bits right by k positions (equivalent to `x // 2^k`).",
+        "Division without `/` or `*` operator (LeetCode 29):",
+        "  - Work with positive absolute values of dividend and divisor.",
+        "  - Find largest power of 2 shift `k` such that `(divisor << k) <= dividend`.",
+        "  - Subtract `(divisor << k)` from `dividend` and add `(1 << k)` to quotient.",
+        "  - Repeat until `dividend < divisor`."
+      ],
+      "exampleTrace": {
+        "input": "n = 7, Multiply by 8 (7 << 3) & Divide 40 by 4 (40 >> 2)",
+        "output": "7 * 8 = 56, 40 / 4 = 10",
+        "traceSteps": [
+          "Multiplication: 7 << 3:",
+          "7 in binary = 00000111.",
+          "Shift left by 3 bits (7 << 3) = 00111000 = 56. (7 * 2^3 = 56).",
+          "Division: 40 >> 2:",
+          "40 in binary = 00101000.",
+          "Shift right by 2 bits (40 >> 2) = 00001010 = 10. (40 / 2^2 = 10).",
+          "Executes single-cycle bitwise shift instructions on CPU."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs fast powers of 2 multiplication/division and division without arithmetic operators.",
+        "whenToUse": "When implementing custom division algorithms, low-level bit packing, or shift optimizations.",
+        "whereUsed": "Compiler code generators (replacing `x * 8` with `x << 3`), graphics bit alignment.",
+        "whyOptimal": "Bit shift CPU instructions `SHL` and `SHR` execute faster than hardware division `DIV` units."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def divide_without_operators(dividend, divisor):\n    if dividend == -2**31 and divisor == -1:\n        return 2**31 - 1\n    negative = (dividend < 0) ^ (divisor < 0)\n    d, v = abs(dividend), abs(divisor)\n    quotient = 0\n    while d >= v:\n        temp, multiple = v, 1\n        while d >= (temp << 1):\n            temp <<= 1\n            multiple <<= 1\n        d -= temp\n        quotient += multiple\n    return -quotient if negative else quotient"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 29 - Divide Two Integers",
+          "url": "https://leetcode.com/problems/divide-two-integers/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

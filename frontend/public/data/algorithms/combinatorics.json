@@ -1,0 +1,400 @@
+{
+  "id": "combinatorics",
+  "category": {
+    "id": "combinatorics",
+    "title": "Combinatorics & Discrete Mathematics",
+    "icon": "Layers",
+    "description": "Permutations, Combinations, Factorials, Pascal's Triangle, Lucas' Theorem for nCr modulo prime, and Inclusion-Exclusion Principle."
+  },
+  "totalAlgorithms": 7,
+  "algorithms": [
+    {
+      "id": "factorials-precomputation",
+      "title": "Factorials & Inverse Factorials Precomputation",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Precomputes Factorials `fact[i] = i!` and Inverse Factorials `invFact[i] = (i!)^(-1) % MOD` for instant O(1) combinatorics evaluations.",
+      "explanation": [
+        "1. Factorial Array: `fact[0] = 1`, `fact[i] = (fact[i-1] * i) % MOD`.",
+        "2. Fermat's Inverse: `invFact[N] = pow(fact[N], MOD - 2, MOD)`.",
+        "3. Linear Suffix Precomputation: `invFact[i-1] = (invFact[i] * i) % MOD` for `i` from N down to 1.",
+        "4. Precomputes both arrays up to N=10^6 in O(N) linear time."
+      ],
+      "exampleTrace": {
+        "title": "Trace Factorials up to N=5 (MOD = 10^9+7)",
+        "traceSteps": [
+          "fact = [1, 1, 2, 6, 24, 120]",
+          "invFact[5] = pow(120, MOD-2) % MOD",
+          "invFact[4] = invFact[5] * 5 % MOD",
+          "invFact[3] = invFact[4] * 4 % MOD",
+          "Enables instant O(1) computation of any nPr or nCr modulo MOD."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Precomputes factorials and inverse factorials for O(1) combinatorics queries.",
+        "whenToUse": "When answering multiple combinatorics queries under modulo 10^9+7 or 998244353.",
+        "whereUsed": "Competitive programming combinatorics, probability, graph counting.",
+        "whyOptimal": "O(N) precomputation turns factorial division into fast O(1) multiplications."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "MOD = 1_000_000_007\n\ndef precompute_factorials(n: int):\n    fact = [1] * (n + 1)\n    inv_fact = [1] * (n + 1)\n    for i in range(1, n + 1):\n        fact[i] = (fact[i - 1] * i) % MOD\n    inv_fact[n] = pow(fact[n], MOD - 2, MOD)\n    for i in range(n - 1, -1, -1):\n        inv_fact[i] = (inv_fact[i + 1] * (i + 1)) % MOD\n    return fact, inv_fact"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nconst int MOD = 1e9 + 7;\n\nlong long power(long long a, long long b) {\n    long long res = 1; a %= MOD;\n    while (b > 0) {\n        if (b & 1) res = (res * a) % MOD;\n        a = (a * a) % MOD; b >>= 1;\n    }\n    return res;\n}\n\npair<vector<long long>, vector<long long>> precomputeFactorials(int n) {\n    vector<long long> fact(n + 1, 1), invFact(n + 1, 1);\n    for (int i = 1; i <= n; i++) fact[i] = (fact[i - 1] * i) % MOD;\n    invFact[n] = power(fact[n], MOD - 2);\n    for (int i = n - 1; i >= 0; i--) invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;\n    return {fact, invFact};\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    static final int MOD = 1000000007;\n    static long power(long a, long b) {\n        long res = 1; a %= MOD;\n        while (b > 0) {\n            if ((b & 1) == 1) res = (res * a) % MOD;\n            a = (a * a) % MOD; b >>= 1;\n        }\n        return res;\n    }\n    public static long[][] precomputeFactorials(int n) {\n        long[] fact = new long[n + 1];\n        long[] invFact = new long[n + 1];\n        fact[0] = invFact[0] = 1;\n        for (int i = 1; i <= n; i++) fact[i] = (fact[i - 1] * i) % MOD;\n        invFact[n] = power(fact[n], MOD - 2);\n        for (int i = n - 1; i >= 0; i--) invFact[i] = (invFact[i + 1] * (i + 1)) % MOD;\n        return new long[][]{fact, invFact};\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "const MOD = 1000000007;\nfunction power(a, b) {\n  let res = 1n, base = BigInt(a) % BigInt(MOD), exp = BigInt(b);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % BigInt(MOD);\n    base = (base * base) % BigInt(MOD);\n    exp >>= 1n;\n  }\n  return res;\n}\nfunction precomputeFactorials(n) {\n  const fact = new Array(n + 1).fill(1);\n  const invFact = new Array(n + 1).fill(1);\n  for (let i = 1; i <= n; i++) fact[i] = Number((BigInt(fact[i - 1]) * BigInt(i)) % BigInt(MOD));\n  invFact[n] = Number(power(fact[n], MOD - 2));\n  for (let i = n - 1; i >= 0; i--) invFact[i] = Number((BigInt(invFact[i + 1]) * BigInt(i + 1)) % BigInt(MOD));\n  return { fact, invFact };\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Factorials Modulo P",
+          "url": "https://www.geeksforgeeks.org/compute-n-r-p-2/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "permutations-npr",
+      "title": "Permutations (nPr - Ordered Arrangements)",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) with precomputation",
+      "spaceComplexity": "O(1)",
+      "summary": "Calculates number of ordered arrangements of picking R items from N distinct items using formula nPr = n! / (n-r)!.",
+      "explanation": [
+        "1. Definition: Order matters! Arranging R items from N items.",
+        "2. Formula: `nPr = n! / (n - r)!`.",
+        "3. Modulo Formula: `nPr % MOD = (fact[n] * invFact[n - r]) % MOD`.",
+        "4. Invalid Bounds: Returns 0 if `r < 0` or `r > n`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 5P2 (Arranging 2 items out of 5)",
+        "traceSteps": [
+          "5P2 = 5! / (5 - 2)! = 5! / 3! = (120) / 6 = 20.",
+          "Using modulo arrays: (fact[5] * invFact[3]) % MOD = (120 * inv(6)) % MOD = 20."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes total distinct ordered arrangements.",
+        "whenToUse": "When sequence order of items matters (e.g. passwords, seating arrangements).",
+        "whereUsed": "Permutation problems, sequence counting, cryptography.",
+        "whyOptimal": "O(1) query time using precomputed factorial arrays."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nPr(n: int, r: int, fact: list[int], inv_fact: list[int], mod: int = 1_000_000_007) -> int:\n    if r < 0 or r > n: return 0\n    return (fact[n] * inv_fact[n - r]) % mod"
+        },
+        {
+          "language": "cpp",
+          "code": "long long nPr(int n, int r, const vector<long long>& fact, const vector<long long>& invFact, long long mod = 1e9 + 7) {\n    if (r < 0 || r > n) return 0;\n    return (fact[n] * invFact[n - r]) % mod;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long nPr(int n, int r, long[] fact, long[] invFact, long mod) {\n        if (r < 0 || r > n) return 0;\n        return (fact[n] * invFact[n - r]) % mod;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function nPr(n, r, fact, invFact, mod = 1000000007) {\n  if (r < 0 || r > n) return 0;\n  return Number((BigInt(fact[n]) * BigInt(invFact[n - r])) % BigInt(mod));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Permutation Coefficient nPr",
+          "url": "https://www.geeksforgeeks.org/permutation-coefficient/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "combinations-ncr-binomial",
+      "title": "Combinations (nCr) & Binomial Coefficients",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) with precomputation",
+      "spaceComplexity": "O(1)",
+      "summary": "Calculates number of unordered selections of R items from N distinct items using binomial formula nCr = n! / (r! * (n-r)!).",
+      "explanation": [
+        "1. Definition: Order does NOT matter! Choosing R items out of N.",
+        "2. Binomial Theorem: Coefficient of `x^(n-r) * y^r` in expansion `(x + y)^n` is `nCr`.",
+        "3. Formula: `nCr = n! / (r! * (n - r)!)`.",
+        "4. Modulo Multiplication: `nCr % MOD = (fact[n] * invFact[r] % MOD * invFact[n - r]) % MOD`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 5C2 (Choosing 2 items out of 5)",
+        "traceSteps": [
+          "5C2 = 5! / (2! * 3!) = 120 / (2 * 6) = 120 / 12 = 10.",
+          "Using precomputed inverse factorials: 120 * inv(2) * inv(6) mod MOD = 10."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes selection combinations in O(1) time.",
+        "whenToUse": "When choosing subsets, committee formation, or grid path counts.",
+        "whereUsed": "Grid unique paths DP, lottery probability, poker hand counts.",
+        "whyOptimal": "O(1) time replaces O(R) multiplicative loops."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nCr(n: int, r: int, fact: list[int], inv_fact: list[int], mod: int = 1_000_000_007) -> int:\n    if r < 0 or r > n: return 0\n    return (fact[n] * inv_fact[r] % mod) * inv_fact[n - r] % mod"
+        },
+        {
+          "language": "cpp",
+          "code": "long long nCr(int n, int r, const vector<long long>& fact, const vector<long long>& invFact, long long mod = 1e9 + 7) {\n    if (r < 0 || r > n) return 0;\n    return (fact[n] * invFact[r] % mod) * invFact[n - r] % mod;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long nCr(int n, int r, long[] fact, long[] invFact, long mod) {\n        if (r < 0 || r > n) return 0;\n        return (fact[n] * invFact[r] % mod) * invFact[n - r] % mod;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function nCr(n, r, fact, invFact, mod = 1000000007) {\n  if (r < 0 || r > n) return 0;\n  return Number((BigInt(fact[n]) * BigInt(invFact[r]) % BigInt(mod) * BigInt(invFact[n - r])) % BigInt(mod));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 62 - Unique Paths",
+          "url": "https://leetcode.com/problems/unique-paths/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "pascals-triangle-dp",
+      "title": "Pascal's Triangle (DP Combination Table)",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N^2)",
+      "spaceComplexity": "O(N^2)",
+      "summary": "Computes binomial coefficients nCr via Dynamic Programming Pascal Triangle recurrence C[n][r] = C[n-1][r] + C[n-1][r-1] without division.",
+      "explanation": [
+        "1. Pascal Recurrence: `C(n, r) = C(n-1, r) + C(n-1, r-1)`.",
+        "2. Base Cases: `C(n, 0) = C(n, n) = 1` for all `n`.",
+        "3. Division-Free Advantage: Works for ANY modulo M (even non-primes where modular inverse does not exist!).",
+        "4. Precomputes entire 2D table `C[0..N][0..N]` in O(N^2) time."
+      ],
+      "exampleTrace": {
+        "title": "Trace Pascal Triangle up to Row 4",
+        "traceSteps": [
+          "Row 0: [1]",
+          "Row 1: [1, 1]",
+          "Row 2: [1, 2, 1]",
+          "Row 3: [1, 3, 3, 1]",
+          "Row 4: [1, 4, 6, 4, 1] -> 4C2 = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes nCr modulo ANY arbitrary non-prime integer M without modular division.",
+        "whenToUse": "When modulo M is not prime or when generating full Pascal triangle rows.",
+        "whereUsed": "Pascal triangle queries, non-prime modulo combinatorics.",
+        "whyOptimal": "Simple additions avoid modular inverse prerequisites."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def generate_pascal_triangle(n: int, mod: int = 1_000_000_007) -> list[list[int]]:\n    C = [[0] * (i + 1) for i in range(n + 1)]\n    for i in range(n + 1):\n        C[i][0] = C[i][i] = 1\n        for j in range(1, i):\n            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod\n    return C"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<vector<long long>> generatePascalTriangle(int n, long long mod = 1e9 + 7) {\n    vector<vector<long long>> C(n + 1);\n    for (int i = 0; i <= n; i++) {\n        C[i].resize(i + 1, 1);\n        for (int j = 1; j < i; j++) {\n            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;\n        }\n    }\n    return C;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long[][] generatePascalTriangle(int n, long mod) {\n        long[][] C = new long[n + 1][];\n        for (int i = 0; i <= n; i++) {\n            C[i] = new long[i + 1];\n            C[i][0] = C[i][i] = 1;\n            for (int j = 1; j < i; j++) {\n                C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;\n            }\n        }\n        return C;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function generatePascalTriangle(n, mod = 1000000007) {\n  const C = [];\n  for (let i = 0; i <= n; i++) {\n    C[i] = new Array(i + 1).fill(1);\n    for (let j = 1; j < i; j++) {\n      C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % mod;\n    }\n  }\n  return C;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 118 - Pascal's Triangle",
+          "url": "https://leetcode.com/problems/pascals-triangle/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "ncr-modulo-prime",
+      "title": "nCr Modulo Prime (Fermat's Inverse Formula)",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log P) per Query",
+      "spaceComplexity": "O(1)",
+      "summary": "Evaluates nCr modulo prime P using Fermat's Little Theorem for modular inverse denominator division.",
+      "explanation": [
+        "1. Modulo Prime P: Fermat's Little Theorem states `inv(r!) = (r!)^(P-2) % P`.",
+        "2. Direct Computation: `nCr % P = (n! * (r!)^(P-2) * ((n-r)!)^(P-2)) % P`.",
+        "3. Multiplicative Approach: `nCr % P = ((n * (n-1) * ... * (n-r+1)) / (1 * 2 * ... * r)) % P`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 10C3 mod 13",
+        "traceSteps": [
+          "Numerator: 10 * 9 * 8 = 720. 720 % 13 = 5.",
+          "Denominator: 1 * 2 * 3 = 6.",
+          "Inverse of 6 mod 13: 6^(13-2) mod 13 = 6^11 mod 13 = 11.",
+          "Result: (5 * 11) % 13 = 55 % 13 = 3. (Indeed 10C3 = 120, 120 % 13 = 3)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes large combinations modulo prime P without allocating memory for full factorial arrays.",
+        "whenToUse": "When computing single queries of nCr modulo prime P.",
+        "whereUsed": "On-demand combinatorics queries, modular math problems.",
+        "whyOptimal": "O(R + log P) single query without global precomputations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nCr_mod_prime(n: int, r: int, p: int) -> int:\n    if r < 0 or r > n: return 0\n    if r == 0 or r == n: return 1\n    if r > n - r:\n        r = n - r\n    num = den = 1\n    for i in range(r):\n        num = (num * (n - i)) % p\n        den = (den * (i + 1)) % p\n    return (num * pow(den, p - 2, p)) % p"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nlong long power(long long a, long long b, long long p) {\n    long long res = 1; a %= p;\n    while (b > 0) {\n        if (b & 1) res = (res * a) % p;\n        a = (a * a) % p; b >>= 1;\n    }\n    return res;\n}\n\nlong long nCrModPrime(long long n, long long r, long long p) {\n    if (r < 0 || r > n) return 0;\n    if (r == 0 || r == n) return 1;\n    if (r > n - r) r = n - r;\n    long long num = 1, den = 1;\n    for (int i = 0; i < r; i++) {\n        num = (num * (n - i)) % p;\n        den = (den * (i + 1)) % p;\n    }\n    return (num * power(den, p - 2, p)) % p;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static long power(long a, long b, long p) {\n        long res = 1; a %= p;\n        while (b > 0) {\n            if ((b & 1) == 1) res = (res * a) % p;\n            a = (a * a) % p; b >>= 1;\n        }\n        return res;\n    }\n    public static long nCrModPrime(long n, long r, long p) {\n        if (r < 0 || r > n) return 0;\n        if (r == 0 || r == n) return 1;\n        if (r > n - r) r = n - r;\n        long num = 1, den = 1;\n        for (int i = 0; i < r; i++) {\n            num = (num * (n - i)) % p;\n            den = (den * (i + 1)) % p;\n        }\n        return (num * power(den, p - 2, p)) % p;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function power(a, b, p) {\n  let res = 1n, base = BigInt(a) % BigInt(p), exp = BigInt(b), mod = BigInt(p);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % mod;\n    base = (base * base) % mod; exp >>= 1n;\n  }\n  return res;\n}\nfunction nCrModPrime(n, r, p) {\n  if (r < 0 || r > n) return 0;\n  if (r === 0 || r === n) return 1;\n  if (r > n - r) r = n - r;\n  let num = 1n, den = 1n, mod = BigInt(p);\n  for (let i = 0; i < r; i++) {\n    num = (num * (BigInt(n) - BigInt(i))) % mod;\n    den = (den * (BigInt(i) + 1n)) % mod;\n  }\n  return Number((num * power(den, p - 2, p)) % mod);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - nCr % P",
+          "url": "https://www.geeksforgeeks.org/compute-n-r-p-2/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "lucas-theorem",
+      "title": "Lucas' Theorem (nCr Modulo Small Prime P)",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Hard",
+      "timeComplexity": "O(P + log_P N)",
+      "spaceComplexity": "O(P)",
+      "summary": "Evaluates nCr modulo small prime P for huge inputs N, R up to 10^18 by breaking N and R into base-P digits.",
+      "explanation": [
+        "1. Base P Digits: Express N and R in base P: `N = n_k * P^k + ... + n_0`, `R = r_k * P^k + ... + r_0`.",
+        "2. Lucas Theorem: `nCr % P = (prod_{i=0..k} (n_i C r_i)) % P`.",
+        "3. Base Combination: Since `n_i, r_i < P`, evaluate `n_i C r_i % P` using simple modular formula.",
+        "4. Base Case: Returns 0 if any `r_i > n_i`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 10C3 mod 3 using Lucas Theorem",
+        "traceSteps": [
+          "N=10 in base 3: [1, 0, 1] (1*9 + 0*3 + 1*1).",
+          "R=3 in base 3: [0, 1, 0] (0*9 + 1*3 + 0*1).",
+          "Digits pairs: (1, 0) -> 1C0 = 1; (0, 1) -> 0C1 = 0; (1, 0) -> 1C0 = 1.",
+          "Result: 1 * 0 * 1 = 0. (Indeed 10C3 = 120, 120 % 3 = 0)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates nCr % P when N and R are up to 10^18 and P <= 10^5 is a small prime.",
+        "whenToUse": "When N, R exceed standard array sizing limits.",
+        "whereUsed": "Competitive programming large-scale combinatorics.",
+        "whyOptimal": "O(log_P N) base P digit reduction reduces 10^18 operations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nCr_small(n: int, r: int, p: int) -> int:\n    if r < 0 or r > n: return 0\n    num = den = 1\n    for i in range(r):\n        num = (num * (n - i)) % p\n        den = (den * (i + 1)) % p\n    return (num * pow(den, p - 2, p)) % p\n\ndef lucas_nCr(n: int, r: int, p: int) -> int:\n    if r == 0: return 1\n    ni = n % p\n    ri = r % p\n    return (lucas_nCr(n // p, r // p, p) * nCr_small(ni, ri, p)) % p"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nlong long power(long long a, long long b, long long p) {\n    long long res = 1; a %= p;\n    while (b > 0) {\n        if (b & 1) res = (res * a) % p;\n        a = (a * a) % p; b >>= 1;\n    }\n    return res;\n}\n\nlong long nCrSmall(long long n, long long r, long long p) {\n    if (r < 0 || r > n) return 0;\n    long long num = 1, den = 1;\n    for (int i = 0; i < r; i++) {\n        num = (num * (n - i)) % p;\n        den = (den * (i + 1)) % p;\n    }\n    return (num * power(den, p - 2, p)) % p;\n}\n\nlong long lucasnCr(long long n, long long r, long long p) {\n    if (r == 0) return 1;\n    long long ni = n % p, ri = r % p;\n    return (lucasnCr(n / p, r / p, p) * nCrSmall(ni, ri, p)) % p;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static long power(long a, long b, long p) {\n        long res = 1; a %= p;\n        while (b > 0) {\n            if ((b & 1) == 1) res = (res * a) % p;\n            a = (a * a) % p; b >>= 1;\n        }\n        return res;\n    }\n    static long nCrSmall(long n, long r, long p) {\n        if (r < 0 || r > n) return 0;\n        long num = 1, den = 1;\n        for (int i = 0; i < r; i++) {\n            num = (num * (n - i)) % p;\n            den = (den * (i + 1)) % p;\n        }\n        return (num * power(den, p - 2, p)) % p;\n    }\n    public static long lucasnCr(long n, long r, long p) {\n        if (r == 0) return 1;\n        return (lucasnCr(n / p, r / p, p) * nCrSmall(n % p, r % p, p)) % p;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function power(a, b, p) {\n  let res = 1n, base = BigInt(a) % BigInt(p), exp = BigInt(b), mod = BigInt(p);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % mod;\n    base = (base * base) % mod; exp >>= 1n;\n  }\n  return res;\n}\nfunction nCrSmall(n, r, p) {\n  if (r < 0 || r > n) return 0;\n  let num = 1n, den = 1n, mod = BigInt(p);\n  for (let i = 0; i < r; i++) {\n    num = (num * (BigInt(n) - BigInt(i))) % mod;\n    den = (den * (BigInt(i) + 1n)) % mod;\n  }\n  return Number((num * power(den, p - 2, p)) % mod);\n}\nfunction lucasnCr(n, r, p) {\n  if (r === 0) return 1;\n  return (lucasnCr(Math.floor(n / p), Math.floor(r / p), p) * nCrSmall(n % p, r % p, p)) % p;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Lucas Theorem",
+          "url": "https://www.geeksforgeeks.org/lucas-theorem/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "inclusion-exclusion-principle",
+      "title": "Principle of Inclusion-Exclusion (PIE)",
+      "categoryId": "combinatorics",
+      "categoryTitle": "Combinatorics & Discrete Mathematics",
+      "difficulty": "Hard",
+      "timeComplexity": "O(2^K)",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes cardinality of set union by adding individual set sizes, subtracting pair intersections, adding triplet intersections, and continuing for all 2^K bitmask subsets.",
+      "explanation": [
+        "1. Union Formula: `|A1 U A2 U ... U Ak| = sum(|Ai|) - sum(|Ai ∩ Aj|) + sum(|Ai ∩ Aj ∩ Ak|) - ...`.",
+        "2. Bitmask Strategy: Iterate `mask` from 1 to `2^K - 1` representing all subsets.",
+        "3. Parity Rule: If `mask` has odd number of set bits, add subset intersection. If even, subtract subset intersection."
+      ],
+      "exampleTrace": {
+        "title": "Trace PIE to count numbers <= 30 divisible by 2, 3, or 5",
+        "traceSteps": [
+          "Single sets: +30/2(15) + 30/3(10) + 30/5(6) = 31.",
+          "Pair intersections: -30/6(5) - 30/10(3) - 30/15(2) = -10.",
+          "Triplet intersection: +30/30(1) = +1.",
+          "Total Union = 31 - 10 + 1 = 22 numbers."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds union size of multiple overlapping condition sets in O(2^K) time.",
+        "whenToUse": "When counting elements satisfying at least one of K conditions.",
+        "whereUsed": "Derangements counting, co-prime counting, constrained grid paths.",
+        "whyOptimal": "Solves complex set union counting without iterating through all elements."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_divisible(n: int, primes: list[int]) -> int:\n    k = len(primes)\n    count = 0\n    for mask in range(1, 1 << k):\n        prod = 1\n        bits = 0\n        for i in range(k):\n            if (mask >> i) & 1:\n                prod *= primes[i]\n                bits += 1\n        if bits % 2 == 1:\n            count += n // prod\n        else:\n            count -= n // prod\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nlong long countDivisible(long long n, vector<long long>& primes) {\n    int k = primes.size();\n    long long count = 0;\n    for (int mask = 1; mask < (1 << k); mask++) {\n        long long prod = 1;\n        int bits = 0;\n        for (int i = 0; i < k; i++) {\n            if ((mask >> i) & 1) {\n                prod *= primes[i];\n                bits++;\n            }\n        }\n        if (bits % 2 == 1) count += n / prod;\n        else count -= n / prod;\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long countDivisible(long n, long[] primes) {\n        int k = primes.length;\n        long count = 0;\n        for (int mask = 1; mask < (1 << k); mask++) {\n            long prod = 1;\n            int bits = 0;\n            for (int i = 0; i < k; i++) {\n                if (((mask >> i) & 1) == 1) {\n                    prod *= primes[i];\n                    bits++;\n                }\n            }\n            if (bits % 2 == 1) count += n / prod;\n            else count -= n / prod;\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function countDivisible(n, primes) {\n  const k = primes.length;\n  let count = 0;\n  for (let mask = 1; mask < (1 << k); mask++) {\n    let prod = 1;\n    let bits = 0;\n    for (let i = 0; i < k; i++) {\n      if ((mask >> i) & 1) {\n        prod *= primes[i];\n        bits++;\n      }\n    }\n    if (bits % 2 === 1) count += Math.floor(n / prod);\n    else count -= Math.floor(n / prod);\n  }\n  return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Inclusion Exclusion Principle",
+          "url": "https://www.geeksforgeeks.org/inclusion-exclusion-principle-and-its-applications/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

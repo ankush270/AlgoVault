@@ -1,0 +1,406 @@
+{
+  "id": "prefix_sum",
+  "category": {
+    "id": "prefix_sum",
+    "title": "Prefix Sum & Difference Arrays",
+    "icon": "Layers",
+    "description": "1D/2D range query optimization, prefix sum + hashmap, difference array updates, prefix XOR, and prefix GCD patterns."
+  },
+  "totalAlgorithms": 7,
+  "algorithms": [
+    {
+      "id": "prefix-sum-1d-array",
+      "title": "1D Prefix Sum Construction (Running Sum)",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Precomputes prefix sum array where P[i] stores sum of elements from index 0 to i-1, enabling O(1) range sum queries.",
+      "explanation": [
+        "1. Initialize `P` array of size `N+1` with `P[0] = 0`.",
+        "2. Compute cumulative values: `P[i] = P[i-1] + arr[i-1]` for `i` from 1 to N.",
+        "3. Any range sum `sum(arr[L..R])` is computed instantly as `P[R+1] - P[L]`."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [1, 2, 3, 4], Range sum L=1, R=2 (val 2+3=5)",
+        "traceSteps": [
+          "Prefix array P: [0, 1, 3, 6, 10]",
+          "Query Range [1..2]: P[3] - P[1] = 6 - 1 = 5.",
+          "Result: 5 in O(1) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers range sum queries in O(1) time after O(N) precomputation.",
+        "whenToUse": "When multiple range sum queries are executed on a static array.",
+        "whereUsed": "Financial ledger cumulative balances, image integral images.",
+        "whyOptimal": "Replaces repeated O(N) loop scans with constant O(1) lookups."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def buildPrefixSum(arr: list[int]) -> list[int]:\n    P = [0] * (len(arr) + 1)\n    for i in range(len(arr)):\n        P[i + 1] = P[i] + arr[i]\n    return P\n\ndef queryRangeSum(P: list[int], L: int, R: int) -> int:\n    return P[R + 1] - P[L]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass NumArray {\n    vector<int> P;\npublic:\n    NumArray(vector<int>& nums) {\n        P.resize(nums.size() + 1, 0);\n        for (int i = 0; i < nums.size(); i++) {\n            P[i + 1] = P[i] + nums[i];\n        }\n    }\n    int sumRange(int L, int R) {\n        return P[R + 1] - P[L];\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class NumArray {\n    private int[] P;\n    public NumArray(int[] nums) {\n        P = new int[nums.length + 1];\n        for (int i = 0; i < nums.length; i++) {\n            P[i + 1] = P[i] + nums[i];\n        }\n    }\n    public int sumRange(int left, int right) {\n        return P[right + 1] - P[left];\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class NumArray {\n  constructor(nums) {\n    this.P = new Array(nums.length + 1).fill(0);\n    for (let i = 0; i < nums.length; i++) {\n      this.P[i + 1] = this.P[i] + nums[i];\n    }\n  }\n  sumRange(left, right) {\n    return this.P[right + 1] - this.P[left];\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 303 - Range Sum Query - Immutable",
+          "url": "https://leetcode.com/problems/range-sum-query-immutable/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "prefix-sum-subarray-sum-equals-k",
+      "title": "Subarray Sum Equals K (Prefix Sum + Hash Map)",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find total number of contiguous subarrays whose sum equals K using running prefix sum and hash map frequency storage.",
+      "explanation": [
+        "1. Mathematical Core: Subarray `arr[i..j]` has sum K if `prefix[j] - prefix[i-1] == K`.",
+        "2. Rearranging gives: `prefix[i-1] = prefix[j] - K`.",
+        "3. Maintain running sum `curr_sum` and a hash map `prefix_map` storing frequency of each prefix sum encountered.",
+        "4. At index `j`: check if `curr_sum - K` exists in map. Add its frequency to answer count, then increment `prefix_map[curr_sum]++`."
+      ],
+      "exampleTrace": {
+        "title": "Trace nums=[1, 1, 1], K=2",
+        "traceSteps": [
+          "Init prefix_map = {0: 1}, count = 0, curr_sum = 0",
+          "i=0 (val 1): curr_sum = 1. Needed (1-2) = -1 (not in map). Map={0:1, 1:1}",
+          "i=1 (val 1): curr_sum = 2. Needed (2-2) = 0 (found count 1!). count = 1. Map={0:1, 1:1, 2:1}",
+          "i=2 (val 1): curr_sum = 3. Needed (3-2) = 1 (found count 1!). count = 2. Map={0:1, 1:1, 2:1, 3:1}",
+          "Total Subarrays = 2 ([1,1] at index 0..1 and [1,1] at index 1..2)"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts arbitrary contiguous subarrays summing to target K in linear O(N) time.",
+        "whenToUse": "When finding count of subarrays matching target sum with negative or positive numbers.",
+        "whereUsed": "Financial transaction net zero balancing, analytics revenue target window detection.",
+        "whyOptimal": "O(N) single pass replacing cubic/quadratic brute-force scans."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subarraySum(nums: list[int], k: int) -> int:\n    prefix_map = {0: 1}\n    curr_sum = count = 0\n    for num in nums:\n        curr_sum += num\n        if curr_sum - k in prefix_map:\n            count += prefix_map[curr_sum - k]\n        prefix_map[curr_sum] = prefix_map.get(curr_sum, 0) + 1\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nint subarraySum(vector<int>& nums, int k) {\n    unordered_map<int, int> prefixMap;\n    prefixMap[0] = 1;\n    int currSum = 0, count = 0;\n    for (int num : nums) {\n        currSum += num;\n        if (prefixMap.count(currSum - k)) {\n            count += prefixMap[currSum - k];\n        }\n        prefixMap[currSum]++;\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int subarraySum(int[] nums, int k) {\n        Map<Integer, Integer> prefixMap = new HashMap<>();\n        prefixMap.put(0, 1);\n        int currSum = 0, count = 0;\n        for (int num : nums) {\n            currSum += num;\n            if (prefixMap.containsKey(currSum - k)) {\n                count += prefixMap.get(currSum - k);\n            }\n            prefixMap.put(currSum, prefixMap.getOrDefault(currSum, 0) + 1);\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subarraySum(nums, k) {\n  const prefixMap = new Map([[0, 1]]);\n  let currSum = 0, count = 0;\n  for (const num of nums) {\n    currSum += num;\n    if (prefixMap.has(currSum - k)) {\n      count += prefixMap.get(currSum - k);\n    }\n    prefixMap.set(currSum, (prefixMap.get(currSum) || 0) + 1);\n  }\n  return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 560 - Subarray Sum Equals K",
+          "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-sum-zero-sum-subarray",
+      "title": "Zero-Sum Subarray & Divisible Subarray Sum",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find length or count of subarrays summing to 0 or divisible by K using prefix remainder hashing.",
+      "explanation": [
+        "1. For zero-sum: If `curr_sum` appeared previously at index `first_seen[curr_sum]`, subarray from `first_seen + 1` to `current` sums to 0.",
+        "2. For divisible by K: Compute `rem = (curr_sum % K + K) % K`. If remainder was seen previously, subarray sum is divisible by K."
+      ],
+      "exampleTrace": {
+        "title": "Trace nums=[4, 5, 0, -2, -3, 1], K=5",
+        "traceSteps": [
+          "i=0 (val 4): rem=4, map={0:-1, 4:0}",
+          "i=1 (val 5): sum=9, rem=4 -> Match index 0! Length = 1 - 0 = 1",
+          "i=2 (val 0): sum=9, rem=4 -> Match index 0! Length = 2 - 0 = 2",
+          "i=4 (val -3): sum=4, rem=4 -> Match index 0! Length = 4 - 0 = 4 ([5, 0, -2, -3])"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies contiguous zero-balance or modular multiple subarrays.",
+        "whenToUse": "When checking for zero-sum windows or divisibility properties.",
+        "whereUsed": "Cycle detection in discrete differences, parity balance verification.",
+        "whyOptimal": "O(N) hash map lookup instead of O(N^2) subarray evaluation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subarraysDivByK(nums: list[int], k: int) -> int:\n    rem_map = {0: 1}\n    curr_sum = count = 0\n    for num in nums:\n        curr_sum += num\n        rem = (curr_sum % k + k) % k\n        if rem in rem_map:\n            count += rem_map[rem]\n        rem_map[rem] = rem_map.get(rem, 0) + 1\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nint subarraysDivByK(vector<int>& nums, int k) {\n    unordered_map<int, int> remMap;\n    remMap[0] = 1;\n    int currSum = 0, count = 0;\n    for (int num : nums) {\n        currSum += num;\n        int rem = (currSum % k + k) % k;\n        if (remMap.count(rem)) count += remMap[rem];\n        remMap[rem]++;\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int subarraysDivByK(int[] nums, int k) {\n        Map<Integer, Integer> remMap = new HashMap<>();\n        remMap.put(0, 1);\n        int currSum = 0, count = 0;\n        for (int num : nums) {\n            currSum += num;\n            int rem = (currSum % k + k) % k;\n            if (remMap.containsKey(rem)) count += remMap.get(rem);\n            remMap.put(rem, remMap.getOrDefault(rem, 0) + 1);\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subarraysDivByK(nums, k) {\n  const remMap = new Map([[0, 1]]);\n  let currSum = 0, count = 0;\n  for (const num of nums) {\n    currSum += num;\n    let rem = (currSum % k + k) % k;\n    if (remMap.has(rem)) count += remMap.get(rem);\n    remMap.set(rem, (remMap.get(rem) || 0) + 1);\n  }\n  return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 974 - Subarray Sums Divisible by K",
+          "url": "https://leetcode.com/problems/subarray-sums-divisible-by-k/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-sum-difference-array-technique",
+      "title": "Difference Array Technique (Range Updates)",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(Q + N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Perform O(1) batch range addition queries `[L, R, val]` on an array, then reconstruct final array in O(N) time using prefix sums.",
+      "explanation": [
+        "1. Create difference array `diff` of size `N+1` initialized to 0.",
+        "2. For each query `add(L, R, val)`: perform `diff[L] += val` and `diff[R+1] -= val`.",
+        "3. After processing all Q queries, compute prefix sum of `diff` array: `arr[i] = diff[i] + arr[i-1]`.",
+        "4. Reduces range update time from O(N * Q) down to O(N + Q)."
+      ],
+      "exampleTrace": {
+        "title": "Trace length=5, updates=[[1, 3, 2], [2, 4, 3]]",
+        "traceSteps": [
+          "Init diff = [0, 0, 0, 0, 0, 0]",
+          "Update [1,3,2]: diff[1]+=2, diff[4]-=2 -> diff=[0, 2, 0, 0, -2, 0]",
+          "Update [2,4,3]: diff[2]+=3, diff[5]-=3 -> diff=[0, 2, 3, 0, -2, -3]",
+          "Prefix sum reconstruction: [0, 2, 5, 5, 3]",
+          "Final Array = [0, 2, 5, 5, 3]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Executes mass range updates in O(1) time per query instead of O(N).",
+        "whenToUse": "When applying many bulk interval modifications before final reading.",
+        "whereUsed": "Flight booking capacity reservation, gaming area effect damage application.",
+        "whyOptimal": "O(N + Q) overall complexity avoiding costly O(N) loops per update."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def getModifiedArray(length: int, updates: list[list[int]]) -> list[int]:\n    diff = [0] * (length + 1)\n    for start, end, val in updates:\n        diff[start] += val\n        diff[end + 1] -= val\n    res = [0] * length\n    curr = 0\n    for i in range(length):\n        curr += diff[i]\n        res[i] = curr\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<int> getModifiedArray(int length, vector<vector<int>>& updates) {\n    vector<int> diff(length + 1, 0);\n    for (auto& u : updates) {\n        diff[u[0]] += u[2];\n        diff[u[1] + 1] -= u[2];\n    }\n    vector<int> res(length, 0);\n    int curr = 0;\n    for (int i = 0; i < length; i++) {\n        curr += diff[i];\n        res[i] = curr;\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int[] getModifiedArray(int length, int[][] updates) {\n        int[] diff = new int[length + 1];\n        for (int[] u : updates) {\n            diff[u[0]] += u[2];\n            diff[u[1] + 1] -= u[2];\n        }\n        int[] res = new int[length];\n        int curr = 0;\n        for (int i = 0; i < length; i++) {\n            curr += diff[i];\n            res[i] = curr;\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function getModifiedArray(length, updates) {\n  const diff = new Array(length + 1).fill(0);\n  for (const [start, end, val] of updates) {\n    diff[start] += val;\n    diff[end + 1] -= val;\n  }\n  const res = new Array(length).fill(0);\n  let curr = 0;\n  for (let i = 0; i < length; i++) {\n    curr += diff[i];\n    res[i] = curr;\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 370 - Range Addition",
+          "url": "https://leetcode.com/problems/range-addition/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 1109 - Corporate Flight Bookings",
+          "url": "https://leetcode.com/problems/corporate-flight-bookings/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-sum-2d-matrix-query",
+      "title": "2D Prefix Sum (Range Sum Query 2D Matrix)",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N * M) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N * M)",
+      "summary": "Precompute 2D cumulative sum matrix enabling sub-matrix sum queries in O(1) constant time.",
+      "explanation": [
+        "1. Construction: `P[r][c] = matrix[r-1][c-1] + P[r-1][c] + P[r][c-1] - P[r-1][c-1]`.",
+        "2. Query sub-matrix from `(r1, c1)` to `(r2, c2)`:",
+        "   `sum = P[r2+1][c2+1] - P[r1][c2+1] - P[r2+1][c1] + P[r1][c1]`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 2D Matrix Query (r1=1, c1=1, r2=2, c2=2)",
+        "traceSteps": [
+          "Build 2D integral image grid P",
+          "Include full rectangle P[r2+1][c2+1]",
+          "Subtract upper region P[r1][c2+1] and left region P[r2+1][c1]",
+          "Add back double-subtracted top-left overlap P[r1][c1]",
+          "Result computed in O(1) arithmetic operations."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes subgrid sums in 2D grids in O(1) time.",
+        "whenToUse": "When querying 2D spatial area sums repeatedly.",
+        "whereUsed": "Image box blurring, GIS spatial density calculation.",
+        "whyOptimal": "Avoids quadratic O(R * C) subgrid iteration loops."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class NumMatrix:\n    def __init__(self, matrix: list[list[int]]):\n        if not matrix or not matrix[0]: return\n        R, C = len(matrix), len(matrix[0])\n        self.P = [[0] * (C + 1) for _ in range(R + 1)]\n        for r in range(R):\n            for c in range(C):\n                self.P[r+1][c+1] = matrix[r][c] + self.P[r][c+1] + self.P[r+1][c] - self.P[r][c]\n\n    def sumRegion(self, r1: int, c1: int, r2: int, c2: int) -> int:\n        return self.P[r2+1][c2+1] - self.P[r1][c2+1] - self.P[r2+1][c1] + self.P[r1][c1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass NumMatrix {\n    vector<vector<int>> P;\npublic:\n    NumMatrix(vector<vector<int>>& matrix) {\n        int R = matrix.size(), C = matrix[0].size();\n        P.assign(R + 1, vector<int>(C + 1, 0));\n        for (int r = 0; r < R; r++) {\n            for (int c = 0; c < C; c++) {\n                P[r+1][c+1] = matrix[r][c] + P[r][c+1] + P[r+1][c] - P[r][c];\n            }\n        }\n    }\n    int sumRegion(int r1, int c1, int r2, int c2) {\n        return P[r2+1][c2+1] - P[r1][c2+1] - P[r2+1][c1] + P[r1][c1];\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class NumMatrix {\n    private int[][] P;\n    public NumMatrix(int[][] matrix) {\n        int R = matrix.length, C = matrix[0].length;\n        P = new int[R + 1][C + 1];\n        for (int r = 0; r < R; r++) {\n            for (int c = 0; c < C; c++) {\n                P[r+1][c+1] = matrix[r][c] + P[r][c+1] + P[r+1][c] - P[r][c];\n            }\n        }\n    }\n    public int sumRegion(int r1, int c1, int r2, int c2) {\n        return P[r2+1][c2+1] - P[r1][c2+1] - P[r2+1][c1] + P[r1][c1];\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class NumMatrix {\n  constructor(matrix) {\n    const R = matrix.length, C = matrix[0].length;\n    this.P = Array.from({ length: R + 1 }, () => new Array(C + 1).fill(0));\n    for (let r = 0; r < R; r++) {\n      for (let c = 0; c < C; c++) {\n        this.P[r+1][c+1] = matrix[r][c] + this.P[r][c+1] + this.P[r+1][c] - this.P[r][c];\n      }\n    }\n  }\n  sumRegion(r1, c1, r2, c2) {\n    return this.P[r2+1][c2+1] - this.P[r1][c2+1] - this.P[r2+1][c1] + this.P[r1][c1];\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 304 - Range Sum Query 2D - Immutable",
+          "url": "https://leetcode.com/problems/range-sum-query-2d-immutable/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-xor-subarray-queries",
+      "title": "Prefix XOR Subarray Queries",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + Q)",
+      "spaceComplexity": "O(N)",
+      "summary": "Compute range XOR queries in O(1) time using property `XOR(arr[L..R]) = P[R+1] ^ P[L]`.",
+      "explanation": [
+        "1. XOR Self-Cancellation Property: `A ^ A = 0`. Therefore `(A ^ B) ^ A = B`.",
+        "2. Compute prefix XOR array: `P[i+1] = P[i] ^ arr[i]`.",
+        "3. Range XOR query for `[L, R]` equals `P[R+1] ^ P[L]`."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr=[1, 3, 4, 8], Query [1, 2]",
+        "traceSteps": [
+          "Prefix XOR P: [0, 1, 1^3=2, 2^4=6, 6^8=14]",
+          "Query range [1..2] (elements 3 ^ 4 = 7):",
+          "Compute P[3] ^ P[1] = 6 ^ 1 = 7.",
+          "Result = 7 in O(1) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers range XOR query in O(1) time.",
+        "whenToUse": "When finding bitwise XOR over dynamic array intervals.",
+        "whereUsed": "Error correction parity checks, cryptographic range hashing.",
+        "whyOptimal": "O(1) lookup using XOR inverse self-cancellation property."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def xorQueries(arr: list[int], queries: list[list[int]]) -> list[int]:\n    P = [0] * (len(arr) + 1)\n    for i in range(len(arr)):\n        P[i + 1] = P[i] ^ arr[i]\n    return [P[r + 1] ^ P[l] for l, r in queries]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<int> xorQueries(vector<int>& arr, vector<vector<int>>& queries) {\n    vector<int> P(arr.size() + 1, 0);\n    for (int i = 0; i < arr.size(); i++) P[i + 1] = P[i] ^ arr[i];\n    vector<int> res;\n    for (auto& q : queries) {\n        res.push_back(P[q[1] + 1] ^ P[q[0]]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int[] xorQueries(int[] arr, int[][] queries) {\n        int[] P = new int[arr.length + 1];\n        for (int i = 0; i < arr.length; i++) P[i + 1] = P[i] ^ arr[i];\n        int[] res = new int[queries.length];\n        for (int i = 0; i < queries.length; i++) {\n            res[i] = P[queries[i][1] + 1] ^ P[queries[i][0]];\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function xorQueries(arr, queries) {\n  const P = new Array(arr.length + 1).fill(0);\n  for (let i = 0; i < arr.length; i++) P[i + 1] = P[i] ^ arr[i];\n  return queries.map(([l, r]) => P[r + 1] ^ P[l]);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1310 - XOR Queries of a Subarray",
+          "url": "https://leetcode.com/problems/xor-queries-of-a-subarray/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-gcd-range-queries",
+      "title": "Prefix & Suffix GCD for Subarray Queries",
+      "categoryId": "prefix_sum",
+      "categoryTitle": "Prefix Sum & Difference Arrays",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log(MaxVal))",
+      "spaceComplexity": "O(N)",
+      "summary": "Compute GCD of array excluding one element or query range GCDs using precalculated prefix and suffix GCD arrays.",
+      "explanation": [
+        "1. Build `prefGCD[i]` = GCD of `arr[0..i]`.",
+        "2. Build `suffGCD[i]` = GCD of `arr[i..N-1]`.",
+        "3. Max GCD after removing element at index `i` = `gcd(prefGCD[i-1], suffGCD[i+1])`.",
+        "4. Precalculation takes O(N log(MAX)) and enables O(1) exclusion queries."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr=[12, 15, 18], Remove index 1 (val 15)",
+        "traceSteps": [
+          "prefGCD = [12, 3, 3]",
+          "suffGCD = [3, 3, 18]",
+          "Remove index 1 (val 15): gcd(prefGCD[0], suffGCD[2]) = gcd(12, 18) = 6.",
+          "Resulting Max GCD = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds array GCD excluding specific elements in O(1) time.",
+        "whenToUse": "When evaluating GCD metric impact under element removal.",
+        "whereUsed": "Number theory grid alignment, signal frequency harmonizing.",
+        "whyOptimal": "Dual prefix/suffix technique avoids recomputing GCD across all remaining elements."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef maxGcdAfterRemoval(arr: list[int]) -> int:\n    n = len(arr)\n    if n <= 1: return 0\n    pref = [0] * n\n    suff = [0] * n\n    pref[0] = arr[0]\n    for i in range(1, n):\n        pref[i] = math.gcd(pref[i - 1], arr[i])\n    suff[-1] = arr[-1]\n    for i in range(n - 2, -1, -1):\n        suff[i] = math.gcd(suff[i + 1], arr[i])\n    max_gcd = max(suff[1], pref[-2])\n    for i in range(1, n - 1):\n        max_gcd = max(max_gcd, math.gcd(pref[i - 1], suff[i + 1]))\n    return max_gcd"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <algorithm>\nusing namespace std;\n\nint gcd(int a, int b) { return std::gcd(a, b); }\n\nint maxGcdAfterRemoval(vector<int>& arr) {\n    int n = arr.size();\n    if (n <= 1) return 0;\n    vector<int> pref(n), suff(n);\n    pref[0] = arr[0];\n    for (int i = 1; i < n; i++) pref[i] = gcd(pref[i - 1], arr[i]);\n    suff[n - 1] = arr[n - 1];\n    for (int i = n - 2; i >= 0; i--) suff[i] = gcd(suff[i + 1], arr[i]);\n    int maxGcd = max(suff[1], pref[n - 2]);\n    for (int i = 1; i < n - 1; i++) {\n        maxGcd = max(maxGcd, gcd(pref[i - 1], suff[i + 1]));\n    }\n    return maxGcd;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    private int gcd(int a, int b) {\n        return b == 0 ? a : gcd(b, a % b);\n    }\n    public int maxGcdAfterRemoval(int[] arr) {\n        int n = arr.length;\n        if (n <= 1) return 0;\n        int[] pref = new int[n];\n        int[] suff = new int[n];\n        pref[0] = arr[0];\n        for (int i = 1; i < n; i++) pref[i] = gcd(pref[i - 1], arr[i]);\n        suff[n - 1] = arr[n - 1];\n        for (int i = n - 2; i >= 0; i--) suff[i] = gcd(suff[i + 1], arr[i]);\n        int maxGcd = Math.max(suff[1], pref[n - 2]);\n        for (int i = 1; i < n - 1; i++) {\n            maxGcd = Math.max(maxGcd, gcd(pref[i - 1], suff[i + 1]));\n        }\n        return maxGcd;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxGcdAfterRemoval(arr) {\n  function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }\n  const n = arr.length;\n  if (n <= 1) return 0;\n  const pref = new Array(n);\n  const suff = new Array(n);\n  pref[0] = arr[0];\n  for (let i = 1; i < n; i++) pref[i] = gcd(pref[i - 1], arr[i]);\n  suff[n - 1] = arr[n - 1];\n  for (let i = n - 2; i >= 0; i--) suff[i] = gcd(suff[i + 1], arr[i]);\n  let maxGcd = Math.max(suff[1], pref[n - 2]);\n  for (let i = 1; i < n - 1; i++) {\n    maxGcd = Math.max(maxGcd, gcd(pref[i - 1], suff[i + 1]));\n  }\n  return maxGcd;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - GCD of Array except one element",
+          "url": "https://www.geeksforgeeks.org/gcd-array-except-one-element/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

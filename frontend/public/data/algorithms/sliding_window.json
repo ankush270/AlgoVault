@@ -1,0 +1,575 @@
+{
+  "id": "sliding_window",
+  "category": {
+    "id": "sliding_window",
+    "title": "Sliding Window & Pointers",
+    "icon": "SlidersHorizontal",
+    "description": "Two pointers, fixed and variable size sliding window patterns."
+  },
+  "totalAlgorithms": 10,
+  "algorithms": [
+    {
+      "id": "sliding-window-fixed-max-sum",
+      "title": "Maximum Sum Subarray of Size K (Fixed Window)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find maximum sum of any contiguous subarray of fixed size K by maintaining rolling window sum in O(1) time per step.",
+      "explanation": [
+        "1. Compute initial sum of first K elements as initial `window_sum`.",
+        "2. Slide window from index K to N-1: add incoming element `arr[i]` and subtract outgoing `arr[i - K]`.",
+        "3. Track global maximum `max_sum = max(max_sum, window_sum)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace on [2, 1, 5, 1, 3, 2], K = 3",
+        "traceSteps": [
+          "Initial window [2, 1, 5] -> window_sum = 8. max_sum = 8.",
+          "i=3 (add 1, remove 2): window_sum = 8 + 1 - 2 = 7. max_sum = 8.",
+          "i=4 (add 3, remove 1): window_sum = 7 + 3 - 1 = 9. max_sum = 9.",
+          "i=5 (add 2, remove 5): window_sum = 9 + 2 - 5 = 6. max_sum = 9.",
+          "Result: Max Sum = 9."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximal sum across all contiguous windows of fixed length K.",
+        "whenToUse": "When finding optimal fixed-size contiguous subarray metrics.",
+        "whereUsed": "Moving averages, audio signal windowing, throughput monitoring.",
+        "whyOptimal": "O(N) time and O(1) space by updating rolling sum incrementally."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxSumSubarray(arr: list[int], k: int) -> int:\n    if len(arr) < k: return 0\n    window_sum = sum(arr[:k])\n    max_sum = window_sum\n    for i in range(k, len(arr)):\n        window_sum += arr[i] - arr[i - k]\n        max_sum = max(max_sum, window_sum)\n    return max_sum"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <algorithm>\nusing namespace std;\n\nint maxSumSubarray(vector<int>& arr, int k) {\n    if (arr.size() < k) return 0;\n    int windowSum = 0;\n    for (int i = 0; i < k; i++) windowSum += arr[i];\n    int maxSum = windowSum;\n    for (int i = k; i < arr.size(); i++) {\n        windowSum += arr[i] - arr[i - k];\n        maxSum = max(maxSum, windowSum);\n    }\n    return maxSum;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int maxSumSubarray(int[] arr, int k) {\n        if (arr.length < k) return 0;\n        int windowSum = 0;\n        for (int i = 0; i < k; i++) windowSum += arr[i];\n        int maxSum = windowSum;\n        for (int i = k; i < arr.length; i++) {\n            windowSum += arr[i] - arr[i - k];\n            maxSum = Math.max(maxSum, windowSum);\n        }\n        return maxSum;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxSumSubarray(arr, k) {\n  if (arr.length < k) return 0;\n  let windowSum = 0;\n  for (let i = 0; i < k; i++) windowSum += arr[i];\n  let maxSum = windowSum;\n  for (let i = k; i < arr.length; i++) {\n    windowSum += arr[i] - arr[i - k];\n    maxSum = Math.max(maxSum, windowSum);\n  }\n  return maxSum;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Max Sum Subarray of size K",
+          "url": "https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-maximum-average-subarray",
+      "title": "Average of Window (Maximum Average Subarray I)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find contiguous subarray of length K that has maximum average value.",
+      "explanation": [
+        "1. Calculate total sum for first K elements.",
+        "2. Maintain max sum found so far.",
+        "3. Slide window through array: add `nums[i]`, subtract `nums[i-k]`.",
+        "4. Return `max_sum / k` as floating point average."
+      ],
+      "exampleTrace": {
+        "title": "Trace on [1, 12, -5, -6, 50, 3], K = 4",
+        "traceSteps": [
+          "Window 0..3: [1, 12, -5, -6] -> sum = 2.",
+          "i=4 (add 50, remove 1): sum = 2 + 50 - 1 = 51. max_sum = 51.",
+          "i=5 (add 3, remove 12): sum = 51 + 3 - 12 = 42. max_sum = 51.",
+          "Result: 51 / 4 = 12.75."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Locates the window of size K with maximal average score.",
+        "whenToUse": "When finding peak performance rate over constant time intervals.",
+        "whereUsed": "CPU load averaging, moving average technical indicators.",
+        "whyOptimal": "O(N) time single pass avoiding recalculating window sums."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findMaxAverage(nums: list[int], k: int) -> float:\n    curr_sum = sum(nums[:k])\n    max_sum = curr_sum\n    for i in range(k, len(nums)):\n        curr_sum += nums[i] - nums[i - k]\n        max_sum = max(max_sum, curr_sum)\n    return max_sum / k"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <algorithm>\nusing namespace std;\n\ndouble findMaxAverage(vector<int>& nums, int k) {\n    double currSum = 0;\n    for (int i = 0; i < k; i++) currSum += nums[i];\n    double maxSum = currSum;\n    for (int i = k; i < nums.size(); i++) {\n        currSum += nums[i] - nums[i - k];\n        maxSum = max(maxSum, currSum);\n    }\n    return maxSum / k;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public double findMaxAverage(int[] nums, int k) {\n        long sum = 0;\n        for (int i = 0; i < k; i++) sum += nums[i];\n        long maxSum = sum;\n        for (int i = k; i < nums.length; i++) {\n            sum += nums[i] - nums[i - k];\n            maxSum = Math.max(maxSum, sum);\n        }\n        return (double) maxSum / k;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findMaxAverage(nums, k) {\n  let sum = 0;\n  for (let i = 0; i < k; i++) sum += nums[i];\n  let maxSum = sum;\n  for (let i = k; i < nums.length; i++) {\n    sum += nums[i] - nums[i - k];\n    maxSum = Math.max(maxSum, sum);\n  }\n  return maxSum / k;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 643 - Maximum Average Subarray I",
+          "url": "https://leetcode.com/problems/maximum-average-subarray-i/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-maximum-deque",
+      "title": "Maximum/Minimum Window (Sliding Window Maximum)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(K)",
+      "summary": "Find maximum element in each sliding window of size K using Monotonic Deque.",
+      "explanation": [
+        "1. Maintain a double-ended queue (deque) storing indices of potential maximum elements in decreasing order.",
+        "2. Remove indices out of current window scope `[i - K + 1]`. ",
+        "3. Pop smaller elements from back of deque before pushing current element index `i`.",
+        "4. Deque front always stores index of maximum element for current window."
+      ],
+      "exampleTrace": {
+        "title": "Trace on [1,3,-1,-3,5,3,6,7], K=3",
+        "traceSteps": [
+          "i=0 (val 1): deque=[0]",
+          "i=1 (val 3): pop 0 (1<3), deque=[1]",
+          "i=2 (val -1): push 2, deque=[1, 2] -> Max = nums[1] = 3",
+          "i=3 (val -3): push 3, deque=[1, 2, 3] -> Max = 3",
+          "i=4 (val 5): pop out of scope 1, pop smaller 2,3 -> deque=[4] -> Max = 5",
+          "Result Maxima: [3, 3, 5, 5, 6, 7]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes rolling maximum/minimum over streaming windows in O(N) linear time.",
+        "whenToUse": "When finding max/min element in fixed-length dynamic intervals.",
+        "whereUsed": "Real-time maximum price tracking, rate limit burst monitoring.",
+        "whyOptimal": "Each index pushed/popped at most once, yielding O(N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef maxSlidingWindow(nums: list[int], k: int) -> list[int]:\n    q = deque()\n    res = []\n    for i, num in enumerate(nums):\n        if q and q[0] <= i - k:\n            q.popleft()\n        while q and nums[q[-1]] < num:\n            q.pop()\n        q.append(i)\n        if i >= k - 1:\n            res.append(nums[q[0]])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <deque>\nusing namespace std;\n\nvector<int> maxSlidingWindow(vector<int>& nums, int k) {\n    deque<int> dq;\n    vector<int> res;\n    for (int i = 0; i < nums.size(); i++) {\n        if (!dq.empty() && dq.front() <= i - k) dq.pop_front();\n        while (!dq.empty() && nums[dq.back()] < nums[i]) dq.pop_back();\n        dq.push_back(i);\n        if (i >= k - 1) res.push_back(nums[dq.front()]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] maxSlidingWindow(int[] nums, int k) {\n        Deque<Integer> dq = new ArrayDeque<>();\n        int[] res = new int[nums.length - k + 1];\n        int idx = 0;\n        for (int i = 0; i < nums.length; i++) {\n            if (!dq.isEmpty() && dq.peekFirst() <= i - k) dq.pollFirst();\n            while (!dq.isEmpty() && nums[dq.peekLast()] < nums[i]) dq.pollLast();\n            dq.offerLast(i);\n            if (i >= k - 1) res[idx++] = nums[dq.peekFirst()];\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxSlidingWindow(nums, k) {\n  const dq = [];\n  const res = [];\n  for (let i = 0; i < nums.length; i++) {\n    if (dq.length && dq[0] <= i - k) dq.shift();\n    while (dq.length && nums[dq[dq.length - 1]] < nums[i]) dq.pop();\n    dq.push(i);\n    if (i >= k - 1) res.push(nums[dq[0]]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 239 - Sliding Window Maximum",
+          "url": "https://leetcode.com/problems/sliding-window-maximum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-longest-substring-no-repeat",
+      "title": "Longest Substring Without Repeating Characters (Variable Window)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(Min(N, Alphabet))",
+      "summary": "Find length of longest substring with all distinct characters using Variable-Size Window and Last-Seen Hash Map.",
+      "explanation": [
+        "1. Expand `right` pointer index through string.",
+        "2. If `s[right]` was seen at index >= `left`, jump `left = last_seen[s[right]] + 1`.",
+        "3. Update `last_seen[s[right]] = right` and calculate `max_len = max(max_len, right - left + 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace on \"abcabcbb\"",
+        "traceSteps": [
+          "right=0 ('a'): left=0, len=1",
+          "right=1 ('b'): left=0, len=2",
+          "right=2 ('c'): left=0, len=3 (\"abc\")",
+          "right=3 ('a'): Duplicate 'a'! Jump left = 1. Window = \"bca\", len=3",
+          "Final Max Substring Length = 3"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximal length window containing zero duplicate characters.",
+        "whenToUse": "When finding unique character contiguous sub-segments.",
+        "whereUsed": "Token parsing, unique string compression algorithms.",
+        "whyOptimal": "O(N) time single pass with instantaneous pointer updates."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lengthOfLongestSubstring(s: str) -> int:\n    last_seen = {}\n    left = max_len = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nint lengthOfLongestSubstring(string s) {\n    unordered_map<char, int> lastSeen;\n    int left = 0, maxLen = 0;\n    for (int right = 0; right < s.size(); right++) {\n        char ch = s[right];\n        if (lastSeen.count(ch) && lastSeen[ch] >= left) {\n            left = lastSeen[ch] + 1;\n        }\n        lastSeen[ch] = right;\n        maxLen = max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        Map<Character, Integer> lastSeen = new HashMap<>();\n        int left = 0, maxLen = 0;\n        for (int right = 0; right < s.length(); right++) {\n            char ch = s.charAt(right);\n            if (lastSeen.containsKey(ch) && lastSeen.get(ch) >= left) {\n                left = lastSeen.get(ch) + 1;\n            }\n            lastSeen.put(ch, right);\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lengthOfLongestSubstring(s) {\n  const lastSeen = new Map();\n  let left = 0, maxLen = 0;\n  for (let right = 0; right < s.length; right++) {\n    const ch = s[right];\n    if (lastSeen.has(ch) && lastSeen.get(ch) >= left) {\n      left = lastSeen.get(ch) + 1;\n    }\n    lastSeen.set(ch, right);\n    maxLen = Math.max(maxLen, right - left + 1);\n  }\n  return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 3 - Longest Substring Without Repeating Characters",
+          "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-minimum-window-substring",
+      "title": "Smallest Substring (Minimum Window Substring)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(Alphabet)",
+      "summary": "Find smallest substring in S that contains all characters and frequencies of string T.",
+      "explanation": [
+        "1. Build character frequency map for pattern string T.",
+        "2. Expand `right` pointer to include characters in current window.",
+        "3. Once window covers all required frequencies (`formed == required`), shrink `left` pointer to minimize window length.",
+        "4. Record global minimum substring bounds."
+      ],
+      "exampleTrace": {
+        "title": "Trace S=\"ADOBECODEBANC\", T=\"ABC\"",
+        "traceSteps": [
+          "Expand right to 5 (\"ADOBEC\"): All 'A', 'B', 'C' matched! Window len=6",
+          "Shrink left to index 1 -> missing 'A'",
+          "Expand right to index 12 (\"BANC\"): All matched! Window len=4",
+          "Result Substring = \"BANC\""
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds smallest substring containing specified multiset of target characters.",
+        "whenToUse": "When finding minimal enclosing range meeting frequency requirements.",
+        "whereUsed": "DNA motif matching, query term search snippet extraction.",
+        "whyOptimal": "O(N+M) expansion/contraction avoiding redundant full-string scans."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import Counter\n\ndef minWindow(s: str, t: str) -> str:\n    if not s or not t: return \"\"\n    target_map = Counter(t)\n    required = len(target_map)\n    left = 0\n    formed = 0\n    window_counts = {}\n    min_len = float('inf')\n    ans_bounds = (0, 0)\n    for right, ch in enumerate(s):\n        window_counts[ch] = window_counts.get(ch, 0) + 1\n        if ch in target_map and window_counts[ch] == target_map[ch]:\n            formed += 1\n        while left <= right and formed == required:\n            if right - left + 1 < min_len:\n                min_len = right - left + 1\n                ans_bounds = (left, right)\n            l_ch = s[left]\n            window_counts[l_ch] -= 1\n            if l_ch in target_map and window_counts[l_ch] < target_map[l_ch]:\n                formed -= 1\n            left += 1\n    return \"\" if min_len == float('inf') else s[ans_bounds[0]:ans_bounds[1]+1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <unordered_map>\n#include <climits>\nusing namespace std;\n\nstring minWindow(string s, string t) {\n    if (s.empty() || t.empty()) return \"\";\n    unordered_map<char, int> target;\n    for (char c : t) target[c]++;\n    int required = target.size(), formed = 0, left = 0;\n    int minLen = INT_MAX, startIdx = 0;\n    unordered_map<char, int> window;\n    for (int right = 0; right < s.size(); right++) {\n        char c = s[right];\n        window[c]++;\n        if (target.count(c) && window[c] == target[c]) formed++;\n        while (left <= right && formed == required) {\n            if (right - left + 1 < minLen) {\n                minLen = right - left + 1;\n                startIdx = left;\n            }\n            char lc = s[left];\n            window[lc]--;\n            if (target.count(lc) && window[lc] < target[lc]) formed--;\n            left++;\n        }\n    }\n    return minLen == INT_MAX ? \"\" : s.substr(startIdx, minLen);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public String minWindow(String s, String t) {\n        if (s.length() == 0 || t.length() == 0) return \"\";\n        Map<Character, Integer> target = new HashMap<>();\n        for (char c : t.toCharArray()) target.put(c, target.getOrDefault(c, 0) + 1);\n        int required = target.size(), formed = 0, left = 0;\n        int minLen = Integer.MAX_VALUE, startIdx = 0;\n        Map<Character, Integer> window = new HashMap<>();\n        for (int right = 0; right < s.length(); right++) {\n            char c = s.charAt(right);\n            window.put(c, window.getOrDefault(c, 0) + 1);\n            if (target.containsKey(c) && window.get(c).equals(target.get(c))) formed++;\n            while (left <= right && formed == required) {\n                if (right - left + 1 < minLen) {\n                    minLen = right - left + 1;\n                    startIdx = left;\n                }\n                char lc = s.charAt(left);\n                window.put(lc, window.get(lc) - 1);\n                if (target.containsKey(lc) && window.get(lc) < target.get(lc)) formed--;\n                left++;\n            }\n        }\n        return minLen == Integer.MAX_VALUE ? \"\" : s.substring(startIdx, startIdx + minLen);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minWindow(s, t) {\n  if (!s || !t) return \"\";\n  const target = new Map();\n  for (const c of t) target.set(c, (target.get(c) || 0) + 1);\n  const required = target.size;\n  let formed = 0, left = 0;\n  let minLen = Infinity, startIdx = 0;\n  const window = new Map();\n  for (let right = 0; right < s.length; right++) {\n    const c = s[right];\n    window.set(c, (window.get(c) || 0) + 1);\n    if (target.has(c) && window.get(c) === target.get(c)) formed++;\n    while (left <= right && formed === required) {\n      if (right - left + 1 < minLen) {\n        minLen = right - left + 1;\n        startIdx = left;\n      }\n      const lc = s[left];\n      window.set(lc, window.get(lc) - 1);\n      if (target.has(lc) && window.get(lc) < target.get(lc)) formed--;\n      left++;\n    }\n  }\n  return minLen === Infinity ? \"\" : s.substring(startIdx, startIdx + minLen);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 76 - Minimum Window Substring",
+          "url": "https://leetcode.com/problems/minimum-window-substring/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-at-most-k-distinct",
+      "title": "Longest Substring with At Most K Distinct Characters",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(K)",
+      "summary": "Find maximum length subarray/substring containing at most K distinct elements.",
+      "explanation": [
+        "1. Expand `right` pointer and record character frequencies in a map.",
+        "2. If `map.size() > K`, shrink window from `left` until distinct count <= K.",
+        "3. Update max length: `max_len = max(max_len, right - left + 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace S=\"eceba\", K=2",
+        "traceSteps": [
+          "right=0 ('e'): map={'e':1}, len=1",
+          "right=1 ('c'): map={'e':1, 'c':1}, len=2",
+          "right=2 ('e'): map={'e':2, 'c':1}, len=3 (\"ece\")",
+          "right=3 ('b'): map has 3 keys! Shrink left=0 -> map={'c':1, 'b':1}, len=2",
+          "Result Max Length = 3"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximal contiguous window containing up to K unique symbols.",
+        "whenToUse": "When distinct key count bounds the active working set.",
+        "whereUsed": "LRU cache hot-key window tracking, variable symbol compression.",
+        "whyOptimal": "O(N) single-pass sliding window."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lengthOfLongestSubstringKDistinct(s: str, k: int) -> int:\n    if k == 0: return 0\n    counts = {}\n    left = max_len = 0\n    for right, ch in enumerate(s):\n        counts[ch] = counts.get(ch, 0) + 1\n        while len(counts) > k:\n            left_ch = s[left]\n            counts[left_ch] -= 1\n            if counts[left_ch] == 0:\n                del counts[left_ch]\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nint lengthOfLongestSubstringKDistinct(string s, int k) {\n    if (k == 0) return 0;\n    unordered_map<char, int> counts;\n    int left = 0, maxLen = 0;\n    for (int right = 0; right < s.size(); right++) {\n        counts[s[right]]++;\n        while (counts.size() > k) {\n            char leftCh = s[left];\n            counts[leftCh]--;\n            if (counts[leftCh] == 0) counts.erase(leftCh);\n            left++;\n        }\n        maxLen = max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int lengthOfLongestSubstringKDistinct(String s, int k) {\n        if (k == 0) return 0;\n        Map<Character, Integer> counts = new HashMap<>();\n        int left = 0, maxLen = 0;\n        for (int right = 0; right < s.length(); right++) {\n            char c = s.charAt(right);\n            counts.put(c, counts.getOrDefault(c, 0) + 1);\n            while (counts.size() > k) {\n                char lc = s.charAt(left);\n                counts.put(lc, counts.get(lc) - 1);\n                if (counts.get(lc) == 0) counts.remove(lc);\n                left++;\n            }\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lengthOfLongestSubstringKDistinct(s, k) {\n  if (k === 0) return 0;\n  const counts = new Map();\n  let left = 0, maxLen = 0;\n  for (let right = 0; right < s.length; right++) {\n    const c = s[right];\n    counts.set(c, (counts.get(c) || 0) + 1);\n    while (counts.size > k) {\n      const lc = s[left];\n      counts.set(lc, counts.get(lc) - 1);\n      if (counts.get(lc) === 0) counts.delete(lc);\n      left++;\n    }\n    maxLen = Math.max(maxLen, right - left + 1);\n  }\n  return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 340 - Longest Substring with At Most K Distinct Characters",
+          "url": "https://leetcode.com/problems/longest-substring-with-at-most-k-distinct-characters/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-exactly-k-distinct",
+      "title": "Subarrays with Exactly K Distinct Elements",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(K)",
+      "summary": "Count contiguous subarrays containing exactly K distinct elements using formula: `Exactly(K) = AtMost(K) - AtMost(K - 1)`.",
+      "explanation": [
+        "1. Direct sliding window directly for 'Exactly K' is difficult because shrinking left can invalidate validity.",
+        "2. Key Reducer Pattern: `Count(Exactly K) = Count(At Most K) - Count(At Most K - 1)`.",
+        "3. Implement helper `atMostK(nums, k)` using sliding window.",
+        "4. Return `atMostK(nums, k) - atMostK(nums, k - 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace nums=[1,2,1,2,3], K=2",
+        "traceSteps": [
+          "atMostK(nums, 2): counts total subarrays with <= 2 distinct = 12",
+          "atMostK(nums, 1): counts total subarrays with <= 1 distinct = 5",
+          "Result: 12 - 5 = 7 subarrays with exactly 2 distinct numbers."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts exact frequency constrained subarrays via AtMost dual subtraction.",
+        "whenToUse": "When finding exact count of subarrays meeting distinct bounds.",
+        "whereUsed": "Data stream partitioning, user session segmentation.",
+        "whyOptimal": "O(N) time linear double-pass sliding window."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subarraysWithKDistinct(nums: list[int], k: int) -> int:\n    def atMostK(k_val: int) -> int:\n        if k_val <= 0: return 0\n        counts = {}\n        left = res = 0\n        for right, x in enumerate(nums):\n            counts[x] = counts.get(x, 0) + 1\n            while len(counts) > k_val:\n                counts[nums[left]] -= 1\n                if counts[nums[left]] == 0:\n                    del counts[nums[left]]\n                left += 1\n            res += right - left + 1\n        return res\n        \n    return atMostK(k) - atMostK(k - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nclass Solution {\n    int atMostK(vector<int>& nums, int k) {\n        if (k <= 0) return 0;\n        unordered_map<int, int> counts;\n        int left = 0, res = 0;\n        for (int right = 0; right < nums.size(); right++) {\n            counts[nums[right]]++;\n            while (counts.size() > k) {\n                counts[nums[left]]--;\n                if (counts[nums[left]] == 0) counts.erase(nums[left]);\n                left++;\n            }\n            res += right - left + 1;\n        }\n        return res;\n    }\npublic:\n    int subarraysWithKDistinct(vector<int>& nums, int k) {\n        return atMostK(nums, k) - atMostK(nums, k - 1);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private int atMostK(int[] nums, int k) {\n        if (k <= 0) return 0;\n        Map<Integer, Integer> counts = new HashMap<>();\n        int left = 0, res = 0;\n        for (int right = 0; right < nums.length; right++) {\n            counts.put(nums[right], counts.getOrDefault(nums[right], 0) + 1);\n            while (counts.size() > k) {\n                counts.put(nums[left], counts.get(nums[left]) - 1);\n                if (counts.get(nums[left]) == 0) counts.remove(nums[left]);\n                left++;\n            }\n            res += right - left + 1;\n        }\n        return res;\n    }\n\n    public int subarraysWithKDistinct(int[] nums, int k) {\n        return atMostK(nums, k) - atMostK(nums, k - 1);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subarraysWithKDistinct(nums, k) {\n  function atMostK(kVal) {\n    if (kVal <= 0) return 0;\n    const counts = new Map();\n    let left = 0, res = 0;\n    for (let right = 0; right < nums.length; right++) {\n      const x = nums[right];\n      counts.set(x, (counts.get(x) || 0) + 1);\n      while (counts.size > kVal) {\n        const l = nums[left];\n        counts.set(l, counts.get(l) - 1);\n        if (counts.get(l) === 0) counts.delete(l);\n        left++;\n      }\n      res += right - left + 1;\n    }\n    return res;\n  }\n  return atMostK(k) - atMostK(k - 1);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 992 - Subarrays with K Different Integers",
+          "url": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-find-all-anagrams",
+      "title": "Find All Anagrams in a String (Frequency Window)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1) (Alphabet size 26)",
+      "summary": "Find all start indices of p's anagrams in s using fixed-size frequency array window.",
+      "explanation": [
+        "1. Maintain target frequency array `p_count` of size 26 for string `P`.",
+        "2. Maintain running window frequency array `s_count` of size 26 for string `S`.",
+        "3. Slide window of size `len(P)` across `S`. At each step, compare `s_count == p_count`.",
+        "4. If matched, append window start index to result array."
+      ],
+      "exampleTrace": {
+        "title": "Trace s=\"cbaebabacd\", p=\"abc\"",
+        "traceSteps": [
+          "Target frequency for 'abc': {a:1, b:1, c:1}",
+          "Window 0..2: \"cba\" -> Match! Add index 0",
+          "Window 1..3: \"bae\" -> No match",
+          "Window 6..8: \"bac\" -> Match! Add index 6",
+          "Result Indices: [0, 6]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Locates all occurrences of string permutations in target text.",
+        "whenToUse": "When finding anagrams or permutations within long text streams.",
+        "whereUsed": "Bioinformatics DNA sequence motif matching, plagiarism checking.",
+        "whyOptimal": "O(N) time with O(26) = O(1) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findAnagrams(s: str, p: str) -> list[int]:\n    if len(p) > len(s): return []\n    p_count = [0] * 26\n    s_count = [0] * 26\n    for i in range(len(p)):\n        p_count[ord(p[i]) - ord('a')] += 1\n        s_count[ord(s[i]) - ord('a')] += 1\n    res = []\n    if s_count == p_count: res.append(0)\n    for i in range(len(p), len(s)):\n        s_count[ord(s[i]) - ord('a')] += 1\n        s_count[ord(s[i - len(p)]) - ord('a')] -= 1\n        if s_count == p_count:\n            res.append(i - len(p) + 1)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> findAnagrams(string s, string p) {\n    if (p.size() > s.size()) return {};\n    vector<int> pCount(26, 0), sCount(26, 0);\n    for (int i = 0; i < p.size(); i++) {\n        pCount[p[i] - 'a']++;\n        sCount[s[i] - 'a']++;\n    }\n    vector<int> res;\n    if (sCount == pCount) res.push_back(0);\n    for (int i = p.size(); i < s.size(); i++) {\n        sCount[s[i] - 'a']++;\n        sCount[s[i - p.size()] - 'a']--;\n        if (sCount == pCount) res.push_back(i - p.size() + 1);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> findAnagrams(String s, String p) {\n        List<Integer> res = new ArrayList<>();\n        if (p.length() > s.length()) return res;\n        int[] pCount = new int[26];\n        int[] sCount = new int[26];\n        for (int i = 0; i < p.length(); i++) {\n            pCount[p.charAt(i) - 'a']++;\n            sCount[s.charAt(i) - 'a']++;\n        }\n        if (Arrays.equals(sCount, pCount)) res.add(0);\n        for (int i = p.length(); i < s.length(); i++) {\n            sCount[s.charAt(i) - 'a']++;\n            sCount[s.charAt(i - p.length()) - 'a']--;\n            if (Arrays.equals(sCount, pCount)) res.add(i - p.length() + 1);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findAnagrams(s, p) {\n  if (p.length > s.length) return [];\n  const pCount = new Array(26).fill(0);\n  const sCount = new Array(26).fill(0);\n  const codeA = 'a'.charCodeAt(0);\n  for (let i = 0; i < p.length; i++) {\n    pCount[p.charCodeAt(i) - codeA]++;\n    sCount[s.charCodeAt(i) - codeA]++;\n  }\n  const res = [];\n  if (pCount.every((val, idx) => val === sCount[idx])) res.push(0);\n  for (let i = p.length; i < s.length; i++) {\n    sCount[s.charCodeAt(i) - codeA]++;\n    sCount[s.charCodeAt(i - p.length()) - codeA]--;\n    if (pCount.every((val, idx) => val === sCount[idx])) {\n      res.push(i - p.length + 1);\n    }\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 438 - Find All Anagrams in a String",
+          "url": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-character-replacement",
+      "title": "Longest Repeating Character Replacement",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1) (Alphabet size 26)",
+      "summary": "Find length of longest substring containing same letter after replacing at most K characters.",
+      "explanation": [
+        "1. Window Invariant: `window_length - max_char_frequency <= K`.",
+        "2. Maintain character frequency map and track max frequency character `max_freq` in current window.",
+        "3. Expand `right` pointer. If `(right - left + 1) - max_freq > K`, shrink window by advancing `left++`.",
+        "4. Calculate `max_len = max(max_len, right - left + 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace s=\"AABABBA\", K=1",
+        "traceSteps": [
+          "right=0 ('A'): max_freq=1, len=1",
+          "right=1 ('A'): max_freq=2, len=2",
+          "right=2 ('B'): max_freq=2, len=3 (3-2 = 1 <= K=1)",
+          "right=3 ('A'): max_freq=3, len=4 (4-3 = 1 <= K=1, \"AABA\")",
+          "Result Max Substring Length = 4"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximal uniform character segment achievable with at most K edits.",
+        "whenToUse": "When optimizing string homogenization under replacement budget.",
+        "whereUsed": "Data deduplication, lossy signal smoothing.",
+        "whyOptimal": "O(N) single-pass window extension."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def characterReplacement(s: str, k: int) -> int:\n    counts = {}\n    left = max_len = max_freq = 0\n    for right, ch in enumerate(s):\n        counts[ch] = counts.get(ch, 0) + 1\n        max_freq = max(max_freq, counts[ch])\n        if (right - left + 1) - max_freq > k:\n            counts[s[left]] -= 1\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint characterReplacement(string s, int k) {\n    vector<int> counts(26, 0);\n    int left = 0, maxLen = 0, maxFreq = 0;\n    for (int right = 0; right < s.size(); right++) {\n        counts[s[right] - 'A']++;\n        maxFreq = max(maxFreq, counts[s[right] - 'A']);\n        if ((right - left + 1) - maxFreq > k) {\n            counts[s[left] - 'A']--;\n            left++;\n        }\n        maxLen = max(maxLen, right - left + 1);\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int characterReplacement(String s, int k) {\n        int[] counts = new int[26];\n        int left = 0, maxLen = 0, maxFreq = 0;\n        for (int right = 0; right < s.length(); right++) {\n            int idx = s.charAt(right) - 'A';\n            counts[idx]++;\n            maxFreq = Math.max(maxFreq, counts[idx]);\n            if ((right - left + 1) - maxFreq > k) {\n                counts[s.charAt(left) - 'A']--;\n                left++;\n            }\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function characterReplacement(s, k) {\n  const counts = new Array(26).fill(0);\n  const codeA = 'A'.charCodeAt(0);\n  let left = 0, maxLen = 0, maxFreq = 0;\n  for (let right = 0; right < s.length; right++) {\n    const idx = s.charCodeAt(right) - codeA;\n    counts[idx]++;\n    maxFreq = Math.max(maxFreq, counts[idx]);\n    if ((right - left + 1) - maxFreq > k) {\n      counts[s.charCodeAt(left) - codeA]--;\n      left++;\n    }\n    maxLen = Math.max(maxLen, right - left + 1);\n  }\n  return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 424 - Longest Repeating Character Replacement",
+          "url": "https://leetcode.com/problems/longest-repeating-character-replacement/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sliding-window-permutation-in-string",
+      "title": "Permutation in String (Check Inclusion)",
+      "categoryId": "sliding_window",
+      "categoryTitle": "Sliding Window & Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N1 + N2)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check if string s2 contains any permutation of string s1 as a substring.",
+      "explanation": [
+        "1. Build target character count array for string s1.",
+        "2. Slide a window of size `len(s1)` across string s2.",
+        "3. Compare running frequency count with target frequency count.",
+        "4. Return True if any window matches target frequency, else False."
+      ],
+      "exampleTrace": {
+        "title": "Trace s1=\"ab\", s2=\"eidbaooo\"",
+        "traceSteps": [
+          "Target frequency s1: {a:1, b:1}",
+          "Window 0..1 \"ei\" -> {e:1, i:1} mismatch",
+          "Window 3..4 \"ba\" -> {b:1, a:1} match!",
+          "Return True"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines if any anagram of pattern exists within host string.",
+        "whenToUse": "When verifying substring permutation presence.",
+        "whereUsed": "Password strength pattern checking, virus signature scanning.",
+        "whyOptimal": "O(N) sliding window with O(1) frequency array equality checks."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def checkInclusion(s1: str, s2: str) -> bool:\n    if len(s1) > len(s2): return False\n    c1, c2 = [0] * 26, [0] * 26\n    for i in range(len(s1)):\n        c1[ord(s1[i]) - ord('a')] += 1\n        c2[ord(s2[i]) - ord('a')] += 1\n    if c1 == c2: return True\n    for i in range(len(s1), len(s2)):\n        c2[ord(s2[i]) - ord('a')] += 1\n        c2[ord(s2[i - len(s1)]) - ord('a')] -= 1\n        if c1 == c2: return True\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <vector>\nusing namespace std;\n\nbool checkInclusion(string s1, string s2) {\n    if (s1.size() > s2.size()) return false;\n    vector<int> c1(26, 0), c2(26, 0);\n    for (int i = 0; i < s1.size(); i++) {\n        c1[s1[i] - 'a']++;\n        c2[s2[i] - 'a']++;\n    }\n    if (c1 == c2) return true;\n    for (int i = s1.size(); i < s2.size(); i++) {\n        c2[s2[i] - 'a']++;\n        c2[s2[i - s1.size()] - 'a']--;\n        if (c1 == c2) return true;\n    }\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public boolean checkInclusion(String s1, String s2) {\n        if (s1.length() > s2.length()) return false;\n        int[] c1 = new int[26];\n        int[] c2 = new int[26];\n        for (int i = 0; i < s1.length(); i++) {\n            c1[s1.charAt(i) - 'a']++;\n            c2[s2.charAt(i) - 'a']++;\n        }\n        if (Arrays.equals(c1, c2)) return true;\n        for (int i = 0; i < s1.length(); i++) {\n            c2[s2.charAt(i) - 'a']++;\n            c2[s2.charAt(i - s1.length()) - 'a']--;\n            if (Arrays.equals(c1, c2)) return true;\n        }\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function checkInclusion(s1, s2) {\n  if (s1.length > s2.length) return false;\n  const c1 = new Array(26).fill(0);\n  const c2 = new Array(26).fill(0);\n  const codeA = 'a'.charCodeAt(0);\n  for (let i = 0; i < s1.length; i++) {\n    c1[s1.charCodeAt(i) - codeA]++;\n    c2[s2.charCodeAt(i) - codeA]++;\n  }\n  if (c1.every((val, idx) => val === c2[idx])) return true;\n  for (let i = s1.length; i < s2.length; i++) {\n    c2[s2.charCodeAt(i) - codeA]++;\n    c2[s2.charCodeAt(i - s1.length()) - codeA]--;\n    if (c1.every((val, idx) => val === c2[idx])) return true;\n  }\n  return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 567 - Permutation in String",
+          "url": "https://leetcode.com/problems/permutation-in-string/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

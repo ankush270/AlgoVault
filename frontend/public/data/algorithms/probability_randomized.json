@@ -1,0 +1,175 @@
+{
+  "id": "probability_randomized",
+  "category": {
+    "id": "probability_randomized",
+    "title": "Probability & Randomized Algorithms",
+    "icon": "Target",
+    "description": "Probability theory, Linearity of Expectation, Randomized QuickSort/QuickSelect, Monte Carlo, and Las Vegas algorithms."
+  },
+  "totalAlgorithms": 3,
+  "algorithms": [
+    {
+      "id": "linearity-of-expectation",
+      "title": "Linearity of Expectation & Probability",
+      "categoryId": "probability_randomized",
+      "categoryTitle": "Probability & Randomized Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes expected value using property E[X1 + X2 + ... + Xn] = E[X1] + E[X2] + ... + E[Xn] regardless of independence.",
+      "explanation": [
+        "1. Fundamental Rule: `E[X + Y] = E[X] + E[Y]` holds EVEN IF variables X and Y are dependent!",
+        "2. Indicator Variables: Define `I_i` as binary indicator variable (1 if event `i` occurs, 0 otherwise). `E[I_i] = P(Event i)`.",
+        "3. Summing Indicators: Total Expected Count `E[X] = sum(P(Event i))`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Expected Matches (Hat Check Problem for N people)",
+        "traceSteps": [
+          "Person i gets their own hat with probability P(I_i = 1) = 1/N.",
+          "Expected matches = sum_{i=1..N} E[I_i] = N * (1/N) = 1.",
+          "Result: Exactly 1 person gets their own hat on average!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes expected average outcomes in complex probabilistic processes.",
+        "whenToUse": "When finding expected number of steps, matches, or trials.",
+        "whereUsed": "Randomized algorithm analysis, gaming drop rate expectations, financial risk metrics.",
+        "whyOptimal": "Splits complex joint probability distribution into simple linear expectation sums."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def expected_matches_hat_check(n: int) -> float:\n    # E[X] = N * (1/N) = 1.0\n    return sum(1.0 / n for _ in range(n))\n\ndef expected_coupon_collector(n: int) -> float:\n    # E[T] = N * (1/N + 1/(N-1) + ... + 1/1)\n    return n * sum(1.0 / i for i in range(1, n + 1))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\ndouble expectedCouponCollector(int n) {\n    double sum = 0;\n    for (int i = 1; i <= n; i++) sum += 1.0 / i;\n    return n * sum;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static double expectedCouponCollector(int n) {\n        double sum = 0;\n        for (int i = 1; i <= n; i++) sum += 1.0 / i;\n        return n * sum;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function expectedCouponCollector(n) {\n  let sum = 0;\n  for (let i = 1; i <= n; i++) sum += 1.0 / i;\n  return n * sum;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1227 - Airplane Seat Assignment Probability",
+          "url": "https://leetcode.com/problems/airplane-seat-assignment-probability/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "randomized-quicksort-select",
+      "title": "Randomized QuickSort & QuickSelect",
+      "categoryId": "probability_randomized",
+      "categoryTitle": "Probability & Randomized Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Expected QuickSort / O(N) Expected QuickSelect",
+      "spaceComplexity": "O(log N)",
+      "summary": "Picks pivot elements uniformly at random to guarantee expected O(N log N) sorting and O(N) K-th element selection.",
+      "explanation": [
+        "1. Deterministic Worst Case: Fixed pivot (e.g. first element) degrades to O(N^2) on sorted arrays.",
+        "2. Random Pivot Strategy: Pick `pivot_idx = random(low, high)`. Swap `arr[pivot_idx]` with `arr[high]`.",
+        "3. Expected O(N log N): Randomized pivot guarantees balanced partitions with high probability, destroying malicious adversarial inputs."
+      ],
+      "exampleTrace": {
+        "title": "Trace QuickSelect for 2nd smallest in [7, 10, 4, 3, 20, 15]",
+        "traceSteps": [
+          "Pick random pivot value = 7.",
+          "Partition array around 7: Left=[4, 3], Pivot=7, Right=[10, 20, 15].",
+          "Pivot index is 2 -> Target K=2 found!",
+          "Result = 7 in O(N) expected time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Eliminates O(N^2) worst-case performance spikes caused by structured inputs.",
+        "whenToUse": "When sorting or finding K-th order statistic reliably in real systems.",
+        "whereUsed": "C++ `std::nth_element`, operating system process priority schedulers.",
+        "whyOptimal": "Guarantees linear expected time O(N) for K-th smallest element."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import random\n\ndef randomized_partition(arr: list[int], low: int, high: int) -> int:\n    rand_idx = random.randint(low, high)\n    arr[rand_idx], arr[high] = arr[high], arr[rand_idx]\n    pivot = arr[high]\n    i = low - 1\n    for j in range(low, high):\n        if arr[j] <= pivot:\n            i += 1\n            arr[i], arr[j] = arr[j], arr[i]\n    arr[i + 1], arr[high] = arr[high], arr[i + 1]\n    return i + 1\n\ndef quick_select(arr: list[int], low: int, high: int, k: int) -> int:\n    if low == high: return arr[low]\n    p_idx = randomized_partition(arr, low, high)\n    if k == p_idx:\n        return arr[k]\n    elif k < p_idx:\n        return quick_select(arr, low, p_idx - 1, k)\n    else:\n        return quick_select(arr, p_idx + 1, high, k)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <cstdlib>\n#include <algorithm>\nusing namespace std;\n\nint randomizedPartition(vector<int>& arr, int low, int high) {\n    int randIdx = low + rand() % (high - low + 1);\n    swap(arr[randIdx], arr[high]);\n    int pivot = arr[high], i = low - 1;\n    for (int j = low; j < high; j++) {\n        if (arr[j] <= pivot) {\n            i++; swap(arr[i], arr[j]);\n        }\n    }\n    swap(arr[i + 1], arr[high]);\n    return i + 1;\n}\n\nint quickSelect(vector<int>& arr, int low, int high, int k) {\n    if (low == high) return arr[low];\n    int pIdx = randomizedPartition(arr, low, high);\n    if (k == pIdx) return arr[k];\n    else if (k < pIdx) return quickSelect(arr, low, pIdx - 1, k);\n    else return quickSelect(arr, pIdx + 1, high, k);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    static Random rand = new Random();\n    static int randomizedPartition(int[] arr, int low, int high) {\n        int randIdx = low + rand.nextInt(high - low + 1);\n        int temp = arr[randIdx]; arr[randIdx] = arr[high]; arr[high] = temp;\n        int pivot = arr[high], i = low - 1;\n        for (int j = low; j < high; j++) {\n            if (arr[j] <= pivot) {\n                i++;\n                int t = arr[i]; arr[i] = arr[j]; arr[j] = t;\n            }\n        }\n        int t = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = t;\n        return i + 1;\n    }\n    public static int quickSelect(int[] arr, int low, int high, int k) {\n        if (low == high) return arr[low];\n        int pIdx = randomizedPartition(arr, low, high);\n        if (k == pIdx) return arr[k];\n        else if (k < pIdx) return quickSelect(arr, low, pIdx - 1, k);\n        else return quickSelect(arr, pIdx + 1, high, k);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function randomizedPartition(arr, low, high) {\n  const randIdx = low + Math.floor(Math.random() * (high - low + 1));\n  [arr[randIdx], arr[high]] = [arr[high], arr[randIdx]];\n  const pivot = arr[high];\n  let i = low - 1;\n  for (let j = low; j < high; j++) {\n    if (arr[j] <= pivot) {\n      i++;\n      [arr[i], arr[j]] = [arr[j], arr[i]];\n    }\n  }\n  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];\n  return i + 1;\n}\nfunction quickSelect(arr, low, high, k) {\n  if (low === high) return arr[low];\n  const pIdx = randomizedPartition(arr, low, high);\n  if (k === pIdx) return arr[k];\n  else if (k < pIdx) return quickSelect(arr, low, pIdx - 1, k);\n  else return quickSelect(arr, pIdx + 1, high, k);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 215 - Kth Largest Element in an Array",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "monte-carlo-las-vegas",
+      "title": "Monte Carlo vs Las Vegas Algorithms",
+      "categoryId": "probability_randomized",
+      "categoryTitle": "Probability & Randomized Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "Probabilistic Runtime / Error Bound",
+      "spaceComplexity": "O(1)",
+      "summary": "Distinguishes Monte Carlo (fixed runtime, probabilistic output correctness like Miller-Rabin) from Las Vegas (probabilistic runtime, guaranteed correct output like QuickSelect).",
+      "explanation": [
+        "1. Las Vegas Algorithms: Always return correct answer. Runtime is a random variable (e.g. Randomized QuickSort, Randomized QuickSelect).",
+        "2. Monte Carlo Algorithms: Fixed deterministic runtime. Output has a small probability of error `P(error) <= 1/4^k` (e.g. Miller-Rabin Primality Test, Karger's Min-Cut).",
+        "3. Error Reduction: Running a Monte Carlo algorithm K times exponentially reduces error probability to `(1/4)^K`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Miller-Rabin Primality (Monte Carlo) on N = 561",
+        "traceSteps": [
+          "561 is Carmichael number (pseudo-prime for Fermat test).",
+          "Miller-Rabin picks random base a=2 -> detects non-trivial square root of 1 mod 561.",
+          "Correctly flags 561 as COMPOSITE in O(k log^3 N) deterministic time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves computationally intractable problems using probabilistic random sampling.",
+        "whenToUse": "When exact deterministic algorithms are too slow (e.g. primality testing for 1024-bit numbers).",
+        "whereUsed": "RSA keygen Miller-Rabin test, Monte Carlo Tree Search (MCTS) in AlphaGo.",
+        "whyOptimal": "Achieves sub-exponential time bounds with arbitrarily low error probability."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import random\n\ndef miller_rabin(n: int, k: int = 5) -> bool:\n    if n <= 1 or n == 4: return False\n    if n <= 3: return True\n    d = n - 1\n    s = 0\n    while d % 2 == 0:\n        d //= 2\n        s += 1\n    for _ in range(k):\n        a = random.randint(2, n - 2)\n        x = pow(a, d, n)\n        if x == 1 or x == n - 1: continue\n        for _ in range(s - 1):\n            x = (x * x) % n\n            if x == n - 1: break\n        else:\n            return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <cstdlib>\nusing namespace std;\n\nlong long power(long long a, long long b, long long m) {\n    long long res = 1; a %= m;\n    while (b > 0) {\n        if (b & 1) res = (__int128)res * a % m;\n        a = (__int128)a * a % m; b >>= 1;\n    }\n    return res;\n}\n\nbool millerRabin(long long n, int k = 5) {\n    if (n <= 1 || n == 4) return false;\n    if (n <= 3) return true;\n    long long d = n - 1; int s = 0;\n    while (d % 2 == 0) { d /= 2; s++; }\n    for (int i = 0; i < k; i++) {\n        long long a = 2 + rand() % (n - 4);\n        long long x = power(a, d, n);\n        if (x == 1 || x == n - 1) continue;\n        bool composite = true;\n        for (int r = 1; r < s; r++) {\n            x = (__int128)x * x % n;\n            if (x == n - 1) { composite = false; break; }\n        }\n        if (composite) return false;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.math.BigInteger;\n\npublic class Solution {\n    public static boolean millerRabin(long n, int k) {\n        return BigInteger.valueOf(n).isProbablePrime(k);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function power(a, b, m) {\n  let res = 1n, base = BigInt(a) % BigInt(m), exp = BigInt(b), mod = BigInt(m);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % mod;\n    base = (base * base) % mod; exp >>= 1n;\n  }\n  return res;\n}\nfunction millerRabin(n, k = 5) {\n  if (n <= 1 || n === 4) return false;\n  if (n <= 3) return true;\n  let d = BigInt(n - 1), s = 0;\n  while (d % 2n === 0n) { d /= 2n; s++; }\n  for (let i = 0; i < k; i++) {\n    let a = BigInt(2 + Math.floor(Math.random() * (n - 4)));\n    let x = power(a, d, n);\n    if (x === 1n || x === BigInt(n - 1)) continue;\n    let composite = true;\n    for (let r = 1; r < s; r++) {\n      x = (x * x) % BigInt(n);\n      if (x === BigInt(n - 1)) { composite = false; break; }\n    }\n    if (composite) return false;\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Primality Test (Miller Rabin)",
+          "url": "https://www.geeksforgeeks.org/primality-test-set-3-miller-rabin/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

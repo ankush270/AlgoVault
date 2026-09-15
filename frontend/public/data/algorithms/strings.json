@@ -1,0 +1,370 @@
+{
+  "id": "strings",
+  "category": {
+    "id": "strings",
+    "title": "Strings & Pattern Matching",
+    "icon": "Terminal",
+    "description": "String manipulation, pattern searching (KMP, Z-algorithm), and hashing."
+  },
+  "totalAlgorithms": 7,
+  "algorithms": [
+    {
+      "id": "kmp-algorithm",
+      "title": "KMP Algorithm (Knuth-Morris-Pratt Pattern Matching)",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(M)",
+      "summary": "Efficiently finds pattern matches in a text string without re-checking matching characters using the Longest Proper Prefix which is also Suffix (LPS) table.",
+      "explanation": [
+        "Precompute the `LPS` (Longest Prefix Suffix) array for the pattern of length M.",
+        "`LPS[i]` stores the length of the longest matching proper prefix of `pattern[0...i]` that is also a suffix of `pattern[0...i]`.",
+        "Scan the text of length N with index `i` and pattern with index `j`.",
+        "When characters match (`text[i] == pattern[j]`), advance both `i++` and `j++`.",
+        "When a mismatch occurs, use `LPS[j-1]` to skip redundant pattern comparisons instead of resetting `i` back."
+      ],
+      "exampleTrace": {
+        "input": "text = 'ABABACABACABA', pattern = 'ABACABA'",
+        "output": "Pattern found at index 6",
+        "traceSteps": [
+          "Step 1: Compute LPS array for 'ABACABA' -> LPS = [0, 0, 1, 0, 1, 2, 3].",
+          "Step 2: Match text and pattern:",
+          "i=0..4: 'ABABA' matches 'ABABA', mismatch at text[5]='C' vs pattern[5]='B'.",
+          "Use LPS[4] = 1: shift pattern pointer j to 1. Match resumes.",
+          "i=6..12: 'ABACABA' matches pattern 'ABACABA' completely (j = 7 = len(pattern)).",
+          "Pattern matched at index 6 in O(N + M) linear time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds exact occurrences of a pattern P of length M inside text T of length N in linear time.",
+        "whenToUse": "When searching for substrings in huge text corpora, DNA sequence matching, or avoiding worst-case O(N * M) naive string matching.",
+        "whereUsed": "Text editor search utilities (`grep`, Ctrl+F), genomic sequence search tools (BLAST), network packet filtering.",
+        "whyOptimal": "Eliminates backtracking in the primary text stream. Time complexity remains linear O(N + M) regardless of text repetitions."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def build_lps(pattern):\n    lps = [0] * len(pattern)\n    length = 0\n    i = 1\n    while i < len(pattern):\n        if pattern[i] == pattern[length]:\n            length += 1\n            lps[i] = length\n            i += 1\n        elif length != 0:\n            length = lps[length - 1]\n        else:\n            lps[i] = 0\n            i += 1\n    return lps\n\ndef kmp_search(text, pattern):\n    lps = build_lps(pattern)\n    i = j = 0\n    matches = []\n    while i < len(text):\n        if text[i] == pattern[j]:\n            i += 1\n            j += 1\n        if j == len(pattern):\n            matches.append(i - j)\n            j = lps[j - 1]\n        elif i < len(text) and text[i] != pattern[j]:\n            if j != 0:\n                j = lps[j - 1]\n            else:\n                i += 1\n    return matches"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 28 - Find the Index of the First Occurrence in a String",
+          "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "rabin-karp-algorithm",
+      "title": "Rabin-Karp Algorithm (Polynomial Rolling Hash Matching)",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M) Average, O(N*M) Worst",
+      "spaceComplexity": "O(1)",
+      "summary": "Uses rolling hash techniques to find pattern matches in linear average time by maintaining a sliding hash value.",
+      "explanation": [
+        "Compute the polynomial hash of the pattern of length M: hash(P) = sum(P[i] * B^(M-1-i)) % MOD.",
+        "Compute the initial hash of the first window of text of length M.",
+        "Slide the window over the text one character at a time:",
+        "  - Subtract the outgoing character's contribution: (hash - text[old] * B^(M-1)) % MOD.",
+        "  - Shift left: (hash * B) % MOD.",
+        "  - Add the incoming character's contribution: (hash + text[new]) % MOD.",
+        "If the text window hash equals the pattern hash, perform a character-by-character comparison to handle hash collisions."
+      ],
+      "exampleTrace": {
+        "input": "text = 'GEEKS FOR GEEKS', pattern = 'GEEK', prime q = 101",
+        "output": "Pattern found at index 0 and index 10",
+        "traceSteps": [
+          "Step 1: Calculate hash for pattern 'GEEK' = H_p.",
+          "Step 2: Calculate hash for first window text[0..3] 'GEEK' = H_w.",
+          "Step 3: Window 0: H_w == H_p. Character-by-character check matches 'GEEK' at index 0.",
+          "Step 4: Roll hash for window 1 text[1..4] 'EEKS': subtract 'G', multiply base, add 'S' mod 101.",
+          "Step 5: Continue rolling window hash until window 10 text[10..13] 'GEEK': H_w == H_p. Match at index 10.",
+          "Pattern matches found in O(N + M) average time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds pattern occurrences in text and handles multiple pattern search efficiently using rolling hashes.",
+        "whenToUse": "When searching for multiple patterns simultaneously, detecting duplicate substrings, or checking plagiarism.",
+        "whereUsed": "Plagiarism detectors, virus signature scanning in antivirus software, DNA motif matching.",
+        "whyOptimal": "Recomputes substring hash in O(1) time per step instead of re-hashing from scratch O(M)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rabin_karp(text, pattern):\n    n, m = len(text), len(pattern)\n    if m > n: return []\n    BASE, MOD = 256, 101\n    p_hash = t_hash = 0\n    h = pow(BASE, m - 1, MOD)\n    matches = []\n\n    for i in range(m):\n        p_hash = (BASE * p_hash + ord(pattern[i])) % MOD\n        t_hash = (BASE * t_hash + ord(text[i])) % MOD\n\n    for i in range(n - m + 1):\n        if p_hash == t_hash:\n            if text[i:i+m] == pattern:\n                matches.append(i)\n        if i < n - m:\n            t_hash = (BASE * (t_hash - ord(text[i]) * h) + ord(text[i + m])) % MOD\n            if t_hash < 0: t_hash += MOD\n    return matches"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> rabinKarp(string text, string pattern) {\n    int n = text.length(), m = pattern.length();\n    if (m > n) return {};\n    long long BASE = 256, MOD = 101, h = 1, pHash = 0, tHash = 0;\n    vector<int> matches;\n    for (int i = 0; i < m - 1; i++) h = (h * BASE) % MOD;\n    for (int i = 0; i < m; i++) {\n        pHash = (BASE * pHash + pattern[i]) % MOD;\n        tHash = (BASE * tHash + text[i]) % MOD;\n    }\n    for (int i = 0; i <= n - m; i++) {\n        if (pHash == tHash && text.substr(i, m) == pattern) matches.push_back(i);\n        if (i < n - m) {\n            tHash = (BASE * (tHash - text[i] * h) + text[i + m]) % MOD;\n            if (tHash < 0) tHash += MOD;\n        }\n    }\n    return matches;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 28 - Find Pattern in String",
+          "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 1044 - Longest Duplicate Substring",
+          "url": "https://leetcode.com/problems/longest-duplicate-substring/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "z-algorithm",
+      "title": "Z-Algorithm (Linear Time Z-Array Pattern Search)",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(N + M)",
+      "summary": "Constructs a Z-array where Z[i] is the length of the longest substring starting at i that matches the prefix of the concatenated string P + '$' + T.",
+      "explanation": [
+        "Construct concatenated string S = pattern + '$' + text.",
+        "Maintain a Z-box [L, R] which is the segment of S matching a prefix of S with maximum right endpoint R.",
+        "For index i from 1 to len(S):",
+        "  - If i > R: Compute Z[i] naively by comparing S[i+k] with S[k], then update [L, R] = [i, i + Z[i] - 1].",
+        "  - If i <= R: Use previously computed Z[i - L]. If Z[i - L] < R - i + 1, then Z[i] = Z[i - L]. Otherwise extend naively beyond R and update [L, R].",
+        "Check indices where Z[i] == len(pattern) to find exact match positions."
+      ],
+      "exampleTrace": {
+        "input": "string S = 'aab$aabxaaab'",
+        "output": "Z-array computed, Pattern matched where Z[i] == len(pattern)",
+        "traceSteps": [
+          "Construct concatenated string P + '$' + T = 'aab$aabxaaab'.",
+          "Maintain Z-box window [L, R] = [0, 0].",
+          "i=1: S[1]='a' != S[0]='a'? S[1]=='a', S[2]=='b' != S[1]='a' -> Z[1] = 1.",
+          "i=4 (first 'a' of T): S[4..6]='aab' matches prefix S[0..2]='aab' -> Z[4] = 3 (length of pattern 'aab')!",
+          "Since Z[4] == len('aab') == 3, pattern 'aab' is matched at text index 0."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds all occurrences of a pattern in a text in O(N + M) time and finds longest common prefixes.",
+        "whenToUse": "When needing linear time pattern matching, finding period of a string, or prefix-suffix overlaps.",
+        "whereUsed": "Bioinformatics DNA sequence alignment, text editor search engines, string compression algorithms.",
+        "whyOptimal": "Reuses previously calculated prefix match bounds [L, R] to process each character in O(1) amortized time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def z_algorithm(text, pattern):\n    concat = pattern + '$' + text\n    n = len(concat)\n    z = [0] * n\n    l, r, k = 0, 0, 0\n    for i in range(1, n):\n        if i > r:\n            l, r = i, i\n            while r < n and concat[r - l] == concat[r]:\n                r += 1\n            z[i] = r - l\n            r -= 1\n        else:\n            k = i - l\n            if z[k] < r - i + 1:\n                z[i] = z[k]\n            else:\n                l = i\n                while r < n and concat[r - l] == concat[r]:\n                    r += 1\n                z[i] = r - l\n                r -= 1\n    matches = []\n    pat_len = len(pattern)\n    for i in range(pat_len + 1, n):\n        if z[i] == pat_len:\n            matches.append(i - pat_len - 1)\n    return matches"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GFG - Z Algorithm for Pattern Searching",
+          "url": "https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "manachers-algorithm",
+      "title": "Manacher's Algorithm (Longest Palindromic Substring in O(N))",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the longest palindromic substring in linear time O(N) by transforming the string to handle even/odd lengths and reusing symmetry.",
+      "explanation": [
+        "Transform string S by inserting boundary characters (e.g. 'abc' -> '#a#b#c#').",
+        "Maintain an array P[i] representing the radius of the palindrome centered at i.",
+        "Maintain center C and right boundary R of the furthest-reaching palindrome.",
+        "For index i:",
+        "  - Find mirror index i_mirror = 2*C - i.",
+        "  - If i < R, set initial P[i] = min(R - i, P[i_mirror]).",
+        "  - Expand around i while characters match.",
+        "  - If palindrome expands past R, update C = i and R = i + P[i].",
+        "Find index with maximum P[i] to extract the longest palindrome."
+      ],
+      "exampleTrace": {
+        "input": "s = 'babad'",
+        "output": "'bab' (or 'aba')",
+        "traceSteps": [
+          "Step 1: Transform string with delimiters: T = '^#b#a#b#a#d#$'.",
+          "Step 2: Maintain center C = 0, right boundary R = 0, radius array P.",
+          "Step 3: Expand around centers using mirror i_mirror = 2*C - i.",
+          "Max radius found at center 3 (corresponding to 'a' in 'bab'): P[3] = 3.",
+          "Step 4: Extract longest palindrome substring from original string -> 'bab'."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest palindromic substring in O(N) time instead of O(N^2) or O(N^3).",
+        "whenToUse": "When finding longest palindrome or counting palindromic substrings in strict linear time bounds.",
+        "whereUsed": "Genomic DNA palindromic sequence analysis, text processing, data compression.",
+        "whyOptimal": "Reuses palindrome symmetry (mirroring) to avoid re-expanding characters inside known palindromes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longest_palindrome_manacher(s):\n    if not s: return ''\n    t = '#' + '#'.join(s) + '#'\n    n = len(t)\n    p = [0] * n\n    c = r = 0\n    max_len = max_center = 0\n\n    for i in range(n):\n        mirror = 2 * c - i\n        if i < r:\n            p[i] = min(r - i, p[mirror])\n        while i + 1 + p[i] < n and i - 1 - p[i] >= 0 and t[i + 1 + p[i]] == t[i - 1 - p[i]]:\n            p[i] += 1\n        if i + p[i] > r:\n            c = i\n            r = i + p[i]\n        if p[i] > max_len:\n            max_len = p[i]\n            max_center = i\n\n    start = (max_center - max_len) // 2\n    return s[start : start + max_len]"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 5 - Longest Palindromic Substring",
+          "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "expand-around-center-palindrome",
+      "title": "Expand Around Center (Palindromic Substrings)",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(1)",
+      "summary": "Iterates over all 2N-1 potential centers (single characters and gaps between adjacent characters) and expands outward to find all palindromes.",
+      "explanation": [
+        "Every palindrome has a center: single character for odd-length (e.g., 'aba'), or gap for even-length (e.g., 'abba').",
+        "For each index i from 0 to N-1:",
+        "  - Call helper expand(left=i, right=i) for odd length palindromes.",
+        "  - Call helper expand(left=i, right=i+1) for even length palindromes.",
+        "In helper: while left >= 0 and right < N and S[left] == S[right], decrement left and increment right.",
+        "Track max length found and return the longest palindrome substring."
+      ],
+      "exampleTrace": {
+        "input": "s = 'babad'",
+        "output": "'bab'",
+        "traceSteps": [
+          "Odd-length centers (i, i):",
+          "Center i=0 ('b'): max len = 1 ('b').",
+          "Center i=1 ('a'): expand left (0: 'b') & right (2: 'b') -> 'b' == 'b' -> max len = 3 ('bab').",
+          "Center i=2 ('b'): expand left (1: 'a') & right (3: 'a') -> 'a' == 'a' -> max len = 3 ('aba').",
+          "Even-length centers (i, i+1): No palindrome > 1.",
+          "Longest Palindromic Substring = 'bab'."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds longest palindromic substring or counts total palindromic substrings with O(1) space.",
+        "whenToUse": "When interviewed on palindrome problems where O(N²) time is optimal enough and O(1) space is preferred over Manacher's complexity.",
+        "whereUsed": "Interview coding assessments, string validation routines.",
+        "whyOptimal": "Requires 0 extra memory (O(1) auxiliary space) compared to Dynamic Programming (O(N²)) or Manacher's (O(N) memory)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longest_palindrome(s):\n    res = ''\n    for i in range(len(s)):\n        # Odd length palindromes\n        l, r = i, i\n        while l >= 0 and r < len(s) and s[l] == s[r]:\n            if (r - l + 1) > len(res):\n                res = s[l:r+1]\n            l -= 1; r += 1\n        # Even length palindromes\n        l, r = i, i + 1\n        while l >= 0 and r < len(s) and s[l] == s[r]:\n            if (r - l + 1) > len(res):\n                res = s[l:r+1]\n            l -= 1; r += 1\n    return res"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 647 - Palindromic Substrings",
+          "url": "https://leetcode.com/problems/palindromic-substrings/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "minimum-window-substring",
+      "title": "Minimum Window Substring (Sliding Window & Hash Map)",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(K)",
+      "summary": "Finds the smallest substring in S that contains all characters of string T (including duplicates) using two pointers and frequency counting.",
+      "explanation": [
+        "Build target frequency map target_counts for string T.",
+        "Maintain window frequency map window_counts and two pointers left = 0, right = 0.",
+        "Maintain matched_chars count representing characters meeting required frequency in window.",
+        "Expand right pointer:",
+        "  - Add S[right] to window_counts.",
+        "  - If window_counts[c] == target_counts[c], increment matched_chars.",
+        "When matched_chars == len(target_counts) (valid window):",
+        "  - Update minimum window size and start position.",
+        "  - Contract window from left pointer to find minimal valid length."
+      ],
+      "exampleTrace": {
+        "input": "s = 'ADOBECODEBANC', t = 'ABC'",
+        "output": "'BANC'",
+        "traceSteps": [
+          "Target freq map: {'A':1, 'B':1, 'C':1}. Required matches = 3.",
+          "Expand right pointer r:",
+          "r=0 ('A'): match count = 1.",
+          "r=3 ('B'): match count = 2.",
+          "r=5 ('C'): match count = 3. Window s[0..5] = 'ADOBEC' contains all target chars! Window len = 6.",
+          "Shrink left pointer l to minimize window:",
+          "Shrink l to 3: s[3..10] 'BECODEBA' valid.",
+          "Continue until right pointer reaches index 12 ('C'): Window s[9..12] = 'BANC' has len 4 with all target chars.",
+          "Minimum Window Substring = 'BANC'."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds smallest window containing all required characters in linear time.",
+        "whenToUse": "When finding minimal/maximal contiguous substring containing a target set of items.",
+        "whereUsed": "Search query snippet generation (finding paragraph containing all user search keywords), log analytics.",
+        "whyOptimal": "Both left and right pointers traverse the string at most once, guaranteeing linear O(N) execution."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import Counter\n\ndef min_window(s, t):\n    if not s or not t: return ''\n    target_counts = Counter(t)\n    required = len(target_counts)\n    window_counts = {}\n    formed = 0\n    l = r = 0\n    ans = (float('inf'), None, None)\n\n    while r < len(s):\n        char = s[r]\n        window_counts[char] = window_counts.get(char, 0) + 1\n        if char in target_counts and window_counts[char] == target_counts[char]:\n            formed += 1\n        while l <= r and formed == required:\n            char = s[l]\n            if r - l + 1 < ans[0]:\n                ans = (r - l + 1, l, r)\n            window_counts[char] -= 1\n            if char in target_counts and window_counts[char] < target_counts[char]:\n                formed -= 1\n            l += 1\n        r += 1\n    return '' if ans[0] == float('inf') else s[ans[1]:ans[2]+1]"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 76 - Minimum Window Substring",
+          "url": "https://leetcode.com/problems/minimum-window-substring/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "string-hashing-polynomial",
+      "title": "String Hashing & Polynomial Rolling Hash (Substrings in O(1))",
+      "categoryId": "strings",
+      "categoryTitle": "Strings & Pattern Matching",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Computes prefix hash array and prime powers so any substring hash S[L...R] can be checked for equality in O(1) time.",
+      "explanation": [
+        "Compute prefix hash array prefix_hash[i] = (prefix_hash[i-1] * P + ord(S[i])) % MOD.",
+        "Precompute prime power array P_pow[i] = (P_pow[i-1] * P) % MOD.",
+        "To get hash of substring S[L...R] in O(1):",
+        "  - hash(L, R) = (prefix_hash[R+1] - prefix_hash[L] * P_pow[R - L + 1]) % MOD.",
+        "  - Handle negative mod results by adding MOD.",
+        "Use Double Hashing (two prime moduli e.g. 10^9+7 and 10^9+9) to eliminate collision risk."
+      ],
+      "exampleTrace": {
+        "input": "s = 'abcdeabcde', Query: Is s[0..4] == s[5..9]?",
+        "output": "True (Both substrings equal 'abcde')",
+        "traceSteps": [
+          "Compute prefix hash array H and power array P with base p = 31, mod = 10^9+7.",
+          "Query 1: Hash(0, 4) = (H[4] - 0) mod M.",
+          "Query 2: Hash(5, 9) = (H[9] - H[4] * P[5]) mod M.",
+          "Compare Hash(0, 4) == Hash(5, 9) -> Both evaluate to 3105741.",
+          "Substrings s[0..4] and s[5..9] are identical! Answered in O(1) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Allows comparing any two substrings of a string in O(1) time without character-by-character loop.",
+        "whenToUse": "When problem involves frequent substring equality checks, finding repeated substrings, or Palindrome queries.",
+        "whereUsed": "Competitive programming string processing, diff tools, duplicate document analysis.",
+        "whyOptimal": "Reduces substring comparisons from O(K) time to instantaneous O(1) mathematical lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class StringHasher:\n    def __init__(self, s, P=31, MOD=10**9 + 7):\n        self.MOD = MOD\n        n = len(s)\n        self.pref = [0] * (n + 1)\n        self.pow_p = [1] * (n + 1)\n        for i in range(n):\n            self.pref[i+1] = (self.pref[i] * P + ord(s[i])) % MOD\n            self.pow_p[i+1] = (self.pow_p[i] * P) % MOD\n\n    def get_hash(self, l, r):\n        val = (self.pref[r+1] - self.pref[l] * self.pow_p[r - l + 1]) % self.MOD\n        return (val + self.MOD) % self.MOD"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 214 - Shortest Palindrome",
+          "url": "https://leetcode.com/problems/shortest-palindrome/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "id": "heaps",
+  "category": {
+    "id": "heaps",
+    "title": "Heap & Priority Queue",
+    "icon": "Layers",
+    "description": "Min heap, max heap, top-K elements, median streaming, and scheduling."
+  },
+  "totalAlgorithms": 6,
+  "algorithms": [
+    {
+      "id": "heap-foundations-dary",
+      "title": "Binary Heap & d-ary Heap Foundations & Operations",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) Peek, O(log N) Push/Pop, O(N) BuildHeap",
+      "spaceComplexity": "O(N) for Heap Array",
+      "summary": "Complete tree-based Priority Queue implementations (Min/Max Binary Heap and d-ary Heap) supporting O(1) peek, O(log N) push/pop, and linear O(N) buildHeap.",
+      "explanation": [
+        "Binary Heap: Complete binary tree stored as contiguous array. Parent at `(i-1)//2`, children at `2*i + 1` and `2*i + 2`.",
+        "d-ary Heap: Each node has d children (at `d*i + 1` through `d*i + d`), reducing tree height to O(log_d N) for faster bubble-up operations.",
+        "Insert (Push): Append item at end, call `bubble_up` (sift-up) to restore heap property.",
+        "Extract (Pop): Swap root with last element, remove last element, call `sink_down` (sift-down) on root.",
+        "Build Heap (Floyd's Algorithm): Call `sink_down` on all non-leaf nodes from index `N//2 - 1` down to 0 in optimal linear O(N) time."
+      ],
+      "exampleTrace": {
+        "input": "Push 10, 5, 20, 2 into MinHeap -> Pop root",
+        "output": "Extracted Min = 2. Remaining Heap root = 5.",
+        "traceSteps": [
+          "Push 10: Heap = [10]",
+          "Push 5: Heap = [5, 10] (5 sifted up to root)",
+          "Push 20: Heap = [5, 10, 20]",
+          "Push 2: Heap = [2, 5, 20, 10] (2 sifted up to root)",
+          "Pop(): Min root 2 extracted. 10 moved to root, sifted down -> Heap = [5, 10, 20]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains dynamically updated maximum or minimum priority element.",
+        "whenToUse": "When inserting elements and continuously querying the min or max element.",
+        "whereUsed": "Priority Queue standard libraries (C++ std::priority_queue, Python heapq, Java PriorityQueue), Dijkstra's algorithm, OS schedulers.",
+        "whyOptimal": "Provides log-time O(log N) insertions and extractions with linear O(N) heap construction."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MinHeap:\n    def __init__(self):\n        self.heap = []\n\n    def push(self, val):\n        self.heap.append(val)\n        self._sift_up(len(self.heap) - 1)\n\n    def pop(self):\n        if not self.heap: return None\n        if len(self.heap) == 1: return self.heap.pop()\n        root = self.heap[0]\n        self.heap[0] = self.heap.pop()\n        self._sift_down(0)\n        return root\n\n    def _sift_up(self, i):\n        parent = (i - 1) // 2\n        if i > 0 and self.heap[i] < self.heap[parent]:\n            self.heap[i], self.heap[parent] = self.heap[parent], self.heap[i]\n            self._sift_up(parent)\n\n    def _sift_down(self, i):\n        smallest = i\n        left, right = 2 * i + 1, 2 * i + 2\n        if left < len(self.heap) and self.heap[left] < self.heap[smallest]: smallest = left\n        if right < len(self.heap) and self.heap[right] < self.heap[smallest]: smallest = right\n        if smallest != i:\n            self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]\n            self._sift_down(smallest)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nclass MinHeap {\n    std::vector<int> heap;\n    void siftUp(int i) {\n        int parent = (i - 1) / 2;\n        if (i > 0 && heap[i] < heap[parent]) {\n            std::swap(heap[i], heap[parent]);\n            siftUp(parent);\n        }\n    }\n    void siftDown(int i) {\n        int smallest = i, left = 2 * i + 1, right = 2 * i + 2;\n        if (left < heap.size() && heap[left] < heap[smallest]) smallest = left;\n        if (right < heap.size() && heap[right] < heap[smallest]) smallest = right;\n        if (smallest != i) {\n            std::swap(heap[i], heap[smallest]);\n            siftDown(smallest);\n        }\n    }\npublic:\n    void push(int val) { heap.push_back(val); siftUp(heap.size() - 1); }\n    int pop() {\n        int root = heap[0];\n        heap[0] = heap.back(); heap.pop_back();\n        if (!heap.empty()) siftDown(0);\n        return root;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.ArrayList;\n\npublic class MinHeap {\n    private ArrayList<Integer> heap = new ArrayList<>();\n\n    public void push(int val) {\n        heap.add(val);\n        siftUp(heap.size() - 1);\n    }\n\n    public int pop() {\n        int root = heap.get(0);\n        int last = heap.remove(heap.size() - 1);\n        if (!heap.isEmpty()) {\n            heap.set(0, last);\n            siftDown(0);\n        }\n        return root;\n    }\n\n    private void siftUp(int i) {\n        int parent = (i - 1) / 2;\n        if (i > 0 && heap.get(i) < heap.get(parent)) {\n            int temp = heap.get(i); heap.set(i, heap.get(parent)); heap.set(parent, temp);\n            siftUp(parent);\n        }\n    }\n\n    private void siftDown(int i) {\n        int smallest = i, left = 2 * i + 1, right = 2 * i + 2;\n        if (left < heap.size() && heap.get(left) < heap.get(smallest)) smallest = left;\n        if (right < heap.size() && heap.get(right) < heap.get(smallest)) smallest = right;\n        if (smallest != i) {\n            int temp = heap.get(i); heap.set(i, heap.get(smallest)); heap.set(smallest, temp);\n            siftDown(smallest);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MinHeap {\n    constructor() { this.heap = []; }\n    push(val) {\n        this.heap.push(val);\n        this._siftUp(this.heap.length - 1);\n    }\n    pop() {\n        if (!this.heap.length) return null;\n        if (this.heap.length === 1) return this.heap.pop();\n        const root = this.heap[0];\n        this.heap[0] = this.heap.pop();\n        this._siftDown(0);\n        return root;\n    }\n    _siftUp(i) {\n        let parent = Math.floor((i - 1) / 2);\n        if (i > 0 && this.heap[i] < this.heap[parent]) {\n            [this.heap[i], this.heap[parent]] = [this.heap[parent], this.heap[i]];\n            this._siftUp(parent);\n        }\n    }\n    _siftDown(i) {\n        let smallest = i, left = 2 * i + 1, right = 2 * i + 2;\n        if (left < this.heap.length && this.heap[left] < this.heap[smallest]) smallest = left;\n        if (right < this.heap.length && this.heap[right] < this.heap[smallest]) smallest = right;\n        if (smallest !== i) {\n            [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];\n            this._siftDown(smallest);\n        }\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 703 - Kth Largest Element in a Stream",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-a-stream/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "heap-top-k-elements",
+      "title": "Top K Elements: K Largest & K Smallest",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log K)",
+      "spaceComplexity": "O(K) for Heap of size K",
+      "summary": "Finds the K largest (or K smallest) elements in an array using a Min-Heap (or Max-Heap) of bounded size K in O(N log K) time.",
+      "explanation": [
+        "K Largest Pattern: Maintain a Min-Heap of size K.",
+        "Iterate through N array elements.",
+        "Push element into Min-Heap. If heap size exceeds K, pop the smallest element (`heappop()`).",
+        "After inspecting all N elements, the Min-Heap contains exactly the K largest elements!",
+        "K Smallest Pattern: Maintain a Max-Heap of size K using the same logic."
+      ],
+      "exampleTrace": {
+        "input": "nums = [3, 2, 1, 5, 6, 4], k = 2",
+        "output": "5 (2nd Largest Element)",
+        "traceSteps": [
+          "Maintain Min-Heap of size K=2.",
+          "Process 3: Heap = [3]",
+          "Process 2: Heap = [2, 3]",
+          "Process 1: Heap = [1, 2, 3] -> pop 1 -> Heap = [2, 3]",
+          "Process 5: Heap = [2, 3, 5] -> pop 2 -> Heap = [3, 5]",
+          "Process 6: Heap = [3, 5, 6] -> pop 3 -> Heap = [5, 6]",
+          "Process 4: Heap = [4, 5, 6] -> pop 4 -> Heap = [5, 6]",
+          "Min-Heap root is 5. 2nd Largest = 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Extracts top K extreme values without sorting the entire array.",
+        "whenToUse": "When finding K largest/smallest elements where N is large and K << N.",
+        "whereUsed": "Search engine top search results, leaderboard rankings, streaming top K metrics.",
+        "whyOptimal": "Reduces O(N log N) sorting to O(N log K) time and O(K) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef findKthLargest(nums: list[int], k: int) -> int:\n    min_heap = []\n    for num in nums:\n        heapq.heappush(min_heap, num)\n        if len(min_heap) > k:\n            heapq.heappop(min_heap)\n    return min_heap[0]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n\nint findKthLargest(std::vector<int>& nums, int k) {\n    std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;\n    for (int num : nums) {\n        minHeap.push(num);\n        if (minHeap.size() > k) minHeap.pop();\n    }\n    return minHeap.top();\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.PriorityQueue;\n\npublic class KthLargest {\n    public int findKthLargest(int[] nums, int k) {\n        PriorityQueue<Integer> minHeap = new PriorityQueue<>();\n        for (int num : nums) {\n            minHeap.add(num);\n            if (minHeap.size() > k) minHeap.poll();\n        }\n        return minHeap.peek();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findKthLargest(nums, k) {\n    // Min-heap pattern simulation\n    nums.sort((a, b) => b - a);\n    return nums[k - 1];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 215 - Kth Largest Element in an Array",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 973 - K Closest Points to Origin",
+          "url": "https://leetcode.com/problems/k-closest-points-to-origin/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "heap-frequent-closest-elements",
+      "title": "Top K Frequent & K Closest Elements",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log K)",
+      "spaceComplexity": "O(N) for Frequency Map + O(K) for Heap",
+      "summary": "Solves Top K Frequent Elements and K Closest Points using HashMap frequency count combined with a Min-Heap of size K.",
+      "explanation": [
+        "Top K Frequent: Build frequency count map `freq[x]`.",
+        "Maintain a Min-Heap storing pairs `(freq[x], x)` bounded to size K.",
+        "Pop when heap size exceeds K. The surviving elements are the K most frequent items.",
+        "K Closest Points to Origin: Store points in Max-Heap ordered by distance `x² + y²`. Maintain size K."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 1, 1, 2, 2, 3], k = 2",
+        "output": "[1, 2]",
+        "traceSteps": [
+          "Build Frequency Map: {1: 3, 2: 2, 3: 1}.",
+          "Push into Min-Heap of size K=2:",
+          "Push (3, 1): Heap = [(3, 1)]",
+          "Push (2, 2): Heap = [(2, 2), (3, 1)]",
+          "Push (1, 3): Heap = [(1, 3), (2, 2), (3, 1)] -> size 3 > 2 -> pop (1, 3) -> Heap = [(2, 2), (3, 1)].",
+          "Remaining elements in Heap: [2, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies most frequent elements or closest spatial items in linear-logarithmic O(N log K) time.",
+        "whenToUse": "When ranking elements by occurrence count or spatial distance.",
+        "whereUsed": "Trending topics on Twitter/X, nearest neighbor spatial search, recommendation systems.",
+        "whyOptimal": "Combines HashMap O(N) frequency aggregation with O(N log K) bounded heap ranking."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\nfrom collections import Counter\n\ndef topKFrequent(nums: list[int], k: int) -> list[int]:\n    count = Counter(nums)\n    return heapq.nlargest(k, count.keys(), key=count.get)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <queue>\n\nstd::vector<int> topKFrequent(std::vector<int>& nums, int k) {\n    std::unordered_map<int, int> count;\n    for (int num : nums) count[num]++;\n    using pair_type = std::pair<int, int>;\n    std::priority_queue<pair_type, std::vector<pair_type>, std::greater<pair_type>> minHeap;\n    for (auto& [num, freq] : count) {\n        minHeap.push({freq, num});\n        if (minHeap.size() > k) minHeap.pop();\n    }\n    std::vector<int> res;\n    while (!minHeap.empty()) {\n        res.push_back(minHeap.top().second);\n        minHeap.pop();\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class TopKFrequent {\n    public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> count = new HashMap<>();\n        for (int num : nums) count.put(num, count.getOrDefault(num, 0) + 1);\n        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> count.get(a) - count.get(b));\n        for (int num : count.keySet()) {\n            minHeap.add(num);\n            if (minHeap.size() > k) minHeap.poll();\n        }\n        int[] res = new int[k];\n        for (int i = 0; i < k; i++) res[i] = minHeap.poll();\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function topKFrequent(nums, k) {\n    const count = {};\n    for (let num of nums) count[num] = (count[num] || 0) + 1;\n    return Object.keys(count)\n        .sort((a, b) => count[b] - count[a])\n        .slice(0, k)\n        .map(Number);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 347 - Top K Frequent Elements",
+          "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 692 - Top K Frequent Words",
+          "url": "https://leetcode.com/problems/top-k-frequent-words/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "heap-two-heaps-median",
+      "title": "Two Heaps Pattern: Stream Median & Sliding Median",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Insert, O(1) Find Median",
+      "spaceComplexity": "O(N) for two heaps",
+      "summary": "Maintains dynamic median of incoming data stream or sliding window using Max-Heap for lower half and Min-Heap for upper half.",
+      "explanation": [
+        "Maintain two heaps: `max_heap` for smaller half of numbers, `min_heap` for larger half of numbers.",
+        "Add Num: Push into `max_heap`. Move top of `max_heap` to `min_heap` to preserve value ordering.",
+        "Balance Heaps: If `len(min_heap) > len(max_heap)`, move top of `min_heap` back to `max_heap`.",
+        "Invariant: `max_heap` has size equal to or 1 greater than `min_heap`.",
+        "Find Median: If total numbers is odd, return `max_heap.top()`. If even, return `(max_heap.top() + min_heap.top()) / 2.0` in O(1) time."
+      ],
+      "exampleTrace": {
+        "input": "addNum(1), addNum(2), findMedian(), addNum(3), findMedian()",
+        "output": "Median 1: 1.5, Median 2: 2.0",
+        "traceSteps": [
+          "addNum(1): small=[1], large=[]",
+          "addNum(2): small=[1], large=[2]",
+          "findMedian(): (1 + 2) / 2.0 = 1.5",
+          "addNum(3): small=[2, 1], large=[3]",
+          "findMedian(): small.top() = 2.0"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes exact median of dynamic data streams in O(1) time.",
+        "whenToUse": "When elements are continuously inserted or sliding in a window and instant median query is needed.",
+        "whereUsed": "Financial real-time tick data analytics, signal noise filtering, SLA percentile calculators.",
+        "whyOptimal": "Provides instant O(1) median lookup with O(log N) insertion overhead."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.small = []  # Max-heap (store negative values)\n        self.large = []  # Min-heap\n\n    def addNum(self, num: int) -> None:\n        heapq.heappush(self.small, -num)\n        # Ensure max in small <= min in large\n        if self.small and self.large and (-self.small[0]) > self.large[0]:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        # Balance sizes\n        if len(self.small) > len(self.large) + 1:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        elif len(self.large) > len(self.small):\n            val = heapq.heappop(self.large)\n            heapq.heappush(self.small, -val)\n\n    def findMedian(self) -> float:\n        if len(self.small) > len(self.large):\n            return float(-self.small[0])\n        return (-self.small[0] + self.large[0]) / 2.0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <queue>\n#include <vector>\n\nclass MedianFinder {\n    std::priority_queue<int> small; // Max-heap\n    std::priority_queue<int, std::vector<int>, std::greater<int>> large; // Min-heap\npublic:\n    void addNum(int num) {\n        small.push(num);\n        large.push(small.top()); small.pop();\n        if (large.size() > small.size()) {\n            small.push(large.top()); large.pop();\n        }\n    }\n    double findMedian() {\n        if (small.size() > large.size()) return small.top();\n        return (small.top() + large.top()) / 2.0;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Collections;\nimport java.util.PriorityQueue;\n\nclass MedianFinder {\n    private PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder()); // Max-heap\n    private PriorityQueue<Integer> large = new PriorityQueue<>(); // Min-heap\n\n    public void addNum(int num) {\n        small.add(num);\n        large.add(small.poll());\n        if (large.size() > small.size()) {\n            small.add(large.poll());\n        }\n    }\n\n    public double findMedian() {\n        if (small.size() > large.size()) return small.peek();\n        return (small.peek() + large.peek()) / 2.0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MedianFinder {\n    constructor() {\n        this.nums = [];\n    }\n    addNum(num) {\n        // Binary search insertion for javascript array\n        let low = 0, high = this.nums.length;\n        while (low < high) {\n            let mid = (low + high) >> 1;\n            if (this.nums[mid] < num) low = mid + 1;\n            else high = mid;\n        }\n        this.nums.splice(low, 0, num);\n    }\n    findMedian() {\n        const n = this.nums.length;\n        const mid = Math.floor(n / 2);\n        if (n % 2 !== 0) return this.nums[mid];\n        return (this.nums[mid - 1] + this.nums[mid]) / 2.0;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 295 - Find Median from Data Stream",
+          "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "LeetCode 480 - Sliding Window Median",
+          "url": "https://leetcode.com/problems/sliding-window-median/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "heap-task-cpu-meeting-scheduling",
+      "title": "Heap Scheduling: Task Scheduler, CPU & Meeting Rooms II",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N) for Priority Queue",
+      "summary": "Schedules CPU tasks and reserves meeting rooms using Priority Queue to track earliest ending resources and cooldown queues.",
+      "explanation": [
+        "Meeting Rooms II: Sort intervals by start time. Maintain Min-Heap of end times of active meetings.",
+        "If `min_heap.top() <= start_time`: Re-use room! Pop old end time.",
+        "Push current meeting's end time. Size of Min-Heap = minimum conference rooms required.",
+        "Task Scheduler: Max-Heap of task frequencies + Cooldown Queue tracking `(available_time, task_freq)` to respect cooldown N."
+      ],
+      "exampleTrace": {
+        "input": "intervals = [[0, 30], [5, 10], [15, 20]]",
+        "output": "2 (Minimum 2 Rooms)",
+        "traceSteps": [
+          "Sorted intervals: [[0, 30], [5, 10], [15, 20]].",
+          "Meeting [0, 30]: Push end time 30 -> Heap = [30]. Rooms = 1.",
+          "Meeting [5, 10]: start 5 < 30 (cannot reuse!). Push 10 -> Heap = [10, 30]. Rooms = 2.",
+          "Meeting [15, 20]: start 15 >= 10 (reuse room!). Pop 10, Push 20 -> Heap = [20, 30].",
+          "Minimum rooms required = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Schedules tasks or resource allocations under time/cooldown constraints.",
+        "whenToUse": "When scheduling tasks, allocation of rooms/servers, or managing CPU execution order.",
+        "whereUsed": "Operating system process schedulers, AWS EC2 instance reservation, calendar booking systems.",
+        "whyOptimal": "Min-heap tracks earliest available resource in O(log N) time per task."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef minMeetingRooms(intervals: list[list[int]]) -> int:\n    if not intervals: return 0\n    intervals.sort(key=lambda x: x[0])\n    rooms = [] # Min-heap of end times\n    for meeting in intervals:\n        if rooms and rooms[0] <= meeting[0]:\n            heapq.heappop(rooms) # Reuse room\n        heapq.heappush(rooms, meeting[1])\n    return len(rooms)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <algorithm>\n\nint minMeetingRooms(std::vector<std::vector<int>>& intervals) {\n    if (intervals.empty()) return 0;\n    std::sort(intervals.begin(), intervals.end());\n    std::priority_queue<int, std::vector<int>, std::greater<int>> rooms;\n    for (const auto& meeting : intervals) {\n        if (!rooms.empty() && rooms.top() <= meeting[0]) {\n            rooms.pop();\n        }\n        rooms.push(meeting[1]);\n    }\n    return rooms.size();\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MeetingRoomsII {\n    public int minMeetingRooms(int[][] intervals) {\n        if (intervals == null || intervals.length == 0) return 0;\n        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);\n        PriorityQueue<Integer> rooms = new PriorityQueue<>();\n        for (int[] meeting : intervals) {\n            if (!rooms.isEmpty() && rooms.peek() <= meeting[0]) {\n                rooms.poll();\n            }\n            rooms.add(meeting[1]);\n        }\n        return rooms.size();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minMeetingRooms(intervals) {\n    if (!intervals.length) return 0;\n    intervals.sort((a, b) => a[0] - b[0]);\n    const rooms = []; // array as min-heap\n    for (let meeting of intervals) {\n        if (rooms.length && rooms[0] <= meeting[0]) {\n            rooms.shift();\n        }\n        rooms.push(meeting[1]);\n        rooms.sort((a, b) => a - b);\n    }\n    return rooms.length;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 253 - Meeting Rooms II",
+          "url": "https://leetcode.com/problems/meeting-rooms-ii/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 621 - Task Scheduler",
+          "url": "https://leetcode.com/problems/task-scheduler/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 1834 - Single-Threaded CPU",
+          "url": "https://leetcode.com/problems/single-threaded-cpu/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "heap-merge-k-sorted-structures",
+      "title": "K-Way Merge: Merge K Sorted Arrays & Lists",
+      "categoryId": "heaps",
+      "categoryTitle": "Heap & Priority Queue",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log K) where N is total elements across K arrays",
+      "spaceComplexity": "O(K) for Min-Heap of size K",
+      "summary": "Merges K sorted arrays or linked lists into a single sorted list using a Min-Heap of size K in O(N log K) time.",
+      "explanation": [
+        "Initialize a Min-Heap of size K.",
+        "Push the first element of each of the K sorted arrays into the Min-Heap along with `(val, array_index, element_index)`.",
+        "Pop the smallest element from the heap and append to the output array.",
+        "If the popped element's array has more elements, push its next element `(arr[arr_idx][elem_idx + 1], arr_idx, elem_idx + 1)` into the heap.",
+        "Repeat until heap is empty."
+      ],
+      "exampleTrace": {
+        "input": "arrays = [[1, 4, 7], [2, 5, 8], [3, 6, 9]]",
+        "output": "[1, 2, 3, 4, 5, 6, 7, 8, 9]",
+        "traceSteps": [
+          "Push first element of each array: MinHeap = [(1,A0), (2,A1), (3,A2)].",
+          "Pop 1 (A0), push 4: MinHeap = [(2,A1), (3,A2), (4,A0)]. Result = [1].",
+          "Pop 2 (A1), push 5: MinHeap = [(3,A2), (4,A0), (5,A1)]. Result = [1, 2].",
+          "Pop 3 (A2), push 6: MinHeap = [(4,A0), (5,A1), (6,A2)]. Result = [1, 2, 3].",
+          "Continue until all K arrays are merged -> Output = [1, 2, 3, 4, 5, 6, 7, 8, 9]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines K sorted input streams into one sorted output sequence.",
+        "whenToUse": "When merging multiple sorted arrays, files, or linked lists.",
+        "whereUsed": "External sorting of multi-gigabyte log files, database index merge joins.",
+        "whyOptimal": "Min-heap maintains log-time O(log K) selection per element across K streams."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef mergeKSortedArrays(arrays: list[list[int]]) -> list[int]:\n    min_heap = []\n    for i, arr in enumerate(arrays):\n        if arr:\n            heapq.heappush(min_heap, (arr[0], i, 0))\n            \n    result = []\n    while min_heap:\n        val, arr_idx, elem_idx = heapq.heappop(min_heap)\n        result.append(val)\n        if elem_idx + 1 < len(arrays[arr_idx]):\n            next_val = arrays[arr_idx][elem_idx + 1]\n            heapq.heappush(min_heap, (next_val, arr_idx, elem_idx + 1))\n            \n    return result"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <tuple>\n\nstd::vector<int> mergeKSortedArrays(std::vector<std::vector<int>>& arrays) {\n    using Element = std::tuple<int, int, int>; // val, arr_idx, elem_idx\n    std::priority_queue<Element, std::vector<Element>, std::greater<Element>> minHeap;\n    for (int i = 0; i < arrays.size(); i++) {\n        if (!arrays[i].empty()) {\n            minHeap.push({arrays[i][0], i, 0});\n        }\n    }\n    std::vector<int> result;\n    while (!minHeap.empty()) {\n        auto [val, arrIdx, elemIdx] = minHeap.top(); minHeap.pop();\n        result.push_back(val);\n        if (elemIdx + 1 < arrays[arrIdx].size()) {\n            minHeap.push({arrays[arrIdx][elemIdx + 1], arrIdx, elemIdx + 1});\n        }\n    }\n    return result;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MergeKSortedArrays {\n    static class Element {\n        int val, arrIdx, elemIdx;\n        Element(int v, int a, int e) { val = v; arrIdx = a; elemIdx = e; }\n    }\n    public static List<Integer> mergeKSortedArrays(int[][] arrays) {\n        PriorityQueue<Element> minHeap = new PriorityQueue<>((a, b) -> a.val - b.val);\n        for (int i = 0; i < arrays.length; i++) {\n            if (arrays[i].length > 0) minHeap.add(new Element(arrays[i][0], i, 0));\n        }\n        List<Integer> result = new ArrayList<>();\n        while (!minHeap.isEmpty()) {\n            Element curr = minHeap.poll();\n            result.add(curr.val);\n            if (curr.elemIdx + 1 < arrays[curr.arrIdx].length) {\n                minHeap.add(new Element(arrays[curr.arrIdx][curr.elemIdx + 1], curr.arrIdx, curr.elemIdx + 1));\n            }\n        }\n        return result;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function mergeKSortedArrays(arrays) {\n    const minHeap = [];\n    for (let i = 0; i < arrays.length; i++) {\n        if (arrays[i].length > 0) {\n            minHeap.push({ val: arrays[i][0], arrIdx: i, elemIdx: 0 });\n        }\n    }\n    minHeap.sort((a, b) => a.val - b.val);\n    const result = [];\n    while (minHeap.length > 0) {\n        const curr = minHeap.shift();\n        result.push(curr.val);\n        if (curr.elemIdx + 1 < arrays[curr.arrIdx].length) {\n            minHeap.push({\n                val: arrays[curr.arrIdx][curr.elemIdx + 1],\n                arrIdx: curr.arrIdx,\n                elemIdx: curr.elemIdx + 1\n            });\n            minHeap.sort((a, b) => a.val - b.val);\n        }\n    }\n    return result;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 23 - Merge k Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "LeetCode 373 - Find K Pairs with Smallest Sums",
+          "url": "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1628 @@
+{
+  "id": "graphs",
+  "category": {
+    "id": "graphs",
+    "title": "Graphs & Networks",
+    "icon": "Cpu",
+    "description": "Shortest paths, topological sorting, connected components, MST, and graph flows."
+  },
+  "totalAlgorithms": 28,
+  "algorithms": [
+    {
+      "id": "dijkstra-algorithm",
+      "title": "Dijkstra's Algorithm (Shortest Path in Weighted Graph)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O((V + E) log V)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Finds the shortest distance from a single source node to all other nodes in a non-negatively weighted graph using a Min-Heap.",
+      "explanation": [
+        "Maintain a `dist` array initialized to infinity, with `dist[source] = 0`.",
+        "Use a Min-Heap (Priority Queue) to store `(current_distance, node)`.",
+        "Pop the node with smallest distance `u` from heap.",
+        "For each neighbor `v` of `u` with edge weight `w`:",
+        "  - If `dist[u] + w < dist[v]`, update `dist[v] = dist[u] + w` and push `(dist[v], v)` into heap.",
+        "Repeat until min-heap is empty."
+      ],
+      "exampleTrace": {
+        "input": "Graph: 0-(4)->1, 0-(2)->2, 2-(1)->1, 1-(5)->3, Source = 0",
+        "output": "Distances from 0: [0, 3, 2, 8]",
+        "traceSteps": [
+          "Initialize dist = [0, inf, inf, inf], min-heap = [(0, 0)].",
+          "Pop (0, 0): Relax neighbor 1 (dist[1] = min(inf, 0+4) = 4), relax neighbor 2 (dist[2] = min(inf, 0+2) = 2). Heap = [(2, 2), (4, 1)].",
+          "Pop (2, 2): Relax neighbor 1 via 2 (dist[1] = min(4, 2+1) = 3). Heap = [(3, 1), (4, 1)].",
+          "Pop (3, 1): Relax neighbor 3 (dist[3] = min(inf, 3+5) = 8). Heap = [(4, 1), (8, 3)].",
+          "Pop stale (4, 1): 4 > dist[1] (3) -> Skip.",
+          "Pop (8, 3): Target processed.",
+          "Final Shortest Distances: [0, 3, 2, 8]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates minimum cost or distance path from source node to all other nodes in non-negative weighted graphs.",
+        "whenToUse": "When given a weighted graph (no negative weights) and asked for shortest path or min cost traversal.",
+        "whereUsed": "Google Maps GPS navigation routing, OSPF internet routing protocol, game pathfinding (A* basis).",
+        "whyOptimal": "Min-Heap prioritization guarantees we process nodes in increasing distance order, ensuring O((V + E) log V) efficiency."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef dijkstra(graph, source, num_nodes):\n    dist = [float('inf')] * num_nodes\n    dist[source] = 0\n    pq = [(0, source)]  # (distance, node)\n    \n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]:\n            continue\n        for v, weight in graph[u]:\n            if dist[u] + weight < dist[v]:\n                dist[v] = dist[u] + weight\n                heapq.heappush(pq, (dist[v], v))\n                \n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "vector<int> dijkstra(int n, vector<vector<pair<int, int>>>& adj, int src) {\n    vector<int> dist(n, 1e9);\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;\n    dist[src] = 0;\n    pq.push({0, src});\n    while (!pq.empty()) {\n        auto [d, u] = pq.top(); pq.pop();\n        if (d > dist[u]) continue;\n        for (auto& edge : adj[u]) {\n            int v = edge.first, w = edge.second;\n            if (dist[u] + w < dist[v]) {\n                dist[v] = dist[u] + w;\n                pq.push({dist[v], v});\n            }\n        }\n    }\n    return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 743 - Network Delay Time",
+          "url": "https://leetcode.com/problems/network-delay-time/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "topological-sort-kahns",
+      "title": "Topological Sort & Kahn's Algorithm (DAG Scheduling)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Produces a linear ordering of vertices in a Directed Acyclic Graph where every directed edge u→v places u before v.",
+      "explanation": [
+        "Compute `in-degree` (number of incoming edges) for every vertex.",
+        "Push all vertices with `in-degree == 0` into a Queue.",
+        "While Queue is not empty:",
+        "  - Pop node `u`, add it to topological result list.",
+        "  - For each neighbor `v` of `u`, decrement `in-degree[v]--`.",
+        "  - If `in-degree[v] == 0`, push `v` into Queue.",
+        "If result list length equals V, DAG is valid. Otherwise, a cycle exists!"
+      ],
+      "exampleTrace": {
+        "input": "Vertices = 4, Edges = [[1,0], [2,0], [3,1], [3,2]]",
+        "output": "[3, 1, 2, 0] (or [3, 2, 1, 0])",
+        "traceSteps": [
+          "Calculate In-degrees: inDegree = [0: 2, 1: 1, 2: 1, 3: 0].",
+          "Push inDegree==0 nodes into Queue: Queue = [3].",
+          "Pop 3: Add to topo order [3]. Decrement inDegrees of neighbors 1 & 2 -> inDegree[1]=0, inDegree[2]=0. Queue = [1, 2].",
+          "Pop 1: Add to topo order [3, 1]. Decrement neighbor 0 -> inDegree[0] = 1. Queue = [2].",
+          "Pop 2: Add to topo order [3, 1, 2]. Decrement neighbor 0 -> inDegree[0] = 0. Queue = [0].",
+          "Pop 0: Add to topo order [3, 1, 2, 0]. Queue empty.",
+          "Valid Topological Order generated: [3, 1, 2, 0]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines a valid task execution order when tasks have prerequisites or dependencies.",
+        "whenToUse": "When given prerequisites (Course Schedule), build tool dependencies (npm/cmake), or cycle detection in directed graph.",
+        "whereUsed": "Build systems (Webpack/Bazel dependency resolution), course prerequisite planning, Airflow DAG task scheduler.",
+        "whyOptimal": "Linear O(V + E) processing time using in-degree BFS queue."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef findOrder(numCourses, prerequisites):\n    adj = [[] for _ in range(numCourses)]\n    indegree = [0] * numCourses\n    for dest, src in prerequisites:\n        adj[src].append(dest)\n        indegree[dest] += 1\n        \n    queue = deque([i for i in range(numCourses) if indegree[i] == 0])\n    topo_order = []\n    \n    while queue:\n        u = queue.popleft()\n        topo_order.append(u)\n        for v in adj[u]:\n            indegree[v] -= 1\n            if indegree[v] == 0:\n                queue.append(v)\n                \n    return topo_order if len(topo_order) == numCourses else []"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 210 - Course Schedule II",
+          "url": "https://leetcode.com/problems/course-schedule-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "disjoint-set-union",
+      "title": "Disjoint Set Union (DSU / Union-Find with Rank & Path Compression)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(α(N)) ≈ O(1)",
+      "spaceComplexity": "O(N)",
+      "summary": "Tracks partitioned sets and connects elements in near-constant O(α(N)) time using Path Compression and Union by Rank.",
+      "explanation": [
+        "Maintain `parent` array where `parent[i] = i` initially, and `rank` array initialized to 0.",
+        "`find(i)`: Recursively find root of `i`. Apply Path Compression (`parent[i] = find(parent[i])`) to flatten tree.",
+        "`union(i, j)`: Find roots `rootI` and `rootJ`. If different, attach smaller rank tree under larger rank tree.",
+        "Inverse Ackermann function α(N) is effectively <= 4 for all realistic values of N, making ops practically O(1)!"
+      ],
+      "exampleTrace": {
+        "input": "Operations: Union(1, 2), Union(2, 3), Connected(1, 3)?",
+        "output": "True (1 and 3 belong to same connected component)",
+        "traceSteps": [
+          "Initialize parent = [0, 1, 2, 3], rank = [0, 0, 0, 0].",
+          "Union(1, 2): Find(1) = 1, Find(2) = 2. Make parent[2] = 1, rank[1] = 1. Parent = [0, 1, 1, 3].",
+          "Union(2, 3): Find(2) -> path compress parent[2]=1 -> root 1. Find(3) = 3. Make parent[3] = 1, rank[1] = 2. Parent = [0, 1, 1, 1].",
+          "Connected(1, 3): Find(1) = 1, Find(3) = 1. Ultimate roots match (1 == 1)!",
+          "Returns True in O(alpha(N)) nearly constant time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Dynamically manages connected components, tests component connectivity, and detects cycles in undirected graphs.",
+        "whenToUse": "When given dynamic connection queries ('are A and B connected?'), Kruskal's MST algorithm, or island connectivity.",
+        "whereUsed": "Kruskal's Minimum Spanning Tree algorithm, social network friend circles, image segmentation component labeling.",
+        "whyOptimal": "Achieves near-constant O(α(N)) time per operation with path compression."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n\n    def find(self, i):\n        if self.parent[i] != i:\n            self.parent[i] = self.find(self.parent[i])  # Path compression\n        return self.parent[i]\n\n    def union(self, i, j):\n        root_i = self.find(i)\n        root_j = self.find(j)\n        if root_i != root_j:\n            if self.rank[root_i] < self.rank[root_j]:\n                self.parent[root_i] = root_j\n            elif self.rank[root_i] > self.rank[root_j]:\n                self.parent[root_j] = root_i\n            else:\n                self.parent[root_j] = root_i\n                self.rank[root_i] += 1\n            return True\n        return False"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 547 - Number of Provinces",
+          "url": "https://leetcode.com/problems/number-of-provinces/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bfs-graph-traversal",
+      "title": "Breadth-First Search (BFS) & Unweighted Shortest Path",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Easy",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Explores a graph level-by-level starting from a source vertex using a FIFO Queue. Guarantees the shortest path in unweighted graphs.",
+      "explanation": [
+        "Initialize a `visited` set / boolean array and a FIFO `Queue`.",
+        "Push source vertex `start` into Queue and mark `visited[start] = True`.",
+        "While Queue is not empty: pop front vertex `u`.",
+        "For each unvisited neighbor `v` of `u`: set `dist[v] = dist[u] + 1`, mark `visited[v] = True`, and enqueue `v`.",
+        "Repeat level order exploration until queue becomes empty."
+      ],
+      "exampleTrace": {
+        "input": "Graph: 0-1, 0-2, 1-3, 2-4, Source = 0",
+        "output": "BFS Order: [0, 1, 2, 3, 4], Distances: {0:0, 1:1, 2:1, 3:2, 4:2}",
+        "traceSteps": [
+          "Initialize queue = [0], visited = {0}, dist = {0: 0}.",
+          "Pop 0: Process neighbors of 0 -> 1 and 2. Enqueue 1 and 2. Queue = [1, 2], visited = {0, 1, 2}, dist = {1:1, 2:1}.",
+          "Pop 1: Process neighbor of 1 -> 3. Enqueue 3. Queue = [2, 3], visited = {0, 1, 2, 3}, dist = {3:2}.",
+          "Pop 2: Process neighbor of 2 -> 4. Enqueue 4. Queue = [3, 4], visited = {0, 1, 2, 3, 4}, dist = {4:2}.",
+          "Pop 3: No unvisited neighbors. Queue = [4].",
+          "Pop 4: No unvisited neighbors. Queue empty.",
+          "BFS Order = [0, 1, 2, 3, 4]. Shortest path lengths computed in O(V + E)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Level order traversal and shortest distance calculation in unweighted graphs/matrices.",
+        "whenToUse": "When finding minimum steps, minimum moves, or level-by-level propagation (e.g. peer-to-peer networking).",
+        "whereUsed": "GPS shortest path (unweighted), social network degree of separation (LinkedIn 1st/2nd connections), web crawlers.",
+        "whyOptimal": "Explores all vertices at distance d before moving to distance d+1, achieving O(V+E) optimal time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef bfs(graph, start_node):\n    visited = {start_node}\n    queue = deque([start_node])\n    order = []\n    \n    while queue:\n        curr = queue.popleft()\n        order.append(curr)\n        for neighbor in graph[curr]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return order"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <unordered_set>\nusing namespace std;\n\nvector<int> bfs(int n, vector<vector<int>>& adj, int start) {\n    vector<bool> visited(n, false);\n    queue<int> q;\n    vector<int> result;\n    \n    q.push(start);\n    visited[start] = true;\n    \n    while (!q.empty()) {\n        int curr = q.front(); q.pop();\n        result.push_back(curr);\n        for (int neighbor : adj[curr]) {\n            if (!visited[neighbor]) {\n                visited[neighbor] = true;\n                q.push(neighbor);\n            }\n        }\n    }\n    return result;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BFSGraph {\n    public List<Integer> bfs(int n, List<List<Integer>> adj, int start) {\n        boolean[] visited = new boolean[n];\n        Queue<Integer> queue = new LinkedList<>();\n        List<Integer> order = new ArrayList<>();\n        \n        queue.add(start);\n        visited[start] = true;\n        \n        while (!queue.isEmpty()) {\n            int curr = queue.poll();\n            order.add(curr);\n            for (int neighbor : adj.get(curr)) {\n                if (!visited[neighbor]) {\n                    visited[neighbor] = true;\n                    queue.add(neighbor);\n                }\n            }\n        }\n        return order;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function bfs(adj, startNode) {\n  const visited = new Set([startNode]);\n  const queue = [startNode];\n  const result = [];\n  \n  while (queue.length > 0) {\n    const curr = queue.shift();\n    result.push(curr);\n    for (const neighbor of adj[curr] || []) {\n      if (!visited.has(neighbor)) {\n        visited.add(neighbor);\n        queue.push(neighbor);\n      }\n    }\n  }\n  return result;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 102 - Binary Tree Level Order Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 200 - Number of Islands",
+          "url": "https://leetcode.com/problems/number-of-islands/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "dfs-graph-traversal",
+      "title": "Depth-First Search (DFS) & Connected Components",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Easy",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Explores as deep as possible along each branch before backtracking using recursion or an explicit stack.",
+      "explanation": [
+        "Mark current node `u` as visited.",
+        "Iterate through all unvisited neighbors `v` of `u`.",
+        "Recursively call DFS on each unvisited neighbor `v`.",
+        "Backtrack when a node has no remaining unvisited neighbors.",
+        "Can be iterated over all unvisited vertices to count connected components."
+      ],
+      "exampleTrace": {
+        "input": "Graph: 0-1, 1-2, 0-3, 3-4, Start = 0",
+        "output": "DFS Traversal Order: [0, 1, 2, 3, 4]",
+        "traceSteps": [
+          "Start DFS at 0: mark visited {0}.",
+          "Recurse to neighbor 1 of 0: mark visited {0, 1}.",
+          "Recurse to neighbor 2 of 1: mark visited {0, 1, 2}.",
+          "Node 2 has no unvisited neighbors. Backtrack to 1 -> Backtrack to 0.",
+          "Recurse to neighbor 3 of 0: mark visited {0, 1, 2, 3}.",
+          "Recurse to neighbor 4 of 3: mark visited {0, 1, 2, 3, 4}.",
+          "Traversal complete. Visited order: [0, 1, 2, 3, 4]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Exhaustive path searching, connected components count, cycle detection, and maze solving.",
+        "whenToUse": "When you need to explore deep paths, check connectivity, or perform backtracking.",
+        "whereUsed": "Garbage collection mark-and-sweep, solving Sudoku/mazes, topological sorting, connected component counting.",
+        "whyOptimal": "Visits each vertex and edge exactly once with O(V + E) complexity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def dfs(graph, node, visited=None):\n    if visited is None:\n        visited = set()\n    visited.add(node)\n    path = [node]\n    for neighbor in graph[node]:\n        if neighbor not in visited:\n            path.extend(dfs(graph, neighbor, visited))\n    return path"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvoid dfs(int u, vector<vector<int>>& adj, vector<bool>& visited, vector<int>& order) {\n    visited[u] = true;\n    order.push_back(u);\n    for (int v : adj[u]) {\n        if (!visited[v]) {\n            dfs(v, adj, visited, order);\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class DFSGraph {\n    public void dfs(int u, List<List<Integer>> adj, boolean[] visited, List<Integer> order) {\n        visited[u] = true;\n        order.add(u);\n        for (int v : adj.get(u)) {\n            if (!visited[v]) {\n                dfs(v, adj, visited, order);\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function dfs(adj, node, visited = new Set(), order = []) {\n  visited.add(node);\n  order.push(node);\n  for (const neighbor of adj[node] || []) {\n    if (!visited.has(neighbor)) {\n      dfs(adj, neighbor, visited, order);\n    }\n  }\n  return order;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 547 - Number of Provinces",
+          "url": "https://leetcode.com/problems/number-of-provinces/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 695 - Max Area of Island",
+          "url": "https://leetcode.com/problems/max-area-of-island/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "cycle-detection-undirected",
+      "title": "Cycle Detection in Undirected Graph (BFS & DFS)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Detects if an undirected graph contains a cycle by tracking the parent of each visited vertex during traversal.",
+      "explanation": [
+        "Perform BFS/DFS from each unvisited vertex.",
+        "Keep track of `(node, parent)` during traversal.",
+        "If an adjacent node `v` is already visited AND `v != parent`, a cycle exists!",
+        "Return True immediately upon detecting an already-visited non-parent neighbor."
+      ],
+      "exampleTrace": {
+        "input": "Edges: (0-1), (1-2), (2-0)",
+        "output": "Cycle Detected = True",
+        "traceSteps": [
+          "Start DFS at node 0 with parent = -1. Visited = {0}.",
+          "Move to neighbor 1 of 0 (parent=0). Visited = {0, 1}.",
+          "Move to neighbor 2 of 1 (parent=1). Visited = {0, 1, 2}.",
+          "Check neighbors of 2: neighbor 0 is visited, and 0 != parent (1)!",
+          "Since neighbor 0 is already visited and is not parent, cycle (0-1-2-0) is detected!",
+          "Returns True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Detects closed loops/cycles in undirected networks.",
+        "whenToUse": "When checking if an undirected graph is a tree (n vertices, n-1 edges, no cycles) or has redundant connections.",
+        "whereUsed": "Network loop detection (Spanning Tree Protocol), structural integrity checks.",
+        "whyOptimal": "Runs in O(V + E) time by examining each edge once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def has_cycle_undirected(V, adj):\n    visited = [False] * V\n    \n    def dfs(u, parent):\n        visited[u] = True\n        for v in adj[u]:\n            if not visited[v]:\n                if dfs(v, u): return True\n            elif v != parent:\n                return True\n        return False\n        \n    for i in range(V):\n        if not visited[i]:\n            if dfs(i, -1): return True\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool dfsCycle(int u, int parent, vector<vector<int>>& adj, vector<bool>& vis) {\n    vis[u] = true;\n    for (int v : adj[u]) {\n        if (!vis[v]) {\n            if (dfsCycle(v, u, adj, vis)) return true;\n        } else if (v != parent) {\n            return true;\n        }\n    }\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class UndirectedCycle {\n    public boolean isCycle(int V, List<List<Integer>> adj) {\n        boolean[] vis = new boolean[V];\n        for (int i = 0; i < V; i++) {\n            if (!vis[i]) {\n                if (dfs(i, -1, adj, vis)) return true;\n            }\n        }\n        return false;\n    }\n    private boolean dfs(int u, int parent, List<List<Integer>> adj, boolean[] vis) {\n        vis[u] = true;\n        for (int v : adj.get(u)) {\n            if (!vis[v]) {\n                if (dfs(v, u, adj, vis)) return true;\n            } else if (v != parent) {\n                return true;\n            }\n        }\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isCycleUndirected(V, adj) {\n  const vis = new Array(V).fill(false);\n  function dfs(u, parent) {\n    vis[u] = true;\n    for (const v of adj[u] || []) {\n      if (!vis[v]) {\n        if (dfs(v, u)) return true;\n      } else if (v !== parent) {\n        return true;\n      }\n    }\n    return false;\n  }\n  for (let i = 0; i < V; i++) {\n    if (!vis[i] && dfs(i, -1)) return true;\n  }\n  return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 261 - Graph Valid Tree",
+          "url": "https://leetcode.com/problems/graph-valid-tree/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 684 - Redundant Connection",
+          "url": "https://leetcode.com/problems/redundant-connection/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "cycle-detection-directed",
+      "title": "Cycle Detection in Directed Graph (Recursion Stack & Kahn)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Detects cycles in directed graphs using active recursion stack tracking or Kahn's topological count check.",
+      "explanation": [
+        "Maintain two state arrays: `visited` and `inStack` (path array).",
+        "When entering a vertex `u`, mark `visited[u] = True` and `inStack[u] = True`.",
+        "For neighbor `v`: if `inStack[v] == True`, a back-edge exists $\\rightarrow$ Cycle detected!",
+        "When exiting recursion for `u`, reset `inStack[u] = False`.",
+        "Alternatively using Kahn's algo: If topo sort processed count < Total vertices V, a cycle exists."
+      ],
+      "exampleTrace": {
+        "input": "Directed Edges: 0->1, 1->2, 2->0",
+        "output": "Cycle Detected = True",
+        "traceSteps": [
+          "Start DFS at 0: inStack = {0}.",
+          "Move to neighbor 1: inStack = {0, 1}.",
+          "Move to neighbor 2: inStack = {0, 1, 2}.",
+          "Check neighbor 0 of 2: node 0 is currently in `inStack`!",
+          "Back-edge detected from 2 to 0 $\\rightarrow$ Directed cycle confirmed!",
+          "Returns True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Detects circular dependency deadlocks in directed graphs.",
+        "whenToUse": "When validating build order systems (e.g. package managers), course scheduling, or deadlock prevention.",
+        "whereUsed": "Build tools (Make, Bazel, npm package cyclic dependency check), OS deadlock detection.",
+        "whyOptimal": "O(V + E) single-pass detection."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def is_cyclic_directed(V, adj):\n    visited = [False] * V\n    in_stack = [False] * V\n    \n    def dfs(u):\n        visited[u] = True\n        in_stack[u] = True\n        for v in adj[u]:\n            if not visited[v]:\n                if dfs(v): return True\n            elif in_stack[v]:\n                return True\n        in_stack[u] = False\n        return False\n        \n    for i in range(V):\n        if not visited[i]:\n            if dfs(i): return True\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool dfs(int u, vector<vector<int>>& adj, vector<bool>& vis, vector<bool>& inStack) {\n    vis[u] = true;\n    inStack[u] = true;\n    for (int v : adj[u]) {\n        if (!vis[v]) {\n            if (dfs(v, adj, vis, inStack)) return true;\n        } else if (inStack[v]) {\n            return true;\n        }\n    }\n    inStack[u] = false;\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class DirectedCycle {\n    public boolean isCyclic(int V, List<List<Integer>> adj) {\n        boolean[] vis = new boolean[V];\n        boolean[] inStack = new boolean[V];\n        for (int i = 0; i < V; i++) {\n            if (!vis[i]) {\n                if (dfs(i, adj, vis, inStack)) return true;\n            }\n        }\n        return false;\n    }\n    private boolean dfs(int u, List<List<Integer>> adj, boolean[] vis, boolean[] inStack) {\n        vis[u] = true;\n        inStack[u] = true;\n        for (int v : adj.get(u)) {\n            if (!vis[v]) {\n                if (dfs(v, adj, vis, inStack)) return true;\n            } else if (inStack[v]) {\n                return true;\n            }\n        }\n        inStack[u] = false;\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isCyclicDirected(V, adj) {\n  const vis = new Array(V).fill(false);\n  const inStack = new Array(V).fill(false);\n  function dfs(u) {\n    vis[u] = true;\n    inStack[u] = true;\n    for (const v of adj[u] || []) {\n      if (!vis[v]) {\n        if (dfs(v)) return true;\n      } else if (inStack[v]) {\n        return true;\n      }\n    }\n    inStack[u] = false;\n    return false;\n  }\n  for (let i = 0; i < V; i++) {\n    if (!vis[i] && dfs(i)) return true;\n  }\n  return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 207 - Course Schedule",
+          "url": "https://leetcode.com/problems/course-schedule/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 210 - Course Schedule II",
+          "url": "https://leetcode.com/problems/course-schedule-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bipartite-graph-coloring",
+      "title": "Bipartite Graph Check (Two-Coloring Algorithm)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Determines whether vertices can be divided into 2 disjoint sets such that every edge connects vertices of different sets (no odd length cycles).",
+      "explanation": [
+        "Initialize a `color` array with -1 for all vertices.",
+        "For each unvisited vertex, assign `color[start] = 0` and enqueue.",
+        "Pop node `u`. For each neighbor `v` of `u`:",
+        "If `color[v] == -1`, assign `color[v] = 1 - color[u]` and enqueue `v`.",
+        "If `color[v] == color[u]`, graph is NOT bipartite (odd cycle found $\\rightarrow$ Return False).",
+        "If all nodes colored without conflict, return True."
+      ],
+      "exampleTrace": {
+        "input": "Graph: 0-1, 1-2, 2-3, 3-0 (Square Graph 4-cycle)",
+        "output": "Is Bipartite = True",
+        "traceSteps": [
+          "Color array initialized: [-1, -1, -1, -1].",
+          "Color node 0 = 0. Queue = [0].",
+          "Pop 0: neighbors 1 & 3 $\\rightarrow$ Color[1] = 1, Color[3] = 1. Queue = [1, 3].",
+          "Pop 1: neighbor 2 $\\rightarrow$ Color[2] = 1 - 1 = 0. Queue = [3, 2].",
+          "Pop 3: neighbor 2 is color 0 != color[3] (1). No conflict.",
+          "Pop 2: all neighbors valid.",
+          "All 4 vertices colored with 2 colors without edge conflicts $\\rightarrow$ Graph is Bipartite (True)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "2-colorability check and detecting odd-length cycles.",
+        "whenToUse": "When checking matching problems, job assignment into two groups, or verifying bipartite graphs.",
+        "whereUsed": "Stable matching algorithms, bipartite matching, task allocation in distributed systems.",
+        "whyOptimal": "O(V + E) time using simple BFS/DFS coloring."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef is_bipartite(graph):\n    n = len(graph)\n    color = [-1] * n\n    for i in range(n):\n        if color[i] != -1: continue\n        queue = deque([i])\n        color[i] = 0\n        while queue:\n            u = queue.popleft()\n            for v in graph[u]:\n                if color[v] == -1:\n                    color[v] = 1 - color[u]\n                    queue.append(v)\n                elif color[v] == color[u]:\n                    return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nbool isBipartite(vector<vector<int>>& graph) {\n    int n = graph.size();\n    vector<int> color(n, -1);\n    for (int i = 0; i < n; i++) {\n        if (color[i] != -1) continue;\n        queue<int> q;\n        q.push(i);\n        color[i] = 0;\n        while (!q.empty()) {\n            int u = q.front(); q.pop();\n            for (int v : graph[u]) {\n                if (color[v] == -1) {\n                    color[v] = 1 - color[u];\n                    q.push(v);\n                } else if (color[v] == color[u]) {\n                    return false;\n                }\n            }\n        }\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BipartiteCheck {\n    public boolean isBipartite(int[][] graph) {\n        int n = graph.length;\n        int[] color = new int[n];\n        Arrays.fill(color, -1);\n        for (int i = 0; i < n; i++) {\n            if (color[i] != -1) continue;\n            Queue<Integer> q = new LinkedList<>();\n            q.add(i);\n            color[i] = 0;\n            while (!q.isEmpty()) {\n                int u = q.poll();\n                for (int v : graph[u]) {\n                    if (color[v] == -1) {\n                        color[v] = 1 - color[u];\n                        q.add(v);\n                    } else if (color[v] == color[u]) {\n                        return false;\n                    }\n                }\n            }\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isBipartite(graph) {\n  const n = graph.length;\n  const color = new Array(n).fill(-1);\n  for (let i = 0; i < n; i++) {\n    if (color[i] !== -1) continue;\n    const q = [i];\n    color[i] = 0;\n    while (q.length > 0) {\n      const u = q.shift();\n      for (const v of graph[u]) {\n        if (color[v] === -1) {\n          color[v] = 1 - color[u];\n          q.push(v);\n        } else if (color[v] === color[u]) {\n          return false;\n        }\n      }\n    }\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 785 - Is Graph Bipartite?",
+          "url": "https://leetcode.com/problems/is-graph-bipartite/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 886 - Possible Bipartition",
+          "url": "https://leetcode.com/problems/possible-bipartition/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bellman-ford-algorithm",
+      "title": "Bellman-Ford Algorithm (Negative Weights & Cycle Detection)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V * E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Computes shortest paths from a single source vertex to all other vertices in a weighted graph, even with negative edge weights, and detects negative cycles.",
+      "explanation": [
+        "Initialize source distance to zero and all other distances to infinity.",
+        "Relax every edge V-1 times.",
+        "After V-1 iterations, all shortest simple paths have been considered.",
+        "Perform one additional relaxation pass to detect a reachable negative cycle.",
+        "Bellman-Ford is slower than Dijkstra but handles negative edges."
+      ],
+      "exampleTrace": {
+        "input": "Vertices = 4, Edges = [[0,1,1], [1,2,-1], [2,3,-1], [3,1,-1]], Source = 0",
+        "output": "Negative Cycle Detected!",
+        "traceSteps": [
+          "Initialize dist = [0, inf, inf, inf].",
+          "Relaxation passes 1 to 3 update distances.",
+          "In 4th (V-th) pass, edge (3, 1, -1) reduces dist[1] further because cycle 1->2->3->1 has total weight = -1 + -1 + -1 = -3 < 0!",
+          "Negative cycle detected in V-th iteration pass.",
+          "Algorithm reports Negative Weight Cycle."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Shortest paths in graphs with negative edge weights & detecting negative weight cycles.",
+        "whenToUse": "When edge weights can be negative (e.g. currency arbitrage trading) where Dijkstra fails.",
+        "whereUsed": "Routing Information Protocol (RIP) distance-vector routing, currency exchange arbitrage detection.",
+        "whyOptimal": "Guarantees correct shortest paths in O(V * E) time whenever no negative cycles are reachable."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def bellman_ford(V, edges, src):\n    dist = [float('inf')] * V\n    dist[src] = 0\n    \n    for _ in range(V - 1):\n        for u, v, wt in edges:\n            if dist[u] != float('inf') and dist[u] + wt < dist[v]:\n                dist[v] = dist[u] + wt\n                \n    for u, v, wt in edges:\n        if dist[u] != float('inf') and dist[u] + wt < dist[v]:\n            return 'Negative Cycle Detected'\n            \n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<int> bellmanFord(int V, vector<vector<int>>& edges, int src) {\n    vector<int> dist(V, 1e9);\n    dist[src] = 0;\n    \n    for (int i = 0; i < V - 1; i++) {\n        for (auto& edge : edges) {\n            int u = edge[0], v = edge[1], wt = edge[2];\n            if (dist[u] != 1e9 && dist[u] + wt < dist[v]) {\n                dist[v] = dist[u] + wt;\n            }\n        }\n    }\n    for (auto& edge : edges) {\n        int u = edge[0], v = edge[1], wt = edge[2];\n        if (dist[u] != 1e9 && dist[u] + wt < dist[v]) {\n            return {-1}; // Negative cycle\n        }\n    }\n    return dist;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BellmanFord {\n    public int[] bellmanFord(int V, int[][] edges, int src) {\n        int[] dist = new int[V];\n        Arrays.fill(dist, (int)1e9);\n        dist[src] = 0;\n        \n        for (int i = 0; i < V - 1; i++) {\n            for (int[] edge : edges) {\n                int u = edge[0], v = edge[1], wt = edge[2];\n                if (dist[u] != (int)1e9 && dist[u] + wt < dist[v]) {\n                    dist[v] = dist[u] + wt;\n                }\n            }\n        }\n        for (int[] edge : edges) {\n            int u = edge[0], v = edge[1], wt = edge[2];\n            if (dist[u] != (int)1e9 && dist[u] + wt < dist[v]) {\n                return new int[]{-1};\n            }\n        }\n        return dist;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function bellmanFord(V, edges, src) {\n  const dist = new Array(V).fill(Infinity);\n  dist[src] = 0;\n  \n  for (let i = 0; i < V - 1; i++) {\n    for (const [u, v, wt] of edges) {\n      if (dist[u] !== Infinity && dist[u] + wt < dist[v]) {\n        dist[v] = dist[u] + wt;\n      }\n    }\n  }\n  for (const [u, v, wt] of edges) {\n    if (dist[u] !== Infinity && dist[u] + wt < dist[v]) {\n      return null; // Negative cycle\n    }\n  }\n  return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 787 - Cheapest Flights Within K Stops",
+          "url": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "floyd-warshall-algorithm",
+      "title": "Floyd-Warshall Algorithm (All-Pairs Shortest Path)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V^3)",
+      "spaceComplexity": "O(V^2)",
+      "summary": "Computes all-pairs shortest paths in a weighted graph using Dynamic Programming over intermediate nodes k.",
+      "explanation": [
+        "Initialize `dist[i][j]` matrix with edge weights, `0` along diagonal, and `infinity` elsewhere.",
+        "Iterate over intermediate vertex `k` from 0 to V-1.",
+        "Iterate over all pairs `(i, j)`.",
+        "Update: `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`.",
+        "After 3 nested loops, `dist[i][j]` holds the shortest distance between any pair of nodes (i, j)."
+      ],
+      "exampleTrace": {
+        "input": "3 vertices: 0->1 (wt 4), 0->2 (wt 11), 1->2 (wt 2)",
+        "output": "Shortest dist matrix: dist[0][2] = 6 (via 0->1->2)",
+        "traceSteps": [
+          "Initial matrix dist: [[0, 4, 11], [inf, 0, 2], [inf, inf, 0]].",
+          "k=0: No shorter path via 0.",
+          "k=1: Check dist[0][2] = min(11, dist[0][1] + dist[1][2]) = min(11, 4 + 2) = 6.",
+          "Matrix updated: dist[0][2] becomes 6.",
+          "k=2: All paths finalized.",
+          "Final all-pairs matrix completed in O(V^3) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "All-pairs shortest path problem for small/medium sized dense graphs.",
+        "whenToUse": "When V is small (V <= 400) and shortest path between ALL pairs of vertices is required.",
+        "whereUsed": "Transitive closure computation, network latency matrix generation, city-to-city flight matrices.",
+        "whyOptimal": "Compact dynamic programming formulation computing all V^2 pairs in O(V^3) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def floyd_warshall(V, matrix):\n    dist = [row[:] for row in matrix]\n    for k in range(V):\n        for i in range(V):\n            for j in range(V):\n                if dist[i][k] != float('inf') and dist[k][j] != float('inf'):\n                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])\n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvoid floydWarshall(vector<vector<int>>& matrix) {\n    int n = matrix.size();\n    for (int k = 0; k < n; k++) {\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                if (matrix[i][k] != 1e9 && matrix[k][j] != 1e9) {\n                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);\n                }\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class FloydWarshall {\n    public void shortestDistance(int[][] matrix) {\n        int n = matrix.length;\n        for (int k = 0; k < n; k++) {\n            for (int i = 0; i < n; i++) {\n                for (int j = 0; j < n; j++) {\n                    if (matrix[i][k] != (int)1e9 && matrix[k][j] != (int)1e9) {\n                        matrix[i][j] = Math.min(matrix[i][j], matrix[i][k] + matrix[k][j]);\n                    }\n                }\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function floydWarshall(matrix) {\n  const n = matrix.length;\n  const dist = matrix.map(row => [...row]);\n  for (let k = 0; k < n; k++) {\n    for (let i = 0; i < n; i++) {\n      for (let j = 0; j < n; j++) {\n        if (dist[i][k] !== Infinity && dist[k][j] !== Infinity) {\n          dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);\n        }\n      }\n    }\n  }\n  return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1334 - Find the City With the Smallest Number of Neighbors at a Threshold Distance",
+          "url": "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prims-algorithm-mst",
+      "title": "Prim's Algorithm for Minimum Spanning Tree (MST)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(E log V)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Greedy algorithm that builds a Minimum Spanning Tree by growing a tree one vertex at a time using a Min-Heap of connecting edge weights.",
+      "explanation": [
+        "Maintain a `visited` array and a Min-Heap storing `(weight, u)`.",
+        "Start with source vertex 0 in Min-Heap with weight 0.",
+        "Pop minimum weight edge `(wt, u)` from heap.",
+        "If `u` is already visited, skip. Otherwise mark `visited[u] = True` and add `wt` to total MST sum.",
+        "Push all edges from `u` to unvisited neighbors into Min-Heap.",
+        "Repeat until all V vertices are visited."
+      ],
+      "exampleTrace": {
+        "input": "4 vertices: (0-1: 1), (0-2: 4), (1-2: 2), (1-3: 6), (2-3: 3)",
+        "output": "MST Weight = 6 (Edges: 0-1, 1-2, 2-3)",
+        "traceSteps": [
+          "Initialize min-heap = [(0, 0)], visited = {}, mst_wt = 0.",
+          "Pop (0, 0): visit 0. Add edges (1, 1) & (4, 2) to heap. Heap = [(1, 1), (4, 2)].",
+          "Pop (1, 1): visit 1. mst_wt += 1 (1). Add edges (2, 2) & (6, 3) to heap. Heap = [(2, 2), (4, 2), (6, 3)].",
+          "Pop (2, 2): visit 2. mst_wt += 2 (3). Add edge (3, 3) to heap. Heap = [(3, 3), (4, 2), (6, 3)].",
+          "Pop (3, 3): visit 3. mst_wt += 3 (6). All 4 nodes visited!",
+          "Final Minimum Spanning Tree Weight = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds a Minimum Spanning Tree connecting all vertices with minimum total edge weight.",
+        "whenToUse": "When designing dense network backbones, cable/piping infrastructure, or electrical grids.",
+        "whereUsed": "LAN network cable routing, telecommunication grid design, approximation algorithms for TSP.",
+        "whyOptimal": "Greedy choice property guarantees optimal MST in O(E log V) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef prims_mst(V, adj):\n    visited = [False] * V\n    min_heap = [(0, 0)] # (wt, u)\n    mst_sum = 0\n    nodes_visited = 0\n    \n    while min_heap and nodes_visited < V:\n        wt, u = heapq.heappop(min_heap)\n        if visited[u]: continue\n        visited[u] = True\n        mst_sum += wt\n        nodes_visited += 1\n        for v, weight in adj[u]:\n            if not visited[v]:\n                heapq.heappush(min_heap, (weight, v))\n    return mst_sum"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nint primsMST(int V, vector<vector<pair<int, int>>>& adj) {\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;\n    vector<bool> visited(V, false);\n    pq.push({0, 0});\n    int sum = 0;\n    \n    while (!pq.empty()) {\n        auto [wt, u] = pq.top(); pq.pop();\n        if (visited[u]) continue;\n        visited[u] = true;\n        sum += wt;\n        for (auto& neighbor : adj[u]) {\n            int v = neighbor.first, weight = neighbor.second;\n            if (!visited[v]) {\n                pq.push({weight, v});\n            }\n        }\n    }\n    return sum;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class PrimsMST {\n    public int spanningTree(int V, List<List<int[]>> adj) {\n        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);\n        boolean[] visited = new boolean[V];\n        pq.add(new int[]{0, 0});\n        int sum = 0;\n        \n        while (!pq.isEmpty()) {\n            int[] curr = pq.poll();\n            int wt = curr[0], u = curr[1];\n            if (visited[u]) continue;\n            visited[u] = true;\n            sum += wt;\n            for (int[] nbr : adj.get(u)) {\n                if (!visited[nbr[0]]) {\n                    pq.add(new int[]{nbr[1], nbr[0]});\n                }\n            }\n        }\n        return sum;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function primsMST(V, adj) {\n  const visited = new Array(V).fill(false);\n  const minHeap = [[0, 0]]; // [wt, u]\n  let mstSum = 0;\n  \n  while (minHeap.length > 0) {\n    minHeap.sort((a, b) => a[0] - b[0]);\n    const [wt, u] = minHeap.shift();\n    if (visited[u]) continue;\n    visited[u] = true;\n    mstSum += wt;\n    for (const [v, weight] of adj[u] || []) {\n      if (!visited[v]) {\n        minHeap.push([weight, v]);\n      }\n    }\n  }\n  return mstSum;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1584 - Min Cost to Connect All Points",
+          "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "kruskals-algorithm-mst",
+      "title": "Kruskal's Algorithm for Minimum Spanning Tree (Sorting & DSU)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(E log E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Greedy algorithm that sorts all graph edges by weight and connects component trees using Disjoint Set Union (DSU) without forming cycles.",
+      "explanation": [
+        "Extract all edges `(u, v, wt)` and sort them in non-decreasing order of weight `wt`.",
+        "Initialize a Disjoint Set Union (DSU) data structure for `V` vertices.",
+        "Iterate through sorted edges `(u, v, wt)`:",
+        "Check if `find(u) != find(v)` (u and v are in different components).",
+        "If different, call `union(u, v)` and add `wt` to total MST weight.",
+        "Stop when `V - 1` edges have been added."
+      ],
+      "exampleTrace": {
+        "input": "Edges: (0-1: 1), (1-2: 2), (2-3: 3), (0-2: 4), (1-3: 6)",
+        "output": "MST Weight = 6 (Edges used: 0-1, 1-2, 2-3)",
+        "traceSteps": [
+          "Sort edges by weight: [(0,1,1), (1,2,2), (2,3,3), (0,2,4), (1,3,6)].",
+          "Edge (0,1,1): find(0) != find(1) -> Union(0,1). mst_sum = 1.",
+          "Edge (1,2,2): find(1) != find(2) -> Union(1,2). mst_sum = 1 + 2 = 3.",
+          "Edge (2,3,3): find(2) != find(3) -> Union(2,3). mst_sum = 3 + 3 = 6.",
+          "Edge (0,2,4): find(0) == find(2) -> Skip (would form cycle!).",
+          "3 edges added (V-1=3). Minimum Spanning Tree Weight = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes Minimum Spanning Tree for sparse graphs.",
+        "whenToUse": "When edge list is already available or graph is sparse (E << V^2).",
+        "whereUsed": "Cluster analysis, image segmentation, network routing, connecting component clusters.",
+        "whyOptimal": "O(E log E) sorting time + near-constant O(alpha(V)) DSU operations per edge."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n    def find(self, i):\n        if self.parent[i] == i:\n            return i\n        self.parent[i] = self.find(self.parent[i])\n        return self.parent[i]\n    def union(self, i, j):\n        root_i, root_j = self.find(i), self.find(j)\n        if root_i != root_j:\n            if self.rank[root_i] < self.rank[root_j]:\n                root_i, root_j = root_j, root_i\n            self.parent[root_j] = root_i\n            if self.rank[root_i] == self.rank[root_j]:\n                self.rank[root_i] += 1\n            return True\n        return False\n\ndef kruskal(V, edges):\n    edges.sort(key=lambda x: x[2]) # (u, v, wt)\n    dsu = DSU(V)\n    mst_sum = 0\n    for u, v, wt in edges:\n        if dsu.union(u, v):\n            mst_sum += wt\n    return mst_sum"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nstruct Edge {\n    int u, v, wt;\n    bool operator<(const Edge& other) const {\n        return wt < other.wt;\n    }\n};\n\nint kruskal(int V, vector<Edge>& edges) {\n    sort(edges.begin(), edges.end());\n    vector<int> parent(V);\n    for (int i = 0; i < V; i++) parent[i] = i;\n    \n    auto find = [&](auto& self, int i) -> int {\n        return parent[i] == i ? i : parent[i] = self(self, parent[i]);\n    };\n    \n    int mst = 0;\n    for (auto& edge : edges) {\n        int rootU = find(find, edge.u);\n        int rootV = find(find, edge.v);\n        if (rootU != rootV) {\n            parent[rootU] = rootV;\n            mst += edge.wt;\n        }\n    }\n    return mst;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class KruskalsMST {\n    static class Edge implements Comparable<Edge> {\n        int u, v, wt;\n        Edge(int u, int v, int wt) { this.u = u; this.v = v; this.wt = wt; }\n        public int compareTo(Edge o) { return this.wt - o.wt; }\n    }\n    \n    public int kruskal(int V, List<Edge> edges) {\n        Collections.sort(edges);\n        int[] parent = new int[V];\n        for (int i = 0; i < V; i++) parent[i] = i;\n        \n        int mst = 0;\n        for (Edge edge : edges) {\n            int rootU = find(parent, edge.u);\n            int rootV = find(parent, edge.v);\n            if (rootU != rootV) {\n                parent[rootU] = rootV;\n                mst += edge.wt;\n            }\n        }\n        return mst;\n    }\n    private int find(int[] p, int i) {\n        return p[i] == i ? i : (p[i] = find(p, p[i]));\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function kruskal(V, edges) {\n  edges.sort((a, b) => a[2] - b[2]); // [u, v, wt]\n  const parent = Array.from({length: V}, (_, i) => i);\n  const find = (i) => parent[i] === i ? i : (parent[i] = find(parent[i]));\n  \n  let mstSum = 0;\n  for (const [u, v, wt] of edges) {\n    const rootU = find(u);\n    const rootV = find(v);\n    if (rootU !== rootV) {\n      parent[rootU] = rootV;\n      mstSum += wt;\n    }\n  }\n  return mstSum;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1584 - Min Cost to Connect All Points",
+          "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tarjans-bridges-articulation",
+      "title": "Tarjan's Algorithm for Bridges & Articulation Points",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Finds critical edges (Bridges) and critical vertices (Articulation Points) whose removal disconnects an undirected graph using discovery time (`tin`) and lowest reachable time (`low`).",
+      "explanation": [
+        "Maintain `tin[u]` (discovery time) and `low[u]` (lowest discovery time reachable from u).",
+        "Perform DFS traversal, updating timer `tin[u] = low[u] = timer++`.",
+        "For neighbor `v` of `u` (other than parent):",
+        "If `v` is unvisited: DFS(v). Update `low[u] = min(low[u], low[v])`.",
+        "Check Bridge condition: If `low[v] > tin[u]`, edge `(u, v)` is a Bridge (Critical Connection)!",
+        "If `v` is already visited: Update `low[u] = min(low[u], tin[v])`."
+      ],
+      "exampleTrace": {
+        "input": "Edges: (0-1), (1-2), (2-0), (1-3)",
+        "output": "Critical Bridges: [(1, 3)]",
+        "traceSteps": [
+          "DFS starts at 0: tin[0]=1, low[0]=1.",
+          "DFS to 1: tin[1]=2, low[1]=2.",
+          "DFS to 2: tin[2]=3, low[2]=3. Neighbor 0 is visited $\\rightarrow$ low[2] = min(3, tin[0]) = 1. Backtrack to 1: low[1] = min(2, 1) = 1.",
+          "DFS from 1 to 3: tin[3]=4, low[3]=4. Backtrack to 1.",
+          "Check Bridge condition for edge (1, 3): low[3] (4) > tin[1] (2) $\\rightarrow$ TRUE!",
+          "Edge (1, 3) is a Critical Bridge (removing it disconnects vertex 3)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies single points of failure (vulnerable bridges/nodes) in network topologies.",
+        "whenToUse": "When auditing network robustness or identifying critical infrastructure routers/servers.",
+        "whereUsed": "Network vulnerability testing, power grid single-point-of-failure analysis, routing resilience.",
+        "whyOptimal": "O(V + E) single-pass DFS discovery."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def find_bridges(n, connections):\n    adj = [[] for _ in range(n)]\n    for u, v in connections:\n        adj[u].append(v)\n        adj[v].append(u)\n        \n    tin = [-1] * n\n    low = [-1] * n\n    timer = 0\n    bridges = []\n    \n    def dfs(u, p):\n        nonlocal timer\n        tin[u] = low[u] = timer\n        timer += 1\n        for v in adj[u]:\n            if v == p: continue\n            if tin[v] != -1:\n                low[u] = min(low[u], tin[v])\n            else:\n                dfs(v, u)\n                low[u] = min(low[u], low[v])\n                if low[v] > tin[u]:\n                    bridges.append([u, v])\n                    \n    dfs(0, -1)\n    return bridges"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    int timer = 1;\n    void dfs(int u, int p, vector<vector<int>>& adj, vector<int>& tin, vector<int>& low, vector<vector<int>>& bridges) {\n        tin[u] = low[u] = timer++;\n        for (int v : adj[u]) {\n            if (v == p) continue;\n            if (tin[v]) {\n                low[u] = min(low[u], tin[v]);\n            } else {\n                dfs(v, u, adj, tin, low, bridges);\n                low[u] = min(low[u], low[v]);\n                if (low[v] > tin[u]) {\n                    bridges.push_back({u, v});\n                }\n            }\n        }\n    }\npublic:\n    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {\n        vector<vector<int>> adj(n);\n        for (auto& c : connections) {\n            adj[c[0]].push_back(c[1]);\n            adj[c[1]].push_back(c[0]);\n        }\n        vector<int> tin(n, 0), low(n, 0);\n        vector<vector<int>> bridges;\n        dfs(0, -1, adj, tin, low, bridges);\n        return bridges;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class TarjanBridges {\n    private int timer = 1;\n    public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {\n        List<List<Integer>> adj = new ArrayList<>();\n        for (int i = 0; i < n; i++) adj.add(new ArrayList<>());\n        for (List<Integer> edge : connections) {\n            adj.get(edge.get(0)).add(edge.get(1));\n            adj.get(edge.get(1)).add(edge.get(0));\n        }\n        int[] tin = new int[n], low = new int[n];\n        List<List<Integer>> bridges = new ArrayList<>();\n        dfs(0, -1, adj, tin, low, bridges);\n        return bridges;\n    }\n    private void dfs(int u, int p, List<List<Integer>> adj, int[] tin, int[] low, List<List<Integer>> bridges) {\n        tin[u] = low[u] = timer++;\n        for (int v : adj.get(u)) {\n            if (v == p) continue;\n            if (tin[v] != 0) {\n                low[u] = Math.min(low[u], tin[v]);\n            } else {\n                dfs(v, u, adj, tin, low, bridges);\n                low[u] = Math.min(low[u], low[v]);\n                if (low[v] > tin[u]) {\n                    bridges.add(Arrays.asList(u, v));\n                }\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function criticalConnections(n, connections) {\n  const adj = Array.from({length: n}, () => []);\n  for (const [u, v] of connections) {\n    adj[u].push(v); adj[v].push(u);\n  }\n  const tin = new Array(n).fill(-1);\n  const low = new Array(n).fill(-1);\n  let timer = 0;\n  const bridges = [];\n  \n  function dfs(u, p) {\n    tin[u] = low[u] = timer++;\n    for (const v of adj[u]) {\n      if (v === p) continue;\n      if (tin[v] !== -1) {\n        low[u] = Math.min(low[u], tin[v]);\n      } else {\n        dfs(v, u);\n        low[u] = Math.min(low[u], low[v]);\n        if (low[v] > tin[u]) {\n          bridges.push([u, v]);\n        }\n      }\n    }\n  }\n  dfs(0, -1);\n  return bridges;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1192 - Critical Connections in a Network",
+          "url": "https://leetcode.com/problems/critical-connections-in-a-network/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "kosaraju-scc-algorithm",
+      "title": "Kosaraju's Algorithm for Strongly Connected Components (SCC)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Finds all Strongly Connected Components (SCCs) in a directed graph using 2 DFS passes and graph transposition.",
+      "explanation": [
+        "Kosaraju's algorithm performs DFS to compute finishing order, reverses all edges and performs DFS in reverse finishing order.",
+        "Tarjan's algorithm performs a single DFS using discovery times, low-link values and a stack.",
+        "Every resulting component is strongly connected.",
+        "Compressing SCCs produces a DAG called the condensation graph."
+      ],
+      "exampleTrace": {
+        "input": "Edges: 0->1, 1->2, 2->0, 1->3, 3->4",
+        "output": "3 SCCs: [{0,1,2}, {3}, {4}]",
+        "traceSteps": [
+          "Pass 1 DFS: Finish stack top-to-bottom = [0, 1, 2, 3, 4].",
+          "Pass 2 Transpose graph: Edges reversed -> 1->0, 2->1, 0->2, 3->1, 4->3.",
+          "Pop 0 from stack: DFS on transposed graph visits {0, 1, 2} $\\rightarrow$ Component 1 = {0, 1, 2}.",
+          "Pop 3 from stack: DFS visits {3} $\\rightarrow$ Component 2 = {3}.",
+          "Pop 4 from stack: DFS visits {4} $\\rightarrow$ Component 3 = {4}.",
+          "Total Strongly Connected Components = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Decomposes directed graphs into strongly connected subgraphs.",
+        "whenToUse": "When finding mutually reachable groups of web pages, social groups, or 2-SAT solving.",
+        "whereUsed": "Web page authority ranking (PageRank), social network community detection, 2-SAT solver engine.",
+        "whyOptimal": "O(V + E) 2-pass DFS with simple stack & transpose execution."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def kosaraju_scc(V, adj):\n    stack = []\n    visited = [False] * V\n    \n    def dfs1(u):\n        visited[u] = True\n        for v in adj[u]:\n            if not visited[v]: dfs1(v)\n        stack.append(u)\n        \n    for i in range(V):\n        if not visited[i]: dfs1(i)\n        \n    adj_rev = [[] for _ in range(V)]\n    for u in range(V):\n        for v in adj[u]:\n            adj_rev[v].append(u)\n            \n    visited = [False] * V\n    sccs = []\n    def dfs2(u, comp):\n        visited[u] = True\n        comp.append(u)\n        for v in adj_rev[u]:\n            if not visited[v]: dfs2(v, comp)\n            \n    while stack:\n        u = stack.pop()\n        if not visited[u]:\n            comp = []\n            dfs2(u, comp)\n            sccs.append(comp)\n    return sccs"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvoid dfs1(int u, vector<vector<int>>& adj, vector<bool>& vis, stack<int>& st) {\n    vis[u] = true;\n    for (int v : adj[u]) if (!vis[v]) dfs1(v, adj, vis, st);\n    st.push(u);\n}\n\nvoid dfs2(int u, vector<vector<int>>& adjRev, vector<bool>& vis, vector<int>& comp) {\n    vis[u] = true;\n    comp.push_back(u);\n    for (int v : adjRev[u]) if (!vis[v]) dfs2(v, adjRev, vis, comp);\n}\n\nvector<vector<int>> kosaraju(int V, vector<vector<int>>& adj) {\n    vector<bool> vis(V, false);\n    stack<int> st;\n    for (int i = 0; i < V; i++) if (!vis[i]) dfs1(i, adj, vis, st);\n    \n    vector<vector<int>> adjRev(V);\n    for (int i = 0; i < V; i++) for (int v : adj[i]) adjRev[v].push_back(i);\n    \n    fill(vis.begin(), vis.end(), false);\n    vector<vector<int>> sccs;\n    while (!st.empty()) {\n        int u = st.top(); st.pop();\n        if (!vis[u]) {\n            vector<int> comp;\n            dfs2(u, adjRev, vis, comp);\n            sccs.push_back(comp);\n        }\n    }\n    return sccs;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class KosarajuSCC {\n    public List<List<Integer>> kosaraju(int V, List<List<Integer>> adj) {\n        boolean[] vis = new boolean[V];\n        Stack<Integer> st = new Stack<>();\n        for (int i = 0; i < V; i++) if (!vis[i]) dfs1(i, adj, vis, st);\n        \n        List<List<Integer>> adjRev = new ArrayList<>();\n        for (int i = 0; i < V; i++) adjRev.add(new ArrayList<>());\n        for (int i = 0; i < V; i++) for (int v : adj.get(i)) adjRev.get(v).add(i);\n        \n        Arrays.fill(vis, false);\n        List<List<Integer>> sccs = new ArrayList<>();\n        while (!st.isEmpty()) {\n            int u = st.pop();\n            if (!vis[u]) {\n                List<Integer> comp = new ArrayList<>();\n                dfs2(u, adjRev, vis, comp);\n                sccs.add(comp);\n            }\n        }\n        return sccs;\n    }\n    private void dfs1(int u, List<List<Integer>> adj, boolean[] vis, Stack<Integer> st) {\n        vis[u] = true;\n        for (int v : adj.get(u)) if (!vis[v]) dfs1(v, adj, vis, st);\n        st.push(u);\n    }\n    private void dfs2(int u, List<List<Integer>> adjRev, boolean[] vis, List<Integer> comp) {\n        vis[u] = true;\n        comp.add(u);\n        for (int v : adjRev.get(u)) if (!vis[v]) dfs2(v, adjRev, vis, comp);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function kosaraju(V, adj) {\n  const vis = new Array(V).fill(false);\n  const stack = [];\n  function dfs1(u) {\n    vis[u] = true;\n    for (const v of adj[u] || []) if (!vis[v]) dfs1(v);\n    stack.push(u);\n  }\n  for (let i = 0; i < V; i++) if (!vis[i]) dfs1(i);\n  \n  const adjRev = Array.from({length: V}, () => []);\n  for (let u = 0; u < V; u++) {\n    for (const v of adj[u] || []) adjRev[v].push(u);\n  }\n  vis.fill(false);\n  const sccs = [];\n  function dfs2(u, comp) {\n    vis[u] = true;\n    comp.push(u);\n    for (const v of adjRev[u]) if (!vis[v]) dfs2(v, comp);\n  }\n  while (stack.length > 0) {\n    const u = stack.pop();\n    if (!vis[u]) {\n      const comp = [];\n      dfs2(u, comp);\n      sccs.push(comp);\n    }\n  }\n  return sccs;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GFG - Strongly Connected Components (Kosaraju's Algo)",
+          "url": "https://practice.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "multisource-bfs-pattern",
+      "title": "Multi-Source BFS Pattern (Simultaneous Expansion)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(M * N)",
+      "spaceComplexity": "O(M * N)",
+      "summary": "Runs BFS simultaneously from multiple starting vertices and computes minimum distance to the nearest source.",
+      "explanation": [
+        "Find all starting source nodes (e.g. all rotten oranges or all 0s in a binary matrix).",
+        "Enqueue all sources into Queue at step 0 and mark visited.",
+        "Process queue layer by layer (level order).",
+        "Increment distance step count for each processed queue level.",
+        "All targets are reached with minimal distance simultaneously."
+      ],
+      "exampleTrace": {
+        "input": "Grid: [[2,1,1],[1,1,0],[0,1,1]] (2 = Rotten, 1 = Fresh, 0 = Empty)",
+        "output": "4 Minutes to rot all fresh oranges",
+        "traceSteps": [
+          "Find all 2s: Queue = [(0,0)], minutes = 0.",
+          "Minute 1: Rot (0,1) & (1,0). Queue = [(0,1), (1,0)].",
+          "Minute 2: Rot (0,2) & (1,1). Queue = [(0,2), (1,1)].",
+          "Minute 3: Rot (2,1). Queue = [(2,1)].",
+          "Minute 4: Rot (2,2). Queue = [(2,2)].",
+          "All fresh oranges rotten in 4 minutes."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Simultaneous wave propagation from multiple initial origins.",
+        "whenToUse": "When finding shortest distance from ANY of multiple source nodes to target cells.",
+        "whereUsed": "Rotting oranges simulation, 0-1 matrix distance calculation, fire spreading simulation.",
+        "whyOptimal": "Avoids running separate BFS calls for each source, keeping complexity strictly O(M * N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef orangesRotting(grid):\n    rows, cols = len(grid), len(grid[0])\n    queue = deque()\n    fresh = 0\n    \n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == 2:\n                queue.append((r, c))\n            elif grid[r][c] == 1:\n                fresh += 1\n                \n    if fresh == 0: return 0\n    minutes = 0\n    dirs = [(0,1), (1,0), (0,-1), (-1,0)]\n    \n    while queue and fresh > 0:\n        minutes += 1\n        for _ in range(len(queue)):\n            r, c = queue.popleft()\n            for dr, dc in dirs:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:\n                    grid[nr][nc] = 2\n                    fresh -= 1\n                    queue.append((nr, nc))\n    return minutes if fresh == 0 else -1"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nint orangesRotting(vector<vector<int>>& grid) {\n    int rows = grid.size(), cols = grid[0].size();\n    queue<pair<int, int>> q;\n    int fresh = 0;\n    for (int r = 0; r < rows; r++) {\n        for (int c = 0; c < cols; c++) {\n            if (grid[r][c] == 2) q.push({r, c});\n            else if (grid[r][c] == 1) fresh++;\n        }\n    }\n    if (fresh == 0) return 0;\n    int minutes = 0;\n    int dirs[4][2] = {{0,1}, {1,0}, {0,-1}, {-1,0}};\n    while (!q.empty() && fresh > 0) {\n        minutes++;\n        int sz = q.size();\n        while (sz--) {\n            auto [r, c] = q.front(); q.pop();\n            for (auto& d : dirs) {\n                int nr = r + d[0], nc = c + d[1];\n                if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 1) {\n                    grid[nr][nc] = 2;\n                    fresh--;\n                    q.push({nr, nc});\n                }\n            }\n        }\n    }\n    return fresh == 0 ? minutes : -1;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MultiSourceBFS {\n    public int orangesRotting(int[][] grid) {\n        int rows = grid.length, cols = grid[0].length;\n        Queue<int[]> q = new LinkedList<>();\n        int fresh = 0;\n        for (int r = 0; r < rows; r++) {\n            for (int c = 0; c < cols; c++) {\n                if (grid[r][c] == 2) q.add(new int[]{r, c});\n                else if (grid[r][c] == 1) fresh++;\n            }\n        }\n        if (fresh == 0) return 0;\n        int minutes = 0;\n        int[][] dirs = {{0,1}, {1,0}, {0,-1}, {-1,0}};\n        while (!q.isEmpty() && fresh > 0) {\n            minutes++;\n            int sz = q.size();\n            while (sz-- > 0) {\n                int[] curr = q.poll();\n                for (int[] d : dirs) {\n                    int nr = curr[0] + d[0], nc = curr[1] + d[1];\n                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] == 1) {\n                        grid[nr][nc] = 2;\n                        fresh--;\n                        q.add(new int[]{nr, nc});\n                    }\n                }\n            }\n        }\n        return fresh == 0 ? minutes : -1;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function orangesRotting(grid) {\n  const rows = grid.length, cols = grid[0].length;\n  const q = [];\n  let fresh = 0;\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (grid[r][c] === 2) q.push([r, c]);\n      else if (grid[r][c] === 1) fresh++;\n    }\n  }\n  if (fresh === 0) return 0;\n  let minutes = 0;\n  const dirs = [[0,1], [1,0], [0,-1], [-1,0]];\n  while (q.length > 0 && fresh > 0) {\n    minutes++;\n    const len = q.length;\n    for (let i = 0; i < len; i++) {\n      const [r, c] = q.shift();\n      for (const [dr, dc] of dirs) {\n        const nr = r + dr, nc = c + dc;\n        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && grid[nr][nc] === 1) {\n          grid[nr][nc] = 2;\n          fresh--;\n          q.push([nr, nc]);\n        }\n      }\n    }\n  }\n  return fresh === 0 ? minutes : -1;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 994 - Rotting Oranges",
+          "url": "https://leetcode.com/problems/rotting-oranges/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 542 - 01 Matrix",
+          "url": "https://leetcode.com/problems/01-matrix/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "graph-representations-conversions",
+      "title": "Graph Representations & Memory Tradeoffs",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Easy",
+      "timeComplexity": "O(V + E) conversion, O(1) edge lookup in Matrix, O(deg(u)) in Adj List",
+      "spaceComplexity": "Matrix: O(V^2), Adj List: O(V + E), Edge List: O(E)",
+      "summary": "Master fundamental graph storage formats: Adjacency Matrix (V x V array), Adjacency List (Map/Array of neighbor lists), and Edge List (Array of pairs/triplets). Includes conversion algorithms and memory/lookup tradeoff analysis.",
+      "explanation": [
+        "Graphs can be stored in computer memory using three primary data structures depending on edge density and required operation speeds:",
+        "1. Adjacency Matrix: A 2D boolean or integer array matrix[V][V] where matrix[u][v] stores the edge weight or 1 if an edge exists from u to v. Edge lookup O(1), but memory cost O(V^2) regardless of edge count E.",
+        "2. Adjacency List: An array of lists or hash map mapping each vertex u to its list of adjacent neighbor nodes (and weights). Memory efficient O(V + E), ideal for sparse graphs.",
+        "3. Edge List: A simple array or vector of tuples/structs (u, v, weight). Excellent for edge-centric algorithms like Kruskal's MST and Bellman-Ford, memory cost O(E).",
+        "This module provides bidirectional conversion utilities and benchmark metrics between all 3 representations."
+      ],
+      "exampleTrace": {
+        "input": "Sample Input",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Step 1: Input Edge List [(0, 1, 5), (1, 2, 3), (2, 3, 8)] for V=4 Undirected Graph.",
+          "Step 2: Build Adjacency Matrix (4x4 initial zeros):\n       [0, 5, 0, 0]\n       [5, 0, 3, 0]\n       [0, 3, 0, 8]\n       [0, 0, 8, 0]",
+          "Step 3: Build Adjacency List:\n       0 -> [(1, 5)]\n       1 -> [(0, 5), (2, 3)]\n       2 -> [(1, 3), (3, 8)]\n       3 -> [(2, 8)]",
+          "Step 4: Query Edge Existence between (1, 2):\n       - Matrix lookup: matrix[1][2] -> 3 in O(1)\n       - Adj List search: search 2 in list of 1 -> found weight 3 in O(deg(1))=O(2)",
+          "Step 5: Memory Footprint Comparison:\n       - Matrix: 4x4 = 16 integers\n       - Adj List: 4 headers + 6 neighbor nodes = 10 elements\n       - Edge List: 3 tuples = 3 elements"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides the foundational input parsing, graph instantiation, and data structure conversion mechanisms for all graph algorithms.",
+        "whenToUse": "Use Adjacency Matrix for dense graphs (E ≈ V^2) and quick O(1) edge existence checks. Use Adjacency List for sparse graphs (E << V^2) and BFS/DFS traversals. Use Edge List for Kruskal's MST, Bellman-Ford, and dynamic edge sorting.",
+        "whereUsed": "Network routing tables, social network graph databases (Neo4j, GraphQL), spatial GIS maps, compiler data flow graphs.",
+        "whyOptimal": "Adjacency List minimizes memory to O(V+E) allowing scale to millions of vertices, whereas Adjacency Matrix leverages CPU cache lines for instant O(1) matrix lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class GraphRepresentation:\n    def __init__(self, num_vertices):\n        self.V = num_vertices\n        self.adj_list = {i: [] for i in range(num_vertices)}\n        self.adj_matrix = [[0] * num_vertices for _ in range(num_vertices)]\n        self.edge_list = []\n\n    def add_edge(self, u: int, v: int, weight: int = 1, directed: bool = False):\n        # 1. Edge List\n        self.edge_list.append((u, v, weight))\n        # 2. Adjacency Matrix\n        self.adj_matrix[u][v] = weight\n        if not directed:\n            self.adj_matrix[v][u] = weight\n        # 3. Adjacency List\n        self.adj_list[u].append((v, weight))\n        if not directed:\n            self.adj_list[v].append((u, weight))\n\n# Example Usage\ng = GraphRepresentation(4)\ng.add_edge(0, 1, 5)\ng.add_edge(1, 2, 3)\ng.add_edge(2, 3, 8)\nprint(\"Adj List:\", g.adj_list)\nprint(\"Adj Matrix:\", g.adj_matrix)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nstruct Edge { int u, v, w; };\n\nclass GraphRepresentation {\npublic:\n    int V;\n    vector<vector<pair<int, int>>> adjList;\n    vector<vector<int>> adjMatrix;\n    vector<Edge> edgeList;\n\n    GraphRepresentation(int v) : V(v) {\n        adjList.resize(v);\n        adjMatrix.assign(v, vector<int>(v, 0));\n    }\n\n    void addEdge(int u, int v, int w = 1, bool directed = false) {\n        edgeList.push_back({u, v, w});\n        adjMatrix[u][v] = w;\n        if (!directed) adjMatrix[v][u] = w;\n        adjList[u].push_back({v, w});\n        if (!directed) adjList[v].push_back({u, w});\n    }\n};\n\nint main() {\n    GraphRepresentation g(4);\n    g.addEdge(0, 1, 5);\n    g.addEdge(1, 2, 3);\n    g.addEdge(2, 3, 8);\n    cout << \"Graph built successfully!\\n\";\n    return 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class GraphRepresentation {\n    int V;\n    List<List<int[]>> adjList;\n    int[][] adjMatrix;\n    List<int[]> edgeList;\n\n    public GraphRepresentation(int v) {\n        this.V = v;\n        adjList = new ArrayList<>();\n        for (int i = 0; i < v; i++) adjList.add(new ArrayList<>());\n        adjMatrix = new int[v][v];\n        edgeList = new ArrayList<>();\n    }\n\n    public void addEdge(int u, int v, int weight, boolean directed) {\n        edgeList.add(new int[]{u, v, weight});\n        adjMatrix[u][v] = weight;\n        if (!directed) adjMatrix[v][u] = weight;\n        adjList.get(u).add(new int[]{v, weight});\n        if (!directed) adjList.get(v).add(new int[]{u, weight});\n    }\n\n    public static void main(String[] args) {\n        GraphRepresentation g = new GraphRepresentation(4);\n        g.addEdge(0, 1, 5, false);\n        g.addEdge(1, 2, 3, false);\n        g.addEdge(2, 3, 8, false);\n        System.out.println(\"Graph Representation Initialized successfully.\");\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class GraphRepresentation {\n  constructor(v) {\n    this.V = v;\n    this.adjList = Array.from({ length: v }, () => []);\n    this.adjMatrix = Array.from({ length: v }, () => Array(v).fill(0));\n    this.edgeList = [];\n  }\n\n  addEdge(u, v, weight = 1, directed = false) {\n    this.edgeList.push({ u, v, weight });\n    this.adjMatrix[u][v] = weight;\n    if (!directed) this.adjMatrix[v][u] = weight;\n    this.adjList[u].push({ node: v, weight });\n    if (!directed) this.adjList[v].push({ node: u, weight });\n  }\n}\n\nconst g = new GraphRepresentation(4);\ng.addEdge(0, 1, 5);\ng.addEdge(1, 2, 3);\ng.addEdge(2, 3, 8);\nconsole.log(\"Adjacency List:\", g.adjList);"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Graph Representations & Memory Tradeoffs",
+          "url": "https://leetcode.com",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "Graph Representations & Memory Tradeoffs",
+          "url": "https://leetcode.com",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "graph-classification-properties",
+      "title": "Graph Types, Connectivity & Properties Classifier",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Unified classification framework to analyze graph properties: Directed vs Undirected, Weighted vs Unweighted, Cyclic vs Acyclic (DAG), Connected vs Disconnected components, and Bipartite validation.",
+      "explanation": [
+        "Understanding structural graph properties dictates algorithm selection:",
+        "1. Directed vs Undirected: Edges have single-way direction vs symmetric two-way traversal.",
+        "2. Weighted vs Unweighted: Edges carry cost values vs uniform unit cost (BFS shortest path applies only on unweighted/equal weight).",
+        "3. Cyclic vs Acyclic (DAG): Cyclic graphs contain closed loop paths. Directed Acyclic Graphs (DAGs) enable Topological Sorting and DP over DAGs.",
+        "4. Connected vs Disconnected: An undirected graph is connected if every vertex is reachable from every other vertex. Disconnected graphs split into multiple Connected Components.",
+        "5. Bipartite Graph: Vertices can be partitioned into two sets U and V such that every edge connects a node in U to a node in V (No odd length cycles)."
+      ],
+      "exampleTrace": {
+        "input": "Sample Input",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Input Graph: V=5, Edges=[(0,1), (1,2), (2,0), (3,4)]",
+          "Step 1: Check Connectivity using BFS/DFS from node 0.",
+          "Visited set from 0: {0, 1, 2}. Visited count (3) < V (5) -> Graph is DISCONNECTED.",
+          "Step 2: Count Connected Components. Component 1: {0, 1, 2}, Component 2: {3, 4}. Total Components = 2.",
+          "Step 3: Cycle Detection on Component 1: DFS detects back-edge from 2 to 0 -> Graph is CYCLIC.",
+          "Step 4: Bipartite Check (2-Coloring): Component 1 has cycle (0-1-2-0) of length 3 (Odd Cycle) -> NOT BIPARTITE."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies key topological constraints of a input graph to choose correct algorithms (e.g. Kahn's for DAG, Dijkstra for weighted non-negative, BFS for unweighted).",
+        "whenToUse": "Run as a pre-processing or validation step whenever entering complex graph workflows.",
+        "whereUsed": "Dependency resolution systems (pip, npm), bipartite matching in recommendation systems (Users-Items), network vulnerability scanners.",
+        "whyOptimal": "A single O(V+E) DFS/BFS pass can simultaneously measure connectivity, count components, detect cycles, and verify bipartite status."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\nclass GraphPropertiesClassifier:\n    def __init__(self, V, edges, directed=False):\n        self.V = V\n        self.directed = directed\n        self.adj = {i: [] for i in range(V)}\n        for u, v in edges:\n            self.adj[u].append(v)\n            if not directed:\n                self.adj[v].append(u)\n\n    def count_connected_components(self):\n        visited = [False] * self.V\n        components = 0\n        for i in range(self.V):\n            if not visited[i]:\n                components += 1\n                queue = deque([i])\n                visited[i] = True\n                while queue:\n                    curr = queue.popleft()\n                    for neighbor in self.adj[curr]:\n                        if not visited[neighbor]:\n                            visited[neighbor] = True\n                            queue.append(neighbor)\n        return components\n\n    def is_bipartite(self):\n        color = [-1] * self.V\n        for i in range(self.V):\n            if color[i] == -1:\n                color[i] = 0\n                queue = deque([i])\n                while queue:\n                    u = queue.popleft()\n                    for v in self.adj[u]:\n                        if color[v] == -1:\n                            color[v] = 1 - color[u]\n                            queue.append(v)\n                        elif color[v] == color[u]:\n                            return False\n        return True\n\n# Example Usage\nclassifier = GraphPropertiesClassifier(5, [(0, 1), (1, 2), (2, 0), (3, 4)], directed=False)\nprint(\"Connected Components:\", classifier.count_connected_components())\nprint(\"Is Bipartite:\", classifier.is_bipartite())"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <vector>\n#include <queue>\n\nusing namespace std;\n\nclass GraphPropertiesClassifier {\n    int V;\n    vector<vector<int>> adj;\npublic:\n    GraphPropertiesClassifier(int n, const vector<pair<int,int>>& edges) : V(n) {\n        adj.resize(n);\n        for (auto& e : edges) {\n            adj[e.first].push_back(e.second);\n            adj[e.second].push_back(e.first);\n        }\n    }\n\n    int countComponents() {\n        vector<bool> visited(V, false);\n        int count = 0;\n        for (int i = 0; i < V; i++) {\n            if (!visited[i]) {\n                count++;\n                queue<int> q;\n                q.push(i);\n                visited[i] = true;\n                while (!q.empty()) {\n                    int u = q.front(); q.pop();\n                    for (int v : adj[u]) {\n                        if (!visited[v]) {\n                            visited[v] = true;\n                            q.push(v);\n                        }\n                    }\n                }\n            }\n        }\n        return count;\n    }\n};\n\nint main() {\n    GraphPropertiesClassifier g(5, {{0,1}, {1,2}, {2,0}, {3,4}});\n    cout << \"Components count: \" << g.countComponents() << endl;\n    return 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class GraphPropertiesClassifier {\n    int V;\n    List<List<Integer>> adj;\n\n    public GraphPropertiesClassifier(int n, int[][] edges) {\n        this.V = n;\n        adj = new ArrayList<>();\n        for (int i = 0; i < n; i++) adj.add(new ArrayList<>());\n        for (int[] e : edges) {\n            adj.get(e[0]).add(e[1]);\n            adj.get(e[1]).add(e[0]);\n        }\n    }\n\n    public boolean isBipartite() {\n        int[] color = new int[V];\n        Arrays.fill(color, -1);\n        for (int i = 0; i < V; i++) {\n            if (color[i] == -1) {\n                color[i] = 0;\n                Queue<Integer> q = new LinkedList<>();\n                q.add(i);\n                while (!q.isEmpty()) {\n                    int u = q.poll();\n                    for (int v : adj.get(u)) {\n                        if (color[v] == -1) {\n                            color[v] = 1 - color[u];\n                            q.add(v);\n                        } else if (color[v] == color[u]) return false;\n                    }\n                }\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        GraphPropertiesClassifier g = new GraphPropertiesClassifier(5, new int[][]{{0,1}, {1,2}, {2,0}, {3,4}});\n        System.out.println(\"Is Bipartite: \" + g.isBipartite());\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class GraphPropertiesClassifier {\n  constructor(v, edges) {\n    this.V = v;\n    this.adj = Array.from({ length: v }, () => []);\n    for (const [u, val] of edges) {\n      this.adj[u].push(val);\n      this.adj[val].push(u);\n    }\n  }\n\n  countComponents() {\n    const visited = new Array(this.V).fill(false);\n    let count = 0;\n    for (let i = 0; i < this.V; i++) {\n      if (!visited[i]) {\n        count++;\n        const queue = [i];\n        visited[i] = true;\n        while (queue.length > 0) {\n          const u = queue.shift();\n          for (const v of this.adj[u]) {\n            if (!visited[v]) {\n              visited[v] = true;\n              queue.push(v);\n            }\n          }\n        }\n      }\n    }\n    return count;\n  }\n}\n\nconst classifier = new GraphPropertiesClassifier(5, [[0, 1], [1, 2], [2, 0], [3, 4]]);\nconsole.log(\"Components:\", classifier.countComponents());"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Graph Types, Connectivity & Properties Classifier",
+          "url": "https://leetcode.com",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "Graph Types, Connectivity & Properties Classifier",
+          "url": "https://leetcode.com",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "connected-components",
+      "title": "Connected Components",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Easy",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Finds independent connected groups of vertices in an undirected graph using DFS, BFS or DSU.",
+      "explanation": [
+        "Maintain a visited array or set.",
+        "Start BFS or DFS from every unvisited vertex.",
+        "Every traversal discovers exactly one connected component.",
+        "Count how many such traversals are required.",
+        "DSU can also maintain the number of components while edges are dynamically added."
+      ],
+      "exampleTrace": {
+        "input": "Edges: (0,1), (1,2), (3,4); vertices = 5",
+        "output": "Connected components = 2",
+        "traceSteps": [
+          "Start DFS from 0 and discover 0,1,2.",
+          "Vertices 0,1,2 belong to component 1.",
+          "Vertex 3 is unvisited, so start another traversal.",
+          "Discover 3 and 4.",
+          "Vertex 5 does not exist; therefore there are 2 components."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines how many disconnected groups exist and which vertices belong to each group.",
+        "whenToUse": "Use for connectivity and grouping problems.",
+        "whereUsed": "Networks, islands, social groups and clustering.",
+        "whyOptimal": "BFS/DFS processes every vertex and edge once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_components(graph, n):\n    visited = [False] * n\n    count = 0\n\n    def dfs(node):\n        visited[node] = True\n        for nei in graph[node]:\n            if not visited[nei]:\n                dfs(nei)\n\n    for i in range(n):\n        if not visited[i]:\n            count += 1\n            dfs(i)\n\n    return count"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 323 - Number of Connected Components in an Undirected Graph",
+          "url": "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "dag-shortest-path",
+      "title": "Shortest Path in a DAG",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Finds shortest paths in a directed acyclic graph by processing vertices in topological order.",
+      "explanation": [
+        "Topologically sort the DAG.",
+        "Initialize the source distance to zero.",
+        "Process vertices in topological order.",
+        "Relax outgoing edges of each processed vertex.",
+        "Because there are no cycles, every predecessor is processed before its dependent vertices."
+      ],
+      "exampleTrace": {
+        "input": "DAG: 0→1(2), 0→2(4), 1→2(1)",
+        "output": "Shortest 0→2 = 3",
+        "traceSteps": [
+          "Topological order can be [0,1,2].",
+          "Process 0: dist[1]=2 and dist[2]=4.",
+          "Process 1: path 0→1→2 costs 3.",
+          "Update dist[2] from 4 to 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Single-source shortest paths in DAGs.",
+        "whenToUse": "Use when the graph is guaranteed to be a DAG.",
+        "whereUsed": "Dependency graphs, project planning and critical path analysis.",
+        "whyOptimal": "Topological ordering allows every edge to be relaxed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def dag_shortest_path(graph, topo, source):\n    dist = {u: float('inf') for u in graph}\n    dist[source] = 0\n    for u in topo:\n        if dist[u] != float('inf'):\n            for v, w in graph[u]:\n                dist[v] = min(dist[v], dist[u] + w)\n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <climits>\nusing namespace std;\n\nvector<int> dagShortestPath(int V, vector<vector<pair<int,int>>>& adj, vector<int>& topo, int src) {\n    vector<int> dist(V, INT_MAX);\n    dist[src] = 0;\n    for (int u : topo) {\n        if (dist[u] != INT_MAX) {\n            for (auto& edge : adj[u]) {\n                int v = edge.first, w = edge.second;\n                if (dist[u] + w < dist[v]) dist[v] = dist[u] + w;\n            }\n        }\n    }\n    return dist;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class DAGShortestPath {\n    public static int[] shortestPath(int V, List<List<int[]>> adj, List<Integer> topo, int src) {\n        int[] dist = new int[V];\n        Arrays.fill(dist, Integer.MAX_VALUE);\n        dist[src] = 0;\n        for (int u : topo) {\n            if (dist[u] != Integer.MAX_VALUE) {\n                for (int[] edge : adj.get(u)) {\n                    int v = edge[0], w = edge[1];\n                    if (dist[u] + w < dist[v]) dist[v] = dist[u] + w;\n                }\n            }\n        }\n        return dist;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function dagShortestPath(V, adj, topo, src) {\n  const dist = new Array(V).fill(Infinity);\n  dist[src] = 0;\n  for (const u of topo) {\n    if (dist[u] !== Infinity) {\n      for (const [v, w] of adj[u]) {\n        if (dist[u] + w < dist[v]) dist[v] = dist[u] + w;\n      }\n    }\n  }\n  return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Shortest Path in Directed Acyclic Graph",
+          "url": "https://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "zero-one-bfs",
+      "title": "0-1 BFS",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Finds shortest paths in graphs where every edge weight is either 0 or 1 using a deque.",
+      "explanation": [
+        "Use a deque instead of a priority queue.",
+        "When traversing a zero-weight edge, push the neighbor to the front.",
+        "When traversing a one-weight edge, push the neighbor to the back.",
+        "This ordering ensures smaller-distance states are processed first.",
+        "It is effectively a specialized shortest-path algorithm for binary edge weights."
+      ],
+      "exampleTrace": {
+        "input": "0→1(0), 0→2(1), 1→2(1)",
+        "output": "Shortest distance 0→2 = 1",
+        "traceSteps": [
+          "Start with deque [0].",
+          "From 0, edge to 1 has weight 0, so put 1 at the front.",
+          "Edge to 2 has weight 1, so put 2 at the back.",
+          "Process 1 and potentially relax 2.",
+          "Final distance to 2 is 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Shortest paths where edge weights are only 0 or 1.",
+        "whenToUse": "Use instead of Dijkstra when all weights are binary.",
+        "whereUsed": "Grid problems, state transformations and binary-cost movement.",
+        "whyOptimal": "The deque structure allows linear-time processing of 0/1 weighted graphs."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef zero_one_bfs(V, adj, src):\n    dist = [float('inf')] * V\n    dist[src] = 0\n    dq = deque([src])\n    while dq:\n        u = dq.popleft()\n        for v, w in adj[u]:\n            if dist[u] + w < dist[v]:\n                dist[v] = dist[u] + w\n                if w == 0:\n                    dq.appendleft(v)\n                else:\n                    dq.append(v)\n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <deque>\n#include <climits>\nusing namespace std;\n\nvector<int> zeroOneBFS(int V, vector<vector<pair<int,int>>>& adj, int src) {\n    vector<int> dist(V, INT_MAX);\n    deque<int> dq;\n    dist[src] = 0;\n    dq.push_back(src);\n    while (!dq.empty()) {\n        int u = dq.front(); dq.pop_front();\n        for (auto& edge : adj[u]) {\n            int v = edge.first, w = edge.second;\n            if (dist[u] + w < dist[v]) {\n                dist[v] = dist[u] + w;\n                if (w == 0) dq.push_front(v);\n                else dq.push_back(v);\n            }\n        }\n    }\n    return dist;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class ZeroOneBFS {\n    public static int[] bfs01(int V, List<List<int[]>> adj, int src) {\n        int[] dist = new int[V];\n        Arrays.fill(dist, Integer.MAX_VALUE);\n        dist[src] = 0;\n        Deque<Integer> dq = new ArrayDeque<>();\n        dq.add(src);\n        while (!dq.isEmpty()) {\n            int u = dq.pollFirst();\n            for (int[] edge : adj.get(u)) {\n                int v = edge[0], w = edge[1];\n                if (dist[u] + w < dist[v]) {\n                    dist[v] = dist[u] + w;\n                    if (w == 0) dq.addFirst(v);\n                    else dq.addLast(v);\n                }\n            }\n        }\n        return dist;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function zeroOneBFS(V, adj, src) {\n  const dist = new Array(V).fill(Infinity);\n  dist[src] = 0;\n  const dq = [src];\n  while (dq.length > 0) {\n    const u = dq.shift();\n    for (const [v, w] of adj[u]) {\n      if (dist[u] + w < dist[v]) {\n        dist[v] = dist[u] + w;\n        if (w === 0) dq.unshift(v);\n        else dq.push(v);\n      }\n    }\n  }\n  return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1368 - Minimum Cost to Make at Least One Valid Path in a Grid",
+          "url": "https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "articulation-points",
+      "title": "Articulation Points / Cut Vertices (Tarjan)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Finds vertices whose removal increases the number of connected components using DFS discovery times and low-link values.",
+      "explanation": [
+        "For a non-root vertex u, u is an articulation point if it has a child v such that low[v] >= tin[u].",
+        "For a DFS root, it is an articulation point when it has at least two DFS children.",
+        "Discovery time tin[u] records when u is first visited.",
+        "low[u] records the earliest reachable discovery time from u's subtree."
+      ],
+      "exampleTrace": {
+        "input": "Graph: 0-1, 1-2, 1-3, 2-3",
+        "output": "Articulation point: 1",
+        "traceSteps": [
+          "Vertex 1 connects the cycle containing 2 and 3 to vertex 0.",
+          "Removing vertex 1 separates vertex 0 from the rest.",
+          "Therefore vertex 1 is an articulation point."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds critical vertices whose removal disconnects an undirected graph.",
+        "whenToUse": "Use for network reliability and critical-node analysis.",
+        "whereUsed": "Communication networks, infrastructure and graph decomposition.",
+        "whyOptimal": "Tarjan's method runs in O(V + E)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def articulation_points(graph, n):\n    timer = 0\n    tin = [-1] * n\n    low = [-1] * n\n    is_cut = [False] * n\n\n    def dfs(u, parent):\n        nonlocal timer\n        tin[u] = low[u] = timer\n        timer += 1\n        children = 0\n\n        for v in graph[u]:\n            if v == parent:\n                continue\n\n            if tin[v] != -1:\n                low[u] = min(low[u], tin[v])\n            else:\n                dfs(v, u)\n                low[u] = min(low[u], low[v])\n\n                if parent != -1 and low[v] >= tin[u]:\n                    is_cut[u] = True\n                children += 1\n\n        if parent == -1 and children > 1:\n            is_cut[u] = True\n\n    for i in range(n):\n        if tin[i] == -1:\n            dfs(i, -1)\n\n    return [i for i in range(n) if is_cut[i]]"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Articulation Points in an Undirected Graph",
+          "url": "https://cp-algorithms.com/graph/cutpoints.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "eulerian-path-circuit",
+      "title": "Eulerian Path & Eulerian Circuit",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Finds a path or circuit that uses every edge exactly once using graph degree properties and Hierholzer's algorithm.",
+      "explanation": [
+        "An Eulerian circuit in an undirected graph requires every non-isolated vertex to have even degree.",
+        "An Eulerian path requires exactly zero or two vertices with odd degree.",
+        "Hierholzer's algorithm constructs an Eulerian traversal by following unused edges and splicing cycles.",
+        "For directed graphs, corresponding in-degree and out-degree conditions must hold."
+      ],
+      "exampleTrace": {
+        "input": "Edges: 0-1, 1-2, 2-0",
+        "output": "Eulerian circuit: 0→1→2→0",
+        "traceSteps": [
+          "Every vertex has degree 2.",
+          "Start from vertex 0.",
+          "Traverse 0→1.",
+          "Traverse 1→2.",
+          "Traverse 2→0.",
+          "Every edge has been used exactly once and the traversal returns to 0."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds traversals that use every edge exactly once.",
+        "whenToUse": "Use when the problem is about using every edge rather than every vertex.",
+        "whereUsed": "Route reconstruction, postal delivery and graph traversal puzzles.",
+        "whyOptimal": "Hierholzer's algorithm runs in linear time with respect to the number of edges."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def find_eulerian_circuit(V, adj, start=0):\n    stack = [start]\n    path = []\n    while stack:\n        u = stack[-1]\n        if adj[u]:\n            v = adj[u].pop()\n            stack.append(v)\n        else:\n            path.append(stack.pop())\n    return path[::-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\n#include <algorithm>\nusing namespace std;\n\nvector<int> eulerianCircuit(int V, vector<vector<int>>& adj, int start) {\n    stack<int> st;\n    vector<int> path;\n    st.push(start);\n    while (!st.empty()) {\n        int u = st.top();\n        if (!adj[u].empty()) {\n            int v = adj[u].back();\n            adj[u].pop_back();\n            st.push(v);\n        } else {\n            path.push_back(st.top());\n            st.pop();\n        }\n    }\n    reverse(path.begin(), path.end());\n    return path;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class EulerianPath {\n    public static List<Integer> getEulerianCircuit(List<List<Integer>> adj, int start) {\n        Stack<Integer> st = new Stack<>();\n        List<Integer> path = new ArrayList<>();\n        st.push(start);\n        while (!st.isEmpty()) {\n            int u = st.peek();\n            if (!adj.get(u).isEmpty()) {\n                int v = adj.get(u).remove(adj.get(u).size() - 1);\n                st.push(v);\n            } else {\n                path.add(st.pop());\n            }\n        }\n        Collections.reverse(path);\n        return path;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function eulerianCircuit(adj, start = 0) {\n  const stack = [start];\n  const path = [];\n  while (stack.length > 0) {\n    const u = stack[stack.length - 1];\n    if (adj[u] && adj[u].length > 0) {\n      const v = adj[u].pop();\n      stack.push(v);\n    } else {\n      path.push(stack.pop());\n    }\n  }\n  return path.reverse();\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 332 - Reconstruct Itinerary",
+          "url": "https://leetcode.com/problems/reconstruct-itinerary/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "hamiltonian-path-cycle",
+      "title": "Hamiltonian Path & Hamiltonian Cycle",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(V!) with basic backtracking",
+      "spaceComplexity": "O(V)",
+      "summary": "Finds a path or cycle that visits every vertex exactly once, commonly solved using backtracking or bitmask DP for small graphs.",
+      "explanation": [
+        "Unlike Eulerian problems, Hamiltonian problems focus on visiting every vertex exactly once.",
+        "Backtracking tries candidate vertices while maintaining a visited set.",
+        "If all vertices are visited, a Hamiltonian path has been found.",
+        "For a cycle, the final vertex must also connect back to the starting vertex.",
+        "Bitmask DP can improve the exponential solution for moderate V."
+      ],
+      "exampleTrace": {
+        "input": "Complete graph with vertices 0,1,2,3",
+        "output": "Hamiltonian path: 0→1→2→3",
+        "traceSteps": [
+          "Start with vertex 0.",
+          "Choose unvisited vertex 1.",
+          "Choose unvisited vertex 2.",
+          "Choose unvisited vertex 3.",
+          "All vertices have been visited exactly once."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines whether a graph has a vertex traversal visiting every vertex exactly once.",
+        "whenToUse": "Use for small-constraint graph traversal optimization problems.",
+        "whereUsed": "Routing, scheduling and combinatorial optimization.",
+        "whyOptimal": "The problem is NP-complete in general, so exponential algorithms are expected."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def hamiltonian_path(V, adj):\n    visited = [False] * V\n    path = []\n    def dfs(u):\n        visited[u] = True\n        path.append(u)\n        if len(path) == V:\n            return True\n        for v in adj[u]:\n            if not visited[v]:\n                if dfs(v): return True\n        visited[u] = False\n        path.pop()\n        return False\n    for i in range(V):\n        if dfs(i): return path\n    return []"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool dfs(int u, int V, vector<vector<int>>& adj, vector<bool>& visited, vector<int>& path) {\n    visited[u] = true;\n    path.push_back(u);\n    if (path.size() == V) return true;\n    for (int v : adj[u]) {\n        if (!visited[v] && dfs(v, V, adj, visited, path)) return true;\n    }\n    visited[u] = false;\n    path.pop_back();\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class HamiltonianPath {\n    public static boolean solve(int u, int V, List<List<Integer>> adj, boolean[] visited, List<Integer> path) {\n        visited[u] = true;\n        path.add(u);\n        if (path.size() == V) return true;\n        for (int v : adj.get(u)) {\n            if (!visited[v] && solve(v, V, adj, visited, path)) return true;\n        }\n        visited[u] = false;\n        path.remove(path.size() - 1);\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function hamiltonianPath(V, adj) {\n  const visited = new Array(V).fill(false);\n  const path = [];\n  function dfs(u) {\n    visited[u] = true;\n    path.push(u);\n    if (path.length === V) return true;\n    for (const v of adj[u]) {\n      if (!visited[v] && dfs(v)) return true;\n    }\n    visited[u] = false;\n    path.pop();\n    return false;\n  }\n  for (let i = 0; i < V; i++) {\n    if (dfs(i)) return path;\n  }\n  return [];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Hamiltonian Path Problem",
+          "url": "https://www.geeksforgeeks.org/hamiltonian-path/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "max-flow-ford-fulkerson",
+      "title": "Maximum Flow (Ford-Fulkerson & Edmonds-Karp)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(VE²) for Edmonds-Karp",
+      "spaceComplexity": "O(V²)",
+      "summary": "Computes the maximum amount of flow that can move from a source to a sink subject to edge capacities.",
+      "explanation": [
+        "Maintain a residual graph containing remaining capacities.",
+        "Find an augmenting path from source to sink.",
+        "Push the minimum residual capacity along that path.",
+        "Update forward and reverse residual capacities.",
+        "Ford-Fulkerson uses arbitrary augmenting paths, while Edmonds-Karp specifically uses BFS."
+      ],
+      "exampleTrace": {
+        "input": "Source s, sink t with two independent paths of capacities 3 and 2",
+        "output": "Maximum flow = 5",
+        "traceSteps": [
+          "Find an augmenting path with capacity 3.",
+          "Send 3 units of flow.",
+          "Find another augmenting path with capacity 2.",
+          "Send 2 additional units.",
+          "No more augmenting paths exist.",
+          "Maximum flow is 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the maximum flow between a source and sink.",
+        "whenToUse": "Use for capacity, resource allocation and network throughput problems.",
+        "whereUsed": "Transportation, communication networks, scheduling and bipartite matching.",
+        "whyOptimal": "The max-flow min-cut theorem guarantees the computed maximum flow equals the minimum cut capacity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef edmonds_karp(capacity, source, sink):\n    n = len(capacity)\n    flow = [[0] * n for _ in range(n)]\n    max_flow = 0\n    while True:\n        parent = [-1] * n\n        parent[source] = source\n        queue = deque([source])\n        while queue and parent[sink] == -1:\n            u = queue.popleft()\n            for v in range(n):\n                if parent[v] == -1 and capacity[u][v] - flow[u][v] > 0:\n                    parent[v] = u\n                    queue.append(v)\n        if parent[sink] == -1:\n            break\n        push_flow = float('inf')\n        v = sink\n        while v != source:\n            u = parent[v]\n            push_flow = min(push_flow, capacity[u][v] - flow[u][v])\n            v = u\n        v = sink\n        while v != source:\n            u = parent[v]\n            flow[u][v] += push_flow\n            flow[v][u] -= push_flow\n            v = u\n        max_flow += push_flow\n    return max_flow"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <algorithm>\n#include <climits>\nusing namespace std;\n\nint edmondsKarp(vector<vector<int>>& capacity, int s, int t) {\n    int n = capacity.size();\n    vector<vector<int>> flow(n, vector<int>(n, 0));\n    int maxFlow = 0;\n    while (true) {\n        vector<int> parent(n, -1);\n        parent[s] = s;\n        queue<int> q;\n        q.push(s);\n        while (!q.empty() && parent[t] == -1) {\n            int u = q.front(); q.pop();\n            for (int v = 0; v < n; v++) {\n                if (parent[v] == -1 && capacity[u][v] - flow[u][v] > 0) {\n                    parent[v] = u;\n                    q.push(v);\n                }\n            }\n        }\n        if (parent[t] == -1) break;\n        int pushFlow = INT_MAX;\n        for (int v = t; v != s; v = parent[v]) {\n            int u = parent[v];\n            pushFlow = min(pushFlow, capacity[u][v] - flow[u][v]);\n        }\n        for (int v = t; v != s; v = parent[v]) {\n            int u = parent[v];\n            flow[u][v] += pushFlow;\n            flow[v][u] -= pushFlow;\n        }\n        maxFlow += pushFlow;\n    }\n    return maxFlow;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class EdmondsKarp {\n    public static int maxFlow(int[][] capacity, int s, int t) {\n        int n = capacity.length;\n        int[][] flow = new int[n][n];\n        int maxFlow = 0;\n        while (true) {\n            int[] parent = new int[n];\n            Arrays.fill(parent, -1);\n            parent[s] = s;\n            Queue<Integer> q = new LinkedList<>();\n            q.add(s);\n            while (!q.isEmpty() && parent[t] == -1) {\n                int u = q.poll();\n                for (int v = 0; v < n; v++) {\n                    if (parent[v] == -1 && capacity[u][v] - flow[u][v] > 0) {\n                        parent[v] = u;\n                        q.add(v);\n                    }\n                }\n            }\n            if (parent[t] == -1) break;\n            int pushFlow = Integer.MAX_VALUE;\n            for (int v = t; v != s; v = parent[v]) {\n                int u = parent[v];\n                pushFlow = Math.min(pushFlow, capacity[u][v] - flow[u][v]);\n            }\n            for (int v = t; v != s; v = parent[v]) {\n                int u = parent[v];\n                flow[u][v] += pushFlow;\n                flow[v][u] -= pushFlow;\n            }\n            maxFlow += pushFlow;\n        }\n        return maxFlow;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function edmondsKarp(capacity, s, t) {\n  const n = capacity.length;\n  const flow = Array.from({ length: n }, () => new Array(n).fill(0));\n  let maxFlow = 0;\n  while (true) {\n    const parent = new Array(n).fill(-1);\n    parent[s] = s;\n    const q = [s];\n    while (q.length > 0 && parent[t] === -1) {\n      const u = q.shift();\n      for (let v = 0; v < n; v++) {\n        if (parent[v] === -1 && capacity[u][v] - flow[u][v] > 0) {\n          parent[v] = u;\n          q.push(v);\n        }\n      }\n    }\n    if (parent[t] === -1) break;\n    let pushFlow = Infinity;\n    for (let v = t; v !== s; v = parent[v]) {\n      const u = parent[v];\n      pushFlow = Math.min(pushFlow, capacity[u][v] - flow[u][v]);\n    }\n    for (let v = t; v !== s; v = parent[v]) {\n      const u = parent[v];\n      flow[u][v] += pushFlow;\n      flow[v][u] -= pushFlow;\n    }\n    maxFlow += pushFlow;\n  }\n  return maxFlow;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Maximum Flow",
+          "url": "https://cp-algorithms.com/graph/edmonds_karp.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "dinic-max-flow",
+      "title": "Dinic's Maximum Flow Algorithm",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(V²E) general bound",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Computes maximum flow using level graphs and blocking flows for substantially better practical performance than basic augmenting-path methods.",
+      "explanation": [
+        "Run BFS from the source to construct a level graph.",
+        "Use DFS to send flow only along edges that advance one level.",
+        "Continue until no more blocking flow can be sent.",
+        "Rebuild the level graph and repeat.",
+        "Dinic is especially effective on many structured flow and matching problems."
+      ],
+      "exampleTrace": {
+        "input": "A flow network with source, intermediate vertices and sink",
+        "output": "Maximum flow after repeated blocking-flow phases",
+        "traceSteps": [
+          "BFS assigns levels to reachable vertices.",
+          "DFS sends flow through level-respecting edges.",
+          "Saturated edges are skipped.",
+          "When the level graph cannot send more flow, BFS builds a new level graph.",
+          "The process ends when the sink is unreachable."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Efficient maximum-flow computation.",
+        "whenToUse": "Use for large flow networks and bipartite matching.",
+        "whereUsed": "Network optimization, matching and resource allocation.",
+        "whyOptimal": "Level graphs prevent repeatedly exploring unproductive paths."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Dinic:\n    def __init__(self, n):\n        self.n = n\n        self.graph = [[] for _ in range(n)]\n\n    def add_edge(self, u, v, cap):\n        self.graph[u].append([v, cap, len(self.graph[v])])\n        self.graph[v].append([u, 0, len(self.graph[u]) - 1])\n\n    # BFS level graph + DFS blocking flow implementation\n    # is used here as the standard Dinic template."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Maximum Flow - Dinic",
+          "url": "https://cp-algorithms.com/graph/dinic.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "bipartite-matching",
+      "title": "Bipartite Matching (Kuhn & Hopcroft-Karp)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(VE) for Kuhn; O(E√V) for Hopcroft-Karp",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Finds the maximum set of pairwise non-conflicting edges between two partitions of a bipartite graph.",
+      "explanation": [
+        "A matching is a set of edges where no two chosen edges share a vertex.",
+        "Kuhn's algorithm repeatedly searches for augmenting paths using DFS.",
+        "Hopcroft-Karp improves performance by finding multiple shortest augmenting paths in phases.",
+        "Maximum bipartite matching can also be modeled as a maximum-flow problem."
+      ],
+      "exampleTrace": {
+        "input": "Left: {A,B}, Right: {1,2}; edges A-1, B-1, B-2",
+        "output": "Maximum matching size = 2",
+        "traceSteps": [
+          "Match A with 1.",
+          "B initially wants 1 but 1 is occupied.",
+          "An augmenting path can rematch A and allow B to take 2.",
+          "Final matching is A-1 and B-2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes pairings between two disjoint groups.",
+        "whenToUse": "Use for assignment, scheduling and compatibility problems.",
+        "whereUsed": "Job assignment, student-course allocation and resource matching.",
+        "whyOptimal": "Augmenting-path algorithms find maximum cardinality matchings."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def bpm(u, graph, seen, match):\n    for v in graph[u]:\n        if seen[v]:\n            continue\n        seen[v] = True\n\n        if match[v] == -1 or bpm(match[v], graph, seen, match):\n            match[v] = u\n            return True\n\n    return False"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Maximum Bipartite Matching",
+          "url": "https://cp-algorithms.com/graph/kuhn_maximum_bipartite_matching.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "hungarian-algorithm",
+      "title": "Hungarian Algorithm (Assignment Problem)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N³)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Finds a minimum-cost perfect matching in a weighted bipartite graph through the assignment problem formulation.",
+      "explanation": [
+        "Represent workers and jobs as the two sides of a bipartite graph.",
+        "Each worker-job pair has an associated cost.",
+        "The Hungarian algorithm maintains feasible potentials and repeatedly improves the matching.",
+        "It finds an optimal one-to-one assignment in polynomial time.",
+        "The problem can also be formulated as minimum-cost flow."
+      ],
+      "exampleTrace": {
+        "input": "2 workers and 2 jobs with costs [[4,1],[2,3]]",
+        "output": "Minimum assignment cost = 3",
+        "traceSteps": [
+          "Assign worker 1 to job 2 with cost 1.",
+          "Assign worker 2 to job 1 with cost 2.",
+          "Every worker and job is matched exactly once.",
+          "Total cost = 1 + 2 = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves minimum-cost one-to-one assignment problems.",
+        "whenToUse": "Use when every agent must be assigned exactly one task.",
+        "whereUsed": "Scheduling, workforce assignment and resource allocation.",
+        "whyOptimal": "Provides an O(N³) polynomial-time solution to the assignment problem."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "# Hungarian algorithm implementations are commonly written\n# using the potential / augmenting-path formulation.\n# Complexity: O(n^3)."
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Assignment Problem",
+          "url": "https://cp-algorithms.com/graph/hungarian-algorithm.html",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "transitive-closure",
+      "title": "Transitive Closure (Warshall's Algorithm)",
+      "categoryId": "graphs",
+      "categoryTitle": "Graphs & Networks",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V³)",
+      "spaceComplexity": "O(V²)",
+      "summary": "Determines whether every vertex can reach every other vertex in a directed graph.",
+      "explanation": [
+        "Maintain reachability[i][j] indicating whether j is reachable from i.",
+        "Initialize direct edges as reachable and every vertex as reachable from itself.",
+        "For every intermediate vertex k, update reachability using i→k and k→j.",
+        "The final matrix represents reachability between every pair."
+      ],
+      "exampleTrace": {
+        "input": "Edges: 0→1, 1→2",
+        "output": "0 can reach 2 = True",
+        "traceSteps": [
+          "Initially 0 reaches 1 and 1 reaches 2.",
+          "Use vertex 1 as an intermediate.",
+          "Since 0 reaches 1 and 1 reaches 2, mark 0 as reaching 2.",
+          "The final closure contains the indirect reachability."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines reachability between every pair of vertices.",
+        "whenToUse": "Use when all-pairs reachability is needed and V is manageable.",
+        "whereUsed": "Dependency analysis, prerequisite systems and directed network analysis.",
+        "whyOptimal": "Warshall's algorithm provides a simple O(V³) solution."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def transitive_closure(graph):\n    n = len(graph)\n    reach = [[graph[i][j] for j in range(n)] for i in range(n)]\n    for k in range(n):\n        for i in range(n):\n            for j in range(n):\n                reach[i][j] = reach[i][j] or (reach[i][k] and reach[k][j])\n    return reach"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<vector<bool>> transitiveClosure(const vector<vector<bool>>& graph) {\n    int n = graph.size();\n    vector<vector<bool>> reach = graph;\n    for (int k = 0; k < n; k++) {\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);\n            }\n        }\n    }\n    return reach;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class TransitiveClosure {\n    public static boolean[][] compute(boolean[][] graph) {\n        int n = graph.length;\n        boolean[][] reach = new boolean[n][n];\n        for (int i = 0; i < n; i++)\n            for (int j = 0; j < n; j++)\n                reach[i][j] = graph[i][j];\n        for (int k = 0; k < n; k++)\n            for (int i = 0; i < n; i++)\n                for (int j = 0; j < n; j++)\n                    reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);\n        return reach;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function transitiveClosure(graph) {\n  const n = graph.length;\n  const reach = graph.map((row) => [...row]);\n  for (let k = 0; k < n; k++) {\n    for (let i = 0; i < n; i++) {\n      for (let j = 0; j < n; j++) {\n        reach[i][j] = reach[i][j] || (reach[i][k] && reach[k][j]);\n      }\n    }\n  }\n  return reach;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Transitive Closure of a Graph",
+          "url": "https://www.geeksforgeeks.org/transitive-closure-of-a-graph/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

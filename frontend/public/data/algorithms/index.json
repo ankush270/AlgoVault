@@ -1,0 +1,238 @@
+{
+  "totalCategories": 28,
+  "totalAlgorithms": 371,
+  "categories": [
+    {
+      "id": "arrays_math",
+      "title": "Arrays & Math",
+      "icon": "Layers",
+      "description": "Array transformations, prefix sums, math, and number theory algorithms.",
+      "file": "arrays_math.json",
+      "algorithmCount": 10
+    },
+    {
+      "id": "strings",
+      "title": "Strings & Pattern Matching",
+      "icon": "Terminal",
+      "description": "String manipulation, pattern searching (KMP, Z-algorithm), and hashing.",
+      "file": "strings.json",
+      "algorithmCount": 7
+    },
+    {
+      "id": "binary_search",
+      "title": "Binary Search & Monotonic Space",
+      "icon": "Target",
+      "description": "Binary search on arrays, answer spaces, and 2D matrices.",
+      "file": "binary_search.json",
+      "algorithmCount": 8
+    },
+    {
+      "id": "sliding_window",
+      "title": "Sliding Window & Pointers",
+      "icon": "SlidersHorizontal",
+      "description": "Two pointers, fixed and variable size sliding window patterns.",
+      "file": "sliding_window.json",
+      "algorithmCount": 10
+    },
+    {
+      "id": "linked_list",
+      "title": "Linked Lists & Memory Pointers",
+      "icon": "FolderTree",
+      "description": "Singly, doubly, circular linked lists, pointer reversal, and cycle detection.",
+      "file": "linked_list.json",
+      "algorithmCount": 16
+    },
+    {
+      "id": "stack_queue",
+      "title": "Stack & Queue Data Structures",
+      "icon": "Layers",
+      "description": "Monotonic stack, expression parsing, queue variants, and priority queues.",
+      "file": "stack_queue.json",
+      "algorithmCount": 24
+    },
+    {
+      "id": "trees",
+      "title": "Trees & Binary Trees",
+      "icon": "FolderTree",
+      "description": "Tree traversals, views, construction, height/depth, and path sum problems.",
+      "file": "trees.json",
+      "algorithmCount": 31
+    },
+    {
+      "id": "bst",
+      "title": "Binary Search Trees",
+      "icon": "FolderTree",
+      "description": "BST operations, validation, iterators, rank statistics, and transformations.",
+      "file": "bst.json",
+      "algorithmCount": 10
+    },
+    {
+      "id": "graphs",
+      "title": "Graphs & Networks",
+      "icon": "Cpu",
+      "description": "Shortest paths, topological sorting, connected components, MST, and graph flows.",
+      "file": "graphs.json",
+      "algorithmCount": 28
+    },
+    {
+      "id": "dp",
+      "title": "Dynamic Programming",
+      "icon": "Zap",
+      "description": "1D, 2D, 3D DP, knapsack, LCS, LIS, grid DP, and DP on trees/graphs.",
+      "file": "dp.json",
+      "algorithmCount": 36
+    },
+    {
+      "id": "intervals",
+      "title": "Intervals & Sweep Line",
+      "icon": "SlidersHorizontal",
+      "description": "Interval merging, insertions, intersections, meeting room scheduling, and sweep line event patterns.",
+      "file": "intervals.json",
+      "algorithmCount": 8
+    },
+    {
+      "id": "prefix_sum",
+      "title": "Prefix Sum & Difference Arrays",
+      "icon": "Layers",
+      "description": "1D/2D range query optimization, prefix sum + hashmap, difference array updates, prefix XOR, and prefix GCD patterns.",
+      "file": "prefix_sum.json",
+      "algorithmCount": 7
+    },
+    {
+      "id": "range_query",
+      "title": "Range Query Data Structures",
+      "icon": "Layers",
+      "description": "Advanced Range Query data structures including Segment Trees, Lazy Propagation, Fenwick Trees (BIT), and Sparse Tables.",
+      "file": "range_query.json",
+      "algorithmCount": 9
+    },
+    {
+      "id": "advanced_trees",
+      "title": "Advanced Trees & Self-Balancing Trees",
+      "icon": "FolderTree",
+      "description": "Self-balancing binary search trees, multi-way indexing trees, randomized trees, and amortized data structures including AVL, Red-Black, B-Tree, B+ Tree, Treap, and Splay Tree.",
+      "file": "advanced_trees.json",
+      "algorithmCount": 6
+    },
+    {
+      "id": "number_theory",
+      "title": "Number Theory & Prime Mathematics",
+      "icon": "Layers",
+      "description": "Fundamental and advanced competitive programming number theory algorithms: Primality testing, Factorization, Euclidean & Extended Euclidean, Sieve of Eratosthenes, Segmented Sieve, and Linear Sieve (SPF).",
+      "file": "number_theory.json",
+      "algorithmCount": 6
+    },
+    {
+      "id": "modular_arithmetic",
+      "title": "Modular Arithmetic & Fast Exponentiation",
+      "icon": "Zap",
+      "description": "Modular properties, negative modulo handling, Fast Binary Exponentiation, Modular Inverse via Fermat's Theorem & Extended GCD, and Chinese Remainder Theorem.",
+      "file": "modular_arithmetic.json",
+      "algorithmCount": 4
+    },
+    {
+      "id": "combinatorics",
+      "title": "Combinatorics & Discrete Mathematics",
+      "icon": "Layers",
+      "description": "Permutations, Combinations, Factorials, Pascal's Triangle, Lucas' Theorem for nCr modulo prime, and Inclusion-Exclusion Principle.",
+      "file": "combinatorics.json",
+      "algorithmCount": 7
+    },
+    {
+      "id": "probability_randomized",
+      "title": "Probability & Randomized Algorithms",
+      "icon": "Target",
+      "description": "Probability theory, Linearity of Expectation, Randomized QuickSort/QuickSelect, Monte Carlo, and Las Vegas algorithms.",
+      "file": "probability_randomized.json",
+      "algorithmCount": 3
+    },
+    {
+      "id": "game_theory",
+      "title": "Game Theory & Adversarial Search",
+      "icon": "Target",
+      "description": "Impartial & Partisan Games, Winning vs Losing States, Nim Game, Nim-Sum, Sprague-Grundy Theorem, Grundy Numbers (Mex), and Minimax with Alpha-Beta Pruning.",
+      "file": "game_theory.json",
+      "algorithmCount": 7
+    },
+    {
+      "id": "computational_geometry",
+      "title": "Computational Geometry",
+      "icon": "Sprout",
+      "description": "Geometric primitives, line-segment intersections, convex hulls, polygon operations, and geometric sweeping.",
+      "file": "computational_geometry.json",
+      "algorithmCount": 44
+    },
+    {
+      "id": "advanced_strings",
+      "title": "Advanced Strings & Automata",
+      "icon": "Terminal",
+      "description": "Trie, Suffix Array, LCP Array (Kasai), Suffix Tree (Ukkonen), Suffix Automaton (SAM), Aho-Corasick, Boyer-Moore, KMP, Z-Algorithm, Rabin-Karp, Manacher's Algorithm & Applications.",
+      "file": "advanced_strings.json",
+      "algorithmCount": 13
+    },
+    {
+      "id": "greedy",
+      "title": "Greedy Algorithms",
+      "icon": "Target",
+      "description": "Activity selection, interval scheduling, minimum span, and greedy choice strategy.",
+      "file": "greedy.json",
+      "algorithmCount": 21
+    },
+    {
+      "id": "backtracking",
+      "title": "Backtracking & Recursion",
+      "icon": "RotateCcw",
+      "description": "N-Queens, Sudoku, permutations, combinations, and state-space exploration.",
+      "file": "backtracking.json",
+      "algorithmCount": 8
+    },
+    {
+      "id": "bit_manipulation",
+      "title": "Bit Manipulation",
+      "icon": "Cpu",
+      "description": "Bitwise XOR, masking, subset generation, and bitwise tricks.",
+      "file": "bit_manipulation.json",
+      "algorithmCount": 14
+    },
+    {
+      "id": "trie",
+      "title": "Trie & Advanced DS",
+      "icon": "FolderTree",
+      "description": "Prefix trees, autocomplete engines, bitwise XOR trie, and radix trees.",
+      "file": "trie.json",
+      "algorithmCount": 7
+    },
+    {
+      "id": "hashing",
+      "title": "Hashing & Hash Tables",
+      "icon": "Building",
+      "description": "Hash maps, hash sets, frequency maps, two-sum lookups, and prefix sum hashing.",
+      "file": "hashing.json",
+      "algorithmCount": 9
+    },
+    {
+      "id": "sorting",
+      "title": "Sorting Algorithms",
+      "icon": "SlidersHorizontal",
+      "description": "Comparison and non-comparison sorting algorithms and stability analysis.",
+      "file": "sorting.json",
+      "algorithmCount": 12
+    },
+    {
+      "id": "design-oriented-data-structures",
+      "title": "Design-Oriented Data Structures",
+      "icon": "Cpu",
+      "description": "Design-Oriented Data Structures",
+      "file": "design-oriented-data-structures.json",
+      "algorithmCount": 24
+    },
+    {
+      "id": "heaps",
+      "title": "Heap & Priority Queue",
+      "icon": "Layers",
+      "description": "Min heap, max heap, top-K elements, median streaming, and scheduling.",
+      "file": "heaps.json",
+      "algorithmCount": 6
+    }
+  ]
+}

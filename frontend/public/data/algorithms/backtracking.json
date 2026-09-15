@@ -1,0 +1,483 @@
+{
+  "id": "backtracking",
+  "category": {
+    "id": "backtracking",
+    "title": "Backtracking & Recursion",
+    "icon": "RotateCcw",
+    "description": "N-Queens, Sudoku, permutations, combinations, and state-space exploration."
+  },
+  "totalAlgorithms": 8,
+  "algorithms": [
+    {
+      "id": "backtracking-subsets-power-set",
+      "title": "Generate All Subsets / Power Set",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(2^N * N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Generate all $2^N$ possible subsets (the Power Set) of an array of unique elements using binary choice decision trees.",
+      "explanation": [
+        "Decision Tree Model: At index `i`, we have 2 choices:",
+        "Choice 1: Include `nums[i]` in current subset -> Recurse `backtrack(i + 1, current_subset)` -> Pop `nums[i]` (Backtrack step).",
+        "Choice 2: Exclude `nums[i]` from current subset -> Recurse `backtrack(i + 1, current_subset)`.",
+        "Base Case: When `i == len(nums)`, append a copy of `current_subset` to result list."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [1, 2, 3]",
+        "output": "8 Subsets: [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]",
+        "traceSteps": [
+          "Step 1: Start at index 0 (val 1). Include 1 -> path=[1].",
+          "Step 2: Index 1 (val 2). Include 2 -> path=[1, 2].",
+          "Step 3: Index 2 (val 3). Include 3 -> path=[1, 2, 3] (Leaf, record). Backtrack 3 -> path=[1, 2].",
+          "Step 4: Exclude 3 -> path=[1, 2] (Leaf, record). Backtrack 2 -> path=[1].",
+          "Step 5: Include 3 -> path=[1, 3] (Leaf, record). Backtrack 3 -> path=[1]. Backtrack 1 -> path=[].",
+          "Step 6: Continue for branch excluding 1 -> Generates [2, 3], [2], [3], []."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates all $2^N$ combinatoric subsets of a set.",
+        "whenToUse": "When finding all possible combinations or sub-selections.",
+        "whereUsed": "Power set generation, feature selection, logic satisfiability solvers.",
+        "whyOptimal": "Explores each of the $2^N$ subsets exactly once using O(N) recursion depth."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subsets(nums: list[int]) -> list[list[int]]:\n    res = []\n    def backtrack(i, path):\n        if i == len(nums):\n            res.append(path[:])\n            return\n        # Include nums[i]\n        path.append(nums[i])\n        backtrack(i + 1, path)\n        path.pop() # Backtrack\n        # Exclude nums[i]\n        backtrack(i + 1, path)\n    backtrack(0, [])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass Solution {\n    vector<vector<int>> res;\n    void backtrack(int i, vector<int>& path, vector<int>& nums) {\n        if (i == nums.size()) {\n            res.push_back(path);\n            return;\n        }\n        path.push_back(nums[i]);\n        backtrack(i + 1, path, nums);\n        path.pop_back(); // Backtrack\n        backtrack(i + 1, path, nums);\n    }\npublic:\n    vector<vector<int>> subsets(vector<int>& nums) {\n        vector<int> path;\n        backtrack(0, path, nums);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> subsets(int[] nums) {\n        List<List<Integer>> res = new ArrayList<>();\n        backtrack(0, new ArrayList<>(), nums, res);\n        return res;\n    }\n    private void backtrack(int i, List<Integer> path, int[] nums, List<List<Integer>> res) {\n        if (i == nums.length) {\n            res.add(new ArrayList<>(path));\n            return;\n        }\n        path.add(nums[i]);\n        backtrack(i + 1, path, nums, res);\n        path.remove(path.size() - 1); // Backtrack\n        backtrack(i + 1, path, nums, res);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subsets(nums) {\n  const res = [];\n  function backtrack(i, path) {\n    if (i === nums.length) {\n      res.push([...path]);\n      return;\n    }\n    path.push(nums[i]);\n    backtrack(i + 1, path);\n    path.pop(); // Backtrack\n    backtrack(i + 1, path);\n  }\n  backtrack(0, []);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 78 - Subsets",
+          "url": "https://leetcode.com/problems/subsets/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-subsets-ii",
+      "title": "Subsets II (Handling Duplicate Elements)",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(2^N * N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Generate all unique subsets from an array containing duplicate numbers without duplicate subset output.",
+      "explanation": [
+        "Pruning Duplicate Branches: Sort input array `nums` first so duplicate numbers are adjacent.",
+        "Loop-based Backtracking: In loop `for idx in range(start, len(nums))`:",
+        "Skip Duplicate Pruning Condition: If `idx > start and nums[idx] == nums[idx-1]`, skip `continue`! This avoids creating identical subset branches at the same recursion level.",
+        "Recurse `backtrack(idx + 1, path)`."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [1, 2, 2]",
+        "output": "Unique Subsets = [[], [1], [1,2], [1,2,2], [2], [2,2]]",
+        "traceSteps": [
+          "Step 1: Sort nums = [1, 2, 2]. Add [] to result.",
+          "Step 2: Pick 1 -> path=[1] (record).",
+          "Step 3: Pick first 2 at idx=1 -> path=[1, 2] (record). Pick second 2 at idx=2 -> path=[1, 2, 2] (record).",
+          "Step 4: Backtrack to idx=0. Pick first 2 at idx=1 -> path=[2] (record).",
+          "Step 5: At idx=2, nums[2] == nums[1] and idx > start (2 > 1) -> SKIP duplicate 2!",
+          "Step 6: Result contains exactly 6 unique subsets."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates unique subsets from collections containing duplicate items.",
+        "whenToUse": "When duplicate elements are present in input set and uniqueness is required.",
+        "whereUsed": "Unique item bundling, database duplicate group generation.",
+        "whyOptimal": "O(1) duplicate skipping avoids allocating duplicate subset objects."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subsetsWithDup(nums: list[int]) -> list[list[int]]:\n    nums.sort()\n    res = []\n    def backtrack(start, path):\n        res.append(path[:])\n        for i in range(start, len(nums)):\n            if i > start and nums[i] == nums[i-1]:\n                continue # Skip duplicates\n            path.append(nums[i])\n            backtrack(i + 1, path)\n            path.pop()\n    backtrack(0, [])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    vector<vector<int>> res;\n    void backtrack(int start, vector<int>& path, vector<int>& nums) {\n        res.push_back(path);\n        for (int i = start; i < nums.size(); i++) {\n            if (i > start && nums[i] == nums[i-1]) continue;\n            path.push_back(nums[i]);\n            backtrack(i + 1, path, nums);\n            path.pop_back();\n        }\n    }\npublic:\n    vector<vector<int>> subsetsWithDup(vector<int>& nums) {\n        sort(nums.begin(), nums.end());\n        vector<int> path;\n        backtrack(0, path, nums);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> subsetsWithDup(int[] nums) {\n        Arrays.sort(nums);\n        List<List<Integer>> res = new ArrayList<>();\n        backtrack(0, new ArrayList<>(), nums, res);\n        return res;\n    }\n    private void backtrack(int start, List<Integer> path, int[] nums, List<List<Integer>> res) {\n        res.add(new ArrayList<>(path));\n        for (int i = start; i < nums.length; i++) {\n            if (i > start && nums[i] == nums[i-1]) continue;\n            path.add(nums[i]);\n            backtrack(i + 1, path, nums, res);\n            path.remove(path.size() - 1);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subsetsWithDup(nums) {\n  nums.sort((a, b) => a - b);\n  const res = [];\n  function backtrack(start, path) {\n    res.push([...path]);\n    for (let i = start; i < nums.length; i++) {\n      if (i > start && nums[i] === nums[i-1]) continue;\n      path.push(nums[i]);\n      backtrack(i + 1, path);\n      path.pop();\n    }\n  }\n  backtrack(0, []);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 90 - Subsets II",
+          "url": "https://leetcode.com/problems/subsets-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-combination-sum-i",
+      "title": "Combination Sum I (Unlimited Re-use of Candidates)",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(2^Target)",
+      "spaceComplexity": "O(Target)",
+      "summary": "Find all unique combinations of candidate numbers that sum to target, where each candidate number can be chosen UNLIMITED times.",
+      "explanation": [
+        "Unlimited Choice Recursion: At candidate index `i`, we can pick `candidates[i]` multiple times.",
+        "1) Pick Choice: If `target >= candidates[i]`, push candidate, recurse `backtrack(i, target - candidates[i])` (stay at same index `i`), then backtrack `path.pop()`.",
+        "2) Move to Next Candidate Choice: Recurse `backtrack(i + 1, target)`.",
+        "Base Case: If `target == 0`, record combination path."
+      ],
+      "exampleTrace": {
+        "input": "Candidates = [2, 3, 6, 7], Target = 7",
+        "output": "Combinations = [[2, 2, 3], [7]]",
+        "traceSteps": [
+          "Step 1: Pick 2 -> target=5 -> Pick 2 -> target=3 -> Pick 2 -> target=1 (cannot pick 2/3/6/7, backtrack).",
+          "Step 2: At target=3: Pick 3 -> target=0! Match found: [2, 2, 3].",
+          "Step 3: Backtrack to root. Skip 2, 3, 6 -> Pick 7 -> target=0! Match found: [7].",
+          "Step 4: Result combinations: [[2, 2, 3], [7]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds target sum combinations when candidates can be reused infinitely.",
+        "whenToUse": "When elements can be selected multiple times to meet target sum.",
+        "whereUsed": "Payment denomination combinations, recipe ingredient combination search.",
+        "whyOptimal": "Prunes branches immediately when candidate value exceeds remaining target."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def combinationSum(candidates: list[int], target: int) -> list[list[int]]:\n    res = []\n    def backtrack(i, remaining, path):\n        if remaining == 0:\n            res.append(path[:])\n            return\n        if i == len(candidates) or remaining < 0:\n            return\n        # Option 1: Pick candidates[i] (can pick again)\n        if candidates[i] <= remaining:\n            path.append(candidates[i])\n            backtrack(i, remaining - candidates[i], path)\n            path.pop() # Backtrack\n        # Option 2: Skip candidates[i]\n        backtrack(i + 1, remaining, path)\n    backtrack(0, target, [])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass Solution {\n    vector<vector<int>> res;\n    void backtrack(int i, int remaining, vector<int>& path, vector<int>& candidates) {\n        if (remaining == 0) {\n            res.push_back(path);\n            return;\n        }\n        if (i == candidates.size() || remaining < 0) return;\n        if (candidates[i] <= remaining) {\n            path.push_back(candidates[i]);\n            backtrack(i, remaining - candidates[i], path, candidates);\n            path.pop_back();\n        }\n        backtrack(i + 1, remaining, path, candidates);\n    }\npublic:\n    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {\n        vector<int> path;\n        backtrack(0, target, path, candidates);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> combinationSum(int[] candidates, int target) {\n        List<List<Integer>> res = new ArrayList<>();\n        backtrack(0, target, new ArrayList<>(), candidates, res);\n        return res;\n    }\n    private void backtrack(int i, int remaining, List<Integer> path, int[] candidates, List<List<Integer>> res) {\n        if (remaining == 0) {\n            res.add(new ArrayList<>(path));\n            return;\n        }\n        if (i == candidates.length || remaining < 0) return;\n        if (candidates[i] <= remaining) {\n            path.add(candidates[i]);\n            backtrack(i, remaining - candidates[i], path, candidates, res);\n            path.remove(path.size() - 1);\n        }\n        backtrack(i + 1, remaining, path, candidates, res);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function combinationSum(candidates, target) {\n  const res = [];\n  function backtrack(i, remaining, path) {\n    if (remaining === 0) {\n      res.push([...path]);\n      return;\n    }\n    if (i === candidates.length || remaining < 0) return;\n    if (candidates[i] <= remaining) {\n      path.push(candidates[i]);\n      backtrack(i, remaining - candidates[i], path);\n      path.pop();\n    }\n    backtrack(i + 1, remaining, path);\n  }\n  backtrack(0, target, []);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 39 - Combination Sum",
+          "url": "https://leetcode.com/problems/combination-sum/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-permutations-i",
+      "title": "Permutations I (All Unique Permutations)",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N! * N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Generate all $N!$ distinct order permutations of an array of unique integers.",
+      "explanation": [
+        "In-Place Swapping Backtracking Strategy:",
+        "Fix element at index `idx`. Swap `nums[idx]` with `nums[i]` for every `i` from `idx` to `N-1`.",
+        "Recurse `backtrack(idx + 1)`.",
+        "Backtrack: Swap `nums[idx]` back with `nums[i]` to restore original array state for next branch.",
+        "Base Case: When `idx == len(nums)`, append a copy of `nums` to result list."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [1, 2, 3]",
+        "output": "6 Permutations: [[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,2,1], [3,1,2]]",
+        "traceSteps": [
+          "Step 1: Fix 1 at pos 0 -> swap(1,1). Branch 2 at pos 1 -> [1,2,3] (Leaf). Swap(2,3) -> [1,3,2] (Leaf).",
+          "Step 2: Backtrack to pos 0. Swap(1,2) -> Fix 2 at pos 0. Generates [2,1,3], [2,3,1].",
+          "Step 3: Backtrack to pos 0. Swap(1,3) -> Fix 3 at pos 0. Generates [3,2,1], [3,1,2].",
+          "Step 4: All 3! = 6 permutations generated."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates all $N!$ ordered arrangements of a distinct set.",
+        "whenToUse": "When evaluating all orderings or sequence arrangements.",
+        "whereUsed": "TSP brute-force search, permutation testing, puzzle order generation.",
+        "whyOptimal": "In-place array swapping avoids extra visited array allocations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def permute(nums: list[int]) -> list[list[int]]:\n    res = []\n    def backtrack(first):\n        if first == len(nums):\n            res.append(nums[:])\n            return\n        for i in range(first, len(nums)):\n            nums[first], nums[i] = nums[i], nums[first]\n            backtrack(first + 1)\n            nums[first], nums[i] = nums[i], nums[first] # Backtrack\n    backtrack(0)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    vector<vector<int>> res;\n    void backtrack(int first, vector<int>& nums) {\n        if (first == nums.size()) {\n            res.push_back(nums);\n            return;\n        }\n        for (int i = first; i < nums.size(); i++) {\n            swap(nums[first], nums[i]);\n            backtrack(first + 1, nums);\n            swap(nums[first], nums[i]); // Backtrack\n        }\n    }\npublic:\n    vector<vector<int>> permute(vector<int>& nums) {\n        backtrack(0, nums);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> permute(int[] nums) {\n        List<List<Integer>> res = new ArrayList<>();\n        backtrack(0, nums, res);\n        return res;\n    }\n    private void backtrack(int first, int[] nums, List<List<Integer>> res) {\n        if (first == nums.length) {\n            List<Integer> list = new ArrayList<>();\n            for (int n : nums) list.add(n);\n            res.add(list);\n            return;\n        }\n        for (int i = first; i < nums.length; i++) {\n            swap(nums, first, i);\n            backtrack(first + 1, nums, res);\n            swap(nums, first, i); // Backtrack\n        }\n    }\n    private void swap(int[] nums, int i, int j) {\n        int t = nums[i]; nums[i] = nums[j]; nums[j] = t;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function permute(nums) {\n  const res = [];\n  function backtrack(first) {\n    if (first === nums.length) {\n      res.push([...nums]);\n      return;\n    }\n    for (let i = first; i < nums.length; i++) {\n      [nums[first], nums[i]] = [nums[i], nums[first]];\n      backtrack(first + 1);\n      [nums[first], nums[i]] = [nums[i], nums[first]];\n    }\n  }\n  backtrack(0);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 46 - Permutations",
+          "url": "https://leetcode.com/problems/permutations/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-n-queens",
+      "title": "N-Queens Problem (N-Queens I & II)",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N!)",
+      "spaceComplexity": "O(N)",
+      "summary": "Place N chess queens on an N x N chessboard such that no two queens attack each other using $O(1)$ diagonal hashing sets.",
+      "explanation": [
+        "Queens Attack Invariants: Two queens attack each other if they share the same row, column, main diagonal, or anti-diagonal.",
+        "Row-by-Row Placement: Place 1 queen per row `r`. We need to verify 3 conflict conditions:",
+        "1) Column conflict: `col in cols_set`.",
+        "2) Main Diagonal conflict: `(r + c) in diag_set`.",
+        "3) Anti-Diagonal conflict: `(r - c) in anti_diag_set`.",
+        "$O(1)$ Hash Set Pruning: Maintain 3 Sets (`cols`, `posDiag`, `negDiag`). Adding/removing from sets in $O(1)$ time prunes invalid queen positions instantly!"
+      ],
+      "exampleTrace": {
+        "input": "N = 4 Chessboard",
+        "output": "2 Valid Queen Solutions",
+        "traceSteps": [
+          "Step 1: Row 0: Place Queen at (0, 1). Add col 1, diag (0+1)=1, anti-diag (0-1)=-1 to sets.",
+          "Step 2: Row 1: Try col 0, 1, 2 (all conflict). Place Queen at (1, 3). Add sets.",
+          "Step 3: Row 2: Place Queen at (2, 0). Add sets.",
+          "Step 4: Row 3: Place Queen at (3, 2). All 4 rows placed! Solution 1 found: [\".Q..\", \"...Q\", \"Q...\", \"..Q.\"].",
+          "Step 5: Backtrack to explore remaining configurations."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves multi-dimensional non-attacking constraint satisfaction puzzles.",
+        "whenToUse": "When placing N non-interfering elements on a grid matrix.",
+        "whereUsed": "Parallel processor task allocation without cache line conflict, VLSI chip component layout.",
+        "whyOptimal": "O(1) diagonal hashing prunes non-promising branches early."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def solveNQueens(n: int) -> list[list[str]]:\n    res = []\n    board = [[\".\"] * n for _ in range(n)]\n    cols = set()\n    posDiag = set() # (r + c)\n    negDiag = set() # (r - c)\n    \n    def backtrack(r):\n        if r == n:\n            res.append([\"\".join(row) for row in board])\n            return\n        for c in range(n):\n            if c in cols or (r + c) in posDiag or (r - c) in negDiag:\n                continue # Conflict! Prune branch\n                \n            cols.add(c)\n            posDiag.add(r + c)\n            negDiag.add(r - c)\n            board[r][c] = \"Q\"\n            \n            backtrack(r + 1)\n            \n            # Backtrack\n            cols.remove(c)\n            posDiag.remove(r + c)\n            negDiag.remove(r - c)\n            board[r][c] = \".\"\n            \n    backtrack(0)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <unordered_set>\nusing namespace std;\n\nclass Solution {\n    vector<vector<string>> res;\n    unordered_set<int> cols, posDiag, negDiag;\n    void backtrack(int r, int n, vector<string>& board) {\n        if (r == n) {\n            res.push_back(board);\n            return;\n        }\n        for (int c = 0; c < n; c++) {\n            if (cols.count(c) || posDiag.count(r + c) || negDiag.count(r - c)) continue;\n            cols.insert(c); posDiag.insert(r + c); negDiag.insert(r - c);\n            board[r][c] = 'Q';\n            backtrack(r + 1, n, board);\n            cols.erase(c); posDiag.erase(r + c); negDiag.erase(r - c);\n            board[r][c] = '.';\n        }\n    }\npublic:\n    vector<vector<string>> solveNQueens(int n) {\n        vector<string> board(n, string(n, '.'));\n        backtrack(0, n, board);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private List<List<String>> res = new ArrayList<>();\n    private Set<Integer> cols = new HashSet<>(), posDiag = new HashSet<>(), negDiag = new HashSet<>();\n    public List<List<String>> solveNQueens(int n) {\n        char[][] board = new char[n][n];\n        for (char[] row : board) Arrays.fill(row, '.');\n        backtrack(0, n, board);\n        return res;\n    }\n    private void backtrack(int r, int n, char[][] board) {\n        if (r == n) {\n            List<String> list = new ArrayList<>();\n            for (char[] row : board) list.add(new String(row));\n            res.add(list);\n            return;\n        }\n        for (int c = 0; c < n; c++) {\n            if (cols.contains(c) || posDiag.contains(r + c) || negDiag.contains(r - c)) continue;\n            cols.add(c); posDiag.add(r + c); negDiag.add(r - c);\n            board[r][c] = 'Q';\n            backtrack(r + 1, n, board);\n            cols.remove(c); posDiag.remove(r + c); negDiag.remove(r - c);\n            board[r][c] = '.';\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function solveNQueens(n) {\n  const res = [];\n  const board = Array.from({ length: n }, () => new Array(n).fill('.'));\n  const cols = new Set(), posDiag = new Set(), negDiag = new Set();\n  function backtrack(r) {\n    if (r === n) {\n      res.push(board.map(row => row.join('')));\n      return;\n    }\n    for (let c = 0; c < n; c++) {\n      if (cols.has(c) || posDiag.has(r + c) || negDiag.has(r - c)) continue;\n      cols.add(c); posDiag.add(r + c); negDiag.add(r - c);\n      board[r][c] = 'Q';\n      backtrack(r + 1);\n      cols.delete(c); posDiag.delete(r + c); negDiag.delete(r - c);\n      board[r][c] = '.';\n    }\n  }\n  backtrack(0);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 51 - N-Queens",
+          "url": "https://leetcode.com/problems/n-queens/",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "LeetCode 52 - N-Queens II",
+          "url": "https://leetcode.com/problems/n-queens-ii/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-sudoku-solver",
+      "title": "Sudoku Solver",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Hard",
+      "timeComplexity": "O(9^(N*N))",
+      "spaceComplexity": "O(1)",
+      "summary": "Solve a 9 x 9 Sudoku puzzle in-place by trying digits 1 to 9 in empty cells with row, column, and 3x3 subgrid validity checks.",
+      "explanation": [
+        "Validation Invariant: A digit `d` ('1'-'9') is valid at `board[r][c]` if:",
+        "1) `d` is NOT in row `r`.",
+        "2) `d` is NOT in col `c`.",
+        "3) `d` is NOT in the 3x3 subgrid starting at `(3 * (r // 3), 3 * (c // 3))`.",
+        "Backtracking Step: Iterate through grid cells `(r, c)`. For empty cell `'.'`: try digits '1'..'9'. If valid, place digit, recurse `solve()`. If recursive call returns True, return True! If no digit works, reset `board[r][c] = '.'` (Backtrack) and return False."
+      ],
+      "exampleTrace": {
+        "input": "9 x 9 Sudoku grid with empty cells '.'",
+        "output": "Sudoku solved in-place",
+        "traceSteps": [
+          "Step 1: Scan for empty cell -> Found at (0, 2).",
+          "Step 2: Try digit '1' -> Row check fails.",
+          "Step 3: Try digit '4' -> Valid! Place '4' at (0, 2). Recurse solve().",
+          "Step 4: Continue solving downstream cells...",
+          "Step 5: Return True when all 81 cells are filled!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Fills empty cells in 9x9 grid satisfying row, column, and box constraints.",
+        "whenToUse": "When solving 2D grid constraint satisfaction puzzles.",
+        "whereUsed": "Sudoku puzzle engines, automated logic constraint solvers.",
+        "whyOptimal": "Constraint validity check prunes 99%+ of dead-end decision branches."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def solveSudoku(board: list[list[str]]) -> None:\n    def is_valid(r, c, ch):\n        for i in range(9):\n            if board[r][i] == ch: return False\n            if board[i][c] == ch: return False\n            if board[3 * (r // 3) + i // 3][3 * (c // 3) + i % 3] == ch: return False\n        return True\n        \n    def solve():\n        for r in range(9):\n            for c in range(9):\n                if board[r][c] == '.':\n                    for ch in '123456789':\n                        if is_valid(r, c, ch):\n                            board[r][c] = ch\n                            if solve(): return True\n                            board[r][c] = '.' # Backtrack\n                    return False\n        return True\n    solve()"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass Solution {\n    bool isValid(int r, int c, char ch, vector<vector<char>>& board) {\n        for (int i = 0; i < 9; i++) {\n            if (board[r][i] == ch) return false;\n            if (board[i][c] == ch) return false;\n            if (board[3 * (r / 3) + i / 3][3 * (c / 3) + i % 3] == ch) return false;\n        }\n        return true;\n    }\npublic:\n    bool solveSudoku(vector<vector<char>>& board) {\n        for (int r = 0; r < 9; r++) {\n            for (int c = 0; c < 9; c++) {\n                if (board[r][c] == '.') {\n                    for (char ch = '1'; ch <= '9'; ch++) {\n                        if (isValid(r, c, ch, board)) {\n                            board[r][c] = ch;\n                            if (solveSudoku(board)) return true;\n                            board[r][c] = '.';\n                        }\n                    }\n                    return false;\n                }\n            }\n        }\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public void solveSudoku(char[][] board) {\n        solve(board);\n    }\n    private boolean solve(char[][] board) {\n        for (int r = 0; r < 9; r++) {\n            for (int c = 0; c < 9; c++) {\n                if (board[r][c] == '.') {\n                    for (char ch = '1'; ch <= '9'; ch++) {\n                        if (isValid(r, c, ch, board)) {\n                            board[r][c] = ch;\n                            if (solve(board)) return true;\n                            board[r][c] = '.';\n                        }\n                    }\n                    return false;\n                }\n            }\n        }\n        return true;\n    }\n    private boolean isValid(int r, int c, char ch, char[][] board) {\n        for (int i = 0; i < 9; i++) {\n            if (board[r][i] == ch) return false;\n            if (board[i][c] == ch) return false;\n            if (board[3 * (r / 3) + i / 3][3 * (c / 3) + i % 3] == ch) return false;\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function solveSudoku(board) {\n  function isValid(r, c, ch) {\n    for (let i = 0; i < 9; i++) {\n      if (board[r][i] === ch) return false;\n      if (board[i][c] === ch) return false;\n      if (board[3 * Math.floor(r / 3) + Math.floor(i / 3)][3 * Math.floor(c / 3) + i % 3] === ch) return false;\n    }\n    return true;\n  }\n  function solve() {\n    for (let r = 0; r < 9; r++) {\n      for (let c = 0; c < 9; c++) {\n        if (board[r][c] === '.') {\n          for (let ch = 1; ch <= 9; ch++) {\n            const charStr = String(ch);\n            if (isValid(r, c, charStr)) {\n              board[r][c] = charStr;\n              if (solve()) return true;\n              board[r][c] = '.';\n            }\n          }\n          return false;\n        }\n      }\n    }\n    return true;\n  }\n  solve();\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 37 - Sudoku Solver",
+          "url": "https://leetcode.com/problems/sudoku-solver/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-word-search-i",
+      "title": "Word Search I in Grid (2D Board Traversal)",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(M * N * 4^L)",
+      "spaceComplexity": "O(L)",
+      "summary": "Determine if a target word exists in a 2D character board using 4-directional DFS grid traversal with in-place cell marking.",
+      "explanation": [
+        "Grid DFS Invariant: Search in 4 orthogonal directions (Up, Down, Left, Right).",
+        "In-Place Marking: Temporarily mark `board[r][c] = '#'` to prevent revisiting the same cell in current path.",
+        "Backtracking Step: Restore `board[r][c] = temp_char` after 4-directional DFS calls return.",
+        "Base Case: If `word_idx == len(word)`, target word found! Return True."
+      ],
+      "exampleTrace": {
+        "input": "Board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], Word = \"ABCCED\"",
+        "output": "Word Exists = True",
+        "traceSteps": [
+          "Step 1: Start DFS at (0,0) 'A'. Match! Mark '#'. Search word[1] 'B'.",
+          "Step 2: Move right to (0,1) 'B'. Match! Mark '#'. Search word[2] 'C'.",
+          "Step 3: Move right to (0,2) 'C'. Match! Mark '#'. Search word[3] 'C'.",
+          "Step 4: Move down to (1,2) 'C'. Match! Mark '#'. Search word[4] 'E'.",
+          "Step 5: Move down to (2,2) 'E'. Match! Mark '#'. Search word[5] 'D'.",
+          "Step 6: Move left to (2,1) 'D'. Match! Length reached -> Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Searches for continuous character paths in 2D grids without repeating cells.",
+        "whenToUse": "When finding string paths in 2D character matrices.",
+        "whereUsed": "Boggle word search game, OCR text pattern matching.",
+        "whyOptimal": "In-place cell modification eliminates external 2D visited boolean array allocations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def exist(board: list[list[str]], word: str) -> bool:\n    m, n = len(board), len(board[0])\n    def dfs(r, c, k):\n        if k == len(word): return True\n        if r < 0 or r >= m or c < 0 or c >= n or board[r][c] != word[k]:\n            return False\n        temp = board[r][c]\n        board[r][c] = '#' # Mark visited\n        res = (dfs(r + 1, c, k + 1) or \n               dfs(r - 1, c, k + 1) or \n               dfs(r, c + 1, k + 1) or \n               dfs(r, c - 1, k + 1))\n        board[r][c] = temp # Backtrack\n        return res\n        \n    for r in range(m):\n        for c in range(n):\n            if dfs(r, c, 0): return True\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\n    int m, n;\n    bool dfs(int r, int c, int k, vector<vector<char>>& board, string& word) {\n        if (k == word.size()) return true;\n        if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] != word[k]) return false;\n        char temp = board[r][c];\n        board[r][c] = '#';\n        bool res = dfs(r + 1, c, k + 1, board, word) ||\n                   dfs(r - 1, c, k + 1, board, word) ||\n                   dfs(r, c + 1, k + 1, board, word) ||\n                   dfs(r, c - 1, k + 1, board, word);\n        board[r][c] = temp;\n        return res;\n    }\npublic:\n    bool exist(vector<vector<char>>& board, string word) {\n        m = board.size(); n = board[0].size();\n        for (int r = 0; r < m; r++) {\n            for (int c = 0; c < n; c++) {\n                if (dfs(r, c, 0, board, word)) return true;\n            }\n        }\n        return false;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    private int m, n;\n    public boolean exist(char[][] board, String word) {\n        m = board.length; n = board[0].length;\n        for (int r = 0; r < m; r++) {\n            for (int c = 0; c < n; c++) {\n                if (dfs(r, c, 0, board, word)) return true;\n            }\n        }\n        return false;\n    }\n    private boolean dfs(int r, int c, int k, char[][] board, String word) {\n        if (k == word.length()) return true;\n        if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] != word.charAt(k)) return false;\n        char temp = board[r][c];\n        board[r][c] = '#';\n        boolean res = dfs(r + 1, c, k + 1, board, word) ||\n                      dfs(r - 1, c, k + 1, board, word) ||\n                      dfs(r, c + 1, k + 1, board, word) ||\n                      dfs(r, c - 1, k + 1, board, word);\n        board[r][c] = temp;\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function exist(board, word) {\n  const m = board.length, n = board[0].length;\n  function dfs(r, c, k) {\n    if (k === word.length) return true;\n    if (r < 0 || r >= m || c < 0 || c >= n || board[r][c] !== word[k]) return false;\n    const temp = board[r][c];\n    board[r][c] = '#';\n    const res = dfs(r + 1, c, k + 1) ||\n                dfs(r - 1, c, k + 1) ||\n                dfs(r, c + 1, k + 1) ||\n                dfs(r, c - 1, k + 1);\n    board[r][c] = temp;\n    return res;\n  }\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) {\n      if (dfs(r, c, 0)) return true;\n    }\n  }\n  return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 79 - Word Search",
+          "url": "https://leetcode.com/problems/word-search/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "backtracking-rat-in-a-maze",
+      "title": "Rat in a Maze Problem",
+      "categoryId": "backtracking",
+      "categoryTitle": "Backtracking & Recursion",
+      "difficulty": "Medium",
+      "timeComplexity": "O(4^(N^2))",
+      "spaceComplexity": "O(N^2)",
+      "summary": "Find all lexicographically sorted direction paths ('D', 'L', 'R', 'U') for a rat to reach (N-1, N-1) from (0,0) in an N x N binary matrix.",
+      "explanation": [
+        "Directions Lexicographical Order: Down ('D'), Left ('L'), Right ('R'), Up ('U').",
+        "Matrix Cell Checks: Cell `(r, c)` must be inside grid bounds and have value `1` (open path) and NOT be visited.",
+        "Backtracking Step: Mark `visited[r][c] = 1`, append direction character to path string, recurse DFS, then unmark `visited[r][c] = 0` (Backtrack)."
+      ],
+      "exampleTrace": {
+        "input": "N = 4 Matrix: [[1, 0, 0, 0], [1, 1, 0, 1], [1, 1, 0, 0], [0, 1, 1, 1]]",
+        "output": "Paths: [\"DDDRRR\", \"DRDDRR\"]",
+        "traceSteps": [
+          "Step 1: Start at (0,0). Move Down -> (1,0). Move Down -> (2,0). Move Down -> (3,0) (Blocked by 0!).",
+          "Step 2: From (2,0), move Right -> (2,1). Move Down -> (3,1). Move Right -> (3,2). Move Right -> (3,3). Target reached! Path: \"DDDRRR\".",
+          "Step 3: Backtrack to explore second path -> \"DRDDRR\"."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates all valid paths through obstacle-laden 2D grid mazes.",
+        "whenToUse": "When outputting all valid paths from source to destination.",
+        "whereUsed": "Robot maze navigation, pathfinder games.",
+        "whyOptimal": "Lexicographical order exploration generates paths in sorted order automatically."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findPath(m: list[list[int]], n: int) -> list[str]:\n    res = []\n    if m[0][0] == 0 or m[n-1][n-1] == 0: return res\n    dirs = [('D', 1, 0), ('L', 0, -1), ('R', 0, 1), ('U', -1, 0)]\n    visited = [[0] * n for _ in range(n)]\n    \n    def dfs(r, c, path):\n        if r == n - 1 and c == n - 1:\n            res.append(path)\n            return\n        visited[r][c] = 1\n        for ch, dr, dc in dirs:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc] and m[nr][nc] == 1:\n                dfs(nr, nc, path + ch)\n        visited[r][c] = 0 # Backtrack\n        \n    dfs(0, 0, \"\")\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\n    vector<string> res;\n    int dx[4] = {1, 0, 0, -1};\n    int dy[4] = {0, -1, 1, 0};\n    char dChar[4] = {'D', 'L', 'R', 'U'};\n    void dfs(int r, int c, int n, string path, vector<vector<int>>& m, vector<vector<int>>& vis) {\n        if (r == n - 1 && c == n - 1) {\n            res.push_back(path);\n            return;\n        }\n        vis[r][c] = 1;\n        for (int i = 0; i < 4; i++) {\n            int nr = r + dx[i], nc = c + dy[i];\n            if (nr >= 0 && nr < n && nc >= 0 && nc < n && !vis[nr][nc] && m[nr][nc] == 1) {\n                dfs(nr, nc, n, path + dChar[i], m, vis);\n            }\n        }\n        vis[r][c] = 0;\n    }\npublic:\n    vector<string> findPath(vector<vector<int>>& m, int n) {\n        if (m[0][0] == 0 || m[n-1][n-1] == 0) return {};\n        vector<vector<int>> vis(n, vector<int>(n, 0));\n        dfs(0, 0, n, \"\", m, vis);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private List<String> res = new ArrayList<>();\n    private int[] dx = {1, 0, 0, -1};\n    private int[] dy = {0, -1, 1, 0};\n    private char[] dChar = {'D', 'L', 'R', 'U'};\n    public List<String> findPath(int[][] m, int n) {\n        if (m[0][0] == 0 || m[n-1][n-1] == 0) return res;\n        int[][] vis = new int[n][n];\n        dfs(0, 0, n, \"\", m, vis);\n        return res;\n    }\n    private void dfs(int r, int c, int n, String path, int[][] m, int[][] vis) {\n        if (r == n - 1 && c == n - 1) {\n            res.add(path);\n            return;\n        }\n        vis[r][c] = 1;\n        for (int i = 0; i < 4; i++) {\n            int nr = r + dx[i], nc = c + dy[i];\n            if (nr >= 0 && nr < n && nc >= 0 && nc < n && vis[nr][nc] == 0 && m[nr][nc] == 1) {\n                dfs(nr, nc, n, path + dChar[i], m, vis);\n            }\n        }\n        vis[r][c] = 0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findPath(m, n) {\n  const res = [];\n  if (m[0][0] === 0 || m[n-1][n-1] === 0) return res;\n  const dirs = [['D', 1, 0], ['L', 0, -1], ['R', 0, 1], ['U', -1, 0]];\n  const vis = Array.from({ length: n }, () => new Array(n).fill(0));\n  function dfs(r, c, path) {\n    if (r === n - 1 && c === n - 1) {\n      res.push(path);\n      return;\n    }\n    vis[r][c] = 1;\n    for (const [ch, dr, dc] of dirs) {\n      const nr = r + dr, nc = c + dc;\n      if (nr >= 0 && nr < n && nc >= 0 && nc < n && !vis[nr][nc] && m[nr][nc] === 1) {\n        dfs(nr, nc, path + ch);\n      }\n    }\n    vis[r][c] = 0;\n  }\n  dfs(0, 0, '');\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Rat in a Maze Problem - I",
+          "url": "https://www.geeksforgeeks.org/problems/rat-in-a-maze-problem/1",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

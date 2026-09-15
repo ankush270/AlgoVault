@@ -1,0 +1,580 @@
+{
+  "id": "bst",
+  "category": {
+    "id": "bst",
+    "title": "Binary Search Trees",
+    "icon": "FolderTree",
+    "description": "BST operations, validation, iterators, rank statistics, and transformations."
+  },
+  "totalAlgorithms": 10,
+  "algorithms": [
+    {
+      "id": "bst-search-insert-delete",
+      "title": "Binary Search Tree Operations (Search, Insert, Delete)",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(H) where H is tree height (O(log N) balanced, O(N) skewed)",
+      "spaceComplexity": "O(H) recursion stack space",
+      "summary": "Core BST dictionary operations: Search, Insert, and Delete node (handling 0, 1, and 2 children with in-order successor replacement).",
+      "explanation": [
+        "1. BST Property: For every node, all values in its Left Subtree are `< node.val` and all values in its Right Subtree are `> node.val`.",
+        "2. Search: Compare key with `node.val`. If `key < node.val` search Left; if `key > node.val` search Right; else found!",
+        "3. Insert: Search for insertion position until reaching `null`. Attach new node as leaf.",
+        "4. Delete: Locate target node. Case 1 (Leaf): Remove node. Case 2 (1 Child): Replace node with child. Case 3 (2 Children): Find Inorder Successor (min node in right subtree), replace node value with successor value, and recursively delete successor."
+      ],
+      "exampleTrace": {
+        "title": "Trace Delete Node 5 in BST [5, 3, 6, 2, 4, null, 7]",
+        "traceSteps": [
+          "Target Node to delete is 5 (Root, 2 Children).",
+          "Find Inorder Successor: Min node in Right Subtree of 5 is 6.",
+          "Replace Root value 5 with Successor value 6.",
+          "Recursively delete original node 6 from Right Subtree.",
+          "Updated BST root becomes 6 with children 3 and 7."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains dynamic ordered set supporting fast search, insertion, and deletion operations.",
+        "whenToUse": "Use when maintaining dynamically changing sorted data requiring log-time lookups and modifications.",
+        "whereUsed": "Database indices (B-Trees / Red-Black Trees), C++ std::set / std::map, Java TreeSet.",
+        "whyOptimal": "Prunes half of the search space at each comparison step in balanced trees."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def deleteNode(root, key):\n    if not root: return None\n    if key < root.val:\n        root.left = deleteNode(root.left, key)\n    elif key > root.val:\n        root.right = deleteNode(root.right, key)\n    else:\n        if not root.left: return root.right\n        if not root.right: return root.left\n        curr = root.right\n        while curr.left: curr = curr.left\n        root.val = curr.val\n        root.right = deleteNode(root.right, curr.val)\n    return root"
+        },
+        {
+          "language": "cpp",
+          "code": "struct TreeNode { int val; TreeNode *left, *right; };\n\nTreeNode* deleteNode(TreeNode* root, int key) {\n    if (!root) return nullptr;\n    if (key < root->val) root->left = deleteNode(root->left, key);\n    else if (key > root->val) root->right = deleteNode(root->right, key);\n    else {\n        if (!root->left) return root->right;\n        if (!root->right) return root->left;\n        TreeNode* curr = root->right;\n        while (curr->left) curr = curr->left;\n        root->val = curr->val;\n        root->right = deleteNode(root->right, curr->val);\n    }\n    return root;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public TreeNode deleteNode(TreeNode root, int key) {\n        if (root == null) return null;\n        if (key < root.val) root.left = deleteNode(root.left, key);\n        else if (key > root.val) root.right = deleteNode(root.right, key);\n        else {\n            if (root.left == null) return root.right;\n            if (root.right == null) return root.left;\n            TreeNode curr = root.right;\n            while (curr.left != null) curr = curr.left;\n            root.val = curr.val;\n            root.right = deleteNode(root.right, curr.val);\n        }\n        return root;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function deleteNode(root, key) {\n  if (!root) return null;\n  if (key < root.val) root.left = deleteNode(root.left, key);\n  else if (key > root.val) root.right = deleteNode(root.right, key);\n  else {\n    if (!root.left) return root.right;\n    if (!root.right) return root.left;\n    let curr = root.right;\n    while (curr.left) curr = curr.left;\n    root.val = curr.val;\n    root.right = deleteNode(root.right, curr.val);\n  }\n  return root;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 450 - Delete Node in a BST",
+          "url": "https://leetcode.com/problems/delete-node-in-a-bst/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 700 - Search in a Binary Search Tree",
+          "url": "https://leetcode.com/problems/search-in-a-binary-search-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bst-validation",
+      "title": "Validate Binary Search Tree",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Validates whether a binary tree satisfies the strict Binary Search Tree ordering properties across all subtrees.",
+      "explanation": [
+        "1. Pitfall: Checking only `root.left.val < root.val < root.right.val` is INSUFFICIENT because right descendants must be greater than all ancestral nodes!",
+        "2. Range Validation: Pass valid range `(low, high)` down recursion. Root value must satisfy `low < root.val < high`.",
+        "3. Recurse `left` with range `(low, root.val)` and `right` with range `(root.val, high)`.",
+        "4. Inorder Traversal Alternative: Inorder traversal of a valid BST must yield a strictly increasing sorted array."
+      ],
+      "exampleTrace": {
+        "title": "Trace Validate BST on [5, 1, 4, null, null, 3, 6]",
+        "traceSteps": [
+          "Root 5: Valid range (-inf, +inf).",
+          "Left Child 1: Range (-inf, 5) -> Valid.",
+          "Right Child 4: Range (5, +inf) -> Violation! 4 is not > 5.",
+          "Result: Invalid BST (False)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies correctness of BST invariants after tree modifications or deserialization.",
+        "whenToUse": "Use when checking data integrity of search tree data structures.",
+        "whereUsed": "Database index integrity verifiers, self-balancing tree assertions.",
+        "whyOptimal": "Single pass O(N) traversal validates all subtree invariants simultaneously."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isValidBST(root) -> bool:\n    def validate(node, low=float('-inf'), high=float('inf')):\n        if not node: return True\n        if not (low < node.val < high): return False\n        return validate(node.left, low, node.val) and validate(node.right, node.val, high)\n    return validate(root)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <climits>\nusing namespace std;\n\nstruct TreeNode { int val; TreeNode *left, *right; };\n\nbool validate(TreeNode* node, long long low, long long high) {\n    if (!node) return true;\n    if (node->val <= low || node->val >= high) return false;\n    return validate(node->left, low, node->val) && validate(node->right, node->val, high);\n}\n\nbool isValidBST(TreeNode* root) {\n    return validate(root, LLONG_MIN, LLONG_MAX);\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public boolean isValidBST(TreeNode root) {\n        return validate(root, Long.MIN_VALUE, Long.MAX_VALUE);\n    }\n    private boolean validate(TreeNode node, long low, long high) {\n        if (node == null) return true;\n        if (node.val <= low || node.val >= high) return false;\n        return validate(node.left, low, node.val) && validate(node.right, node.val, high);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isValidBST(root) {\n  function validate(node, low = -Infinity, high = Infinity) {\n    if (!node) return true;\n    if (node.val <= low || node.val >= high) return false;\n    return validate(node.left, low, node.val) && validate(node.right, node.val, high);\n  }\n  return validate(root);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 98 - Validate Binary Search Tree",
+          "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bst-kth-smallest-largest",
+      "title": "Kth Smallest and Kth Largest Element in BST",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(H + K)",
+      "spaceComplexity": "O(H)",
+      "summary": "Finds the K-th smallest or K-th largest node value in a BST using early-stopping Inorder or Reverse-Inorder traversal.",
+      "explanation": [
+        "1. Inorder Traversal Property: Inorder traversal (`Left -> Root -> Right`) visits BST nodes in strictly sorted ascending order.",
+        "2. Kth Smallest: Perform Inorder traversal. Decrement `k` at each visited node. When `k == 0`, current node is the K-th smallest!",
+        "3. Kth Largest: Perform Reverse-Inorder traversal (`Right -> Root -> Left`) visiting nodes in strictly descending order. Decrement `k` until 0.",
+        "4. Stop traversal immediately once K-th element is found (Early Exit)."
+      ],
+      "exampleTrace": {
+        "title": "Trace K=3 Smallest on BST [5, 3, 6, 2, 4, null, null, 1]",
+        "traceSteps": [
+          "Inorder Visits: Node 1 (k=3->2), Node 2 (k=2->1), Node 3 (k=1->0).",
+          "k reached 0 at Node 3.",
+          "Result: 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Locates order statistics (K-th minimum / maximum) without array sorting.",
+        "whenToUse": "Use when finding rank statistics in BSTs.",
+        "whereUsed": "Database percentile queries, median streaming algorithms.",
+        "whyOptimal": "Early stopping processes only first K nodes in O(H + K) time rather than O(N) full array sort."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def kthSmallest(root, k: int) -> int:\n    stack = []\n    curr = root\n    while curr or stack:\n        while curr:\n            stack.append(curr)\n            curr = curr.left\n        curr = stack.pop()\n        k -= 1\n        if k == 0:\n            return curr.val\n        curr = curr.right"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <stack>\nusing namespace std;\nstruct TreeNode { int val; TreeNode *left, *right; };\n\nint kthSmallest(TreeNode* root, int k) {\n    stack<TreeNode*> st;\n    TreeNode* curr = root;\n    while (curr || !st.empty()) {\n        while (curr) {\n            st.push(curr);\n            curr = curr->left;\n        }\n        curr = st.top(); st.pop();\n        if (--k == 0) return curr->val;\n        curr = curr->right;\n    }\n    return -1;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public int kthSmallest(TreeNode root, int k) {\n        Deque<TreeNode> stack = new ArrayDeque<>();\n        TreeNode curr = root;\n        while (curr != null || !stack.isEmpty()) {\n            while (curr != null) {\n                stack.push(curr);\n                curr = curr.left;\n            }\n            curr = stack.pop();\n            if (--k == 0) return curr.val;\n            curr = curr.right;\n        }\n        return -1;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function kthSmallest(root, k) {\n  const stack = [];\n  let curr = root;\n  while (curr || stack.length > 0) {\n    while (curr) {\n      stack.push(curr);\n      curr = curr.left;\n    }\n    curr = stack.pop();\n    k--;\n    if (k === 0) return curr.val;\n    curr = curr.right;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 230 - Kth Smallest Element in a BST",
+          "url": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bst-lowest-common-ancestor",
+      "title": "Lowest Common Ancestor of a Binary Search Tree",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(H)",
+      "spaceComplexity": "O(1) iterative",
+      "summary": "Exploits BST ordering properties to find the Lowest Common Ancestor (LCA) of nodes p and q in O(1) extra space.",
+      "explanation": [
+        "1. BST Ancestor Rule: If both `p.val` and `q.val` are smaller than `curr.val`, LCA MUST lie in the Left Subtree.",
+        "2. If both `p.val` and `q.val` are larger than `curr.val`, LCA MUST lie in the Right Subtree.",
+        "3. Split Point: If one value is smaller and one value is larger (or equal to `curr.val`), `curr` is the split point and thus the LCA!",
+        "4. Iteration continues until split point is reached."
+      ],
+      "exampleTrace": {
+        "title": "Trace LCA(p=2, q=8) in BST Root=6 [6, 2, 8, 0, 4, 7, 9]",
+        "traceSteps": [
+          "Inspect Root 6: p=2 < 6 and q=8 > 6.",
+          "Split point detected! One value lies left, one lies right.",
+          "Result: LCA is 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds lowest shared ancestor in BSTs without hash sets or node parent pointers.",
+        "whenToUse": "Use when finding LCA specifically in Binary Search Trees.",
+        "whereUsed": "Taxonomy classification, version control commit history trees.",
+        "whyOptimal": "Iterative BST property check uses strict O(1) space compared to standard binary tree O(H) stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lowestCommonAncestor(root, p, q):\n    curr = root\n    while curr:\n        if p.val < curr.val and q.val < curr.val:\n            curr = curr.left\n        elif p.val > curr.val and q.val > curr.val:\n            curr = curr.right\n        else:\n            return curr"
+        },
+        {
+          "language": "cpp",
+          "code": "struct TreeNode { int val; TreeNode *left, *right; };\nTreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {\n    TreeNode* curr = root;\n    while (curr) {\n        if (p->val < curr->val && q->val < curr->val) curr = curr->left;\n        else if (p->val > curr->val && q->val > curr->val) curr = curr->right;\n        else return curr;\n    }\n    return nullptr;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        TreeNode curr = root;\n        while (curr != null) {\n            if (p.val < curr.val && q.val < curr.val) curr = curr.left;\n            else if (p.val > curr.val && q.val > curr.val) curr = curr.right;\n            else return curr;\n        }\n        return null;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lowestCommonAncestor(root, p, q) {\n  let curr = root;\n  while (curr) {\n    if (p.val < curr.val && q.val < curr.val) curr = curr.left;\n    else if (p.val > curr.val && q.val > curr.val) curr = curr.right;\n    else return curr;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 235 - Lowest Common Ancestor of a Binary Search Tree",
+          "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bst-iterator",
+      "title": "Binary Search Tree Iterator",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) amortized for next() and hasNext()",
+      "spaceComplexity": "O(H) for explicit stack",
+      "summary": "Implements an iterator over a BST that returns nodes in ascending sorted order using controlled stack-based Inorder traversal.",
+      "explanation": [
+        "1. Maintain an explicit `stack` of tree nodes representing left-leaning traversal state.",
+        "2. Helper `pushAllLeft(node)`: Push `node` and all its left descendants onto stack.",
+        "3. Constructor initializes `pushAllLeft(root)`.",
+        "4. `next()`: Pop top node `curr` from stack. Call `pushAllLeft(curr.right)` to process right subtree. Return `curr.val`.",
+        "5. `hasNext()`: Return `len(stack) > 0`."
+      ],
+      "exampleTrace": {
+        "title": "Trace BSTIterator on BST [7, 3, 15, null, null, 9, 20]",
+        "traceSteps": [
+          "Init: Push 7, 3 → Stack: [7, 3].",
+          "next(): Pop 3. Return 3.",
+          "next(): Pop 7. Push 15, 9 → Stack: [15, 9]. Return 7.",
+          "hasNext(): True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides controlled step-by-step element streaming over BSTs in sorted order.",
+        "whenToUse": "Use when lazy iteration over sorted BST elements is needed without preallocating an array.",
+        "whereUsed": "Database cursor iterators, streaming data processing pipelines.",
+        "whyOptimal": "Achieves O(1) amortized time per next() query using minimal O(H) stack memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class BSTIterator:\n    def __init__(self, root):\n        self.stack = []\n        self._push_all(root)\n\n    def _push_all(self, node):\n        while node:\n            self.stack.append(node)\n            node = node.left\n\n    def next(self) -> int:\n        node = self.stack.pop()\n        self._push_all(node.right)\n        return node.val\n\n    def hasNext(self) -> bool:\n        return len(self.stack) > 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <stack>\nusing namespace std;\nstruct TreeNode { int val; TreeNode *left, *right; };\n\nclass BSTIterator {\n    stack<TreeNode*> st;\n    void pushAll(TreeNode* node) {\n        while (node) { st.push(node); node = node->left; }\n    }\npublic:\n    BSTIterator(TreeNode* root) { pushAll(root); }\n    int next() {\n        TreeNode* node = st.top(); st.pop();\n        pushAll(node->right);\n        return node->val;\n    }\n    bool hasNext() { return !st.empty(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class BSTIterator {\n    static class TreeNode { int val; TreeNode left, right; }\n    private Deque<TreeNode> stack = new ArrayDeque<>();\n    public BSTIterator(TreeNode root) { pushAll(root); }\n    private void pushAll(TreeNode node) {\n        while (node != null) { stack.push(node); node = node.left; }\n    }\n    public int next() {\n        TreeNode node = stack.pop();\n        pushAll(node.right);\n        return node.val;\n    }\n    public boolean hasNext() { return !stack.isEmpty(); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class BSTIterator {\n  constructor(root) {\n    this.stack = [];\n    this._pushAll(root);\n  }\n  _pushAll(node) {\n    while (node) {\n      this.stack.push(node);\n      node = node.left;\n    }\n  }\n  next() {\n    const node = this.stack.pop();\n    this._pushAll(node.right);\n    return node.val;\n  }\n  hasNext() {\n    return this.stack.length > 0;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 173 - Binary Search Tree Iterator",
+          "url": "https://leetcode.com/problems/binary-search-tree-iterator/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bst-sorted-array-to-bst",
+      "title": "Convert Sorted Array to Height-Balanced BST",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(log N) recursion stack space",
+      "summary": "Constructs a height-balanced BST from a sorted array using divide-and-conquer binary splitting.",
+      "explanation": [
+        "1. Height-Balanced Constraint: Depth of two subtrees of every node must never differ by more than 1.",
+        "2. Divide & Conquer: Pick the middle element `mid = (left + right) // 2` as root.",
+        "3. Recursively build Left Subtree from `nums[left ... mid-1]`.",
+        "4. Recursively build Right Subtree from `nums[mid+1 ... right]`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Sorted Array [-10, -3, 0, 5, 9]",
+        "traceSteps": [
+          "Mid element is 0 (index 2) → Root = 0.",
+          "Left subarray [-10, -3] → Mid is -3 → Left Child = -3.",
+          "Right subarray [5, 9] → Mid is 9 → Right Child = 9.",
+          "Resulting Balanced BST height = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Converts flat sorted arrays into optimal height-balanced search trees.",
+        "whenToUse": "Use when building search trees from static sorted datasets.",
+        "whereUsed": "Static database indexing, fast binary search tree scaffolding.",
+        "whyOptimal": "Splitting at exact middle guarantees logarithmic height O(log N) with minimal depth."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sortedArrayToBST(nums: list[int]):\n    def helper(left, right):\n        if left > right: return None\n        mid = (left + right) // 2\n        root = {'val': nums[mid], 'left': None, 'right': None}\n        root['left'] = helper(left, mid - 1)\n        root['right'] = helper(mid + 1, right)\n        return root\n    return helper(0, len(nums) - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\nstruct TreeNode {\n    int val; TreeNode *left, *right;\n    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}\n};\nTreeNode* helper(vector<int>& nums, int left, int right) {\n    if (left > right) return nullptr;\n    int mid = left + (right - left) / 2;\n    TreeNode* root = new TreeNode(nums[mid]);\n    root->left = helper(nums, left, mid - 1);\n    root->right = helper(nums, mid + 1, right);\n    return root;\n}\nTreeNode* sortedArrayToBST(vector<int>& nums) {\n    return helper(nums, 0, nums.size() - 1);\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode {\n        int val; TreeNode left, right;\n        TreeNode(int x) { val = x; }\n    }\n    public TreeNode sortedArrayToBST(int[] nums) {\n        return helper(nums, 0, nums.length - 1);\n    }\n    private TreeNode helper(int[] nums, int left, int right) {\n        if (left > right) return null;\n        int mid = left + (right - left) / 2;\n        TreeNode root = new TreeNode(nums[mid]);\n        root.left = helper(nums, left, mid - 1);\n        root.right = helper(nums, mid + 1, right);\n        return root;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function sortedArrayToBST(nums) {\n  function helper(left, right) {\n    if (left > right) return null;\n    const mid = Math.floor((left + right) / 2);\n    const root = { val: nums[mid], left: null, right: null };\n    root.left = helper(left, mid - 1);\n    root.right = helper(mid + 1, right);\n    return root;\n  }\n  return helper(0, nums.length - 1);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 108 - Convert Sorted Array to Binary Search Tree",
+          "url": "https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bst-predecessor-successor",
+      "title": "Inorder Predecessor and Successor in BST",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(H)",
+      "spaceComplexity": "O(1) iterative",
+      "summary": "Finds the Inorder Predecessor (largest value smaller than key) and Inorder Successor (smallest value larger than key) in a BST.",
+      "explanation": [
+        "1. Successor Logic: Start at root. If `key < curr.val`, update `succ = curr` and move left. If `key >= curr.val`, move right.",
+        "2. Predecessor Logic: Start at root. If `key > curr.val`, update `pred = curr` and move right. If `key <= curr.val`, move left.",
+        "3. If target node has a Right Child, successor is the Minimum node in its right subtree.",
+        "4. If target node has a Left Child, predecessor is the Maximum node in its left subtree."
+      ],
+      "exampleTrace": {
+        "title": "Trace Successor of Key 8 in BST [10, 5, 15, 2, 8, 12, 20]",
+        "traceSteps": [
+          "Inspect 10: 8 < 10 → Candidate Succ=10. Move Left to 5.",
+          "Inspect 5: 8 > 5 → Move Right to 8.",
+          "Inspect 8: 8 >= 8 → Move Right to null.",
+          "Result: Successor of 8 is 10."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds adjacent neighbor values in BST ordering without full tree traversal.",
+        "whenToUse": "Use when finding next/previous elements in ordered map datasets.",
+        "whereUsed": "Range query iterators, B-tree step traversals.",
+        "whyOptimal": "BST ordering eliminates half of the tree at each step, yielding O(H) time and O(1) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def inorderSuccessor(root, p):\n    succ = None\n    curr = root\n    while curr:\n        if p.val < curr.val:\n            succ = curr\n            curr = curr.left\n        else:\n            curr = curr.right\n    return succ"
+        },
+        {
+          "language": "cpp",
+          "code": "struct TreeNode { int val; TreeNode *left, *right; };\nTreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {\n    TreeNode* succ = nullptr;\n    TreeNode* curr = root;\n    while (curr) {\n        if (p->val < curr->val) {\n            succ = curr;\n            curr = curr->left;\n        } else {\n            curr = curr->right;\n        }\n    }\n    return succ;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public TreeNode inorderSuccessor(TreeNode root, TreeNode p) {\n        TreeNode succ = null;\n        TreeNode curr = root;\n        while (curr != null) {\n            if (p.val < curr.val) {\n                succ = curr;\n                curr = curr.left;\n            } else {\n                curr = curr.right;\n            }\n        }\n        return succ;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function inorderSuccessor(root, p) {\n  let succ = null;\n  let curr = root;\n  while (curr) {\n    if (p.val < curr.val) {\n      succ = curr;\n      curr = curr.left;\n    } else {\n      curr = curr.right;\n    }\n  }\n  return succ;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 285 - Inorder Successor in BST",
+          "url": "https://leetcode.com/problems/inorder-successor-in-bst/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bst-recover-swapped-nodes",
+      "title": "Recover Binary Search Tree (Two Swapped Nodes)",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1) auxiliary space using Morris Traversal",
+      "summary": "Restores a BST where exactly two node values were swapped by mistake without altering tree structure.",
+      "explanation": [
+        "1. Inorder Traversal Anomaly: Inorder traversal of a valid BST is strictly sorted.",
+        "2. If two nodes are swapped, there will be 1 or 2 places where `prev.val > curr.val`.",
+        "3. First Anomaly: `first = prev`, `middle = curr`.",
+        "4. Second Anomaly (if non-adjacent): `last = curr`.",
+        "5. Swap node values: if `last` exists swap `(first.val, last.val)` else swap `(first.val, middle.val)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Recover BST [1, 3, null, null, 2]",
+        "traceSteps": [
+          "Inorder Traversal: 3 -> 2 -> 1.",
+          "Anomaly 1: prev=3 > curr=2 → first=3, middle=2.",
+          "Anomaly 2: prev=2 > curr=1 → last=1.",
+          "Swap values of first (3) and last (1).",
+          "Restored BST Inorder: 1 -> 2 -> 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Fixes corrupted binary search trees in-place when two nodes are misplaced.",
+        "whenToUse": "Use when restoring BST invariant without reconstructing the tree.",
+        "whereUsed": "Database repair tools, memory-constrained tree restoration.",
+        "whyOptimal": "Morris Traversal enables in-place O(N) detection and swap with zero extra stack memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def recoverTree(root) -> None:\n    first = middle = last = prev = None\n    def inorder(node):\n        nonlocal first, middle, last, prev\n        if not node: return\n        inorder(node.left)\n        if prev and prev.val > node.val:\n            if not first:\n                first = prev\n                middle = node\n            else:\n                last = node\n        prev = node\n        inorder(node.right)\n    inorder(root)\n    if first and last:\n        first.val, last.val = last.val, first.val\n    elif first and middle:\n        first.val, middle.val = middle.val, first.val"
+        },
+        {
+          "language": "cpp",
+          "code": "struct TreeNode { int val; TreeNode *left, *right; };\nclass Solution {\n    TreeNode *first = nullptr, *middle = nullptr, *last = nullptr, *prev = nullptr;\n    void inorder(TreeNode* node) {\n        if (!node) return;\n        inorder(node->left);\n        if (prev && prev->val > node->val) {\n            if (!first) { first = prev; middle = node; }\n            else { last = node; }\n        }\n        prev = node;\n        inorder(node->right);\n    }\npublic:\n    void recoverTree(TreeNode* root) {\n        inorder(root);\n        if (first && last) swap(first->val, last->val);\n        else if (first && middle) swap(first->val, middle->val);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    private TreeNode first, middle, last, prev;\n    private void inorder(TreeNode node) {\n        if (node == null) return;\n        inorder(node.left);\n        if (prev != null && prev.val > node.val) {\n            if (first == null) { first = prev; middle = node; }\n            else { last = node; }\n        }\n        prev = node;\n        inorder(node.right);\n    }\n    public void recoverTree(TreeNode root) {\n        inorder(root);\n        if (first != null && last != null) {\n            int temp = first.val; first.val = last.val; last.val = temp;\n        } else if (first != null && middle != null) {\n            int temp = first.val; first.val = middle.val; middle.val = temp;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function recoverTree(root) {\n  let first = null, middle = null, last = null, prev = null;\n  function inorder(node) {\n    if (!node) return;\n    inorder(node.left);\n    if (prev && prev.val > node.val) {\n      if (!first) {\n        first = prev;\n        middle = node;\n      } else {\n        last = node;\n      }\n    }\n    prev = node;\n    inorder(node.right);\n  }\n  inorder(root);\n  if (first && last) {\n    const temp = first.val; first.val = last.val; last.val = temp;\n  } else if (first && middle) {\n    const temp = first.val; first.val = middle.val; middle.val = temp;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 99 - Recover Binary Search Tree",
+          "url": "https://leetcode.com/problems/recover-binary-search-tree/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "bst-merge-two-trees",
+      "title": "Merge Two Binary Search Trees",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(N + M)",
+      "summary": "Merges two BSTs into a single sorted list or balanced BST in O(N + M) linear time.",
+      "explanation": [
+        "1. Perform Inorder traversal on `root1` to produce sorted array `list1` (size N).",
+        "2. Perform Inorder traversal on `root2` to produce sorted array `list2` (size M).",
+        "3. Merge two sorted arrays `list1` and `list2` into a single sorted array using Two Pointers in O(N + M).",
+        "4. (Optional) Convert merged sorted array into a height-balanced BST in O(N + M)."
+      ],
+      "exampleTrace": {
+        "title": "Trace Merge BST1 [2, 1, 4] and BST2 [1, 0, 3]",
+        "traceSteps": [
+          "List 1 (Inorder): [1, 2, 4].",
+          "List 2 (Inorder): [0, 1, 3].",
+          "Merged Sorted List: [0, 1, 1, 2, 3, 4].",
+          "Merged Result Total Elements: 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines data from two independent BSTs into unified sorted output.",
+        "whenToUse": "Use when merging search tree database indexes.",
+        "whereUsed": "Database index merging (LSM-tree compaction), multi-source sorted data aggregation.",
+        "whyOptimal": "Two-pointer array merge achieves linear O(N + M) time vs O((N+M) log(N+M)) re-insertion."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def getAllElements(root1, root2) -> list[int]:\n    def inorder(node, lst):\n        if not node: return\n        inorder(node.left, lst)\n        lst.append(node.val)\n        inorder(node.right, lst)\n    l1, l2 = [], []\n    inorder(root1, l1)\n    inorder(root2, l2)\n    i = j = 0\n    res = []\n    while i < len(l1) and j < len(l2):\n        if l1[i] < l2[j]:\n            res.append(l1[i]); i += 1\n        else:\n            res.append(l2[j]); j += 1\n    res.extend(l1[i:])\n    res.extend(l2[j:])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\nstruct TreeNode { int val; TreeNode *left, *right; };\nvoid inorder(TreeNode* node, vector<int>& v) {\n    if (!node) return;\n    inorder(node->left, v);\n    v.push_back(node->val);\n    inorder(node->right, v);\n}\nvector<int> getAllElements(TreeNode* root1, TreeNode* root2) {\n    vector<int> v1, v2, res;\n    inorder(root1, v1); inorder(root2, v2);\n    int i = 0, j = 0;\n    while (i < v1.size() && j < v2.size()) {\n        if (v1[i] < v2[j]) res.push_back(v1[i++]);\n        else res.push_back(v2[j++]);\n    }\n    while (i < v1.size()) res.push_back(v1[i++]);\n    while (j < v2.size()) res.push_back(v2[j++]);\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {\n        List<Integer> l1 = new ArrayList<>(), l2 = new ArrayList<>(), res = new ArrayList<>();\n        inorder(root1, l1); inorder(root2, l2);\n        int i = 0, j = 0;\n        while (i < l1.size() && j < l2.size()) {\n            if (l1.get(i) < l2.get(j)) res.add(l1.get(i++));\n            else res.add(l2.get(j++));\n        }\n        while (i < l1.size()) res.add(l1.get(i++));\n        while (j < l2.size()) res.add(l2.get(j++));\n        return res;\n    }\n    private void inorder(TreeNode node, List<Integer> list) {\n        if (node == null) return;\n        inorder(node.left, list);\n        list.add(node.val);\n        inorder(node.right, list);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function getAllElements(root1, root2) {\n  function inorder(node, lst) {\n    if (!node) return;\n    inorder(node.left, lst);\n    lst.push(node.val);\n    inorder(node.right, lst);\n  }\n  const l1 = [], l2 = [];\n  inorder(root1, l1); inorder(root2, l2);\n  let i = 0, j = 0;\n  const res = [];\n  while (i < l1.length && j < l2.length) {\n    if (l1[i] < l2[j]) res.push(l1[i++]);\n    else res.push(l2[j++]);\n  }\n  while (i < l1.length) res.push(l1[i++]);\n  while (j < l2.length) res.push(l2[j++]);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1305 - All Elements in Two Binary Search Trees",
+          "url": "https://leetcode.com/problems/all-elements-in-two-binary-search-trees/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bst-two-sum",
+      "title": "Two Sum IV - Input is a BST",
+      "categoryId": "bst",
+      "categoryTitle": "Binary Search Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H) using Dual BST Iterators",
+      "summary": "Finds if there exist two node values in a BST that add up to a target sum K using Dual BST Iterators (Two Pointers).",
+      "explanation": [
+        "1. Dual Iterator Idea: Standard Two Sum on sorted array uses `left` and `right` pointers.",
+        "2. Create Ascending BST Iterator (Left → Root → Right) for `left` pointer.",
+        "3. Create Descending BST Iterator (Right → Root → Left) for `right` pointer.",
+        "4. Fetch `val1 = leftIter.next()` and `val2 = rightIter.next()`.",
+        "5. If `val1 + val2 == K`, return `True`. If `< K`, advance `leftIter`. If `> K`, advance `rightIter`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Two Sum Target=9 on BST [5, 3, 6, 2, 4, null, 7]",
+        "traceSteps": [
+          "Ascending Iterator starts at min = 2.",
+          "Descending Iterator starts at max = 7.",
+          "Check: 2 + 7 = 9 (Matches target 9!).",
+          "Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves Two Sum on BST in linear time using optimal O(H) stack space.",
+        "whenToUse": "Use when finding target sum pairs in Binary Search Trees.",
+        "whereUsed": "Tree-based sum pair queries, database index joining.",
+        "whyOptimal": "Dual BST Iterator eliminates the need for an O(N) auxiliary array while preserving Two-Pointer traversal."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findTarget(root, k: int) -> bool:\n    def push_left(node, st):\n        while node: st.append(node); node = node.left\n    def push_right(node, st):\n        while node: st.append(node); node = node.right\n    st_left, st_right = [], []\n    push_left(root, st_left)\n    push_right(root, st_right)\n    left_node = st_left[-1]\n    right_node = st_right[-1]\n    while left_node and right_node and left_node != right_node:\n        v1, v2 = left_node.val, right_node.val\n        if v1 + v2 == k: return True\n        if v1 + v2 < k:\n            node = st_left.pop()\n            push_left(node.right, st_left)\n            left_node = st_left[-1] if st_left else None\n        else:\n            node = st_right.pop()\n            push_right(node.left, st_right)\n            right_node = st_right[-1] if st_right else None\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <stack>\nusing namespace std;\nstruct TreeNode { int val; TreeNode *left, *right; };\n\nbool findTarget(TreeNode* root, int k) {\n    stack<TreeNode*> stL, stR;\n    auto pushL = [&](TreeNode* n) { while (n) { stL.push(n); n = n->left; } };\n    auto pushR = [&](TreeNode* n) { while (n) { stR.push(n); n = n->right; } };\n    pushL(root); pushR(root);\n    while (!stL.empty() && !stR.empty() && stL.top() != stR.top()) {\n        int sum = stL.top()->val + stR.top()->val;\n        if (sum == k) return true;\n        if (sum < k) {\n            TreeNode* n = stL.top(); stL.pop();\n            pushL(n->right);\n        } else {\n            TreeNode* n = stR.top(); stR.pop();\n            pushR(n->left);\n        }\n    }\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    static class TreeNode { int val; TreeNode left, right; }\n    public boolean findTarget(TreeNode root, int k) {\n        Deque<TreeNode> stL = new ArrayDeque<>(), stR = new ArrayDeque<>();\n        pushL(root, stL); pushR(root, stR);\n        while (!stL.isEmpty() && !stR.isEmpty() && stL.peek() != stR.peek()) {\n            int sum = stL.peek().val + stR.peek().val;\n            if (sum == k) return true;\n            if (sum < k) {\n                TreeNode n = stL.pop();\n                pushL(n.right, stL);\n            } else {\n                TreeNode n = stR.pop();\n                pushR(n.left, stR);\n            }\n        }\n        return false;\n    }\n    private void pushL(TreeNode n, Deque<TreeNode> st) { while (n != null) { st.push(n); n = n.left; } }\n    private void pushR(TreeNode n, Deque<TreeNode> st) { while (n != null) { st.push(n); n = n.right; } }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findTarget(root, k) {\n  const stL = [], stR = [];\n  function pushL(n) { while (n) { stL.push(n); n = n.left; } }\n  function pushR(n) { while (n) { stR.push(n); n = n.right; } }\n  pushL(root); pushR(root);\n  while (stL.length > 0 && stR.length > 0 && stL[stL.length - 1] !== stR[stR.length - 1]) {\n    const sum = stL[stL.length - 1].val + stR[stR.length - 1].val;\n    if (sum === k) return true;\n    if (sum < k) {\n      const n = stL.pop();\n      pushL(n.right);\n    } else {\n      const n = stR.pop();\n      pushR(n.left);\n    }\n  }\n  return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 653 - Two Sum IV - Input is a BST",
+          "url": "https://leetcode.com/problems/two-sum-iv-input-is-a-bst/",
+          "difficulty": "Easy"
+        }
+      ]
+    }
+  ]
+}

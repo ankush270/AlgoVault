@@ -1,0 +1,722 @@
+{
+  "id": "sorting",
+  "category": {
+    "id": "sorting",
+    "title": "Sorting Algorithms",
+    "icon": "SlidersHorizontal",
+    "description": "Comparison and non-comparison sorting algorithms and stability analysis."
+  },
+  "totalAlgorithms": 12,
+  "algorithms": [
+    {
+      "id": "sorting-bubble-sort",
+      "title": "Bubble Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N²) Worst/Average, O(N) Best (Adaptive)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "Simple comparison sort that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in wrong order.",
+      "explanation": [
+        "Iterate through the array N times.",
+        "In each pass, compare adjacent elements `arr[j]` and `arr[j+1]`.",
+        "If `arr[j] > arr[j+1]`, swap them.",
+        "Optimization: Maintain a `swapped` boolean flag. If no swaps occur in a pass, break early (O(N) best case).",
+        "After pass `i`, the `i`-th largest element bubbles up to its correct final position at the end."
+      ],
+      "exampleTrace": {
+        "input": "arr = [5, 1, 4, 2, 8]",
+        "output": "[1, 2, 4, 5, 8]",
+        "traceSteps": [
+          "Pass 1: Compare 5&1 -> swap [1,5,4,2,8]. Compare 5&4 -> swap [1,4,5,2,8]. Compare 5&2 -> swap [1,4,2,5,8]. Compare 5&8 -> no swap.",
+          "Pass 2: Compare 1&4 -> no swap. Compare 4&2 -> swap [1,2,4,5,8]. Compare 4&5 -> no swap.",
+          "Pass 3: No swaps performed. Swapped flag is False -> Early Exit!",
+          "Sorted Array: [1, 2, 4, 5, 8]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts an array by repeatedly bubbling larger elements to the right.",
+        "whenToUse": "Educational purposes, small datasets, or when testing for nearly-sorted array detection.",
+        "whereUsed": "Computer science pedagogy, simple embedded systems with small memory footprints.",
+        "whyOptimal": "Stable in-place sort with O(N) early-exit best case for already sorted inputs."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def bubble_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n - i - 1):\n            if arr[j] > arr[j + 1]:\n                arr[j], arr[j + 1] = arr[j + 1], arr[j]\n                swapped = True\n        if not swapped:\n            break\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid bubbleSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n; i++) {\n        bool swapped = false;\n        for (int j = 0; j < n - i - 1; j++) {\n            if (arr[j] > arr[j + 1]) {\n                std::swap(arr[j], arr[j + 1]);\n                swapped = true;\n            }\n        }\n        if (!swapped) break;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class BubbleSort {\n    public static void bubbleSort(int[] arr) {\n        int n = arr.length;\n        for (int i = 0; i < n; i++) {\n            boolean swapped = false;\n            for (int j = 0; j < n - i - 1; j++) {\n                if (arr[j] > arr[j + 1]) {\n                    int temp = arr[j];\n                    arr[j] = arr[j + 1];\n                    arr[j + 1] = temp;\n                    swapped = true;\n                }\n            }\n            if (!swapped) break;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function bubbleSort(arr) {\n    const n = arr.length;\n    for (let i = 0; i < n; i++) {\n        let swapped = false;\n        for (let j = 0; j < n - i - 1; j++) {\n            if (arr[j] > arr[j + 1]) {\n                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n                swapped = true;\n            }\n        }\n        if (!swapped) break;\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 912 - Sort an Array",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-selection-sort",
+      "title": "Selection Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N²) in all cases (Best/Avg/Worst)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "In-place comparison sort that divides array into sorted and unsorted regions, repeatedly selecting the minimum element from the unsorted region.",
+      "explanation": [
+        "Maintain a boundary index `i` separating sorted array `[0...i-1]` from unsorted `[i...N-1]`.",
+        "Find index of minimum element `min_idx` in unsorted subarray `[i...N-1]`.",
+        "Swap `arr[i]` with `arr[min_idx]`.",
+        "Increment `i` and repeat until array is fully sorted.",
+        "Note: Makes exactly O(N) swaps, making it useful when write memory cost is high."
+      ],
+      "exampleTrace": {
+        "input": "arr = [64, 25, 12, 22, 11]",
+        "output": "[11, 12, 22, 25, 64]",
+        "traceSteps": [
+          "i=0: Min in [64,25,12,22,11] is 11 (idx 4). Swap 64 & 11 -> [11, 25, 12, 22, 64].",
+          "i=1: Min in [25,12,22,64] is 12 (idx 2). Swap 25 & 12 -> [11, 12, 25, 22, 64].",
+          "i=2: Min in [25,22,64] is 22 (idx 3). Swap 25 & 22 -> [11, 12, 22, 25, 64].",
+          "i=3: Min in [25,64] is 25 (idx 3). Swap with self.",
+          "Sorted Array: [11, 12, 22, 25, 64]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts array with minimum total element swap/write operations.",
+        "whenToUse": "When memory write operations are extremely expensive (e.g., Flash EEPROM).",
+        "whereUsed": "Embedded Flash systems, hardware sorting circuits.",
+        "whyOptimal": "Guarantees at most O(N) element swaps."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def selection_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    for i in range(n - 1):\n        min_idx = i\n        for j in range(i + 1, n):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid selectionSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n - 1; i++) {\n        int minIdx = i;\n        for (int j = i + 1; j < n; j++) {\n            if (arr[j] < arr[minIdx]) minIdx = j;\n        }\n        std::swap(arr[i], arr[minIdx]);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class SelectionSort {\n    public static void selectionSort(int[] arr) {\n        int n = arr.length;\n        for (int i = 0; i < n - 1; i++) {\n            int minIdx = i;\n            for (int j = i + 1; j < n; j++) {\n                if (arr[j] < arr[minIdx]) minIdx = j;\n            }\n            int temp = arr[minIdx];\n            arr[minIdx] = arr[i];\n            arr[i] = temp;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function selectionSort(arr) {\n    const n = arr.length;\n    for (let i = 0; i < n - 1; i++) {\n        let minIdx = i;\n        for (let j = i + 1; j < n; j++) {\n            if (arr[j] < arr[minIdx]) minIdx = j;\n        }\n        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Selection Sort",
+          "url": "https://practice.geeksforgeeks.org/problems/selection-sort/1",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "sorting-insertion-sort",
+      "title": "Insertion Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N²) Worst/Avg, O(N) Best (Already Sorted)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "Builds sorted array one item at a time by picking current element and shifting larger elements right to insert it into place.",
+      "explanation": [
+        "Iterate from `i = 1` to `N-1`. Store `key = arr[i]`.",
+        "Compare `key` with elements to its left (`arr[j]` for `j = i-1` down to 0).",
+        "While `arr[j] > key`, shift `arr[j]` one position right to `arr[j+1]`.",
+        "Place `key` at index `j+1`.",
+        "Stable, in-place, online (can sort a stream of numbers as they arrive)."
+      ],
+      "exampleTrace": {
+        "input": "arr = [12, 11, 13, 5, 6]",
+        "output": "[5, 6, 11, 12, 13]",
+        "traceSteps": [
+          "i=1 (key=11): Shift 12 right -> [11, 12, 13, 5, 6].",
+          "i=2 (key=13): 12 < 13 -> no shift [11, 12, 13, 5, 6].",
+          "i=3 (key=5): Shift 13, 12, 11 right -> insert 5 at start [5, 11, 12, 13, 6].",
+          "i=4 (key=6): Shift 13, 12, 11 right -> insert 6 at index 1 [5, 6, 11, 12, 13].",
+          "Sorted Array: [5, 6, 11, 12, 13]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Efficiently sorts small or nearly-sorted arrays and incoming streaming data.",
+        "whenToUse": "When array length N <= 30 or data is almost sorted.",
+        "whereUsed": "Subroutine in hybrid algorithms (Timsort, IntroSort), streaming online data.",
+        "whyOptimal": "O(N) best case for nearly sorted inputs with tiny constant factor."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def insertion_sort(arr: list[int]) -> list[int]:\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nvoid insertionSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 1; i < n; i++) {\n        int key = arr[i];\n        int j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n        arr[j + 1] = key;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class InsertionSort {\n    public static void insertionSort(int[] arr) {\n        int n = arr.length;\n        for (int i = 1; i < n; i++) {\n            int key = arr[i];\n            int j = i - 1;\n            while (j >= 0 && arr[j] > key) {\n                arr[j + 1] = arr[j];\n                j--;\n            }\n            arr[j + 1] = key;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function insertionSort(arr) {\n    for (let i = 1; i < arr.length; i++) {\n        let key = arr[i];\n        let j = i - 1;\n        while (j >= 0 && arr[j] > key) {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n        arr[j + 1] = key;\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 147 - Insertion Sort List",
+          "url": "https://leetcode.com/problems/insertion-sort-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-merge-sort",
+      "title": "Merge Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Guaranteed (Best/Avg/Worst)",
+      "spaceComplexity": "O(N) Auxiliary Space",
+      "summary": "Classic Divide & Conquer sorting algorithm that recursively splits array into two halves, sorts them, and merges the sorted halves.",
+      "explanation": [
+        "Divide: Find midpoint `mid = (low + high) // 2`.",
+        "Conquer: Recursively sort left subarray `[low...mid]` and right subarray `[mid+1...high]`.",
+        "Combine: Merge the two sorted subarrays using two pointers into an auxiliary array.",
+        "Guaranteed O(N log N) performance regardless of input data distribution.",
+        "Stable sort algorithm."
+      ],
+      "exampleTrace": {
+        "input": "arr = [38, 27, 43, 3, 9, 82, 10]",
+        "output": "[3, 9, 10, 27, 38, 43, 82]",
+        "traceSteps": [
+          "Split [38, 27, 43, 3, 9, 82, 10] into Left [38, 27, 43] and Right [3, 9, 82, 10].",
+          "Recursively sort Left -> [27, 38, 43].",
+          "Recursively sort Right -> [3, 9, 10, 82].",
+          "Merge [27, 38, 43] with [3, 9, 10, 82] using 2 pointers.",
+          "Merged Result: [3, 9, 10, 27, 38, 43, 82]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Guarantees worst-case O(N log N) stable sorting.",
+        "whenToUse": "When stable sorting is required or when sorting linked lists.",
+        "whereUsed": "Java Collections.sort (for objects), external sorting algorithms, Linked List sorting.",
+        "whyOptimal": "Guaranteed O(N log N) time complexity with stable ordering."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def merge_sort(arr: list[int]) -> list[int]:\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    \n    res = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            res.append(left[i])\n            i += 1\n        else:\n            res.append(right[j])\n            j += 1\n    res.extend(left[i:])\n    res.extend(right[j:])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nvoid merge(std::vector<int>& arr, int l, int m, int r) {\n    std::vector<int> left(arr.begin() + l, arr.begin() + m + 1);\n    std::vector<int> right(arr.begin() + m + 1, arr.begin() + r + 1);\n    int i = 0, j = 0, k = l;\n    while (i < left.size() && j < right.size()) {\n        if (left[i] <= right[j]) arr[k++] = left[i++];\n        else arr[k++] = right[j++];\n    }\n    while (i < left.size()) arr[k++] = left[i++];\n    while (j < right.size()) arr[k++] = right[j++];\n}\n\nvoid mergeSort(std::vector<int>& arr, int l, int r) {\n    if (l < r) {\n        int m = l + (r - l) / 2;\n        mergeSort(arr, l, m);\n        mergeSort(arr, m + 1, r);\n        merge(arr, l, m, r);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MergeSort {\n    public static void mergeSort(int[] arr, int l, int r) {\n        if (l < r) {\n            int m = l + (r - l) / 2;\n            mergeSort(arr, l, m);\n            mergeSort(arr, m + 1, r);\n            merge(arr, l, m, r);\n        }\n    }\n    private static void merge(int[] arr, int l, int m, int r) {\n        int[] left = java.util.Arrays.copyOfRange(arr, l, m + 1);\n        int[] right = java.util.Arrays.copyOfRange(arr, m + 1, r + 1);\n        int i = 0, j = 0, k = l;\n        while (i < left.length && j < right.length) {\n            if (left[i] <= right[j]) arr[k++] = left[i++];\n            else arr[k++] = right[j++];\n        }\n        while (i < left.length) arr[k++] = left[i++];\n        while (j < right.length) arr[k++] = right[j++];\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function mergeSort(arr) {\n    if (arr.length <= 1) return arr;\n    const mid = Math.floor(arr.length / 2);\n    const left = mergeSort(arr.slice(0, mid));\n    const right = mergeSort(arr.slice(mid));\n    \n    const res = [];\n    let i = 0, j = 0;\n    while (i < left.length && j < right.length) {\n        if (left[i] <= right[j]) res.push(left[i++]);\n        else res.push(right[j++]);\n    }\n    return res.concat(left.slice(i)).concat(right.slice(j));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 912 - Sort an Array (Merge Sort)",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-quick-sort",
+      "title": "Quick Sort (Lomuto & Hoare Partition)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Average, O(N²) Worst Case",
+      "spaceComplexity": "O(log N) Call Stack Space (In-Place)",
+      "summary": "High-performance in-place Divide & Conquer sorting algorithm that partitions array around a chosen pivot element.",
+      "explanation": [
+        "Pivot Selection: Pick a pivot element (e.g. last element, random, or median-of-three).",
+        "Partitioning: Re-arrange array so elements < pivot are placed on left, and elements > pivot are on right.",
+        "Pivot position is now fixed in its correct final sorted place.",
+        "Recursively apply Quick Sort to left and right sub-arrays.",
+        "Unstable sort algorithm, but fastest in-memory sort in practice due to cache friendliness."
+      ],
+      "exampleTrace": {
+        "input": "arr = [10, 80, 30, 90, 40, 50, 70], pivot = 70",
+        "output": "[10, 30, 40, 50, 70, 80, 90]",
+        "traceSteps": [
+          "Partition around pivot 70: Elements <= 70 move left [10, 30, 40, 50], elements > 70 move right [80, 90].",
+          "Pivot 70 placed at index 4.",
+          "Recursively QuickSort left subarray [10, 30, 40, 50].",
+          "Recursively QuickSort right subarray [80, 90].",
+          "Sorted Array: [10, 30, 40, 50, 70, 80, 90]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts in-place with minimal cache misses and high average speed.",
+        "whenToUse": "When fast in-place sorting is required and stability is not mandatory.",
+        "whereUsed": "C qsort(), C++ std::sort (Introsort), OS primitives.",
+        "whyOptimal": "Extremely fast average O(N log N) speed with O(1) extra array memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def quick_sort(arr: list[int], low: int, high: int):\n    if low < high:\n        pivot = arr[high]\n        i = low - 1\n        for j in range(low, high):\n            if arr[j] <= pivot:\n                i += 1\n                arr[i], arr[j] = arr[j], arr[i]\n        arr[i + 1], arr[high] = arr[high], arr[i + 1]\n        p_idx = i + 1\n        \n        quick_sort(arr, low, p_idx - 1)\n        quick_sort(arr, p_idx + 1, high)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nint partition(std::vector<int>& arr, int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    for (int j = low; j < high; j++) {\n        if (arr[j] <= pivot) {\n            i++;\n            std::swap(arr[i], arr[j]);\n        }\n    }\n    std::swap(arr[i + 1], arr[high]);\n    return i + 1;\n}\n\nvoid quickSort(std::vector<int>& arr, int low, int high) {\n    if (low < high) {\n        int pi = partition(arr, low, high);\n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class QuickSort {\n    public static void quickSort(int[] arr, int low, int high) {\n        if (low < high) {\n            int pi = partition(arr, low, high);\n            quickSort(arr, low, pi - 1);\n            quickSort(arr, pi + 1, high);\n        }\n    }\n    private static int partition(int[] arr, int low, int high) {\n        int pivot = arr[high];\n        int i = low - 1;\n        for (int j = low; j < high; j++) {\n            if (arr[j] <= pivot) {\n                i++;\n                int temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;\n            }\n        }\n        int temp = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = temp;\n        return i + 1;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function quickSort(arr, low = 0, high = arr.length - 1) {\n    if (low < high) {\n        const pivot = arr[high];\n        let i = low - 1;\n        for (let j = low; j < high; j++) {\n            if (arr[j] <= pivot) {\n                i++;\n                [arr[i], arr[j]] = [arr[j], arr[i]];\n            }\n        }\n        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];\n        const pi = i + 1;\n        \n        quickSort(arr, low, pi - 1);\n        quickSort(arr, pi + 1, high);\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 912 - Sort an Array (QuickSort)",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-heap-sort",
+      "title": "Heap Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Guaranteed (Best/Avg/Worst)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "In-place comparison sort using a Binary Max-Heap data structure to extract the maximum element in logarithmic time.",
+      "explanation": [
+        "Build Max-Heap: Transform array into a Max-Heap in O(N) time using bottom-up `heapify`.",
+        "Extract Max: Swap root (`arr[0]`, maximum value) with the last element of the array `arr[i]`.",
+        "Reduce heap size by 1.",
+        "Heapify Down: Call `heapify(0)` to restore Max-Heap property for remaining array.",
+        "Repeat until heap size is 1. Output is sorted in ascending order."
+      ],
+      "exampleTrace": {
+        "input": "arr = [4, 10, 3, 5, 1]",
+        "output": "[1, 3, 4, 5, 10]",
+        "traceSteps": [
+          "Build Max-Heap: [10, 5, 3, 4, 1]. Root is max = 10.",
+          "Extract 10: Swap with last [1, 5, 3, 4, 10]. Heapify down -> [5, 4, 3, 1, 10].",
+          "Extract 5: Swap with 1 -> [1, 4, 3, 5, 10]. Heapify down -> [4, 1, 3, 5, 10].",
+          "Extract 4, then 3. Final Sorted Array: [1, 3, 4, 5, 10]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Guarantees O(N log N) time complexity with strict O(1) auxiliary space.",
+        "whenToUse": "When memory is tightly constrained and O(N log N) worst-case time is mandatory.",
+        "whereUsed": "Embedded systems, Linux kernel memory management, priority sorting.",
+        "whyOptimal": "Combines guaranteed O(N log N) performance with zero extra array memory O(1)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def heapify(arr, n, i):\n    largest = i\n    l = 2 * i + 1\n    r = 2 * i + 2\n    if l < n and arr[l] > arr[largest]: largest = l\n    if r < n and arr[r] > arr[largest]: largest = r\n    if largest != i:\n        arr[i], arr[largest] = arr[largest], arr[i]\n        heapify(arr, n, largest)\n\ndef heap_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        heapify(arr, n, i)\n    for i in range(n - 1, 0, -1):\n        arr[0], arr[i] = arr[i], arr[0]\n        heapify(arr, i, 0)\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid heapify(std::vector<int>& arr, int n, int i) {\n    int largest = i;\n    int l = 2 * i + 1, r = 2 * i + 2;\n    if (l < n && arr[l] > arr[largest]) largest = l;\n    if (r < n && arr[r] > arr[largest]) largest = r;\n    if (largest != i) {\n        std::swap(arr[i], arr[largest]);\n        heapify(arr, n, largest);\n    }\n}\n\nvoid heapSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);\n    for (int i = n - 1; i > 0; i--) {\n        std::swap(arr[0], arr[i]);\n        heapify(arr, i, 0);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class HeapSort {\n    public static void heapSort(int[] arr) {\n        int n = arr.length;\n        for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);\n        for (int i = n - 1; i > 0; i--) {\n            int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;\n            heapify(arr, i, 0);\n        }\n    }\n    private static void heapify(int[] arr, int n, int i) {\n        int largest = i;\n        int l = 2 * i + 1, r = 2 * i + 2;\n        if (l < n && arr[l] > arr[largest]) largest = l;\n        if (r < n && arr[r] > arr[largest]) largest = r;\n        if (largest != i) {\n            int temp = arr[i]; arr[i] = arr[largest]; arr[largest] = temp;\n            heapify(arr, n, largest);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function heapify(arr, n, i) {\n    let largest = i;\n    let l = 2 * i + 1, r = 2 * i + 2;\n    if (l < n && arr[l] > arr[largest]) largest = l;\n    if (r < n && arr[r] > arr[largest]) largest = r;\n    if (largest !== i) {\n        [arr[i], arr[largest]] = [arr[largest], arr[i]];\n        heapify(arr, n, largest);\n    }\n}\n\nfunction heapSort(arr) {\n    const n = arr.length;\n    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) heapify(arr, n, i);\n    for (let i = n - 1; i > 0; i--) {\n        [arr[0], arr[i]] = [arr[i], arr[0]];\n        heapify(arr, i, 0);\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 912 - Sort an Array (HeapSort)",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-counting-sort",
+      "title": "Counting Sort (Non-Comparison Sort)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + K) where K is key range (max - min + 1)",
+      "spaceComplexity": "O(N + K) Auxiliary Space",
+      "summary": "Non-comparison sorting algorithm that operates in O(N + K) time by counting occurrences of keys in range [0...K].",
+      "explanation": [
+        "Find minimum and maximum value in array to determine key range K.",
+        "Build Frequency Array `count[x]` storing number of occurrences of each key.",
+        "Compute Prefix Sums of `count` array to determine final index positions of elements.",
+        "Iterate input array backwards and place elements into output array to preserve stability.",
+        "Extremely fast linear O(N) sort when key range K <= N."
+      ],
+      "exampleTrace": {
+        "input": "arr = [4, 2, 2, 8, 3, 3, 1]",
+        "output": "[1, 2, 2, 3, 3, 4, 8]",
+        "traceSteps": [
+          "Find range: min=1, max=8. Create count array of size 8.",
+          "Populate counts: count[1]=1, count[2]=2, count[3]=2, count[4]=1, count[8]=1.",
+          "Prefix sums: count[1]=1, count[2]=3, count[3]=5, count[4]=6, count[8]=7.",
+          "Build Output: Place elements at prefix sum positions.",
+          "Sorted Array: [1, 2, 2, 3, 3, 4, 8]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts integer values in linear O(N) time without element comparisons.",
+        "whenToUse": "When elements are integers with small range K (e.g. sorting ages, grades, bytes).",
+        "whereUsed": "Subroutine in Radix Sort, sorting characters (ASCII 0-255), suffix array building.",
+        "whyOptimal": "Beats comparison lower bound O(N log N) by taking advantage of integer key indexing."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def counting_sort(arr: list[int]) -> list[int]:\n    if not arr: return arr\n    min_val, max_val = min(arr), max(arr)\n    k = max_val - min_val + 1\n    count = [0] * k\n    output = [0] * len(arr)\n    \n    for x in arr:\n        count[x - min_val] += 1\n        \n    for i in range(1, k):\n        count[i] += count[i - 1]\n        \n    for x in reversed(arr):\n        output[count[x - min_val] - 1] = x\n        count[x - min_val] -= 1\n        \n    return output"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nstd::vector<int> countingSort(std::vector<int>& arr) {\n    if (arr.empty()) return arr;\n    int minVal = *std::min_element(arr.begin(), arr.end());\n    int maxVal = *std::max_element(arr.begin(), arr.end());\n    int k = maxVal - minVal + 1;\n    std::vector<int> count(k, 0), output(arr.size());\n    \n    for (int x : arr) count[x - minVal]++;\n    for (int i = 1; i < k; i++) count[i] += count[i - 1];\n    for (int i = arr.size() - 1; i >= 0; i--) {\n        output[count[arr[i] - minVal] - 1] = arr[i];\n        count[arr[i] - minVal]--;\n    }\n    return output;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class CountingSort {\n    public static int[] countingSort(int[] arr) {\n        if (arr.length == 0) return arr;\n        int minVal = Arrays.stream(arr).min().getAsInt();\n        int maxVal = Arrays.stream(arr).max().getAsInt();\n        int k = maxVal - minVal + 1;\n        int[] count = new int[k];\n        int[] output = new int[arr.length];\n        \n        for (int x : arr) count[x - minVal]++;\n        for (int i = 1; i < k; i++) count[i] += count[i - 1];\n        for (int i = arr.length - 1; i >= 0; i--) {\n            output[count[arr[i] - minVal] - 1] = arr[i];\n            count[arr[i] - minVal]--;\n        }\n        return output;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function countingSort(arr) {\n    if (!arr.length) return arr;\n    const minVal = Math.min(...arr);\n    const maxVal = Math.max(...arr);\n    const k = maxVal - minVal + 1;\n    const count = new Array(k).fill(0);\n    const output = new Array(arr.length);\n    \n    for (let x of arr) count[x - minVal]++;\n    for (let i = 1; i < k; i++) count[i] += count[i - 1];\n    for (let i = arr.length - 1; i >= 0; i--) {\n        output[count[arr[i] - minVal] - 1] = arr[i];\n        count[arr[i] - minVal]--;\n    }\n    return output;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1122 - Relative Sort Array",
+          "url": "https://leetcode.com/problems/relative-sort-array/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "sorting-radix-sort",
+      "title": "Radix Sort (Digit-by-Digit Non-Comparison)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(d * (N + K)) where d is number of digits, K is base (10)",
+      "spaceComplexity": "O(N + K) Auxiliary Space",
+      "summary": "Non-comparison sorting algorithm that sorts numbers digit-by-digit from Least Significant Digit (LSD) to Most Significant Digit (MSD) using Counting Sort.",
+      "explanation": [
+        "Find maximum element to determine maximum number of digits `d`.",
+        "Iterate digit position `exp = 1, 10, 100, ...`.",
+        "For each digit position, apply stable Counting Sort based on digit `(arr[i] // exp) % 10`.",
+        "Stability is critical: equal digits preserve their relative order from previous pass.",
+        "Linear time O(d * N) for integers with fixed number of digits."
+      ],
+      "exampleTrace": {
+        "input": "arr = [170, 45, 75, 90, 802, 24, 2, 66]",
+        "output": "[2, 24, 45, 66, 75, 90, 170, 802]",
+        "traceSteps": [
+          "Pass 1 (Units digit): Sort by units -> [170, 90, 802, 2, 24, 45, 75, 66].",
+          "Pass 2 (Tens digit): Sort by tens -> [802, 2, 24, 45, 66, 170, 75, 90].",
+          "Pass 3 (Hundreds digit): Sort by hundreds -> [2, 24, 45, 66, 75, 90, 170, 802].",
+          "Sorted Array: [2, 24, 45, 66, 75, 90, 170, 802]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts large integers or strings in linear time O(d * N).",
+        "whenToUse": "When sorting multi-digit integers or fixed-length strings.",
+        "whereUsed": "Suffix array construction, parallel GPU sorting, card sorter machines.",
+        "whyOptimal": "Outperforms comparison sorting algorithms when number of digits d is small."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def radix_sort(arr: list[int]) -> list[int]:\n    if not arr: return arr\n    max_val = max(arr)\n    exp = 1\n    while max_val // exp > 0:\n        count = [0] * 10\n        output = [0] * len(arr)\n        for x in arr:\n            digit = (x // exp) % 10\n            count[digit] += 1\n        for i in range(1, 10):\n            count[i] += count[i - 1]\n        for i in reversed(range(len(arr))):\n            digit = (arr[i] // exp) % 10\n            output[count[digit] - 1] = arr[i]\n            count[digit] -= 1\n        arr = output\n        exp *= 10\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid countSortDigit(std::vector<int>& arr, int exp) {\n    int n = arr.size();\n    std::vector<int> output(n);\n    int count[10] = {0};\n    for (int i = 0; i < n; i++) count[(arr[i] / exp) % 10]++;\n    for (int i = 1; i < 10; i++) count[i] += count[i - 1];\n    for (int i = n - 1; i >= 0; i--) {\n        int digit = (arr[i] / exp) % 10;\n        output[count[digit] - 1] = arr[i];\n        count[digit]--;\n    }\n    arr = output;\n}\n\nvoid radixSort(std::vector<int>& arr) {\n    if (arr.empty()) return;\n    int maxVal = *std::max_element(arr.begin(), arr.end());\n    for (int exp = 1; maxVal / exp > 0; exp *= 10) {\n        countSortDigit(arr, exp);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class RadixSort {\n    public static void radixSort(int[] arr) {\n        if (arr.length == 0) return;\n        int maxVal = Arrays.stream(arr).max().getAsInt();\n        for (int exp = 1; maxVal / exp > 0; exp *= 10) {\n            int n = arr.length;\n            int[] output = new int[n];\n            int[] count = new int[10];\n            for (int i = 0; i < n; i++) count[(arr[i] / exp) % 10]++;\n            for (int i = 1; i < 10; i++) count[i] += count[i - 1];\n            for (int i = n - 1; i >= 0; i--) {\n                int digit = (arr[i] / exp) % 10;\n                output[count[digit] - 1] = arr[i];\n                count[digit]--;\n            }\n            System.arraycopy(output, 0, arr, 0, n);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function radixSort(arr) {\n    if (!arr.length) return arr;\n    const maxVal = Math.max(...arr);\n    for (let exp = 1; Math.floor(maxVal / exp) > 0; exp *= 10) {\n        const count = new Array(10).fill(0);\n        const output = new Array(arr.length);\n        for (let x of arr) count[Math.floor(x / exp) % 10]++;\n        for (let i = 1; i < 10; i++) count[i] += count[i - 1];\n        for (let i = arr.length - 1; i >= 0; i--) {\n            const digit = Math.floor(arr[i] / exp) % 10;\n            output[count[digit] - 1] = arr[i];\n            count[digit]--;\n        }\n        arr = output;\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 164 - Maximum Gap",
+          "url": "https://leetcode.com/problems/maximum-gap/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sorting-bucket-sort",
+      "title": "Bucket Sort",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + K) Avg, O(N²) Worst",
+      "spaceComplexity": "O(N + K) Auxiliary Space",
+      "summary": "Distribution sort that partitions elements into uniform buckets, sorts each bucket individually (e.g. with Insertion Sort), and concatenates them.",
+      "explanation": [
+        "Create K empty buckets.",
+        "Scatter: Put each array element `arr[i]` into bucket index `floor(K * arr[i])`.",
+        "Sort: Sort each individual bucket using Insertion Sort or recursion.",
+        "Gather: Concatenate all buckets sequentially into output array.",
+        "Ideal for uniformly distributed floating-point numbers in range [0, 1)."
+      ],
+      "exampleTrace": {
+        "input": "arr = [0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434]",
+        "output": "[0.1234, 0.3434, 0.565, 0.656, 0.665, 0.897]",
+        "traceSteps": [
+          "Distribute into 6 buckets.",
+          "Bucket 0: [0.1234]",
+          "Bucket 2: [0.3434]",
+          "Bucket 3: [0.565, 0.656, 0.665]",
+          "Bucket 5: [0.897]",
+          "Sort each bucket and concatenate.",
+          "Sorted Result: [0.1234, 0.3434, 0.565, 0.656, 0.665, 0.897]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts uniformly distributed floating point numbers in linear O(N) average time.",
+        "whenToUse": "When input numbers are uniformly distributed over a known interval.",
+        "whereUsed": "Graphics rendering depth sorting, histogram equalization.",
+        "whyOptimal": "Scatter-gather approach achieves O(N) average time complexity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def bucket_sort(arr: list[float]) -> list[float]:\n    if not arr: return arr\n    n = len(arr)\n    buckets = [[] for _ in range(n)]\n    \n    for num in arr:\n        bi = int(n * num)\n        if bi == n: bi = n - 1\n        buckets[bi].append(num)\n        \n    for i in range(n):\n        buckets[i].sort()\n        \n    res = []\n    for b in buckets:\n        res.extend(b)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid bucketSort(float arr[], int n) {\n    std::vector<float> b[n];\n    for (int i = 0; i < n; i++) {\n        int bi = n * arr[i];\n        b[bi].push_back(arr[i]);\n    }\n    for (int i = 0; i < n; i++) {\n        std::sort(b[i].begin(), b[i].end());\n    }\n    int index = 0;\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < b[i].size(); j++) {\n            arr[index++] = b[i][j];\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.ArrayList;\nimport java.util.Collections;\n\npublic class BucketSort {\n    public static void bucketSort(float[] arr) {\n        int n = arr.length;\n        if (n <= 0) return;\n        ArrayList<Float>[] buckets = new ArrayList[n];\n        for (int i = 0; i < n; i++) buckets[i] = new ArrayList<>();\n        for (int i = 0; i < n; i++) {\n            int bi = (int)(n * arr[i]);\n            buckets[bi].add(arr[i]);\n        }\n        for (int i = 0; i < n; i++) Collections.sort(buckets[i]);\n        int idx = 0;\n        for (int i = 0; i < n; i++) {\n            for (float num : buckets[i]) arr[idx++] = num;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function bucketSort(arr) {\n    const n = arr.length;\n    if (n <= 0) return arr;\n    const buckets = Array.from({ length: n }, () => []);\n    for (let num of arr) {\n        let bi = Math.floor(n * num);\n        if (bi === n) bi = n - 1;\n        buckets[bi].push(num);\n    }\n    for (let i = 0; i < n; i++) buckets[i].sort((a, b) => a - b);\n    return buckets.flat();\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 347 - Top K Frequent Elements",
+          "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-shell-sort",
+      "title": "Shell Sort (Diminishing Increment)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N^1.3) to O(N²) depending on gap sequence",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "In-place generalization of Insertion Sort that allows exchange of far-apart elements using diminishing gap sequences (e.g. N/2, N/4, ..., 1).",
+      "explanation": [
+        "Initialize gap `h = N // 2`.",
+        "Perform h-sorting: Insertion Sort on sub-lists of elements separated by gap `h`.",
+        "Reduce gap `h = h // 2`.",
+        "Repeat until `h = 1` (final pass is standard Insertion Sort, but on a nearly-sorted array).",
+        "Significantly faster than O(N²) Insertion Sort because elements move long distances quickly."
+      ],
+      "exampleTrace": {
+        "input": "arr = [12, 34, 54, 2, 3]",
+        "output": "[2, 3, 12, 34, 54]",
+        "traceSteps": [
+          "Gap = 2: Compare 12 & 54, 34 & 2 (swap to [12, 2, 54, 34, 3]), 54 & 3 (swap to [12, 2, 3, 34, 54]).",
+          "Gap = 1: Final Insertion Sort pass on nearly sorted array [12, 2, 3, 34, 54].",
+          "Sorted Array: [2, 3, 12, 34, 54]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Speeds up Insertion Sort by moving elements across large gaps first.",
+        "whenToUse": "When fast in-place sorting is needed without recursion stack memory overhead.",
+        "whereUsed": "Embedded uControllers, uClibc C library `qsort` implementation.",
+        "whyOptimal": "Avoids recursive stack space while outperforming simple O(N²) quadratic sorts."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def shell_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nvoid shellSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int gap = n / 2; gap > 0; gap /= 2) {\n        for (int i = gap; i < n; i++) {\n            int temp = arr[i];\n            int j = i;\n            while (j >= gap && arr[j - gap] > temp) {\n                arr[j] = arr[j - gap];\n                j -= gap;\n            }\n            arr[j] = temp;\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class ShellSort {\n    public static void shellSort(int[] arr) {\n        int n = arr.length;\n        for (int gap = n / 2; gap > 0; gap /= 2) {\n            for (int i = gap; i < n; i++) {\n                int temp = arr[i];\n                int j = i;\n                while (j >= gap && arr[j - gap] > temp) {\n                    arr[j] = arr[j - gap];\n                    j -= gap;\n                }\n                arr[j] = temp;\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function shellSort(arr) {\n    const n = arr.length;\n    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {\n        for (let i = gap; i < n; i++) {\n            let temp = arr[i];\n            let j = i;\n            while (j >= gap && arr[j - gap] > temp) {\n                arr[j] = arr[j - gap];\n                j -= gap;\n            }\n            arr[j] = temp;\n        }\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Shell Sort",
+          "url": "https://practice.geeksforgeeks.org/problems/shell-sort/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sorting-cycle-sort",
+      "title": "Cycle Sort (Optimal Memory Writes)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "In-place unstable sorting algorithm that minimizes the total number of memory writes, theoretical minimum swaps O(N).",
+      "explanation": [
+        "Cycle Sort rotates elements along permutation cycles to place each element into its exact final sorted position.",
+        "For each element `item` at `cycle_start`:",
+        "Count number of elements smaller than `item` to find its correct position `pos`.",
+        "Move `item` to `arr[pos]` and take the displaced element.",
+        "Repeat displacement until cycle returns to `cycle_start`.",
+        "Guarantees at most N-1 memory writes, optimal for EEPROM / Flash memory lifespan."
+      ],
+      "exampleTrace": {
+        "input": "arr = [1, 8, 3, 9, 10, 10, 2, 4]",
+        "output": "[1, 2, 3, 4, 8, 9, 10, 10]",
+        "traceSteps": [
+          "Cycle Start 0 (item=1): Already at correct pos 0.",
+          "Cycle Start 1 (item=8): Correct pos is 4. Swap 8 into pos 4.",
+          "Cycle displacement continues along permutation loop.",
+          "Guarantees minimal write operations.",
+          "Sorted Result: [1, 2, 3, 4, 8, 9, 10, 10]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts array with minimum possible memory writes.",
+        "whenToUse": "When memory writes cause physical wear (Flash storage, EEPROM) or are computationally expensive.",
+        "whereUsed": "EEPROM microcontroller memory systems, Flash memory endurance optimization.",
+        "whyOptimal": "Theoretical minimum number of memory write operations O(N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def cycle_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    for cycle_start in range(0, n - 1):\n        item = arr[cycle_start]\n        pos = cycle_start\n        for i in range(cycle_start + 1, n):\n            if arr[i] < item:\n                pos += 1\n        if pos == cycle_start:\n            continue\n        while item == arr[pos]:\n            pos += 1\n        arr[pos], item = item, arr[pos]\n        \n        while pos != cycle_start:\n            pos = cycle_start\n            for i in range(cycle_start + 1, n):\n                if arr[i] < item:\n                    pos += 1\n            while item == arr[pos]:\n                pos += 1\n            arr[pos], item = item, arr[pos]\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nvoid cycleSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int cycle_start = 0; cycle_start <= n - 2; cycle_start++) {\n        int item = arr[cycle_start];\n        int pos = cycle_start;\n        for (int i = cycle_start + 1; i < n; i++) {\n            if (arr[i] < item) pos++;\n        }\n        if (pos == cycle_start) continue;\n        while (item == arr[pos]) pos++;\n        std::swap(arr[pos], item);\n        while (pos != cycle_start) {\n            pos = cycle_start;\n            for (int i = cycle_start + 1; i < n; i++) {\n                if (arr[i] < item) pos++;\n            }\n            while (item == arr[pos]) pos++;\n            std::swap(arr[pos], item);\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class CycleSort {\n    public static void cycleSort(int[] arr) {\n        int n = arr.length;\n        for (int cycleStart = 0; cycleStart <= n - 2; cycleStart++) {\n            int item = arr[cycleStart];\n            int pos = cycleStart;\n            for (int i = cycleStart + 1; i < n; i++) {\n                if (arr[i] < item) pos++;\n            }\n            if (pos == cycleStart) continue;\n            while (item == arr[pos]) pos++;\n            int temp = arr[pos]; arr[pos] = item; item = temp;\n            while (pos != cycleStart) {\n                pos = cycleStart;\n                for (int i = cycleStart + 1; i < n; i++) {\n                    if (arr[i] < item) pos++;\n                }\n                while (item == arr[pos]) pos++;\n                temp = arr[pos]; arr[pos] = item; item = temp;\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function cycleSort(arr) {\n    const n = arr.length;\n    for (let cycleStart = 0; cycleStart <= n - 2; cycleStart++) {\n        let item = arr[cycleStart];\n        let pos = cycleStart;\n        for (let i = cycleStart + 1; i < n; i++) {\n            if (arr[i] < item) pos++;\n        }\n        if (pos === cycleStart) continue;\n        while (item === arr[pos]) pos++;\n        [arr[pos], item] = [item, arr[pos]];\n        while (pos !== cycleStart) {\n            pos = cycleStart;\n            for (let i = cycleStart + 1; i < n; i++) {\n                if (arr[i] < item) pos++;\n            }\n            while (item === arr[pos]) pos++;\n            [arr[pos], item] = [item, arr[pos]];\n        }\n    }\n    return arr;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 268 - Missing Number (Cycle Sort Pattern)",
+          "url": "https://leetcode.com/problems/missing-number/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 448 - Find All Numbers Disappeared in an Array",
+          "url": "https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "sorting-tim-sort",
+      "title": "Tim Sort (Hybrid Merge & Insertion Sort)",
+      "categoryId": "sorting",
+      "categoryTitle": "Sorting Algorithms",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N) Worst/Avg, O(N) Best (Already Sorted)",
+      "spaceComplexity": "O(N) Auxiliary Space",
+      "summary": "High-performance hybrid stable sorting algorithm combining Merge Sort and Insertion Sort, standard built-in sort in Python `sorted()` and Java `Arrays.sort()`. ",
+      "explanation": [
+        "Partition array into small natural blocks called `runs` (typically MIN_RUN = 32 or 64).",
+        "Sort each run using Insertion Sort (which is blazingly fast for small N <= 64).",
+        "Merge sorted runs together using an optimized Merge Sort procedure with Galloping mode.",
+        "Adapts dynamically to pre-existing order in real-world data to achieve O(N) time on nearly sorted data."
+      ],
+      "exampleTrace": {
+        "input": "arr = [5, 21, 7, 23, 19, 1, 3, 12, 45, 2]",
+        "output": "[1, 2, 3, 5, 7, 12, 19, 21, 23, 45]",
+        "traceSteps": [
+          "Split array into runs of size MIN_RUN.",
+          "Sort runs individually using Insertion Sort.",
+          "Merge adjacent runs using Merge Sort.",
+          "Adaptive Galloping Mode accelerates merge for long sorted runs.",
+          "Final Sorted Result: [1, 2, 3, 5, 7, 12, 19, 21, 23, 45]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Delivers real-world peak sorting performance across arbitrary data distributions.",
+        "whenToUse": "Standard production choice for general-purpose object and primitive sorting.",
+        "whereUsed": "Python `list.sort()`, Java `Arrays.sort()`, V8 JavaScript engine Chrome/Node.js, Android OS.",
+        "whyOptimal": "Combines O(N) best-case linear speed of Insertion Sort with guaranteed O(N log N) worst-case bound of Merge Sort."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "MIN_RUN = 32\n\ndef calc_min_run(n):\n    r = 0\n    while n >= MIN_RUN:\n        r |= n & 1\n        n >>= 1\n    return n + r\n\ndef tim_sort(arr: list[int]) -> list[int]:\n    n = len(arr)\n    min_run = calc_min_run(n)\n    \n    for start in range(0, n, min_run):\n        end = min(start + min_run, n)\n        for i in range(start + 1, end):\n            key = arr[i]\n            j = i - 1\n            while j >= start and arr[j] > key:\n                arr[j + 1] = arr[j]\n                j -= 1\n            arr[j + 1] = key\n            \n    size = min_run\n    while size < n:\n        for left in range(0, n, 2 * size):\n            mid = min(n - 1, left + size - 1)\n            right = min((left + 2 * size - 1), (n - 1))\n            if mid < right:\n                merged = []\n                i, j = left, mid + 1\n                while i <= mid and j <= right:\n                    if arr[i] <= arr[j]: merged.append(arr[i]); i += 1\n                    else: merged.append(arr[j]); j += 1\n                while i <= mid: merged.append(arr[i]); i += 1\n                while j <= right: merged.append(arr[j]); j += 1\n                for k, val in enumerate(merged):\n                    arr[left + k] = val\n        size *= 2\n    return arr"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nconst int RUN = 32;\n\nvoid insertionSortRun(std::vector<int>& arr, int left, int right) {\n    for (int i = left + 1; i <= right; i++) {\n        int temp = arr[i];\n        int j = i - 1;\n        while (j >= left && arr[j] > temp) {\n            arr[j + 1] = arr[j];\n            j--;\n        }\n        arr[j + 1] = temp;\n    }\n}\n\nvoid timSort(std::vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n; i += RUN)\n        insertionSortRun(arr, i, std::min((i + RUN - 1), (n - 1)));\n    for (int size = RUN; size < n; size = 2 * size) {\n        for (int left = 0; left < n; left += 2 * size) {\n            int mid = left + size - 1;\n            int right = std::min((left + 2 * size - 1), (n - 1));\n            if (mid < right) {\n                std::inplace_merge(arr.begin() + left, arr.begin() + mid + 1, arr.begin() + right + 1);\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class TimSort {\n    public static void timSort(int[] arr) {\n        java.util.Arrays.sort(arr);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function timSort(arr) {\n    return arr.sort((a, b) => a - b);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 912 - Sort an Array (Timsort)",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

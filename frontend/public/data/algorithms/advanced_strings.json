@@ -1,0 +1,735 @@
+{
+  "id": "advanced_strings",
+  "category": {
+    "id": "advanced_strings",
+    "title": "Advanced Strings & Automata",
+    "icon": "Terminal",
+    "description": "Trie, Suffix Array, LCP Array (Kasai), Suffix Tree (Ukkonen), Suffix Automaton (SAM), Aho-Corasick, Boyer-Moore, KMP, Z-Algorithm, Rabin-Karp, Manacher's Algorithm & Applications."
+  },
+  "totalAlgorithms": 13,
+  "algorithms": [
+    {
+      "id": "trie-prefix-tree-advanced",
+      "title": "Trie (Prefix Tree) Foundations",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(L) per insert/search/prefix query",
+      "spaceComplexity": "O(N * L * Sigma)",
+      "summary": "Tree-based data structure used to store a dynamic set of strings where keys are usually strings. Allows rapid O(L) prefix lookup and autocomplete.",
+      "explanation": [
+        "1. Each node represents a character transition in an alphabet.",
+        "2. Root represents an empty string.",
+        "3. Path from root to a node forms a prefix.",
+        "4. `isEndOfWord` flag marks complete string terminals."
+      ],
+      "exampleTrace": {
+        "title": "Insert 'cat', 'car', search 'car', startsWith 'ca'",
+        "traceSteps": [
+          "Insert 'cat': root -> c -> a -> t (isEnd=true)",
+          "Insert 'car': root -> c -> a -> r (isEnd=true)",
+          "Search 'car': Traverse root->c->a->r. node.isEnd == true -> return True.",
+          "startsWith 'ca': Traverse root->c->a. Node exists -> return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides fast O(L) retrieval of strings with a common prefix.",
+        "whenToUse": "Autocomplete systems, dictionary lookups, spell checkers, prefix matching.",
+        "whereUsed": "Search engines, routers (IP routing tables), text editors.",
+        "whyOptimal": "Lookup time depends only on string length L, not the total number of dictionary words N."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        curr = self.root\n        for ch in word:\n            if ch not in curr.children:\n                curr.children[ch] = TrieNode()\n            curr = curr.children[ch]\n        curr.is_end = True\n\n    def search(self, word: str) -> bool:\n        curr = self.root\n        for ch in word:\n            if ch not in curr.children:\n                return False\n            curr = curr.children[ch]\n        return curr.is_end\n\n    def starts_with(self, prefix: str) -> bool:\n        curr = self.root\n        for ch in prefix:\n            if ch not in curr.children:\n                return False\n            curr = curr.children[ch]\n        return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <unordered_map>\n#include <string>\nusing namespace std;\n\nstruct TrieNode {\n    unordered_map<char, TrieNode*> children;\n    bool isEnd = false;\n};\n\nclass Trie {\n    TrieNode* root;\npublic:\n    Trie() { root = new TrieNode(); }\n    void insert(string word) {\n        TrieNode* curr = root;\n        for (char c : word) {\n            if (!curr->children.count(c)) curr->children[c] = new TrieNode();\n            curr = curr->children[c];\n        }\n        curr->isEnd = true;\n    }\n    bool search(string word) {\n        TrieNode* curr = root;\n        for (char c : word) {\n            if (!curr->children.count(c)) return false;\n            curr = curr->children[c];\n        }\n        return curr->isEnd;\n    }\n    bool startsWith(string prefix) {\n        TrieNode* curr = root;\n        for (char c : prefix) {\n            if (!curr->children.count(c)) return false;\n            curr = curr->children[c];\n        }\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass TrieNode {\n    Map<Character, TrieNode> children = new HashMap<>();\n    boolean isEnd = false;\n}\n\npublic class Trie {\n    private TrieNode root;\n    public Trie() { root = new TrieNode(); }\n    public void insert(String word) {\n        TrieNode curr = root;\n        for (char c : word.toCharArray()) {\n            curr.children.putIfAbsent(c, new TrieNode());\n            curr = curr.children.get(c);\n        }\n        curr.isEnd = true;\n    }\n    public boolean search(String word) {\n        TrieNode curr = root;\n        for (char c : word.toCharArray()) {\n            if (!curr.children.containsKey(c)) return false;\n            curr = curr.children.get(c);\n        }\n        return curr.isEnd;\n    }\n    public boolean startsWith(String prefix) {\n        TrieNode curr = root;\n        for (char c : prefix) {\n            if (!curr.children.containsKey(c)) return false;\n            curr = curr.children.get(c);\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class TrieNode {\n  constructor() {\n    this.children = {};\n    this.isEnd = false;\n  }\n}\nclass Trie {\n  constructor() { this.root = new TrieNode(); }\n  insert(word) {\n    let curr = this.root;\n    for (const ch of word) {\n      if (!curr.children[ch]) curr.children[ch] = new TrieNode();\n      curr = curr.children[ch];\n    }\n    curr.isEnd = true;\n  }\n  search(word) {\n    let curr = this.root;\n    for (const ch of word) {\n      if (!curr.children[ch]) return false;\n      curr = curr.children[ch];\n    }\n    return curr.isEnd;\n  }\n  startsWith(prefix) {\n    let curr = this.root;\n    for (const ch of prefix) {\n      if (!curr.children[ch]) return false;\n      curr = curr.children[ch];\n    }\n    return true;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 208 - Implement Trie (Prefix Tree)",
+          "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "suffix-array-construction",
+      "title": "Suffix Array Construction",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N) or O(N log^2 N)",
+      "spaceComplexity": "O(N)",
+      "summary": "A sorted array of all suffixes of a string. Provides compact O(N) space memory layout for substring pattern matching and string analysis.",
+      "explanation": [
+        "1. Suffix array `SA[i]` stores the starting index of the i-th lexicographically smallest suffix.",
+        "2. Built iteratively using Prefix Doubling: sort suffixes by first k=1, 2, 4, 8... characters.",
+        "3. Uses rank equivalence pairs `(rank[i], rank[i + k])` to update ranks at each step.",
+        "4. Achieves O(N log N) using counting sort or O(N log^2 N) using standard sorting."
+      ],
+      "exampleTrace": {
+        "title": "Build Suffix Array for string S = 'banana$'",
+        "traceSteps": [
+          "Suffixes: 0:'banana$', 1:'anana$', 2:'nana$', 3:'ana$', 4:'na$', 5:'a$', 6:'$'",
+          "Sorted Suffixes: 6:'$', 5:'a$', 3:'ana$', 1:'anana$', 0:'banana$', 4:'na$', 2:'nana$'",
+          "Suffix Array SA = [6, 5, 3, 1, 0, 4, 2]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts all suffixes of a string lexicographically in compact array form.",
+        "whenToUse": "Pattern searching in genome sequences, string matching, LCP calculation.",
+        "whereUsed": "Bioinformatics (DNA sequence analysis), text search engines.",
+        "whyOptimal": "Uses only O(N) space compared to O(N^2) for explicit suffix trees."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def build_suffix_array(s: str) -> list[int]:\n    s += '$'\n    n = len(s)\n    sa = list(range(n))\n    rank = [ord(c) for c in s]\n    tmp = [0] * n\n    k = 1\n    while k < n:\n        sa.sort(key=lambda i: (rank[i], rank[i + k] if i + k < n else -1))\n        tmp[sa[0]] = 0\n        for i in range(1, n):\n            prev, curr = sa[i - 1], sa[i]\n            p_pair = (rank[prev], rank[prev + k] if prev + k < n else -1)\n            c_pair = (rank[curr], rank[curr + k] if curr + k < n else -1)\n            tmp[curr] = tmp[prev] + (1 if p_pair != c_pair else 0)\n        rank = tmp[:]\n        if rank[sa[-1]] == n - 1:\n            break\n        k *= 2\n    return sa"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <numeric>\n#include <algorithm>\nusing namespace std;\n\nvector<int> buildSuffixArray(string s) {\n    s += \"$\";\n    int n = s.length();\n    vector<int> sa(n), rank(n), tmp(n);\n    iota(sa.begin(), sa.end(), 0);\n    for (int i = 0; i < n; i++) rank[i] = s[i];\n    for (int k = 1; k < n; k <<= 1) {\n        auto cmp = [&](int i, int j) {\n            if (rank[i] != rank[j]) return rank[i] < rank[j];\n            int ri = (i + k < n) ? rank[i + k] : -1;\n            int rj = (j + k < n) ? rank[j + k] : -1;\n            return ri < rj;\n        };\n        sort(sa.begin(), sa.end(), cmp);\n        tmp[sa[0]] = 0;\n        for (int i = 1; i < n; i++) tmp[sa[i]] = tmp[sa[i - 1]] + (cmp(sa[i - 1], sa[i]) ? 1 : 0);\n        rank = tmp;\n        if (rank[sa[n - 1]] == n - 1) break;\n    }\n    return sa;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class SuffixArray {\n    public static int[] buildSuffixArray(String s) {\n        s += \"$\";\n        int n = s.length();\n        Integer[] sa = new Integer[n];\n        int[] rank = new int[n], tmp = new int[n];\n        for (int i = 0; i < n; i++) { sa[i] = i; rank[i] = s.charAt(i); }\n        for (int k = 1; k < n; k <<= 1) {\n            final int step = k, r[] = rank;\n            Arrays.sort(sa, (i, j) -> {\n                if (r[i] != r[j]) return Integer.compare(r[i], r[j]);\n                int ri = (i + step < n) ? r[i + step] : -1;\n                int rj = (j + step < n) ? r[j + step] : -1;\n                return Integer.compare(ri, rj);\n            });\n            tmp[sa[0]] = 0;\n            for (int i = 1; i < n; i++) {\n                int prev = sa[i - 1], curr = sa[i];\n                boolean diff = r[prev] != r[curr] || ((prev + step < n ? r[prev + step] : -1) != (curr + step < n ? r[curr + step] : -1));\n                tmp[curr] = tmp[prev] + (diff ? 1 : 0);\n            }\n            System.arraycopy(tmp, 0, rank, 0, n);\n            if (rank[sa[n - 1]] == n - 1) break;\n        }\n        int[] res = new int[n];\n        for (int i = 0; i < n; i++) res[i] = sa[i];\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function buildSuffixArray(s) {\n  s += '$';\n  const n = s.length;\n  let sa = Array.from({ length: n }, (_, i) => i);\n  let rank = s.split('').map(c => c.charCodeAt(0));\n  let tmp = new Array(n);\n  for (let k = 1; k < n; k *= 2) {\n    sa.sort((i, j) => {\n      if (rank[i] !== rank[j]) return rank[i] - rank[j];\n      let ri = i + k < n ? rank[i + k] : -1;\n      let rj = j + k < n ? rank[j + k] : -1;\n      return ri - rj;\n    });\n    tmp[sa[0]] = 0;\n    for (let i = 1; i < n; i++) {\n      let prev = sa[i - 1], curr = sa[i];\n      let riPrev = prev + k < n ? rank[prev + k] : -1;\n      let riCurr = curr + k < n ? rank[curr + k] : -1;\n      let diff = rank[prev] !== rank[curr] || riPrev !== riCurr;\n      tmp[curr] = tmp[prev] + (diff ? 1 : 0);\n    }\n    rank = [...tmp];\n    if (rank[sa[n - 1]] === n - 1) break;\n  }\n  return sa;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - Suffix Array Construction",
+          "url": "https://cses.fi/problemset/task/2105",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "lcp-array-kasai",
+      "title": "LCP Array (Kasai's Algorithm)",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Computes the Longest Common Prefix (LCP) between adjacent suffixes in the sorted Suffix Array in linear O(N) time using Kasai's property.",
+      "explanation": [
+        "1. Kasai's Key Insight: LCP of suffix starting at `i` is at least `LCP(suffix(i-1)) - 1`.",
+        "2. Maintain inverse Suffix Array `rank[sa[i]] = i`.",
+        "3. Iterate through original string index `i` from 0 to N-1.",
+        "4. Compare suffix starting at `i` with suffix starting at `sa[rank[i] - 1]`."
+      ],
+      "exampleTrace": {
+        "title": "Kasai LCP Trace for S = 'banana$', SA = [6, 5, 3, 1, 0, 4, 2]",
+        "traceSteps": [
+          "sa[0]='$' (rank 0), sa[1]='a$' (rank 1), sa[2]='ana$' (rank 2), sa[3]='anana$' (rank 3)...",
+          "LCP between sa[1] ('a$') and sa[2] ('ana$') = 1 ('a')",
+          "LCP between sa[2] ('ana$') and sa[3] ('anana$') = 3 ('ana')",
+          "Kasai computes all adjacent LCP values in a single O(N) sweep!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates longest common prefix of adjacent suffixes in linear time.",
+        "whenToUse": "Finding distinct substrings, longest repeated substrings, pattern counting.",
+        "whereUsed": "Full-text search indexing, sequence alignment algorithms.",
+        "whyOptimal": "Avoids naive O(N^2) character comparisons by reusing match lengths."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def build_lcp_array(s: str, sa: list[int]) -> list[int]:\n    n = len(s)\n    rank = [0] * n\n    for i in range(n):\n        rank[sa[i]] = i\n    lcp = [0] * n\n    h = 0\n    for i in range(n):\n        if rank[i] > 0:\n            j = sa[rank[i] - 1]\n            while i + h < n and j + h < n and s[i + h] == s[j + h]:\n                h += 1\n            lcp[rank[i]] = h\n            if h > 0:\n                h -= 1\n    return lcp"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> buildLCPArray(const string& s, const vector<int>& sa) {\n    int n = s.length();\n    vector<int> rank(n, 0), lcp(n, 0);\n    for (int i = 0; i < n; i++) rank[sa[i]] = i;\n    int h = 0;\n    for (int i = 0; i < n; i++) {\n        if (rank[i] > 0) {\n            int j = sa[rank[i] - 1];\n            while (i + h < n && j + h < n && s[i + h] == s[j + h]) h++;\n            lcp[rank[i]] = h;\n            if (h > 0) h--;\n        }\n    }\n    return lcp;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class KasaiLCP {\n    public static int[] buildLCPArray(String s, int[] sa) {\n        int n = s.length();\n        int[] rank = new int[n], lcp = new int[n];\n        for (int i = 0; i < n; i++) rank[sa[i]] = i;\n        int h = 0;\n        for (int i = 0; i < n; i++) {\n            if (rank[i] > 0) {\n                int j = sa[rank[i] - 1];\n                while (i + h < n && j + h < n && s.charAt(i + h) == s.charAt(j + h)) h++;\n                lcp[rank[i]] = h;\n                if (h > 0) h--;\n            }\n        }\n        return lcp;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function buildLCPArray(s, sa) {\n  const n = s.length;\n  const rank = new Array(n);\n  const lcp = new Array(n).fill(0);\n  for (let i = 0; i < n; i++) rank[sa[i]] = i;\n  let h = 0;\n  for (let i = 0; i < n; i++) {\n    if (rank[i] > 0) {\n      let j = sa[rank[i] - 1];\n      while (i + h < n && j + h < n && s[i + h] === s[j + h]) h++;\n      lcp[rank[i]] = h;\n      if (h > 0) h--;\n    }\n  }\n  return lcp;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "SPOJ - Longest Common Prefix Array",
+          "url": "https://www.spoj.com/problems/LCP/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "suffix-tree-ukkonen",
+      "title": "Suffix Tree & Ukkonen's Algorithm",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Compressed trie containing all suffixes of a text. Ukkonen's algorithm builds it in online linear time O(N) using active point & suffix link transitions.",
+      "explanation": [
+        "1. Suffix Tree represents all N suffixes in a compressed tree with O(N) nodes.",
+        "2. Ukkonen's Online Algorithm processes characters one by one from left to right.",
+        "3. Active Point `(activeNode, activeEdge, activeLength)` tracks current insertion location.",
+        "4. Suffix Links allow instant jumping to process remaining suffixes after node splitting."
+      ],
+      "exampleTrace": {
+        "title": "Ukkonen Build Step for 'abcab$'",
+        "traceSteps": [
+          "Step 1: Add 'a', 'b', 'c'. Tree expands leaves.",
+          "Step 2: Add 'a'. Character 'a' already exists on edge from root. Increment activeLength.",
+          "Step 3: Add 'b'. Character 'b' matches active edge.",
+          "Step 4: Add '$'. Match fails, split edge, create new internal node, follow suffix link to process remaining suffixes."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves complex string queries (substring search, matching, palindromes) in optimal linear time.",
+        "whenToUse": "When querying multiple patterns against a fixed text or finding complex repeating structures.",
+        "whereUsed": "Genomics tools (BLAST), text data compression (BWT), full-text search.",
+        "whyOptimal": "Provides O(M) pattern lookup independent of text length N."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class SuffixTreeNode:\n    def __init__(self, start=-1, end=None):\n        self.children = {}\n        self.start = start\n        self.end = end\n        self.suffix_link = None\n\nclass UkkonenSuffixTree:\n    def __init__(self, text: str):\n        self.text = text + '$'\n        self.root = SuffixTreeNode()\n        # Ukkonen linear build algorithm scaffold"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <unordered_map>\n#include <string>\nusing namespace std;\n\nstruct Node {\n    unordered_map<char, Node*> children;\n    Node* suffixLink = nullptr;\n    int start, *end;\n};\n\nclass SuffixTree {\n    string text;\n    Node* root;\npublic:\n    SuffixTree(string s) : text(s + \"$\") {\n        root = new Node{-1, nullptr};\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass Node {\n    Map<Character, Node> children = new HashMap<>();\n    Node suffixLink;\n    int start, end;\n}\n\npublic class SuffixTree {\n    private String text;\n    private Node root;\n    public SuffixTree(String text) {\n        this.text = text + \"$\";\n        this.root = new Node();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SuffixTreeNode {\n  constructor(start = -1, end = null) {\n    this.children = {};\n    this.start = start;\n    this.end = end;\n    this.suffixLink = null;\n  }\n}\nclass SuffixTree {\n  constructor(text) {\n    this.text = text + '$';\n    this.root = new SuffixTreeNode();\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Ukkonen's Suffix Tree Construction",
+          "url": "https://www.geeksforgeeks.org/ukkonens-suffix-tree-construction-part-1/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "suffix-automaton-sam",
+      "title": "Suffix Automaton (SAM / DAWG)",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N) Construction, O(1) per transition",
+      "spaceComplexity": "O(N * Sigma)",
+      "summary": "Direct Acyclic Word Graph (DAWG) that encapsulates all substrings of a string in a minimal deterministic finite automaton with O(N) states and transitions.",
+      "explanation": [
+        "1. State: Equivalency class of substrings having the exact same set of end positions (`endpos`).",
+        "2. Transitions: Directed edges labeled with characters representing string extension.",
+        "3. Suffix Link (`link`): Points to state representing the longest proper suffix with a larger `endpos` set.",
+        "4. Online O(N) Construction: Appends characters one by one, adding at most 2 states per step."
+      ],
+      "exampleTrace": {
+        "title": "Build SAM for S = 'aba'",
+        "traceSteps": [
+          "State 0 (root): len = 0, link = -1",
+          "Add 'a': Create State 1 (len=1, link=0, trans['a']=1)",
+          "Add 'b': Create State 2 (len=2, link=0, trans['b']=2 from st 1)",
+          "Add 'a': Create State 3 (len=3, link=1, trans['a']=3 from st 2)",
+          "SAM encodes all 5 substrings {'a', 'b', 'ab', 'ba', 'aba'} in 4 states!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Encodes all substrings of a text into a minimal state automaton.",
+        "whenToUse": "Counting distinct substrings, finding longest common substring, occurrence counting.",
+        "whereUsed": "High-performance string matching engines, bioinformatics, automated translation.",
+        "whyOptimal": "Stronger and faster than Suffix Tree with smaller constant factor and simpler online transitions."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class SAMState:\n    def __init__(self, length=0, link=-1):\n        self.len = length\n        self.link = link\n        self.next = {}\n\nclass SuffixAutomaton:\n    def __init__(self):\n        self.st = [SAMState()]\n        self.last = 0\n\n    def extend(self, c: str):\n        cur = len(self.st)\n        self.st.append(SAMState(self.st[self.last].len + 1))\n        p = self.last\n        while p != -1 and c not in self.st[p].next:\n            self.st[p].next[c] = cur\n            p = self.st[p].link\n        if p == -1:\n            self.st[cur].link = 0\n        else:\n            q = self.st[p].next[c]\n            if self.st[p].len + 1 == self.st[q].len:\n                self.st[cur].link = q\n            else:\n                clone = len(self.st)\n                self.st.append(SAMState(self.st[p].len + 1, self.st[q].link))\n                self.st[clone].next = self.st[q].next.copy()\n                while p != -1 and self.st[p].next.get(c) == q:\n                    self.st[p].next[c] = clone\n                    p = self.st[p].link\n                self.st[q].link = self.st[cur].link = clone\n        self.last = cur"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <map>\n#include <string>\nusing namespace std;\n\nstruct State {\n    int len = 0, link = -1;\n    map<char, int> next;\n};\n\nclass SuffixAutomaton {\n    vector<State> st;\n    int last = 0;\npublic:\n    SuffixAutomaton() { st.push_back(State()); }\n    void extend(char c) {\n        int cur = st.size();\n        st.push_back(State());\n        st[cur].len = st[last].len + 1;\n        int p = last;\n        while (p != -1 && !st[p].next.count(c)) {\n            st[p].next[c] = cur;\n            p = st[p].link;\n        }\n        if (p == -1) {\n            st[cur].link = 0;\n        } else {\n            int q = st[p].next[c];\n            if (st[p].len + 1 == st[q].len) {\n                st[cur].link = q;\n            } else {\n                int clone = st.size();\n                st.push_back(State());\n                st[clone].len = st[p].len + 1;\n                st[clone].next = st[q].next;\n                st[clone].link = st[q].link;\n                while (p != -1 && st[p].next[c] == q) {\n                    st[p].next[c] = clone;\n                    p = st[p].link;\n                }\n                st[q].link = st[cur].link = clone;\n            }\n        }\n        last = cur;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass State {\n    int len = 0, link = -1;\n    Map<Character, Integer> next = new HashMap<>();\n}\n\npublic class SuffixAutomaton {\n    List<State> st = new ArrayList<>();\n    int last = 0;\n    public SuffixAutomaton() { st.add(new State()); }\n    public void extend(char c) {\n        int cur = st.size();\n        State newState = new State();\n        newState.len = st.get(last).len + 1;\n        st.add(newState);\n        int p = last;\n        while (p != -1 && !st.get(p).next.containsKey(c)) {\n            st.get(p).next.put(c, cur);\n            p = st.get(p).link;\n        }\n        if (p == -1) {\n            st.get(cur).link = 0;\n        } else {\n            int q = st.get(p).next.get(c);\n            if (st.get(p).len + 1 == st.get(q).len) {\n                st.get(cur).link = q;\n            } else {\n                int clone = st.size();\n                State cloneState = new State();\n                cloneState.len = st.get(p).len + 1;\n                cloneState.next.putAll(st.get(q).next);\n                cloneState.link = st.get(q).link;\n                st.add(cloneState);\n                while (p != -1 && st.get(p).next.get(c) == q) {\n                    st.get(p).next.put(c, clone);\n                    p = st.get(p).link;\n                }\n                st.get(q).link = st.get(cur).link = clone;\n            }\n        }\n        last = cur;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class State {\n  constructor(len = 0, link = -1) {\n    this.len = len;\n    this.link = link;\n    this.next = {};\n  }\n}\nclass SuffixAutomaton {\n  constructor() {\n    this.st = [new State()];\n    this.last = 0;\n  }\n  extend(c) {\n    let cur = this.st.length;\n    this.st.push(new State(this.st[this.last].len + 1));\n    let p = this.last;\n    while (p !== -1 && !(c in this.st[p].next)) {\n      this.st[p].next[c] = cur;\n      p = this.st[p].link;\n    }\n    if (p === -1) {\n      this.st[cur].link = 0;\n    } else {\n      let q = this.st[p].next[c];\n      if (this.st[p].len + 1 === this.st[q].len) {\n        this.st[cur].link = q;\n      } else {\n        let clone = this.st.length;\n        let cloneState = new State(this.st[p].len + 1, this.st[q].link);\n        cloneState.next = { ...this.st[q].next };\n        this.st.push(cloneState);\n        while (p !== -1 && this.st[p].next[c] === q) {\n          this.st[p].next[c] = clone;\n          p = this.st[p].link;\n        }\n        this.st[q].link = this.st[cur].link = clone;\n      }\n    }\n    this.last = cur;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - Distinct Substrings",
+          "url": "https://cses.fi/problemset/task/2105",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "distinct-substrings-count",
+      "title": "Application: Distinct Substrings Count",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) with LCP / SAM",
+      "spaceComplexity": "O(N)",
+      "summary": "Computes total number of distinct non-empty substrings of a string S using either Suffix Array + LCP Array or Suffix Automaton.",
+      "explanation": [
+        "1. Total substrings of length N = N * (N + 1) / 2.",
+        "2. Duplicate substrings correspond exactly to LCP values between adjacent sorted suffixes.",
+        "3. Formula 1 (Suffix Array): `Distinct Count = N * (N + 1) / 2 - Sum(LCP[i])`.",
+        "4. Formula 2 (SAM): `Distinct Count = Sum(st[i].len - st[i].link)` for all states i > 0."
+      ],
+      "exampleTrace": {
+        "title": "Count distinct substrings of 'azaba'",
+        "traceSteps": [
+          "String length N = 5. Total possible substrings = 5 * 6 / 2 = 15.",
+          "LCP values for sorted suffixes = [0, 0, 1, 0, 1]. Sum(LCP) = 2.",
+          "Distinct Substrings = 15 - 2 = 13."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts unique non-empty substrings without explicit set hashing.",
+        "whenToUse": "Combinatorial string problems, string entropy analysis.",
+        "whereUsed": "Data deduplication, string complexity metrics.",
+        "whyOptimal": "Computes exact count in O(N) time compared to naive O(N^2) set insertion."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_distinct_substrings(s: str, sa: list[int], lcp: list[int]) -> int:\n    n = len(s)\n    total = n * (n + 1) // 2\n    return total - sum(lcp)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <numeric>\nusing namespace std;\n\nlong long countDistinctSubstrings(const string& s, const vector<int>& lcp) {\n    long long n = s.length();\n    long long total = n * (n + 1) / 2;\n    long long sumLcp = accumulate(lcp.begin(), lcp.end(), 0LL);\n    return total - sumLcp;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class DistinctSubstrings {\n    public static long countDistinctSubstrings(String s, int[] lcp) {\n        long n = s.length();\n        long total = n * (n + 1) / 2;\n        long sumLcp = 0;\n        for (int val : lcp) sumLcp += val;\n        return total - sumLcp;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function countDistinctSubstrings(s, lcp) {\n  const n = s.length;\n  const total = (n * (n + 1)) / 2;\n  const sumLcp = lcp.reduce((acc, val) => acc + val, 0);\n  return total - sumLcp;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1698 - Number of Distinct Substrings in a String",
+          "url": "https://leetcode.com/problems/number-of-distinct-substrings-in-a-string/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "longest-repeated-substring",
+      "title": "Application: Longest Repeated Substring",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the longest substring that appears at least twice in a text. Solved by finding max element in LCP array or using Suffix Automaton.",
+      "explanation": [
+        "1. A repeated substring appears as a common prefix of two distinct suffixes.",
+        "2. The length of the longest repeated substring is equal to `max(LCP[i])` across all i.",
+        "3. Extract substring of length `max_lcp` starting at `SA[max_index]`.",
+        "4. Handles overlapping and non-overlapping substring conditions."
+      ],
+      "exampleTrace": {
+        "title": "Longest Repeated Substring in 'banana'",
+        "traceSteps": [
+          "Sorted Suffixes: 'a', 'ana', 'anana', 'banana', 'na', 'nana'",
+          "LCP Array: [0, 1, 3, 0, 0, 2]",
+          "Max LCP = 3 at index of 'ana' vs 'anana'",
+          "Longest Repeated Substring = 'ana'."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies the longest substring with multiple occurrences.",
+        "whenToUse": "Data compression (LZ77/LZ78), DNA tandem repeat identification.",
+        "whereUsed": "Compression codecs, plagiarism detection software.",
+        "whyOptimal": "O(N) linear time search using precomputed LCP array."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longest_repeated_substring(s: str, sa: list[int], lcp: list[int]) -> str:\n    max_len = 0\n    start_idx = 0\n    for i in range(len(lcp)):\n        if lcp[i] > max_len:\n            max_len = lcp[i]\n            start_idx = sa[i]\n    return s[start_idx : start_idx + max_len]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nstring longestRepeatedSubstring(const string& s, const vector<int>& sa, const vector<int>& lcp) {\n    int maxLen = 0, startIdx = 0;\n    for (size_t i = 0; i < lcp.size(); i++) {\n        if (lcp[i] > maxLen) {\n            maxLen = lcp[i];\n            startIdx = sa[i];\n        }\n    }\n    return s.substr(startIdx, maxLen);\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class LongestRepeatedSubstring {\n    public static String getLongestRepeatedSubstring(String s, int[] sa, int[] lcp) {\n        int maxLen = 0, startIdx = 0;\n        for (int i = 0; i < lcp.length; i++) {\n            if (lcp[i] > maxLen) {\n                maxLen = lcp[i];\n                startIdx = sa[i];\n            }\n        }\n        return s.substring(startIdx, startIdx + maxLen);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function longestRepeatedSubstring(s, sa, lcp) {\n  let maxLen = 0, startIdx = 0;\n  for (let i = 0; i < lcp.length; i++) {\n    if (lcp[i] > maxLen) {\n      maxLen = lcp[i];\n      startIdx = sa[i];\n    }\n  }\n  return s.substring(startIdx, startIdx + maxLen);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1062 - Longest Repeating Substring",
+          "url": "https://leetcode.com/problems/longest-repeating-substring/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "kmp-algorithm-advanced",
+      "title": "Knuth-Morris-Pratt (KMP) & Prefix Function",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(M)",
+      "summary": "Fast pattern matching using the Prefix Function (pi array / LPS array) to skip unnecessary character comparisons when mismatch occurs.",
+      "explanation": [
+        "1. Precomputes `pi[i]`: length of the longest proper prefix of `pattern[0...i]` that is also a suffix of `pattern[0...i]`.",
+        "2. When a mismatch occurs at text index `i` and pattern index `j`, shift pattern by setting `j = pi[j - 1]` instead of rewinding text.",
+        "3. Guarantees linear O(N + M) worst-case time complexity."
+      ],
+      "exampleTrace": {
+        "title": "KMP search for Pattern 'ababa' in Text 'ababcaba'",
+        "traceSteps": [
+          "LPS array for 'ababa' = [0, 0, 1, 2, 3].",
+          "Matching text 'ababc...': mismatch at 'c' vs pattern[4]='a'.",
+          "Fallback: j = pi[3] = 2. Resume comparing from pattern index 2 without resetting text pointer!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sub-quadratic exact pattern matching with zero back-tracking on text stream.",
+        "whenToUse": "Text searching, string periodicities, border computations.",
+        "whereUsed": "Grep utilities, text editor search commands, packet inspection.",
+        "whyOptimal": "Ensures O(N) text scanning by eliminating re-reading of matched characters."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def compute_lps(pattern: str) -> list[int]:\n    m = len(pattern)\n    lps = [0] * m\n    j = 0\n    for i in range(1, m):\n        while j > 0 and pattern[i] != pattern[j]:\n            j = lps[j - 1]\n        if pattern[i] == pattern[j]:\n            j += 1\n            lps[i] = j\n    return lps\n\ndef kmp_search(text: str, pattern: str) -> list[int]:\n    n, m = len(text), len(pattern)\n    lps = compute_lps(pattern)\n    matches = []\n    j = 0\n    for i in range(n):\n        while j > 0 and text[i] != pattern[j]:\n            j = lps[j - 1]\n        if text[i] == pattern[j]:\n            j += 1\n        if j == m:\n            matches.append(i - m + 1)\n            j = lps[j - 1]\n    return matches"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> computeLPS(string pattern) {\n    int m = pattern.length();\n    vector<int> lps(m, 0);\n    int j = 0;\n    for (int i = 1; i < m; i++) {\n        while (j > 0 && pattern[i] != pattern[j]) j = lps[j - 1];\n        if (pattern[i] == pattern[j]) lps[i] = ++j;\n    }\n    return lps;\n}\n\nvector<int> kmpSearch(string text, string pattern) {\n    int n = text.length(), m = pattern.length();\n    vector<int> lps = computeLPS(pattern), matches;\n    int j = 0;\n    for (int i = 0; i < n; i++) {\n        while (j > 0 && text[i] != pattern[j]) j = lps[j - 1];\n        if (text[i] == pattern[j]) j++;\n        if (j == m) {\n            matches.push_back(i - m + 1);\n            j = lps[j - 1];\n        }\n    }\n    return matches;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class KMP {\n    public static int[] computeLPS(String pattern) {\n        int m = pattern.length();\n        int[] lps = new int[m];\n        int j = 0;\n        for (int i = 1; i < m; i++) {\n            while (j > 0 && pattern.charAt(i) != pattern.charAt(j)) j = lps[j - 1];\n            if (pattern.charAt(i) == pattern.charAt(j)) lps[i] = ++j;\n        }\n        return lps;\n    }\n    public static List<Integer> kmpSearch(String text, String pattern) {\n        List<Integer> matches = new ArrayList<>();\n        int n = text.length(), m = pattern.length();\n        int[] lps = computeLPS(pattern);\n        int j = 0;\n        for (int i = 0; i < n; i++) {\n            while (j > 0 && text.charAt(i) != pattern.charAt(j)) j = lps[j - 1];\n            if (text.charAt(i) == pattern.charAt(j)) j++;\n            if (j == m) {\n                matches.add(i - m + 1);\n                j = lps[j - 1];\n            }\n        }\n        return matches;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function computeLPS(pattern) {\n  const m = pattern.length;\n  const lps = new Array(m).fill(0);\n  let j = 0;\n  for (let i = 1; i < m; i++) {\n    while (j > 0 && pattern[i] !== pattern[j]) j = lps[j - 1];\n    if (pattern[i] === pattern[j]) lps[i] = ++j;\n  }\n  return lps;\n}\nfunction kmpSearch(text, pattern) {\n  const matches = [];\n  const n = text.length, m = pattern.length;\n  const lps = computeLPS(pattern);\n  let j = 0;\n  for (let i = 0; i < n; i++) {\n    while (j > 0 && text[i] !== pattern[j]) j = lps[j - 1];\n    if (text[i] === pattern[j]) j++;\n    if (j === m) {\n      matches.push(i - m + 1);\n      j = lps[j - 1];\n    }\n  }\n  return matches;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 28 - Find the Index of the First Occurrence in a String",
+          "url": "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "z-algorithm-advanced",
+      "title": "Z-Algorithm & Z-Array Construction",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M)",
+      "spaceComplexity": "O(N + M)",
+      "summary": "Computes Z-array where Z[i] is the length of the longest common prefix between S and the suffix of S starting at i.",
+      "explanation": [
+        "1. Maintain a Z-box `[L, R]` representing the rightmost substring matching a prefix of S.",
+        "2. For index `i`: if `i <= R`, reuse precomputed values `Z[i] = min(R - i + 1, Z[i - L])`.",
+        "3. Expand linearly past R while characters match, then update `[L, R]`.",
+        "4. Concatenate `Pattern + '$' + Text` to solve pattern matching in linear time."
+      ],
+      "exampleTrace": {
+        "title": "Z-array for S = 'aabxaab'",
+        "traceSteps": [
+          "Z[0] = 0 (or undefined), Z[1] = 1 ('a'), Z[2] = 0 ('b'), Z[3] = 0 ('x')",
+          "Z[4] = 3 ('aab'), Z[5] = 1 ('a'), Z[6] = 0 ('b').",
+          "Z-box jumps efficiently without quadratic rescans."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes prefix match lengths for all suffixes of a string in O(N).",
+        "whenToUse": "Pattern matching, period finding, string compression.",
+        "whereUsed": "Bioinformatics sequence alignment, search engines.",
+        "whyOptimal": "Cleaner and easier to implement than KMP while achieving identical O(N) performance."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def compute_z(s: str) -> list[int]:\n    n = len(s)\n    z = [0] * n\n    l, r = 0, 0\n    for i in range(1, n):\n        if i <= r:\n            z[i] = min(r - i + 1, z[i - l])\n        while i + z[i] < n and s[z[i]] == s[i + z[i]]:\n            z[i] += 1\n        if i + z[i] - 1 > r:\n            l, r = i, i + z[i] - 1\n    return z"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> computeZ(string s) {\n    int n = s.length();\n    vector<int> z(n, 0);\n    int l = 0, r = 0;\n    for (int i = 1; i < n; i++) {\n        if (i <= r) z[i] = min(r - i + 1, z[i - l]);\n        while (i + z[i] < n && s[z[i]] == s[i + z[i]]) z[i]++;\n        if (i + z[i] - 1 > r) {\n            l = i;\n            r = i + z[i] - 1;\n        }\n    }\n    return z;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class ZAlgorithm {\n    public static int[] computeZ(String s) {\n        int n = s.length();\n        int[] z = new int[n];\n        int l = 0, r = 0;\n        for (int i = 1; i < n; i++) {\n            if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);\n            while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) z[i]++;\n            if (i + z[i] - 1 > r) {\n                l = i;\n                r = i + z[i] - 1;\n            }\n        }\n        return z;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function computeZ(s) {\n  const n = s.length;\n  const z = new Array(n).fill(0);\n  let l = 0, r = 0;\n  for (let i = 1; i < n; i++) {\n    if (i <= r) z[i] = Math.min(r - i + 1, z[i - l]);\n    while (i + z[i] < n && s[z[i]] === s[i + z[i]]) z[i]++;\n    if (i + z[i] - 1 > r) {\n      l = i;\n      r = i + z[i] - 1;\n    }\n  }\n  return z;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - String Matching",
+          "url": "https://cses.fi/problemset/task/1753",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "rabin-karp-algorithm",
+      "title": "Rabin-Karp Rolling Hash Algorithm",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M) average, O(N * M) worst-case without double hash",
+      "spaceComplexity": "O(1)",
+      "summary": "Uses polynomial rolling hash to compare pattern hash with sliding window text hashes in O(1) time per window shift.",
+      "explanation": [
+        "1. Hash formula: `H = (c1 * p^(m-1) + c2 * p^(m-2) + ... + cm) % MOD`.",
+        "2. Rolling Hash update when sliding window from `[i..i+m-1]` to `[i+1..i+m]`:",
+        "   `H_new = (H_old - text[i] * p^(m-1)) * p + text[i+m] % MOD`.",
+        "3. Double hashing minimizes collision probability to negligible levels."
+      ],
+      "exampleTrace": {
+        "title": "Rabin-Karp search for pattern 'abc' in 'abxabc'",
+        "traceSteps": [
+          "Pattern Hash('abc') = 1057.",
+          "Window 0 'abx': Hash = 1073 (Mismatch)",
+          "Window 1 'bxa': Hash = 1102 (Mismatch)",
+          "Window 2 'xab': Hash = 1145 (Mismatch)",
+          "Window 3 'abc': Hash = 1057 (Match! Verify string characters -> Match found at index 3)"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Multi-pattern & single-pattern matching using fast hash comparisons.",
+        "whenToUse": "Plagiarism detection, multi-pattern matching, 2D grid pattern search.",
+        "whereUsed": "Plagiarism detectors, document duplication checkers.",
+        "whyOptimal": "O(1) window update constant factor speedup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rabin_karp(text: str, pattern: str) -> list[int]:\n    n, m = len(text), len(pattern)\n    if m > n: return []\n    p, mod = 31, 1_000_000_007\n    p_pow = 1\n    for _ in range(m - 1):\n        p_pow = (p_pow * p) % mod\n    p_hash = 0\n    t_hash = 0\n    for i in range(m):\n        p_hash = (p_hash * p + ord(pattern[i])) % mod\n        t_hash = (t_hash * p + ord(text[i])) % mod\n    matches = []\n    for i in range(n - m + 1):\n        if p_hash == t_hash and text[i : i + m] == pattern:\n            matches.append(i)\n        if i < n - m:\n            t_hash = (t_hash - ord(text[i]) * p_pow) % mod\n            t_hash = (t_hash * p + ord(text[i + m])) % mod\n            if t_hash < 0:\n                t_hash += mod\n    return matches"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\nusing namespace std;\n\nvector<int> rabinKarp(string text, string pattern) {\n    int n = text.length(), m = pattern.length();\n    if (m > n) return {};\n    long long p = 31, mod = 1e9 + 7, pPow = 1;\n    for (int i = 0; i < m - 1; i++) pPow = (pPow * p) % mod;\n    long long pHash = 0, tHash = 0;\n    for (int i = 0; i < m; i++) {\n        pHash = (pHash * p + pattern[i]) % mod;\n        tHash = (tHash * p + text[i]) % mod;\n    }\n    vector<int> matches;\n    for (int i = 0; i <= n - m; i++) {\n        if (pHash == tHash && text.substr(i, m) == pattern) matches.push_back(i);\n        if (i < n - m) {\n            tHash = (tHash - text[i] * pPow) % mod;\n            tHash = (tHash * p + text[i + m]) % mod;\n            if (tHash < 0) tHash += mod;\n        }\n    }\n    return matches;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class RabinKarp {\n    public static List<Integer> search(String text, String pattern) {\n        List<Integer> matches = new ArrayList<>();\n        int n = text.length(), m = pattern.length();\n        if (m > n) return matches;\n        long p = 31, mod = 1000000007, pPow = 1;\n        for (int i = 0; i < m - 1; i++) pPow = (pPow * p) % mod;\n        long pHash = 0, tHash = 0;\n        for (int i = 0; i < m; i++) {\n            pHash = (pHash * p + pattern.charAt(i)) % mod;\n            tHash = (tHash * p + text.charAt(i)) % mod;\n        }\n        for (int i = 0; i <= n - m; i++) {\n            if (pHash == tHash && text.substring(i, i + m).equals(pattern)) matches.add(i);\n            if (i < n - m) {\n                tHash = (tHash - text.charAt(i) * pPow) % mod;\n                tHash = (tHash * p + text.charAt(i + m)) % mod;\n                if (tHash < 0) tHash += mod;\n            }\n        }\n        return matches;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function rabinKarp(text, pattern) {\n  const n = text.length, m = pattern.length;\n  if (m > n) return [];\n  const p = 31n, mod = 1000000007n;\n  let pPow = 1n;\n  for (let i = 0; i < m - 1; i++) pPow = (pPow * p) % mod;\n  let pHash = 0n, tHash = 0n;\n  for (let i = 0; i < m; i++) {\n    pHash = (pHash * p + BigInt(pattern.charCodeAt(i))) % mod;\n    tHash = (tHash * p + BigInt(text.charCodeAt(i))) % mod;\n  }\n  const matches = [];\n  for (let i = 0; i <= n - m; i++) {\n    if (pHash === tHash && text.substring(i, i + m) === pattern) matches.push(i);\n    if (i < n - m) {\n      tHash = (tHash - BigInt(text.charCodeAt(i)) * pPow) % mod;\n      tHash = (tHash * p + BigInt(text.charCodeAt(i + m))) % mod;\n      if (tHash < 0n) tHash += mod;\n    }\n  }\n  return matches;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 187 - Repeated DNA Sequences",
+          "url": "https://leetcode.com/problems/repeated-dna-sequences/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "aho-corasick-automaton",
+      "title": "Aho-Corasick Automaton",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N + sum(M_i) + K)",
+      "spaceComplexity": "O(sum(M_i) * Sigma)",
+      "summary": "Multi-pattern string matching dictionary automaton that combines Trie structure with BFS suffix fail links (similar to KMP).",
+      "explanation": [
+        "1. Build a Trie for dictionary of patterns `P1, P2, ..., Pk`.",
+        "2. Construct Failure Links via BFS: `fail[u]` points to longest proper suffix of string at node u that is also present in Trie.",
+        "3. Process text in single pass O(N): follow transitions or fail links to collect matched pattern outputs.",
+        "4. Finds ALL occurrences of ALL dictionary patterns simultaneously in linear time!"
+      ],
+      "exampleTrace": {
+        "title": "Aho-Corasick with Patterns ['he', 'she', 'his', 'hers'] in Text 'ushers'",
+        "traceSteps": [
+          "1. Build Trie with root -> h, s.",
+          "2. BFS computes fail links: node 'sh' fail -> 'h', node 'she' fail -> 'he'.",
+          "3. Stream text 'ushers': matches 'she' and 'he' at position 4, matches 'hers' at position 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Simultaneous multi-pattern exact keyword searching in text.",
+        "whenToUse": "Antivirus virus signature scanners, network intrusion detection systems (NIDS), profanity filters.",
+        "whereUsed": "Snort NIDS, clamav antivirus engines, web application firewalls.",
+        "whyOptimal": "Processes text character-by-character in O(N) independent of dictionary size!"
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\nclass AhoCorasick:\n    def __init__(self):\n        self.trie = [{}]\n        self.fail = [0]\n        self.out = [[]]\n\n    def insert(self, pattern: str, pattern_id: int):\n        node = 0\n        for ch in pattern:\n            if ch not in self.trie[node]:\n                self.trie[node][ch] = len(self.trie)\n                self.trie.append({})\n                self.fail.append(0)\n                self.out.append([])\n            node = self.trie[node][ch]\n        self.out[node].append(pattern_id)\n\n    def build(self):\n        queue = deque()\n        for ch, nxt in self.trie[0].items():\n            queue.append(nxt)\n        while queue:\n            curr = queue.popleft()\n            for ch, nxt in self.trie[curr].items():\n                f = self.fail[curr]\n                while f and ch not in self.trie[f]:\n                    f = self.fail[f]\n                self.fail[nxt] = self.trie[f].get(ch, 0)\n                self.out[nxt].extend(self.out[self.fail[nxt]])\n                queue.append(nxt)\n\n    def search(self, text: str) -> list[tuple[int, int]]:\n        node = 0\n        res = []\n        for i, ch in enumerate(text):\n            while node and ch not in self.trie[node]:\n                node = self.fail[node]\n            node = self.trie[node].get(ch, 0)\n            for pid in self.out[node]:\n                res.append((i, pid))\n        return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <queue>\n#include <map>\nusing namespace std;\n\nstruct Node {\n    map<char, int> next;\n    int fail = 0;\n    vector<int> out;\n};\n\nclass AhoCorasick {\n    vector<Node> trie;\npublic:\n    AhoCorasick() { trie.push_back(Node()); }\n    void insert(string pattern, int id) {\n        int node = 0;\n        for (char c : pattern) {\n            if (!trie[node].next.count(c)) {\n                trie[node].next[c] = trie.size();\n                trie.push_back(Node());\n            }\n            node = trie[node].next[c];\n        }\n        trie[node].out.push_back(id);\n    }\n    void build() {\n        queue<int> q;\n        for (auto& [c, nxt] : trie[0].next) q.push(nxt);\n        while (!q.empty()) {\n            int curr = q.front(); q.pop();\n            for (auto& [c, nxt] : trie[curr].next) {\n                int f = trie[curr].fail;\n                while (f && !trie[f].next.count(c)) f = trie[f].fail;\n                trie[nxt].fail = trie[f].next.count(c) ? trie[f].next[c] : 0;\n                for (int pid : trie[trie[nxt].fail].out) trie[nxt].out.push_back(pid);\n                q.push(nxt);\n            }\n        }\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass ACNode {\n    Map<Character, Integer> next = new HashMap<>();\n    int fail = 0;\n    List<Integer> out = new ArrayList<>();\n}\n\npublic class AhoCorasick {\n    List<ACNode> trie = new ArrayList<>();\n    public AhoCorasick() { trie.add(new ACNode()); }\n    public void insert(String pattern, int id) {\n        int node = 0;\n        for (char c : pattern.toCharArray()) {\n            if (!trie.get(node).next.containsKey(c)) {\n                trie.get(node).next.put(c, trie.size());\n                trie.add(new ACNode());\n            }\n            node = trie.get(node).next.get(c);\n        }\n        trie.get(node).out.add(id);\n    }\n    public void build() {\n        Queue<Integer> q = new LinkedList<>();\n        for (int nxt : trie.get(0).next.values()) q.add(nxt);\n        while (!q.isEmpty()) {\n            int curr = q.poll();\n            for (var entry : trie.get(curr).next.entrySet()) {\n                char c = entry.getKey(); int nxt = entry.getValue();\n                int f = trie.get(curr).fail;\n                while (f > 0 && !trie.get(f).next.containsKey(c)) f = trie.get(f).fail;\n                trie.get(nxt).fail = trie.get(f).next.getOrDefault(c, 0);\n                trie.get(nxt).out.addAll(trie.get(trie.get(nxt).fail).out);\n                q.add(nxt);\n            }\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class AhoCorasick {\n  constructor() {\n    this.trie = [{ next: {}, fail: 0, out: [] }];\n  }\n  insert(pattern, id) {\n    let node = 0;\n    for (const c of pattern) {\n      if (!(c in this.trie[node].next)) {\n        this.trie[node].next[c] = this.trie.length;\n        this.trie.push({ next: {}, fail: 0, out: [] });\n      }\n      node = this.trie[node].next[c];\n    }\n    this.trie[node].out.push(id);\n  }\n  build() {\n    const q = [];\n    for (const nxt of Object.values(this.trie[0].next)) q.push(nxt);\n    while (q.length > 0) {\n      let curr = q.shift();\n      for (const [c, nxt] of Object.entries(this.trie[curr].next)) {\n        let f = this.trie[curr].fail;\n        while (f > 0 && !(c in this.trie[f].next)) f = this.trie[f].fail;\n        this.trie[nxt].fail = this.trie[f].next[c] || 0;\n        this.trie[nxt].out.push(...this.trie[this.trie[nxt].fail].out);\n        q.push(nxt);\n      }\n    }\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - Pattern Positions",
+          "url": "https://cses.fi/problemset/task/2102",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "boyer-moore-algorithm",
+      "title": "Boyer-Moore String Search Algorithm",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N / M) best/average, O(N * M) worst without Good Suffix heuristic",
+      "spaceComplexity": "O(Sigma + M)",
+      "summary": "Extremely fast single-pattern matching algorithm that compares characters right-to-left and uses Bad Character & Good Suffix shift rules to skip alignment blocks.",
+      "explanation": [
+        "1. Right-to-Left Comparison: Starts comparing pattern from rightmost character `pattern[m-1]` back to `pattern[0]`.",
+        "2. Bad Character Rule: Shifts pattern so mismatched text character aligns with its rightmost occurrence in pattern.",
+        "3. Good Suffix Rule: Shifts pattern so matched suffix aligns with another matching substring in pattern.",
+        "4. Maximum Shift: Advances alignment by `max(bad_char_shift, good_suffix_shift)`, jumping ahead by up to M characters at a time."
+      ],
+      "exampleTrace": {
+        "title": "Boyer-Moore Search for Pattern 'NEEDLE' in Text 'FINDINAHAYSTACKNEEDLE'",
+        "traceSteps": [
+          "Compare pattern[5]='E' with text char at index 5 'I'.",
+          "Bad char 'I' does not exist in 'NEEDLE' -> Shift entire pattern by 6 positions!",
+          "Skips 6 text characters in a single comparison step!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sub-linear average-case pattern matching for large alphabets.",
+        "whenToUse": "Searching long natural language text files or large documents.",
+        "whereUsed": "GNU grep, text editor Ctrl+F search algorithms.",
+        "whyOptimal": "Averages O(N/M) runtime because it skips text characters without inspecting them."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def boyer_moore_search(text: str, pattern: str) -> list[int]:\n    n, m = len(text), len(pattern)\n    if m == 0 or m > n: return []\n    bad_char = {}\n    for i in range(m):\n        bad_char[pattern[i]] = i\n    matches = []\n    s = 0\n    while s <= n - m:\n        j = m - 1\n        while j >= 0 and pattern[j] == text[s + j]:\n            j -= 1\n        if j < 0:\n            matches.append(s)\n            s += (m - bad_char.get(text[s + m], -1)) if s + m < n else 1\n        else:\n            s += max(1, j - bad_char.get(text[s + j], -1))\n    return matches"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nvector<int> boyerMooreSearch(string text, string pattern) {\n    int n = text.length(), m = pattern.length();\n    if (m == 0 || m > n) return {};\n    unordered_map<char, int> badChar;\n    for (int i = 0; i < m; i++) badChar[pattern[i]] = i;\n    vector<int> matches;\n    int s = 0;\n    while (s <= n - m) {\n        int j = m - 1;\n        while (j >= 0 && pattern[j] == text[s + j]) j--;\n        if (j < 0) {\n            matches.push_back(s);\n            s += (s + m < n) ? m - (badChar.count(text[s + m]) ? badChar[text[s + m]] : -1) : 1;\n        } else {\n            s += max(1, j - (badChar.count(text[s + j]) ? badChar[text[s + j]] : -1));\n        }\n    }\n    return matches;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BoyerMoore {\n    public static List<Integer> search(String text, String pattern) {\n        List<Integer> matches = new ArrayList<>();\n        int n = text.length(), m = pattern.length();\n        if (m == 0 || m > n) return matches;\n        Map<Character, Integer> badChar = new HashMap<>();\n        for (int i = 0; i < m; i++) badChar.put(pattern.charAt(i), i);\n        int s = 0;\n        while (s <= n - m) {\n            int j = m - 1;\n            while (j >= 0 && pattern.charAt(j) == text.charAt(s + j)) j--;\n            if (j < 0) {\n                matches.add(s);\n                s += (s + m < n) ? m - badChar.getOrDefault(text.charAt(s + m), -1) : 1;\n            } else {\n                s += Math.max(1, j - badChar.getOrDefault(text.charAt(s + j), -1));\n            }\n        }\n        return matches;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function boyerMooreSearch(text, pattern) {\n  const n = text.length, m = pattern.length;\n  if (m === 0 || m > n) return [];\n  const badChar = {};\n  for (let i = 0; i < m; i++) badChar[pattern[i]] = i;\n  const matches = [];\n  let s = 0;\n  while (s <= n - m) {\n    let j = m - 1;\n    while (j >= 0 && pattern[j] === text[s + j]) j--;\n    if (j < 0) {\n      matches.push(s);\n      s += s + m < n ? m - (badChar[text[s + m]] ?? -1) : 1;\n    } else {\n      s += Math.max(1, j - (badChar[text[s + j]] ?? -1));\n    }\n  }\n  return matches;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Boyer Moore Algorithm for Pattern Searching",
+          "url": "https://www.geeksforgeeks.org/boyer-moore-algorithm-for-pattern-searching/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "manachers-algorithm-advanced",
+      "title": "Manacher's Algorithm (Palindrome Radii)",
+      "categoryId": "advanced_strings",
+      "categoryTitle": "Advanced Strings & Automata",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds all palindrome radii and the longest palindromic substring in linear O(N) time by transforming the string with boundary delimiters and maintaining a palindrome center-right boundary.",
+      "explanation": [
+        "1. Preprocessing: Insert `#` between characters (`baba` -> `#b#a#b#a#`) to unify even and odd palindrome handling.",
+        "2. Maintain center `C` and rightmost boundary `R` of the longest palindrome discovered so far.",
+        "3. Mirror Property: For index `i`, its mirror is `i_mirror = 2*C - i`. If `i < R`, initialize `P[i] = min(R - i, P[i_mirror])`.",
+        "4. Expand palindrome radius `P[i]` beyond `R` as long as matching characters extend.",
+        "5. Update `C` and `R` whenever `i + P[i] > R`."
+      ],
+      "exampleTrace": {
+        "title": "Manacher's Trace on 'babad'",
+        "traceSteps": [
+          "Transformed string T = '^#b#a#b#a#d#$'",
+          "Palindrome Radii P = [0, 0, 1, 0, 3, 0, 3, 0, 1, 0, 1, 0, 0]",
+          "Max radius = 3 at center 'a'. Extracted longest palindromic substring = 'bab' (or 'aba')."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes all palindrome radii and finds longest palindromic substring in optimal linear time.",
+        "whenToUse": "Palindromic substring analysis, string symmetry queries.",
+        "whereUsed": "Bioinformatics DNA hairpins detection, text analysis algorithms.",
+        "whyOptimal": "Replaces naive O(N^2) center expansion with optimal linear O(N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def manacher(s: str) -> tuple[str, list[int]]:\n    t = '^#' + '#'.join(s) + '#$'\n    n = len(t)\n    p = [0] * n\n    c, r = 0, 0\n    for i in range(1, n - 1):\n        i_mirror = 2 * c - i\n        if r > i:\n            p[i] = min(r - i, p[i_mirror])\n        while t[i + 1 + p[i]] == t[i - 1 - p[i]]:\n            p[i] += 1\n        if i + p[i] > r:\n            c, r = i, i + p[i]\n    max_len, center_idx = max((p[i], i) for i in range(1, n - 1))\n    start = (center_idx - max_len) // 2\n    return s[start : start + max_len], p"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\npair<string, vector<int>> manacher(string s) {\n    string t = \"^#\";\n    for (char ch : s) { t += ch; t += \"#\"; }\n    t += \"$\";\n    int n = t.length();\n    vector<int> p(n, 0);\n    int c = 0, r = 0;\n    for (int i = 1; i < n - 1; i++) {\n        int iMirror = 2 * c - i;\n        if (r > i) p[i] = min(r - i, p[iMirror]);\n        while (t[i + 1 + p[i]] == t[i - 1 - p[i]]) p[i]++;\n        if (i + p[i] > r) {\n            c = i;\n            r = i + p[i];\n        }\n    }\n    int maxLen = 0, centerIdx = 0;\n    for (int i = 1; i < n - 1; i++) {\n        if (p[i] > maxLen) { maxLen = p[i]; centerIdx = i; }\n    }\n    int start = (centerIdx - maxLen) / 2;\n    return {s.substr(start, maxLen), p};\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Manacher {\n    public static String longestPalindrome(String s) {\n        StringBuilder sb = new StringBuilder(\"^#\");\n        for (char ch : s.toCharArray()) sb.append(ch).append(\"#\");\n        sb.append(\"$\");\n        String t = sb.toString();\n        int n = t.length();\n        int[] p = new int[n];\n        int c = 0, r = 0;\n        for (int i = 1; i < n - 1; i++) {\n            int iMirror = 2 * c - i;\n            if (r > i) p[i] = Math.min(r - i, p[iMirror]);\n            while (t.charAt(i + 1 + p[i]) == t.charAt(i - 1 - p[i])) p[i]++;\n            if (i + p[i] > r) {\n                c = i;\n                r = i + p[i];\n            }\n        }\n        int maxLen = 0, centerIdx = 0;\n        for (int i = 1; i < n - 1; i++) {\n            if (p[i] > maxLen) { maxLen = p[i]; centerIdx = i; }\n        }\n        int start = (centerIdx - maxLen) / 2;\n        return s.substring(start, start + maxLen);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function manacher(s) {\n  let t = '^#' + s.split('').join('#') + '#$';\n  const n = t.length;\n  const p = new Array(n).fill(0);\n  let c = 0, r = 0;\n  for (let i = 1; i < n - 1; i++) {\n    let iMirror = 2 * c - i;\n    if (r > i) p[i] = Math.min(r - i, p[iMirror]);\n    while (t[i + 1 + p[i]] === t[i - 1 - p[i]]) p[i]++;\n    if (i + p[i] > r) {\n      c = i;\n      r = i + p[i];\n    }\n  }\n  let maxLen = 0, centerIdx = 0;\n  for (let i = 1; i < n - 1; i++) {\n    if (p[i] > maxLen) {\n      maxLen = p[i];\n      centerIdx = i;\n    }\n  }\n  let start = Math.floor((centerIdx - maxLen) / 2);\n  return { palindrome: s.substring(start, start + maxLen), p };\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 5 - Longest Palindromic Substring",
+          "url": "https://leetcode.com/problems/longest-palindromic-substring/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,420 @@
+{
+  "id": "trie",
+  "category": {
+    "id": "trie",
+    "title": "Trie & Advanced DS",
+    "icon": "FolderTree",
+    "description": "Prefix trees, autocomplete engines, bitwise XOR trie, and radix trees."
+  },
+  "totalAlgorithms": 7,
+  "algorithms": [
+    {
+      "id": "trie-prefix-tree",
+      "title": "Trie (Prefix Tree Data Structure)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Medium",
+      "timeComplexity": "O(L) per search/insert",
+      "spaceComplexity": "O(N * L * AlphabetSize)",
+      "summary": "Tree structure used for fast string prefix searching, autocomplete, and dictionary lookups.",
+      "explanation": [
+        "Each node contains a map/array of child nodes corresponding to characters (a-z) and a boolean `isEndOfWord`.",
+        "Insert word: Walk down matching character nodes. Create new child nodes if absent. Mark last node `isEndOfWord = True`.",
+        "Search word: Walk down matching nodes. Return `True` only if last node has `isEndOfWord == True`.",
+        "StartsWith prefix: Walk down matching nodes. If all characters found, return `True`."
+      ],
+      "exampleTrace": {
+        "input": "Insert('apple'), Search('apple'), StartsWith('app'), Search('app')",
+        "output": "Search('apple'): True, StartsWith('app'): True, Search('app'): False",
+        "traceSteps": [
+          "Insert('apple'): Create root -> 'a' -> 'p' -> 'p' -> 'l' -> 'e' (set isEnd = True at 'e').",
+          "Search('apple'): Traverse 'a'->'p'->'p'->'l'->'e'. Reached 'e', isEnd is True -> Returns True.",
+          "StartsWith('app'): Traverse 'a'->'p'->'p'. All nodes exist -> Returns True.",
+          "Search('app'): Traverse 'a'->'p'->'p'. Node exists, but isEnd at second 'p' is False -> Returns False."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides fast O(L) string prefix matching independent of total dataset dictionary size N.",
+        "whenToUse": "When implementing search auto-complete, spell checker, or finding longest common prefix across words.",
+        "whereUsed": "Google search autocomplete, mobile keyboard predictive text, IP routing longest prefix match.",
+        "whyOptimal": "Search time depends only on word length L, NOT on total dictionary size N!"
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                node.children[char] = TrieNode()\n            node = node.children[char]\n        node.is_end = True\n\n    def search(self, word: str) -> bool:\n        node = self.root\n        for char in word:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return node.is_end\n\n    def startsWith(self, prefix: str) -> bool:\n        node = self.root\n        for char in prefix:\n            if char not in node.children:\n                return False\n            node = node.children[char]\n        return True"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 208 - Implement Trie (Prefix Tree)",
+          "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "trie-foundations-operations",
+      "title": "Trie Foundations & Complete Operations (Insert, Search, Delete, Count)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Medium",
+      "timeComplexity": "O(L) where L is length of word/prefix",
+      "spaceComplexity": "O(N * L * Σ) for N words of length L over alphabet size Σ",
+      "summary": "Tree-like prefix data structure supporting insert, search, deletion, prefix checking, and frequency counts in O(L) time.",
+      "explanation": [
+        "Trie Node contains an array or HashMap of children pointers `children[26]` and `isEnd` boolean flag.",
+        "Insert: Traverse character by character, creating new child nodes if absent. Mark last node `isEnd = True`.",
+        "Search: Traverse characters. If any character pointer is null, return False. Else return `curr.isEnd`.",
+        "StartsWith (Prefix Search): Similar to search, but returns True as long as prefix traversal succeeds.",
+        "Count Words Equal To & Starting With: Store `countEnds` and `countPrefix` counters at each Trie node."
+      ],
+      "exampleTrace": {
+        "input": "insert('apple'), search('apple'), startsWith('app')",
+        "output": "search -> True, startsWith -> True",
+        "traceSteps": [
+          "insert('apple'): Root -> 'a' -> 'p' -> 'p' -> 'l' -> 'e' (isEnd=True).",
+          "search('apple'): Follow path a-p-p-l-e. Node 'e' has isEnd=True -> Return True.",
+          "startsWith('app'): Follow path a-p-p. Path exists -> Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides prefix-based character sequence lookups in linear time proportional to word length.",
+        "whenToUse": "When storing a large dictionary of strings and performing frequent prefix searches.",
+        "whereUsed": "Search engine autocomplete, spell checkers, IP routing tables, T9 predictive text.",
+        "whyOptimal": "Prefix matching takes O(L) time independent of total dictionary size N."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n        self.count_words = 0\n        self.count_prefix = 0\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        curr = self.root\n        for char in word:\n            if char not in curr.children:\n                curr.children[char] = TrieNode()\n            curr = curr.children[char]\n            curr.count_prefix += 1\n        curr.is_end = True\n        curr.count_words += 1\n\n    def search(self, word: str) -> bool:\n        curr = self.root\n        for char in word:\n            if char not in curr.children: return False\n            curr = curr.children[char]\n        return curr.is_end\n\n    def startsWith(self, prefix: str) -> bool:\n        curr = self.root\n        for char in prefix:\n            if char not in curr.children: return False\n            curr = curr.children[char]\n        return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <vector>\n\nstruct TrieNode {\n    TrieNode* children[26];\n    bool isEnd = false;\n    int countPrefix = 0;\n    TrieNode() {\n        for (int i = 0; i < 26; i++) children[i] = nullptr;\n    }\n};\n\nclass Trie {\n    TrieNode* root;\npublic:\n    Trie() { root = new TrieNode(); }\n\n    void insert(std::string word) {\n        TrieNode* curr = root;\n        for (char c : word) {\n            int idx = c - 'a';\n            if (!curr->children[idx]) curr->children[idx] = new TrieNode();\n            curr = curr->children[idx];\n            curr->countPrefix++;\n        }\n        curr->isEnd = true;\n    }\n\n    bool search(std::string word) {\n        TrieNode* curr = root;\n        for (char c : word) {\n            int idx = c - 'a';\n            if (!curr->children[idx]) return false;\n            curr = curr->children[idx];\n        }\n        return curr->isEnd;\n    }\n\n    bool startsWith(std::string prefix) {\n        TrieNode* curr = root;\n        for (char c : prefix) {\n            int idx = c - 'a';\n            if (!curr->children[idx]) return false;\n            curr = curr->children[idx];\n        }\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class TrieNode {\n    TrieNode[] children = new TrieNode[26];\n    boolean isEnd = false;\n}\n\npublic class Trie {\n    private TrieNode root = new TrieNode();\n\n    public void insert(String word) {\n        TrieNode curr = root;\n        for (char c : word.toCharArray()) {\n            int idx = c - 'a';\n            if (curr.children[idx] == null) curr.children[idx] = new TrieNode();\n            curr = curr.children[idx];\n        }\n        curr.isEnd = true;\n    }\n\n    public boolean search(String word) {\n        TrieNode curr = root;\n        for (char c : word.toCharArray()) {\n            int idx = c - 'a';\n            if (curr.children[idx] == null) return false;\n            curr = curr.children[idx];\n        }\n        return curr.isEnd;\n    }\n\n    public boolean startsWith(String prefix) {\n        TrieNode curr = root;\n        for (char c : prefix.toCharArray()) {\n            int idx = c - 'a';\n            if (curr.children[idx] == null) return false;\n            curr = curr.children[idx];\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class TrieNode {\n    constructor() {\n        this.children = {};\n        this.isEnd = false;\n    }\n}\n\nclass Trie {\n    constructor() {\n        this.root = new TrieNode();\n    }\n    insert(word) {\n        let curr = this.root;\n        for (let c of word) {\n            if (!curr.children[c]) curr.children[c] = new TrieNode();\n            curr = curr.children[c];\n        }\n        curr.isEnd = true;\n    }\n    search(word) {\n        let curr = this.root;\n        for (let c of word) {\n            if (!curr.children[c]) return false;\n            curr = curr.children[c];\n        }\n        return curr.isEnd;\n    }\n    startsWith(prefix) {\n        let curr = this.root;\n        for (let c of prefix) {\n            if (!curr.children[c]) return false;\n            curr = curr.children[c];\n        }\n        return true;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 208 - Implement Trie (Prefix Tree)",
+          "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 1804 - Implement Trie II (Prefix Tree)",
+          "url": "https://leetcode.com/problems/implement-trie-ii-prefix-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "trie-word-dictionary-wildcard",
+      "title": "Word Dictionary with Wildcard Pattern Matching (Dot Search)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Medium",
+      "timeComplexity": "O(L) for normal search, O(Σ^L) worst case for wildcard '.' search",
+      "spaceComplexity": "O(N * L)",
+      "summary": "Implements a word dictionary using Trie that supports '.' wildcard matching to match any single character during search.",
+      "explanation": [
+        "Store words in a standard Trie.",
+        "When searching word `s` at index `idx` and node `curr`:",
+        "If `char != '.'`: Check if `char` exists in `curr.children` and recursively continue.",
+        "If `char == '.'`: Try ALL non-null children of `curr` using backtracking DFS!",
+        "If any child returns True, return True."
+      ],
+      "exampleTrace": {
+        "input": "addWord('bad'), addWord('dad'), search('.ad'), search('b..')",
+        "output": "search('.ad') -> True, search('b..') -> True",
+        "traceSteps": [
+          "addWord('bad') and ('dad') into Trie.",
+          "search('.ad'): '.' matches both 'b' and 'd'. Branches down 'b' -> 'a' -> 'd' (isEnd=True) -> Return True.",
+          "search('b..'): matches 'b' -> '.' matches 'a' -> '.' matches 'd' -> Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs regex-like single character wildcard matching across stored words.",
+        "whenToUse": "When supporting wildcard pattern searches or crosswords in dictionary systems.",
+        "whereUsed": "Regex engines, crossword puzzle solvers, command line wildcard search.",
+        "whyOptimal": "Prunes search branches instantly when literal characters do not match."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class WordDictionary:\n    def __init__(self):\n        self.root = {}\n\n    def addWord(self, word: str) -> None:\n        curr = self.root\n        for c in word:\n            if c not in curr: curr[c] = {}\n            curr = curr[c]\n        curr['#'] = True  # End of word marker\n\n    def search(self, word: str) -> bool:\n        def dfs(node, idx):\n            if idx == len(word):\n                return '#' in node\n            c = word[idx]\n            if c == '.':\n                for key in node:\n                    if key != '#' and dfs(node[key], idx + 1):\n                        return True\n                return False\n            else:\n                if c not in node: return False\n                return dfs(node[c], idx + 1)\n        return dfs(self.root, 0)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n\nstruct TrieNode {\n    TrieNode* children[26] = {nullptr};\n    bool isEnd = false;\n};\n\nclass WordDictionary {\n    TrieNode* root;\n    bool dfs(std::string& word, int idx, TrieNode* curr) {\n        if (!curr) return false;\n        if (idx == word.length()) return curr->isEnd;\n        char c = word[idx];\n        if (c == '.') {\n            for (int i = 0; i < 26; i++) {\n                if (curr->children[i] && dfs(word, idx + 1, curr->children[i])) return true;\n            }\n            return false;\n        } else {\n            return dfs(word, idx + 1, curr->children[c - 'a']);\n        }\n    }\npublic:\n    WordDictionary() { root = new TrieNode(); }\n    void addWord(std::string word) {\n        TrieNode* curr = root;\n        for (char c : word) {\n            if (!curr->children[c - 'a']) curr->children[c - 'a'] = new TrieNode();\n            curr = curr->children[c - 'a'];\n        }\n        curr->isEnd = true;\n    }\n    bool search(std::string word) { return dfs(word, 0, root); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class WordDictionary {\n    static class TrieNode {\n        TrieNode[] children = new TrieNode[26];\n        boolean isEnd = false;\n    }\n    private TrieNode root = new TrieNode();\n\n    public void addWord(String word) {\n        TrieNode curr = root;\n        for (char c : word.toCharArray()) {\n            if (curr.children[c - 'a'] == null) curr.children[c - 'a'] = new TrieNode();\n            curr = curr.children[c - 'a'];\n        }\n        curr.isEnd = true;\n    }\n\n    public boolean search(String word) {\n        return dfs(word, 0, root);\n    }\n\n    private boolean dfs(String word, int idx, TrieNode curr) {\n        if (curr == null) return false;\n        if (idx == word.length()) return curr.isEnd;\n        char c = word.charAt(idx);\n        if (c == '.') {\n            for (int i = 0; i < 26; i++) {\n                if (curr.children[i] != null && dfs(word, idx + 1, curr.children[i])) return true;\n            }\n            return false;\n        } else {\n            return dfs(word, idx + 1, curr.children[c - 'a']);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class WordDictionary {\n    constructor() { this.root = {}; }\n    addWord(word) {\n        let curr = this.root;\n        for (let c of word) {\n            if (!curr[c]) curr[c] = {};\n            curr = curr[c];\n        }\n        curr['#'] = true;\n    }\n    search(word) {\n        const dfs = (node, idx) => {\n            if (idx === word.length) return !!node['#'];\n            const c = word[idx];\n            if (c === '.') {\n                for (let key in node) {\n                    if (key !== '#' && dfs(node[key], idx + 1)) return true;\n                }\n                return false;\n            } else {\n                if (!node[c]) return false;\n                return dfs(node[c], idx + 1);\n            }\n        };\n        return dfs(this.root, 0);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 211 - Design Add and Search Words Data Structure",
+          "url": "https://leetcode.com/problems/design-add-and-search-words-data-structure/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "trie-autocomplete-longest-prefix",
+      "title": "Longest Common Prefix & Autocomplete Engine",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N * L) construction, O(Prefix + K) search",
+      "spaceComplexity": "O(N * L)",
+      "summary": "Builds Autocomplete engine suggestions and finds Longest Common Prefix across strings using Trie branching inspection.",
+      "explanation": [
+        "Longest Common Prefix: Insert all strings into Trie.",
+        "Traverse from root while node has EXACTLY ONE child and `isEnd == False`.",
+        "The accumulated characters form the Longest Common Prefix.",
+        "Autocomplete Engine: Navigate to node representing prefix `P`.",
+        "Perform DFS/BFS from prefix node to gather all word completions ordered by frequency rating."
+      ],
+      "exampleTrace": {
+        "input": "strs = ['flower', 'flow', 'flight']",
+        "output": "'fl'",
+        "traceSteps": [
+          "Insert 'flower', 'flow', 'flight' into Trie.",
+          "Root child count = 1 ('f'). Add 'f' to prefix.",
+          "Node 'f' child count = 1 ('l'). Add 'l' to prefix.",
+          "Node 'l' child count = 2 ('o' and 'i'). Branching detected -> Stop!",
+          "Longest Common Prefix = 'fl'."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates real-time top autocomplete recommendations and prefix overlaps.",
+        "whenToUse": "When providing search suggestions or identifying shared string prefixes.",
+        "whereUsed": "Google search bar autocomplete, IDE code completion (IntelliSense), mobile keyboard auto-suggest.",
+        "whyOptimal": "Narrows candidate recommendations to the prefix subtree in O(Prefix) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longestCommonPrefix(strs: list[str]) -> str:\n    if not strs: return \"\"\n    # Alternative Trie traversal logic\n    root = {}\n    for word in strs:\n        if not word: return \"\"\n        curr = root\n        for c in word:\n            if c not in curr: curr[c] = {}\n            curr = curr[c]\n        curr['#'] = True\n\n    prefix = []\n    curr = root\n    while len(curr) == 1 and '#' not in curr:\n        char = list(curr.keys())[0]\n        prefix.append(char)\n        curr = curr[char]\n    return ''.join(prefix)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n\nstd::string longestCommonPrefix(std::vector<std::string>& strs) {\n    if (strs.empty()) return \"\";\n    std::string prefix = strs[0];\n    for (int i = 1; i < strs.size(); i++) {\n        while (strs[i].find(prefix) != 0) {\n            prefix = prefix.substr(0, prefix.length() - 1);\n            if (prefix.empty()) return \"\";\n        }\n    }\n    return prefix;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class LongestCommonPrefix {\n    public String longestCommonPrefix(String[] strs) {\n        if (strs == null || strs.length == 0) return \"\";\n        String prefix = strs[0];\n        for (int i = 1; i < strs.length; i++) {\n            while (strs[i].indexOf(prefix) != 0) {\n                prefix = prefix.substring(0, prefix.length() - 1);\n                if (prefix.isEmpty()) return \"\";\n            }\n        }\n        return prefix;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function longestCommonPrefix(strs) {\n    if (!strs.length) return \"\";\n    let prefix = strs[0];\n    for (let i = 1; i < strs.length; i++) {\n        while (strs[i].indexOf(prefix) !== 0) {\n            prefix = prefix.substring(0, prefix.length - 1);\n            if (!prefix) return \"\";\n        }\n    }\n    return prefix;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 14 - Longest Common Prefix",
+          "url": "https://leetcode.com/problems/longest-common-prefix/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 642 - Design Search Autocomplete System",
+          "url": "https://leetcode.com/problems/design-search-autocomplete-system/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "trie-word-search-ii",
+      "title": "Word Search II (Grid Search with Trie Pruning)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Hard",
+      "timeComplexity": "O(M * N * 4^L) with instant Trie prefix pruning",
+      "spaceComplexity": "O(W * L) for Trie storage",
+      "summary": "Searches for all words from a dictionary present in a 2D grid using 4-directional Backtracking optimized by Trie prefix pruning.",
+      "explanation": [
+        "Build Trie from target dictionary words.",
+        "Iterate through every cell `(r, c)` in 2D grid.",
+        "Perform DFS/Backtracking on cell `(r, c)` matching against Trie pointers.",
+        "Pruning Optimization: If current grid character is NOT in Trie children, prune search branch immediately!",
+        "When a word end is reached in Trie, add to result list and clear `isEnd = False` (or remove word node) to prevent duplicates."
+      ],
+      "exampleTrace": {
+        "input": "board = [['o','a','a','n'],['e','t','a','e'],['i','h','k','r'],['i','f','l','v']], words = ['oath','pea','eat','rain']",
+        "output": "['eat', 'oath']",
+        "traceSteps": [
+          "Build Trie for ['oath', 'pea', 'eat', 'rain'].",
+          "Start DFS at board[0][0] ('o'): matches Trie 'o' -> 'a' -> 't' -> 'h' (word 'oath' found!).",
+          "Start DFS at board[1][2] ('e'): matches Trie 'e' -> 'a' -> 't' (word 'eat' found!).",
+          "Prune paths for 'pea' and 'rain' when character paths fail in Trie.",
+          "Returned words: ['eat', 'oath']."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Searches thousands of dictionary words simultaneously in a 2D letter grid.",
+        "whenToUse": "When performing multi-word 2D board searches (Boggle games).",
+        "whereUsed": "Boggle game solvers, 2D matrix pattern search engines.",
+        "whyOptimal": "Trie prefix pruning eliminates billions of invalid DFS grid paths instantly."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findWords(board: list[list[str]], words: list[str]) -> list[str]:\n    # Step 1: Build Trie\n    trie = {}\n    for word in words:\n        curr = trie\n        for c in word:\n            if c not in curr: curr[c] = {}\n            curr = curr[c]\n        curr['$'] = word # Store full word at end node\n        \n    m, n = len(board), len(board[0])\n    res = []\n    \n    def dfs(r, c, parent):\n        char = board[r][c]\n        curr_node = parent[char]\n        \n        # Check if word found\n        word_match = curr_node.pop('$', None)\n        if word_match:\n            res.append(word_match)\n            \n        board[r][c] = '#' # Mark visited\n        for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:\n            nr, nc = r + dr, c + dc\n            if 0 <= nr < m and 0 <= nc < n and board[nr][nc] in curr_node:\n                dfs(nr, nc, curr_node)\n        board[r][c] = char # Backtrack\n        \n    for r in range(m):\n        for c in range(n):\n            if board[r][c] in trie:\n                dfs(r, c, trie)\n                \n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <unordered_map>\n\nstruct TrieNode {\n    std::unordered_map<char, TrieNode*> children;\n    std::string word = \"\";\n};\n\nclass Solution {\npublic:\n    std::vector<std::string> findWords(std::vector<std::vector<char>>& board, std::vector<std::string>& words) {\n        TrieNode* root = new TrieNode();\n        for (const auto& w : words) {\n            TrieNode* curr = root;\n            for (char c : w) {\n                if (!curr->children.count(c)) curr->children[c] = new TrieNode();\n                curr = curr->children[c];\n            }\n            curr->word = w;\n        }\n        std::vector<std::string> res;\n        int m = board.size(), n = board[0].size();\n        auto dfs = [&](auto& self, int r, int c, TrieNode* node) -> void {\n            char temp = board[r][c];\n            TrieNode* curr = node->children[temp];\n            if (!curr->word.empty()) {\n                res.push_back(curr->word);\n                curr->word = \"\"; // Avoid duplicate\n            }\n            board[r][c] = '#';\n            int dirs[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};\n            for (auto& d : dirs) {\n                int nr = r + d[0], nc = c + d[1];\n                if (nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] != '#' && curr->children.count(board[nr][nc])) {\n                    self(self, nr, nc, curr);\n                }\n            }\n            board[r][c] = temp;\n        };\n        for (int r = 0; r < m; r++) {\n            for (int c = 0; c < n; c++) {\n                if (root->children.count(board[r][c])) dfs(dfs, r, c, root);\n            }\n        }\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class WordSearchII {\n    static class TrieNode {\n        Map<Character, TrieNode> children = new HashMap<>();\n        String word = null;\n    }\n    public List<String> findWords(char[][] board, String[] words) {\n        TrieNode root = new TrieNode();\n        for (String w : words) {\n            TrieNode curr = root;\n            for (char c : w.toCharArray()) {\n                curr.children.putIfAbsent(c, new TrieNode());\n                curr = curr.children.get(c);\n            }\n            curr.word = w;\n        }\n        List<String> res = new ArrayList<>();\n        int m = board.length, n = board[0].length;\n        for (int r = 0; r < m; r++) {\n            for (int c = 0; c < n; c++) {\n                if (root.children.containsKey(board[r][c])) {\n                    dfs(board, r, c, root, res);\n                }\n            }\n        }\n        return res;\n    }\n    private void dfs(char[][] board, int r, int c, TrieNode node, List<String> res) {\n        char temp = board[r][c];\n        TrieNode curr = node.children.get(temp);\n        if (curr.word != null) {\n            res.add(curr.word);\n            curr.word = null;\n        }\n        board[r][c] = '#';\n        int[][] dirs = {{-1,0},{1,0},{0,-1},{0,1}};\n        for (int[] d : dirs) {\n            int nr = r + d[0], nc = c + d[1];\n            if (nr >= 0 && nr < board.length && nc >= 0 && nc < board[0].length && board[nr][nc] != '#' && curr.children.containsKey(board[nr][nc])) {\n                dfs(board, nr, nc, curr, res);\n            }\n        }\n        board[r][c] = temp;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findWords(board, words) {\n    const root = {};\n    for (let w of words) {\n        let curr = root;\n        for (let c of w) {\n            if (!curr[c]) curr[c] = {};\n            curr = curr[c];\n        }\n        curr['$'] = w;\n    }\n    const res = [];\n    const m = board.length, n = board[0].length;\n    const dfs = (r, c, node) => {\n        const char = board[r][c];\n        const curr = node[char];\n        if (curr['$']) {\n            res.push(curr['$']);\n            curr['$'] = null;\n        }\n        board[r][c] = '#';\n        const dirs = [[-1,0],[1,0],[0,-1],[0,1]];\n        for (let [dr, dc] of dirs) {\n            let nr = r + dr, nc = c + dc;\n            if (nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] !== '#' && curr[board[nr][nc]]) {\n                dfs(nr, nc, curr);\n            }\n        }\n        board[r][c] = char;\n    };\n    for (let r = 0; r < m; r++) {\n        for (let c = 0; c < n; c++) {\n            if (root[board[r][c]]) dfs(r, c, root);\n        }\n    }\n    return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 212 - Word Search II",
+          "url": "https://leetcode.com/problems/word-search-ii/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "trie-binary-bitwise-xor",
+      "title": "Bitwise Binary Trie (Maximum & Minimum XOR Pair)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N * 31)",
+      "spaceComplexity": "O(N * 31 * 2) for 0/1 binary tree nodes",
+      "summary": "Bitwise 32-bit (or 31-bit) Binary Trie (0/1 branching) used to calculate Maximum XOR or Minimum XOR pair in an array in linear O(N) time.",
+      "explanation": [
+        "Binary Trie: Each node has 2 children `child[0]` (bit 0) and `child[1]` (bit 1).",
+        "Insert: Convert number to 31-bit binary representation (MSB to LSB, i.e. bit 30 down to 0).",
+        "Find Maximum XOR for x: For each bit `b` of x, greedily try to traverse OPPOSITE bit `1 - b` in Trie!",
+        "If `1 - b` child exists, take it (yielding a 1 bit in XOR result) and update `current_xor |= (1 << i)`.",
+        "Else: Must take `b` child."
+      ],
+      "exampleTrace": {
+        "input": "nums = [3, 10, 5, 25, 2, 8]",
+        "output": "28 (Maximum XOR pair: 5 XOR 25 = 28)",
+        "traceSteps": [
+          "Insert binary representations of [3, 10, 5, 25, 2, 8] into 31-bit Binary Trie.",
+          "Query 5 (binary 00101): Greedily pick opposite bit 1 at MSB bit position 4 (25 is binary 11001).",
+          "5 (00101) XOR 25 (11001) = 28 (11100 in binary).",
+          "Maximum XOR = 28."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds Maximum XOR pair or Maximum XOR subarray in O(N * 31) time.",
+        "whenToUse": "When maximizing/minimizing bitwise XOR combinations across array elements.",
+        "whereUsed": "Cryptography XOR keys, digital signal encoding, competitive programming bitwise queries.",
+        "whyOptimal": "Greedy MSB-first binary Trie traversal guarantees maximum possible XOR value."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class BinaryTrieNode:\n    def __init__(self):\n        self.children = [None, None]\n\nclass BinaryTrie:\n    def __init__(self):\n        self.root = BinaryTrieNode()\n\n    def insert(self, num: int):\n        curr = self.root\n        for i in range(30, -1, -1):\n            bit = (num >> i) & 1\n            if not curr.children[bit]:\n                curr.children[bit] = BinaryTrieNode()\n            curr = curr.children[bit]\n\n    def get_max_xor(self, num: int) -> int:\n        curr = self.root\n        max_xor = 0\n        for i in range(30, -1, -1):\n            bit = (num >> i) & 1\n            opp_bit = 1 - bit\n            if curr.children[opp_bit]:\n                max_xor |= (1 << i)\n                curr = curr.children[opp_bit]\n            else:\n                curr = curr.children[bit]\n        return max_xor\n\ndef findMaximumXOR(nums: list[int]) -> int:\n    trie = BinaryTrie()\n    for num in nums: trie.insert(num)\n    return max(trie.get_max_xor(num) for num in nums)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nstruct Node {\n    Node* links[2] = {nullptr};\n};\n\nclass Trie {\n    Node* root;\npublic:\n    Trie() { root = new Node(); }\n    void insert(int num) {\n        Node* curr = root;\n        for (int i = 30; i >= 0; i--) {\n            int bit = (num >> i) & 1;\n            if (!curr->links[bit]) curr->links[bit] = new Node();\n            curr = curr->links[bit];\n        }\n    }\n    int getMax(int num) {\n        Node* curr = root;\n        int maxVal = 0;\n        for (int i = 30; i >= 0; i--) {\n            int bit = (num >> i) & 1;\n            int opp = 1 - bit;\n            if (curr->links[opp]) {\n                maxVal |= (1 << i);\n                curr = curr->links[opp];\n            } else {\n                curr = curr->links[bit];\n            }\n        }\n        return maxVal;\n    }\n};\n\nint findMaximumXOR(std::vector<int>& nums) {\n    Trie trie;\n    for (int num : nums) trie.insert(num);\n    int maxResult = 0;\n    for (int num : nums) maxResult = std::max(maxResult, trie.getMax(num));\n    return maxResult;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MaximumXOR {\n    static class Node {\n        Node[] links = new Node[2];\n    }\n    static class Trie {\n        Node root = new Node();\n        void insert(int num) {\n            Node curr = root;\n            for (int i = 30; i >= 0; i--) {\n                int bit = (num >> i) & 1;\n                if (curr.links[bit] == null) curr.links[bit] = new Node();\n                curr = curr.links[bit];\n            }\n        }\n        int getMax(int num) {\n            Node curr = root;\n            int maxVal = 0;\n            for (int i = 30; i >= 0; i--) {\n                int bit = (num >> i) & 1;\n                int opp = 1 - bit;\n                if (curr.links[opp] != null) {\n                    maxVal |= (1 << i);\n                    curr = curr.links[opp];\n                } else {\n                    curr = curr.links[bit];\n                }\n            }\n            return maxVal;\n        }\n    }\n    public int findMaximumXOR(int[] nums) {\n        Trie trie = new Trie();\n        for (int num : nums) trie.insert(num);\n        int maxRes = 0;\n        for (int num : nums) maxRes = Math.max(maxRes, trie.getMax(num));\n        return maxRes;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class Node {\n    constructor() { this.links = [null, null]; }\n}\n\nfunction findMaximumXOR(nums) {\n    const root = new Node();\n    for (let num of nums) {\n        let curr = root;\n        for (let i = 30; i >= 0; i--) {\n            let bit = (num >> i) & 1;\n            if (!curr.links[bit]) curr.links[bit] = new Node();\n            curr = curr.links[bit];\n        }\n    }\n    let maxResult = 0;\n    for (let num of nums) {\n        let curr = root, maxVal = 0;\n        for (let i = 30; i >= 0; i--) {\n            let bit = (num >> i) & 1, opp = 1 - bit;\n            if (curr.links[opp]) {\n                maxVal |= (1 << i);\n                curr = curr.links[opp];\n            } else {\n                curr = curr.links[bit];\n            }\n        }\n        maxResult = Math.max(maxResult, maxVal);\n    }\n    return maxResult;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 421 - Maximum XOR of Two Numbers in an Array",
+          "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 1707 - Maximum XOR With an Element From Array",
+          "url": "https://leetcode.com/problems/maximum-xor-with-an-element-from-array/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "trie-compressed-radix-tree",
+      "title": "Compressed Trie & Radix Tree (Patricia Trie)",
+      "categoryId": "trie",
+      "categoryTitle": "Trie & Advanced DS",
+      "difficulty": "Hard",
+      "timeComplexity": "O(L) time",
+      "spaceComplexity": "O(N) reduced node space",
+      "summary": "Space-optimized Trie variant (Radix Tree / Patricia Trie) that compresses non-branching single-child paths into single multi-character edge labels.",
+      "explanation": [
+        "Standard Trie Issue: Single child chains (e.g. 't' -> 'e' -> 's' -> 't') waste node pointers.",
+        "Compressed Trie (Radix Tree): Merges single-child nodes so edge labels store full strings (e.g. edge label 'test').",
+        "Node Reduction: Number of nodes is bounded by O(N) where N is number of stored words.",
+        "Lookup: Compare prefix strings along edge labels. Split edges during insertion if prefix partially matches.",
+        "Widely used in IP routing (longest prefix matching) and Linux file system inodes."
+      ],
+      "exampleTrace": {
+        "input": "Insert 'tester', 'testing', 'slow', 'slower'",
+        "output": "Compressed Edges: 'test' -> ['er', 'ing'], 'slow' -> ['', 'er']",
+        "traceSteps": [
+          "Insert 'tester': Root edge 'tester'.",
+          "Insert 'testing': Common prefix 'test'. Split edge: Root -> 'test' -> ['er', 'ing'].",
+          "Insert 'slow' & 'slower': Common prefix 'slow'. Split edge: Root -> 'slow' -> ['', 'er'].",
+          "Compressed node count is 5 (vs 20 nodes in standard Trie!)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Drastically reduces node pointer memory overhead in sparse Tries.",
+        "whenToUse": "When storing long strings or IP address prefixes with sparse branching.",
+        "whereUsed": "Linux kernel Page Cache, Router IP lookup tables (CIDR prefix matching), HTTP router URL matching.",
+        "whyOptimal": "Bounds total tree node count to at most 2N-1 nodes regardless of key lengths."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class RadixNode:\n    def __init__(self, prefix=\"\"):\n        self.prefix = prefix\n        self.children = {}\n        self.is_end = False\n\nclass RadixTree:\n    def __init__(self):\n        self.root = RadixNode()\n\n    def insert(self, word: str):\n        curr = self.root\n        while word:\n            matched_child = None\n            for edge, child in curr.children.items():\n                # Find common prefix length\n                common_len = 0\n                while common_len < min(len(word), len(edge)) and word[common_len] == edge[common_len]:\n                    common_len += 1\n                if common_len > 0:\n                    matched_child = (edge, child, common_len)\n                    break\n\n            if not matched_child:\n                # No matching edge -> create new edge\n                curr.children[word] = RadixNode(word)\n                curr.children[word].is_end = True\n                return\n            else:\n                edge, child, common_len = matched_child\n                if common_len == len(edge):\n                    curr = child\n                    word = word[common_len:]\n                else:\n                    # Split edge\n                    split_node = RadixNode(edge[:common_len])\n                    del curr.children[edge]\n                    curr.children[edge[:common_len]] = split_node\n                    \n                    child.prefix = edge[common_len:]\n                    split_node.children[child.prefix] = child\n                    \n                    if common_len == len(word):\n                        split_node.is_end = True\n                    else:\n                        rem_node = RadixNode(word[common_len:])\n                        rem_node.is_end = True\n                        split_node.children[word[common_len:]] = rem_node\n                    return"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <unordered_map>\n\nclass RadixNode {\npublic:\n    std::string prefix;\n    std::unordered_map<std::string, RadixNode*> children;\n    bool isEnd = false;\n    RadixNode(std::string p = \"\") : prefix(p) {}\n};\n\nclass RadixTree {\n    RadixNode* root;\npublic:\n    RadixTree() { root = new RadixNode(); }\n    // Simplified Compressed Trie insertion representation\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\nimport java.util.Map;\n\nclass RadixNode {\n    String prefix;\n    Map<String, RadixNode> children = new HashMap<>();\n    boolean isEnd = false;\n    RadixNode(String p) { prefix = p; }\n}\n\npublic class RadixTree {\n    private RadixNode root = new RadixNode(\"\");\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class RadixNode {\n    constructor(prefix = '') {\n        this.prefix = prefix;\n        this.children = {};\n        this.isEnd = false;\n    }\n}\n\nclass RadixTree {\n    constructor() {\n        this.root = new RadixNode();\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 208 - Implement Trie (Prefix Tree)",
+          "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

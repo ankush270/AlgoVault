@@ -1,0 +1,1234 @@
+{
+  "id": "greedy",
+  "category": {
+    "id": "greedy",
+    "title": "Greedy Algorithms",
+    "icon": "Target",
+    "description": "Activity selection, interval scheduling, minimum span, and greedy choice strategy."
+  },
+  "totalAlgorithms": 21,
+  "algorithms": [
+    {
+      "id": "greedy-assign-cookies",
+      "title": "Assign Cookies / Children Satisfaction",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N log N + M log M)",
+      "spaceComplexity": "O(1)",
+      "summary": "Maximize the number of content children by greedily matching the smallest cookie that satisfies each child's greed factor.",
+      "explanation": [
+        "Greedy Choice Property: Give the smallest possible cookie that meets or exceeds a child's greed factor `g[i]`. This leaves larger cookies for greedier children.",
+        "Algorithm: 1) Sort children greed factors `g` and cookie sizes `s` in ascending order.",
+        "2) Use two pointers `i` (child index) and `j` (cookie index). If `s[j] >= g[i]`, child `i` is satisfied -> increment both `i` and `j`.",
+        "3) Otherwise, cookie `s[j]` is too small -> increment `j` to try larger cookie.",
+        "4) Return satisfied children count `i`."
+      ],
+      "exampleTrace": {
+        "input": "Greed g = [1, 2, 3], Cookie sizes s = [1, 1]",
+        "output": "Content Children = 1",
+        "traceSteps": [
+          "Step 1: Sort g = [1, 2, 3], s = [1, 1]. i = 0, j = 0.",
+          "Step 2: Compare g[0]=1 with s[0]=1. s[0] >= g[0]! Child 0 satisfied. i=1, j=1.",
+          "Step 3: Compare g[1]=2 with s[1]=1. s[1] < g[1]. Cookie too small. Increment j=2.",
+          "Step 4: Cookies exhausted (j == len(s)). satisfied count = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Pairs demands with minimal sufficient resources to maximize total satisfied demands.",
+        "whenToUse": "When resource capacity can satisfy demands of varying thresholds and items are consumed individually.",
+        "whereUsed": "Server request thread allocation, resource scheduling for low-spec jobs.",
+        "whyOptimal": "Sorting allows O(N log N) greedy matching that never wastes larger cookies on smaller greed factors."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findContentChildren(g: list[int], s: list[int]) -> int:\n    g.sort()\n    s.sort()\n    child = cookie = 0\n    while child < len(g) and cookie < len(s):\n        if s[cookie] >= g[child]:\n            child += 1\n        cookie += 1\n    return child"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint findContentChildren(vector<int>& g, vector<int>& s) {\n    sort(g.begin(), g.end());\n    sort(s.begin(), s.end());\n    int child = 0, cookie = 0;\n    while (child < g.size() && cookie < s.size()) {\n        if (s[cookie] >= g[child]) child++;\n        cookie++;\n    }\n    return child;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class Solution {\n    public int findContentChildren(int[] g, int[] s) {\n        Arrays.sort(g);\n        Arrays.sort(s);\n        int child = 0, cookie = 0;\n        while (child < g.length && cookie < s.length) {\n            if (s[cookie] >= g[child]) child++;\n            cookie++;\n        }\n        return child;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findContentChildren(g, s) {\n  g.sort((a, b) => a - b);\n  s.sort((a, b) => a - b);\n  let child = 0, cookie = 0;\n  while (child < g.length && cookie < s.length) {\n    if (s[cookie] >= g[child]) child++;\n    cookie++;\n  }\n  return child;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 455 - Assign Cookies",
+          "url": "https://leetcode.com/problems/assign-cookies/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "greedy-fractional-knapsack",
+      "title": "Fractional Knapsack Problem",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Maximize total value in a knapsack of capacity W by taking items or fractions of items sorted by value-to-weight ratio.",
+      "explanation": [
+        "Greedy Choice Property: Items can be broken into smaller fractions. Taking items with highest value-per-unit-weight `value / weight` maximizes value density.",
+        "Algorithm: 1) Compute ratio `value / weight` for each item.",
+        "2) Sort items in descending order of ratio.",
+        "3) Iterate through sorted items. If knapsack can take whole item, add its full weight and value. Otherwise, take fraction `remaining_capacity / item.weight` of its value and break loop."
+      ],
+      "exampleTrace": {
+        "input": "Items: [(value: 60, weight: 10), (100, 20), (120, 30)], Capacity W = 50",
+        "output": "Max Value = 240.0",
+        "traceSteps": [
+          "Step 1: Ratios: Item 0 = 60/10 = 6.0, Item 1 = 100/20 = 5.0, Item 2 = 120/30 = 4.0.",
+          "Step 2: Take Item 0 fully (wt 10). Value = 60, Rem W = 40.",
+          "Step 3: Take Item 1 fully (wt 20). Value = 60 + 100 = 160, Rem W = 20.",
+          "Step 4: Take fraction of Item 2: fraction 20/30 = 2/3. Value += (120 * 2/3) = 80.",
+          "Step 5: Total Value = 160 + 80 = 240.0. Knapsack full!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes profit/utility under weight constraints when continuous item fractions are allowed.",
+        "whenToUse": "When items are divisible (liquids, gold dust, bandwidth, commodities).",
+        "whereUsed": "Bandwidth allocation, liquid cargo loading, investment portfolio allocation.",
+        "whyOptimal": "Greedy sorting by density guarantees mathematically optimal value for divisible items."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Item:\n    def __init__(self, val, wt):\n        self.val = val\n        self.wt = wt\n\ndef fractionalKnapsack(W: float, items: list[Item]) -> float:\n    items.sort(key=lambda x: x.val / x.wt, reverse=True)\n    total_val = 0.0\n    for item in items:\n        if W >= item.wt:\n            W -= item.wt\n            total_val += item.val\n        else:\n            total_val += item.val * (W / item.wt)\n            break\n    return total_val"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nstruct Item { int value, weight; };\n\nbool cmp(Item a, Item b) {\n    double r1 = (double)a.value / a.weight;\n    double r2 = (double)b.value / b.weight;\n    return r1 > r2;\n}\n\ndouble fractionalKnapsack(int W, vector<Item>& items) {\n    sort(items.begin(), items.end(), cmp);\n    double totalVal = 0.0;\n    for (auto& item : items) {\n        if (W >= item.weight) {\n            W -= item.weight;\n            totalVal += item.value;\n        } else {\n            totalVal += item.value * ((double)W / item.weight);\n            break;\n        }\n    }\n    return totalVal;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass Item { int value, weight; Item(int v, int w){ value=v; weight=w; } }\n\npublic class Solution {\n    public double fractionalKnapsack(int W, Item[] items) {\n        Arrays.sort(items, (a, b) -> Double.compare((double)b.value/b.weight, (double)a.value/a.weight));\n        double totalVal = 0.0;\n        for (Item item : items) {\n            if (W >= item.weight) {\n                W -= item.weight;\n                totalVal += item.value;\n            } else {\n                totalVal += item.value * ((double)W / item.weight);\n                break;\n            }\n        }\n        return totalVal;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function fractionalKnapsack(W, items) {\n  items.sort((a, b) => (b.value / b.weight) - (a.value / a.weight));\n  let totalVal = 0.0;\n  for (const item of items) {\n    if (W >= item.weight) {\n      W -= item.weight;\n      totalVal += item.value;\n    } else {\n      totalVal += item.value * (W / item.weight);\n      break;\n    }\n  }\n  return totalVal;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Fractional Knapsack",
+          "url": "https://www.geeksforgeeks.org/problems/fractional-knapsack-1587115620/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-minimum-coins",
+      "title": "Minimum Coins (Greedy Canonical Currency System)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find minimum number of coins/notes needed to make a given amount V in canonical currency systems.",
+      "explanation": [
+        "Greedy Choice Property: For canonical currency systems (where coin denominations are multiples or satisfy the greedy property e.g. [1, 2, 5, 10, 20, 50, 100, 500, 2000]), picking the largest coin denomination $\\le V$ yields the minimum coin count.",
+        "Algorithm: 1) Sort coins in descending order.",
+        "2) For each coin, take as many as possible (`count += V // coin`, `V %= coin`).",
+        "3) Repeat until amount `V == 0`."
+      ],
+      "exampleTrace": {
+        "input": "Denominations = [2000, 500, 200, 100, 50, 20, 10, 5, 2, 1], Amount V = 43",
+        "output": "Coins Used: [20, 20, 2, 1] (Count = 4)",
+        "traceSteps": [
+          "Step 1: Largest coin <= 43 is 20. Take 20 -> Amount rem = 23.",
+          "Step 2: Largest coin <= 23 is 20. Take 20 -> Amount rem = 3.",
+          "Step 3: Largest coin <= 3 is 2. Take 2 -> Amount rem = 1.",
+          "Step 4: Largest coin <= 1 is 1. Take 1 -> Amount rem = 0.",
+          "Step 5: Total Coins = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Minimizes coin count for change calculation in real-world currency systems.",
+        "whenToUse": "When currency systems are canonical (e.g., standard bills/coins).",
+        "whereUsed": "Vending machines, cash register change dispensers, ATM cash dispensing.",
+        "whyOptimal": "Canonical currency guarantees that greedy choice never fails to achieve optimal coin count."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minCoins(coins: list[int], V: int) -> list[int]:\n    coins.sort(reverse=True)\n    res = []\n    for coin in coins:\n        while V >= coin:\n            V -= coin\n            res.append(coin)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvector<int> minCoins(vector<int>& coins, int V) {\n    sort(coins.rbegin(), coins.rend());\n    vector<int> res;\n    for (int coin : coins) {\n        while (V >= coin) {\n            V -= coin;\n            res.push_back(coin);\n        }\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> minCoins(int[] coins, int V) {\n        Arrays.sort(coins);\n        List<Integer> res = new ArrayList<>();\n        for (int i = coins.length - 1; i >= 0; i--) {\n            while (V >= coins[i]) {\n                V -= coins[i];\n                res.add(coins[i]);\n            }\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minCoins(coins, V) {\n  coins.sort((a, b) => b - a);\n  const res = [];\n  for (const coin of coins) {\n    while (V >= coin) {\n      V -= coin;\n      res.push(coin);\n    }\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Minimum Coins",
+          "url": "https://www.geeksforgeeks.org/problems/number-of-coins1824/1",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "greedy-lemonade-change",
+      "title": "Lemonade Change Problem",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine if correct change can be provided to customers buying $5 lemonade paying with $5, $10, or $20 bills.",
+      "explanation": [
+        "Greedy Choice Strategy: When receiving a $20 bill, change required is $15. Prefer giving `$10 + $5` over `$5 + $5 + $5`! Why? Because $5 bills are more versatile (needed for $10 change).",
+        "Algorithm: Track `five` bill count and `ten` bill count.",
+        "1) Customer pays $5: `five++`.",
+        "2) Customer pays $10: requires $5 change. If `five > 0`, `five--`, `ten++`; else return False.",
+        "3) Customer pays $20: requires $15 change. If `ten > 0 and five > 0`, `ten--`, `five--`. Else if `five >= 3`, `five -= 3`. Else return False."
+      ],
+      "exampleTrace": {
+        "input": "Bills = [5, 5, 5, 10, 20]",
+        "output": "Can Provide Change = True",
+        "traceSteps": [
+          "Step 1: Pay 5 -> five=1, ten=0.",
+          "Step 2: Pay 5 -> five=2, ten=0.",
+          "Step 3: Pay 5 -> five=3, ten=0.",
+          "Step 4: Pay 10 -> change 5 -> five=2, ten=1.",
+          "Step 5: Pay 20 -> change 15 -> give one 10 and one 5 -> five=1, ten=0.",
+          "Step 6: All customers served! Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies change availability under strict bill denomination availability.",
+        "whenToUse": "When managing cash drawer balances with limited bill denominations.",
+        "whereUsed": "POS cash drawer management, automated ticketing machines.",
+        "whyOptimal": "O(N) single-pass greedy choice prioritizing preservation of smaller $5 bills."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lemonadeChange(bills: list[int]) -> bool:\n    five = ten = 0\n    for bill in bills:\n        if bill == 5:\n            five += 1\n        elif bill == 10:\n            if not five: return False\n            five -= 1\n            ten += 1\n        else: # 20 bill\n            if ten and five:\n                ten -= 1\n                five -= 1\n            elif five >= 3:\n                five -= 3\n            else:\n                return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool lemonadeChange(vector<int>& bills) {\n    int five = 0, ten = 0;\n    for (int bill : bills) {\n        if (bill == 5) five++;\n        else if (bill == 10) {\n            if (five == 0) return false;\n            five--; ten++;\n        } else {\n            if (ten > 0 && five > 0) {\n                ten--; five--;\n            } else if (five >= 3) {\n                five -= 3;\n            } else return false;\n        }\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean lemonadeChange(int[] bills) {\n        int five = 0, ten = 0;\n        for (int bill : bills) {\n            if (bill == 5) five++;\n            else if (bill == 10) {\n                if (five == 0) return false;\n                five--; ten++;\n            } else {\n                if (ten > 0 && five > 0) {\n                    ten--; five--;\n                } else if (five >= 3) {\n                    five -= 3;\n                } else return false;\n            }\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lemonadeChange(bills) {\n  let five = 0, ten = 0;\n  for (const bill of bills) {\n    if (bill === 5) five++;\n    else if (bill === 10) {\n      if (!five) return false;\n      five--; ten++;\n    } else {\n      if (ten && five) {\n        ten--; five--;\n      } else if (five >= 3) {\n        five -= 3;\n      } else return false;\n    }\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 860 - Lemonade Change",
+          "url": "https://leetcode.com/problems/lemonade-change/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "greedy-n-meetings-in-one-room",
+      "title": "N Meetings in One Room / Activity Selection Problem",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Maximize the maximum number of non-overlapping meetings that can be scheduled in a single meeting room.",
+      "explanation": [
+        "Greedy Choice Property: Always select the meeting that FINISHES EARLIEST! Why? Ending early leaves maximum remaining time for subsequent meetings.",
+        "Algorithm: 1) Pair `(start, end, meeting_id)` for each meeting.",
+        "2) Sort meetings by `end_time` in ascending order.",
+        "3) Maintain `last_end_time`. Iterate through sorted meetings: if `meeting.start > last_end_time`, select meeting and update `last_end_time = meeting.end`."
+      ],
+      "exampleTrace": {
+        "input": "Start = [1, 3, 0, 5, 8, 5], End = [2, 4, 6, 7, 9, 9]",
+        "output": "Max Meetings Scheduled = 4 (Meetings: (1,2), (3,4), (5,7), (8,9))",
+        "traceSteps": [
+          "Step 1: Sort by end times -> [(1,2), (3,4), (0,6), (5,7), (8,9), (5,9)].",
+          "Step 2: Pick (1,2). last_end_time = 2. Meetings count = 1.",
+          "Step 3: Pick (3,4) (start 3 > 2). last_end_time = 4. Meetings count = 2.",
+          "Step 4: Skip (0,6) (start 0 <= 4).",
+          "Step 5: Pick (5,7) (start 5 > 4). last_end_time = 7. Meetings count = 3.",
+          "Step 6: Pick (8,9) (start 8 > 7). last_end_time = 9. Meetings count = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Schedules maximum non-conflicting tasks on a single shared resource.",
+        "whenToUse": "When maximizing task count in single CPU core, single room, or single machine.",
+        "whereUsed": "Conference room booking system, single-core CPU process scheduler.",
+        "whyOptimal": "Sorting by earliest finish time is mathematically proven optimal for activity selection."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxMeetings(start: list[int], end: list[int]) -> int:\n    meetings = sorted(zip(start, end), key=lambda x: x[1])\n    count = 0\n    last_end = -1\n    for s, e in meetings:\n        if s > last_end:\n            count += 1\n            last_end = e\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nstruct Meeting { int start, end; };\nbool cmp(Meeting m1, Meeting m2) { return m1.end < m2.end; }\n\nint maxMeetings(vector<int>& start, vector<int>& end) {\n    int n = start.size();\n    vector<Meeting> m(n);\n    for (int i = 0; i < n; i++) m[i] = {start[i], end[i]};\n    sort(m.begin(), m.end(), cmp);\n    int count = 0, lastEnd = -1;\n    for (int i = 0; i < n; i++) {\n        if (m[i].start > lastEnd) {\n            count++;\n            lastEnd = m[i].end;\n        }\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int maxMeetings(int[] start, int[] end) {\n        int n = start.length;\n        int[][] meetings = new int[n][2];\n        for (int i = 0; i < n; i++) {\n            meetings[i][0] = start[i];\n            meetings[i][1] = end[i];\n        }\n        Arrays.sort(meetings, Comparator.comparingInt(a -> a[1]));\n        int count = 0, lastEnd = -1;\n        for (int i = 0; i < n; i++) {\n            if (meetings[i][0] > lastEnd) {\n                count++;\n                lastEnd = meetings[i][1];\n            }\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxMeetings(start, end) {\n  const meetings = start.map((s, i) => ({ start: s, end: end[i] }));\n  meetings.sort((a, b) => a.end - b.end);\n  let count = 0, lastEnd = -1;\n  for (const m of meetings) {\n    if (m.start > lastEnd) {\n      count++;\n      lastEnd = m.end;\n    }\n  }\n  return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - N meetings in one room",
+          "url": "https://www.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-non-overlapping-intervals",
+      "title": "Non-overlapping Intervals / Erase Overlap Intervals",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find minimum number of intervals to remove to make remaining intervals non-overlapping.",
+      "explanation": [
+        "Mathematical Equivalent: `Minimum Removals = Total Intervals - Maximum Non-Overlapping Intervals`.",
+        "Greedy Strategy: Sort intervals by end time `interval[1]`. Track `prev_end`. When an overlap occurs (`curr.start < prev_end`), remove current interval (increment removal count) and keep the interval with smaller end time."
+      ],
+      "exampleTrace": {
+        "input": "Intervals = [[1, 2], [2, 3], [3, 4], [1, 3]]",
+        "output": "Minimum Removals = 1 (Remove [1, 3])",
+        "traceSteps": [
+          "Step 1: Sort by end time -> [[1,2], [2,3], [1,3], [3,4]].",
+          "Step 2: Start with [1,2]. prev_end = 2.",
+          "Step 3: Interval [2,3] starts at 2 >= 2 -> No overlap! Update prev_end = 3.",
+          "Step 4: Interval [1,3] starts at 1 < 3 -> OVERLAP! Remove [1,3]. Removals count = 1.",
+          "Step 5: Interval [3,4] starts at 3 >= 3 -> No overlap! Update prev_end = 4.",
+          "Step 6: Total removals = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Eliminates minimum overlapping interval collisions in resource schedules.",
+        "whenToUse": "When resolving schedule conflicts with minimal cancelled appointments.",
+        "whereUsed": "Calendar conflict resolver, radio spectrum frequency allocation.",
+        "whyOptimal": "O(N log N) sorting ensures earliest end time intervals are preserved."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def eraseOverlapIntervals(intervals: list[list[int]]) -> int:\n    intervals.sort(key=lambda x: x[1])\n    removals = 0\n    prev_end = float('-inf')\n    for s, e in intervals:\n        if s >= prev_end:\n            prev_end = e\n        else:\n            removals += 1\n    return removals"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint eraseOverlapIntervals(vector<vector<int>>& intervals) {\n    sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) {\n        return a[1] < b[1];\n    });\n    int removals = 0;\n    int prevEnd = intervals[0][1];\n    for (int i = 1; i < intervals.size(); i++) {\n        if (intervals[i][0] >= prevEnd) {\n            prevEnd = intervals[i][1];\n        } else {\n            removals++;\n        }\n    }\n    return removals;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int eraseOverlapIntervals(int[][] intervals) {\n        Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));\n        int removals = 0;\n        int prevEnd = intervals[0][1];\n        for (int i = 1; i < intervals.length; i++) {\n            if (intervals[i][0] >= prevEnd) {\n                prevEnd = intervals[i][1];\n            } else {\n                removals++;\n            }\n        }\n        return removals;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function eraseOverlapIntervals(intervals) {\n  intervals.sort((a, b) => a[1] - b[1]);\n  let removals = 0;\n  let prevEnd = intervals[0][1];\n  for (let i = 1; i < intervals.length; i++) {\n    if (intervals[i][0] >= prevEnd) {\n      prevEnd = intervals[i][1];\n    } else {\n      removals++;\n    }\n  }\n  return removals;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 435 - Non-overlapping Intervals",
+          "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-minimum-platforms",
+      "title": "Minimum Platforms Required for Trains",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find minimum number of railway platforms needed to prevent train delays given arrival and departure times.",
+      "explanation": [
+        "Greedy Two-Pointer Sweep: Sort arrival times `arr` and departure times `dep` independently.",
+        "Use two pointers `i` (arrivals) and `j` (departures).",
+        "If `arr[i] <= dep[j]`: a train arrives before previous train leaves -> `needed_platforms++`, `i++`.",
+        "Else (`arr[i] > dep[j]`): a train departs -> `needed_platforms--`, `j++`.",
+        "Track `max_platforms = max(max_platforms, needed_platforms)`."
+      ],
+      "exampleTrace": {
+        "input": "Arr = [900, 940, 950, 1100, 1500, 1800], Dep = [910, 1200, 1120, 1130, 1900, 2000]",
+        "output": "Minimum Platforms = 3",
+        "traceSteps": [
+          "Step 1: Sort Arr = [900, 940, 950, 1100, 1500, 1800], Dep = [910, 1120, 1130, 1200, 1900, 2000].",
+          "Step 2: Train 900 arrives -> platforms = 1.",
+          "Step 3: Train 910 departs -> platforms = 0.",
+          "Step 4: Trains 940, 950 arrive before 1120 departs -> platforms count reaches 2.",
+          "Step 5: Train 1100 arrives before 1120 departs -> platforms count reaches 3 (MAX).",
+          "Step 6: Return max platforms = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds peak simultaneous resource overlap requiring independent parallel tracks/channels.",
+        "whenToUse": "When determining peak concurrent overlap across time intervals.",
+        "whereUsed": "Railway platform allocation, airport gate assignment, max concurrency server scaling.",
+        "whyOptimal": "O(N log N) sorting with two-pointer sweep tracks exact peak simultaneous overlaps."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findPlatform(arr: list[int], dep: list[int]) -> int:\n    arr.sort()\n    dep.sort()\n    n = len(arr)\n    i = j = 0\n    platforms = max_platforms = 0\n    while i < n and j < n:\n        if arr[i] <= dep[j]:\n            platforms += 1\n            max_platforms = max(max_platforms, platforms)\n            i += 1\n        else:\n            platforms -= 1\n            j += 1\n    return max_platforms"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint findPlatform(vector<int>& arr, vector<int>& dep) {\n    sort(arr.begin(), arr.end());\n    sort(dep.begin(), dep.end());\n    int n = arr.size();\n    int i = 0, j = 0;\n    int platforms = 0, maxPlatforms = 0;\n    while (i < n && j < n) {\n        if (arr[i] <= dep[j]) {\n            platforms++;\n            maxPlatforms = max(maxPlatforms, platforms);\n            i++;\n        } else {\n            platforms--;\n            j++;\n        }\n    }\n    return maxPlatforms;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class Solution {\n    public int findPlatform(int[] arr, int[] dep) {\n        Arrays.sort(arr);\n        Arrays.sort(dep);\n        int n = arr.length;\n        int i = 0, j = 0;\n        int platforms = 0, maxPlatforms = 0;\n        while (i < n && j < n) {\n            if (arr[i] <= dep[j]) {\n                platforms++;\n                maxPlatforms = Math.max(maxPlatforms, platforms);\n                i++;\n            } else {\n                platforms--;\n                j++;\n            }\n        }\n        return maxPlatforms;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findPlatform(arr, dep) {\n  arr.sort((a, b) => a - b);\n  dep.sort((a, b) => a - b);\n  let n = arr.length;\n  let i = 0, j = 0;\n  let platforms = 0, maxPlatforms = 0;\n  while (i < n && j < n) {\n    if (arr[i] <= dep[j]) {\n      platforms++;\n      maxPlatforms = Math.max(maxPlatforms, platforms);\n      i++;\n    } else {\n      platforms--;\n      j++;\n    }\n  }\n  return maxPlatforms;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Minimum Platforms",
+          "url": "https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-job-sequencing",
+      "title": "Job Sequencing Problem with Deadlines",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N + N * max_deadline)",
+      "spaceComplexity": "O(max_deadline)",
+      "summary": "Maximize total profit by scheduling jobs that take 1 unit of time each before their respective deadlines.",
+      "explanation": [
+        "Greedy Strategy: Sort jobs in descending order of PROFIT. For each job, assign it to the LATEST AVAILABLE TIME SLOT $\\le$ its deadline! Why latest slot? This leaves earlier time slots free for jobs with stricter deadlines.",
+        "Algorithm: 1) Sort jobs by `profit` descending.",
+        "2) Find max deadline `max_d`. Create boolean slot array `slots[1..max_d]` initialized to False.",
+        "3) For each job, search backwards from `min(max_d, job.deadline)` down to 1 for an empty slot. If found, mark slot as taken, add profit, increment job count."
+      ],
+      "exampleTrace": {
+        "input": "Jobs = [(id:1, dead:4, prof:20), (2, 1, 10), (3, 1, 40), (4, 1, 30)]",
+        "output": "Max Profit = 60 (Jobs: 3 and 1)",
+        "traceSteps": [
+          "Step 1: Sort by profit -> Job 3 (40, d:1), Job 4 (30, d:1), Job 1 (20, d:4), Job 2 (10, d:1).",
+          "Step 2: Job 3 (profit 40): Assign to slot 1. Slots: [1: Taken]. Profit = 40.",
+          "Step 3: Job 4 (profit 30): Deadline 1. Slot 1 already taken! Cannot schedule.",
+          "Step 4: Job 1 (profit 20): Deadline 4. Assign to slot 4. Slots: [1: Taken, 4: Taken]. Profit = 60.",
+          "Step 5: Total Profit = 60, Scheduled Count = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Schedules unit-time jobs to maximize profit under deadline constraints.",
+        "whenToUse": "When choosing highest revenue jobs subject to expiration deadlines.",
+        "whereUsed": "Ad slot auction scheduling, freelance contract bidding.",
+        "whyOptimal": "Greedy profit sorting + latest slot assignment maximizes profit without blocking early deadlines."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Job:\n    def __init__(self, id, deadline, profit):\n        self.id = id\n        self.deadline = deadline\n        self.profit = profit\n\ndef JobScheduling(jobs: list[Job]) -> list[int]:\n    jobs.sort(key=lambda x: x.profit, reverse=True)\n    max_d = max(job.deadline for job in jobs)\n    slots = [-1] * (max_d + 1)\n    count = total_profit = 0\n    for job in jobs:\n        for r in range(job.deadline, 0, -1):\n            if slots[r] == -1:\n                slots[r] = job.id\n                count += 1\n                total_profit += job.profit\n                break\n    return [count, total_profit]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nstruct Job { int id, deadline, profit; };\n\nbool cmp(Job a, Job b) { return a.profit > b.profit; }\n\nvector<int> JobScheduling(vector<Job>& jobs) {\n    sort(jobs.begin(), jobs.end(), cmp);\n    int maxD = 0;\n    for (auto& j : jobs) maxD = max(maxD, j.deadline);\n    vector<int> slots(maxD + 1, -1);\n    int count = 0, totalProfit = 0;\n    for (auto& j : jobs) {\n        for (int r = j.deadline; r > 0; r--) {\n            if (slots[r] == -1) {\n                slots[r] = j.id;\n                count++;\n                totalProfit += j.profit;\n                break;\n            }\n        }\n    }\n    return {count, totalProfit};\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass Job { int id, deadline, profit; Job(int i, int d, int p){ id=i; deadline=d; profit=p; } }\n\npublic class Solution {\n    public int[] JobScheduling(Job[] jobs) {\n        Arrays.sort(jobs, (a, b) -> b.profit - a.profit);\n        int maxD = 0;\n        for (Job j : jobs) maxD = Math.max(maxD, j.deadline);\n        int[] slots = new int[maxD + 1];\n        Arrays.fill(slots, -1);\n        int count = 0, totalProfit = 0;\n        for (Job j : jobs) {\n            for (int r = j.deadline; r > 0; r--) {\n                if (slots[r] == -1) {\n                    slots[r] = j.id;\n                    count++;\n                    totalProfit += j.profit;\n                    break;\n                }\n            }\n        }\n        return new int[]{count, totalProfit};\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function JobScheduling(jobs) {\n  jobs.sort((a, b) => b.profit - a.profit);\n  let maxD = Math.max(...jobs.map(j => j.deadline));\n  const slots = new Array(maxD + 1).fill(-1);\n  let count = 0, totalProfit = 0;\n  for (const j of jobs) {\n    for (let r = j.deadline; r > 0; r--) {\n      if (slots[r] === -1) {\n        slots[r] = j.id;\n        count++;\n        totalProfit += j.profit;\n        break;\n      }\n    }\n  }\n  return [count, totalProfit];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Job Sequencing Problem",
+          "url": "https://www.geeksforgeeks.org/problems/job-sequencing-problem-1587115620/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-jump-game-i",
+      "title": "Jump Game I (Can Reach End)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Determine if you can reach the last index of an array starting from index 0 where `nums[i]` is max jump length.",
+      "explanation": [
+        "Greedy Single-Pass Variable: Maintain `max_reachable` index.",
+        "Iterate `i` from 0 to N-1:",
+        "1) If `i > max_reachable`: We hit an unreachable gap! Return False.",
+        "2) Update `max_reachable = max(max_reachable, i + nums[i])`.",
+        "3) If `max_reachable >= N - 1`: Return True immediately."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [2, 3, 1, 1, 4]",
+        "output": "Can Reach End = True",
+        "traceSteps": [
+          "Step 1: i=0: nums[0]=2. max_reachable = max(0, 0+2) = 2.",
+          "Step 2: i=1: nums[1]=3. max_reachable = max(2, 1+3) = 4.",
+          "Step 3: max_reachable (4) >= N-1 (4) -> Return True immediately!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies reachability to final destination under maximum jump bounds.",
+        "whenToUse": "When determining array reachability without needing min jump path.",
+        "whereUsed": "Game level connectivity validation, network packet reachability.",
+        "whyOptimal": "O(N) time with O(1) space dynamically updating max reachable bound."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def canJump(nums: list[int]) -> bool:\n    max_reachable = 0\n    for i, jump in enumerate(nums):\n        if i > max_reachable: return False\n        max_reachable = max(max_reachable, i + jump)\n        if max_reachable >= len(nums) - 1: return True\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nbool canJump(vector<int>& nums) {\n    int maxReachable = 0;\n    for (int i = 0; i < nums.size(); i++) {\n        if (i > maxReachable) return false;\n        maxReachable = max(maxReachable, i + nums[i]);\n        if (maxReachable >= nums.size() - 1) return true;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean canJump(int[] nums) {\n        int maxReachable = 0;\n        for (int i = 0; i < nums.length; i++) {\n            if (i > maxReachable) return false;\n            maxReachable = Math.max(maxReachable, i + nums[i]);\n            if (maxReachable >= nums.length - 1) return true;\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function canJump(nums) {\n  let maxReachable = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i > maxReachable) return false;\n    maxReachable = Math.max(maxReachable, i + nums[i]);\n    if (maxReachable >= nums.length - 1) return true;\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 55 - Jump Game",
+          "url": "https://leetcode.com/problems/jump-game/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-jump-game-ii",
+      "title": "Jump Game II (Minimum Jumps to Reach End)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find minimum number of jumps to reach the last index of array.",
+      "explanation": [
+        "Greedy Window BFS Strategy: Maintain current jump boundary `curr_end` and `farthest` jump reachable.",
+        "Iterate `i` from 0 to N-2 (don't need to jump from last index):",
+        "1) Update `farthest = max(farthest, i + nums[i])`.",
+        "2) When index `i == curr_end`: We must make a jump! Increment `jumps++`, update `curr_end = farthest`."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [2, 3, 1, 1, 4]",
+        "output": "Minimum Jumps = 2",
+        "traceSteps": [
+          "Step 1: i=0: farthest = max(0, 0+2) = 2. Since i == curr_end (0), jumps=1, curr_end=2.",
+          "Step 2: i=1: farthest = max(2, 1+3) = 4.",
+          "Step 3: i=2: farthest = max(4, 2+1) = 4. Since i == curr_end (2), jumps=2, curr_end=4.",
+          "Step 4: End of loop. Minimum Jumps = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds absolute minimum jump count to reach destination.",
+        "whenToUse": "When finding shortest step path in array jump graphs.",
+        "whereUsed": "Router hop count optimization, platform jump game engines.",
+        "whyOptimal": "O(N) single-pass greedy range expansion replacing O(N^2) DP."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def jump(nums: list[int]) -> int:\n    if len(nums) <= 1: return 0\n    jumps = 0\n    curr_end = farthest = 0\n    for i in range(len(nums) - 1):\n        farthest = max(farthest, i + nums[i])\n        if i == curr_end:\n            jumps += 1\n            curr_end = farthest\n    return jumps"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint jump(vector<int>& nums) {\n    if (nums.size() <= 1) return 0;\n    int jumps = 0, currEnd = 0, farthest = 0;\n    for (int i = 0; i < nums.size() - 1; i++) {\n        farthest = max(farthest, i + nums[i]);\n        if (i == currEnd) {\n            jumps++;\n            currEnd = farthest;\n        }\n    }\n    return jumps;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int jump(int[] nums) {\n        if (nums.length <= 1) return 0;\n        int jumps = 0, currEnd = 0, farthest = 0;\n        for (int i = 0; i < nums.length - 1; i++) {\n            farthest = Math.max(farthest, i + nums[i]);\n            if (i == currEnd) {\n                jumps++;\n                currEnd = farthest;\n            }\n        }\n        return jumps;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function jump(nums) {\n  if (nums.length <= 1) return 0;\n  let jumps = 0, currEnd = 0, farthest = 0;\n  for (let i = 0; i < nums.length - 1; i++) {\n    farthest = Math.max(farthest, i + nums[i]);\n    if (i === currEnd) {\n      jumps++;\n      currEnd = farthest;\n    }\n  }\n  return jumps;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 45 - Jump Game II",
+          "url": "https://leetcode.com/problems/jump-game-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-gas-station",
+      "title": "Gas Station / Circuit Completion",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find starting gas station index to complete a circular route once, or return -1 if impossible.",
+      "explanation": [
+        "Key Observations: 1) Total Gas vs Total Cost: If `sum(gas) < sum(cost)`, completing circuit is mathematically impossible! Return -1.",
+        "2) Greedy Reset Invariant: If starting at index `start` causes fuel tank `curr_tank` to drop below 0 at index `i`, NO station between `start` and `i` can be a valid starting point! Reset `start = i + 1` and reset `curr_tank = 0`."
+      ],
+      "exampleTrace": {
+        "input": "Gas = [1, 2, 3, 4, 5], Cost = [3, 4, 5, 1, 2]",
+        "output": "Starting Station = 3",
+        "traceSteps": [
+          "Step 1: i=0: gas 1 - cost 3 = -2. curr_tank = -2 < 0. Reset start = 1, curr_tank = 0.",
+          "Step 2: i=1: gas 2 - cost 4 = -2. curr_tank = -2 < 0. Reset start = 2, curr_tank = 0.",
+          "Step 3: i=2: gas 3 - cost 5 = -2. curr_tank = -2 < 0. Reset start = 3, curr_tank = 0.",
+          "Step 4: i=3: gas 4 - cost 1 = +3. curr_tank = 3 >= 0. Keep start = 3.",
+          "Step 5: i=4: gas 5 - cost 2 = +3. curr_tank = 3 + 3 = 6 >= 0.",
+          "Step 6: Total gas (15) >= Total cost (15). Return start index = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds unique valid starting point for circular traversal with resource consumption.",
+        "whenToUse": "When completing circular resource circuits.",
+        "whereUsed": "Circular vehicle refueling route optimization, ring buffer processing.",
+        "whyOptimal": "O(N) single pass eliminating candidate starting points greedily."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:\n    if sum(gas) < sum(cost): return -1\n    start = curr_tank = 0\n    for i in range(len(gas)):\n        curr_tank += gas[i] - cost[i]\n        if curr_tank < 0:\n            start = i + 1\n            curr_tank = 0\n    return start"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\nusing namespace std;\n\nint canCompleteCircuit(vector<int>& gas, vector<int>& cost) {\n    int totalGas = 0, totalCost = 0;\n    int currTank = 0, start = 0;\n    for (int i = 0; i < gas.size(); i++) {\n        totalGas += gas[i];\n        totalCost += cost[i];\n        currTank += gas[i] - cost[i];\n        if (currTank < 0) {\n            start = i + 1;\n            currTank = 0;\n        }\n    }\n    return totalGas < totalCost ? -1 : start;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int canCompleteCircuit(int[] gas, int[] cost) {\n        int totalGas = 0, totalCost = 0;\n        int currTank = 0, start = 0;\n        for (int i = 0; i < gas.length; i++) {\n            totalGas += gas[i];\n            totalCost += cost[i];\n            currTank += gas[i] - cost[i];\n            if (currTank < 0) {\n                start = i + 1;\n                currTank = 0;\n            }\n        }\n        return totalGas < totalCost ? -1 : start;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function canCompleteCircuit(gas, cost) {\n  let totalGas = 0, totalCost = 0;\n  let currTank = 0, start = 0;\n  for (let i = 0; i < gas.length; i++) {\n    totalGas += gas[i];\n    totalCost += cost[i];\n    currTank += gas[i] - cost[i];\n    if (currTank < 0) {\n      start = i + 1;\n      currTank = 0;\n    }\n  }\n  return totalGas < totalCost ? -1 : start;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 134 - Gas Station",
+          "url": "https://leetcode.com/problems/gas-station/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-candy-distribution",
+      "title": "Candy Distribution Problem (Hard)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Distribute minimum total candies to children in line such that every child gets at least 1 candy and children with higher ratings than neighbors get more candies.",
+      "explanation": [
+        "Two-Pass Greedy Sweep Strategy:",
+        "Step 1: Initialize `candies` array of size N with 1 candy for every child.",
+        "Step 2: Left-to-Right Pass: If `ratings[i] > ratings[i-1]`, set `candies[i] = candies[i-1] + 1`.",
+        "Step 3: Right-to-Left Pass: If `ratings[i] > ratings[i+1]`, update `candies[i] = max(candies[i], candies[i+1] + 1)`.",
+        "Step 4: Return `sum(candies)`."
+      ],
+      "exampleTrace": {
+        "input": "Ratings = [1, 0, 2]",
+        "output": "Minimum Candies = 5 (Candies: [2, 1, 2])",
+        "traceSteps": [
+          "Step 1: Initialize candies = [1, 1, 1].",
+          "Step 2: Left-to-right pass: i=1 (0 < 1, no change), i=2 (2 > 0 -> candies[2]=2). Candies = [1, 1, 2].",
+          "Step 3: Right-to-left pass: i=1 (0 < 2, no change), i=0 (1 > 0 -> candies[0] = max(1, 1+1) = 2).",
+          "Step 4: Final Candies = [2, 1, 2]. Total sum = 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Satisfies bidirectional local rating constraints with minimal total resource allocation.",
+        "whenToUse": "When elements require relative order satisfaction from both left and right neighbors.",
+        "whereUsed": "Employee bonus distribution based on peer performance ratings.",
+        "whyOptimal": "Two linear O(N) passes decouple left and right neighbor constraints cleanly."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def candy(ratings: list[int]) -> int:\n    n = len(ratings)\n    candies = [1] * n\n    for i in range(1, n):\n        if ratings[i] > ratings[i-1]:\n            candies[i] = candies[i-1] + 1\n    for i in range(n - 2, -1, -1):\n        if ratings[i] > ratings[i+1]:\n            candies[i] = max(candies[i], candies[i+1] + 1)\n    return sum(candies)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <algorithm>\nusing namespace std;\n\nint candy(vector<int>& ratings) {\n    int n = ratings.size();\n    vector<int> candies(n, 1);\n    for (int i = 1; i < n; i++) {\n        if (ratings[i] > ratings[i-1]) candies[i] = candies[i-1] + 1;\n    }\n    for (int i = n - 2; i >= 0; i--) {\n        if (ratings[i] > ratings[i+1]) candies[i] = max(candies[i], candies[i+1] + 1);\n    }\n    return accumulate(candies.begin(), candies.end(), 0);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class Solution {\n    public int candy(int[] ratings) {\n        int n = ratings.length;\n        int[] candies = new int[n];\n        Arrays.fill(candies, 1);\n        for (int i = 1; i < n; i++) {\n            if (ratings[i] > ratings[i-1]) candies[i] = candies[i-1] + 1;\n        }\n        for (int i = n - 2; i >= 0; i--) {\n            if (ratings[i] > ratings[i+1]) candies[i] = Math.max(candies[i], candies[i+1] + 1);\n        }\n        int sum = 0;\n        for (int c : candies) sum += c;\n        return sum;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function candy(ratings) {\n  const n = ratings.length;\n  const candies = new Array(n).fill(1);\n  for (let i = 1; i < n; i++) {\n    if (ratings[i] > ratings[i-1]) candies[i] = candies[i-1] + 1;\n  }\n  for (let i = n - 2; i >= 0; i--) {\n    if (ratings[i] > ratings[i+1]) candies[i] = Math.max(candies[i], candies[i+1] + 1);\n  }\n  return candies.reduce((a, b) => a + b, 0);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 135 - Candy",
+          "url": "https://leetcode.com/problems/candy/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "greedy-valid-parenthesis-string",
+      "title": "Valid Parenthesis String with Wildcard '*'",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Check if a string containing '(', ')', and '*' is valid where '*' can represent '(', ')', or empty string.",
+      "explanation": [
+        "Greedy Range Range Tracking: Track minimum `min_open` and maximum `max_open` possible open parentheses.",
+        "Iterate character `c` in string:",
+        "1) `c == '('`: `min_open++`, `max_open++`.",
+        "2) `c == ')'`: `min_open--`, `max_open--`.",
+        "3) `c == '*'`: `min_open--` (treat as ')'), `max_open++` (treat as '(').",
+        "4) Pruning: If `max_open < 0`, return False immediately (too many ')' closing parentheses). Reset `min_open = max(0, min_open)`.",
+        "5) Final Check: Return `min_open == 0`."
+      ],
+      "exampleTrace": {
+        "input": "String = \"(*))\"",
+        "output": "Is Valid = True",
+        "traceSteps": [
+          "Step 1: '(': min_open=1, max_open=1.",
+          "Step 2: '*': min_open=0, max_open=2.",
+          "Step 3: ')': min_open=-1 -> reset to 0, max_open=1.",
+          "Step 4: ')': min_open=-1 -> reset to 0, max_open=0.",
+          "Step 5: String finished. min_open == 0 -> Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Validates flexible bracket expressions with wildcard replacements.",
+        "whenToUse": "When string matching contains flexible wildcards with bounds.",
+        "whereUsed": "Regex parser wildcards, syntax tree validation.",
+        "whyOptimal": "O(N) time tracking min/max open bounds in O(1) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def checkValidString(s: str) -> bool:\n    min_open = max_open = 0\n    for c in s:\n        if c == '(':\n            min_open += 1\n            max_open += 1\n        elif c == ')':\n            min_open -= 1\n            max_open -= 1\n        else: # '*'\n            min_open -= 1\n            max_open += 1\n        if max_open < 0: return False\n        min_open = max(0, min_open)\n    return min_open == 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <algorithm>\nusing namespace std;\n\nbool checkValidString(string s) {\n    int minOpen = 0, maxOpen = 0;\n    for (char c : s) {\n        if (c == '(') { minOpen++; maxOpen++; }\n        else if (c == ')') { minOpen--; maxOpen--; }\n        else { minOpen--; maxOpen++; }\n        if (maxOpen < 0) return false;\n        minOpen = max(0, minOpen);\n    }\n    return minOpen == 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean checkValidString(String s) {\n        int minOpen = 0, maxOpen = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(') { minOpen++; maxOpen++; }\n            else if (c == ')') { minOpen--; maxOpen--; }\n            else { minOpen--; maxOpen++; }\n            if (maxOpen < 0) return false;\n            minOpen = Math.max(0, minOpen);\n        }\n        return minOpen == 0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function checkValidString(s) {\n  let minOpen = 0, maxOpen = 0;\n  for (const c of s) {\n    if (c === '(') { minOpen++; maxOpen++; }\n    else if (c === ')') { minOpen--; maxOpen--; }\n    else { minOpen--; maxOpen++; }\n    if (maxOpen < 0) return false;\n    minOpen = Math.max(0, minOpen);\n  }\n  return minOpen === 0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 678 - Valid Parenthesis String",
+          "url": "https://leetcode.com/problems/valid-parenthesis-string/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-kruskals-algorithm",
+      "title": "Kruskal's Minimum Spanning Tree (MST)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(E log E)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Find Minimum Spanning Tree of a weighted graph by greedily adding smallest edges that do not form a cycle using Disjoint Set Union (DSU).",
+      "explanation": [
+        "Greedy Choice Property: Always pick the overall smallest weight edge in the graph. If adding it to MST does not create a cycle, include it!",
+        "DSU Helper: Disjoint Set Union with Path Compression and Union by Rank provides $O(\\alpha(V)) \\approx O(1)$ cycle detection.",
+        "Algorithm: 1) Sort all edges `(weight, u, v)` by weight ascending.",
+        "2) Iterate sorted edges: If `find(u) != find(v)`, perform `union(u, v)`, add edge to MST, add `weight` to total MST cost.",
+        "3) Stop when MST contains `V - 1` edges."
+      ],
+      "exampleTrace": {
+        "input": "Edges: [(u:0, v:1, w:10), (0, 2, 6), (0, 3, 5), (1, 3, 15), (2, 3, 4)], V = 4",
+        "output": "MST Total Weight = 15 (Edges: (2,3,4), (0,3,5), (0,1,10))",
+        "traceSteps": [
+          "Step 1: Sort edges by weight -> [(2,3,4), (0,3,5), (0,2,6), (0,1,10), (1,3,15)].",
+          "Step 2: Pick (2,3, weight 4). find(2) != find(3). Union(2,3). MST weight = 4. Edges count = 1.",
+          "Step 3: Pick (0,3, weight 5). find(0) != find(3). Union(0,3). MST weight = 9. Edges count = 2.",
+          "Step 4: Pick (0,2, weight 6). find(0) == find(2) (connected!). Skip to avoid cycle.",
+          "Step 5: Pick (0,1, weight 10). find(0) != find(1). Union(0,1). MST weight = 19. Edges count = 3.",
+          "Step 6: MST has V-1 (3) edges! Total Weight = 19."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Connects all graph vertices with minimum total edge weight without cycles.",
+        "whenToUse": "When graph edges are explicitly listed or sparse.",
+        "whereUsed": "Telecommunication network cabling, electrical grid design, cluster analysis (single-linkage).",
+        "whyOptimal": "Greedy edge sorting + DSU achieves optimal MST cost in O(E log E) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n    def find(self, i):\n        if self.parent[i] == i:\n            return i\n        self.parent[i] = self.find(self.parent[i])\n        return self.parent[i]\n    def union(self, i, j):\n        root_i, root_j = self.find(i), self.find(j)\n        if root_i != root_j:\n            if self.rank[root_i] < self.rank[root_j]:\n                root_i, root_j = root_j, root_i\n            self.parent[root_j] = root_i\n            if self.rank[root_i] == self.rank[root_j]:\n                self.rank[root_i] += 1\n            return True\n        return False\n\ndef kruskalMST(V: int, edges: list[tuple[int, int, int]]) -> int:\n    edges.sort(key=lambda x: x[2]) # Sort by weight\n    dsu = DSU(V)\n    mst_weight = 0\n    edges_count = 0\n    for u, v, w in edges:\n        if dsu.union(u, v):\n            mst_weight += w\n            edges_count += 1\n            if edges_count == V - 1: break\n    return mst_weight"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nstruct Edge { int u, v, weight; };\nbool cmp(Edge a, Edge b) { return a.weight < b.weight; }\n\nclass DSU {\n    vector<int> parent, rank;\npublic:\n    DSU(int n) {\n        parent.resize(n);\n        for (int i = 0; i < n; i++) parent[i] = i;\n        rank.assign(n, 0);\n    }\n    int find(int i) {\n        if (parent[i] == i) return i;\n        return parent[i] = find(parent[i]);\n    }\n    bool unite(int i, int j) {\n        int rootI = find(i), rootJ = find(j);\n        if (rootI != rootJ) {\n            if (rank[rootI] < rank[rootJ]) swap(rootI, rootJ);\n            parent[rootJ] = rootI;\n            if (rank[rootI] == rank[rootJ]) rank[rootI]++;\n            return true;\n        }\n        return false;\n    }\n};\n\nint kruskalMST(int V, vector<Edge>& edges) {\n    sort(edges.begin(), edges.end(), cmp);\n    DSU dsu(V);\n    int mstWeight = 0, edgesCount = 0;\n    for (auto& e : edges) {\n        if (dsu.unite(e.u, e.v)) {\n            mstWeight += e.weight;\n            edgesCount++;\n            if (edgesCount == V - 1) break;\n        }\n    }\n    return mstWeight;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass Edge implements Comparable<Edge> {\n    int u, v, weight;\n    Edge(int u, int v, int w){ this.u=u; this.v=v; this.weight=w; }\n    public int compareTo(Edge o) { return Integer.compare(this.weight, o.weight); }\n}\n\npublic class Solution {\n    static class DSU {\n        int[] parent, rank;\n        DSU(int n) {\n            parent = new int[n];\n            for (int i = 0; i < n; i++) parent[i] = i;\n            rank = new int[n];\n        }\n        int find(int i) {\n            if (parent[i] == i) return i;\n            return parent[i] = find(parent[i]);\n        }\n        boolean union(int i, int j) {\n            int rI = find(i), rJ = find(j);\n            if (rI != rJ) {\n                if (rank[rI] < rank[rJ]) { int t = rI; rI = rJ; rJ = t; }\n                parent[rJ] = rI;\n                if (rank[rI] == rank[rJ]) rank[rI]++;\n                return true;\n            }\n            return false;\n        }\n    }\n    public int kruskalMST(int V, List<Edge> edges) {\n        Collections.sort(edges);\n        DSU dsu = new DSU(V);\n        int mstWeight = 0, edgesCount = 0;\n        for (Edge e : edges) {\n            if (dsu.union(e.u, e.v)) {\n                mstWeight += e.weight;\n                edgesCount++;\n                if (edgesCount == V - 1) break;\n            }\n        }\n        return mstWeight;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class DSU {\n  constructor(n) {\n    this.parent = Array.from({ length: n }, (_, i) => i);\n    this.rank = new Array(n).fill(0);\n  }\n  find(i) {\n    if (this.parent[i] === i) return i;\n    return this.parent[i] = this.find(this.parent[i]);\n  }\n  union(i, j) {\n    let rootI = this.find(i), rootJ = this.find(j);\n    if (rootI !== rootJ) {\n      if (this.rank[rootI] < this.rank[rootJ]) {\n        [rootI, rootJ] = [rootJ, rootI];\n      }\n      this.parent[rootJ] = rootI;\n      if (this.rank[rootI] === this.rank[rootJ]) this.rank[rootI]++;\n      return true;\n    }\n    return false;\n  }\n}\n\nfunction kruskalMST(V, edges) {\n  edges.sort((a, b) => a[2] - b[2]);\n  const dsu = new DSU(V);\n  let mstWeight = 0, edgesCount = 0;\n  for (const [u, v, w] of edges) {\n    if (dsu.union(u, v)) {\n      mstWeight += w;\n      edgesCount++;\n      if (edgesCount === V - 1) break;\n    }\n  }\n  return mstWeight;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1584 - Min Cost to Connect All Points",
+          "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-huffman-coding",
+      "title": "Huffman Coding Algorithm",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Generate optimal prefix-free variable-length binary codes for characters based on their frequency using Min-Heap.",
+      "explanation": [
+        "Greedy Choice Property: Characters with highest frequency get shortest binary bit codes. Characters with lowest frequency get longest binary bit codes.",
+        "Algorithm: 1) Build a Min-Heap of single-character tree nodes ordered by frequency.",
+        "2) While Min-Heap size > 1: Pop 2 lowest frequency nodes `node1` and `node2`. Create internal parent node with frequency `node1.freq + node2.freq` and left/right children. Push parent back into Min-Heap.",
+        "3) Root of remaining tree is Huffman Tree. Traverse tree assigning '0' to left branch and '1' to right branch to generate prefix codes."
+      ],
+      "exampleTrace": {
+        "input": "Frequencies: {'a': 5, 'b': 9, 'c': 12, 'd': 13, 'e': 16, 'f': 45}",
+        "output": "Huffman Codes: f: 0, c: 100, d: 101, a: 1100, b: 1101, e: 111",
+        "traceSteps": [
+          "Step 1: Heap: [a:5, b:9, c:12, d:13, e:16, f:45].",
+          "Step 2: Pop a(5) and b(9) -> Create parent (14). Heap: [c:12, d:13, (14), e:16, f:45].",
+          "Step 3: Pop c(12) and d(13) -> Create parent (25). Heap: [(14), e:16, (25), f:45].",
+          "Step 4: Pop (14) and e(16) -> Create parent (30). Heap: [(25), (30), f:45].",
+          "Step 5: Pop (25) and (30) -> Create parent (55). Heap: [f:45, (55)].",
+          "Step 6: Pop f(45) and (55) -> Root node (100). Codes generated!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Losslessly compresses text data by assigning variable-length prefix-free codes.",
+        "whenToUse": "When compressing character frequency streams into minimal bit storage.",
+        "whereUsed": "ZIP compression, JPEG image encoding, MP3 audio compression.",
+        "whyOptimal": "Greedy merging of smallest frequencies guarantees minimum expected code length."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass Node:\n    def __init__(self, char, freq):\n        self.char = char\n        self.freq = freq\n        self.left = self.right = None\n    def __lt__(self, other):\n        return self.freq < other.freq\n\ndef huffmanCoding(freq_map: dict[str, int]) -> dict[str, str]:\n    heap = [Node(char, freq) for char, freq in freq_map.items()]\n    heapq.heapify(heap)\n    while len(heap) > 1:\n        left = heapq.heappop(heap)\n        right = heapq.heappop(heap)\n        parent = Node(None, left.freq + right.freq)\n        parent.left = left\n        parent.right = right\n        heapq.heappush(heap, parent)\n        \n    codes = {}\n    def build_codes(node, code=\"\"):\n        if not node: return\n        if node.char:\n            codes[node.char] = code\n            return\n        build_codes(node.left, code + \"0\")\n        build_codes(node.right, code + \"1\")\n    build_codes(heap[0])\n    return codes"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <queue>\n#include <unordered_map>\nusing namespace std;\n\nstruct Node {\n    char ch;\n    int freq;\n    Node *left, *right;\n    Node(char c, int f) : ch(c), freq(f), left(nullptr), right(nullptr) {}\n};\n\nstruct cmp {\n    bool operator()(Node* a, Node* b) { return a->freq > b->freq; }\n};\n\nvoid buildCodes(Node* root, string code, unordered_map<char, string>& codes) {\n    if (!root) return;\n    if (root->ch != '\\0') codes[root->ch] = code;\n    buildCodes(root->left, code + \"0\", codes);\n    buildCodes(root->right, code + \"1\", codes);\n}\n\nunordered_map<char, string> huffmanCoding(const unordered_map<char, int>& freqMap) {\n    priority_queue<Node*, vector<Node*>, cmp> pq;\n    for (auto& p : freqMap) pq.push(new Node(p.first, p.second));\n    while (pq.size() > 1) {\n        Node* l = pq.top(); pq.pop();\n        Node* r = pq.top(); pq.pop();\n        Node* parent = new Node('\\0', l->freq + r->freq);\n        parent->left = l; parent->right = r;\n        pq.push(parent);\n    }\n    unordered_map<char, string> codes;\n    buildCodes(pq.top(), \"\", codes);\n    return codes;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\nclass Node implements Comparable<Node> {\n    char ch; int freq;\n    Node left, right;\n    Node(char c, int f) { ch = c; freq = f; }\n    public int compareTo(Node o) { return Integer.compare(this.freq, o.freq); }\n}\n\npublic class Solution {\n    public Map<Character, String> huffmanCoding(Map<Character, Integer> freqMap) {\n        PriorityQueue<Node> pq = new PriorityQueue<>();\n        for (Map.Entry<Character, Integer> entry : freqMap.entrySet()) {\n            pq.add(new Node(entry.getKey(), entry.getValue()));\n        }\n        while (pq.size() > 1) {\n            Node l = pq.poll(), r = pq.poll();\n            Node parent = new Node('\\0', l.freq + r.freq);\n            parent.left = l; parent.right = r;\n            pq.add(parent);\n        }\n        Map<Character, String> codes = new HashMap<>();\n        buildCodes(pq.peek(), \"\", codes);\n        return codes;\n    }\n    private void buildCodes(Node node, String code, Map<Character, String> codes) {\n        if (node == null) return;\n        if (node.ch != '\\0') codes.put(node.ch, code);\n        buildCodes(node.left, code + \"0\", codes);\n        buildCodes(node.right, code + \"1\", codes);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function huffmanCoding(freqMap) {\n  const nodes = Object.entries(freqMap).map(([ch, freq]) => ({ ch, freq, left: null, right: null }));\n  while (nodes.length > 1) {\n    nodes.sort((a, b) => a.freq - b.freq);\n    const l = nodes.shift();\n    const r = nodes.shift();\n    nodes.push({ ch: null, freq: l.freq + r.freq, left: l, right: r });\n  }\n  const codes = {};\n  function buildCodes(node, code = '') {\n    if (!node) return;\n    if (node.ch) codes[node.ch] = code;\n    buildCodes(node.left, code + '0');\n    buildCodes(node.right, code + '1');\n  }\n  buildCodes(nodes[0]);\n  return codes;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Huffman Encoding",
+          "url": "https://www.geeksforgeeks.org/problems/huffman-encoding3345/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "greedy-merge-intervals",
+      "title": "Merge Overlapping Intervals",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(N) for merged output array",
+      "summary": "Merges all overlapping intervals into non-overlapping intervals by sorting by start time and greedily extending boundaries.",
+      "explanation": [
+        "1. Sort intervals in ascending order based on their start time `interval[0]`.",
+        "2. Initialize `merged` array with the first interval `[start, end]`.",
+        "3. Iterate through remaining intervals. For current interval `[currStart, currEnd]`:",
+        "   - If `currStart <= end` (overlapping), greedily extend `end = max(end, currEnd)`.",
+        "   - Else (no overlap), push `[start, end]` to result and set new current interval."
+      ],
+      "exampleTrace": {
+        "title": "Trace Merge Intervals on [[1,3], [2,6], [8,10], [15,18]]",
+        "traceSteps": [
+          "Sorted Intervals: [[1,3], [2,6], [8,10], [15,18]].",
+          "Start with active interval [1, 3].",
+          "Inspect [2, 6]: 2 <= 3 (overlap!). Extend end = max(3, 6) = 6. Active interval becomes [1, 6].",
+          "Inspect [8, 10]: 8 > 6 (no overlap). Push [1, 6] to output. Active interval becomes [8, 10].",
+          "Inspect [15, 18]: 15 > 10 (no overlap). Push [8, 10] to output. Active interval becomes [15, 18].",
+          "Push final [15, 18]. Output: [[1,6], [8,10], [15,18]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines all intersecting time intervals into a minimal list of contiguous mutually disjoint intervals.",
+        "whenToUse": "Use when scheduling calendar events, allocating contiguous memory blocks, or processing time range logs.",
+        "whereUsed": "Calendar scheduling apps (Google Calendar, Outlook), disk defragmentation, audio range merging.",
+        "whyOptimal": "Sorting by start time guarantees that any potential overlap can be resolved in a single linear O(N) scan."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def merge(intervals: list[list[int]]) -> list[list[int]]:\n    intervals.sort(key=lambda x: x[0])\n    merged = []\n    for interval in intervals:\n        if not merged or merged[-1][1] < interval[0]:\n            merged.append(interval)\n        else:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n    return merged"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nvector<vector<int>> merge(vector<vector<int>>& intervals) {\n    if (intervals.empty()) return {};\n    sort(intervals.begin(), intervals.end());\n    vector<vector<int>> merged;\n    for (auto& interval : intervals) {\n        if (merged.empty() || merged.back()[1] < interval[0]) {\n            merged.push_back(interval);\n        } else {\n            merged.back()[1] = max(merged.back()[1], interval[1]);\n        }\n    }\n    return merged;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n        List<int[]> merged = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (merged.isEmpty() || merged.get(merged.size() - 1)[1] < interval[0]) {\n                merged.add(interval);\n            } else {\n                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], interval[1]);\n            }\n        }\n        return merged.toArray(new int[merged.size()][]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function merge(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  const merged = [];\n  for (const interval of intervals) {\n    if (merged.length === 0 || merged[merged.length - 1][1] < interval[0]) {\n      merged.push(interval);\n    } else {\n      merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], interval[1]);\n    }\n  }\n  return merged;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 56 - Merge Intervals",
+          "url": "https://leetcode.com/problems/merge-intervals/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-minimum-arrows-balloons",
+      "title": "Minimum Number of Arrows to Burst Balloons",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(1) auxiliary space",
+      "summary": "Greedily finds the minimum number of arrows needed to shoot and burst all 2D spherical balloons.",
+      "explanation": [
+        "1. Sort balloons by their end coordinates `points[i][1]` in ascending order.",
+        "2. Greedily shoot the first arrow at the end position of the first balloon: `arrowPos = points[0][1]`.",
+        "3. Iterate through remaining balloons. If a balloon's `start > arrowPos`, it cannot be popped by current arrow.",
+        "4. Shoot a new arrow at this balloon's end coordinate `arrowPos = points[i][1]` and increment `arrows` count."
+      ],
+      "exampleTrace": {
+        "title": "Trace Minimum Arrows on [[10,16], [2,8], [1,6], [7,12]]",
+        "traceSteps": [
+          "Sort by end coordinate: [[1,6], [2,8], [7,12], [10,16]].",
+          "Arrow 1 shot at end of first balloon: arrowPos = 6. Arrows count = 1.",
+          "Inspect [2, 8]: start 2 <= 6 -> popped by Arrow 1!",
+          "Inspect [7, 12]: start 7 > 6 -> Arrow 1 misses! Shoot Arrow 2 at arrowPos = 12. Arrows count = 2.",
+          "Inspect [10, 16]: start 10 <= 12 -> popped by Arrow 2!",
+          "Total minimum arrows needed: 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the minimum points required to intersect all intervals on a 1D line.",
+        "whenToUse": "Use when finding minimum coverage for overlapping range intervals.",
+        "whereUsed": "Radar target interception, missile defense scheduling, batch resource allocation.",
+        "whyOptimal": "Sorting by end time greedily leaves maximum room to catch future overlapping intervals."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findMinArrowShots(points: list[list[int]]) -> int:\n    if not points: return 0\n    points.sort(key=lambda x: x[1])\n    arrows = 1\n    arrow_pos = points[0][1]\n    for i in range(1, len(points)):\n        if points[i][0] > arrow_pos:\n            arrows += 1\n            arrow_pos = points[i][1]\n    return arrows"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint findMinArrowShots(vector<vector<int>>& points) {\n    if (points.empty()) return 0;\n    sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b) {\n        return a[1] < b[1];\n    });\n    int arrows = 1;\n    int arrowPos = points[0][1];\n    for (size_t i = 1; i < points.size(); i++) {\n        if (points[i][0] > arrowPos) {\n            arrows++;\n            arrowPos = points[i][1];\n        }\n    }\n    return arrows;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int findMinArrowShots(int[][] points) {\n        if (points.length == 0) return 0;\n        Arrays.sort(points, (a, b) -> Integer.compare(a[1], b[1]));\n        int arrows = 1;\n        int arrowPos = points[0][1];\n        for (int i = 1; i < points.length; i++) {\n            if (points[i][0] > arrowPos) {\n                arrows++;\n                arrowPos = points[i][1];\n            }\n        }\n        return arrows;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findMinArrowShots(points) {\n  if (points.length === 0) return 0;\n  points.sort((a, b) => a[1] - b[1]);\n  let arrows = 1;\n  let arrowPos = points[0][1];\n  for (let i = 1; i < points.length; i++) {\n    if (points[i][0] > arrowPos) {\n      arrows++;\n      arrowPos = points[i][1];\n    }\n  }\n  return arrows;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 452 - Minimum Number of Arrows to Burst Balloons",
+          "url": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-meeting-rooms-ii",
+      "title": "Meeting Rooms I & II (Min Conference Rooms)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(N) for start/end time arrays or min-heap",
+      "summary": "Finds the minimum number of conference rooms required to hold all meetings without overlap using greedy Min-Heap or Two Pointers.",
+      "explanation": [
+        "1. Extract and sort `start` times and `end` times independently.",
+        "2. Maintain two pointers: `startPtr` and `endPtr`.",
+        "3. If `start[startPtr] < end[endPtr]`, a new meeting starts before the earliest ending meeting finishes → Need +1 room!",
+        "4. Else, a room becomes free! Advance `endPtr`.",
+        "5. Repeat until all meetings are processed. Max rooms active simultaneously is the answer."
+      ],
+      "exampleTrace": {
+        "title": "Trace Meeting Rooms on [[0,30], [5,10], [15,20]]",
+        "traceSteps": [
+          "Starts: [0, 5, 15]. Ends: [10, 20, 30].",
+          "Step 1: start=0 < end=10 → Room count=1. startPtr=1.",
+          "Step 2: start=5 < end=10 → Room count=2. startPtr=2.",
+          "Step 3: start=15 >= end=10 → Room freed! endPtr=1, startPtr=2.",
+          "Step 4: start=15 < end=20 → Room count=2. startPtr=3.",
+          "Maximum conference rooms required: 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates peak concurrent resource usage / minimum resources required to handle time interval workloads.",
+        "whenToUse": "Use when determining hardware server capacity, classroom booking, or hotel room allocations.",
+        "whereUsed": "AWS EC2 auto-scaling capacity planners, hotel room booking engines, airline gate scheduling.",
+        "whyOptimal": "Two-pointer sweep line approach processes interval endpoints in optimal O(N log N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minMeetingRooms(intervals: list[list[int]]) -> int:\n    starts = sorted([i[0] for i in intervals])\n    ends = sorted([i[1] for i in intervals])\n    rooms = 0\n    end_ptr = 0\n    for start in starts:\n        if start < ends[end_ptr]:\n            rooms += 1\n        else:\n            end_ptr += 1\n    return rooms"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint minMeetingRooms(vector<vector<int>>& intervals) {\n    vector<int> starts, ends;\n    for (auto& i : intervals) {\n        starts.push_back(i[0]);\n        ends.push_back(i[1]);\n    }\n    sort(starts.begin(), starts.end());\n    sort(ends.begin(), ends.end());\n    int rooms = 0, endPtr = 0;\n    for (int start : starts) {\n        if (start < ends[endPtr]) rooms++;\n        else endPtr++;\n    }\n    return rooms;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int minMeetingRooms(int[][] intervals) {\n        int[] starts = new int[intervals.length];\n        int[] ends = new int[intervals.length];\n        for (int i = 0; i < intervals.length; i++) {\n            starts[i] = intervals[i][0];\n            ends[i] = intervals[i][1];\n        }\n        Arrays.sort(starts);\n        Arrays.sort(ends);\n        int rooms = 0, endPtr = 0;\n        for (int start : starts) {\n            if (start < ends[endPtr]) rooms++;\n            else endPtr++;\n        }\n        return rooms;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minMeetingRooms(intervals) {\n  const starts = intervals.map(i => i[0]).sort((a, b) => a - b);\n  const ends = intervals.map(i => i[1]).sort((a, b) => a - b);\n  let rooms = 0;\n  let endPtr = 0;\n  for (const start of starts) {\n    if (start < ends[endPtr]) rooms++;\n    else endPtr++;\n  }\n  return rooms;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 253 - Meeting Rooms II",
+          "url": "https://leetcode.com/problems/meeting-rooms-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-task-scheduler",
+      "title": "Task Scheduler with CPU Cooldown",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) where N is total tasks count",
+      "spaceComplexity": "O(1) fixed frequency array of 26 alphabet letters",
+      "summary": "Calculates minimum CPU time units required to complete all tasks given a mandatory cooldown period N between identical tasks.",
+      "explanation": [
+        "1. Count frequency of each task letter A-Z.",
+        "2. Find maximum task frequency `maxFreq` and count how many tasks share this `maxFreq` (`maxCount`).",
+        "3. The most frequent task creates `maxFreq - 1` frame chunks of size `(n + 1)`.",
+        "4. Minimum total CPU slots required = `(maxFreq - 1) * (n + 1) + maxCount`.",
+        "5. If total tasks length is larger (no idle slots needed), return `max(len(tasks), formula)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Task Scheduler on Tasks=['A','A','A','B','B','B'], n=2",
+        "traceSteps": [
+          "Frequencies: A:3, B:3. maxFreq = 3.",
+          "Tasks with maxFreq=3: A and B → maxCount = 2.",
+          "Formula: (3 - 1) * (2 + 1) + 2 = 2 * 3 + 2 = 8.",
+          "Execution schedule: A -> B -> idle -> A -> B -> idle -> A -> B (Total 8 units).",
+          "Minimum CPU units: 8."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Schedules CPU tasks minimizing total execution time while adhering to cooldown constraints.",
+        "whenToUse": "Use when scheduling jobs with mandatory hardware cooldown or rate limiting intervals.",
+        "whereUsed": "OS CPU process schedulers, GPU kernel queue dispatchers, network rate limiters.",
+        "whyOptimal": "Greedily scheduling the most constrained (highest frequency) tasks first minimizes required idle slots."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import Counter\n\ndef leastInterval(tasks: list[str], n: int) -> int:\n    counts = Counter(tasks)\n    max_freq = max(counts.values())\n    max_count = sum(1 for v in counts.values() if v == max_freq)\n    ans = (max_freq - 1) * (n + 1) + max_count\n    return max(len(tasks), ans)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <algorithm>\nusing namespace std;\n\nint leastInterval(vector<char>& tasks, int n) {\n    vector<int> freq(26, 0);\n    for (char c : tasks) freq[c - 'A']++;\n    int maxFreq = *max_element(freq.begin(), freq.end());\n    int maxCount = 0;\n    for (int f : freq) if (f == maxFreq) maxCount++;\n    int ans = (maxFreq - 1) * (n + 1) + maxCount;\n    return max((int)tasks.size(), ans);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int leastInterval(char[] tasks, int n) {\n        int[] freq = new int[26];\n        for (char c : tasks) freq[c - 'A']++;\n        Arrays.sort(freq);\n        int maxFreq = freq[25];\n        int maxCount = 0;\n        for (int f : freq) if (f == maxFreq) maxCount++;\n        int ans = (maxFreq - 1) * (n + 1) + maxCount;\n        return Math.max(tasks.length, ans);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function leastInterval(tasks, n) {\n  const freq = new Array(26).fill(0);\n  for (const t of tasks) freq[t.charCodeAt(0) - 65]++;\n  const maxFreq = Math.max(...freq);\n  const maxCount = freq.filter(f => f === maxFreq).length;\n  const ans = (maxFreq - 1) * (n + 1) + maxCount;\n  return Math.max(tasks.length, ans);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 621 - Task Scheduler",
+          "url": "https://leetcode.com/problems/task-scheduler/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-dijkstras-shortest-path",
+      "title": "Dijkstra's Shortest Path (Greedy Edge Relaxation)",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O((V + E) log V)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Computes single-source shortest paths in weighted graphs with non-negative edge weights by greedily extracting the node with minimum tentative distance.",
+      "explanation": [
+        "1. Greedy Choice Property: At each step, extract the unvisited node `u` with the smallest distance `dist[u]` from Min-PriorityQueue.",
+        "2. Optimal Substructure: The shortest path to `u` is finalized because all edge weights are non-negative (≥ 0).",
+        "3. Relax all adjacent edges `(u, v, w)`: If `dist[u] + w < dist[v]`, update `dist[v]` and push `(dist[v], v)` into Min-Heap."
+      ],
+      "exampleTrace": {
+        "title": "Trace Dijkstra from Source 0 on Edges: (0,1,4), (0,2,1), (2,1,2)",
+        "traceSteps": [
+          "Initialize dist[0]=0, dist[1]=∞, dist[2]=∞.",
+          "Pop min node 0 (dist 0). Relax edge (0,1,4) → dist[1]=4. Relax (0,2,1) → dist[2]=1.",
+          "Pop min node 2 (dist 1). Relax edge (2,1,2) → 1 + 2 = 3 < 4 → Update dist[1]=3!",
+          "Pop min node 1 (dist 3). Final shortest distances: dist[1] = 3, dist[2] = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds absolute minimum cost paths from a single source to all other reachable nodes.",
+        "whenToUse": "Use on weighted graphs when edge weights are non-negative.",
+        "whereUsed": "GPS Navigation (Google Maps, Waze), OSPF network routing, game pathfinding (A* foundation).",
+        "whyOptimal": "Greedily settling the closest vertex guarantees optimal shortest paths without re-visiting settled vertices."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef dijkstra(V: int, adj: list[list[tuple[int, int]]], src: int) -> list[int]:\n    dist = [float('inf')] * V\n    dist[src] = 0\n    pq = [(0, src)]\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d > dist[u]: continue\n        for v, w in adj[u]:\n            if dist[u] + w < dist[v]:\n                dist[v] = dist[u] + w\n                heapq.heappush(pq, (dist[v], v))\n    return dist"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <climits>\nusing namespace std;\n\nvector<int> dijkstra(int V, vector<vector<pair<int, int>>>& adj, int src) {\n    vector<int> dist(V, INT_MAX);\n    dist[src] = 0;\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;\n    pq.push({0, src});\n    while (!pq.empty()) {\n        auto [d, u] = pq.top(); pq.pop();\n        if (d > dist[u]) continue;\n        for (auto& [v, w] : adj[u]) {\n            if (dist[u] + w < dist[v]) {\n                dist[v] = dist[u] + w;\n                pq.push({dist[v], v});\n            }\n        }\n    }\n    return dist;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] dijkstra(int V, List<List<int[]>> adj, int src) {\n        int[] dist = new int[V];\n        Arrays.fill(dist, Integer.MAX_VALUE);\n        dist[src] = 0;\n        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));\n        pq.add(new int[]{0, src});\n        while (!pq.isEmpty()) {\n            int[] curr = pq.poll();\n            int d = curr[0], u = curr[1];\n            if (d > dist[u]) continue;\n            for (int[] edge : adj.get(u)) {\n                int v = edge[0], w = edge[1];\n                if (dist[u] + w < dist[v]) {\n                    dist[v] = dist[u] + w;\n                    pq.add(new int[]{dist[v], v});\n                }\n            }\n        }\n        return dist;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function dijkstra(V, adj, src) {\n  const dist = new Array(V).fill(Infinity);\n  dist[src] = 0;\n  const visited = new Array(V).fill(false);\n  for (let i = 0; i < V; i++) {\n    let u = -1;\n    for (let j = 0; j < V; j++) {\n      if (!visited[j] && (u === -1 || dist[j] < dist[u])) u = j;\n    }\n    if (dist[u] === Infinity) break;\n    visited[u] = true;\n    for (const [v, w] of adj[u]) {\n      if (dist[u] + w < dist[v]) dist[v] = dist[u] + w;\n    }\n  }\n  return dist;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 743 - Network Delay Time",
+          "url": "https://leetcode.com/problems/network-delay-time/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "greedy-prims-algorithm-mst",
+      "title": "Prim's Algorithm for Minimum Spanning Tree",
+      "categoryId": "greedy",
+      "categoryTitle": "Greedy Algorithms",
+      "difficulty": "Medium",
+      "timeComplexity": "O((V + E) log V)",
+      "spaceComplexity": "O(V + E)",
+      "summary": "Builds a Minimum Spanning Tree (MST) greedily by expanding a single connected component with the minimum weight edge crossing the cut.",
+      "explanation": [
+        "1. Greedy Choice Property: At each step, select the edge with the minimum weight that connects a visited node in the MST to an unvisited node.",
+        "2. Start with arbitrary source vertex `0`. Maintain a Min-PriorityQueue of `(weight, u)`.",
+        "3. Extract minimum weight vertex `u`. If `u` is already visited, skip.",
+        "4. Mark `u` as visited, add `weight` to total MST sum, and push all unvisited neighbors `(w, v)` into Min-Heap."
+      ],
+      "exampleTrace": {
+        "title": "Trace Prim's MST on 3 Vertices with Edges: 0-1 (w=1), 0-2 (w=3), 1-2 (w=2)",
+        "traceSteps": [
+          "Start at vertex 0. Visited={0}. Push edges (1, 1) and (3, 2).",
+          "Pop min edge (1, 1) → Visit vertex 1. Add weight 1. Visited={0, 1}. Push edge (2, 2).",
+          "Pop min edge (2, 2) → Visit vertex 2. Add weight 2. Visited={0, 1, 2}.",
+          "All V=3 nodes visited. Minimum Spanning Tree Cost = 1 + 2 = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Connects all vertices in a weighted graph with minimum total edge weight and zero cycles.",
+        "whenToUse": "Use for dense graphs or when growing a single connected tree from a starting node.",
+        "whereUsed": "Electric power grid layout, fiber optic cable installation, road network design.",
+        "whyOptimal": "Cut property guarantees that the minimum edge crossing any cut is always part of some MST."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\ndef primMST(V: int, adj: list[list[tuple[int, int]]]) -> int:\n    visited = [False] * V\n    pq = [(0, 0)]  # (weight, node)\n    mst_weight = 0\n    nodes_cnt = 0\n    while pq:\n        w, u = heapq.heappop(pq)\n        if visited[u]: continue\n        visited[u] = True\n        mst_weight += w\n        nodes_cnt += 1\n        if nodes_cnt == V: break\n        for v, weight in adj[u]:\n            if not visited[v]:\n                heapq.heappush(pq, (weight, v))\n    return mst_weight"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nint primMST(int V, vector<vector<pair<int, int>>>& adj) {\n    vector<bool> visited(V, false);\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;\n    pq.push({0, 0});\n    int mstWeight = 0, count = 0;\n    while (!pq.empty()) {\n        auto [w, u] = pq.top(); pq.pop();\n        if (visited[u]) continue;\n        visited[u] = true;\n        mstWeight += w;\n        count++;\n        if (count == V) break;\n        for (auto& [v, weight] : adj[u]) {\n            if (!visited[v]) pq.push({weight, v});\n        }\n    }\n    return mstWeight;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int primMST(int V, List<List<int[]>> adj) {\n        boolean[] visited = new boolean[V];\n        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));\n        pq.add(new int[]{0, 0});\n        int mstWeight = 0, count = 0;\n        while (!pq.isEmpty()) {\n            int[] curr = pq.poll();\n            int w = curr[0], u = curr[1];\n            if (visited[u]) continue;\n            visited[u] = true;\n            mstWeight += w;\n            count++;\n            if (count == V) break;\n            for (int[] edge : adj.get(u)) {\n                if (!visited[edge[0]]) {\n                    pq.add(new int[]{edge[1], edge[0]});\n                }\n            }\n        }\n        return mstWeight;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function primMST(V, adj) {\n  const visited = new Array(V).fill(false);\n  let mstWeight = 0;\n  const key = new Array(V).fill(Infinity);\n  key[0] = 0;\n  for (let i = 0; i < V; i++) {\n    let u = -1;\n    for (let j = 0; j < V; j++) {\n      if (!visited[j] && (u === -1 || key[j] < key[u])) u = j;\n    }\n    visited[u] = true;\n    mstWeight += key[u];\n    for (const [v, w] of adj[u]) {\n      if (!visited[v] && w < key[v]) key[v] = w;\n    }\n  }\n  return mstWeight;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1584 - Min Cost to Connect All Points",
+          "url": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

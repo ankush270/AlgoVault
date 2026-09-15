@@ -1,0 +1,351 @@
+{
+  "id": "number_theory",
+  "category": {
+    "id": "number_theory",
+    "title": "Number Theory & Prime Mathematics",
+    "icon": "Layers",
+    "description": "Fundamental and advanced competitive programming number theory algorithms: Primality testing, Factorization, Euclidean & Extended Euclidean, Sieve of Eratosthenes, Segmented Sieve, and Linear Sieve (SPF)."
+  },
+  "totalAlgorithms": 6,
+  "algorithms": [
+    {
+      "id": "primality-test-factors-divisibility",
+      "title": "Primality Testing & Factor Extraction (Divisibility)",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Easy",
+      "timeComplexity": "O(sqrt(N))",
+      "spaceComplexity": "O(1)",
+      "summary": "Check if a number is Prime or Composite and extract all unique factors/divisors in O(sqrt(N)) time.",
+      "explanation": [
+        "1. Divisibility Property: If `N = a * b`, at least one factor must be `<= sqrt(N)`.",
+        "2. Primality Test: Loop `d` from 2 to `sqrt(N)`. If `N % d == 0`, N is composite.",
+        "3. Factor Extraction: Iterate `d` from 1 to `sqrt(N)`. If `d` divides N, add `d` and paired factor `N / d` to factors list."
+      ],
+      "exampleTrace": {
+        "title": "Trace Primality and Factors of N = 36",
+        "traceSteps": [
+          "Check d=1: 1 divides 36 -> Add 1 and 36.",
+          "Check d=2: 2 divides 36 -> Add 2 and 18.",
+          "Check d=3: 3 divides 36 -> Add 3 and 12.",
+          "Check d=4: 4 divides 36 -> Add 4 and 9.",
+          "Check d=6: 6 divides 36 -> Add 6.",
+          "Factors of 36: [1, 2, 3, 4, 6, 9, 12, 18, 36]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks prime status and enumerates all divisors of an integer in O(sqrt(N)) time.",
+        "whenToUse": "When verifying individual numbers for primality or finding all factors.",
+        "whereUsed": "RSA cryptography key validation, modular math factorizations.",
+        "whyOptimal": "O(sqrt(N)) replaces naive O(N) trial division."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def is_prime(n: int) -> bool:\n    if n <= 1: return False\n    if n <= 3: return True\n    if n % 2 == 0 or n % 3 == 0: return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0: return False\n        i += 6\n    return True\n\ndef get_factors(n: int) -> list[int]:\n    factors = []\n    for i in range(1, int(n**0.5) + 1):\n        if n % i == 0:\n            factors.append(i)\n            if i * i != n:\n                factors.append(n // i)\n    return sorted(factors)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nbool isPrime(long long n) {\n    if (n <= 1) return false;\n    if (n <= 3) return true;\n    if (n % 2 == 0 || n % 3 == 0) return false;\n    for (long long i = 5; i * i <= n; i += 6) {\n        if (n % i == 0 || n % (i + 2) == 0) return false;\n    }\n    return true;\n}\n\nvector<long long> getFactors(long long n) {\n    vector<long long> factors;\n    for (long long i = 1; i * i <= n; i++) {\n        if (n % i == 0) {\n            factors.push_back(i);\n            if (i * i != n) factors.push_back(n / i);\n        }\n    }\n    sort(factors.begin(), factors.end());\n    return factors;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public boolean isPrime(long n) {\n        if (n <= 1) return false;\n        if (n <= 3) return true;\n        if (n % 2 == 0 || n % 3 == 0) return false;\n        for (long i = 5; i * i <= n; i += 6) {\n            if (n % i == 0 || n % (i + 2) == 0) return false;\n        }\n        return true;\n    }\n    public List<Long> getFactors(long n) {\n        List<Long> factors = new ArrayList<>();\n        for (long i = 1; i * i <= n; i++) {\n            if (n % i == 0) {\n                factors.add(i);\n                if (i * i != n) factors.add(n / i);\n            }\n        }\n        Collections.sort(factors);\n        return factors;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isPrime(n) {\n  if (n <= 1) return false;\n  if (n <= 3) return true;\n  if (n % 2 === 0 || n % 3 === 0) return false;\n  for (let i = 5; i * i <= n; i += 6) {\n    if (n % i === 0 || n % (i + 2) === 0) return false;\n  }\n  return true;\n}\n\nfunction getFactors(n) {\n  const factors = [];\n  for (let i = 1; i * i <= n; i++) {\n    if (n % i === 0) {\n      factors.push(i);\n      if (i * i !== n) factors.push(Math.floor(n / i));\n    }\n  }\n  return factors.sort((a, b) => a - b);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 507 - Perfect Number / Factors",
+          "url": "https://leetcode.com/problems/perfect-number/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "euclidean-algorithm-gcd-lcm",
+      "title": "Euclidean Algorithm (GCD & LCM)",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Easy",
+      "timeComplexity": "O(log(min(A, B)))",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes Greatest Common Divisor (GCD) using Euclidean division algorithm and Least Common Multiple (LCM) via formula LCM(A, B) = (A * B) / GCD(A, B).",
+      "explanation": [
+        "1. Euclidean Reduction: `gcd(a, b) = gcd(b, a % b)`.",
+        "2. Base Case: When `b == 0`, `gcd(a, 0) = a`.",
+        "3. LCM Relation: `LCM(a, b) * GCD(a, b) = a * b`, so `LCM(a, b) = (a * b) // GCD(a, b)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace GCD(48, 18)",
+        "traceSteps": [
+          "Step 1: gcd(48, 18) -> 48 % 18 = 12 -> gcd(18, 12)",
+          "Step 2: gcd(18, 12) -> 18 % 12 = 6  -> gcd(12, 6)",
+          "Step 3: gcd(12, 6)  -> 12 % 6 = 0   -> gcd(6, 0)",
+          "Result: GCD = 6. LCM = (48 * 18) / 6 = 144."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Calculates highest common factor and lowest common multiple in O(log N) operations.",
+        "whenToUse": "When simplifying fractions, computing periodic cycles, or reducing modular equations.",
+        "whereUsed": "Fraction arithmetic reduction, clock synchronization, competitive programming math.",
+        "whyOptimal": "Logarithmic reduction `O(log(min(A, B)))` by repeatedly taking remainder."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def gcd(a: int, b: int) -> int:\n    while b:\n        a, b = b, a % b\n    return a\n\ndef lcm(a: int, b: int) -> int:\n    return (a * b) // gcd(a, b) if a and b else 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <numeric>\nusing namespace std;\n\nlong long gcdFunc(long long a, long long b) {\n    while (b) {\n        long long temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}\n\nlong long lcmFunc(long long a, long long b) {\n    if (a == 0 || b == 0) return 0;\n    return (a / gcdFunc(a, b)) * b;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public long gcd(long a, long b) {\n        while (b != 0) {\n            long temp = b;\n            b = a % b;\n            a = temp;\n        }\n        return a;\n    }\n    public long lcm(long a, long b) {\n        if (a == 0 || b == 0) return 0;\n        return (a / gcd(a, b)) * b;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function gcd(a, b) {\n  while (b !== 0) {\n    let temp = b;\n    b = a % b;\n    a = temp;\n  }\n  return a;\n}\n\nfunction lcm(a, b) {\n  if (a === 0 || b === 0) return 0;\n  return (a / gcd(a, b)) * b;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1979 - Find Greatest Common Divisor of Array",
+          "url": "https://leetcode.com/problems/find-greatest-common-divisor-of-array/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "extended-euclidean-algorithm",
+      "title": "Extended Euclidean Algorithm (Modular Inverse)",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log(min(A, B)))",
+      "spaceComplexity": "O(1)",
+      "summary": "Solves linear Diophantine equation `a*x + b*y = gcd(a, b)` and calculates modular multiplicative inverse `(a * x) % m = 1`.",
+      "explanation": [
+        "1. Bézout's Identity: For non-zero integers `a` and `b`, integers `x` and `y` exist such that `a*x + b*y = gcd(a, b)`.",
+        "2. Extended Euclidean Recurrence: `gcd, x1, y1 = extGCD(b, a % b)`, then `x = y1` and `y = x1 - (a // b) * y1`.",
+        "3. Modular Multiplicative Inverse: If `gcd(a, m) == 1`, `(a * x) % m = 1`. `x % m` gives the modular inverse of `a` modulo `m`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Extended GCD(30, 20)",
+        "traceSteps": [
+          "Recursive call extGCD(20, 10)",
+          "Recursive call extGCD(10, 0) -> Returns (gcd=10, x=1, y=0)",
+          "Backtrack: x = 0, y = 1 - (20//10)*0 = 1",
+          "Backtrack: x = 1, y = 0 - (30//20)*1 = -1",
+          "Check: 30*(1) + 20*(-1) = 10 = gcd(30, 20)!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes Bézout coefficients and modular multiplicative inverse in O(log N) time.",
+        "whenToUse": "When finding modular inverses for combination counting modulo 10^9+7 or solving Diophantine equations.",
+        "whereUsed": "RSA public key encryption, modular division in combinatorics, Chinese Remainder Theorem.",
+        "whyOptimal": "Logarithmic complexity O(log N) for modular inverse calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def ext_gcd(a: int, b: int) -> tuple[int, int, int]:\n    if b == 0:\n        return (a, 1, 0)\n    g, x1, y1 = ext_gcd(b, a % b)\n    x = y1\n    y = x1 - (a // b) * y1\n    return (g, x, y)\n\ndef mod_inverse(a: int, m: int) -> int:\n    g, x, _ = ext_gcd(a, m)\n    if g != 1:\n        raise ValueError(\"Modular inverse does not exist\")\n    return (x % m + m) % m"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <tuple>\nusing namespace std;\n\ntuple<long long, long long, long long> extGCD(long long a, long long b) {\n    if (b == 0) return {a, 1, 0};\n    auto [g, x1, y1] = extGCD(b, a % b);\n    long long x = y1;\n    long long y = x1 - (a / b) * y1;\n    return {g, x, y};\n}\n\nlong long modInverse(long long a, long long m) {\n    auto [g, x, y] = extGCD(a, m);\n    if (g != 1) return -1; // Inverse doesn't exist\n    return (x % m + m) % m;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class Result {\n        long g, x, y;\n        Result(long g, long x, long y) { this.g = g; this.x = x; this.y = y; }\n    }\n    public static Result extGCD(long a, long b) {\n        if (b == 0) return new Result(a, 1, 0);\n        Result res = extGCD(b, a % b);\n        long x = res.y;\n        long y = res.x - (a / b) * res.y;\n        return new Result(res.g, x, y);\n    }\n    public static long modInverse(long a, long m) {\n        Result res = extGCD(a, m);\n        if (res.g != 1) return -1;\n        return (res.x % m + m) % m;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function extGCD(a, b) {\n  if (b === 0) return { g: a, x: 1, y: 0 };\n  const res = extGCD(b, a % b);\n  const x = res.y;\n  const y = res.x - Math.floor(a / b) * res.y;\n  return { g: res.g, x, y };\n}\n\nfunction modInverse(a, m) {\n  const res = extGCD(a, m);\n  if (res.g !== 1) return -1;\n  return (res.x % m + m) % m;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Modular Multiplicative Inverse",
+          "url": "https://www.geeksforgeeks.org/problems/modular-multiplicative-inverse-1587115620/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sieve-of-eratosthenes",
+      "title": "Sieve of Eratosthenes (Primes up to N)",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log(log N))",
+      "spaceComplexity": "O(N)",
+      "summary": "Precomputes prime status for all numbers up to N in near-linear O(N log log N) time.",
+      "explanation": [
+        "1. Create boolean array `is_prime[0..N]` initialized to True. Set `is_prime[0] = is_prime[1] = False`.",
+        "2. Iterate `p` from 2 to `sqrt(N)`. If `is_prime[p]` is True, mark all multiples of `p` starting from `p*p` as False.",
+        "3. All remaining True entries represent prime numbers."
+      ],
+      "exampleTrace": {
+        "title": "Trace Sieve up to N = 20",
+        "traceSteps": [
+          "Mark 0, 1 as False.",
+          "p=2 (Prime): Mark 4, 6, 8, 10, 12, 14, 16, 18, 20 as False.",
+          "p=3 (Prime): Mark 9, 12, 15, 18 as False.",
+          "p=4: Already marked False.",
+          "Primes up to 20: [2, 3, 5, 7, 11, 13, 17, 19]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates all prime numbers up to N in near-linear time.",
+        "whenToUse": "When checking multiple prime queries or needing prime table up to N=10^7.",
+        "whereUsed": "Competitive programming prime precomputation, prime factor counting.",
+        "whyOptimal": "O(N log log N) is practically linear for N = 10^7."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sieve(n: int) -> list[int]:\n    is_prime = [True] * (n + 1)\n    is_prime[0] = is_prime[1] = False\n    for p in range(2, int(n**0.5) + 1):\n        if is_prime[p]:\n            for i in range(p * p, n + 1, p):\n                is_prime[i] = False\n    return [i for i in range(2, n + 1) if is_prime[i]]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<int> sieve(int n) {\n    vector<bool> isPrime(n + 1, true);\n    if (n >= 0) isPrime[0] = false;\n    if (n >= 1) isPrime[1] = false;\n    for (int p = 2; p * p <= n; p++) {\n        if (isPrime[p]) {\n            for (int i = p * p; i <= n; i += p)\n                isPrime[i] = false;\n        }\n    }\n    vector<int> primes;\n    for (int i = 2; i <= n; i++) {\n        if (isPrime[i]) primes.push_back(i);\n    }\n    return primes;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> sieve(int n) {\n        boolean[] isPrime = new boolean[n + 1];\n        Arrays.fill(isPrime, true);\n        if (n >= 0) isPrime[0] = false;\n        if (n >= 1) isPrime[1] = false;\n        for (int p = 2; p * p <= n; p++) {\n            if (isPrime[p]) {\n                for (int i = p * p; i <= n; i += p)\n                    isPrime[i] = false;\n            }\n        }\n        List<Integer> primes = new ArrayList<>();\n        for (int i = 2; i <= n; i++) {\n            if (isPrime[i]) primes.add(i);\n        }\n        return primes;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function sieve(n) {\n  const isPrime = new Array(n + 1).fill(true);\n  if (n >= 0) isPrime[0] = false;\n  if (n >= 1) isPrime[1] = false;\n  for (let p = 2; p * p <= n; p++) {\n    if (isPrime[p]) {\n      for (let i = p * p; i <= n; i += p) {\n        isPrime[i] = false;\n      }\n    }\n  }\n  const primes = [];\n  for (let i = 2; i <= n; i++) {\n    if (isPrime[i]) primes.push(i);\n  }\n  return primes;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 204 - Count Primes",
+          "url": "https://leetcode.com/problems/count-primes/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "segmented-sieve",
+      "title": "Segmented Sieve (Primes in Range [L, R])",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Hard",
+      "timeComplexity": "O((R - L + 1) log(log R) + sqrt(R))",
+      "spaceComplexity": "O(sqrt(R) + (R - L + 1))",
+      "summary": "Generates all prime numbers in range [L, R] where R can be up to 10^12 and segment length R - L <= 10^6.",
+      "explanation": [
+        "1. Generate base primes up to `sqrt(R)` using standard Sieve of Eratosthenes.",
+        "2. Create boolean array `dummy[0..R-L]` initialized to True for interval `[L, R]`.",
+        "3. For each base prime `p`, find smallest multiple `first_multiple >= L`. Mark multiples `first_multiple` through `R` as False in `dummy` array.",
+        "4. Avoids allocated O(R) memory array, allowing prime generation for huge numbers up to 10^12."
+      ],
+      "exampleTrace": {
+        "title": "Trace Segmented Sieve for L=10, R=20",
+        "traceSteps": [
+          "Base primes up to sqrt(20) = 4 -> Primes: [2, 3].",
+          "Dummy array size 11 for range [10..20].",
+          "Prime 2: first_multiple = 10. Mark 10, 12, 14, 16, 18, 20 as False.",
+          "Prime 3: first_multiple = 12. Mark 12, 15, 18 as False.",
+          "Primes in range [10..20]: [11, 13, 17, 19]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates primes in a large range [L, R] without storing huge arrays in memory.",
+        "whenToUse": "When range endpoints R are large (up to 10^12) but query interval length R - L is small (<= 10^6).",
+        "whereUsed": "Competitive programming large range prime counting problems.",
+        "whyOptimal": "O(R - L + 1) memory footprint instead of allocating O(R) array."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def segmented_sieve(L: int, R: int) -> list[int]:\n    limit = int(R**0.5) + 1\n    # Step 1: Base primes\n    is_prime_base = [True] * (limit + 1)\n    is_prime_base[0] = is_prime_base[1] = False\n    for p in range(2, int(limit**0.5) + 1):\n        if is_prime_base[p]:\n            for i in range(p * p, limit + 1, p):\n                is_prime_base[i] = False\n    base_primes = [i for i in range(2, limit + 1) if is_prime_base[i]]\n\n    # Step 2: Segmented array for [L, R]\n    dummy = [True] * (R - L + 1)\n    for p in base_primes:\n        first_multiple = max(p * p, ((L + p - 1) // p) * p)\n        for j in range(first_multiple, R + 1, p):\n            dummy[j - L] = False\n\n    primes = []\n    for i in range(R - L + 1):\n        if dummy[i] and (i + L) >= 2:\n            primes.append(i + L)\n    return primes"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <cmath>\n#include <algorithm>\nusing namespace std;\n\nvector<long long> segmentedSieve(long long L, long long R) {\n    long long limit = sqrt(R) + 1;\n    vector<bool> isBasePrime(limit + 1, true);\n    isBasePrime[0] = isBasePrime[1] = false;\n    for (long long p = 2; p * p <= limit; p++) {\n        if (isBasePrime[p]) {\n            for (long long i = p * p; i <= limit; i += p) isBasePrime[i] = false;\n        }\n    }\n    vector<long long> basePrimes;\n    for (long long i = 2; i <= limit; i++) if (isBasePrime[i]) basePrimes.push_back(i);\n\n    vector<bool> dummy(R - L + 1, true);\n    for (long long p : basePrimes) {\n        long long firstMultiple = max(p * p, ((L + p - 1) / p) * p);\n        for (long long j = firstMultiple; j <= R; j += p) {\n            dummy[j - L] = false;\n        }\n    }\n    vector<long long> primes;\n    for (long long i = 0; i <= R - L; i++) {\n        if (dummy[i] && (i + L) >= 2) primes.push_back(i + L);\n    }\n    return primes;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Long> segmentedSieve(long L, long R) {\n        int limit = (int) Math.sqrt(R) + 1;\n        boolean[] isBasePrime = new boolean[limit + 1];\n        Arrays.fill(isBasePrime, true);\n        isBasePrime[0] = isBasePrime[1] = false;\n        for (int p = 2; p * p <= limit; p++) {\n            if (isBasePrime[p]) {\n                for (int i = p * p; i <= limit; i += p) isBasePrime[i] = false;\n            }\n        }\n        List<Long> basePrimes = new ArrayList<>();\n        for (int i = 2; i <= limit; i++) if (isBasePrime[i]) basePrimes.add((long) i);\n\n        boolean[] dummy = new boolean[(int) (R - L + 1)];\n        Arrays.fill(dummy, true);\n        for (long p : basePrimes) {\n            long firstMultiple = Math.max(p * p, ((L + p - 1) / p) * p);\n            for (long j = firstMultiple; j <= R; j += p) {\n                dummy[(int) (j - L)] = false;\n            }\n        }\n        List<Long> primes = new ArrayList<>();\n        for (int i = 0; i <= R - L; i++) {\n            if (dummy[i] && (i + L) >= 2) primes.add(i + L);\n        }\n        return primes;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function segmentedSieve(L, R) {\n  const limit = Math.floor(Math.sqrt(R)) + 1;\n  const isBasePrime = new Array(limit + 1).fill(true);\n  isBasePrime[0] = isBasePrime[1] = false;\n  for (let p = 2; p * p <= limit; p++) {\n    if (isBasePrime[p]) {\n      for (let i = p * p; i <= limit; i += p) isBasePrime[i] = false;\n    }\n  }\n  const basePrimes = [];\n  for (let i = 2; i <= limit; i++) if (isBasePrime[i]) basePrimes.push(i);\n\n  const dummy = new Array(R - L + 1).fill(true);\n  for (const p of basePrimes) {\n    let firstMultiple = Math.max(p * p, Math.ceil(L / p) * p);\n    for (let j = firstMultiple; j <= R; j += p) {\n      dummy[j - L] = false;\n    }\n  }\n  const primes = [];\n  for (let i = 0; i <= R - L; i++) {\n    if (dummy[i] && (i + L) >= 2) primes.push(i + L);\n  }\n  return primes;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "SPOJ - PRIME1 - Prime Generator (Segmented Sieve)",
+          "url": "https://www.spoj.com/problems/PRIME1/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "linear-sieve-spf",
+      "title": "Linear Sieve (Euler's Sieve & Smallest Prime Factor - SPF)",
+      "categoryId": "number_theory",
+      "categoryTitle": "Number Theory & Prime Mathematics",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N) Sieve, O(log N) Factorization Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Strictly O(N) linear time prime sieve that also records Smallest Prime Factor (SPF) for instant O(log N) prime factorization queries.",
+      "explanation": [
+        "1. Single Composite Marking: Every composite number is marked EXACTLY ONCE by its smallest prime factor.",
+        "2. SPF Array: `spf[i]` stores smallest prime factor dividing `i`.",
+        "3. Linear Loop: For each number `i`, iterate through discovered `primes`. Mark `i * p` composite with `spf[i * p] = p`. STOP loop when `i % p == 0`.",
+        "4. O(log N) Factorization Query: Repeatedly divide `N` by `spf[N]` until `N == 1`."
+      ],
+      "exampleTrace": {
+        "title": "Trace SPF Factorization of N = 60",
+        "traceSteps": [
+          "Precomputed SPF array up to N=60.",
+          "spf[60] = 2 -> 60 / 2 = 30",
+          "spf[30] = 2 -> 30 / 2 = 15",
+          "spf[15] = 3 -> 15 / 3 = 5",
+          "spf[5]  = 5 -> 5 / 5 = 1",
+          "Prime Factors of 60: [2, 2, 3, 5] in O(log N) time!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates primes in strictly linear O(N) time and performs O(log N) factorizations for Q queries.",
+        "whenToUse": "When answering thousands of prime factorization queries in competitive programming.",
+        "whereUsed": "High performance competitive programming factorization, multiplicative functions precomputation.",
+        "whyOptimal": "Strict O(N) linear time without redundant multiple composite markings."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def linear_sieve(n: int):\n    spf = list(range(n + 1))\n    primes = []\n    for i in range(2, n + 1):\n        if spf[i] == i:\n            primes.append(i)\n        for p in primes:\n            if p > spf[i] or i * p > n:\n                break\n            spf[i * p] = p\n    return primes, spf\n\ndef get_prime_factors(n: int, spf: list[int]) -> list[int]:\n    factors = []\n    while n > 1:\n        factors.append(spf[n])\n        n //= spf[n]\n    return factors"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass LinearSieve {\npublic:\n    vector<int> spf;\n    vector<int> primes;\n    LinearSieve(int n) {\n        spf.resize(n + 1);\n        for (int i = 0; i <= n; i++) spf[i] = i;\n        for (int i = 2; i <= n; i++) {\n            if (spf[i] == i) primes.push_back(i);\n            for (int p : primes) {\n                if (p > spf[i] || i * p > n) break;\n                spf[i * p] = p;\n            }\n        }\n    }\n    vector<int> getPrimeFactors(int n) {\n        vector<int> factors;\n        while (n > 1) {\n            factors.push_back(spf[n]);\n            n /= spf[n];\n        }\n        return factors;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class LinearSieve {\n    private int[] spf;\n    private List<Integer> primes = new ArrayList<>();\n    public LinearSieve(int n) {\n        spf = new int[n + 1];\n        for (int i = 0; i <= n; i++) spf[i] = i;\n        for (int i = 2; i <= n; i++) {\n            if (spf[i] == i) primes.add(i);\n            for (int p : primes) {\n                if (p > spf[i] || i * p > n) break;\n                spf[i * p] = p;\n            }\n        }\n    }\n    public List<Integer> getPrimeFactors(int n) {\n        List<Integer> factors = new ArrayList<>();\n        while (n > 1) {\n            factors.add(spf[n]);\n            n /= spf[n];\n        }\n        return factors;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class LinearSieve {\n  constructor(n) {\n    this.spf = Array.from({ length: n + 1 }, (_, i) => i);\n    this.primes = [];\n    for (let i = 2; i <= n; i++) {\n      if (this.spf[i] === i) this.primes.push(i);\n      for (const p of this.primes) {\n        if (p > this.spf[i] || i * p > n) break;\n        this.spf[i * p] = p;\n      }\n    }\n  }\n  getPrimeFactors(n) {\n    const factors = [];\n    while (n > 1) {\n      factors.push(this.spf[n]);\n      n = Math.floor(n / this.spf[n]);\n    }\n    return factors;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Prime Factorization using SPF",
+          "url": "https://www.geeksforgeeks.org/prime-factorization-using-sieve-log-n-time-space-complexity/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

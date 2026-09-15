@@ -1,0 +1,1977 @@
+{
+  "id": "dp",
+  "category": {
+    "id": "dp",
+    "title": "Dynamic Programming",
+    "icon": "Zap",
+    "description": "1D, 2D, 3D DP, knapsack, LCS, LIS, grid DP, and DP on trees/graphs."
+  },
+  "totalAlgorithms": 36,
+  "algorithms": [
+    {
+      "id": "fibonacci-dp",
+      "title": "Fibonacci DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N) or O(1) optimized",
+      "summary": "The basic DP pattern where we store previously calculated Fibonacci values instead of calculating the same values repeatedly.",
+      "explanation": [
+        "Fibonacci follows the rule: fib(n) = fib(n-1) + fib(n-2).",
+        "A normal recursive solution calculates the same values many times.",
+        "In DP, store every calculated Fibonacci value in an array.",
+        "Start with base cases fib(0) = 0 and fib(1) = 1.",
+        "For every next position, calculate it using the previous two values.",
+        "Because only the previous two values are required, the O(N) array can be optimized to O(1) space."
+      ],
+      "exampleTrace": {
+        "input": "n = 6",
+        "output": "8",
+        "traceSteps": [
+          "fib(0) = 0",
+          "fib(1) = 1",
+          "fib(2) = 1",
+          "fib(3) = 2",
+          "fib(4) = 3",
+          "fib(5) = 5",
+          "fib(6) = 8"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Demonstrates how storing previous results avoids repeated recursive calculations.",
+        "whenToUse": "When the current answer depends on a small number of previous states.",
+        "whereUsed": "It is mainly a teaching pattern and is also useful as the foundation for more complex DP.",
+        "whyOptimal": "Each Fibonacci value is calculated only once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n\n    prev2 = 0\n    prev1 = 1\n\n    for _ in range(2, n + 1):\n        current = prev1 + prev2\n        prev2 = prev1\n        prev1 = current\n\n    return prev1"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nlong long fibonacci(int n) {\n    if (n <= 1) return n;\n\n    long long prev2 = 0;\n    long long prev1 = 1;\n\n    for (int i = 2; i <= n; i++) {\n        long long current = prev1 + prev2;\n        prev2 = prev1;\n        prev1 = current;\n    }\n\n    return prev1;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public long fibonacci(int n) {\n        if (n <= 1) return n;\n\n        long prev2 = 0;\n        long prev1 = 1;\n\n        for (int i = 2; i <= n; i++) {\n            long current = prev1 + prev2;\n            prev2 = prev1;\n            prev1 = current;\n        }\n\n        return prev1;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 509 - Fibonacci Number",
+          "url": "https://leetcode.com/problems/fibonacci-number/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "climbing-stairs-dp",
+      "title": "Climbing Stairs DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Counts the number of ways to reach the top when each move can take one or two steps.",
+      "explanation": [
+        "To reach stair i, we can come from stair i-1 or stair i-2.",
+        "Therefore dp[i] = dp[i-1] + dp[i-2].",
+        "The first stair has one way to reach it.",
+        "The second stair has two ways: 1+1 or 2.",
+        "Only the previous two values are needed, so we can use constant space."
+      ],
+      "exampleTrace": {
+        "input": "n = 5",
+        "output": "8",
+        "traceSteps": [
+          "dp[1] = 1",
+          "dp[2] = 2",
+          "dp[3] = 3",
+          "dp[4] = 5",
+          "dp[5] = 8",
+          "Therefore there are 8 different ways to reach stair 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts the number of ways to reach a destination using allowed step sizes.",
+        "whenToUse": "When a state can be reached from a small number of previous states.",
+        "whereUsed": "Path counting and state transition problems.",
+        "whyOptimal": "Every stair is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def climb_stairs(n):\n    if n <= 2:\n        return n\n\n    one = 1\n    two = 2\n\n    for _ in range(3, n + 1):\n        current = one + two\n        one = two\n        two = current\n\n    return two"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint climbStairs(int n) {\n    if (n <= 2) return n;\n\n    int one = 1;\n    int two = 2;\n\n    for (int i = 3; i <= n; i++) {\n        int current = one + two;\n        one = two;\n        two = current;\n    }\n\n    return two;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int climbStairs(int n) {\n        if (n <= 2) return n;\n\n        int one = 1;\n        int two = 2;\n\n        for (int i = 3; i <= n; i++) {\n            int current = one + two;\n            one = two;\n            two = current;\n        }\n\n        return two;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 70 - Climbing Stairs",
+          "url": "https://leetcode.com/problems/climbing-stairs/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "house-robber-dp",
+      "title": "House Robber DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the maximum money that can be collected when adjacent houses cannot both be selected.",
+      "explanation": [
+        "At every house we have two choices: rob it or skip it.",
+        "If we rob the current house, we cannot rob the previous house.",
+        "If we skip it, we keep the best answer from the previous house.",
+        "Therefore dp[i] = max(dp[i-1], dp[i-2] + money[i]).",
+        "Only the previous two answers are required."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 7, 9, 3, 1]",
+        "output": "12",
+        "traceSteps": [
+          "House 1: best = 2",
+          "House 2: best = 7",
+          "House 3: max(7, 2+9) = 11",
+          "House 4: max(11, 7+3) = 11",
+          "House 5: max(11, 11+1) = 12",
+          "Maximum money = 12."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximum sum when adjacent elements cannot be selected together.",
+        "whenToUse": "When each position gives a choice between taking it and skipping it, with a restriction on neighboring choices.",
+        "whereUsed": "Resource selection and scheduling problems.",
+        "whyOptimal": "Each house is considered exactly once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rob(nums):\n    prev2 = 0\n    prev1 = 0\n\n    for money in nums:\n        current = max(prev1, prev2 + money)\n        prev2 = prev1\n        prev1 = current\n\n    return prev1"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint rob(vector<int>& nums) {\n    int prev2 = 0;\n    int prev1 = 0;\n\n    for (int money : nums) {\n        int current = max(prev1, prev2 + money);\n        prev2 = prev1;\n        prev1 = current;\n    }\n\n    return prev1;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int rob(int[] nums) {\n        int prev2 = 0;\n        int prev1 = 0;\n\n        for (int money : nums) {\n            int current = Math.max(prev1, prev2 + money);\n            prev2 = prev1;\n            prev1 = current;\n        }\n\n        return prev1;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 198 - House Robber",
+          "url": "https://leetcode.com/problems/house-robber/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 213 - House Robber II",
+          "url": "https://leetcode.com/problems/house-robber-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "maximum-subarray-kadane",
+      "title": "Maximum Subarray DP (Kadane's Algorithm)",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the contiguous subarray having the maximum possible sum.",
+      "explanation": [
+        "At every element, decide whether to start a new subarray or continue the previous one.",
+        "If the previous sum is negative, it is better to start again from the current element.",
+        "Maintain currentSum and bestSum.",
+        "currentSum = max(nums[i], currentSum + nums[i]).",
+        "bestSum stores the maximum value seen so far."
+      ],
+      "exampleTrace": {
+        "input": "nums = [-2,1,-3,4,-1,2,1,-5,4]",
+        "output": "6",
+        "traceSteps": [
+          "The best subarray is [4,-1,2,1].",
+          "Its sum is 4 - 1 + 2 + 1 = 6.",
+          "Kadane's algorithm finds this in one pass."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the maximum sum of any contiguous subarray.",
+        "whenToUse": "When the problem asks for the best contiguous range based on sum.",
+        "whereUsed": "Array optimization and maximum gain problems.",
+        "whyOptimal": "Each element is processed once with constant extra space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def max_subarray(nums):\n    current = nums[0]\n    best = nums[0]\n\n    for i in range(1, len(nums)):\n        current = max(nums[i], current + nums[i])\n        best = max(best, current)\n\n    return best"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint maxSubArray(vector<int>& nums) {\n    int current = nums[0];\n    int best = nums[0];\n\n    for (int i = 1; i < nums.size(); i++) {\n        current = max(nums[i], current + nums[i]);\n        best = max(best, current);\n    }\n\n    return best;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int maxSubArray(int[] nums) {\n        int current = nums[0];\n        int best = nums[0];\n\n        for (int i = 1; i < nums.length; i++) {\n            current = Math.max(nums[i], current + nums[i]);\n            best = Math.max(best, current);\n        }\n\n        return best;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 53 - Maximum Subarray",
+          "url": "https://leetcode.com/problems/maximum-subarray/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "unique-paths-grid-dp",
+      "title": "Grid DP - Unique Paths",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(M*N)",
+      "spaceComplexity": "O(M*N) or O(N)",
+      "summary": "Counts the number of ways to reach the bottom-right cell of a grid when movement is allowed only right or down.",
+      "explanation": [
+        "Every cell can be reached from the cell above or the cell on the left.",
+        "Therefore dp[row][col] = dp[row-1][col] + dp[row][col-1].",
+        "The first row has only one way because we can only move right.",
+        "The first column also has only one way because we can only move down.",
+        "A one-dimensional DP array can reduce space from O(M*N) to O(N)."
+      ],
+      "exampleTrace": {
+        "input": "m = 3, n = 3",
+        "output": "6",
+        "traceSteps": [
+          "Start at the top-left cell.",
+          "Each cell stores the number of ways to reach it.",
+          "The final cell contains 6.",
+          "Therefore there are 6 possible paths."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts paths through a grid.",
+        "whenToUse": "When movement between grid cells follows fixed directions.",
+        "whereUsed": "Grid navigation and path-counting problems.",
+        "whyOptimal": "Every grid cell is calculated once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def unique_paths(m, n):\n    dp = [1] * n\n\n    for _ in range(1, m):\n        for col in range(1, n):\n            dp[col] += dp[col - 1]\n\n    return dp[-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint uniquePaths(int m, int n) {\n    vector<int> dp(n, 1);\n\n    for (int row = 1; row < m; row++) {\n        for (int col = 1; col < n; col++) {\n            dp[col] += dp[col - 1];\n        }\n    }\n\n    return dp[n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int uniquePaths(int m, int n) {\n        int[] dp = new int[n];\n        Arrays.fill(dp, 1);\n\n        for (int row = 1; row < m; row++) {\n            for (int col = 1; col < n; col++) {\n                dp[col] += dp[col - 1];\n            }\n        }\n\n        return dp[n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 62 - Unique Paths",
+          "url": "https://leetcode.com/problems/unique-paths/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 63 - Unique Paths II",
+          "url": "https://leetcode.com/problems/unique-paths-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "minimum-path-sum-dp",
+      "title": "Minimum Path Sum DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(M*N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the minimum cost required to travel from the top-left to the bottom-right of a weighted grid.",
+      "explanation": [
+        "For every cell, we can arrive either from the top or from the left.",
+        "Take the smaller of those two previous costs.",
+        "Add the current cell's value.",
+        "Therefore dp[col] = grid[row][col] + min(dp[col], dp[col-1]).",
+        "The one-dimensional array stores the best cost for the current row."
+      ],
+      "exampleTrace": {
+        "input": "grid = [[1,3,1],[1,5,1],[4,2,1]]",
+        "output": "7",
+        "traceSteps": [
+          "Choose the path 1 → 3 → 1 → 1 → 1.",
+          "Its total cost is 7.",
+          "DP compares all possible ways to reach each cell."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the cheapest path through a weighted grid.",
+        "whenToUse": "When every grid cell has a cost and movement directions are fixed.",
+        "whereUsed": "Path planning and optimization problems.",
+        "whyOptimal": "The cheapest path to a cell depends only on the cheapest paths to its predecessors."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def min_path_sum(grid):\n    n = len(grid[0])\n    dp = [float('inf')] * n\n    dp[0] = 0\n\n    for row in grid:\n        dp[0] += row[0]\n        for col in range(1, n):\n            dp[col] = min(dp[col], dp[col - 1]) + row[col]\n\n    return dp[-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint minPathSum(vector<vector<int>>& grid) {\n    int n = grid[0].size();\n    vector<int> dp(n, INT_MAX);\n    dp[0] = 0;\n\n    for (auto& row : grid) {\n        dp[0] += row[0];\n        for (int col = 1; col < n; col++) {\n            dp[col] = min(dp[col], dp[col - 1]) + row[col];\n        }\n    }\n\n    return dp[n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int minPathSum(int[][] grid) {\n        int n = grid[0].length;\n        int[] dp = new int[n];\n        Arrays.fill(dp, Integer.MAX_VALUE);\n        dp[0] = 0;\n\n        for (int[] row : grid) {\n            dp[0] += row[0];\n            for (int col = 1; col < n; col++) {\n                dp[col] = Math.min(dp[col], dp[col - 1]) + row[col];\n            }\n        }\n\n        return dp[n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 64 - Minimum Path Sum",
+          "url": "https://leetcode.com/problems/minimum-path-sum/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "coin-change-dp",
+      "title": "Coin Change DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*K)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the minimum number of coins required to make a target amount.",
+      "explanation": [
+        "Let dp[x] be the minimum number of coins needed to make amount x.",
+        "For every coin, if the coin can be used, update dp[x].",
+        "The transition is dp[x] = min(dp[x], dp[x-coin] + 1).",
+        "Initialize dp[0] = 0 because zero coins are needed to make amount zero.",
+        "If an amount cannot be created, return -1."
+      ],
+      "exampleTrace": {
+        "input": "coins = [1,2,5], amount = 11",
+        "output": "3",
+        "traceSteps": [
+          "11 can be created using 5 + 5 + 1.",
+          "Therefore the answer is 3 coins.",
+          "DP checks smaller amounts first and uses their answers to build the answer for 11."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the minimum number of items needed to reach a target sum.",
+        "whenToUse": "When unlimited use of choices is allowed and the goal is minimum count/cost.",
+        "whereUsed": "Currency systems, resource allocation, and optimization.",
+        "whyOptimal": "Every amount is solved once using already solved smaller amounts."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def coin_change(coins, amount):\n    dp = [amount + 1] * (amount + 1)\n    dp[0] = 0\n\n    for value in range(1, amount + 1):\n        for coin in coins:\n            if coin <= value:\n                dp[value] = min(dp[value], dp[value - coin] + 1)\n\n    return -1 if dp[amount] > amount else dp[amount]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint coinChange(vector<int>& coins, int amount) {\n    vector<int> dp(amount + 1, amount + 1);\n    dp[0] = 0;\n\n    for (int value = 1; value <= amount; value++) {\n        for (int coin : coins) {\n            if (coin <= value) {\n                dp[value] = min(dp[value], dp[value - coin] + 1);\n            }\n        }\n    }\n\n    return dp[amount] > amount ? -1 : dp[amount];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int coinChange(int[] coins, int amount) {\n        int[] dp = new int[amount + 1];\n        Arrays.fill(dp, amount + 1);\n        dp[0] = 0;\n\n        for (int value = 1; value <= amount; value++) {\n            for (int coin : coins) {\n                if (coin <= value) {\n                    dp[value] = Math.min(dp[value], dp[value - coin] + 1);\n                }\n            }\n        }\n\n        return dp[amount] > amount ? -1 : dp[amount];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 322 - Coin Change",
+          "url": "https://leetcode.com/problems/coin-change/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "coin-change-combinations-dp",
+      "title": "Coin Change II - Counting Combinations",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*K)",
+      "spaceComplexity": "O(N)",
+      "summary": "Counts the number of different combinations that can create a target amount using unlimited coins.",
+      "explanation": [
+        "dp[amount] stores the number of combinations that create that amount.",
+        "Set dp[0] = 1 because there is one way to create zero: choose nothing.",
+        "Process coins in the outer loop so different orders of the same combination are not counted separately.",
+        "For every coin, update amounts from coin to target.",
+        "The transition is dp[value] += dp[value - coin]."
+      ],
+      "exampleTrace": {
+        "input": "coins = [1,2,5], amount = 5",
+        "output": "4",
+        "traceSteps": [
+          "The combinations are [5], [2,2,1], [2,1,1,1], and [1,1,1,1,1].",
+          "Therefore the answer is 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts combinations that form a target sum.",
+        "whenToUse": "When items can be reused and the order of selected items does not matter.",
+        "whereUsed": "Counting ways to make amounts and resource combinations.",
+        "whyOptimal": "Each coin and amount pair is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def change(amount, coins):\n    dp = [0] * (amount + 1)\n    dp[0] = 1\n\n    for coin in coins:\n        for value in range(coin, amount + 1):\n            dp[value] += dp[value - coin]\n\n    return dp[amount]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint change(int amount, vector<int>& coins) {\n    vector<int> dp(amount + 1, 0);\n    dp[0] = 1;\n\n    for (int coin : coins) {\n        for (int value = coin; value <= amount; value++) {\n            dp[value] += dp[value - coin];\n        }\n    }\n\n    return dp[amount];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int change(int amount, int[] coins) {\n        int[] dp = new int[amount + 1];\n        dp[0] = 1;\n\n        for (int coin : coins) {\n            for (int value = coin; value <= amount; value++) {\n                dp[value] += dp[value - coin];\n            }\n        }\n\n        return dp[amount];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 518 - Coin Change II",
+          "url": "https://leetcode.com/problems/coin-change-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "zero-one-knapsack",
+      "title": "0/1 Knapsack DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*W)",
+      "spaceComplexity": "O(W)",
+      "summary": "Maximizes total value when every item can be selected at most once and the total weight cannot exceed a capacity.",
+      "explanation": [
+        "For every item, we have two choices: take it or skip it.",
+        "If we skip it, the answer stays dp[w].",
+        "If we take it, we gain its value and use the answer for remaining capacity.",
+        "The transition is dp[w] = max(dp[w], dp[w-weight] + value).",
+        "Iterate capacity backwards so an item cannot accidentally be used more than once."
+      ],
+      "exampleTrace": {
+        "input": "weights = [1,3,4,5], values = [1,4,5,7], capacity = 7",
+        "output": "9",
+        "traceSteps": [
+          "Choose item with weight 3 and value 4.",
+          "Choose item with weight 4 and value 5.",
+          "Total weight = 7.",
+          "Total value = 9."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes value under a capacity constraint.",
+        "whenToUse": "When every item can be selected zero or one time.",
+        "whereUsed": "Resource allocation, budget selection, and subset optimization.",
+        "whyOptimal": "Each item is processed once and every capacity stores the best value possible."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def knapsack(weights, values, capacity):\n    dp = [0] * (capacity + 1)\n\n    for weight, value in zip(weights, values):\n        for w in range(capacity, weight - 1, -1):\n            dp[w] = max(dp[w], dp[w - weight] + value)\n\n    return dp[capacity]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint knapsack(vector<int>& weights, vector<int>& values, int capacity) {\n    vector<int> dp(capacity + 1, 0);\n\n    for (int i = 0; i < weights.size(); i++) {\n        for (int w = capacity; w >= weights[i]; w--) {\n            dp[w] = max(dp[w], dp[w - weights[i]] + values[i]);\n        }\n    }\n\n    return dp[capacity];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int knapsack(int[] weights, int[] values, int capacity) {\n        int[] dp = new int[capacity + 1];\n\n        for (int i = 0; i < weights.length; i++) {\n            for (int w = capacity; w >= weights[i]; w--) {\n                dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);\n            }\n        }\n\n        return dp[capacity];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - 0/1 Knapsack",
+          "url": "https://www.geeksforgeeks.org/problems/0-1-knapsack-problem0945/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "unbounded-knapsack",
+      "title": "Unbounded Knapsack DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*W)",
+      "spaceComplexity": "O(W)",
+      "summary": "Maximizes value when every item can be selected any number of times.",
+      "explanation": [
+        "Unlike 0/1 Knapsack, an item can be selected again.",
+        "For every capacity, try every item that fits.",
+        "If we take an item, we can still use the same item again.",
+        "Therefore capacity is processed from small to large.",
+        "The transition is dp[w] = max(dp[w], dp[w-weight] + value)."
+      ],
+      "exampleTrace": {
+        "input": "weights = [2,3,4], values = [4,5,7], capacity = 7",
+        "output": "13",
+        "traceSteps": [
+          "Take the item with weight 2 multiple times.",
+          "Take the item with weight 3 when useful.",
+          "DP checks repeated use of each item."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes value when items can be used unlimited times.",
+        "whenToUse": "When the same choice can be selected repeatedly.",
+        "whereUsed": "Rod cutting, coin systems, and unlimited resource selection.",
+        "whyOptimal": "Each capacity uses the best answer for a smaller capacity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def unbounded_knapsack(weights, values, capacity):\n    dp = [0] * (capacity + 1)\n\n    for w in range(1, capacity + 1):\n        for i in range(len(weights)):\n            if weights[i] <= w:\n                dp[w] = max(dp[w], dp[w - weights[i]] + values[i])\n\n    return dp[capacity]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint unboundedKnapsack(vector<int>& weights, vector<int>& values, int capacity) {\n    vector<int> dp(capacity + 1, 0);\n\n    for (int w = 1; w <= capacity; w++) {\n        for (int i = 0; i < weights.size(); i++) {\n            if (weights[i] <= w) {\n                dp[w] = max(dp[w], dp[w - weights[i]] + values[i]);\n            }\n        }\n    }\n\n    return dp[capacity];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int unboundedKnapsack(int[] weights, int[] values, int capacity) {\n        int[] dp = new int[capacity + 1];\n\n        for (int w = 1; w <= capacity; w++) {\n            for (int i = 0; i < weights.length; i++) {\n                if (weights[i] <= w) {\n                    dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);\n                }\n            }\n        }\n\n        return dp[capacity];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Unbounded Knapsack",
+          "url": "https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "subset-sum-dp",
+      "title": "Subset Sum DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*SUM)",
+      "spaceComplexity": "O(SUM)",
+      "summary": "Determines whether a subset of numbers can produce a target sum.",
+      "explanation": [
+        "dp[s] tells whether sum s can be created using the processed numbers.",
+        "Initially only sum 0 is possible.",
+        "For every number, either use it or skip it.",
+        "Process sums backwards so the same number is not used more than once.",
+        "This is one of the most important forms of 0/1 Knapsack."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2,3,7,8,10], target = 11",
+        "output": "true",
+        "traceSteps": [
+          "Choose 3 and 8.",
+          "3 + 8 = 11.",
+          "Therefore a subset with sum 11 exists."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether a target sum can be created from a subset.",
+        "whenToUse": "When every number can be selected at most once.",
+        "whereUsed": "Partition, target sum, and subset optimization problems.",
+        "whyOptimal": "Each sum is updated using each number only once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subset_sum(nums, target):\n    dp = [False] * (target + 1)\n    dp[0] = True\n\n    for num in nums:\n        for s in range(target, num - 1, -1):\n            dp[s] = dp[s] or dp[s - num]\n\n    return dp[target]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nbool subsetSum(vector<int>& nums, int target) {\n    vector<bool> dp(target + 1, false);\n    dp[0] = true;\n\n    for (int num : nums) {\n        for (int s = target; s >= num; s--) {\n            dp[s] = dp[s] || dp[s - num];\n        }\n    }\n\n    return dp[target];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public boolean subsetSum(int[] nums, int target) {\n        boolean[] dp = new boolean[target + 1];\n        dp[0] = true;\n\n        for (int num : nums) {\n            for (int s = target; s >= num; s--) {\n                dp[s] = dp[s] || dp[s - num];\n            }\n        }\n\n        return dp[target];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 416 - Partition Equal Subset Sum",
+          "url": "https://leetcode.com/problems/partition-equal-subset-sum/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "partition-equal-subset-sum",
+      "title": "Partition Equal Subset Sum",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*SUM)",
+      "spaceComplexity": "O(SUM)",
+      "summary": "Determines whether an array can be divided into two subsets having the same sum.",
+      "explanation": [
+        "First calculate the total sum.",
+        "If the total sum is odd, equal partition is impossible.",
+        "Otherwise each subset must have sum total/2.",
+        "Now the problem becomes a standard subset sum problem.",
+        "Use boolean DP to determine whether total/2 can be created."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1,5,11,5]",
+        "output": "true",
+        "traceSteps": [
+          "Total sum = 22.",
+          "Each subset must have sum 11.",
+          "Subset [11] has sum 11.",
+          "Subset [1,5,5] also has sum 11.",
+          "Therefore equal partition is possible."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether an array can be split into two equal-sum subsets.",
+        "whenToUse": "When the problem asks to divide numbers into equal or target sums.",
+        "whereUsed": "Partition and balancing problems.",
+        "whyOptimal": "It converts the problem into one subset-sum DP."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def can_partition(nums):\n    total = sum(nums)\n\n    if total % 2:\n        return False\n\n    target = total // 2\n    dp = [False] * (target + 1)\n    dp[0] = True\n\n    for num in nums:\n        for s in range(target, num - 1, -1):\n            dp[s] = dp[s] or dp[s - num]\n\n    return dp[target]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nbool canPartition(vector<int>& nums) {\n    int total = accumulate(nums.begin(), nums.end(), 0);\n    if (total % 2) return false;\n\n    int target = total / 2;\n    vector<bool> dp(target + 1, false);\n    dp[0] = true;\n\n    for (int num : nums) {\n        for (int s = target; s >= num; s--) {\n            dp[s] = dp[s] || dp[s - num];\n        }\n    }\n\n    return dp[target];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public boolean canPartition(int[] nums) {\n        int total = 0;\n        for (int num : nums) total += num;\n\n        if (total % 2 != 0) return false;\n\n        int target = total / 2;\n        boolean[] dp = new boolean[target + 1];\n        dp[0] = true;\n\n        for (int num : nums) {\n            for (int s = target; s >= num; s--) {\n                dp[s] = dp[s] || dp[s - num];\n            }\n        }\n\n        return dp[target];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 416 - Partition Equal Subset Sum",
+          "url": "https://leetcode.com/problems/partition-equal-subset-sum/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence (LIS)",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N²) DP / O(N log N) optimized",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the longest subsequence in which every next element is greater than the previous element.",
+      "explanation": [
+        "dp[i] represents the longest increasing subsequence ending at index i.",
+        "For every earlier index j, if nums[j] < nums[i], nums[i] can extend that subsequence.",
+        "The transition is dp[i] = max(dp[i], dp[j] + 1).",
+        "The simple DP solution takes O(N²).",
+        "A faster O(N log N) solution uses binary search and a tails array."
+      ],
+      "exampleTrace": {
+        "input": "nums = [10,9,2,5,3,7,101,18]",
+        "output": "4",
+        "traceSteps": [
+          "One longest increasing subsequence is [2,3,7,101].",
+          "Its length is 4.",
+          "The O(N²) DP checks all previous elements for each current element."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest strictly increasing subsequence.",
+        "whenToUse": "When elements must be selected in order but do not need to be contiguous.",
+        "whereUsed": "Sequence analysis, scheduling, and optimization.",
+        "whyOptimal": "Each position stores the best subsequence ending there."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def length_of_lis(nums):\n    n = len(nums)\n    dp = [1] * n\n\n    for i in range(n):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n\n    return max(dp, default=0)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint lengthOfLIS(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> dp(n, 1);\n    int answer = 0;\n\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < i; j++) {\n            if (nums[j] < nums[i]) {\n                dp[i] = max(dp[i], dp[j] + 1);\n            }\n        }\n        answer = max(answer, dp[i]);\n    }\n\n    return answer;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int lengthOfLIS(int[] nums) {\n        int n = nums.length;\n        int[] dp = new int[n];\n        Arrays.fill(dp, 1);\n        int answer = 0;\n\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < i; j++) {\n                if (nums[j] < nums[i]) {\n                    dp[i] = Math.max(dp[i], dp[j] + 1);\n                }\n            }\n            answer = Math.max(answer, dp[i]);\n        }\n\n        return answer;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 300 - Longest Increasing Subsequence",
+          "url": "https://leetcode.com/problems/longest-increasing-subsequence/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "longest-common-subsequence",
+      "title": "Longest Common Subsequence (LCS)",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*M)",
+      "spaceComplexity": "O(N*M) or O(M)",
+      "summary": "Finds the longest sequence that appears in both strings while keeping the relative order of characters.",
+      "explanation": [
+        "dp[i][j] represents the LCS length between the first i characters of string A and first j characters of string B.",
+        "If the current characters are equal, they can be included in the subsequence.",
+        "Then dp[i][j] = dp[i-1][j-1] + 1.",
+        "If they are different, skip one character from either string.",
+        "Then dp[i][j] = max(dp[i-1][j], dp[i][j-1])."
+      ],
+      "exampleTrace": {
+        "input": "A = 'abcde', B = 'ace'",
+        "output": "3",
+        "traceSteps": [
+          "The common subsequence is 'ace'.",
+          "Characters remain in the same relative order.",
+          "Therefore the LCS length is 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest ordered sequence common to two strings.",
+        "whenToUse": "When comparing sequences while allowing characters to be skipped.",
+        "whereUsed": "Diff tools, version comparison, DNA sequence analysis, and text comparison.",
+        "whyOptimal": "Every pair of prefixes is solved once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lcs(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i - 1] == b[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1] + 1\n            else:\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n\n    return dp[m][n]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint lcs(string a, string b) {\n    int m = a.size(), n = b.size();\n    vector<vector<int>> dp(m + 1, vector<int>(n + 1));\n\n    for (int i = 1; i <= m; i++) {\n        for (int j = 1; j <= n; j++) {\n            if (a[i - 1] == b[j - 1])\n                dp[i][j] = dp[i - 1][j - 1] + 1;\n            else\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);\n        }\n    }\n\n    return dp[m][n];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int lcs(String a, String b) {\n        int m = a.length();\n        int n = b.length();\n        int[][] dp = new int[m + 1][n + 1];\n\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (a.charAt(i - 1) == b.charAt(j - 1))\n                    dp[i][j] = dp[i - 1][j - 1] + 1;\n                else\n                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);\n            }\n        }\n\n        return dp[m][n];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1143 - Longest Common Subsequence",
+          "url": "https://leetcode.com/problems/longest-common-subsequence/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "longest-common-substring",
+      "title": "Longest Common Substring DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*M)",
+      "spaceComplexity": "O(N*M)",
+      "summary": "Finds the longest contiguous substring that appears in both strings.",
+      "explanation": [
+        "Unlike LCS, the matching characters must be next to each other.",
+        "dp[i][j] stores the length of the common substring ending at A[i-1] and B[j-1].",
+        "If characters match, dp[i][j] = dp[i-1][j-1] + 1.",
+        "If they do not match, dp[i][j] becomes zero because the substring is broken.",
+        "Track the maximum value seen."
+      ],
+      "exampleTrace": {
+        "input": "A = 'abcdxyz', B = 'xyzabcd'",
+        "output": "4",
+        "traceSteps": [
+          "The common substrings include 'abcd' and 'xyz'.",
+          "'abcd' has length 4.",
+          "Therefore the longest common substring has length 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest contiguous sequence common to two strings.",
+        "whenToUse": "When matching characters must be consecutive.",
+        "whereUsed": "Document comparison and sequence analysis.",
+        "whyOptimal": "Every pair of character positions is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longest_common_substring(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    answer = 0\n\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i - 1] == b[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1] + 1\n                answer = max(answer, dp[i][j])\n\n    return answer"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint longestCommonSubstring(string a, string b) {\n    int m = a.size(), n = b.size();\n    vector<vector<int>> dp(m + 1, vector<int>(n + 1));\n    int answer = 0;\n\n    for (int i = 1; i <= m; i++) {\n        for (int j = 1; j <= n; j++) {\n            if (a[i - 1] == b[j - 1]) {\n                dp[i][j] = dp[i - 1][j - 1] + 1;\n                answer = max(answer, dp[i][j]);\n            }\n        }\n    }\n\n    return answer;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int longestCommonSubstring(String a, String b) {\n        int m = a.length();\n        int n = b.length();\n        int[][] dp = new int[m + 1][n + 1];\n        int answer = 0;\n\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (a.charAt(i - 1) == b.charAt(j - 1)) {\n                    dp[i][j] = dp[i - 1][j - 1] + 1;\n                    answer = Math.max(answer, dp[i][j]);\n                }\n            }\n        }\n\n        return answer;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Longest Common Substring",
+          "url": "https://www.geeksforgeeks.org/longest-common-substring-dp-29/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "edit-distance-dp",
+      "title": "Edit Distance DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N*M)",
+      "spaceComplexity": "O(N*M)",
+      "summary": "Finds the minimum number of insertions, deletions, and replacements needed to transform one string into another.",
+      "explanation": [
+        "dp[i][j] represents the minimum operations needed to convert the first i characters of A into the first j characters of B.",
+        "If the current characters are equal, no operation is needed.",
+        "Otherwise we can insert, delete, or replace a character.",
+        "Take the minimum of those three choices and add one.",
+        "The base cases are converting an empty string into another string using insertions or deletions."
+      ],
+      "exampleTrace": {
+        "input": "A = 'horse', B = 'ros'",
+        "output": "3",
+        "traceSteps": [
+          "Convert 'horse' to 'rorse' by replacing h with r.",
+          "Delete 'r'.",
+          "Delete 'e'.",
+          "Minimum operations = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Measures how many edits are needed to transform one string into another.",
+        "whenToUse": "When insertion, deletion, and replacement operations are allowed.",
+        "whereUsed": "Spell checkers, autocomplete, fuzzy search, and text comparison.",
+        "whyOptimal": "Each pair of string prefixes is solved once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def edit_distance(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n\n    for i in range(m + 1):\n        dp[i][0] = i\n    for j in range(n + 1):\n        dp[0][j] = j\n\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i - 1] == b[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1]\n            else:\n                dp[i][j] = 1 + min(\n                    dp[i - 1][j],\n                    dp[i][j - 1],\n                    dp[i - 1][j - 1]\n                )\n\n    return dp[m][n]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint editDistance(string a, string b) {\n    int m = a.size(), n = b.size();\n    vector<vector<int>> dp(m + 1, vector<int>(n + 1));\n\n    for (int i = 0; i <= m; i++) dp[i][0] = i;\n    for (int j = 0; j <= n; j++) dp[0][j] = j;\n\n    for (int i = 1; i <= m; i++) {\n        for (int j = 1; j <= n; j++) {\n            if (a[i - 1] == b[j - 1]) {\n                dp[i][j] = dp[i - 1][j - 1];\n            } else {\n                dp[i][j] = 1 + min({\n                    dp[i - 1][j],\n                    dp[i][j - 1],\n                    dp[i - 1][j - 1]\n                });\n            }\n        }\n    }\n\n    return dp[m][n];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int minDistance(String a, String b) {\n        int m = a.length();\n        int n = b.length();\n        int[][] dp = new int[m + 1][n + 1];\n\n        for (int i = 0; i <= m; i++) dp[i][0] = i;\n        for (int j = 0; j <= n; j++) dp[0][j] = j;\n\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (a.charAt(i - 1) == b.charAt(j - 1)) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else {\n                    dp[i][j] = 1 + Math.min(\n                        dp[i - 1][j],\n                        Math.min(dp[i][j - 1], dp[i - 1][j - 1])\n                    );\n                }\n            }\n        }\n\n        return dp[m][n];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 72 - Edit Distance",
+          "url": "https://leetcode.com/problems/edit-distance/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "word-break-dp",
+      "title": "Word Break DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(N)",
+      "summary": "Determines whether a string can be split into valid dictionary words.",
+      "explanation": [
+        "dp[i] means the prefix ending before index i can be formed using dictionary words.",
+        "Start with dp[0] = true because an empty prefix is valid.",
+        "For every ending position, try possible starting positions.",
+        "If the previous prefix is valid and the substring exists in the dictionary, mark the current position as valid.",
+        "This converts a recursive word splitting problem into DP."
+      ],
+      "exampleTrace": {
+        "input": "s = 'leetcode', dictionary = ['leet','code']",
+        "output": "true",
+        "traceSteps": [
+          "The prefix 'leet' exists in the dictionary.",
+          "The remaining substring 'code' also exists.",
+          "Therefore 'leetcode' can be split successfully."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks whether a string can be segmented into dictionary words.",
+        "whenToUse": "When a string must be divided into valid pieces.",
+        "whereUsed": "Autocomplete, text segmentation, tokenization, and word processing.",
+        "whyOptimal": "Each prefix is checked using previously solved prefixes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def word_break(s, word_dict):\n    words = set(word_dict)\n    n = len(s)\n    dp = [False] * (n + 1)\n    dp[0] = True\n\n    for i in range(1, n + 1):\n        for j in range(i):\n            if dp[j] and s[j:i] in words:\n                dp[i] = True\n                break\n\n    return dp[n]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nbool wordBreak(string s, vector<string>& wordDict) {\n    unordered_set<string> words(wordDict.begin(), wordDict.end());\n    int n = s.size();\n    vector<bool> dp(n + 1, false);\n    dp[0] = true;\n\n    for (int i = 1; i <= n; i++) {\n        for (int j = 0; j < i; j++) {\n            if (dp[j] && words.count(s.substr(j, i - j))) {\n                dp[i] = true;\n                break;\n            }\n        }\n    }\n\n    return dp[n];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public boolean wordBreak(String s, List<String> wordDict) {\n        Set<String> words = new HashSet<>(wordDict);\n        int n = s.length();\n        boolean[] dp = new boolean[n + 1];\n        dp[0] = true;\n\n        for (int i = 1; i <= n; i++) {\n            for (int j = 0; j < i; j++) {\n                if (dp[j] && words.contains(s.substring(j, i))) {\n                    dp[i] = true;\n                    break;\n                }\n            }\n        }\n\n        return dp[n];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 139 - Word Break",
+          "url": "https://leetcode.com/problems/word-break/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "palindromic-subsequence-dp",
+      "title": "Longest Palindromic Subsequence DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Finds the longest subsequence that reads the same forward and backward.",
+      "explanation": [
+        "dp[left][right] represents the longest palindromic subsequence inside that range.",
+        "If the two boundary characters are equal, they can be included together.",
+        "Otherwise skip either the left character or the right character.",
+        "The transition is max(dp[left+1][right], dp[left][right-1]) when the boundary characters differ.",
+        "Build the table from shorter ranges to longer ranges."
+      ],
+      "exampleTrace": {
+        "input": "s = 'bbbab'",
+        "output": "4",
+        "traceSteps": [
+          "One longest palindromic subsequence is 'bbbb'.",
+          "Its length is 4.",
+          "DP checks smaller intervals and builds larger intervals."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest palindromic subsequence.",
+        "whenToUse": "When characters can be skipped but their original order must remain.",
+        "whereUsed": "Sequence analysis and palindrome optimization.",
+        "whyOptimal": "Every substring range is solved once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longest_palindromic_subsequence(s):\n    n = len(s)\n    dp = [[0] * n for _ in range(n)]\n\n    for i in range(n):\n        dp[i][i] = 1\n\n    for length in range(2, n + 1):\n        for left in range(n - length + 1):\n            right = left + length - 1\n            if s[left] == s[right]:\n                dp[left][right] = 2 if length == 2 else dp[left + 1][right - 1] + 2\n            else:\n                dp[left][right] = max(dp[left + 1][right], dp[left][right - 1])\n\n    return dp[0][n - 1] if n else 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint longestPalindromicSubsequence(string s) {\n    int n = s.size();\n    if (n == 0) return 0;\n\n    vector<vector<int>> dp(n, vector<int>(n));\n\n    for (int i = 0; i < n; i++) dp[i][i] = 1;\n\n    for (int len = 2; len <= n; len++) {\n        for (int l = 0; l + len - 1 < n; l++) {\n            int r = l + len - 1;\n\n            if (s[l] == s[r])\n                dp[l][r] = (len == 2 ? 2 : dp[l + 1][r - 1] + 2);\n            else\n                dp[l][r] = max(dp[l + 1][r], dp[l][r - 1]);\n        }\n    }\n\n    return dp[0][n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int longestPalindromeSubseq(String s) {\n        int n = s.length();\n        if (n == 0) return 0;\n\n        int[][] dp = new int[n][n];\n\n        for (int i = 0; i < n; i++) dp[i][i] = 1;\n\n        for (int len = 2; len <= n; len++) {\n            for (int l = 0; l + len - 1 < n; l++) {\n                int r = l + len - 1;\n\n                if (s.charAt(l) == s.charAt(r)) {\n                    dp[l][r] = len == 2 ? 2 : dp[l + 1][r - 1] + 2;\n                } else {\n                    dp[l][r] = Math.max(dp[l + 1][r], dp[l][r - 1]);\n                }\n            }\n        }\n\n        return dp[0][n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 516 - Longest Palindromic Subsequence",
+          "url": "https://leetcode.com/problems/longest-palindromic-subsequence/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "palindrome-partitioning-dp",
+      "title": "Palindrome Partitioning DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Finds the minimum number of cuts needed to divide a string into palindromic pieces.",
+      "explanation": [
+        "First determine whether every substring is a palindrome.",
+        "Then dp[i] represents the minimum cuts needed for the prefix ending at i.",
+        "Try every previous position as the start of the last palindrome.",
+        "If that substring is a palindrome, update the minimum number of cuts.",
+        "This separates palindrome checking from minimum partition calculation."
+      ],
+      "exampleTrace": {
+        "input": "s = 'aab'",
+        "output": "1",
+        "traceSteps": [
+          "Partition the string as 'aa' | 'b'.",
+          "Both pieces are palindromes.",
+          "Only one cut is required."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the minimum cuts needed to partition a string into palindromes.",
+        "whenToUse": "When a string must be split into valid palindromic sections.",
+        "whereUsed": "String segmentation and palindrome problems.",
+        "whyOptimal": "Every possible substring is checked once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def min_cut(s):\n    n = len(s)\n    palindrome = [[False] * n for _ in range(n)]\n\n    for length in range(1, n + 1):\n        for l in range(n - length + 1):\n            r = l + length - 1\n            palindrome[l][r] = (\n                s[l] == s[r] and\n                (length <= 2 or palindrome[l + 1][r - 1])\n            )\n\n    dp = [0] * n\n\n    for i in range(n):\n        if palindrome[0][i]:\n            dp[i] = 0\n        else:\n            dp[i] = i\n            for j in range(1, i + 1):\n                if palindrome[j][i]:\n                    dp[i] = min(dp[i], dp[j - 1] + 1)\n\n    return dp[-1] if n else 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint minCut(string s) {\n    int n = s.size();\n    if (n == 0) return 0;\n\n    vector<vector<bool>> pal(n, vector<bool>(n, false));\n\n    for (int len = 1; len <= n; len++) {\n        for (int l = 0; l + len - 1 < n; l++) {\n            int r = l + len - 1;\n            pal[l][r] = s[l] == s[r] &&\n                        (len <= 2 || pal[l + 1][r - 1]);\n        }\n    }\n\n    vector<int> dp(n);\n\n    for (int i = 0; i < n; i++) {\n        if (pal[0][i]) {\n            dp[i] = 0;\n        } else {\n            dp[i] = i;\n            for (int j = 1; j <= i; j++) {\n                if (pal[j][i])\n                    dp[i] = min(dp[i], dp[j - 1] + 1);\n            }\n        }\n    }\n\n    return dp[n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int minCut(String s) {\n        int n = s.length();\n        if (n == 0) return 0;\n\n        boolean[][] pal = new boolean[n][n];\n\n        for (int len = 1; len <= n; len++) {\n            for (int l = 0; l + len - 1 < n; l++) {\n                int r = l + len - 1;\n                pal[l][r] = s.charAt(l) == s.charAt(r) &&\n                            (len <= 2 || pal[l + 1][r - 1]);\n            }\n        }\n\n        int[] dp = new int[n];\n\n        for (int i = 0; i < n; i++) {\n            if (pal[0][i]) {\n                dp[i] = 0;\n            } else {\n                dp[i] = i;\n                for (int j = 1; j <= i; j++) {\n                    if (pal[j][i]) {\n                        dp[i] = Math.min(dp[i], dp[j - 1] + 1);\n                    }\n                }\n            }\n        }\n\n        return dp[n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 132 - Palindrome Partitioning II",
+          "url": "https://leetcode.com/problems/palindrome-partitioning-ii/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "matrix-chain-multiplication",
+      "title": "Matrix Chain Multiplication DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N³)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Finds the minimum number of scalar multiplications needed to multiply a chain of matrices.",
+      "explanation": [
+        "Matrix multiplication order affects the total number of operations.",
+        "dp[i][j] stores the minimum cost to multiply matrices from i to j.",
+        "Try every possible position k as the final split.",
+        "The cost is the left cost plus right cost plus the cost of multiplying the two resulting matrices.",
+        "Choose the split with the smallest cost."
+      ],
+      "exampleTrace": {
+        "input": "Matrices with dimensions [10,20,30,40]",
+        "output": "18000",
+        "traceSteps": [
+          "There are three matrices: 10x20, 20x30, and 30x40.",
+          "Try both multiplication orders.",
+          "The better order gives a cost of 18000 scalar multiplications."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the cheapest way to parenthesize a sequence of matrix multiplications.",
+        "whenToUse": "When the problem asks for the best way to split an interval into smaller intervals.",
+        "whereUsed": "Matrix computation and interval optimization.",
+        "whyOptimal": "Every interval is solved by checking all possible split points."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def matrix_chain_order(dims):\n    n = len(dims) - 1\n    dp = [[0] * n for _ in range(n)]\n\n    for length in range(2, n + 1):\n        for i in range(n - length + 1):\n            j = i + length - 1\n            dp[i][j] = float('inf')\n\n            for k in range(i, j):\n                cost = (\n                    dp[i][k] +\n                    dp[k + 1][j] +\n                    dims[i] * dims[k + 1] * dims[j + 1]\n                )\n                dp[i][j] = min(dp[i][j], cost)\n\n    return dp[0][n - 1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nlong long matrixChainOrder(vector<int>& dims) {\n    int n = dims.size() - 1;\n    vector<vector<long long>> dp(n, vector<long long>(n, 0));\n\n    for (int len = 2; len <= n; len++) {\n        for (int i = 0; i + len - 1 < n; i++) {\n            int j = i + len - 1;\n            dp[i][j] = LLONG_MAX;\n\n            for (int k = i; k < j; k++) {\n                long long cost = dp[i][k] +\n                                 dp[k + 1][j] +\n                                 1LL * dims[i] * dims[k + 1] * dims[j + 1];\n                dp[i][j] = min(dp[i][j], cost);\n            }\n        }\n    }\n\n    return dp[0][n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public long matrixChainOrder(int[] dims) {\n        int n = dims.length - 1;\n        long[][] dp = new long[n][n];\n\n        for (int len = 2; len <= n; len++) {\n            for (int i = 0; i + len - 1 < n; i++) {\n                int j = i + len - 1;\n                dp[i][j] = Long.MAX_VALUE;\n\n                for (int k = i; k < j; k++) {\n                    long cost = dp[i][k]\n                        + dp[k + 1][j]\n                        + 1L * dims[i] * dims[k + 1] * dims[j + 1];\n\n                    dp[i][j] = Math.min(dp[i][j], cost);\n                }\n            }\n        }\n\n        return dp[0][n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Matrix Chain Multiplication",
+          "url": "https://www.geeksforgeeks.org/matrix-chain-multiplication-dp-8/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "burst-balloons-dp",
+      "title": "Burst Balloons Interval DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N³)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Finds the maximum coins that can be collected by bursting balloons in the best possible order.",
+      "explanation": [
+        "The difficult part is that bursting a balloon changes its neighbors.",
+        "Instead of choosing the first balloon, choose the last balloon burst inside an interval.",
+        "When a balloon is the last one, its left and right neighbors are fixed.",
+        "dp[left][right] stores the best result for an interval.",
+        "Try every possible last balloon and take the maximum."
+      ],
+      "exampleTrace": {
+        "input": "nums = [3,1,5,8]",
+        "output": "167",
+        "traceSteps": [
+          "Add virtual balloons with value 1 at both ends.",
+          "Solve smaller intervals first.",
+          "Try every balloon as the last balloon in an interval.",
+          "The maximum result is 167."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Optimizes the order of operations where each operation changes neighboring elements.",
+        "whenToUse": "When choosing the first operation makes the remaining problem difficult, but choosing the last operation makes the interval independent.",
+        "whereUsed": "Classic interval DP problems.",
+        "whyOptimal": "Every interval considers every possible final operation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def max_coins(nums):\n    nums = [1] + nums + [1]\n    n = len(nums)\n    dp = [[0] * n for _ in range(n)]\n\n    for length in range(2, n):\n        for left in range(0, n - length):\n            right = left + length\n\n            for k in range(left + 1, right):\n                dp[left][right] = max(\n                    dp[left][right],\n                    dp[left][k] +\n                    dp[k][right] +\n                    nums[left] * nums[k] * nums[right]\n                )\n\n    return dp[0][n - 1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint maxCoins(vector<int>& nums) {\n    nums.insert(nums.begin(), 1);\n    nums.push_back(1);\n\n    int n = nums.size();\n    vector<vector<int>> dp(n, vector<int>(n));\n\n    for (int len = 2; len < n; len++) {\n        for (int l = 0; l + len < n; l++) {\n            int r = l + len;\n\n            for (int k = l + 1; k < r; k++) {\n                dp[l][r] = max(dp[l][r],\n                    dp[l][k] + dp[k][r] +\n                    nums[l] * nums[k] * nums[r]);\n            }\n        }\n    }\n\n    return dp[0][n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int maxCoins(int[] input) {\n        int n = input.length + 2;\n        int[] nums = new int[n];\n        nums[0] = 1;\n        nums[n - 1] = 1;\n\n        for (int i = 0; i < input.length; i++) {\n            nums[i + 1] = input[i];\n        }\n\n        int[][] dp = new int[n][n];\n\n        for (int len = 2; len < n; len++) {\n            for (int l = 0; l + len < n; l++) {\n                int r = l + len;\n\n                for (int k = l + 1; k < r; k++) {\n                    dp[l][r] = Math.max(\n                        dp[l][r],\n                        dp[l][k] + dp[k][r] +\n                        nums[l] * nums[k] * nums[r]\n                    );\n                }\n            }\n        }\n\n        return dp[0][n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 312 - Burst Balloons",
+          "url": "https://leetcode.com/problems/burst-balloons/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "rod-cutting-dp",
+      "title": "Rod Cutting DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the maximum revenue obtained by cutting a rod into pieces with given prices.",
+      "explanation": [
+        "dp[length] stores the maximum revenue possible for a rod of that length.",
+        "Try every possible first cut.",
+        "If the first piece has length cut, add its price to the best answer for the remaining length.",
+        "The transition is dp[length] = max(price[cut] + dp[length-cut]).",
+        "This is an unbounded knapsack-style DP because a piece length can be used repeatedly."
+      ],
+      "exampleTrace": {
+        "input": "prices = [1,5,8,9], rod length = 4",
+        "output": "10",
+        "traceSteps": [
+          "Cut the rod into two pieces of length 2.",
+          "Each piece gives price 5.",
+          "Total revenue = 10."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes revenue by choosing how to divide a rod.",
+        "whenToUse": "When a total length must be divided into reusable piece sizes.",
+        "whereUsed": "Cutting and resource allocation optimization.",
+        "whyOptimal": "Every smaller rod length is solved before larger lengths."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rod_cutting(prices, n):\n    dp = [0] * (n + 1)\n\n    for length in range(1, n + 1):\n        for cut in range(1, length + 1):\n            dp[length] = max(\n                dp[length],\n                prices[cut - 1] + dp[length - cut]\n            )\n\n    return dp[n]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint rodCutting(vector<int>& prices, int n) {\n    vector<int> dp(n + 1, 0);\n\n    for (int length = 1; length <= n; length++) {\n        for (int cut = 1; cut <= length; cut++) {\n            dp[length] = max(\n                dp[length],\n                prices[cut - 1] + dp[length - cut]\n            );\n        }\n    }\n\n    return dp[n];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int rodCutting(int[] prices, int n) {\n        int[] dp = new int[n + 1];\n\n        for (int length = 1; length <= n; length++) {\n            for (int cut = 1; cut <= length; cut++) {\n                dp[length] = Math.max(\n                    dp[length],\n                    prices[cut - 1] + dp[length - cut]\n                );\n            }\n        }\n\n        return dp[n];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Rod Cutting",
+          "url": "https://www.geeksforgeeks.org/cutting-a-rod-dp-13/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stock-dp",
+      "title": "Stock Trading DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Uses DP states to represent whether we currently hold a stock and how many transactions are available.",
+      "explanation": [
+        "Stock problems are usually state-machine DP problems.",
+        "A state can represent whether we are holding a stock, not holding one, or have completed a certain number of transactions.",
+        "For each price, calculate the best answer for every possible state.",
+        "The next state depends on buying, selling, or doing nothing.",
+        "Different stock problems change the number of states and allowed transitions."
+      ],
+      "exampleTrace": {
+        "input": "prices = [7,1,5,3,6,4]",
+        "output": "5",
+        "traceSteps": [
+          "Buy at price 1.",
+          "Sell at price 6.",
+          "Profit = 5.",
+          "The DP state tracks the best result while holding or not holding the stock."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Optimizes profit under stock trading restrictions.",
+        "whenToUse": "When buying, selling, cooldown, transaction limits, or transaction fees are involved.",
+        "whereUsed": "Financial optimization and state-machine DP.",
+        "whyOptimal": "Each day updates a small fixed number of states."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def max_profit(prices):\n    cash = 0\n    hold = float('-inf')\n\n    for price in prices:\n        cash = max(cash, hold + price)\n        hold = max(hold, -price)\n\n    return cash"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint maxProfit(vector<int>& prices) {\n    int cash = 0;\n    int hold = INT_MIN;\n\n    for (int price : prices) {\n        cash = max(cash, hold + price);\n        hold = max(hold, -price);\n    }\n\n    return cash;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int maxProfit(int[] prices) {\n        int cash = 0;\n        int hold = Integer.MIN_VALUE;\n\n        for (int price : prices) {\n            cash = Math.max(cash, hold + price);\n            hold = Math.max(hold, -price);\n        }\n\n        return cash;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 121 - Best Time to Buy and Sell Stock",
+          "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 122 - Best Time to Buy and Sell Stock II",
+          "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 309 - Best Time to Buy and Sell Stock with Cooldown",
+          "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "house-robber-tree-dp",
+      "title": "Tree DP - House Robber III",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Uses DP on a tree where choosing a node prevents choosing its direct children.",
+      "explanation": [
+        "For every tree node calculate two answers.",
+        "The first answer means we rob this node.",
+        "The second answer means we do not rob this node.",
+        "If we rob the current node, we cannot rob its children.",
+        "If we do not rob it, each child can either be robbed or skipped."
+      ],
+      "exampleTrace": {
+        "input": "A binary tree with values [3,2,3,null,3,null,1]",
+        "output": "7",
+        "traceSteps": [
+          "Rob the root with value 3.",
+          "Do not rob its direct children.",
+          "Rob grandchildren with values 3 and 1.",
+          "Total = 3 + 3 + 1 = 7."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Optimizes selections on a tree with parent-child restrictions.",
+        "whenToUse": "When the answer for a node depends on whether that node is selected.",
+        "whereUsed": "Tree optimization and hierarchical decision problems.",
+        "whyOptimal": "Each tree node is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rob(root):\n    def dfs(node):\n        if not node:\n            return (0, 0)\n\n        left_skip, left_take = dfs(node.left)\n        right_skip, right_take = dfs(node.right)\n\n        take = node.val + left_skip + right_skip\n        skip = max(left_skip, left_take) + max(right_skip, right_take)\n\n        return (skip, take)\n\n    skip, take = dfs(root)\n    return max(skip, take)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nclass Solution {\npublic:\n    pair<int,int> dfs(TreeNode* node) {\n        if (!node) return {0, 0};\n\n        auto left = dfs(node->left);\n        auto right = dfs(node->right);\n\n        int take = node->val + left.first + right.first;\n        int skip = max(left.first, left.second)\n                 + max(right.first, right.second);\n\n        return {skip, take};\n    }\n\n    int rob(TreeNode* root) {\n        auto result = dfs(root);\n        return max(result.first, result.second);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    private int[] dfs(TreeNode node) {\n        if (node == null) return new int[]{0, 0};\n\n        int[] left = dfs(node.left);\n        int[] right = dfs(node.right);\n\n        int take = node.val + left[0] + right[0];\n        int skip = Math.max(left[0], left[1])\n                 + Math.max(right[0], right[1]);\n\n        return new int[]{skip, take};\n    }\n\n    public int rob(TreeNode root) {\n        int[] result = dfs(root);\n        return Math.max(result[0], result[1]);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 337 - House Robber III",
+          "url": "https://leetcode.com/problems/house-robber-iii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "dag-dp",
+      "title": "Dynamic Programming on DAG",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(V + E)",
+      "spaceComplexity": "O(V)",
+      "summary": "Uses topological ordering to calculate DP values on a Directed Acyclic Graph.",
+      "explanation": [
+        "A DAG has no directed cycle.",
+        "Because there are no cycles, nodes can be arranged in topological order.",
+        "Process nodes in that order so all required previous states are already calculated.",
+        "For each edge u → v, update the DP value of v using the value of u.",
+        "This can solve shortest path, longest path, and counting problems on DAGs."
+      ],
+      "exampleTrace": {
+        "input": "DAG with edges 0→1, 0→2, 1→3, 2→3",
+        "output": "DP values calculated in topological order",
+        "traceSteps": [
+          "Topological order can be [0,1,2,3].",
+          "Process node 0 first.",
+          "Use node 0's value to update nodes 1 and 2.",
+          "Then use those values to update node 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves optimization or counting problems over directed acyclic graphs.",
+        "whenToUse": "When the state transitions form a DAG.",
+        "whereUsed": "Dependency systems, project planning, and graph optimization.",
+        "whyOptimal": "Every vertex and edge is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef dag_shortest_path(n, edges, source):\n    graph = [[] for _ in range(n)]\n    indegree = [0] * n\n\n    for u, v, w in edges:\n        graph[u].append((v, w))\n        indegree[v] += 1\n\n    queue = deque(i for i in range(n) if indegree[i] == 0)\n    order = []\n\n    while queue:\n        u = queue.popleft()\n        order.append(u)\n        for v, _ in graph[u]:\n            indegree[v] -= 1\n            if indegree[v] == 0:\n                queue.append(v)\n\n    INF = float('inf')\n    dp = [INF] * n\n    dp[source] = 0\n\n    for u in order:\n        if dp[u] == INF:\n            continue\n        for v, w in graph[u]:\n            dp[v] = min(dp[v], dp[u] + w)\n\n    return dp"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nvector<long long> dagShortestPath(int n, vector<tuple<int,int,int>>& edges, int source) {\n    vector<vector<pair<int,int>>> graph(n);\n    vector<int> indegree(n);\n\n    for (auto [u,v,w] : edges) {\n        graph[u].push_back({v,w});\n        indegree[v]++;\n    }\n\n    queue<int> q;\n    for (int i = 0; i < n; i++)\n        if (indegree[i] == 0) q.push(i);\n\n    vector<int> order;\n    while (!q.empty()) {\n        int u = q.front();\n        q.pop();\n        order.push_back(u);\n\n        for (auto [v,w] : graph[u]) {\n            if (--indegree[v] == 0) q.push(v);\n        }\n    }\n\n    const long long INF = 1e18;\n    vector<long long> dp(n, INF);\n    dp[source] = 0;\n\n    for (int u : order) {\n        if (dp[u] == INF) continue;\n\n        for (auto [v,w] : graph[u]) {\n            dp[v] = min(dp[v], dp[u] + w);\n        }\n    }\n\n    return dp;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public long[] dagShortestPath(int n, int[][] edges, int source) {\n        List<int[]>[] graph = new ArrayList[n];\n        int[] indegree = new int[n];\n\n        for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();\n\n        for (int[] edge : edges) {\n            graph[edge[0]].add(new int[]{edge[1], edge[2]});\n            indegree[edge[1]]++;\n        }\n\n        Queue<Integer> queue = new LinkedList<>();\n        for (int i = 0; i < n; i++) {\n            if (indegree[i] == 0) queue.offer(i);\n        }\n\n        List<Integer> order = new ArrayList<>();\n\n        while (!queue.isEmpty()) {\n            int u = queue.poll();\n            order.add(u);\n\n            for (int[] edge : graph[u]) {\n                if (--indegree[edge[0]] == 0) queue.offer(edge[0]);\n            }\n        }\n\n        long INF = Long.MAX_VALUE / 4;\n        long[] dp = new long[n];\n        Arrays.fill(dp, INF);\n        dp[source] = 0;\n\n        for (int u : order) {\n            if (dp[u] == INF) continue;\n\n            for (int[] edge : graph[u]) {\n                int v = edge[0];\n                int w = edge[1];\n                dp[v] = Math.min(dp[v], dp[u] + w);\n            }\n        }\n\n        return dp;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Shortest Path in Directed Acyclic Graph",
+          "url": "https://www.geeksforgeeks.org/shortest-path-for-directed-acyclic-graphs/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bitmask-dp",
+      "title": "Bitmask DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(2^N * N)",
+      "spaceComplexity": "O(2^N * N)",
+      "summary": "Uses bits to represent which elements have already been selected.",
+      "explanation": [
+        "A bitmask is a binary number where each bit represents whether an element is selected.",
+        "For example, mask 0101 means elements 0 and 2 are selected.",
+        "dp[mask][i] can represent the best answer when the selected elements are mask and the current position is i.",
+        "Try adding every unused element to the current state.",
+        "This is useful when N is small, usually around 15 to 25 depending on the problem."
+      ],
+      "exampleTrace": {
+        "input": "n = 3 elements",
+        "output": "States from 000 to 111",
+        "traceSteps": [
+          "000 means no element is selected.",
+          "001 means element 0 is selected.",
+          "101 means elements 0 and 2 are selected.",
+          "111 means all elements are selected.",
+          "DP stores the best answer for each subset."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves subset-state problems where the number of elements is small.",
+        "whenToUse": "When the state depends on exactly which elements have already been selected.",
+        "whereUsed": "Traveling Salesman, assignment problems, Hamiltonian paths, and subset optimization.",
+        "whyOptimal": "It avoids recomputing the same subset state."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def tsp(dist):\n    n = len(dist)\n    INF = float('inf')\n    dp = [[INF] * n for _ in range(1 << n)]\n    dp[1][0] = 0\n\n    for mask in range(1 << n):\n        for u in range(n):\n            if not (mask & (1 << u)):\n                continue\n\n            for v in range(n):\n                if mask & (1 << v):\n                    continue\n\n                next_mask = mask | (1 << v)\n                dp[next_mask][v] = min(\n                    dp[next_mask][v],\n                    dp[mask][u] + dist[u][v]\n                )\n\n    full = (1 << n) - 1\n    return min(dp[full][i] + dist[i][0] for i in range(n))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint tsp(vector<vector<int>>& dist) {\n    int n = dist.size();\n    const int INF = 1e9;\n    int total = 1 << n;\n\n    vector<vector<int>> dp(total, vector<int>(n, INF));\n    dp[1][0] = 0;\n\n    for (int mask = 0; mask < total; mask++) {\n        for (int u = 0; u < n; u++) {\n            if (!(mask & (1 << u))) continue;\n\n            for (int v = 0; v < n; v++) {\n                if (mask & (1 << v)) continue;\n\n                int nextMask = mask | (1 << v);\n                dp[nextMask][v] = min(\n                    dp[nextMask][v],\n                    dp[mask][u] + dist[u][v]\n                );\n            }\n        }\n    }\n\n    int full = total - 1;\n    int answer = INF;\n\n    for (int i = 0; i < n; i++) {\n        answer = min(answer, dp[full][i] + dist[i][0]);\n    }\n\n    return answer;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int tsp(int[][] dist) {\n        int n = dist.length;\n        int total = 1 << n;\n        int INF = 1_000_000_000;\n\n        int[][] dp = new int[total][n];\n        for (int[] row : dp) Arrays.fill(row, INF);\n\n        dp[1][0] = 0;\n\n        for (int mask = 0; mask < total; mask++) {\n            for (int u = 0; u < n; u++) {\n                if ((mask & (1 << u)) == 0) continue;\n\n                for (int v = 0; v < n; v++) {\n                    if ((mask & (1 << v)) != 0) continue;\n\n                    int nextMask = mask | (1 << v);\n                    dp[nextMask][v] = Math.min(\n                        dp[nextMask][v],\n                        dp[mask][u] + dist[u][v]\n                    );\n                }\n            }\n        }\n\n        int full = total - 1;\n        int answer = INF;\n\n        for (int i = 0; i < n; i++) {\n            answer = Math.min(answer, dp[full][i] + dist[i][0]);\n        }\n\n        return answer;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 847 - Shortest Path Visiting All Nodes",
+          "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "digit-dp",
+      "title": "Digit DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(D * STATES * 10)",
+      "spaceComplexity": "O(D * STATES)",
+      "summary": "Counts numbers in a large range while satisfying conditions on their digits.",
+      "explanation": [
+        "Digit DP builds a number one digit at a time.",
+        "The state usually contains the current digit position.",
+        "A tight flag tells whether the number is still equal to the upper bound prefix.",
+        "A started flag tells whether a real digit has been placed yet.",
+        "Additional state can store digit sum, remainder, previous digit, or used digits."
+      ],
+      "exampleTrace": {
+        "input": "Count numbers from 0 to 999 with digit sum 10",
+        "output": "The DP counts valid numbers digit by digit",
+        "traceSteps": [
+          "Start from the most significant digit.",
+          "Choose a valid digit.",
+          "Track the remaining digit sum.",
+          "Use the tight flag to ensure the number does not exceed 999.",
+          "Reuse states when the same position and remaining state occur again."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts numbers satisfying digit-based restrictions over very large ranges.",
+        "whenToUse": "When N is huge and the condition depends on its digits.",
+        "whereUsed": "Number theory, digit restrictions, and competitive programming.",
+        "whyOptimal": "It groups many numbers into the same digit state instead of processing every number."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from functools import lru_cache\n\ndef count_digit_sum(n, target_sum):\n    digits = list(map(int, str(n)))\n\n    @lru_cache(None)\n    def dp(pos, remaining, tight):\n        if pos == len(digits):\n            return 1 if remaining == 0 else 0\n\n        limit = digits[pos] if tight else 9\n        answer = 0\n\n        for digit in range(limit + 1):\n            if digit > remaining:\n                break\n\n            answer += dp(\n                pos + 1,\n                remaining - digit,\n                tight and digit == limit\n            )\n\n        return answer\n\n    return dp(0, target_sum, True)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nstring s;\nlong long memo[20][200][2];\nbool vis[20][200][2];\n\nlong long solve(int pos, int sum, int tight) {\n    if (pos == s.size()) return sum == 0;\n\n    if (vis[pos][sum][tight]) return memo[pos][sum][tight];\n    vis[pos][sum][tight] = true;\n\n    int limit = tight ? s[pos] - '0' : 9;\n    long long ans = 0;\n\n    for (int digit = 0; digit <= limit && digit <= sum; digit++) {\n        ans += solve(\n            pos + 1,\n            sum - digit,\n            tight && digit == limit\n        );\n    }\n\n    return memo[pos][sum][tight] = ans;\n}\n\nlong long countDigitSum(long long n, int target) {\n    s = to_string(n);\n    memset(vis, false, sizeof(vis));\n    return solve(0, target, 1);\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    private String s;\n    private long[][][] memo;\n    private boolean[][][] seen;\n\n    private long solve(int pos, int sum, int tight, int target) {\n        if (pos == s.length()) return sum == target ? 1 : 0;\n\n        if (seen[pos][sum][tight]) return memo[pos][sum][tight];\n        seen[pos][sum][tight] = true;\n\n        int limit = tight == 1 ? s.charAt(pos) - '0' : 9;\n        long answer = 0;\n\n        for (int digit = 0; digit <= limit; digit++) {\n            answer += solve(\n                pos + 1,\n                sum + digit,\n                tight == 1 && digit == limit ? 1 : 0,\n                target\n            );\n        }\n\n        return memo[pos][sum][tight] = answer;\n    }\n\n    public long countDigitSum(long n, int target) {\n        s = String.valueOf(n);\n        memo = new long[s.length()][target + 1][2];\n        seen = new boolean[s.length()][target + 1][2];\n        return solve(0, 0, 1, target);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Digit DP",
+          "url": "https://www.geeksforgeeks.org/digit-dp-introduction/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "tree-dp",
+      "title": "Tree DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Solves optimization problems on trees by calculating answers for subtrees and combining child results.",
+      "explanation": [
+        "Root the tree at any node.",
+        "Solve the problem for every child subtree first.",
+        "Combine child answers to calculate the answer for the current node.",
+        "The DP state can contain multiple values depending on whether the current node is selected or not.",
+        "Some advanced tree DP problems require rerooting to calculate the answer for every possible root."
+      ],
+      "exampleTrace": {
+        "input": "A tree where each node has a value",
+        "output": "Best answer calculated for the complete tree",
+        "traceSteps": [
+          "Start from leaf nodes.",
+          "Calculate their DP values.",
+          "Move upward toward the root.",
+          "Combine the values from all children.",
+          "The root's DP value gives the final answer."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves optimization and counting problems on trees.",
+        "whenToUse": "When a node's answer depends on answers from its children or subtree.",
+        "whereUsed": "Hierarchical optimization, network problems, and tree algorithms.",
+        "whyOptimal": "Each subtree is solved once instead of repeatedly."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def tree_dp(root):\n    def dfs(node):\n        if not node:\n            return 0\n\n        left = dfs(node.left)\n        right = dfs(node.right)\n\n        return node.val + max(left, right)\n\n    return dfs(root)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint treeDP(TreeNode* root) {\n    if (!root) return 0;\n\n    int left = treeDP(root->left);\n    int right = treeDP(root->right);\n\n    return root->val + max(left, right);\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    private int treeDP(TreeNode node) {\n        if (node == null) return 0;\n\n        int left = treeDP(node.left);\n        int right = treeDP(node.right);\n\n        return node.val + Math.max(left, right);\n    }\n\n    public int solve(TreeNode root) {\n        return treeDP(root);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 124 - Binary Tree Maximum Path Sum",
+          "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "rerooting-dp",
+      "title": "Rerooting DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Calculates a DP answer for every possible tree root by reusing information from a previously processed root.",
+      "explanation": [
+        "First root the tree at an arbitrary node and calculate subtree answers.",
+        "Then perform a second traversal.",
+        "When moving the root from u to its child v, reuse the answer already calculated for u.",
+        "Remove v's contribution from u and add u's contribution to v.",
+        "This allows answers for all possible roots to be calculated in linear time."
+      ],
+      "exampleTrace": {
+        "input": "Tree with nodes 0-1-2 and 1-3",
+        "output": "Answer calculated for every possible root",
+        "traceSteps": [
+          "First calculate subtree information with root 0.",
+          "Then move the root from 0 to 1.",
+          "Reuse previously calculated information.",
+          "Continue moving the root through the tree."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds a tree DP answer for every possible root efficiently.",
+        "whenToUse": "When the same tree problem must be solved with every node considered as the root.",
+        "whereUsed": "Sum of distances, tree eccentricity, subtree contribution, and tree optimization.",
+        "whyOptimal": "A second traversal reuses previous results instead of solving the whole tree repeatedly."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def reroot_tree(n, graph):\n    subtree = [1] * n\n    answer = [0] * n\n\n    def dfs1(u, parent):\n        for v in graph[u]:\n            if v == parent:\n                continue\n            dfs1(v, u)\n            subtree[u] += subtree[v]\n            answer[0] += subtree[v]\n\n    def dfs2(u, parent):\n        for v in graph[u]:\n            if v == parent:\n                continue\n\n            answer[v] = answer[u] + n - 2 * subtree[v]\n            dfs2(v, u)\n\n    dfs1(0, -1)\n    dfs2(0, -1)\n\n    return answer"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nvoid dfs1(int u, int parent, vector<vector<int>>& graph,\n          vector<int>& subtree, vector<long long>& answer) {\n    subtree[u] = 1;\n\n    for (int v : graph[u]) {\n        if (v == parent) continue;\n\n        dfs1(v, u, graph, subtree, answer);\n        subtree[u] += subtree[v];\n        answer[0] += subtree[v];\n    }\n}\n\nvoid dfs2(int u, int parent, vector<vector<int>>& graph,\n          vector<int>& subtree, vector<long long>& answer, int n) {\n    for (int v : graph[u]) {\n        if (v == parent) continue;\n\n        answer[v] = answer[u] + n - 2LL * subtree[v];\n        dfs2(v, u, graph, subtree, answer, n);\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    private int[] subtree;\n    private long[] answer;\n    private List<Integer>[] graph;\n    private int n;\n\n    private void dfs1(int u, int parent) {\n        subtree[u] = 1;\n\n        for (int v : graph[u]) {\n            if (v == parent) continue;\n\n            dfs1(v, u);\n            subtree[u] += subtree[v];\n            answer[0] += subtree[v];\n        }\n    }\n\n    private void dfs2(int u, int parent) {\n        for (int v : graph[u]) {\n            if (v == parent) continue;\n\n            answer[v] = answer[u] + n - 2L * subtree[v];\n            dfs2(v, u);\n        }\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 834 - Sum of Distances in Tree",
+          "url": "https://leetcode.com/problems/sum-of-distances-in-tree/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "interval-dp",
+      "title": "Interval DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "Usually O(N³)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Solves problems where the state represents an interval [L,R] and the answer is built by splitting that interval.",
+      "explanation": [
+        "dp[L][R] represents the best answer for the interval from L to R.",
+        "Try every possible split point or final operation inside the interval.",
+        "Combine the answers of the left and right intervals.",
+        "Process shorter intervals before longer intervals.",
+        "Matrix Chain Multiplication and Burst Balloons are classic examples."
+      ],
+      "exampleTrace": {
+        "input": "An interval [0,4]",
+        "output": "Best value for the complete interval",
+        "traceSteps": [
+          "Solve intervals of length 1.",
+          "Then solve intervals of length 2.",
+          "Continue until the complete interval [0,4].",
+          "For every interval, try all possible split positions."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Optimizes operations performed on ranges or intervals.",
+        "whenToUse": "When the problem naturally asks for the best result inside a range.",
+        "whereUsed": "Matrix multiplication, partitioning, merging, and game problems.",
+        "whyOptimal": "Every interval is solved once and every possible split is considered."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def interval_dp(arr):\n    n = len(arr)\n    dp = [[0] * n for _ in range(n)]\n\n    for length in range(2, n + 1):\n        for left in range(n - length + 1):\n            right = left + length - 1\n\n            for mid in range(left, right):\n                candidate = (\n                    dp[left][mid] +\n                    dp[mid + 1][right]\n                )\n                dp[left][right] = max(dp[left][right], candidate)\n\n    return dp[0][n - 1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint intervalDP(vector<int>& arr) {\n    int n = arr.size();\n    vector<vector<int>> dp(n, vector<int>(n));\n\n    for (int len = 2; len <= n; len++) {\n        for (int l = 0; l + len - 1 < n; l++) {\n            int r = l + len - 1;\n\n            for (int mid = l; mid < r; mid++) {\n                dp[l][r] = max(\n                    dp[l][r],\n                    dp[l][mid] + dp[mid + 1][r]\n                );\n            }\n        }\n    }\n\n    return dp[0][n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int intervalDP(int[] arr) {\n        int n = arr.length;\n        int[][] dp = new int[n][n];\n\n        for (int len = 2; len <= n; len++) {\n            for (int l = 0; l + len - 1 < n; l++) {\n                int r = l + len - 1;\n\n                for (int mid = l; mid < r; mid++) {\n                    dp[l][r] = Math.max(\n                        dp[l][r],\n                        dp[l][mid] + dp[mid + 1][r]\n                    );\n                }\n            }\n        }\n\n        return dp[0][n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1039 - Minimum Score Triangulation of Polygon",
+          "url": "https://leetcode.com/problems/minimum-score-triangulation-of-polygon/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "game-dp",
+      "title": "Game Theory DP / Minimax DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N²) depending on state",
+      "spaceComplexity": "O(N²) depending on state",
+      "summary": "Uses DP to determine the best result for a player when two or more players make optimal decisions.",
+      "explanation": [
+        "Assume every player makes the best possible move.",
+        "dp[state] represents the best advantage or result from that state.",
+        "A player chooses the move that gives the best result for themselves.",
+        "The opponent's best response is included in the transition.",
+        "Many two-player problems can use a min/max recurrence."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1,5,233,7]",
+        "output": "First player can win",
+        "traceSteps": [
+          "The first player chooses an element from one end.",
+          "The second player then chooses optimally.",
+          "DP calculates the best score difference for every interval.",
+          "The initial interval determines whether the first player can win."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the best result when multiple players make optimal choices.",
+        "whenToUse": "When players alternate turns and the future depends on previous choices.",
+        "whereUsed": "Competitive games, optimal strategy, and adversarial decision problems.",
+        "whyOptimal": "The DP stores the best possible result from every game state."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def predict_winner(nums):\n    n = len(nums)\n    dp = nums[:]\n\n    for length in range(2, n + 1):\n        for left in range(n - length + 1):\n            right = left + length - 1\n            dp[left] = max(\n                nums[left] - dp[left + 1],\n                nums[right] - dp[left]\n            )\n\n    return dp[0] >= 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nbool predictWinner(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> dp = nums;\n\n    for (int len = 2; len <= n; len++) {\n        for (int l = 0; l + len - 1 < n; l++) {\n            int r = l + len - 1;\n            dp[l] = max(nums[l] - dp[l + 1],\n                        nums[r] - dp[l]);\n        }\n    }\n\n    return dp[0] >= 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public boolean predictWinner(int[] nums) {\n        int n = nums.length;\n        int[] dp = nums.clone();\n\n        for (int len = 2; len <= n; len++) {\n            for (int l = 0; l + len - 1 < n; l++) {\n                int r = l + len - 1;\n                dp[l] = Math.max(\n                    nums[l] - dp[l + 1],\n                    nums[r] - dp[l]\n                );\n            }\n        }\n\n        return dp[0] >= 0;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 486 - Predict the Winner",
+          "url": "https://leetcode.com/problems/predict-the-winner/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "probability-dp",
+      "title": "Probability DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "Depends on number of states",
+      "spaceComplexity": "Depends on number of states",
+      "summary": "Calculates probabilities or expected outcomes by storing probability values for previously solved states.",
+      "explanation": [
+        "A state represents the current situation of the random process.",
+        "Each possible next action has a probability.",
+        "The probability of reaching a state is calculated from previous states.",
+        "For expected value problems, multiply each outcome by its probability and add them.",
+        "The important part is identifying the state and all possible transitions."
+      ],
+      "exampleTrace": {
+        "input": "Probability of reaching a target after several random moves",
+        "output": "Probability stored in the final state",
+        "traceSteps": [
+          "Start with probability 1 at the initial state.",
+          "Distribute probability according to possible moves.",
+          "Combine probabilities that reach the same state.",
+          "The final state contains the required probability."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes probabilities or expected values over repeated states.",
+        "whenToUse": "When a random process has overlapping states.",
+        "whereUsed": "Random walks, probability games, and expected-value problems.",
+        "whyOptimal": "The same probability state is calculated only once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def probability_dp(steps):\n    dp = [0.0] * (steps + 1)\n    dp[0] = 1.0\n\n    for i in range(steps):\n        dp[i + 1] += dp[i] * 0.5\n        if i + 2 <= steps:\n            dp[i + 2] += dp[i] * 0.5\n\n    return dp[steps]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\ndouble probabilityDP(int steps) {\n    vector<double> dp(steps + 1, 0.0);\n    dp[0] = 1.0;\n\n    for (int i = 0; i < steps; i++) {\n        dp[i + 1] += dp[i] * 0.5;\n        if (i + 2 <= steps)\n            dp[i + 2] += dp[i] * 0.5;\n    }\n\n    return dp[steps];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public double probabilityDP(int steps) {\n        double[] dp = new double[steps + 1];\n        dp[0] = 1.0;\n\n        for (int i = 0; i < steps; i++) {\n            dp[i + 1] += dp[i] * 0.5;\n            if (i + 2 <= steps) {\n                dp[i + 2] += dp[i] * 0.5;\n            }\n        }\n\n        return dp[steps];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 688 - Knight Probability in Chessboard",
+          "url": "https://leetcode.com/problems/knight-probability-in-chessboard/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "traveling-salesman-dp",
+      "title": "Traveling Salesman Problem (TSP) DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N² * 2^N)",
+      "spaceComplexity": "O(N * 2^N)",
+      "summary": "Finds the minimum-cost tour that visits every city exactly once and returns to the starting city using bitmask DP.",
+      "explanation": [
+        "The important state is which cities have already been visited.",
+        "Represent visited cities using a bitmask.",
+        "dp[mask][i] stores the minimum cost when the visited cities are mask and the current city is i.",
+        "Try every city that has not been visited yet.",
+        "Finally add the cost of returning to the starting city."
+      ],
+      "exampleTrace": {
+        "input": "4 cities with a distance matrix",
+        "output": "Minimum tour cost",
+        "traceSteps": [
+          "Start at city 0.",
+          "Represent the visited set using a bitmask.",
+          "Try every unvisited city.",
+          "When all cities are visited, return to city 0.",
+          "Choose the minimum total cost."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the cheapest route visiting every city exactly once.",
+        "whenToUse": "When N is small and the state depends on the exact set of visited nodes.",
+        "whereUsed": "Routing, logistics, and combinatorial optimization.",
+        "whyOptimal": "Bitmask DP merges identical visited-set states."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def tsp(dist):\n    n = len(dist)\n    INF = float('inf')\n    dp = [[INF] * n for _ in range(1 << n)]\n    dp[1][0] = 0\n\n    for mask in range(1 << n):\n        for u in range(n):\n            if not (mask & (1 << u)):\n                continue\n\n            for v in range(n):\n                if mask & (1 << v):\n                    continue\n\n                new_mask = mask | (1 << v)\n                dp[new_mask][v] = min(\n                    dp[new_mask][v],\n                    dp[mask][u] + dist[u][v]\n                )\n\n    full = (1 << n) - 1\n    return min(dp[full][i] + dist[i][0] for i in range(n))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint tsp(vector<vector<int>>& dist) {\n    int n = dist.size();\n    int total = 1 << n;\n    const int INF = 1e9;\n\n    vector<vector<int>> dp(total, vector<int>(n, INF));\n    dp[1][0] = 0;\n\n    for (int mask = 1; mask < total; mask++) {\n        for (int u = 0; u < n; u++) {\n            if (!(mask & (1 << u))) continue;\n\n            for (int v = 0; v < n; v++) {\n                if (mask & (1 << v)) continue;\n\n                int next = mask | (1 << v);\n                dp[next][v] = min(dp[next][v],\n                                  dp[mask][u] + dist[u][v]);\n            }\n        }\n    }\n\n    int full = total - 1;\n    int answer = INF;\n\n    for (int i = 0; i < n; i++)\n        answer = min(answer, dp[full][i] + dist[i][0]);\n\n    return answer;\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int tsp(int[][] dist) {\n        int n = dist.length;\n        int total = 1 << n;\n        int INF = 1_000_000_000;\n\n        int[][] dp = new int[total][n];\n        for (int[] row : dp) Arrays.fill(row, INF);\n\n        dp[1][0] = 0;\n\n        for (int mask = 1; mask < total; mask++) {\n            for (int u = 0; u < n; u++) {\n                if ((mask & (1 << u)) == 0) continue;\n\n                for (int v = 0; v < n; v++) {\n                    if ((mask & (1 << v)) != 0) continue;\n\n                    int next = mask | (1 << v);\n                    dp[next][v] = Math.min(\n                        dp[next][v],\n                        dp[mask][u] + dist[u][v]\n                    );\n                }\n            }\n        }\n\n        int full = total - 1;\n        int answer = INF;\n\n        for (int i = 0; i < n; i++) {\n            answer = Math.min(answer, dp[full][i] + dist[i][0]);\n        }\n\n        return answer;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Travelling Salesman Problem",
+          "url": "https://www.geeksforgeeks.org/travelling-salesman-problem-tsp-implementation/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "minimum-cost-path-dp",
+      "title": "Minimum Cost / Maximum Value State DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N*K)",
+      "spaceComplexity": "O(N)",
+      "summary": "A general DP pattern where each state stores the minimum cost or maximum value achievable up to that point.",
+      "explanation": [
+        "Define dp[i] as the best answer when reaching position i.",
+        "For every allowed previous state j, calculate the new cost or value.",
+        "Take minimum for minimization problems or maximum for maximization problems.",
+        "The important step is identifying which previous states can transition into the current state.",
+        "This pattern appears in stairs, jumps, scheduling, partitioning, and many optimization problems."
+      ],
+      "exampleTrace": {
+        "input": "Positions with transition costs",
+        "output": "Minimum total cost",
+        "traceSteps": [
+          "Start with the base state.",
+          "For each position, look at all allowed previous positions.",
+          "Add the transition cost.",
+          "Keep the smallest total cost.",
+          "The final position contains the answer."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "General minimum or maximum optimization problems.",
+        "whenToUse": "When a state can be reached through multiple previous states.",
+        "whereUsed": "Scheduling, jumps, paths, and resource optimization.",
+        "whyOptimal": "Each state keeps only the best result needed by future states."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def min_cost(cost):\n    n = len(cost)\n    dp = [float('inf')] * n\n    dp[0] = cost[0]\n\n    for i in range(1, n):\n        for j in range(i):\n            dp[i] = min(dp[i], dp[j] + cost[i])\n\n    return dp[-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint minCost(vector<int>& cost) {\n    int n = cost.size();\n    vector<int> dp(n, INT_MAX);\n    dp[0] = cost[0];\n\n    for (int i = 1; i < n; i++) {\n        for (int j = 0; j < i; j++) {\n            dp[i] = min(dp[i], dp[j] + cost[i]);\n        }\n    }\n\n    return dp[n - 1];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int minCost(int[] cost) {\n        int n = cost.length;\n        int[] dp = new int[n];\n        Arrays.fill(dp, Integer.MAX_VALUE);\n        dp[0] = cost[0];\n\n        for (int i = 1; i < n; i++) {\n            for (int j = 0; j < i; j++) {\n                dp[i] = Math.min(dp[i], dp[j] + cost[i]);\n            }\n        }\n\n        return dp[n - 1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 746 - Min Cost Climbing Stairs",
+          "url": "https://leetcode.com/problems/min-cost-climbing-stairs/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "counting-dp",
+      "title": "Counting DP",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "Depends on number of states and transitions",
+      "spaceComplexity": "Depends on number of states",
+      "summary": "Counts how many valid ways exist instead of finding a minimum or maximum value.",
+      "explanation": [
+        "The DP state stores the number of valid ways to reach that state.",
+        "Start from a base state with one valid way.",
+        "For every transition, add the number of ways from the previous state.",
+        "Use modulo arithmetic when the answer can become very large.",
+        "The same idea appears in path counting, coin combinations, decoding, and string construction."
+      ],
+      "exampleTrace": {
+        "input": "Number of ways to reach stair 5 using jumps of 1 or 2",
+        "output": "8",
+        "traceSteps": [
+          "dp[0] = 1.",
+          "dp[1] = 1.",
+          "dp[2] = 2.",
+          "dp[3] = 3.",
+          "dp[4] = 5.",
+          "dp[5] = 8."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts the number of valid solutions.",
+        "whenToUse": "When the question asks 'how many ways' instead of best/minimum/maximum.",
+        "whereUsed": "Combinatorics, path counting, decoding, and partition problems.",
+        "whyOptimal": "Each state combines counts from previously calculated states."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_ways(n):\n    dp = [0] * (n + 1)\n    dp[0] = 1\n\n    for i in range(1, n + 1):\n        dp[i] += dp[i - 1]\n        if i >= 2:\n            dp[i] += dp[i - 2]\n\n    return dp[n]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nlong long countWays(int n) {\n    vector<long long> dp(n + 1, 0);\n    dp[0] = 1;\n\n    for (int i = 1; i <= n; i++) {\n        dp[i] += dp[i - 1];\n        if (i >= 2) dp[i] += dp[i - 2];\n    }\n\n    return dp[n];\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public long countWays(int n) {\n        long[] dp = new long[n + 1];\n        dp[0] = 1;\n\n        for (int i = 1; i <= n; i++) {\n            dp[i] += dp[i - 1];\n            if (i >= 2) dp[i] += dp[i - 2];\n        }\n\n        return dp[n];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 91 - Decode Ways",
+          "url": "https://leetcode.com/problems/decode-ways/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "linear-space-dp-optimization",
+      "title": "DP Space Optimization",
+      "categoryId": "dp",
+      "categoryTitle": "Dynamic Programming",
+      "difficulty": "Medium",
+      "timeComplexity": "Same as original DP",
+      "spaceComplexity": "Reduced from O(N²) to O(N) where applicable",
+      "summary": "Reduces DP memory by keeping only the previous states required to calculate the next state.",
+      "explanation": [
+        "Many DP tables contain old values that are no longer needed.",
+        "If the current row only depends on the previous row, keep only two rows.",
+        "If the current state only needs one previous row, one array can be enough.",
+        "For example, LCS can be optimized from O(N*M) space to O(M).",
+        "Space optimization does not change the time complexity."
+      ],
+      "exampleTrace": {
+        "input": "2D DP where row i depends only on row i-1",
+        "output": "O(N) memory instead of O(N²)",
+        "traceSteps": [
+          "Keep the previous row.",
+          "Calculate the current row.",
+          "Replace the previous row.",
+          "Repeat until the final row is calculated."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reduces the memory used by a DP solution.",
+        "whenToUse": "When each state depends only on a small number of previous rows or states.",
+        "whereUsed": "LCS, edit distance, grid DP, and knapsack.",
+        "whyOptimal": "Unnecessary old states are discarded."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lcs_space_optimized(a, b):\n    if len(b) > len(a):\n        a, b = b, a\n\n    prev = [0] * (len(b) + 1)\n\n    for x in a:\n        curr = [0] * (len(b) + 1)\n\n        for j, y in enumerate(b, 1):\n            if x == y:\n                curr[j] = prev[j - 1] + 1\n            else:\n                curr[j] = max(prev[j], curr[j - 1])\n\n        prev = curr\n\n    return prev[-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <bits/stdc++.h>\nusing namespace std;\n\nint lcsOptimized(string a, string b) {\n    if (b.size() > a.size()) swap(a, b);\n\n    vector<int> prev(b.size() + 1, 0);\n\n    for (char x : a) {\n        vector<int> curr(b.size() + 1, 0);\n\n        for (int j = 1; j <= b.size(); j++) {\n            if (x == b[j - 1])\n                curr[j] = prev[j - 1] + 1;\n            else\n                curr[j] = max(prev[j], curr[j - 1]);\n        }\n\n        prev = curr;\n    }\n\n    return prev.back();\n}"
+        },
+        {
+          "language": "java",
+          "code": "class Solution {\n    public int lcsOptimized(String a, String b) {\n        if (b.length() > a.length()) {\n            String temp = a;\n            a = b;\n            b = temp;\n        }\n\n        int[] prev = new int[b.length() + 1];\n\n        for (char x : a.toCharArray()) {\n            int[] curr = new int[b.length() + 1];\n\n            for (int j = 1; j <= b.length(); j++) {\n                if (x == b.charAt(j - 1))\n                    curr[j] = prev[j - 1] + 1;\n                else\n                    curr[j] = Math.max(prev[j], curr[j - 1]);\n            }\n\n            prev = curr;\n        }\n\n        return prev[b.length()];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1143 - Longest Common Subsequence",
+          "url": "https://leetcode.com/problems/longest-common-subsequence/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,475 @@
+{
+  "id": "intervals",
+  "category": {
+    "id": "intervals",
+    "title": "Intervals & Sweep Line",
+    "icon": "SlidersHorizontal",
+    "description": "Interval merging, insertions, intersections, meeting room scheduling, and sweep line event patterns."
+  },
+  "totalAlgorithms": 8,
+  "algorithms": [
+    {
+      "id": "interval-merge-intervals",
+      "title": "Merge Overlapping Intervals",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(N) for merged output list",
+      "summary": "Sorts intervals by start time and greedily merges overlapping intervals into a minimal list of non-overlapping intervals.",
+      "explanation": [
+        "1. Sort input intervals in ascending order by their start time `interval[0]`.",
+        "2. Initialize `merged` list with the first interval.",
+        "3. Iterate through intervals. If current interval starts before or at previous interval's end (`curr[0] <= last[1]`), merge them by setting `last[1] = max(last[1], curr[1])`.",
+        "4. Otherwise, no overlap occurs. Append current interval to `merged`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Merge Intervals on [[1,3], [2,6], [8,10], [15,18]]",
+        "traceSteps": [
+          "Sorted: [[1,3], [2,6], [8,10], [15,18]].",
+          "Start with active interval [1, 3].",
+          "Inspect [2, 6]: 2 <= 3 → Overlap! Extend end to max(3, 6) = 6. Active becomes [1, 6].",
+          "Inspect [8, 10]: 8 > 6 → No overlap. Push [1, 6]. Active becomes [8, 10].",
+          "Inspect [15, 18]: 15 > 10 → Push [8, 10]. Active becomes [15, 18].",
+          "Result: [[1,6], [8,10], [15,18]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines overlapping time intervals into disjoint contiguous blocks.",
+        "whenToUse": "Use when consolidating schedule availability or overlapping physical memory ranges.",
+        "whereUsed": "Calendar applications, memory allocators, audio segment merging.",
+        "whyOptimal": "Sorting by start time ensures single-pass linear O(N) overlap merging."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def merge(intervals: list[list[int]]) -> list[list[int]]:\n    intervals.sort(key=lambda x: x[0])\n    merged = []\n    for interval in intervals:\n        if not merged or merged[-1][1] < interval[0]:\n            merged.append(interval)\n        else:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n    return merged"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nvector<vector<int>> merge(vector<vector<int>>& intervals) {\n    if (intervals.empty()) return {};\n    sort(intervals.begin(), intervals.end());\n    vector<vector<int>> merged;\n    for (auto& interval : intervals) {\n        if (merged.empty() || merged.back()[1] < interval[0]) {\n            merged.push_back(interval);\n        } else {\n            merged.back()[1] = max(merged.back()[1], interval[1]);\n        }\n    }\n    return merged;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n        List<int[]> merged = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (merged.isEmpty() || merged.get(merged.size() - 1)[1] < interval[0]) {\n                merged.add(interval);\n            } else {\n                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], interval[1]);\n            }\n        }\n        return merged.toArray(new int[merged.size()][]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function merge(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  const merged = [];\n  for (const interval of intervals) {\n    if (merged.length === 0 || merged[merged.length - 1][1] < interval[0]) {\n      merged.push(interval);\n    } else {\n      merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], interval[1]);\n    }\n  }\n  return merged;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 56 - Merge Intervals",
+          "url": "https://leetcode.com/problems/merge-intervals/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-insert-interval",
+      "title": "Insert Interval into Sorted Non-Overlapping List",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) single linear scan",
+      "spaceComplexity": "O(N) for output array",
+      "summary": "Inserts a new interval into a pre-sorted list of non-overlapping intervals and merges any overlapping intervals in O(N) time.",
+      "explanation": [
+        "1. Phase 1 (Pre-overlap): Add all intervals that end before `newInterval` starts (`interval[1] < newInterval[0]`).",
+        "2. Phase 2 (Overlap Merge): While intervals overlap with `newInterval` (`interval[0] <= newInterval[1]`), merge them into `newInterval` by setting `newInterval[0] = min(newInterval[0], interval[0])` and `newInterval[1] = max(newInterval[1], interval[1])`.",
+        "3. Append merged `newInterval` to output.",
+        "4. Phase 3 (Post-overlap): Add all remaining intervals after `newInterval`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Insert newInterval=[2,5] into [[1,3], [6,9]]",
+        "traceSteps": [
+          "Inspect [1, 3]: Overlaps with [2, 5] (1 <= 5). Merge → newInterval becomes [min(1,2), max(3,5)] = [1, 5].",
+          "Inspect [6, 9]: Starts at 6 > 5 (after newInterval). Append merged [1, 5], then append [6, 9].",
+          "Result: [[1,5], [6,9]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Inserts a new event into an existing conflict-free schedule in O(N) time without full array re-sorting.",
+        "whenToUse": "Use when inserting new events into an already sorted list of non-overlapping intervals.",
+        "whereUsed": "Real-time calendar event creation, stream-based interval maintenance.",
+        "whyOptimal": "Leverages existing sorted order to complete insertion and merging in a single O(N) pass."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def insert(intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:\n    res = []\n    i = 0\n    n = len(intervals)\n    while i < n and intervals[i][1] < newInterval[0]:\n        res.append(intervals[i])\n        i += 1\n    while i < n and intervals[i][0] <= newInterval[1]:\n        newInterval[0] = min(newInterval[0], intervals[i][0])\n        newInterval[1] = max(newInterval[1], intervals[i][1])\n        i += 1\n    res.append(newInterval)\n    while i < n:\n        res.append(intervals[i])\n        i += 1\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nvector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {\n    vector<vector<int>> res;\n    int i = 0, n = intervals.size();\n    while (i < n && intervals[i][1] < newInterval[0]) {\n        res.push_back(intervals[i++]);\n    }\n    while (i < n && intervals[i][0] <= newInterval[1]) {\n        newInterval[0] = min(newInterval[0], intervals[i][0]);\n        newInterval[1] = max(newInterval[1], intervals[i][1]);\n        i++;\n    }\n    res.push_back(newInterval);\n    while (i < n) {\n        res.push_back(intervals[i++]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int[][] insert(int[][] intervals, int[] newInterval) {\n        List<int[]> res = new ArrayList<>();\n        int i = 0, n = intervals.length;\n        while (i < n && intervals[i][1] < newInterval[0]) {\n            res.add(intervals[i++]);\n        }\n        while (i < n && intervals[i][0] <= newInterval[1]) {\n            newInterval[0] = Math.min(newInterval[0], intervals[i][0]);\n            newInterval[1] = Math.max(newInterval[1], intervals[i][1]);\n            i++;\n        }\n        res.add(newInterval);\n        while (i < n) {\n            res.add(intervals[i++]);\n        }\n        return res.toArray(new int[res.size()][]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function insert(intervals, newInterval) {\n  const res = [];\n  let i = 0, n = intervals.length;\n  while (i < n && intervals[i][1] < newInterval[0]) {\n    res.push(intervals[i++]);\n  }\n  while (i < n && intervals[i][0] <= newInterval[1]) {\n    newInterval[0] = Math.min(newInterval[0], intervals[i][0]);\n    newInterval[1] = Math.max(newInterval[1], intervals[i][1]);\n    i++;\n  }\n  res.push(newInterval);\n  while (i < n) {\n    res.push(intervals[i++]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 57 - Insert Interval",
+          "url": "https://leetcode.com/problems/insert-interval/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-intersection",
+      "title": "Interval List Intersections",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N + M) two pointers scan",
+      "spaceComplexity": "O(N + M) for result array",
+      "summary": "Finds the intersection of two sorted lists of closed intervals using a Two-Pointer traversal.",
+      "explanation": [
+        "1. Maintain pointers `i` for `firstList` and `j` for `secondList`.",
+        "2. Calculate overlap bounds: `start = max(firstList[i][0], secondList[j][0])` and `end = min(firstList[i][1], secondList[j][1])`.",
+        "3. If `start <= end`, a valid intersection `[start, end]` exists. Append to output.",
+        "4. Advance pointer corresponding to the interval that ends first: if `firstList[i][1] < secondList[j][1]`, increment `i`, else increment `j`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Intersections on A=[[0,2],[5,10]] and B=[[1,5],[8,12]]",
+        "traceSteps": [
+          "i=0 [0,2], j=0 [1,5] → Intersect [max(0,1), min(2,5)] = [1, 2]. A[0] ends at 2 < 5 → i=1.",
+          "i=1 [5,10], j=0 [1,5] → Intersect [max(5,1), min(10,5)] = [5, 5]. B[0] ends at 5 <= 10 → j=1.",
+          "i=1 [5,10], j=1 [8,12] → Intersect [max(5,8), min(10,12)] = [8, 10]. A[1] ends at 10 < 12 → i=2.",
+          "Result Intersections: [[1,2], [5,5], [8,10]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes exact overlapping time windows between two independent availability lists.",
+        "whenToUse": "Use when finding common available meeting times between two users' calendars.",
+        "whereUsed": "Calendar meeting schedulers (Google Meet find a time), signal frequency overlap detection.",
+        "whyOptimal": "Two-pointer approach computes intersections in linear time O(N + M) without nested loops."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def intervalIntersection(firstList: list[list[int]], secondList: list[list[int]]) -> list[list[int]]:\n    i = j = 0\n    res = []\n    while i < len(firstList) and j < len(secondList):\n        lo = max(firstList[i][0], secondList[j][0])\n        hi = min(firstList[i][1], secondList[j][1])\n        if lo <= hi:\n            res.append([lo, hi])\n        if firstList[i][1] < secondList[j][1]:\n            i += 1\n        else:\n            j += 1\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nvector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {\n    vector<vector<int>> res;\n    int i = 0, j = 0;\n    while (i < firstList.size() && j < secondList.size()) {\n        int lo = max(firstList[i][0], secondList[j][0]);\n        int hi = min(firstList[i][1], secondList[j][1]);\n        if (lo <= hi) res.push_back({lo, hi});\n        if (firstList[i][1] < secondList[j][1]) i++;\n        else j++;\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {\n        List<int[]> res = new ArrayList<>();\n        int i = 0, j = 0;\n        while (i < firstList.length && j < secondList.length) {\n            int lo = Math.max(firstList[i][0], secondList[j][0]);\n            int hi = Math.min(firstList[i][1], secondList[j][1]);\n            if (lo <= hi) res.add(new int[]{lo, hi});\n            if (firstList[i][1] < secondList[j][1]) i++;\n            else j++;\n        }\n        return res.toArray(new int[res.size()][]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function intervalIntersection(firstList, secondList) {\n  let i = 0, j = 0;\n  const res = [];\n  while (i < firstList.length && j < secondList.length) {\n    const lo = Math.max(firstList[i][0], secondList[j][0]);\n    const hi = Math.min(firstList[i][1], secondList[j][1]);\n    if (lo <= hi) res.push([lo, hi]);\n    if (firstList[i][1] < secondList[j][1]) i++;\n    else j++;\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 986 - Interval List Intersections",
+          "url": "https://leetcode.com/problems/interval-list-intersections/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-non-overlapping-intervals",
+      "title": "Non-overlapping Intervals (Erase Overlaps)",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(1) auxiliary space",
+      "summary": "Finds the minimum number of intervals to remove to make the remaining intervals non-overlapping using Greedy choice.",
+      "explanation": [
+        "1. Greedy Strategy: Sort intervals by end time `interval[1]` in ascending order.",
+        "2. Always keep the interval that finishes earliest. This leaves maximum room for future intervals.",
+        "3. Maintain `prevEnd = -inf`. For each interval `[start, end]`:",
+        "   - If `start >= prevEnd`, no overlap! Keep interval and update `prevEnd = end`.",
+        "   - Else, overlap detected! Remove this interval (increment `removeCount`)."
+      ],
+      "exampleTrace": {
+        "title": "Trace Non-overlapping Intervals on [[1,2], [2,3], [3,4], [1,3]]",
+        "traceSteps": [
+          "Sorted by end time: [[1,2], [2,3], [1,3], [3,4]].",
+          "Inspect [1,2]: 1 >= -inf → Keep [1,2]. prevEnd = 2.",
+          "Inspect [2,3]: 2 >= 2 → Keep [2,3]. prevEnd = 3.",
+          "Inspect [1,3]: 1 < 3 → Overlap! Increment removeCount = 1.",
+          "Inspect [3,4]: 3 >= 3 → Keep [3,4]. prevEnd = 4.",
+          "Result: Minimum intervals to remove = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines minimum deletions required to remove all conflicting time intervals.",
+        "whenToUse": "Use when scheduling maximum number of compatible jobs on a single machine.",
+        "whereUsed": "CPU single-core job schedulers, television show Recording planners.",
+        "whyOptimal": "Sorting by end time greedily minimizes future resource blockage."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def eraseOverlapIntervals(intervals: list[list[int]]) -> int:\n    if not intervals: return 0\n    intervals.sort(key=lambda x: x[1])\n    count = 0\n    prev_end = float('-inf')\n    for start, end in intervals:\n        if start >= prev_end:\n            prev_end = end\n        else:\n            count += 1\n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nint eraseOverlapIntervals(vector<vector<int>>& intervals) {\n    if (intervals.empty()) return 0;\n    sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) {\n        return a[1] < b[1];\n    });\n    int count = 0, prevEnd = intervals[0][1];\n    for (size_t i = 1; i < intervals.size(); i++) {\n        if (intervals[i][0] >= prevEnd) prevEnd = intervals[i][1];\n        else count++;\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int eraseOverlapIntervals(int[][] intervals) {\n        if (intervals.length == 0) return 0;\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));\n        int count = 0, prevEnd = intervals[0][1];\n        for (int i = 1; i < intervals.length; i++) {\n            if (intervals[i][0] >= prevEnd) prevEnd = intervals[i][1];\n            else count++;\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function eraseOverlapIntervals(intervals) {\n  if (intervals.length === 0) return 0;\n  intervals.sort((a, b) => a[1] - b[1]);\n  let count = 0, prevEnd = intervals[0][1];\n  for (let i = 1; i < intervals.length; i++) {\n    if (intervals[i][0] >= prevEnd) prevEnd = intervals[i][1];\n    else count++;\n  }\n  return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 435 - Non-overlapping Intervals",
+          "url": "https://leetcode.com/problems/non-overlapping-intervals/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-meeting-rooms-i",
+      "title": "Meeting Rooms I (Can Attend All Meetings)",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(1) auxiliary space",
+      "summary": "Determines if a single person can attend all scheduled meeting intervals without any overlap.",
+      "explanation": [
+        "1. Sort meeting intervals by their start time `interval[0]`.",
+        "2. Iterate through meetings from index 1 to N-1.",
+        "3. If current meeting starts before previous meeting ends (`curr[0] < prev[1]`), a schedule conflict occurs! Return `False`.",
+        "4. If no conflicts are found across all meetings, return `True`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Meeting Rooms I on [[0,30], [5,10], [15,20]]",
+        "traceSteps": [
+          "Sorted: [[0,30], [5,10], [15,20]].",
+          "Compare Meeting 1 [5,10] with Meeting 0 [0,30]: 5 < 30 (Conflict!).",
+          "Return False."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Validates single-user schedule feasibility without time collisions.",
+        "whenToUse": "Use when verifying if a single resource can accommodate all requested time slots.",
+        "whereUsed": "Doctor appointment checkers, room reservation validation.",
+        "whyOptimal": "Sorting by start time allows simple pairwise adjacent comparison in O(N) linear scan."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def canAttendMeetings(intervals: list[list[int]]) -> bool:\n    intervals.sort(key=lambda x: x[0])\n    for i in range(1, len(intervals)):\n        if intervals[i][0] < intervals[i-1][1]:\n            return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nbool canAttendMeetings(vector<vector<int>>& intervals) {\n    if (intervals.empty()) return true;\n    sort(intervals.begin(), intervals.end());\n    for (size_t i = 1; i < intervals.size(); i++) {\n        if (intervals[i][0] < intervals[i-1][1]) return false;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public boolean canAttendMeetings(int[][] intervals) {\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n        for (int i = 1; i < intervals.length; i++) {\n            if (intervals[i][0] < intervals[i-1][1]) return false;\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function canAttendMeetings(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  for (let i = 1; i < intervals.length; i++) {\n    if (intervals[i][0] < intervals[i - 1][1]) return false;\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 252 - Meeting Rooms",
+          "url": "https://leetcode.com/problems/meeting-rooms/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "interval-meeting-rooms-ii",
+      "title": "Meeting Rooms II (Min Conference Rooms)",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(N) for start/end time arrays or min-heap",
+      "summary": "Calculates the minimum number of conference rooms required to accommodate all meetings using Min-Heap or Two Pointers.",
+      "explanation": [
+        "1. Extract and sort `start` times and `end` times independently.",
+        "2. Maintain `startPtr` and `endPtr`.",
+        "3. If `start[startPtr] < end[endPtr]`, a meeting starts before the earliest ending meeting finishes → Room count +1!",
+        "4. Otherwise, a room freed up! Advance `endPtr`.",
+        "5. The peak rooms required simultaneously across the timeline is the answer."
+      ],
+      "exampleTrace": {
+        "title": "Trace Meeting Rooms II on [[0,30], [5,10], [15,20]]",
+        "traceSteps": [
+          "Starts: [0, 5, 15]. Ends: [10, 20, 30].",
+          "start=0 < end=10 → rooms=1. startPtr=1.",
+          "start=5 < end=10 → rooms=2. startPtr=2.",
+          "start=15 >= end=10 → endPtr=1.",
+          "start=15 < end=20 → rooms=2. startPtr=3.",
+          "Peak rooms required: 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes peak concurrency / minimum physical rooms required to hold overlapping events.",
+        "whenToUse": "Use when determining maximum overlapping intervals at any given moment.",
+        "whereUsed": "Conference center room manager, server instance autoscalers.",
+        "whyOptimal": "Separate sorting of start and end times yields optimal O(N log N) sweep computation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minMeetingRooms(intervals: list[list[int]]) -> int:\n    starts = sorted([i[0] for i in intervals])\n    ends = sorted([i[1] for i in intervals])\n    rooms = end_ptr = 0\n    for start in starts:\n        if start < ends[end_ptr]:\n            rooms += 1\n        else:\n            end_ptr += 1\n    return rooms"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nint minMeetingRooms(vector<vector<int>>& intervals) {\n    vector<int> starts, ends;\n    for (auto& i : intervals) {\n        starts.push_back(i[0]);\n        ends.push_back(i[1]);\n    }\n    sort(starts.begin(), starts.end());\n    sort(ends.begin(), ends.end());\n    int rooms = 0, endPtr = 0;\n    for (int start : starts) {\n        if (start < ends[endPtr]) rooms++;\n        else endPtr++;\n    }\n    return rooms;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int minMeetingRooms(int[][] intervals) {\n        int[] starts = new int[intervals.length];\n        int[] ends = new int[intervals.length];\n        for (int i = 0; i < intervals.length; i++) {\n            starts[i] = intervals[i][0];\n            ends[i] = intervals[i][1];\n        }\n        Arrays.sort(starts);\n        Arrays.sort(ends);\n        int rooms = 0, endPtr = 0;\n        for (int start : starts) {\n            if (start < ends[endPtr]) rooms++;\n            else endPtr++;\n        }\n        return rooms;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minMeetingRooms(intervals) {\n  const starts = intervals.map(i => i[0]).sort((a, b) => a - b);\n  const ends = intervals.map(i => i[1]).sort((a, b) => a - b);\n  let rooms = 0, endPtr = 0;\n  for (const start of starts) {\n    if (start < ends[endPtr]) rooms++;\n    else endPtr++;\n  }\n  return rooms;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 253 - Meeting Rooms II",
+          "url": "https://leetcode.com/problems/meeting-rooms-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-minimum-platforms",
+      "title": "Minimum Railway Platforms Required",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) for sorting",
+      "spaceComplexity": "O(N) for sorting arrays",
+      "summary": "Calculates the minimum number of railway platforms required for a station to avoid train collisions.",
+      "explanation": [
+        "1. Extract arrival times `arr` and departure times `dep` into separate arrays.",
+        "2. Sort both `arr` and `dep` in ascending order.",
+        "3. Use Two Pointers `i` (arrival) and `j` (departure). Maintain `count` of currently occupied platforms and `maxPlatforms`.",
+        "4. If `arr[i] <= dep[j]`, train arrives before previous train leaves → increment `count` and `i`.",
+        "5. Else, train departs → decrement `count` and increment `j`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Platforms for Arrivals=[900, 940, 950], Departures=[910, 1200, 1120]",
+        "traceSteps": [
+          "Sorted Arrivals: [900, 940, 950]. Sorted Departures: [910, 1120, 1200].",
+          "arr=900 <= dep=910 → count=1. max=1.",
+          "arr=940 > dep=910 → Train 1 left! count=0, depPtr=1.",
+          "arr=940 <= dep=1120 → count=1. max=1.",
+          "arr=950 <= dep=1120 → count=2. max=2.",
+          "Result: Minimum platforms needed = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines maximum simultaneous train occupancy at a transit station.",
+        "whenToUse": "Use when determining capacity requirements for concurrent arrival/departure events.",
+        "whereUsed": "Railway dispatch systems, airport gate scheduling, bus terminal management.",
+        "whyOptimal": "Separate array sorting enables two-pointer linear sweep in O(N log N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findPlatform(arr: list[int], dep: list[int]) -> int:\n    arr.sort()\n    dep.sort()\n    i = j = 0\n    count = max_platforms = 0\n    n = len(arr)\n    while i < n and j < n:\n        if arr[i] <= dep[j]:\n            count += 1\n            max_platforms = max(max_platforms, count)\n            i += 1\n        else:\n            count -= 1\n            j += 1\n    return max_platforms"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nint findPlatform(vector<int>& arr, vector<int>& dep) {\n    sort(arr.begin(), arr.end());\n    sort(dep.begin(), dep.end());\n    int i = 0, j = 0, count = 0, maxPlatforms = 0, n = arr.size();\n    while (i < n && j < n) {\n        if (arr[i] <= dep[j]) {\n            count++;\n            maxPlatforms = max(maxPlatforms, count);\n            i++;\n        } else {\n            count--;\n            j++;\n        }\n    }\n    return maxPlatforms;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public int findPlatform(int[] arr, int[] dep) {\n        Arrays.sort(arr);\n        Arrays.sort(dep);\n        int i = 0, j = 0, count = 0, maxPlatforms = 0, n = arr.length;\n        while (i < n && j < n) {\n            if (arr[i] <= dep[j]) {\n                count++;\n                maxPlatforms = Math.max(maxPlatforms, count);\n                i++;\n            } else {\n                count--;\n                j++;\n            }\n        }\n        return maxPlatforms;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findPlatform(arr, dep) {\n  arr.sort((a, b) => a - b);\n  dep.sort((a, b) => a - b);\n  let i = 0, j = 0, count = 0, maxPlatforms = 0, n = arr.length;\n  while (i < n && j < n) {\n    if (arr[i] <= dep[j]) {\n      count++;\n      maxPlatforms = Math.max(maxPlatforms, count);\n      i++;\n    } else {\n      count--;\n      j++;\n    }\n  }\n  return maxPlatforms;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksForGeeks - Minimum Platforms",
+          "url": "https://www.geeksforgeeks.org/problems/minimum-platforms-1587115620/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "interval-sweep-line-pattern",
+      "title": "Sweep Line Algorithm (Events & Skyline Pattern)",
+      "categoryId": "intervals",
+      "categoryTitle": "Intervals & Sweep Line",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N) for event sorting and Priority Queue",
+      "spaceComplexity": "O(N)",
+      "summary": "Transforms interval start/end boundaries into discrete events and sweeps across the timeline to maintain dynamic active state.",
+      "explanation": [
+        "1. Event Transformation: Convert each interval `[start, end, val]` into two point events: Start Event `(start, +val)` and End Event `(end, -val)`.",
+        "2. Event Sorting: Sort all events by timestamp. Tie-breaking: process start events before end events if boundaries coincide.",
+        "3. Sweep Line Execution: Iterate through sorted events. Maintain running active capacity / height using a Hash Map or Max-PriorityQueue.",
+        "4. Record skyline key points, peak capacity, or overlap thresholds as sweep line moves forward."
+      ],
+      "exampleTrace": {
+        "title": "Trace Sweep Line Car Pooling on Trips=[[2,1,5], [3,3,7]], Capacity=4",
+        "traceSteps": [
+          "Events: (1, +2), (5, -2), (3, +3), (7, -3).",
+          "Sorted Events by time: (1, +2), (3, +3), (5, -2), (7, -3).",
+          "Time 1: Passengers = 2 (≤ 4).",
+          "Time 3: Passengers = 2 + 3 = 5 > 4 (Capacity Exceeded!).",
+          "Result: Return False."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes dynamic continuous timeline states over geometric and temporal interval events.",
+        "whenToUse": "Use for Skyline problem, Car Pooling capacity, My Calendar III, and 2D rectangle intersections.",
+        "whereUsed": "GIS spatial layout engines, building skyline renderers, dynamic ride-sharing capacity checks.",
+        "whyOptimal": "Converting 2D/range operations into 1D sorted event sweeps reduces complexity to O(N log N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def carPooling(trips: list[list[int]], capacity: int) -> bool:\n    events = []\n    for num, start, end in trips:\n        events.append((start, num))\n        events.append((end, -num))\n    events.sort(key=lambda x: (x[0], x[1]))\n    curr = 0\n    for time, num in events:\n        curr += num\n        if curr > capacity:\n            return False\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\nbool carPooling(vector<vector<int>>& trips, int capacity) {\n    vector<pair<int, int>> events;\n    for (auto& t : trips) {\n        events.push_back({t[1], t[0]});\n        events.push_back({t[2], -t[0]});\n    }\n    sort(events.begin(), events.end());\n    int curr = 0;\n    for (auto& e : events) {\n        curr += e.second;\n        if (curr > capacity) return false;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\npublic class Solution {\n    public boolean carPooling(int[][] trips, int capacity) {\n        List<int[]> events = new ArrayList<>();\n        for (int[] t : trips) {\n            events.add(new int[]{t[1], t[0]});\n            events.add(new int[]{t[2], -t[0]});\n        }\n        events.sort((a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(a[1], b[1]));\n        int curr = 0;\n        for (int[] e : events) {\n            curr += e[1];\n            if (curr > capacity) return false;\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function carPooling(trips, capacity) {\n  const events = [];\n  for (const [num, start, end] of trips) {\n    events.push([start, num]);\n    events.push([end, -num]);\n  }\n  events.sort((a, b) => a[0] !== b[0] ? a[0] - b[0] : a[1] - b[1]);\n  let curr = 0;\n  for (const [time, num] of events) {\n    curr += num;\n    if (curr > capacity) return false;\n  }\n  return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1094 - Car Pooling",
+          "url": "https://leetcode.com/problems/car-pooling/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 218 - The Skyline Problem",
+          "url": "https://leetcode.com/problems/the-skyline-problem/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

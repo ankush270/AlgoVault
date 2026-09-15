@@ -1,0 +1,1423 @@
+{
+  "id": "stack_queue",
+  "category": {
+    "id": "stack_queue",
+    "title": "Stack & Queue Data Structures",
+    "icon": "Layers",
+    "description": "Monotonic stack, expression parsing, queue variants, and priority queues."
+  },
+  "totalAlgorithms": 24,
+  "algorithms": [
+    {
+      "id": "stack-next-greater-element",
+      "title": "Next Greater Element I & II (NGE)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find the first element to the right that is strictly greater than the current element (Linear & Circular Array).",
+      "explanation": [
+        "Monotonic Decreasing Stack Strategy: Maintain a stack storing element values/indices in strictly decreasing order.",
+        "Algorithm for Linear Array: Traverse array right-to-left (or left-to-right).",
+        "1) While stack is not empty and `stack.top() <= curr_val`: Pop element from stack.",
+        "2) If stack is empty: NGE is `-1`. Else: NGE is `stack.top()`.",
+        "3) Push `curr_val` onto stack.",
+        "Circular Array Variant (NGE II): Simulate 2N iterations using index `i % N` so elements can wrap around to find next greater."
+      ],
+      "exampleTrace": {
+        "input": "Array = [4, 5, 2, 10, 8]",
+        "output": "Next Greater Elements = [5, 10, 10, -1, -1]",
+        "traceSteps": [
+          "Step 1: Traverse right-to-left starting at 8. Stack = []. NGE[8] = -1. Push 8. Stack=[8].",
+          "Step 2: Element 10. Pop 8 (10 >= 8). Stack empty. NGE[10] = -1. Push 10. Stack=[10].",
+          "Step 3: Element 2. Stack top (10) > 2. NGE[2] = 10. Push 2. Stack=[10, 2].",
+          "Step 4: Element 5. Pop 2 (5 >= 2). Stack top (10) > 5. NGE[5] = 10. Push 5. Stack=[10, 5].",
+          "Step 5: Element 4. Stack top (5) > 4. NGE[4] = 5. Push 4. Stack=[10, 5, 4].",
+          "Step 6: Output = [5, 10, 10, -1, -1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds nearest greater element to the right in linear O(N) single pass.",
+        "whenToUse": "When finding next larger value or nearest right-side peak boundary.",
+        "whereUsed": "Stock span calculation, temperature rise forecasting, histogram bounds.",
+        "whyOptimal": "Each element is pushed and popped at most once, yielding O(N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nextGreaterElements(nums: list[int]) -> list[int]:\n    n = len(nums)\n    res = [-1] * n\n    stack = []\n    for i in range(2 * n - 1, -1, -1):\n        while stack and stack[-1] <= nums[i % n]:\n            stack.pop()\n        if i < n:\n            res[i] = stack[-1] if stack else -1\n        stack.append(nums[i % n])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> nextGreaterElements(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> res(n, -1);\n    stack<int> st;\n    for (int i = 2 * n - 1; i >= 0; i--) {\n        while (!st.empty() && st.top() <= nums[i % n]) st.pop();\n        if (i < n) res[i] = st.empty() ? -1 : st.top();\n        st.push(nums[i % n]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] nextGreaterElements(int[] nums) {\n        int n = nums.length;\n        int[] res = new int[n];\n        Stack<Integer> stack = new Stack<>();\n        for (int i = 2 * n - 1; i >= 0; i--) {\n            while (!stack.isEmpty() && stack.peek() <= nums[i % n]) stack.pop();\n            if (i < n) res[i] = stack.isEmpty() ? -1 : stack.peek();\n            stack.push(nums[i % n]);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function nextGreaterElements(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(-1);\n  const stack = [];\n  for (let i = 2 * n - 1; i >= 0; i--) {\n    while (stack.length > 0 && stack[stack.length - 1] <= nums[i % n]) {\n      stack.pop();\n    }\n    if (i < n) res[i] = stack.length > 0 ? stack[stack.length - 1] : -1;\n    stack.push(nums[i % n]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 496 - Next Greater Element I",
+          "url": "https://leetcode.com/problems/next-greater-element-i/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 503 - Next Greater Element II",
+          "url": "https://leetcode.com/problems/next-greater-element-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-next-smaller-element",
+      "title": "Next Smaller Element (NSE)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find the first element to the right that is strictly smaller than the current element.",
+      "explanation": [
+        "Monotonic Increasing Stack Strategy: Maintain a stack storing elements in strictly increasing order.",
+        "Traverse array right-to-left:",
+        "1) While stack is not empty and `stack.top() >= curr_val`: Pop element from stack.",
+        "2) If stack is empty: NSE is `-1`. Else: NSE is `stack.top()`.",
+        "3) Push `curr_val` onto stack."
+      ],
+      "exampleTrace": {
+        "input": "Array = [4, 8, 5, 2, 25]",
+        "output": "Next Smaller Elements = [2, 5, 2, -1, -1]",
+        "traceSteps": [
+          "Step 1: i=4 (val 25): Stack=[]. NSE = -1. Push 25.",
+          "Step 2: i=3 (val 2): Pop 25 (25 >= 2). Stack empty. NSE = -1. Push 2.",
+          "Step 3: i=2 (val 5): Stack top 2 < 5. NSE = 2. Push 5.",
+          "Step 4: i=1 (val 8): Stack top 5 < 8. NSE = 5. Push 8.",
+          "Step 5: i=0 (val 4): Pop 8 and 5 (>= 4). Stack top 2 < 4. NSE = 2.",
+          "Step 6: Output = [2, 5, 2, -1, -1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds nearest smaller element to the right in O(N) time.",
+        "whenToUse": "When determining right boundary for histogram rectangles.",
+        "whereUsed": "Histogram area computation, minimum range boundaries.",
+        "whyOptimal": "O(N) linear time Monotonic Stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nextSmallerElement(nums: list[int]) -> list[int]:\n    n = len(nums)\n    res = [-1] * n\n    stack = []\n    for i in range(n - 1, -1, -1):\n        while stack and stack[-1] >= nums[i]:\n            stack.pop()\n        res[i] = stack[-1] if stack else -1\n        stack.append(nums[i])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> nextSmallerElement(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> res(n, -1);\n    stack<int> st;\n    for (int i = n - 1; i >= 0; i--) {\n        while (!st.empty() && st.top() >= nums[i]) st.pop();\n        res[i] = st.empty() ? -1 : st.top();\n        st.push(nums[i]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] nextSmallerElement(int[] nums) {\n        int n = nums.length;\n        int[] res = new int[n];\n        Stack<Integer> stack = new Stack<>();\n        for (int i = n - 1; i >= 0; i--) {\n            while (!stack.isEmpty() && stack.peek() >= nums[i]) stack.pop();\n            res[i] = stack.isEmpty() ? -1 : stack.peek();\n            stack.push(nums[i]);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function nextSmallerElement(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(-1);\n  const stack = [];\n  for (let i = n - 1; i >= 0; i--) {\n    while (stack.length > 0 && stack[stack.length - 1] >= nums[i]) {\n      stack.pop();\n    }\n    res[i] = stack.length > 0 ? stack[stack.length - 1] : -1;\n    stack.push(nums[i]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Next Smaller Element",
+          "url": "https://www.geeksforgeeks.org/problems/next-smaller-element/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-previous-smaller-element",
+      "title": "Previous Smaller Element (PSE)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find the first element to the left that is strictly smaller than the current element.",
+      "explanation": [
+        "Monotonic Increasing Stack (Left-to-Right Pass):",
+        "Traverse array left-to-right:",
+        "1) While stack is not empty and `stack.top() >= curr_val`: Pop element from stack.",
+        "2) If stack is empty: PSE is `-1`. Else: PSE is `stack.top()`.",
+        "3) Push `curr_val` onto stack."
+      ],
+      "exampleTrace": {
+        "input": "Array = [4, 5, 2, 10, 8]",
+        "output": "Previous Smaller Elements = [-1, 4, -1, 2, 2]",
+        "traceSteps": [
+          "Step 1: i=0 (val 4): Stack=[]. PSE = -1. Push 4.",
+          "Step 2: i=1 (val 5): Stack top 4 < 5. PSE = 4. Push 5.",
+          "Step 3: i=2 (val 2): Pop 5 and 4 (>= 2). Stack empty. PSE = -1. Push 2.",
+          "Step 4: i=3 (val 10): Stack top 2 < 10. PSE = 2. Push 10.",
+          "Step 5: i=4 (val 8): Pop 10 (>= 8). Stack top 2 < 8. PSE = 2. Push 8.",
+          "Step 6: Output = [-1, 4, -1, 2, 2]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds nearest smaller element to the left in O(N) single pass.",
+        "whenToUse": "When determining left boundary for histogram bar expansion.",
+        "whereUsed": "Largest Rectangle in Histogram, stock span calculation.",
+        "whyOptimal": "O(N) linear time Monotonic Stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def previousSmallerElement(nums: list[int]) -> list[int]:\n    n = len(nums)\n    res = [-1] * n\n    stack = []\n    for i in range(n):\n        while stack and stack[-1] >= nums[i]:\n            stack.pop()\n        res[i] = stack[-1] if stack else -1\n        stack.append(nums[i])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> previousSmallerElement(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> res(n, -1);\n    stack<int> st;\n    for (int i = 0; i < n; i++) {\n        while (!st.empty() && st.top() >= nums[i]) st.pop();\n        res[i] = st.empty() ? -1 : st.top();\n        st.push(nums[i]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] previousSmallerElement(int[] nums) {\n        int n = nums.length;\n        int[] res = new int[n];\n        Stack<Integer> stack = new Stack<>();\n        for (int i = 0; i < n; i++) {\n            while (!stack.isEmpty() && stack.peek() >= nums[i]) stack.pop();\n            res[i] = stack.isEmpty() ? -1 : stack.peek();\n            stack.push(nums[i]);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function previousSmallerElement(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(-1);\n  const stack = [];\n  for (let i = 0; i < n; i++) {\n    while (stack.length > 0 && stack[stack.length - 1] >= nums[i]) {\n      stack.pop();\n    }\n    res[i] = stack.length > 0 ? stack[stack.length - 1] : -1;\n    stack.push(nums[i]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Smallest number on left",
+          "url": "https://www.geeksforgeeks.org/problems/smallest-number-on-left1555/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-largest-rectangle-histogram",
+      "title": "Largest Rectangle in Histogram",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find area of largest rectangle that can be formed within a histogram of bar heights using Monotonic Stack boundaries.",
+      "explanation": [
+        "Histogram Boundary Formula: For each bar at index `i` with height `h = heights[i]`, the max rectangular width it can span is `width = right_bound - left_bound - 1`.",
+        "`left_bound` = index of Previous Smaller Element (PSE).",
+        "`right_bound` = index of Next Smaller Element (NSE).",
+        "Single-Pass Stack Approach: Maintain monotonic increasing stack of indices. When popping element `tp` because `heights[i] < heights[tp]`, `heights[tp]` is the bar height, `i` is right_bound, and `stack.top()` is left_bound!"
+      ],
+      "exampleTrace": {
+        "input": "Heights = [2, 1, 5, 6, 2, 3]",
+        "output": "Largest Rectangular Area = 10 (Heights [5, 6] of width 2)",
+        "traceSteps": [
+          "Step 1: i=0 (h=2): Push 0. Stack=[0].",
+          "Step 2: i=1 (h=1 < 2): Pop 0. height=2, width=1 (1 - 0). Area = 2. Push 1. Stack=[1].",
+          "Step 3: i=2 (h=5), i=3 (h=6): Push 2, 3. Stack=[1, 2, 3].",
+          "Step 4: i=4 (h=2 < 6): Pop 3 (h=6, width = 4 - 2 - 1 = 1 -> Area = 6).",
+          "Step 5: Pop 2 (h=5, width = 4 - 1 - 1 = 2 -> Area = 10!). Push 4.",
+          "Step 6: Max Area = 10."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximal contiguous rectangular area under non-uniform bar heights.",
+        "whenToUse": "When finding maximum contiguous bounding rectangle in 1D/2D bar charts.",
+        "whereUsed": "Maximum 2D matrix rectangle search, image bounding box algorithms.",
+        "whyOptimal": "Single pass O(N) time using Monotonic Stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def largestRectangleArea(heights: list[int]) -> int:\n    stack = [] # Stores indices\n    max_area = 0\n    heights.append(0) # Sentinel\n    for i, h in enumerate(heights):\n        while stack and heights[stack[-1]] > h:\n            height = heights[stack.pop()]\n            width = i if not stack else (i - stack[-1] - 1)\n            max_area = max(max_area, height * width)\n        stack.append(i)\n    heights.pop()\n    return max_area"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\n#include <algorithm>\nusing namespace std;\n\nint largestRectangleArea(vector<int>& heights) {\n    heights.push_back(0);\n    stack<int> st;\n    int maxArea = 0;\n    for (int i = 0; i < heights.size(); i++) {\n        while (!st.empty() && heights[st.top()] > heights[i]) {\n            int height = heights[st.top()]; st.pop();\n            int width = st.empty() ? i : (i - st.top() - 1);\n            maxArea = max(maxArea, height * width);\n        }\n        st.push(i);\n    }\n    heights.pop_back();\n    return maxArea;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int largestRectangleArea(int[] heights) {\n        int n = heights.length;\n        Stack<Integer> stack = new Stack<>();\n        int maxArea = 0;\n        for (int i = 0; i <= n; i++) {\n            int h = (i == n) ? 0 : heights[i];\n            while (!stack.isEmpty() && heights[stack.peek()] > h) {\n                int height = heights[stack.pop()];\n                int width = stack.isEmpty() ? i : (i - stack.peek() - 1);\n                maxArea = Math.max(maxArea, height * width);\n            }\n            stack.push(i);\n        }\n        return maxArea;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function largestRectangleArea(heights) {\n  const stack = [];\n  let maxArea = 0;\n  heights.push(0);\n  for (let i = 0; i < heights.length; i++) {\n    while (stack.length > 0 && heights[stack[stack.length - 1]] > heights[i]) {\n      const height = heights[stack.pop()];\n      const width = stack.length === 0 ? i : (i - stack[stack.length - 1] - 1);\n      maxArea = Math.max(maxArea, height * width);\n    }\n    stack.push(i);\n  }\n  heights.pop();\n  return maxArea;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 84 - Largest Rectangle in Histogram",
+          "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "queue-sliding-window-maximum",
+      "title": "Sliding Window Maximum (Monotonic Deque)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(K)",
+      "summary": "Find the maximum element in every sliding window of size K as it moves from left to right across array.",
+      "explanation": [
+        "Monotonic Decreasing Deque Strategy: Maintain a Double-Ended Queue (Deque) storing array indices such that corresponding values `nums[idx]` are in strictly decreasing order.",
+        "Algorithm for each index `i`:",
+        "1) Out of Window Eviction: If `deque.front() <= i - K`, pop front of deque.",
+        "2) Monotonic Maintenance: While deque is not empty and `nums[deque.back()] <= nums[i]`, pop back of deque.",
+        "3) Push `i` to back of deque.",
+        "4) When `i >= K - 1`, record window maximum `nums[deque.front()]`."
+      ],
+      "exampleTrace": {
+        "input": "Nums = [1, 3, -1, -3, 5, 3, 6, 7], K = 3",
+        "output": "Sliding Window Maxima = [3, 3, 5, 5, 6, 7]",
+        "traceSteps": [
+          "Step 1: i=0 (val 1): Deque = [0].",
+          "Step 2: i=1 (val 3): Pop 0 (1 <= 3). Deque = [1].",
+          "Step 3: i=2 (val -1): Deque = [1, 2]. Window 1 result: nums[1] = 3.",
+          "Step 4: i=3 (val -3): Deque = [1, 2, 3]. Window 2 result: nums[1] = 3.",
+          "Step 5: i=4 (val 5): Pop out of window 1. Pop 2, 3 (<= 5). Deque = [4]. Window 3 result: nums[4] = 5.",
+          "Step 6: Continue for all windows -> Output = [3, 3, 5, 5, 6, 7]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes rolling maximum in sliding window of size K in O(N) total time.",
+        "whenToUse": "When finding maximum or minimum in fixed sliding time windows.",
+        "whereUsed": "Real-time stock price peak monitor, network packet latency max burst filter.",
+        "whyOptimal": "Deque elements are pushed/popped at most once, reducing O(N*K) naive loop to O(N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef maxSlidingWindow(nums: list[int], k: int) -> list[int]:\n    q = deque() # Stores indices\n    res = []\n    for i, x in enumerate(nums):\n        if q and q[0] <= i - k:\n            q.popleft() # Evict out of window\n        while q and nums[q[-1]] <= x:\n            q.pop() # Maintain monotonic decreasing order\n        q.append(i)\n        if i >= k - 1:\n            res.append(nums[q[0]])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <deque>\nusing namespace std;\n\nvector<int> maxSlidingWindow(vector<int>& nums, int k) {\n    deque<int> dq;\n    vector<int> res;\n    for (int i = 0; i < nums.size(); i++) {\n        if (!dq.empty() && dq.front() <= i - k) dq.pop_front();\n        while (!dq.empty() && nums[dq.back()] <= nums[i]) dq.pop_back();\n        dq.push_back(i);\n        if (i >= k - 1) res.push_back(nums[dq.front()]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] maxSlidingWindow(int[] nums, int k) {\n        Deque<Integer> dq = new ArrayDeque<>();\n        int[] res = new int[nums.length - k + 1];\n        int idx = 0;\n        for (int i = 0; i < nums.length; i++) {\n            if (!dq.isEmpty() && dq.peekFirst() <= i - k) dq.pollFirst();\n            while (!dq.isEmpty() && nums[dq.peekLast()] <= nums[i]) dq.pollLast();\n            dq.offerLast(i);\n            if (i >= k - 1) res[idx++] = nums[dq.peekFirst()];\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxSlidingWindow(nums, k) {\n  const q = [];\n  const res = [];\n  for (let i = 0; i < nums.length; i++) {\n    if (q.length > 0 && q[0] <= i - k) q.shift();\n    while (q.length > 0 && nums[q[q.length - 1]] <= nums[i]) q.pop();\n    q.push(i);\n    if (i >= k - 1) res.push(nums[q[0]]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 239 - Sliding Window Maximum",
+          "url": "https://leetcode.com/problems/sliding-window-maximum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "priority-queue-heap-implementation",
+      "title": "Min-Heap & Max-Heap Implementation & Heapify",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) build, O(log N) insert/pop",
+      "spaceComplexity": "O(N)",
+      "summary": "Master Priority Queue Min-Heap and Max-Heap binary tree array implementations with O(N) heapify and O(log N) shiftUp/shiftDown operations.",
+      "explanation": [
+        "Complete Binary Tree Array Mapping: For node at index `i`, parent is `(i - 1) // 2`, left child is `2*i + 1`, right child is `2*i + 2`.",
+        "Min-Heap Invariant: `heap[parent] <= heap[child]`.",
+        "`shiftUp(i)`: Swap element at index `i` with its parent while `heap[i] < heap[parent]`.",
+        "`shiftDown(i)`: Swap element at index `i` with its smallest child while `heap[i] > min(children)`.",
+        "O(N) Heapify: Build heap from array bottom-up starting from first non-leaf node `(N//2 - 1)` down to 0."
+      ],
+      "exampleTrace": {
+        "input": "Insert elements [5, 3, 8, 1, 2] into Min-Heap",
+        "output": "Heap Array = [1, 2, 8, 5, 3], Min Peek = 1",
+        "traceSteps": [
+          "Step 1: Insert 5 -> Heap=[5].",
+          "Step 2: Insert 3 -> shiftUp(1) swaps 3 and 5 -> Heap=[3, 5].",
+          "Step 3: Insert 8 -> Heap=[3, 5, 8].",
+          "Step 4: Insert 1 -> shiftUp(3) swaps 1 & 5, then 1 & 3 -> Heap=[1, 3, 8, 5].",
+          "Step 5: Insert 2 -> shiftUp(4) swaps 2 & 3 -> Heap=[1, 2, 8, 5, 3].",
+          "Step 6: Root element is min = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains dynamically updated minimum/maximum priority element in logarithmic time.",
+        "whenToUse": "When repeatedly fetching highest/lowest priority item from streaming data.",
+        "whereUsed": "Dijkstra shortest path algorithm, OS process scheduler, Huffman coding tree.",
+        "whyOptimal": "O(1) minimum retrieval with O(log N) insertion/deletion."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MinHeap:\n    def __init__(self):\n        self.heap = []\n    def push(self, val):\n        self.heap.append(val)\n        self._shift_up(len(self.heap) - 1)\n    def pop(self):\n        if not self.heap: return None\n        if len(self.heap) == 1: return self.heap.pop()\n        min_val = self.heap[0]\n        self.heap[0] = self.heap.pop()\n        self._shift_down(0)\n        return min_val\n    def _shift_up(self, i):\n        parent = (i - 1) // 2\n        if i > 0 and self.heap[i] < self.heap[parent]:\n            self.heap[i], self.heap[parent] = self.heap[parent], self.heap[i]\n            self._shift_up(parent)\n    def _shift_down(self, i):\n        left, right, smallest = 2*i + 1, 2*i + 2, i\n        if left < len(self.heap) and self.heap[left] < self.heap[smallest]: smallest = left\n        if right < len(self.heap) and self.heap[right] < self.heap[smallest]: smallest = right\n        if smallest != i:\n            self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]\n            self._shift_down(smallest)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass MinHeap {\n    vector<int> heap;\n    void shiftUp(int i) {\n        int parent = (i - 1) / 2;\n        if (i > 0 && heap[i] < heap[parent]) {\n            swap(heap[i], heap[parent]);\n            shiftUp(parent);\n        }\n    }\n    void shiftDown(int i) {\n        int left = 2 * i + 1, right = 2 * i + 2, smallest = i;\n        if (left < heap.size() && heap[left] < heap[smallest]) smallest = left;\n        if (right < heap.size() && heap[right] < heap[smallest]) smallest = right;\n        if (smallest != i) {\n            swap(heap[i], heap[smallest]);\n            shiftDown(smallest);\n        }\n    }\npublic:\n    void push(int val) {\n        heap.push_back(val);\n        shiftUp(heap.size() - 1);\n    }\n    int pop() {\n        int minVal = heap[0];\n        heap[0] = heap.back(); heap.pop_back();\n        if (!heap.empty()) shiftDown(0);\n        return minVal;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MinHeap {\n    private List<Integer> heap = new ArrayList<>();\n    public void push(int val) {\n        heap.add(val);\n        shiftUp(heap.size() - 1);\n    }\n    public int pop() {\n        int minVal = heap.get(0);\n        heap.set(0, heap.get(heap.size() - 1));\n        heap.remove(heap.size() - 1);\n        if (!heap.isEmpty()) shiftDown(0);\n        return minVal;\n    }\n    private void shiftUp(int i) {\n        int parent = (i - 1) / 2;\n        if (i > 0 && heap.get(i) < heap.get(parent)) {\n            int temp = heap.get(i); heap.set(i, heap.get(parent)); heap.set(parent, temp);\n            shiftUp(parent);\n        }\n    }\n    private void shiftDown(int i) {\n        int left = 2 * i + 1, right = 2 * i + 2, smallest = i;\n        if (left < heap.size() && heap.get(left) < heap.get(smallest)) smallest = left;\n        if (right < heap.size() && heap.get(right) < heap.get(smallest)) smallest = right;\n        if (smallest != i) {\n            int temp = heap.get(i); heap.set(i, heap.get(smallest)); heap.set(smallest, temp);\n            shiftDown(smallest);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MinHeap {\n  constructor() {\n    this.heap = [];\n  }\n  push(val) {\n    this.heap.push(val);\n    this._shiftUp(this.heap.length - 1);\n  }\n  pop() {\n    if (this.heap.length === 0) return null;\n    if (this.heap.length === 1) return this.heap.pop();\n    const minVal = this.heap[0];\n    this.heap[0] = this.heap.pop();\n    this._shiftDown(0);\n    return minVal;\n  }\n  _shiftUp(i) {\n    const parent = Math.floor((i - 1) / 2);\n    if (i > 0 && this.heap[i] < this.heap[parent]) {\n      [this.heap[i], this.heap[parent]] = [this.heap[parent], this.heap[i]];\n      this._shiftUp(parent);\n    }\n  }\n  _shiftDown(i) {\n    let left = 2 * i + 1, right = 2 * i + 2, smallest = i;\n    if (left < this.heap.length && this.heap[left] < this.heap[smallest]) smallest = left;\n    if (right < this.heap.length && this.heap[right] < this.heap[smallest]) smallest = right;\n    if (smallest !== i) {\n      [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];\n      this._shiftDown(smallest);\n    }\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 215 - Kth Largest Element in an Array",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "priority-queue-find-median-stream",
+      "title": "Find Median from Data Stream (Two Heaps Pattern)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) insert, O(1) median",
+      "spaceComplexity": "O(N)",
+      "summary": "Continuously compute the median of a streaming sequence of numbers using a Max-Heap for lower half and Min-Heap for upper half.",
+      "explanation": [
+        "Two Heaps Architecture:",
+        "1) `max_heap` (Lower Half): Stores smaller half of numbers, root is maximum of lower half.",
+        "2) `min_heap` (Upper Half): Stores larger half of numbers, root is minimum of upper half.",
+        "Invariants: `max_heap.size()` is either equal to or 1 greater than `min_heap.size()`, and every element in `max_heap` is $\\le$ every element in `min_heap`.",
+        "Finding Median: If `len(max_heap) > len(min_heap)`, median is `max_heap.top()`. Else, median is `(max_heap.top() + min_heap.top()) / 2.0`."
+      ],
+      "exampleTrace": {
+        "input": "Stream numbers: [1, 2, 3]",
+        "output": "Medians: after 1 -> 1.0, after 2 -> 1.5, after 3 -> 2.0",
+        "traceSteps": [
+          "Step 1: Add 1 -> max_heap=[1], min_heap=[]. Median = 1.0.",
+          "Step 2: Add 2 -> max_heap=[1], min_heap=[2]. Median = (1 + 2)/2 = 1.5.",
+          "Step 3: Add 3 -> max_heap=[2, 1], min_heap=[3]. Median = max_heap.top() = 2.0.",
+          "Step 4: All stream medians computed in O(1) time per query."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes continuous median of an unbounded incoming data stream in real-time.",
+        "whenToUse": "When finding running median of dynamic streaming data.",
+        "whereUsed": "Real-time latency median monitoring, financial tick stream median price calculation.",
+        "whyOptimal": "Two Heaps maintain equal halves in O(log N) insert time with O(1) median query."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.small = [] # Max-heap (store negative values)\n        self.large = [] # Min-heap\n        \n    def addNum(self, num: int) -> None:\n        heapq.heappush(self.small, -num)\n        # Ensure max of small <= min of large\n        if self.small and self.large and (-self.small[0]) > self.large[0]:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        # Balance sizes\n        if len(self.small) > len(self.large) + 1:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        elif len(self.large) > len(self.small):\n            val = heapq.heappop(self.large)\n            heapq.heappush(self.small, -val)\n            \n    def findMedian(self) -> float:\n        if len(self.small) > len(self.large):\n            return float(-self.small[0])\n        return (-self.small[0] + self.large[0]) / 2.0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <queue>\nusing namespace std;\n\nclass MedianFinder {\n    priority_queue<int> small; // Max-heap\n    priority_queue<int, vector<int>, greater<int>> large; // Min-heap\npublic:\n    void addNum(int num) {\n        small.push(num);\n        if (!small.empty() && !large.empty() && small.top() > large.top()) {\n            large.push(small.top()); small.pop();\n        }\n        if (small.size() > large.size() + 1) {\n            large.push(small.top()); small.pop();\n        } else if (large.size() > small.size()) {\n            small.push(large.top()); large.pop();\n        }\n    }\n    double findMedian() {\n        if (small.size() > large.size()) return small.top();\n        return (small.top() + large.top()) / 2.0;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MedianFinder {\n    private PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder()); // Max-heap\n    private PriorityQueue<Integer> large = new PriorityQueue<>(); // Min-heap\n    public void addNum(int num) {\n        small.add(num);\n        if (!small.isEmpty() && !large.isEmpty() && small.peek() > large.peek()) {\n            large.add(small.poll());\n        }\n        if (small.size() > large.size() + 1) {\n            large.add(small.poll());\n        } else if (large.size() > small.size()) {\n            small.add(large.poll());\n        }\n    }\n    public double findMedian() {\n        if (small.size() > large.size()) return small.peek();\n        return (small.peek() + large.peek()) / 2.0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "// JavaScript Min-Heap / Max-Heap Helper Class\nclass MedianFinder {\n  constructor() {\n    this.arr = [];\n  }\n  addNum(num) {\n    let l = 0, r = this.arr.length;\n    while (l < r) {\n      const mid = Math.floor((l + r) / 2);\n      if (this.arr[mid] < num) l = mid + 1;\n      else r = mid;\n    }\n    this.arr.splice(l, 0, num);\n  }\n  findMedian() {\n    const n = this.arr.length;\n    if (n % 2 !== 0) return this.arr[Math.floor(n / 2)];\n    return (this.arr[n / 2 - 1] + this.arr[n / 2]) / 2.0;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 295 - Find Median from Data Stream",
+          "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-previous-greater-element",
+      "title": "Previous Greater Element (PGE)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find the first element to the left that is strictly greater than the current element.",
+      "explanation": [
+        "Monotonic Decreasing Stack (Left-to-Right Pass):",
+        "Traverse array left-to-right:",
+        "1) While stack is not empty and `stack.top() <= curr_val`: Pop element from stack.",
+        "2) If stack is empty: PGE is `-1`. Else: PGE is `stack.top()`.",
+        "3) Push `curr_val` onto stack."
+      ],
+      "exampleTrace": {
+        "input": "Array = [10, 4, 2, 20, 40, 12, 30]",
+        "output": "Previous Greater Elements = [-1, 10, 4, -1, -1, 40, 40]",
+        "traceSteps": [
+          "Step 1: i=0 (val 10): Stack=[]. PGE = -1. Push 10.",
+          "Step 2: i=1 (val 4): Stack top 10 > 4. PGE = 10. Push 4.",
+          "Step 3: i=2 (val 2): Stack top 4 > 2. PGE = 4. Push 2.",
+          "Step 4: i=3 (val 20): Pop 2, 4, 10 (<= 20). Stack empty. PGE = -1. Push 20.",
+          "Step 5: i=4 (val 40): Pop 20. Stack empty. PGE = -1. Push 40.",
+          "Step 6: i=5 (val 12): Stack top 40 > 12. PGE = 40.",
+          "Step 7: Output = [-1, 10, 4, -1, -1, 40, 40]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds nearest greater element to the left in linear O(N) time.",
+        "whenToUse": "When determining left boundary for stock span or peak bounds.",
+        "whereUsed": "Stock span problem, left boundary peak isolation.",
+        "whyOptimal": "O(N) single pass Monotonic Stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def previousGreaterElement(nums: list[int]) -> list[int]:\n    n = len(nums)\n    res = [-1] * n\n    stack = []\n    for i in range(n):\n        while stack and stack[-1] <= nums[i]:\n            stack.pop()\n        res[i] = stack[-1] if stack else -1\n        stack.append(nums[i])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> previousGreaterElement(vector<int>& nums) {\n    int n = nums.size();\n    vector<int> res(n, -1);\n    stack<int> st;\n    for (int i = 0; i < n; i++) {\n        while (!st.empty() && st.top() <= nums[i]) st.pop();\n        res[i] = st.empty() ? -1 : st.top();\n        st.push(nums[i]);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] previousGreaterElement(int[] nums) {\n        int n = nums.length;\n        int[] res = new int[n];\n        Stack<Integer> stack = new Stack<>();\n        for (int i = 0; i < n; i++) {\n            while (!stack.isEmpty() && stack.peek() <= nums[i]) stack.pop();\n            res[i] = stack.isEmpty() ? -1 : stack.peek();\n            stack.push(nums[i]);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function previousGreaterElement(nums) {\n  const n = nums.length;\n  const res = new Array(n).fill(-1);\n  const stack = [];\n  for (let i = 0; i < n; i++) {\n    while (stack.length > 0 && stack[stack.length - 1] <= nums[i]) {\n      stack.pop();\n    }\n    res[i] = stack.length > 0 ? stack[stack.length - 1] : -1;\n    stack.push(nums[i]);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Stock span problem",
+          "url": "https://www.geeksforgeeks.org/problems/stock-span-problem-1587115621/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-trapping-rain-water",
+      "title": "Trapping Rain Water (Monotonic Stack & Two Pointers)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Calculate total trapped rainwater between elevation bars using Two Pointers or Monotonic Stack boundaries.",
+      "explanation": [
+        "Water Trapping Condition: Water trapped at index `i` is `min(left_max, right_max) - height[i]`.",
+        "Two Pointers Strategy (O(1) Space): Maintain `left` and `right` pointers, along with `left_max` and `right_max`.",
+        "If `height[left] <= height[right]`: If `height[left] >= left_max`, update `left_max`; else add `left_max - height[left]` to total water. Move `left++`.",
+        "Else (`height[left] > height[right]`): If `height[right] >= right_max`, update `right_max`; else add `right_max - height[right]` to total water. Move `right--`."
+      ],
+      "exampleTrace": {
+        "input": "Heights = [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]",
+        "output": "Total Trapped Water = 6",
+        "traceSteps": [
+          "Step 1: Pointers left=0 (h=0), right=11 (h=1). left_max=0, right_max=1.",
+          "Step 2: Trapped water accumulates at indices 2 (1 unit), 4 (1 unit), 5 (2 units), 6 (1 unit), 9 (1 unit).",
+          "Step 3: Total Trapped Water = 6 units."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes total bounded liquid capacity between 2D terrain elevation bars.",
+        "whenToUse": "When computing volume of trapped liquid or bounded valley capacity.",
+        "whereUsed": "Geographic terrain water accumulation modeling, 2D container fluid capacity.",
+        "whyOptimal": "O(N) single pass with O(1) two-pointer memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def trap(height: list[int]) -> int:\n    if not height: return 0\n    l, r = 0, len(height) - 1\n    left_max, right_max = height[l], height[r]\n    water = 0\n    while l < r:\n        if left_max <= right_max:\n            l += 1\n            left_max = max(left_max, height[l])\n            water += left_max - height[l]\n        else:\n            r -= 1\n            right_max = max(right_max, height[r])\n            water += right_max - height[r]\n    return water"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint trap(vector<int>& height) {\n    if (height.empty()) return 0;\n    int l = 0, r = height.size() - 1;\n    int leftMax = height[l], rightMax = height[r];\n    int water = 0;\n    while (l < r) {\n        if (leftMax <= rightMax) {\n            l++;\n            leftMax = max(leftMax, height[l]);\n            water += leftMax - height[l];\n        } else {\n            r--;\n            rightMax = max(rightMax, height[r]);\n            water += rightMax - height[r];\n        }\n    }\n    return water;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int trap(int[] height) {\n        if (height.length == 0) return 0;\n        int l = 0, r = height.length - 1;\n        int leftMax = height[l], rightMax = height[r];\n        int water = 0;\n        while (l < r) {\n            if (leftMax <= rightMax) {\n                l++;\n                leftMax = Math.max(leftMax, height[l]);\n                water += leftMax - height[l];\n            } else {\n                r--;\n                rightMax = Math.max(rightMax, height[r]);\n                water += rightMax - height[r];\n            }\n        }\n        return water;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function trap(height) {\n  if (height.length === 0) return 0;\n  let l = 0, r = height.length - 1;\n  let leftMax = height[l], rightMax = height[r];\n  let water = 0;\n  while (l < r) {\n    if (leftMax <= rightMax) {\n      l++;\n      leftMax = Math.max(leftMax, height[l]);\n      water += leftMax - height[l];\n    } else {\n      r--;\n      rightMax = Math.max(rightMax, height[r]);\n      water += rightMax - height[r];\n    }\n  }\n  return water;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 42 - Trapping Rain Water",
+          "url": "https://leetcode.com/problems/trapping-rain-water/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-min-stack",
+      "title": "Min Stack (O(1) GetMin Design)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) all operations",
+      "spaceComplexity": "O(N)",
+      "summary": "Design a Stack supporting push, pop, top, and retrieving the minimum element in O(1) constant time.",
+      "explanation": [
+        "Auxiliary Min Stack Strategy: Maintain two stacks: primary `stack` and `min_stack`.",
+        "Push `x`: Push `x` to `stack`. Push `min(x, min_stack.top())` to `min_stack`.",
+        "Pop: Pop from both `stack` and `min_stack`.",
+        "GetMin: Return `min_stack.top()` in $O(1)$ time."
+      ],
+      "exampleTrace": {
+        "input": "Push -2, Push 0, Push -3, GetMin, Pop, Top, GetMin",
+        "output": "GetMin = -3, Top = 0, GetMin = -2",
+        "traceSteps": [
+          "Step 1: Push -2 -> stack=[-2], min_stack=[-2].",
+          "Step 2: Push 0 -> stack=[-2, 0], min_stack=[-2, -2].",
+          "Step 3: Push -3 -> stack=[-2, 0, -3], min_stack=[-2, -2, -3].",
+          "Step 4: GetMin -> returns min_stack.top() = -3.",
+          "Step 5: Pop -> stack=[-2, 0], min_stack=[-2, -2].",
+          "Step 6: Top = 0, GetMin = -2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides constant-time O(1) minimum retrieval for stack structures.",
+        "whenToUse": "When tracking running minimum of stack history.",
+        "whereUsed": "Undo-redo buffer with min state, tracking lowest temperature reading.",
+        "whyOptimal": "O(1) constant time for push, pop, top, and getMin."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    def push(self, val: int) -> None:\n        self.stack.append(val)\n        val = min(val, self.min_stack[-1] if self.min_stack else val)\n        self.min_stack.append(val)\n    def pop(self) -> None:\n        self.stack.pop()\n        self.min_stack.pop()\n    def top(self) -> int:\n        return self.stack[-1]\n    def getMin(self) -> int:\n        return self.min_stack[-1]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <stack>\n#include <algorithm>\nusing namespace std;\n\nclass MinStack {\n    stack<int> st;\n    stack<int> minSt;\npublic:\n    void push(int val) {\n        st.push(val);\n        if (minSt.empty() || val <= minSt.top()) minSt.push(val);\n        else minSt.push(minSt.top());\n    }\n    void pop() {\n        st.pop();\n        minSt.pop();\n    }\n    int top() { return st.top(); }\n    int getMin() { return minSt.top(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class MinStack {\n    private Stack<Integer> stack = new Stack<>();\n    private Stack<Integer> minStack = new Stack<>();\n    public void push(int val) {\n        stack.push(val);\n        if (minStack.isEmpty() || val <= minStack.peek()) minStack.push(val);\n        else minStack.push(minStack.peek());\n    }\n    public void pop() {\n        stack.pop();\n        minStack.pop();\n    }\n    public int top() { return stack.peek(); }\n    public int getMin() { return minStack.peek(); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MinStack {\n  constructor() {\n    this.stack = [];\n    this.minStack = [];\n  }\n  push(val) {\n    this.stack.push(val);\n    const min = this.minStack.length === 0 ? val : Math.min(val, this.minStack[this.minStack.length - 1]);\n    this.minStack.push(min);\n  }\n  pop() {\n    this.stack.pop();\n    this.minStack.pop();\n  }\n  top() {\n    return this.stack[this.stack.length - 1];\n  }\n  getMin() {\n    return this.minStack[this.minStack.length - 1];\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 155 - Min Stack",
+          "url": "https://leetcode.com/problems/min-stack/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "priority-queue-top-k-frequent",
+      "title": "Top K Frequent Elements",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log K)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find the K most frequent elements in an array using Frequency Map and Min-Heap of size K.",
+      "explanation": [
+        "Min-Heap of Size K Strategy:",
+        "Step 1: Count frequency of each element using HashMap `count_map`.",
+        "Step 2: Maintain a Min-Heap ordered by frequency storing `(freq, element)` pairs.",
+        "Step 3: Push elements to Min-Heap. If `heap.size() > K`, pop the root (evicts element with smallest frequency).",
+        "Step 4: Remaining K elements in Min-Heap are the top K most frequent elements!"
+      ],
+      "exampleTrace": {
+        "input": "Nums = [1, 1, 1, 2, 2, 3], K = 2",
+        "output": "Top 2 Frequent Elements = [1, 2]",
+        "traceSteps": [
+          "Step 1: Frequency map: {1: 3, 2: 2, 3: 1}.",
+          "Step 2: Insert (3, 1) -> Min-Heap = [(3, 1)].",
+          "Step 3: Insert (2, 2) -> Min-Heap = [(2, 2), (3, 1)].",
+          "Step 4: Insert (1, 3) -> Heap size 3 > 2! Pop root (1, 3). Min-Heap remains [(2, 2), (3, 1)].",
+          "Step 5: Output elements: [1, 2]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Extracts the top K highest frequency elements from dynamic streaming data.",
+        "whenToUse": "When finding most frequent items under memory bound K.",
+        "whereUsed": "Trending hashtag monitor, search term frequency ranking.",
+        "whyOptimal": "O(N log K) time using Min-Heap of size K."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import Counter\nimport heapq\n\ndef topKFrequent(nums: list[int], k: int) -> list[int]:\n    count = Counter(nums)\n    return heapq.nlargest(k, count.keys(), key=count.get)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <queue>\nusing namespace std;\n\nvector<int> topKFrequent(vector<int>& nums, int k) {\n    unordered_map<int, int> count;\n    for (int x : nums) count[x]++;\n    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;\n    for (auto& [num, freq] : count) {\n        pq.push({freq, num});\n        if (pq.size() > k) pq.pop();\n    }\n    vector<int> res;\n    while (!pq.empty()) {\n        res.push_back(pq.top().second);\n        pq.pop();\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int[] topKFrequent(int[] nums, int k) {\n        Map<Integer, Integer> count = new HashMap<>();\n        for (int x : nums) count.put(x, count.getOrDefault(x, 0) + 1);\n        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> count.get(a) - count.get(b));\n        for (int num : count.keySet()) {\n            pq.add(num);\n            if (pq.size() > k) pq.poll();\n        }\n        int[] res = new int[k];\n        for (int i = 0; i < k; i++) res[i] = pq.poll();\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function topKFrequent(nums, k) {\n  const count = new Map();\n  for (const x of nums) count.set(x, (count.get(x) || 0) + 1);\n  const sorted = Array.from(count.keys()).sort((a, b) => count.get(b) - count.get(a));\n  return sorted.slice(0, k);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 347 - Top K Frequent Elements",
+          "url": "https://leetcode.com/problems/top-k-frequent-elements/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "queue-simple-fifo",
+      "title": "Simple Queue (FIFO Array & Linked List)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "First-In-First-Out (FIFO) linear data structure where elements are enqueued at the rear and dequeued from the front.",
+      "explanation": [
+        "Overview: First-In-First-Out (FIFO) linear data structure where elements are enqueued at the rear and dequeued from the front.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Enqueue [10, 20, 30], Dequeue front element, Enqueue 40",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Enqueue 10: Add 10 to the rear of the queue.",
+          "Enqueue 20: Add 20 to the rear of the queue.",
+          "Enqueue 30: Add 30 to the rear of the queue.",
+          "Dequeue Front (10): Remove 10 from the front. Front pointer moves from index 0 to 1.",
+          "Enqueue 40: Add 40 to the rear. Queue is now [20, 30, 40]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "enqueue(x) adds to back in O(1), dequeue() removes from front in O(1).",
+        "whenToUse": "Use when elements must be processed strictly in the order they arrived.",
+        "whereUsed": "Breadth-First Search (BFS), print job spooling, web server request handling, task queues.",
+        "whyOptimal": "Guarantees strict order processing (FIFO) essential for task scheduling, messaging queues, and BFS traversal."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\nclass SimpleQueue:\n    def __init__(self):\n        self.q = deque()\n    def enqueue(self, val):\n        self.q.append(val)\n    def dequeue(self):\n        return self.q.popleft() if self.q else None\n    def peek(self):\n        return self.q[0] if self.q else None\n    def is_empty(self):\n        return len(self.q) == 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <queue>\n#include <iostream>\n\nclass SimpleQueue {\n    std::queue<int> q;\npublic:\n    void enqueue(int val) { q.push(val); }\n    int dequeue() {\n        if (q.empty()) return -1;\n        int front = q.front(); q.pop();\n        return front;\n    }\n    int peek() { return q.empty() ? -1 : q.front(); }\n    bool isEmpty() { return q.empty(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.LinkedList;\nimport java.util.Queue;\n\npublic class SimpleQueue {\n    private Queue<Integer> q = new LinkedList<>();\n    public void enqueue(int val) { q.add(val); }\n    public int dequeue() { return q.isEmpty() ? -1 : q.poll(); }\n    public int peek() { return q.isEmpty() ? -1 : q.peek(); }\n    public boolean isEmpty() { return q.isEmpty(); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SimpleQueue {\n    constructor() {\n        this.items = [];\n        this.head = 0;\n    }\n    enqueue(val) { this.items.push(val); }\n    dequeue() {\n        if (this.head >= this.items.length) return null;\n        return this.items[this.head++];\n    }\n    peek() { return this.items[this.head] ?? null; }\n    isEmpty() { return this.head >= this.items.length; }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Implement Queue using Stacks",
+          "url": "https://leetcode.com/problems/implement-queue-using-stacks/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "queue-circular",
+      "title": "Circular Queue (Ring Buffer)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Fixed-capacity array queue using modulo arithmetic (rear + 1) % capacity to reuse vacated front memory slots efficiently.",
+      "explanation": [
+        "Overview: Fixed-capacity array queue using modulo arithmetic (rear + 1) % capacity to reuse vacated front memory slots efficiently.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "[1, 2, 3, 4]",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Enqueue 1: Buffer[0] = 1. rear = (0+1)%3 = 1. count = 1.",
+          "Enqueue 2: Buffer[1] = 2. rear = (1+1)%3 = 2. count = 2.",
+          "Enqueue 3 (Full): Buffer[2] = 3. rear = (2+1)%3 = 0. count = 3. Queue is now FULL.",
+          "Dequeue (1 Removed): Remove 1 from index 0. front = (0+1)%3 = 1. count = 2.",
+          "Enqueue 4 (Wraps Around): Buffer[0] = 4 (reuses index 0!). rear = (0+1)%3 = 1. count = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Uses front and rear pointers with modulo arithmetic: (rear + 1) % capacity.",
+        "whenToUse": "When memory is limited or bounded and FIFO queue needs continuous O(1) push and pop without reallocation.",
+        "whereUsed": "Audio/video stream buffers, CPU process scheduling ring buffers, memory management in OS.",
+        "whyOptimal": "Eliminates memory waste in fixed-sized memory buffers by wrapping around instead of shifting elements."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MyCircularQueue:\n    def __init__(self, k: int):\n        self.q = [0] * k\n        self.head = 0\n        self.tail = 0\n        self.count = 0\n        self.capacity = k\n\n    def enQueue(self, value: int) -> bool:\n        if self.isFull(): return False\n        self.q[self.tail] = value\n        self.tail = (self.tail + 1) % self.capacity\n        self.count += 1\n        return True\n\n    def deQueue(self) -> bool:\n        if self.isEmpty(): return False\n        self.head = (self.head + 1) % self.capacity\n        self.count -= 1\n        return True\n\n    def Front(self) -> int:\n        return -1 if self.isEmpty() else self.q[self.head]\n\n    def Rear(self) -> int:\n        return -1 if self.isEmpty() else self.q[(self.tail - 1 + self.capacity) % self.capacity]\n\n    def isEmpty(self) -> bool:\n        return self.count == 0\n\n    def isFull(self) -> bool:\n        return self.count == self.capacity"
+        },
+        {
+          "language": "cpp",
+          "code": "class MyCircularQueue {\n    vector<int> q;\n    int head = 0, tail = 0, count = 0, capacity;\npublic:\n    MyCircularQueue(int k) : capacity(k), q(k) {}\n    bool enQueue(int value) {\n        if (isFull()) return false;\n        q[tail] = value;\n        tail = (tail + 1) % capacity;\n        count++;\n        return true;\n    }\n    bool deQueue() {\n        if (isEmpty()) return false;\n        head = (head + 1) % capacity;\n        count--;\n        return true;\n    }\n    int Front() { return isEmpty() ? -1 : q[head]; }\n    int Rear() { return isEmpty() ? -1 : q[(tail - 1 + capacity) % capacity]; }\n    bool isEmpty() { return count == 0; }\n    bool isFull() { return count == capacity; }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class MyCircularQueue {\n    private int[] q;\n    private int head = 0, tail = 0, count = 0, capacity;\n    public MyCircularQueue(int k) {\n        capacity = k;\n        q = new int[k];\n    }\n    public boolean enQueue(int value) {\n        if (isFull()) return false;\n        q[tail] = value;\n        tail = (tail + 1) % capacity;\n        count++;\n        return true;\n    }\n    public boolean deQueue() {\n        if (isEmpty()) return false;\n        head = (head + 1) % capacity;\n        count--;\n        return true;\n    }\n    public int Front() { return isEmpty() ? -1 : q[head]; }\n    public int Rear() { return isEmpty() ? -1 : q[(tail - 1 + capacity) % capacity]; }\n    public boolean isEmpty() { return count == 0; }\n    public boolean isFull() { return count == capacity; }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MyCircularQueue {\n    constructor(k) {\n        this.q = new Array(k);\n        this.head = 0;\n        this.tail = 0;\n        this.count = 0;\n        this.capacity = k;\n    }\n    enQueue(value) {\n        if (this.isFull()) return false;\n        this.q[this.tail] = value;\n        this.tail = (this.tail + 1) % this.capacity;\n        this.count++;\n        return true;\n    }\n    deQueue() {\n        if (this.isEmpty()) return false;\n        this.head = (this.head + 1) % this.capacity;\n        this.count--;\n        return true;\n    }\n    Front() { return this.isEmpty() ? -1 : this.q[this.head]; }\n    Rear() { return this.isEmpty() ? -1 : this.q[(this.tail - 1 + this.capacity) % this.capacity]; }\n    isEmpty() { return this.count === 0; }\n    isFull() { return this.count === this.capacity; }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Circular Queue",
+          "url": "https://leetcode.com/problems/design-circular-queue/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "queue-deque",
+      "title": "Double-Ended Queue (Deque)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Generalized queue allowing insertion and deletion at both the front and rear ends in O(1) time.",
+      "explanation": [
+        "Overview: Generalized queue allowing insertion and deletion at both the front and rear ends in O(1) time.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Operations: insertLast(10), insertFront(5), insertLast(20), deleteFront(), deleteLast()",
+        "output": "Computed Result",
+        "traceSteps": [
+          "insertLast(10): Add 10 to the back of the deque.",
+          "insertFront(5): Add 5 to the front of the deque.",
+          "insertLast(20): Add 20 to the back of the deque.",
+          "deleteFront() -> 5: Remove element from front. 5 is removed.",
+          "deleteLast() -> 20: Remove element from back. 20 is removed. Deque is left with [10]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Supports pushFront, pushLast, popFront, popLast all in guaranteed O(1) time.",
+        "whenToUse": "When problem requires inspecting or modifying elements at both ends (e.g. palindrome checks, sliding window max).",
+        "whereUsed": "Sliding Window Maximum algorithms, Undo-Redo history buffers, Palindrome checking, Steal-work scheduling.",
+        "whyOptimal": "Provides maximum flexibility: can function as both a FIFO queue and a LIFO stack or dynamic sliding window buffer."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\nclass CustomDeque:\n    def __init__(self):\n        self.dq = deque()\n    def insert_front(self, val):\n        self.dq.appendleft(val)\n    def insert_last(self, val):\n        self.dq.append(val)\n    def delete_front(self):\n        return self.dq.popleft() if self.dq else None\n    def delete_last(self):\n        return self.dq.pop() if self.dq else None\n    def get_front(self):\n        return self.dq[0] if self.dq else None\n    def get_rear(self):\n        return self.dq[-1] if self.dq else None"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <deque>\n#include <iostream>\n\nclass CustomDeque {\n    std::deque<int> dq;\npublic:\n    void insertFront(int val) { dq.push_front(val); }\n    void insertLast(int val) { dq.push_back(val); }\n    int deleteFront() {\n        if (dq.empty()) return -1;\n        int val = dq.front(); dq.pop_front();\n        return val;\n    }\n    int deleteLast() {\n        if (dq.empty()) return -1;\n        int val = dq.back(); dq.pop_back();\n        return val;\n    }\n    int getFront() { return dq.empty() ? -1 : dq.front(); }\n    int getRear() { return dq.empty() ? -1 : dq.back(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.ArrayDeque;\nimport java.util.Deque;\n\npublic class CustomDeque {\n    private Deque<Integer> dq = new ArrayDeque<>();\n    public void insertFront(int val) { dq.addFirst(val); }\n    public void insertLast(int val) { dq.addLast(val); }\n    public int deleteFront() { return dq.isEmpty() ? -1 : dq.pollFirst(); }\n    public int deleteLast() { return dq.isEmpty() ? -1 : dq.pollLast(); }\n    public int getFront() { return dq.isEmpty() ? -1 : dq.peekFirst(); }\n    public int getRear() { return dq.isEmpty() ? -1 : dq.peekLast(); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class CustomDeque {\n    constructor() {\n        this.items = [];\n    }\n    insertFront(val) { this.items.unshift(val); }\n    insertLast(val) { this.items.push(val); }\n    deleteFront() { return this.items.length ? this.items.shift() : null; }\n    deleteLast() { return this.items.length ? this.items.pop() : null; }\n    getFront() { return this.items.length ? this.items[0] : null; }\n    getRear() { return this.items.length ? this.items[this.items.length - 1] : null; }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Circular Deque",
+          "url": "https://leetcode.com/problems/design-circular-deque/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "queue-priority",
+      "title": "Priority Queue (Heap-Based)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Queue where each element has an associated priority; highest (or lowest) priority elements are served first regardless of insertion order.",
+      "explanation": [
+        "Overview: Queue where each element has an associated priority; highest (or lowest) priority elements are served first regardless of insertion order.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Push priorities [30, 10, 50, 20] into Max Priority Queue. Pop max twice.",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Push 30: Heap root = 30.",
+          "Push 10: 10 added as child of 30.",
+          "Push 50: 50 added and bubbles up to root. Heap is [50, 10, 30].",
+          "Push 20: 20 added, heap is [50, 20, 30, 10].",
+          "Pop Max -> 50: 50 extracted from root. Rebalanced heap is [30, 20, 10]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains min-heap or max-heap property after push and pop operations.",
+        "whenToUse": "When elements must be processed based on priority rather than arrival time.",
+        "whereUsed": "Dijkstra's shortest path, Prim's MST, Task scheduling OS, Huffman coding, A* search.",
+        "whyOptimal": "Allows constant O(1) peek and O(log N) extraction of highest/lowest priority elements."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass PriorityQueue:\n    def __init__(self):\n        self.heap = []\n    def push(self, val):\n        heapq.heappush(self.heap, val)  # Min-heap by default\n    def pop(self):\n        return heapq.heappop(self.heap) if self.heap else None\n    def peek(self):\n        return self.heap[0] if self.heap else None"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <queue>\n#include <vector>\n\nclass PriorityQueue {\n    std::priority_queue<int> maxPQ;\npublic:\n    void push(int val) { maxPQ.push(val); }\n    int pop() {\n        if (maxPQ.empty()) return -1;\n        int top = maxPQ.top(); maxPQ.pop();\n        return top;\n    }\n    int peek() { return maxPQ.empty() ? -1 : maxPQ.top(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.PriorityQueue;\n\npublic class CustomPriorityQueue {\n    private PriorityQueue<Integer> minPQ = new PriorityQueue<>();\n    public void push(int val) { minPQ.add(val); }\n    public int pop() { return minPQ.isEmpty() ? -1 : minPQ.poll(); }\n    public int peek() { return minPQ.isEmpty() ? -1 : minPQ.peek(); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class MinPriorityQueue {\n    constructor() { this.heap = []; }\n    push(val) {\n        this.heap.push(val);\n        this._bubbleUp(this.heap.length - 1);\n    }\n    pop() {\n        if (!this.heap.length) return null;\n        const top = this.heap[0];\n        const bottom = this.heap.pop();\n        if (this.heap.length > 0) {\n            this.heap[0] = bottom;\n            this._sinkDown(0);\n        }\n        return top;\n    }\n    _bubbleUp(i) {\n        while (i > 0) {\n            let p = (i - 1) >> 1;\n            if (this.heap[p] <= this.heap[i]) break;\n            [this.heap[p], this.heap[i]] = [this.heap[i], this.heap[p]];\n            i = p;\n        }\n    }\n    _sinkDown(i) {\n        const len = this.heap.length;\n        while (true) {\n            let l = 2 * i + 1, r = 2 * i + 2, smallest = i;\n            if (l < len && this.heap[l] < this.heap[smallest]) smallest = l;\n            if (r < len && this.heap[r] < this.heap[smallest]) smallest = r;\n            if (smallest === i) break;\n            [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];\n            i = smallest;\n        }\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Kth Largest Element in an Array",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "queue-blocking",
+      "title": "Bounded Blocking Queue",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Thread-safe bounded queue that blocks enqueue when full and blocks dequeue when empty using concurrency synchronization primitives.",
+      "explanation": [
+        "Overview: Thread-safe bounded queue that blocks enqueue when full and blocks dequeue when empty using concurrency synchronization primitives.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Capacity = 2. Producer enqueues 10, 20. Producer tries 30 (BLOCKED). Consumer dequeues 10 (UNBLOCKS producer).",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Enqueue 10: Producer locks mutex, adds 10. Signals notEmpty condition.",
+          "Enqueue 20: Producer adds 20. Queue size = 2 (FULL).",
+          "Enqueue 30 -> BLOCKED: Queue is FULL. Producer thread blocks on notFull condition awaiting space.",
+          "Dequeue 10 -> UNBLOCKS Producer: Consumer thread dequeues 10. Signals notFull condition! Producer wakes up.",
+          "Producer Enqueues 30: Woken producer completes enqueue of 30 into vacated space."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Uses Mutex Lock + Two Condition Variables (notFull, notEmpty) or Semaphores.",
+        "whenToUse": "When coordinating async Producer and Consumer threads sharing a fixed-capacity buffer.",
+        "whereUsed": "Java ArrayBlockingQueue, Thread Pools (ExecutorService), Async Logging frameworks, Message Brokers.",
+        "whyOptimal": "Essential for multi-threaded producer-consumer architectures to prevent memory overflow and CPU spin-waiting."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import threading\nfrom collections import deque\n\nclass BoundedBlockingQueue:\n    def __init__(self, capacity: int):\n        self.capacity = capacity\n        self.q = deque()\n        self.lock = threading.Lock()\n        self.not_full = threading.Condition(self.lock)\n        self.not_empty = threading.Condition(self.lock)\n\n    def enqueue(self, element: int) -> None:\n        with self.not_full:\n            while len(self.q) == self.capacity:\n                self.not_full.wait()\n            self.q.append(element)\n            self.not_empty.notify()\n\n    def dequeue(self) -> int:\n        with self.not_empty:\n            while len(self.q) == 0:\n                self.not_empty.wait()\n            val = self.q.popleft()\n            self.not_full.notify()\n            return val\n\n    def size(self) -> int:\n        with self.lock:\n            return len(self.q)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <mutex>\n#include <condition_variable>\n#include <queue>\n\nclass BoundedBlockingQueue {\n    int capacity;\n    std::queue<int> q;\n    std::mutex mtx;\n    std::condition_variable cv_not_full;\n    std::condition_variable cv_not_empty;\npublic:\n    BoundedBlockingQueue(int capacity) : capacity(capacity) {}\n    \n    void enqueue(int element) {\n        std::unique_lock<std::mutex> lock(mtx);\n        cv_not_full.wait(lock, [this] { return q.size() < capacity; });\n        q.push(element);\n        cv_not_empty.notify_one();\n    }\n    \n    int dequeue() {\n        std::unique_lock<std::mutex> lock(mtx);\n        cv_not_empty.wait(lock, [this] { return !q.empty(); });\n        int val = q.front(); q.pop();\n        cv_not_full.notify_one();\n        return val;\n    }\n    \n    int size() {\n        std::unique_lock<std::mutex> lock(mtx);\n        return q.size();\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.LinkedList;\nimport java.util.Queue;\nimport java.util.concurrent.locks.Condition;\nimport java.util.concurrent.locks.ReentrantLock;\n\nclass BoundedBlockingQueue {\n    private final Queue<Integer> q = new LinkedList<>();\n    private final int capacity;\n    private final ReentrantLock lock = new ReentrantLock();\n    private final Condition notFull = lock.newCondition();\n    private final Condition notEmpty = lock.newCondition();\n\n    public BoundedBlockingQueue(int capacity) {\n        this.capacity = capacity;\n    }\n\n    public void enqueue(int element) throws InterruptedException {\n        lock.lock();\n        try {\n            while (q.size() == capacity) {\n                notFull.await();\n            }\n            q.add(element);\n            notEmpty.signal();\n        } finally {\n            lock.unlock();\n        }\n    }\n\n    public int dequeue() throws InterruptedException {\n        lock.lock();\n        try {\n            while (q.isEmpty()) {\n                notEmpty.await();\n            }\n            int val = q.poll();\n            notFull.signal();\n            return val;\n        } finally {\n            lock.unlock();\n        }\n    }\n\n    public int size() {\n        lock.lock();\n        try {\n            return q.size();\n        } finally {\n            lock.unlock();\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class BoundedBlockingQueue {\n    constructor(capacity) {\n        this.capacity = capacity;\n        this.q = [];\n        this.enqueueWaiters = [];\n        this.dequeueWaiters = [];\n    }\n    async enqueue(element) {\n        while (this.q.length === this.capacity) {\n            await new Promise(resolve => this.enqueueWaiters.push(resolve));\n        }\n        this.q.push(element);\n        if (this.dequeueWaiters.length > 0) {\n            const resolve = this.dequeueWaiters.shift();\n            resolve();\n        }\n    }\n    async dequeue() {\n        while (this.q.length === 0) {\n            await new Promise(resolve => this.dequeueWaiters.push(resolve));\n        }\n        const val = this.q.shift();\n        if (this.enqueueWaiters.length > 0) {\n            const resolve = this.enqueueWaiters.shift();\n            resolve();\n        }\n        return val;\n    }\n    size() { return this.q.length; }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Bounded Blocking Queue",
+          "url": "https://leetcode.com/problems/design-bounded-blocking-queue/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-infix-to-postfix",
+      "title": "Infix to Postfix Conversion (Shunting-Yard)",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Converts infix expressions (e.g. A + B * C) to postfix notation (e.g. A B C * +) using an operator stack and operator precedence rules.",
+      "explanation": [
+        "Overview: Converts infix expressions (e.g. A + B * C) to postfix notation (e.g. A B C * +) using an operator stack and operator precedence rules.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Convert infix 'a+b*c' to postfix notation.",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Process 'a': 'a' is an operand. Append directly to output.",
+          "Process '+': '+' is an operator. Stack is empty, so push '+' onto stack.",
+          "Process 'b': 'b' is an operand. Append to output.",
+          "Process '*': '*' has higher precedence than '+' on top of stack. Push '*' onto stack.",
+          "Process 'c': 'c' is an operand. Append to output.",
+          "Pop Remaining Operators: End of expression. Pop '*' and '+' to output."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintain operator stack. Operands go to output; operators pop higher/equal precedence operators before pushing.",
+        "whenToUse": "When building expression parsers, compilers, or stack-based calculators.",
+        "whereUsed": "Compiler front-ends, RPN (Reverse Polish Notation) calculators, expression evaluators.",
+        "whyOptimal": "Postfix expressions eliminate the need for parentheses and explicit operator precedence during computer execution."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def infix_to_postfix(s: str) -> str:\n    precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}\n    stack = []\n    res = []\n    for ch in s:\n        if ch.isalnum():\n            res.append(ch)\n        elif ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            while stack and stack[-1] != '(':\n                res.append(stack.pop())\n            stack.pop()\n        else:\n            while stack and precedence.get(stack[-1], 0) >= precedence.get(ch, 0):\n                res.append(stack.pop())\n            stack.append(ch)\n    while stack:\n        res.append(stack.pop())\n    return ''.join(res)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <stack>\n#include <unordered_map>\n\nint prec(char c) {\n    if (c == '^') return 3;\n    if (c == '*' || c == '/') return 2;\n    if (c == '+' || c == '-') return 1;\n    return -1;\n}\n\nstd::string infixToPostfix(std::string s) {\n    std::stack<char> st;\n    std::string result = \"\";\n    for (char c : s) {\n        if (isalnum(c)) result += c;\n        else if (c == '(') st.push('(');\n        else if (c == ')') {\n            while (!st.empty() && st.top() != '(') {\n                result += st.top(); st.pop();\n            }\n            st.pop();\n        } else {\n            while (!st.empty() && prec(st.top()) >= prec(c)) {\n                result += st.top(); st.pop();\n            }\n            st.push(c);\n        }\n    }\n    while (!st.empty()) { result += st.top(); st.pop(); }\n    return result;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class InfixToPostfix {\n    static int prec(char c) {\n        if (c == '^') return 3;\n        if (c == '*' || c == '/') return 2;\n        if (c == '+' || c == '-') return 1;\n        return -1;\n    }\n    public static String infixToPostfix(String s) {\n        StringBuilder result = new StringBuilder();\n        Stack<Character> stack = new Stack<>();\n        for (int i = 0; i < s.length(); i++) {\n            char c = s.charAt(i);\n            if (Character.isLetterOrDigit(c)) result.append(c);\n            else if (c == '(') stack.push(c);\n            else if (c == ')') {\n                while (!stack.isEmpty() && stack.peek() != '(')\n                    result.append(stack.pop());\n                stack.pop();\n            } else {\n                while (!stack.isEmpty() && prec(stack.peek()) >= prec(c))\n                    result.append(stack.pop());\n                stack.push(c);\n            }\n        }\n        while (!stack.isEmpty()) result.append(stack.pop());\n        return result.toString();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function infixToPostfix(s) {\n    const prec = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3 };\n    const stack = [];\n    let result = '';\n    for (let char of s) {\n        if (/[a-zA-Z0-9]/.test(char)) result += char;\n        else if (char === '(') stack.push('(');\n        else if (char === ')') {\n            while (stack.length && stack[stack.length - 1] !== '(') {\n                result += stack.pop();\n            }\n            stack.pop();\n        } else {\n            while (stack.length && (prec[stack[stack.length - 1]] || 0) >= (prec[char] || 0)) {\n                result += stack.pop();\n            }\n            stack.push(char);\n        }\n    }\n    while (stack.length) result += stack.pop();\n    return result;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Basic Calculator II",
+          "url": "https://leetcode.com/problems/basic-calculator-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-infix-to-prefix",
+      "title": "Infix to Prefix Conversion",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Converts infix expressions (e.g. A + B * C) to prefix notation (e.g. + A * B C) by reversing string, swapping brackets, converting to postfix, and reversing again.",
+      "explanation": [
+        "Overview: Converts infix expressions (e.g. A + B * C) to prefix notation (e.g. + A * B C) by reversing string, swapping brackets, converting to postfix, and reversing again.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Convert Infix '(a+b)*c' to Prefix notation '+ a * b c'.",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Reverse Infix & Swap Brackets: Reversing '(a+b)*c' yields 'c*(b+a)'.",
+          "Convert 'c*(b+a)' to Postfix: Applying Infix-to-Postfix to 'c*(b+a)' yields 'cba+*'.",
+          "Reverse Postfix Result: Reversing 'cba+*' yields '*+abc'. Final Prefix expression!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reverse infix, swap '(' with ')', apply Modified Postfix, then reverse the result.",
+        "whenToUse": "When converting expressions for Lisp/Scheme compilers or right-to-left evaluation engines.",
+        "whereUsed": "Functional programming language parsers, tree expression building.",
+        "whyOptimal": "Prefix notation (Polish Notation) evaluates operators from right to left without needing parenthetical grouping."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def infix_to_prefix(s: str) -> str:\n    # Step 1: Reverse string and swap '(' with ')'\n    rev = []\n    for ch in reversed(s):\n        if ch == '(': rev.append(')')\n        elif ch == ')': rev.append('(')\n        else: rev.append(ch)\n    s_rev = ''.join(rev)\n    \n    # Step 2: Get postfix\n    precedence = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3}\n    stack, res = [], []\n    for ch in s_rev:\n        if ch.isalnum(): res.append(ch)\n        elif ch == '(': stack.append(ch)\n        elif ch == ')':\n            while stack and stack[-1] != '(':\n                res.append(stack.pop())\n            stack.pop()\n        else:\n            while stack and precedence.get(stack[-1], 0) > precedence.get(ch, 0):\n                res.append(stack.pop())\n            stack.append(ch)\n    while stack: res.append(stack.pop())\n    \n    # Step 3: Reverse result\n    return ''.join(reversed(res))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <algorithm>\n#include <stack>\n\nstd::string infixToPrefix(std::string s) {\n    std::reverse(s.begin(), s.end());\n    for (int i = 0; i < s.length(); i++) {\n        if (s[i] == '(') s[i] = ')';\n        else if (s[i] == ')') s[i] = '(';\n    }\n    std::stack<char> st;\n    std::string post = \"\";\n    auto prec = [](char c) {\n        if (c == '^') return 3;\n        if (c == '*' || c == '/') return 2;\n        if (c == '+' || c == '-') return 1;\n        return -1;\n    };\n    for (char c : s) {\n        if (isalnum(c)) post += c;\n        else if (c == '(') st.push('(');\n        else if (c == ')') {\n            while (!st.empty() && st.top() != '(') {\n                post += st.top(); st.pop();\n            }\n            st.pop();\n        } else {\n            while (!st.empty() && prec(st.top()) > prec(c)) {\n                post += st.top(); st.pop();\n            }\n            st.push(c);\n        }\n    }\n    while (!st.empty()) { post += st.top(); st.pop(); }\n    std::reverse(post.begin(), post.end());\n    return post;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class InfixToPrefix {\n    public static String infixToPrefix(String s) {\n        StringBuilder sb = new StringBuilder(s).reverse();\n        for (int i = 0; i < sb.length(); i++) {\n            if (sb.charAt(i) == '(') sb.setCharAt(i, ')');\n            else if (sb.charAt(i) == ')') sb.setCharAt(i, '(');\n        }\n        Stack<Character> stack = new Stack<>();\n        StringBuilder post = new StringBuilder();\n        for (char c : sb.toString().toCharArray()) {\n            if (Character.isLetterOrDigit(c)) post.append(c);\n            else if (c == '(') stack.push(c);\n            else if (c == ')') {\n                while (!stack.isEmpty() && stack.peek() != '(') post.append(stack.pop());\n                stack.pop();\n            } else {\n                while (!stack.isEmpty() && prec(stack.peek()) > prec(c)) post.append(stack.pop());\n                stack.push(c);\n            }\n        }\n        while (!stack.isEmpty()) post.append(stack.pop());\n        return post.reverse().toString();\n    }\n    private static int prec(char c) {\n        if (c == '^') return 3;\n        if (c == '*' || c == '/') return 2;\n        if (c == '+' || c == '-') return 1;\n        return -1;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function infixToPrefix(s) {\n    let reversed = s.split('').reverse().map(c => c === '(' ? ')' : c === ')' ? '(' : c).join('');\n    const prec = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3 };\n    const stack = [];\n    let post = '';\n    for (let c of reversed) {\n        if (/[a-zA-Z0-9]/.test(c)) post += c;\n        else if (c === '(') stack.push('(');\n        else if (c === ')') {\n            while (stack.length && stack[stack.length - 1] !== '(') post += stack.pop();\n            stack.pop();\n        } else {\n            while (stack.length && (prec[stack[stack.length - 1]] || 0) > (prec[c] || 0)) post += stack.pop();\n            stack.push(c);\n        }\n    }\n    while (stack.length) post += stack.pop();\n    return post.split('').reverse().join('');\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Basic Calculator",
+          "url": "https://leetcode.com/problems/basic-calculator/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-postfix-evaluation",
+      "title": "Postfix Expression Evaluation",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Evaluates a Reverse Polish Notation (RPN) expression using an operand stack in linear O(N) time.",
+      "explanation": [
+        "Overview: Evaluates a Reverse Polish Notation (RPN) expression using an operand stack in linear O(N) time.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Evaluate Postfix expression ['2', '3', '1', '*', '+', '9', '-']",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Push Operands 2, 3, 1: Push numbers onto operand stack.",
+          "Operator '*': Pop 1 (v2) and 3 (v1). Compute 3 * 1 = 3. Push 3.",
+          "Operator '+': Pop 3 (v2) and 2 (v1). Compute 2 + 3 = 5. Push 5.",
+          "Push 9: Push 9 onto stack.",
+          "Operator '-': Pop 9 (v2) and 5 (v1). Compute 5 - 9 = -4. Final Answer = -4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Push operands. When encountering operator op, pop val2 then val1, evaluate (val1 op val2), and push result back.",
+        "whenToUse": "When evaluating pre-parsed mathematical expressions or executing stack-machine bytecode.",
+        "whereUsed": "HP calculators, PostScript engines, Java Virtual Machine (JVM) operand stack execution.",
+        "whyOptimal": "Postfix expressions do not require parenthetical precedence checks, allowing single-pass O(N) execution."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def evalRPN(tokens: list[str]) -> int:\n    stack = []\n    for token in tokens:\n        if token in '+-*/':\n            b = stack.pop()\n            a = stack.pop()\n            if token == '+': stack.append(a + b)\n            elif token == '-': stack.append(a - b)\n            elif token == '*': stack.append(a * b)\n            elif token == '/': stack.append(int(a / b))\n        else:\n            stack.append(int(token))\n    return stack[0]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <stack>\n\nint evalRPN(std::vector<std::string>& tokens) {\n    std::stack<int> st;\n    for (const auto& t : tokens) {\n        if (t == \"+\" || t == \"-\" || t == \"*\" || t == \"/\") {\n            int b = st.top(); st.pop();\n            int a = st.top(); st.pop();\n            if (t == \"+\") st.push(a + b);\n            else if (t == \"-\") st.push(a - b);\n            else if (t == \"*\") st.push(a * b);\n            else if (t == \"/\") st.push(a / b);\n        } else {\n            st.push(std::stoi(t));\n        }\n    }\n    return st.top();\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class EvaluatePostfix {\n    public int evalRPN(String[] tokens) {\n        Stack<Integer> stack = new Stack<>();\n        for (String t : tokens) {\n            if (\"+\".equals(t) || \"-\".equals(t) || \"*\".equals(t) || \"/\".equals(t)) {\n                int b = stack.pop();\n                int a = stack.pop();\n                if (\"+\".equals(t)) stack.push(a + b);\n                else if (\"-\".equals(t)) stack.push(a - b);\n                else if (\"*\".equals(t)) stack.push(a * b);\n                else if (\"/\".equals(t)) stack.push(a / b);\n            } else {\n                stack.push(Integer.parseInt(t));\n            }\n        }\n        return stack.peek();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function evalRPN(tokens) {\n    const stack = [];\n    for (let t of tokens) {\n        if (['+', '-', '*', '/'].includes(t)) {\n            const b = stack.pop();\n            const a = stack.pop();\n            if (t === '+') stack.push(a + b);\n            else if (t === '-') stack.push(a - b);\n            else if (t === '*') stack.push(a * b);\n            else if (t === '/') stack.push(Math.trunc(a / b));\n        } else {\n            stack.push(Number(t));\n        }\n    }\n    return stack[0];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Evaluate Reverse Polish Notation",
+          "url": "https://leetcode.com/problems/evaluate-reverse-polish-notation/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-prefix-evaluation",
+      "title": "Prefix Expression Evaluation",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Evaluates Polish Notation (Prefix) expressions by scanning tokens from right-to-left using an operand stack.",
+      "explanation": [
+        "Overview: Evaluates Polish Notation (Prefix) expressions by scanning tokens from right-to-left using an operand stack.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Evaluate Prefix expression ['-', '+', '2', '*', '3', '1', '9']",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Push 9, 1, 3: Scanning from right: push 9, push 1, push 3.",
+          "Operator '*': Pop 3 (v1) and 1 (v2). Compute 3 * 1 = 3. Push 3.",
+          "Push 2: Push 2 onto stack.",
+          "Operator '+': Pop 2 (v1) and 3 (v2). Compute 2 + 3 = 5. Push 5.",
+          "Operator '-': Pop 5 (v1) and 9 (v2). Compute 5 - 9 = -4. Final Result = -4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Scan expression from right to left. Push numbers. On operator, pop val1 then val2, compute (val1 op val2), push result.",
+        "whenToUse": "When building interpreters for Polish notation or recursive AST evaluators.",
+        "whereUsed": "Lisp AST evaluations, symbolic calculation engines.",
+        "whyOptimal": "Prefix expressions can be cleanly evaluated in one right-to-left scan where operator precedes operands (val1 op val2)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def eval_prefix(tokens: list[str]) -> int:\n    stack = []\n    for token in reversed(tokens):\n        if token in '+-*/':\n            a = stack.pop()\n            b = stack.pop()\n            if token == '+': stack.append(a + b)\n            elif token == '-': stack.append(a - b)\n            elif token == '*': stack.append(a * b)\n            elif token == '/': stack.append(int(a / b))\n        else:\n            stack.append(int(token))\n    return stack[0]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <stack>\n\nint evalPrefix(std::vector<std::string>& tokens) {\n    std::stack<int> st;\n    for (int i = tokens.size() - 1; i >= 0; i--) {\n        const std::string& t = tokens[i];\n        if (t == \"+\" || t == \"-\" || t == \"*\" || t == \"/\") {\n            int a = st.top(); st.pop();\n            int b = st.top(); st.pop();\n            if (t == \"+\") st.push(a + b);\n            else if (t == \"-\") st.push(a - b);\n            else if (t == \"*\") st.push(a * b);\n            else if (t == \"/\") st.push(a / b);\n        } else {\n            st.push(std::stoi(t));\n        }\n    }\n    return st.top();\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class EvaluatePrefix {\n    public int evalPrefix(String[] tokens) {\n        Stack<Integer> stack = new Stack<>();\n        for (int i = tokens.length - 1; i >= 0; i--) {\n            String t = tokens[i];\n            if (\"+\".equals(t) || \"-\".equals(t) || \"*\".equals(t) || \"/\".equals(t)) {\n                int a = stack.pop();\n                int b = stack.pop();\n                if (\"+\".equals(t)) stack.push(a + b);\n                else if (\"-\".equals(t)) stack.push(a - b);\n                else if (\"*\".equals(t)) stack.push(a * b);\n                else if (\"/\".equals(t)) stack.push(a / b);\n            } else {\n                stack.push(Integer.parseInt(t));\n            }\n        }\n        return stack.peek();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function evalPrefix(tokens) {\n    const stack = [];\n    for (let i = tokens.length - 1; i >= 0; i--) {\n        let t = tokens[i];\n        if (['+', '-', '*', '/'].includes(t)) {\n            let a = stack.pop();\n            let b = stack.pop();\n            if (t === '+') stack.push(a + b);\n            else if (t === '-') stack.push(a - b);\n            else if (t === '*') stack.push(a * b);\n            else if (t === '/') stack.push(Math.trunc(a / b));\n        } else {\n            stack.push(Number(t));\n        }\n    }\n    return stack[0];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Basic Calculator III",
+          "url": "https://leetcode.com/problems/basic-calculator-iii/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-valid-parentheses",
+      "title": "Valid Parentheses",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Determines if an input string containing '()', '{}', and '[]' is balanced using a LIFO stack.",
+      "explanation": [
+        "Overview: Determines if an input string containing '()', '{}', and '[]' is balanced using a LIFO stack.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Validate string s = '({[]})'",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Process '(': Opening bracket '('. Push onto stack.",
+          "Process '{': Opening bracket '{'. Push onto stack.",
+          "Process '[': Opening bracket '['. Push onto stack.",
+          "Process ']': Closing ']'. Pop top '['. Matches!",
+          "Process '}': Closing '}'. Pop top '{'. Matches!",
+          "Process ')': Closing ')'. Pop top '('. Matches! Stack is now empty. Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Push opening brackets onto stack. For closing brackets, pop and check if matching.",
+        "whenToUse": "When validating code syntax, JSON formats, or mathematical expressions.",
+        "whereUsed": "Code IDE syntax highlighters, JSON/XML parsers, compiler lexers.",
+        "whyOptimal": "Every opening bracket must be closed by the same type of closing bracket in strict reverse order (LIFO)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isValid(s: str) -> bool:\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in mapping:\n            top = stack.pop() if stack else '#'\n            if mapping[char] != top:\n                return False\n        else:\n            stack.append(char)\n    return not stack"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <stack>\n#include <unordered_map>\n\nbool isValid(std::string s) {\n    std::stack<char> st;\n    std::unordered_map<char, char> map = {{')', '('}, {'}', '{'}, {']', '['}};\n    for (char c : s) {\n        if (map.count(c)) {\n            if (st.empty() || st.top() != map[c]) return false;\n            st.pop();\n        } else {\n            st.push(c);\n        }\n    }\n    return st.empty();\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class ValidParentheses {\n    public boolean isValid(String s) {\n        Stack<Character> stack = new Stack<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(') stack.push(')');\n            else if (c == '{') stack.push('}');\n            else if (c == '[') stack.push(']');\n            else if (stack.isEmpty() || stack.pop() != c) return false;\n        }\n        return stack.isEmpty();\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isValid(s) {\n    const stack = [];\n    const map = { ')': '(', '}': '{', ']': '[' };\n    for (let c of s) {\n        if (map[c]) {\n            if (!stack.length || stack.pop() !== map[c]) return false;\n        } else {\n            stack.push(c);\n        }\n    }\n    return stack.length === 0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Valid Parentheses",
+          "url": "https://leetcode.com/problems/valid-parentheses/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "stack-min-add-valid-parentheses",
+      "title": "Minimum Add to Make Parentheses Valid",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the minimum number of parentheses '(' or ')' that must be added to make a given string valid.",
+      "explanation": [
+        "Overview: Finds the minimum number of parentheses '(' or ')' that must be added to make a given string valid.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Find minimum additions for s = '())('",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Process '(': Open bracket '('. openCount = 1.",
+          "Process ')': Matched with open '('. openCount decreases to 0.",
+          "Process ')': Unmatched closing ')'. Must add '(' to balance. additions = 1.",
+          "Process '(': Trailing open '('. openCount = 1.",
+          "Final Total: Total additions needed = additions (1) + openCount (1) = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Keep track of unclosed '(' balance and unmatched ')' count. Total additions = open_needed + close_needed.",
+        "whenToUse": "When counting syntax errors or auto-closing bracket suggestions in text editors.",
+        "whereUsed": "IDE auto-completion engines, text format repair utilities.",
+        "whyOptimal": "Tracks unmatched opening and closing parentheses counts without needing full string re-construction."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minAddToMakeValid(s: str) -> int:\n    open_count = 0\n    additions = 0\n    for char in s:\n        if char == '(':\n            open_count += 1\n        else:\n            if open_count > 0:\n                open_count -= 1\n            else:\n                additions += 1\n    return open_count + additions"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n\nint minAddToMakeValid(std::string s) {\n    int openCount = 0, additions = 0;\n    for (char c : s) {\n        if (c == '(') openCount++;\n        else {\n            if (openCount > 0) openCount--;\n            else additions++;\n        }\n    }\n    return openCount + additions;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MinAddToMakeValid {\n    public int minAddToMakeValid(String s) {\n        int openCount = 0, additions = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(') openCount++;\n            else {\n                if (openCount > 0) openCount--;\n                else additions++;\n            }\n        }\n        return openCount + additions;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minAddToMakeValid(s) {\n    let openCount = 0, additions = 0;\n    for (let c of s) {\n        if (c === '(') openCount++;\n        else {\n            if (openCount > 0) openCount--;\n            else additions++;\n        }\n    }\n    return openCount + additions;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Minimum Add to Make Parentheses Valid",
+          "url": "https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "stack-remove-invalid-parentheses",
+      "title": "Remove Invalid Parentheses",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Removes the minimum number of invalid parentheses to make the input string valid, returning all unique valid strings using BFS / Backtracking.",
+      "explanation": [
+        "Overview: Removes the minimum number of invalid parentheses to make the input string valid, returning all unique valid strings using BFS / Backtracking.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Remove invalid parentheses from s = '()())()'",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Level 0 Check: '()())()' is NOT valid. Generate all 1-character removals.",
+          "Level 1 Check: Found valid strings: '(())()' and '()()()'. Stop BFS!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Use BFS level-by-level queue. Stop at first level where valid strings are found.",
+        "whenToUse": "When multiple valid configurations exist and all must be generated.",
+        "whereUsed": "Compiler error recovery, syntax repair engines.",
+        "whyOptimal": "Finds all optimal minimal modifications to fix broken parenthetical syntax."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef removeInvalidParentheses(s: str) -> list[str]:\n    def is_valid(string):\n        count = 0\n        for c in string:\n            if c == '(': count += 1\n            elif c == ')':\n                count -= 1\n                if count < 0: return False\n        return count == 0\n\n    visited = {s}\n    q = deque([s])\n    res = []\n    found = False\n    \n    while q:\n        curr = q.popleft()\n        if is_valid(curr):\n            res.append(curr)\n            found = True\n        if found: continue\n        for i in range(len(curr)):\n            if curr[i] not in '()': continue\n            nxt = curr[:i] + curr[i+1:]\n            if nxt not in visited:\n                visited.add(nxt)\n                q.append(nxt)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <string>\n#include <queue>\n#include <unordered_set>\n\nbool isValid(const std::string& s) {\n    int count = 0;\n    for (char c : s) {\n        if (c == '(') count++;\n        else if (c == ')') {\n            count--;\n            if (count < 0) return false;\n        }\n    }\n    return count == 0;\n}\n\nstd::vector<std::string> removeInvalidParentheses(std::string s) {\n    std::vector<std::string> res;\n    std::unordered_set<std::string> visited;\n    std::queue<std::string> q;\n    q.push(s); visited.insert(s);\n    bool found = false;\n    while (!q.empty()) {\n        std::string curr = q.front(); q.pop();\n        if (isValid(curr)) {\n            res.push_back(curr);\n            found = true;\n        }\n        if (found) continue;\n        for (int i = 0; i < curr.length(); i++) {\n            if (curr[i] != '(' && curr[i] != ')') continue;\n            std::string nxt = curr.substr(0, i) + curr.substr(i + 1);\n            if (!visited.count(nxt)) {\n                visited.insert(nxt);\n                q.push(nxt);\n            }\n        }\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class RemoveInvalidParentheses {\n    public List<String> removeInvalidParentheses(String s) {\n        List<String> res = new ArrayList<>();\n        Set<String> visited = new HashSet<>();\n        Queue<String> q = new LinkedList<>();\n        q.add(s); visited.add(s);\n        boolean found = false;\n        while (!q.isEmpty()) {\n            String curr = q.poll();\n            if (isValid(curr)) {\n                res.add(curr);\n                found = true;\n            }\n            if (found) continue;\n            for (int i = 0; i < curr.length(); i++) {\n                if (curr.charAt(i) != '(' && curr.charAt(i) != ')') continue;\n                String nxt = curr.substring(0, i) + curr.substring(i + 1);\n                if (!visited.contains(nxt)) {\n                    visited.add(nxt);\n                    q.add(nxt);\n                }\n            }\n        }\n        return res;\n    }\n    private boolean isValid(String s) {\n        int count = 0;\n        for (char c : s.toCharArray()) {\n            if (c == '(') count++;\n            else if (c == ')') {\n                count--;\n                if (count < 0) return false;\n            }\n        }\n        return count == 0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function removeInvalidParentheses(s) {\n    const isValid = (str) => {\n        let count = 0;\n        for (let c of str) {\n            if (c === '(') count++;\n            else if (c === ')') {\n                count--;\n                if (count < 0) return false;\n            }\n        }\n        return count === 0;\n    };\n    const res = [];\n    const visited = new Set([s]);\n    const q = [s];\n    let found = false;\n    while (q.length) {\n        const curr = q.shift();\n        if (isValid(curr)) {\n            res.push(curr);\n            found = true;\n        }\n        if (found) continue;\n        for (let i = 0; i < curr.length; i++) {\n            if (curr[i] !== '(' && curr[i] !== ')') continue;\n            const nxt = curr.slice(0, i) + curr.slice(i + 1);\n            if (!visited.has(nxt)) {\n                visited.add(nxt);\n                q.push(nxt);\n            }\n        }\n    }\n    return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Remove Invalid Parentheses",
+          "url": "https://leetcode.com/problems/remove-invalid-parentheses/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "stack-longest-valid-parentheses",
+      "title": "Longest Valid Parentheses",
+      "categoryId": "stack_queue",
+      "categoryTitle": "Stack & Queue Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the length of the longest valid (well-formed) parentheses substring using a Stack of indices in O(N) time.",
+      "explanation": [
+        "Overview: Finds the length of the longest valid (well-formed) parentheses substring using a Stack of indices in O(N) time.",
+        "Step 1: Initialize data structures and pointers.",
+        "Step 2: Iterate through input elements applying algorithm logic.",
+        "Step 3: Update state and return final result."
+      ],
+      "exampleTrace": {
+        "input": "Find longest valid substring for s = ')()())'",
+        "output": "Computed Result",
+        "traceSteps": [
+          "Index 0: ')': Pop -1. Stack empty, push index 0 as new boundary marker.",
+          "Index 1: '(': Push index 1.",
+          "Index 2: ')': Pop 1. Top is 0. Valid length = 2 - 0 = 2. maxLen = 2.",
+          "Index 3: '(': Push index 3.",
+          "Index 4: ')': Pop 3. Top is 0. Valid length = 4 - 0 = 4. maxLen = 4.",
+          "Index 5: ')': Pop 0. Stack empty, push index 5 as new boundary marker. Final maxLen = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Initialize stack with -1. Push indices of '('. On ')', pop. Length = current_index - stack.top().",
+        "whenToUse": "When finding continuous balanced substring lengths in string sequences.",
+        "whereUsed": "Bioinformatics sequence alignment, syntax parsing boundary optimization.",
+        "whyOptimal": "A stack storing index positions provides the exact starting boundary of the current valid substring."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longestValidParentheses(s: str) -> int:\n    stack = [-1]\n    max_len = 0\n    for i, char in enumerate(s):\n        if char == '(':\n            stack.append(i)\n        else:\n            stack.pop()\n            if not stack:\n                stack.append(i)\n            else:\n                max_len = max(max_len, i - stack[-1])\n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <stack>\n#include <algorithm>\n\nint longestValidParentheses(std::string s) {\n    std::stack<int> st;\n    st.push(-1);\n    int maxLen = 0;\n    for (int i = 0; i < s.length(); i++) {\n        if (s[i] == '(') {\n            st.push(i);\n        } else {\n            st.pop();\n            if (st.empty()) {\n                st.push(i);\n            } else {\n                maxLen = std::max(maxLen, i - st.top());\n            }\n        }\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Stack;\n\npublic class LongestValidParentheses {\n    public int longestValidParentheses(String s) {\n        Stack<Integer> stack = new Stack<>();\n        stack.push(-1);\n        int maxLen = 0;\n        for (int i = 0; i < s.length(); i++) {\n            if (s.charAt(i) == '(') {\n                stack.push(i);\n            } else {\n                stack.pop();\n                if (stack.isEmpty()) {\n                    stack.push(i);\n                } else {\n                    maxLen = Math.max(maxLen, i - stack.peek());\n                }\n            }\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function longestValidParentheses(s) {\n    const stack = [-1];\n    let maxLen = 0;\n    for (let i = 0; i < s.length; i++) {\n        if (s[i] === '(') {\n            stack.push(i);\n        } else {\n            stack.pop();\n            if (stack.length === 0) {\n                stack.push(i);\n            } else {\n                maxLen = Math.max(maxLen, i - stack[stack.length - 1]);\n            }\n        }\n    }\n    return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Longest Valid Parentheses",
+          "url": "https://leetcode.com/problems/longest-valid-parentheses/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

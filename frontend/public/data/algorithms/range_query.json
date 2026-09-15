@@ -1,0 +1,520 @@
+{
+  "id": "range_query",
+  "category": {
+    "id": "range_query",
+    "title": "Range Query Data Structures",
+    "icon": "Layers",
+    "description": "Advanced Range Query data structures including Segment Trees, Lazy Propagation, Fenwick Trees (BIT), and Sparse Tables."
+  },
+  "totalAlgorithms": 9,
+  "algorithms": [
+    {
+      "id": "segment-tree-range-sum",
+      "title": "Segment Tree (Range Sum Query & Point Update)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N) Build, O(log N) Query/Update",
+      "spaceComplexity": "O(N)",
+      "summary": "Tree data structure for querying sum in any range [L, R] and updating point values in O(log N) logarithmic time.",
+      "explanation": [
+        "1. Binary tree where leaf nodes represent array elements and internal nodes store sum of child ranges.",
+        "2. Build Tree: Recursively divide array into halves down to leaves in O(N).",
+        "3. Range Query: Traverse subtrees overlapping query range [L, R] in O(log N).",
+        "4. Point Update: Traverse path from root to leaf, updating values along the path in O(log N)."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [1, 3, 5, 7, 9, 11], Query Range [1, 3]",
+        "traceSteps": [
+          "Build Segment Tree of size 4*N.",
+          "Query range [1..3] (indices 1, 2, 3 values 3+5+7=15).",
+          "Root covers [0..5] (sum=36) -> Split left [0..2] and right [3..5].",
+          "Left node covers [1..2] (sum=8). Right node covers [3..3] (sum=7).",
+          "Result = 8 + 7 = 15."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs dynamic range queries and point updates in O(log N) time.",
+        "whenToUse": "When array elements change dynamically while answering range aggregate queries.",
+        "whereUsed": "Database range indexes, financial order book total volume queries.",
+        "whyOptimal": "Replaces slow O(N) array scans with logarithmic O(log N) tree operations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class NumArray:\n    def __init__(self, nums: list[int]):\n        self.n = len(nums)\n        self.tree = [0] * (4 * self.n)\n        if self.n > 0:\n            self._build(nums, 0, 0, self.n - 1)\n\n    def _build(self, nums, node, start, end):\n        if start == end:\n            self.tree[node] = nums[start]\n            return\n        mid = (start + end) // 2\n        self._build(nums, 2 * node + 1, start, mid)\n        self._build(nums, 2 * node + 2, mid + 1, end)\n        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]\n\n    def update(self, index: int, val: int) -> None:\n        self._update(0, 0, self.n - 1, index, val)\n\n    def _update(self, node, start, end, idx, val):\n        if start == end:\n            self.tree[node] = val\n            return\n        mid = (start + end) // 2\n        if start <= idx <= mid:\n            self._update(2 * node + 1, start, mid, idx, val)\n        else:\n            self._update(2 * node + 2, mid + 1, end, idx, val)\n        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]\n\n    def sumRange(self, left: int, right: int) -> int:\n        return self._query(0, 0, self.n - 1, left, right)\n\n    def _query(self, node, start, end, l, r):\n        if r < start or end < l:\n            return 0\n        if l <= start and end <= r:\n            return self.tree[node]\n        mid = (start + end) // 2\n        return self._query(2 * node + 1, start, mid, l, r) + self._query(2 * node + 2, mid + 1, end, l, r)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass NumArray {\n    int n;\n    vector<int> tree;\n    void build(vector<int>& nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    void update(int node, int start, int end, int idx, int val) {\n        if (start == end) { tree[node] = val; return; }\n        int mid = (start + end) / 2;\n        if (idx <= mid) update(2 * node + 1, start, mid, idx, val);\n        else update(2 * node + 2, mid + 1, end, idx, val);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return query(2 * node + 1, start, mid, l, r) + query(2 * node + 2, mid + 1, end, l, r);\n    }\npublic:\n    NumArray(vector<int>& nums) {\n        n = nums.size();\n        tree.resize(4 * n, 0);\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    void update(int index, int val) { update(0, 0, n - 1, index, val); }\n    int sumRange(int left, int right) { return query(0, 0, n - 1, left, right); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class NumArray {\n    private int n;\n    private int[] tree;\n    private void build(int[] nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    private void update(int node, int start, int end, int idx, int val) {\n        if (start == end) { tree[node] = val; return; }\n        int mid = (start + end) / 2;\n        if (idx <= mid) update(2 * node + 1, start, mid, idx, val);\n        else update(2 * node + 2, mid + 1, end, idx, val);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    private int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return query(2 * node + 1, start, mid, l, r) + query(2 * node + 2, mid + 1, end, l, r);\n    }\n    public NumArray(int[] nums) {\n        n = nums.length;\n        tree = new int[4 * n];\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    public void update(int index, int val) { update(0, 0, n - 1, index, val); }\n    public int sumRange(int left, int right) { return query(0, 0, n - 1, left, right); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class NumArray {\n  constructor(nums) {\n    this.n = nums.length;\n    this.tree = new Array(4 * this.n).fill(0);\n    if (this.n > 0) this._build(nums, 0, 0, this.n - 1);\n  }\n  _build(nums, node, start, end) {\n    if (start === end) { this.tree[node] = nums[start]; return; }\n    const mid = Math.floor((start + end) / 2);\n    this._build(nums, 2 * node + 1, start, mid);\n    this._build(nums, 2 * node + 2, mid + 1, end);\n    this.tree[node] = this.tree[2 * node + 1] + this.tree[2 * node + 2];\n  }\n  update(index, val) {\n    this._update(0, 0, this.n - 1, index, val);\n  }\n  _update(node, start, end, idx, val) {\n    if (start === end) { this.tree[node] = val; return; }\n    const mid = Math.floor((start + end) / 2);\n    if (idx <= mid) this._update(2 * node + 1, start, mid, idx, val);\n    else this._update(2 * node + 2, mid + 1, end, idx, val);\n    this.tree[node] = this.tree[2 * node + 1] + this.tree[2 * node + 2];\n  }\n  sumRange(left, right) {\n    return this._query(0, 0, this.n - 1, left, right);\n  }\n  _query(node, start, end, l, r) {\n    if (r < start || end < l) return 0;\n    if (l <= start && end <= r) return this.tree[node];\n    const mid = Math.floor((start + end) / 2);\n    return this._query(2 * node + 1, start, mid, l, r) + this._query(2 * node + 2, mid + 1, end, l, r);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 307 - Range Sum Query - Mutable",
+          "url": "https://leetcode.com/problems/range-sum-query-mutable/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "segment-tree-range-min-max",
+      "title": "Segment Tree (Range Min & Max Queries)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N) Build, O(log N) Query/Update",
+      "spaceComplexity": "O(N)",
+      "summary": "Find minimum or maximum element in any arbitrary range [L, R] dynamically.",
+      "explanation": [
+        "1. Tree nodes store `min` or `max` value of left and right child subtrees.",
+        "2. Internal node merges children: `tree[node] = min(tree[2*node+1], tree[2*node+2])`.",
+        "3. Range Query: Returns `infinity` (for min) or `-infinity` (for max) when out of bounds.",
+        "4. Point Update: Updates leaf node and rebalances parent min/max up to the root."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [2, 5, 1, 4, 9, 3], Query Min in [1, 4]",
+        "traceSteps": [
+          "Tree stores range minima at each node.",
+          "Query Range [1..4] (elements [5, 1, 4, 9]).",
+          "Left subtree [1..2] returns min(5, 1) = 1.",
+          "Right subtree [3..4] returns min(4, 9) = 4.",
+          "Global Range Min = min(1, 4) = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes dynamic Range Minimum Query (RMQ) and Range Maximum Query.",
+        "whenToUse": "When finding dynamic min/max over updating intervals.",
+        "whereUsed": "Game leaderboard score dynamic boundaries, stock price trough detection.",
+        "whyOptimal": "O(log N) query time instead of O(N) linear scans."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class SegmentTreeMinMax:\n    def __init__(self, nums: list[int]):\n        self.n = len(nums)\n        self.tree = [float('inf')] * (4 * self.n)\n        if self.n > 0: self._build(nums, 0, 0, self.n - 1)\n\n    def _build(self, nums, node, start, end):\n        if start == end:\n            self.tree[node] = nums[start]\n            return\n        mid = (start + end) // 2\n        self._build(nums, 2 * node + 1, start, mid)\n        self._build(nums, 2 * node + 2, mid + 1, end)\n        self.tree[node] = min(self.tree[2 * node + 1], self.tree[2 * node + 2])\n\n    def queryMin(self, l: int, r: int) -> int:\n        return self._query(0, 0, self.n - 1, l, r)\n\n    def _query(self, node, start, end, l, r):\n        if r < start or end < l: return float('inf')\n        if l <= start and end <= r: return self.tree[node]\n        mid = (start + end) // 2\n        return min(self._query(2 * node + 1, start, mid, l, r), self._query(2 * node + 2, mid + 1, end, l, r))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n#include <climits>\nusing namespace std;\n\nclass SegmentTreeRMQ {\n    int n;\n    vector<int> tree;\n    void build(vector<int>& nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = min(tree[2 * node + 1], tree[2 * node + 2]);\n    }\n    int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return INT_MAX;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return min(query(2 * node + 1, start, mid, l, r), query(2 * node + 2, mid + 1, end, l, r));\n    }\npublic:\n    SegmentTreeRMQ(vector<int>& nums) {\n        n = nums.size();\n        tree.resize(4 * n, INT_MAX);\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    int queryMin(int l, int r) { return query(0, 0, n - 1, l, r); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class SegmentTreeRMQ {\n    private int n;\n    private int[] tree;\n    private void build(int[] nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = Math.min(tree[2 * node + 1], tree[2 * node + 2]);\n    }\n    private int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return Integer.MAX_VALUE;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return Math.min(query(2 * node + 1, start, mid, l, r), query(2 * node + 2, mid + 1, end, l, r));\n    }\n    public SegmentTreeRMQ(int[] nums) {\n        n = nums.length;\n        tree = new int[4 * n];\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    public int queryMin(int l, int r) { return query(0, 0, n - 1, l, r); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SegmentTreeRMQ {\n  constructor(nums) {\n    this.n = nums.length;\n    this.tree = new Array(4 * this.n).fill(Infinity);\n    if (this.n > 0) this._build(nums, 0, 0, this.n - 1);\n  }\n  _build(nums, node, start, end) {\n    if (start === end) { this.tree[node] = nums[start]; return; }\n    const mid = Math.floor((start + end) / 2);\n    this._build(nums, 2 * node + 1, start, mid);\n    this._build(nums, 2 * node + 2, mid + 1, end);\n    this.tree[node] = Math.min(this.tree[2 * node + 1], this.tree[2 * node + 2]);\n  }\n  queryMin(l, r) { return this._query(0, 0, this.n - 1, l, r); }\n  _query(node, start, end, l, r) {\n    if (r < start || end < l) return Infinity;\n    if (l <= start && end <= r) return this.tree[node];\n    const mid = Math.floor((start + end) / 2);\n    return Math.min(this._query(2 * node + 1, start, mid, l, r), this._query(2 * node + 2, mid + 1, end, l, r));\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Range Minimum Query",
+          "url": "https://www.geeksforgeeks.org/range-minimum-query-for-static-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "segment-tree-range-gcd",
+      "title": "Segment Tree (Range GCD Queries)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log(Max)) Build, O(log N * log(Max)) Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Compute Greatest Common Divisor (GCD) of elements in any range [L, R] with dynamic point updates.",
+      "explanation": [
+        "1. Internal node combines child GCD values: `tree[node] = gcd(tree[2*node+1], tree[2*node+2])`.",
+        "2. Identity element for GCD is 0 (`gcd(a, 0) = a`).",
+        "3. Range Query: Intersects query interval [L, R] and accumulates GCD recursively.",
+        "4. Enables dynamic updates where updating single array element re-computes GCD bounds in logarithmic time."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [12, 18, 24, 30], Query GCD in [1, 3]",
+        "traceSteps": [
+          "Elements in range [1..3]: [18, 24, 30].",
+          "Left node returns gcd(18, 24) = 6.",
+          "Right node returns gcd(30, 0) = 30.",
+          "Combine: gcd(6, 30) = 6.",
+          "Result Range GCD = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes dynamic Greatest Common Divisor over updating array intervals.",
+        "whenToUse": "When finding GCD of dynamic subarrays in competitive programming.",
+        "whereUsed": "Signal frequency analysis, lattice grid scale synchronization.",
+        "whyOptimal": "O(log N * log(Max)) dynamic query instead of O(N log(Max))."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\nclass SegmentTreeGCD:\n    def __init__(self, nums: list[int]):\n        self.n = len(nums)\n        self.tree = [0] * (4 * self.n)\n        if self.n > 0: self._build(nums, 0, 0, self.n - 1)\n\n    def _build(self, nums, node, start, end):\n        if start == end:\n            self.tree[node] = nums[start]\n            return\n        mid = (start + end) // 2\n        self._build(nums, 2 * node + 1, start, mid)\n        self._build(nums, 2 * node + 2, mid + 1, end)\n        self.tree[node] = math.gcd(self.tree[2 * node + 1], self.tree[2 * node + 2])\n\n    def queryGCD(self, l: int, r: int) -> int:\n        return self._query(0, 0, self.n - 1, l, r)\n\n    def _query(self, node, start, end, l, r):\n        if r < start or end < l: return 0\n        if l <= start and end <= r: return self.tree[node]\n        mid = (start + end) // 2\n        return math.gcd(self._query(2 * node + 1, start, mid, l, r), self._query(2 * node + 2, mid + 1, end, l, r))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\nusing namespace std;\n\nint gcdFunc(int a, int b) { return std::gcd(a, b); }\n\nclass SegmentTreeGCD {\n    int n;\n    vector<int> tree;\n    void build(vector<int>& nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = gcdFunc(tree[2 * node + 1], tree[2 * node + 2]);\n    }\n    int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return gcdFunc(query(2 * node + 1, start, mid, l, r), query(2 * node + 2, mid + 1, end, l, r));\n    }\npublic:\n    SegmentTreeGCD(vector<int>& nums) {\n        n = nums.size();\n        tree.resize(4 * n, 0);\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    int queryGCD(int l, int r) { return query(0, 0, n - 1, l, r); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class SegmentTreeGCD {\n    private int n;\n    private int[] tree;\n    private int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }\n    private void build(int[] nums, int node, int start, int end) {\n        if (start == end) { tree[node] = nums[start]; return; }\n        int mid = (start + end) / 2;\n        build(nums, 2 * node + 1, start, mid);\n        build(nums, 2 * node + 2, mid + 1, end);\n        tree[node] = gcd(tree[2 * node + 1], tree[2 * node + 2]);\n    }\n    private int query(int node, int start, int end, int l, int r) {\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return gcd(query(2 * node + 1, start, mid, l, r), query(2 * node + 2, mid + 1, end, l, r));\n    }\n    public SegmentTreeGCD(int[] nums) {\n        n = nums.length;\n        tree = new int[4 * n];\n        if (n > 0) build(nums, 0, 0, n - 1);\n    }\n    public int queryGCD(int l, int r) { return query(0, 0, n - 1, l, r); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SegmentTreeGCD {\n  constructor(nums) {\n    this.n = nums.length;\n    this.tree = new Array(4 * this.n).fill(0);\n    if (this.n > 0) this._build(nums, 0, 0, this.n - 1);\n  }\n  _gcd(a, b) { return b === 0 ? a : this._gcd(b, a % b); }\n  _build(nums, node, start, end) {\n    if (start === end) { this.tree[node] = nums[start]; return; }\n    const mid = Math.floor((start + end) / 2);\n    this._build(nums, 2 * node + 1, start, mid);\n    this._build(nums, 2 * node + 2, mid + 1, end);\n    this.tree[node] = this._gcd(this.tree[2 * node + 1], this.tree[2 * node + 2]);\n  }\n  queryGCD(l, r) { return this._query(0, 0, this.n - 1, l, r); }\n  _query(node, start, end, l, r) {\n    if (r < start || end < l) return 0;\n    if (l <= start && end <= r) return this.tree[node];\n    const mid = Math.floor((start + end) / 2);\n    return this._gcd(this._query(2 * node + 1, start, mid, l, r), this._query(2 * node + 2, mid + 1, end, l, r));\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Codeforces - Segment Tree for the GCD",
+          "url": "https://codeforces.com/edu/course/2/lesson/4/2",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "segment-tree-lazy-propagation",
+      "title": "Segment Tree with Lazy Propagation (Range Update & Range Query)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Range Update, O(log N) Range Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Executes Range Updates [L, R] += val in O(log N) by deferring update operations to lazy array until children are accessed.",
+      "explanation": [
+        "1. Problem without Lazy: Updating range [L, R] takes O(N log N) if we update every node individually.",
+        "2. Lazy Propagation Idea: Mark internal nodes with pending updates (`lazy[node] += val`). Defer pushing to children until necessary.",
+        "3. Node Push: When visiting node `i`, apply pending `lazy[i]` to `tree[i]` and pass lazy tags down to child nodes `2*i+1` and `2*i+2`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Range Update [1..3] += 5 on array size 8",
+        "traceSteps": [
+          "Update arrives for range [1..3].",
+          "Tree node covering range [1..3] gets lazy tag += 5.",
+          "Tree node sum instantly updated by `(end - start + 1) * 5`.",
+          "Children are NOT updated immediately (O(log N) operations saved!).",
+          "Subsequent queries push lazy values down on-demand."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs dynamic Range Additions/Updates and Range Sum/Min Queries in O(log N) time.",
+        "whenToUse": "When updating entire contiguous array sub-ranges repeatedly.",
+        "whereUsed": "Mass canvas pixel updates, bulk stock dividend updates across portfolios.",
+        "whyOptimal": "Avoids updating subtrees immediately, reducing range update complexity from O(N) to O(log N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class LazySegmentTree:\n    def __init__(self, nums: list[int]):\n        self.n = len(nums)\n        self.tree = [0] * (4 * self.n)\n        self.lazy = [0] * (4 * self.n)\n        if self.n > 0: self._build(nums, 0, 0, self.n - 1)\n\n    def _build(self, nums, node, start, end):\n        if start == end:\n            self.tree[node] = nums[start]\n            return\n        mid = (start + end) // 2\n        self._build(nums, 2 * node + 1, start, mid)\n        self._build(nums, 2 * node + 2, mid + 1, end)\n        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]\n\n    def _push(self, node, start, end):\n        if self.lazy[node] != 0:\n            self.tree[node] += (end - start + 1) * self.lazy[node]\n            if start != end:\n                self.lazy[2 * node + 1] += self.lazy[node]\n                self.lazy[2 * node + 2] += self.lazy[node]\n            self.lazy[node] = 0\n\n    def updateRange(self, l: int, r: int, val: int):\n        self._update(0, 0, self.n - 1, l, r, val)\n\n    def _update(self, node, start, end, l, r, val):\n        self._push(node, start, end)\n        if r < start or end < l: return\n        if l <= start and end <= r:\n            self.lazy[node] += val\n            self._push(node, start, end)\n            return\n        mid = (start + end) // 2\n        self._update(2 * node + 1, start, mid, l, r, val)\n        self._update(2 * node + 2, mid + 1, end, l, r, val)\n        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]\n\n    def queryRange(self, l: int, r: int) -> int:\n        return self._query(0, 0, self.n - 1, l, r)\n\n    def _query(self, node, start, end, l, r):\n        self._push(node, start, end)\n        if r < start or end < l: return 0\n        if l <= start and end <= r: return self.tree[node]\n        mid = (start + end) // 2\n        return self._query(2 * node + 1, start, mid, l, r) + self._query(2 * node + 2, mid + 1, end, l, r)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass LazySegmentTree {\n    int n;\n    vector<long long> tree, lazy;\n    void push(int node, int start, int end) {\n        if (lazy[node] != 0) {\n            tree[node] += (end - start + 1) * lazy[node];\n            if (start != end) {\n                lazy[2 * node + 1] += lazy[node];\n                lazy[2 * node + 2] += lazy[node];\n            }\n            lazy[node] = 0;\n        }\n    }\n    void update(int node, int start, int end, int l, int r, long long val) {\n        push(node, start, end);\n        if (r < start || end < l) return;\n        if (l <= start && end <= r) {\n            lazy[node] += val;\n            push(node, start, end);\n            return;\n        }\n        int mid = (start + end) / 2;\n        update(2 * node + 1, start, mid, l, r, val);\n        update(2 * node + 2, mid + 1, end, l, r, val);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    long long query(int node, int start, int end, int l, int r) {\n        push(node, start, end);\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return query(2 * node + 1, start, mid, l, r) + query(2 * node + 2, mid + 1, end, l, r);\n    }\npublic:\n    LazySegmentTree(vector<int>& nums) {\n        n = nums.size();\n        tree.assign(4 * n, 0);\n        lazy.assign(4 * n, 0);\n    }\n    void updateRange(int l, int r, long long val) { update(0, 0, n - 1, l, r, val); }\n    long long queryRange(int l, int r) { return query(0, 0, n - 1, l, r); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class LazySegmentTree {\n    private int n;\n    private long[] tree, lazy;\n    private void push(int node, int start, int end) {\n        if (lazy[node] != 0) {\n            tree[node] += (end - start + 1) * lazy[node];\n            if (start != end) {\n                lazy[2 * node + 1] += lazy[node];\n                lazy[2 * node + 2] += lazy[node];\n            }\n            lazy[node] = 0;\n        }\n    }\n    private void update(int node, int start, int end, int l, int r, long val) {\n        push(node, start, end);\n        if (r < start || end < l) return;\n        if (l <= start && end <= r) {\n            lazy[node] += val;\n            push(node, start, end);\n            return;\n        }\n        int mid = (start + end) / 2;\n        update(2 * node + 1, start, mid, l, r, val);\n        update(2 * node + 2, mid + 1, end, l, r, val);\n        tree[node] = tree[2 * node + 1] + tree[2 * node + 2];\n    }\n    private long query(int node, int start, int end, int l, int r) {\n        push(node, start, end);\n        if (r < start || end < l) return 0;\n        if (l <= start && end <= r) return tree[node];\n        int mid = (start + end) / 2;\n        return query(2 * node + 1, start, mid, l, r) + query(2 * node + 2, mid + 1, end, l, r);\n    }\n    public LazySegmentTree(int[] nums) {\n        n = nums.length;\n        tree = new long[4 * n];\n        lazy = new long[4 * n];\n    }\n    public void updateRange(int l, int r, long val) { update(0, 0, n - 1, l, r, val); }\n    public long queryRange(int l, int r) { return query(0, 0, n - 1, l, r); }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class LazySegmentTree {\n  constructor(nums) {\n    this.n = nums.length;\n    this.tree = new Array(4 * this.n).fill(0);\n    this.lazy = new Array(4 * this.n).fill(0);\n  }\n  _push(node, start, end) {\n    if (this.lazy[node] !== 0) {\n      this.tree[node] += (end - start + 1) * this.lazy[node];\n      if (start !== end) {\n        this.lazy[2 * node + 1] += this.lazy[node];\n        this.lazy[2 * node + 2] += this.lazy[node];\n      }\n      this.lazy[node] = 0;\n    }\n  }\n  updateRange(l, r, val) {\n    this._update(0, 0, this.n - 1, l, r, val);\n  }\n  _update(node, start, end, l, r, val) {\n    this._push(node, start, end);\n    if (r < start || end < l) return;\n    if (l <= start && end <= r) {\n      this.lazy[node] += val;\n      this._push(node, start, end);\n      return;\n    }\n    const mid = Math.floor((start + end) / 2);\n    this._update(2 * node + 1, start, mid, l, r, val);\n    this._update(2 * node + 2, mid + 1, end, l, r, val);\n    this.tree[node] = this.tree[2 * node + 1] + this.tree[2 * node + 2];\n  }\n  queryRange(l, r) {\n    return this._query(0, 0, this.n - 1, l, r);\n  }\n  _query(node, start, end, l, r) {\n    this._push(node, start, end);\n    if (r < start || end < l) return 0;\n    if (l <= start && end <= r) return this.tree[node];\n    const mid = Math.floor((start + end) / 2);\n    return this._query(2 * node + 1, start, mid, l, r) + this._query(2 * node + 2, mid + 1, end, l, r);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - Range Update Queries",
+          "url": "https://cses.fi/problemset/task/1651",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "fenwick-tree-bit-point-update-range-query",
+      "title": "Fenwick Tree / Binary Indexed Tree (Point Update & Prefix/Range Query)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Build, O(log N) Query/Update",
+      "spaceComplexity": "O(N)",
+      "summary": "Lightweight 1-indexed array structure supporting point updates and prefix sum queries in O(log N) time with low constant overhead.",
+      "explanation": [
+        "1. Bit trick: `LSB(x) = x & (-x)`. `tree[i]` stores sum of range `(i - LSB(i), i]`.",
+        "2. Point Update `add(idx, val)`: Add `val` to `tree[idx]` and move to parent index `idx += idx & (-idx)`.",
+        "3. Prefix Query `query(idx)`: Accumulate `tree[idx]` and move to lower sub-range `idx -= idx & (-idx)`.",
+        "4. Range Query `[L, R]`: Computed instantly as `query(R) - query(L - 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Fenwick Tree [1..6] Query Range [2, 4]",
+        "traceSteps": [
+          "Prefix Sum(4) = query(4) (adds tree[4] which covers 1..4).",
+          "Prefix Sum(1) = query(1) (tree[1] covering 1..1).",
+          "Range Sum [2..4] = Prefix Sum(4) - Prefix Sum(1).",
+          "Computed in 2 * log2(N) steps."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes dynamic prefix sums and range sums with minimal code and high cache locality.",
+        "whenToUse": "When implementing cumulative frequency tables, inversion counting, or dynamic rank queries.",
+        "whereUsed": "Inversion count calculation, order statistic trees, competitive programming range queries.",
+        "whyOptimal": "Requires only O(N) memory array without tree pointers or recursion overhead."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class FenwickTree:\n    def __init__(self, size: int):\n        self.n = size\n        self.tree = [0] * (size + 1)\n\n    def update(self, idx: int, delta: int):\n        while idx <= self.n:\n            self.tree[idx] += delta\n            idx += idx & (-idx)\n\n    def query(self, idx: int) -> int:\n        s = 0\n        while idx > 0:\n            s += self.tree[idx]\n            idx -= idx & (-idx)\n        return s\n\n    def queryRange(self, l: int, r: int) -> int:\n        return self.query(r) - self.query(l - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass FenwickTree {\n    int n;\n    vector<int> tree;\npublic:\n    FenwickTree(int size) {\n        n = size;\n        tree.assign(size + 1, 0);\n    }\n    void update(int idx, int delta) {\n        for (; idx <= n; idx += idx & (-idx))\n            tree[idx] += delta;\n    }\n    int query(int idx) {\n        int sum = 0;\n        for (; idx > 0; idx -= idx & (-idx))\n            sum += tree[idx];\n        return sum;\n    }\n    int queryRange(int l, int r) {\n        return query(r) - query(l - 1);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class FenwickTree {\n    private int n;\n    private int[] tree;\n    public FenwickTree(int size) {\n        this.n = size;\n        tree = new int[size + 1];\n    }\n    public void update(int idx, int delta) {\n        for (; idx <= n; idx += idx & (-idx))\n            tree[idx] += delta;\n    }\n    public int query(int idx) {\n        int sum = 0;\n        for (; idx > 0; idx -= idx & (-idx))\n            sum += tree[idx];\n        return sum;\n    }\n    public int queryRange(int l, int r) {\n        return query(r) - query(l - 1);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class FenwickTree {\n  constructor(size) {\n    this.n = size;\n    this.tree = new Array(size + 1).fill(0);\n  }\n  update(idx, delta) {\n    for (; idx <= this.n; idx += idx & (-idx)) {\n      this.tree[idx] += delta;\n    }\n  }\n  query(idx) {\n    let sum = 0;\n    for (; idx > 0; idx -= idx & (-idx)) {\n      sum += this.tree[idx];\n    }\n    return sum;\n  }\n  queryRange(l, r) {\n    return this.query(r) - this.query(l - 1);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 315 - Count of Smaller Numbers After Self",
+          "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "fenwick-tree-range-update",
+      "title": "Fenwick Tree Range Update & Point/Range Query",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Range Update, O(log N) Range Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Dual Fenwick Tree technique supporting Range Additions [L, R] += val and Range Queries in logarithmic time.",
+      "explanation": [
+        "1. Difference Array + BIT: Maintain two BITs (`B1` and `B2`).",
+        "2. Range Add `[L, R] += v`: `B1.update(L, v)`, `B1.update(R + 1, -v)`, `B2.update(L, v * (L - 1))`, `B2.update(R + 1, -v * R)`.",
+        "3. Prefix Sum Formula: `PrefixSum(x) = B1.query(x) * x - B2.query(x)`.",
+        "4. Range Query `[L, R] = PrefixSum(R) - PrefixSum(L - 1)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Range Update [2, 4] += 3 on array size 6",
+        "traceSteps": [
+          "B1 update at index 2 (+3) and 5 (-3).",
+          "B2 update at index 2 (+3*1 = +3) and 5 (-3*4 = -12).",
+          "Prefix sum query formula computes range addition dynamically in O(log N)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Performs Range Updates and Range Queries using simple BIT structures.",
+        "whenToUse": "When Segment Tree is too heavy/verbose and range updates are required.",
+        "whereUsed": "High performance competitive programming range update tasks.",
+        "whyOptimal": "O(log N) operations with minimal memory footprint compared to Segment Trees."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class RangeBIT:\n    def __init__(self, size: int):\n        self.n = size\n        self.b1 = [0] * (size + 1)\n        self.b2 = [0] * (size + 1)\n\n    def _add(self, b, idx, val):\n        while idx <= self.n:\n            b[idx] += val\n            idx += idx & (-idx)\n\n    def _query(self, b, idx):\n        s = 0\n        while idx > 0:\n            s += b[idx]\n            idx -= idx & (-idx)\n        return s\n\n    def updateRange(self, l: int, r: int, val: int):\n        self._add(self.b1, l, val)\n        self._add(self.b1, r + 1, -val)\n        self._add(self.b2, l, val * (l - 1))\n        self._add(self.b2, r + 1, -val * r)\n\n    def prefixSum(self, idx: int) -> int:\n        return self._query(self.b1, idx) * idx - self._query(self.b2, idx)\n\n    def queryRange(self, l: int, r: int) -> int:\n        return self.prefixSum(r) - self.prefixSum(l - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass RangeBIT {\n    int n;\n    vector<long long> b1, b2;\n    void add(vector<long long>& b, int idx, long long val) {\n        for (; idx <= n; idx += idx & (-idx)) b[idx] += val;\n    }\n    long long query(vector<long long>& b, int idx) {\n        long long sum = 0;\n        for (; idx > 0; idx -= idx & (-idx)) sum += b[idx];\n        return sum;\n    }\npublic:\n    RangeBIT(int size) {\n        n = size;\n        b1.assign(size + 1, 0);\n        b2.assign(size + 1, 0);\n    }\n    void updateRange(int l, int r, long long val) {\n        add(b1, l, val); add(b1, r + 1, -val);\n        add(b2, l, val * (l - 1)); add(b2, r + 1, -val * r);\n    }\n    long long prefixSum(int idx) {\n        return query(b1, idx) * idx - query(b2, idx);\n    }\n    long long queryRange(int l, int r) {\n        return prefixSum(r) - prefixSum(l - 1);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class RangeBIT {\n    private int n;\n    private long[] b1, b2;\n    private void add(long[] b, int idx, long val) {\n        for (; idx <= n; idx += idx & (-idx)) b[idx] += val;\n    }\n    private long query(long[] b, int idx) {\n        long sum = 0;\n        for (; idx > 0; idx -= idx & (-idx)) sum += b[idx];\n        return sum;\n    }\n    public RangeBIT(int size) {\n        n = size;\n        b1 = new long[size + 1];\n        b2 = new long[size + 1];\n    }\n    public void updateRange(int l, int r, long val) {\n        add(b1, l, val);\n        add(b1, r + 1, -val);\n        add(b2, l, val * (l - 1));\n        add(b2, r + 1, -val * r);\n    }\n    public long prefixSum(int idx) {\n        return query(b1, idx) * idx - query(b2, idx);\n    }\n    public long queryRange(int l, int r) {\n        return prefixSum(r) - prefixSum(l - 1);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class RangeBIT {\n  constructor(size) {\n    this.n = size;\n    this.b1 = new Array(size + 1).fill(0);\n    this.b2 = new Array(size + 1).fill(0);\n  }\n  _add(b, idx, val) {\n    for (; idx <= this.n; idx += idx & (-idx)) b[idx] += val;\n  }\n  _query(b, idx) {\n    let sum = 0;\n    for (; idx > 0; idx -= idx & (-idx)) sum += b[idx];\n    return sum;\n  }\n  updateRange(l, r, val) {\n    this._add(this.b1, l, val);\n    this._add(this.b1, r + 1, -val);\n    this._add(this.b2, l, val * (l - 1));\n    this._add(this.b2, r + 1, -val * r);\n  }\n  prefixSum(idx) {\n    return this._query(this.b1, idx) * idx - this._query(this.b2, idx);\n  }\n  queryRange(l, r) {\n    return this.prefixSum(r) - this.prefixSum(l - 1);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "CSES - Range Update Queries",
+          "url": "https://cses.fi/problemset/task/1651",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "sparse-table-static-range-minimum",
+      "title": "Sparse Table (Static Range Minimum Query - RMQ)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N log N)",
+      "summary": "Precomputes powers-of-two range minima enabling instant O(1) constant time queries for static arrays.",
+      "explanation": [
+        "1. Sparse Table definition: `table[i][j]` stores minimum in range `[i, i + 2^j - 1]`.",
+        "2. Precomputation: `table[i][j] = min(table[i][j-1], table[i + 2^(j-1)][j-1])`.",
+        "3. Idempotent Query: Range [L, R] length `len = R - L + 1`. Let `k = log2(len)`. `queryMin(L, R) = min(table[L][k], table[R - 2^k + 1][k])`.",
+        "4. Instant O(1) query time because two overlapping power-of-two intervals fully cover `[L, R]`."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [7, 2, 3, 0, 5, 10, 3, 12], Query Min in [1, 6]",
+        "traceSteps": [
+          "Query interval [1..6] length = 6.",
+          "k = floor(log2(6)) = 2 (block length 2^2 = 4).",
+          "Covering blocks: block1 starting at L=1 length 4 [indices 1..4: 2,3,0,5] -> min 0.",
+          "block2 ending at R=6 length 4 [indices 3..6: 0,5,10,3] -> min 0.",
+          "Result = min(0, 0) = 0 in O(1) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers Range Minimum Query (RMQ) in true O(1) constant time for static arrays.",
+        "whenToUse": "When array elements never change and range min queries must be blazingly fast.",
+        "whereUsed": "Lowest Common Ancestor (LCA) via Euler Tour RMQ reduction.",
+        "whyOptimal": "O(1) query time outperforms logarithmic Segment Trees."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\nclass SparseTableMin:\n    def __init__(self, arr: list[int]):\n        self.n = len(arr)\n        if self.n == 0: return\n        self.K = int(math.log2(self.n)) + 1\n        self.table = [[0] * self.K for _ in range(self.n)]\n        for i in range(self.n):\n            self.table[i][0] = arr[i]\n        for j in range(1, self.K):\n            for i in range(self.n - (1 << j) + 1):\n                self.table[i][j] = min(self.table[i][j - 1], self.table[i + (1 << (j - 1))][j - 1])\n\n    def queryMin(self, l: int, r: int) -> int:\n        length = r - l + 1\n        k = int(math.log2(length))\n        return min(self.table[l][k], self.table[r - (1 << k) + 1][k])"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <cmath>\n#include <algorithm>\nusing namespace std;\n\nclass SparseTableMin {\n    int n, K;\n    vector<vector<int>> table;\npublic:\n    SparseTableMin(vector<int>& arr) {\n        n = arr.size();\n        if (n == 0) return;\n        K = log2(n) + 1;\n        table.assign(n, vector<int>(K, 0));\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = min(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    int queryMin(int l, int r) {\n        int len = r - l + 1;\n        int k = log2(len);\n        return min(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class SparseTableMin {\n    private int n, K;\n    private int[][] table;\n    public SparseTableMin(int[] arr) {\n        n = arr.length;\n        if (n == 0) return;\n        K = (int)(Math.log(n) / Math.log(2)) + 1;\n        table = new int[n][K];\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = Math.min(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    public int queryMin(int l, int r) {\n        int len = r - l + 1;\n        int k = (int)(Math.log(len) / Math.log(2));\n        return Math.min(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SparseTableMin {\n  constructor(arr) {\n    this.n = arr.length;\n    if (this.n === 0) return;\n    this.K = Math.floor(Math.log2(this.n)) + 1;\n    this.table = Array.from({ length: this.n }, () => new Array(this.K).fill(0));\n    for (let i = 0; i < this.n; i++) this.table[i][0] = arr[i];\n    for (let j = 1; j < this.K; j++) {\n      for (let i = 0; i + (1 << j) <= this.n; i++) {\n        this.table[i][j] = Math.min(this.table[i][j - 1], this.table[i + (1 << (j - 1))][j - 1]);\n      }\n    }\n  }\n  queryMin(l, r) {\n    const len = r - l + 1;\n    const k = Math.floor(Math.log2(len));\n    return Math.min(this.table[l][k], this.table[r - (1 << k) + 1][k]);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "SPOJ - RMQSQ - Range Minimum Query",
+          "url": "https://www.spoj.com/problems/RMQSQ/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sparse-table-range-maximum",
+      "title": "Sparse Table (Static Range Maximum Query)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N log N)",
+      "summary": "Precomputes range maxima enabling instant O(1) constant time queries for static arrays.",
+      "explanation": [
+        "1. Sparse Table definition: `table[i][j]` stores maximum in range `[i, i + 2^j - 1]`.",
+        "2. Precomputation: `table[i][j] = max(table[i][j-1], table[i + 2^(j-1)][j-1])`.",
+        "3. Idempotent Query: Range [L, R] length `len = R - L + 1`. Let `k = log2(len)`. `queryMax(L, R) = max(table[L][k], table[R - 2^k + 1][k])`.",
+        "4. Instant O(1) query time because `max(max(A), max(B)) = max(A U B)`."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [1, 5, 8, 2, 9, 3], Query Max in [1, 4]",
+        "traceSteps": [
+          "Query interval [1..4] (elements [5, 8, 2, 9]) length = 4.",
+          "k = floor(log2(4)) = 2.",
+          "block1 starting at L=1 length 4 [5, 8, 2, 9] -> max 9.",
+          "Result = 9 in O(1) time."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers Range Maximum Query in true O(1) constant time for static arrays.",
+        "whenToUse": "When finding maximum values over static array ranges in O(1) time.",
+        "whereUsed": "Peak signal amplitude identification, sliding dynamic boundary limits.",
+        "whyOptimal": "O(1) query execution avoiding log N tree traversals."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\nclass SparseTableMax:\n    def __init__(self, arr: list[int]):\n        self.n = len(arr)\n        if self.n == 0: return\n        self.K = int(math.log2(self.n)) + 1\n        self.table = [[0] * self.K for _ in range(self.n)]\n        for i in range(self.n):\n            self.table[i][0] = arr[i]\n        for j in range(1, self.K):\n            for i in range(self.n - (1 << j) + 1):\n                self.table[i][j] = max(self.table[i][j - 1], self.table[i + (1 << (j - 1))][j - 1])\n\n    def queryMax(self, l: int, r: int) -> int:\n        length = r - l + 1\n        k = int(math.log2(length))\n        return max(self.table[l][k], self.table[r - (1 << k) + 1][k])"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <cmath>\n#include <algorithm>\nusing namespace std;\n\nclass SparseTableMax {\n    int n, K;\n    vector<vector<int>> table;\npublic:\n    SparseTableMax(vector<int>& arr) {\n        n = arr.size();\n        if (n == 0) return;\n        K = log2(n) + 1;\n        table.assign(n, vector<int>(K, 0));\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = max(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    int queryMax(int l, int r) {\n        int len = r - l + 1;\n        int k = log2(len);\n        return max(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class SparseTableMax {\n    private int n, K;\n    private int[][] table;\n    public SparseTableMax(int[] arr) {\n        n = arr.length;\n        if (n == 0) return;\n        K = (int)(Math.log(n) / Math.log(2)) + 1;\n        table = new int[n][K];\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = Math.max(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    public int queryMax(int l, int r) {\n        int len = r - l + 1;\n        int k = (int)(Math.log(len) / Math.log(2));\n        return Math.max(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SparseTableMax {\n  constructor(arr) {\n    this.n = arr.length;\n    if (this.n === 0) return;\n    this.K = Math.floor(Math.log2(this.n)) + 1;\n    this.table = Array.from({ length: this.n }, () => new Array(this.K).fill(0));\n    for (let i = 0; i < this.n; i++) this.table[i][0] = arr[i];\n    for (let j = 1; j < this.K; j++) {\n      for (let i = 0; i + (1 << j) <= this.n; i++) {\n        this.table[i][j] = Math.max(this.table[i][j - 1], this.table[i + (1 << (j - 1))][j - 1]);\n      }\n    }\n  }\n  queryMax(l, r) {\n    const len = r - l + 1;\n    const k = Math.floor(Math.log2(len));\n    return Math.max(this.table[l][k], this.table[r - (1 << k) + 1][k]);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Range Maximum Query",
+          "url": "https://www.geeksforgeeks.org/range-maximum-query-using-sparse-table/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sparse-table-range-gcd",
+      "title": "Sparse Table (Static Range GCD Query)",
+      "categoryId": "range_query",
+      "categoryTitle": "Range Query Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N log(Max)) Precomputation, O(log(Max)) Query",
+      "spaceComplexity": "O(N log N)",
+      "summary": "Precomputes range GCDs enabling instant Range GCD queries for static arrays.",
+      "explanation": [
+        "1. Idempotent Property of GCD: `gcd(gcd(A), gcd(B)) = gcd(A U B)`.",
+        "2. Sparse Table construction: `table[i][j] = gcd(table[i][j-1], table[i + 2^(j-1)][j-1])`.",
+        "3. Range Query: `queryGCD(L, R) = gcd(table[L][k], table[R - 2^k + 1][k])` where `k = log2(R - L + 1)`.",
+        "4. Executes range GCD queries without tree traversals, taking time equal to a single GCD calculation."
+      ],
+      "exampleTrace": {
+        "title": "Trace arr = [12, 24, 36, 48, 60], Query GCD in [1, 3]",
+        "traceSteps": [
+          "Query interval [1..3] (elements [24, 36, 48]) length = 3.",
+          "k = floor(log2(3)) = 1 (block length 2^1 = 2).",
+          "block1 starting at L=1 [24, 36] -> gcd 12.",
+          "block2 ending at R=3 [36, 48] -> gcd 12.",
+          "Result = gcd(12, 12) = 12 in O(1) table lookups."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes Range GCD over static arrays in single GCD evaluation time.",
+        "whenToUse": "When querying subarray GCDs frequently without element modifications.",
+        "whereUsed": "Number theory sequence analysis, lattice alignment.",
+        "whyOptimal": "O(1) table lookups + single GCD call beats Segment Tree log N tree traversals."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\nclass SparseTableGCD:\n    def __init__(self, arr: list[int]):\n        self.n = len(arr)\n        if self.n == 0: return\n        self.K = int(math.log2(self.n)) + 1\n        self.table = [[0] * self.K for _ in range(self.n)]\n        for i in range(self.n):\n            self.table[i][0] = arr[i]\n        for j in range(1, self.K):\n            for i in range(self.n - (1 << j) + 1):\n                self.table[i][j] = math.gcd(self.table[i][j - 1], self.table[i + (1 << (j - 1))][j - 1])\n\n    def queryGCD(self, l: int, r: int) -> int:\n        length = r - l + 1\n        k = int(math.log2(length))\n        return math.gcd(self.table[l][k], self.table[r - (1 << k) + 1][k])"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <cmath>\nusing namespace std;\n\nclass SparseTableGCD {\n    int n, K;\n    vector<vector<int>> table;\n    int gcd(int a, int b) { return std::gcd(a, b); }\npublic:\n    SparseTableGCD(vector<int>& arr) {\n        n = arr.size();\n        if (n == 0) return;\n        K = log2(n) + 1;\n        table.assign(n, vector<int>(K, 0));\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = gcd(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    int queryGCD(int l, int r) {\n        int len = r - l + 1;\n        int k = log2(len);\n        return gcd(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class SparseTableGCD {\n    private int n, K;\n    private int[][] table;\n    private int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }\n    public SparseTableGCD(int[] arr) {\n        n = arr.length;\n        if (n == 0) return;\n        K = (int)(Math.log(n) / Math.log(2)) + 1;\n        table = new int[n][K];\n        for (int i = 0; i < n; i++) table[i][0] = arr[i];\n        for (int j = 1; j < K; j++) {\n            for (int i = 0; i + (1 << j) <= n; i++) {\n                table[i][j] = gcd(table[i][j - 1], table[i + (1 << (j - 1))][j - 1]);\n            }\n        }\n    }\n    public int queryGCD(int l, int r) {\n        int len = r - l + 1;\n        int k = (int)(Math.log(len) / Math.log(2));\n        return gcd(table[l][k], table[r - (1 << k) + 1][k]);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SparseTableGCD {\n  constructor(arr) {\n    this.n = arr.length;\n    if (this.n === 0) return;\n    this.K = Math.floor(Math.log2(this.n)) + 1;\n    this.table = Array.from({ length: this.n }, () => new Array(this.K).fill(0));\n    for (let i = 0; i < this.n; i++) this.table[i][0] = arr[i];\n    for (let j = 1; j < this.K; j++) {\n      for (let i = 0; i + (1 << j) <= this.n; i++) {\n        this.table[i][j] = this._gcd(this.table[i][j - 1], this.table[i + (1 << (j - 1))][j - 1]);\n      }\n    }\n  }\n  _gcd(a, b) { return b === 0 ? a : this._gcd(b, a % b); }\n  queryGCD(l, r) {\n    const len = r - l + 1;\n    const k = Math.floor(Math.log2(len));\n    return this._gcd(this.table[l][k], this.table[r - (1 << k) + 1][k]);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Codeforces - GCD Table / Sparse Table GCD",
+          "url": "https://codeforces.com/problemset/problem/1547/F",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

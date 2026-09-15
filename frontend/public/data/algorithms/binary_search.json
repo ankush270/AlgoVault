@@ -1,0 +1,504 @@
+{
+  "id": "binary_search",
+  "category": {
+    "id": "binary_search",
+    "title": "Binary Search & Monotonic Space",
+    "icon": "Target",
+    "description": "Binary search on arrays, answer spaces, and 2D matrices."
+  },
+  "totalAlgorithms": 8,
+  "algorithms": [
+    {
+      "id": "binary-search-foundations",
+      "title": "Binary Search & Lower/Upper Bound Patterns",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Easy",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Divide-and-conquer technique to locate elements or decision thresholds in sorted arrays or monotonic search spaces.",
+      "explanation": [
+        "Maintain search space range `[low, high]`.",
+        "Compute `mid = low + (high - low) // 2` to prevent integer overflow.",
+        "Check condition at `mid`:",
+        "  - If `arr[mid] == target`, return `mid`.",
+        "  - If `arr[mid] < target`, shrink search space to right `low = mid + 1`.",
+        "  - If `arr[mid] > target`, shrink search space to left `high = mid - 1`.",
+        "For Binary Search on Answer Space: Replace array with boolean function `check(mid)` that is monotonic (TTT...FFF or FFF...TTT)."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 3, 4, 6, 8, 10, 13], target = 6",
+        "output": "Index 3",
+        "traceSteps": [
+          "Initialize low = 0, high = 6.",
+          "Iteration 1: mid = (0 + 6) // 2 = 3. nums[3] = 6.",
+          "Target 6 == nums[3] (6). Target found immediately!",
+          "Returns index 3 in O(log N) iterations."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds an item or optimal threshold value in logarithmic O(log N) operations.",
+        "whenToUse": "Whenever data is sorted, or whenever problem asks for min/max threshold matching a condition.",
+        "whereUsed": "Database B-Tree indexing, Git bisect (finding bug commit), memory allocation address lookup, binary search trees.",
+        "whyOptimal": "Reduces search space by half in each iteration: O(log₂ N). 1 Billion elements searched in just 30 comparisons!"
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def binary_search(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = low + (high - low) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 704 - Binary Search",
+          "url": "https://leetcode.com/problems/binary-search/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 33 - Search in Rotated Sorted Array",
+          "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bs-standard-bounds",
+      "title": "Standard Binary Search, Lower Bound & Upper Bound",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Easy",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1) Auxiliary Space",
+      "summary": "Foundational binary search techniques for searching sorted arrays and finding Lower Bound (first element ≥ target), Upper Bound (first element > target), and Search Insert Position.",
+      "explanation": [
+        "Standard Binary Search: Search for exact match by checking mid = low + (high - low) // 2.",
+        "Lower Bound: Finds first index `i` where `arr[i] >= target`. If target > max, returns N.",
+        "Upper Bound: Finds first index `i` where `arr[i] > target`. Useful for range queries.",
+        "Search Insert Position: Equivalent to Lower Bound index where target should be inserted."
+      ],
+      "exampleTrace": {
+        "input": "arr = [1, 3, 5, 6], target = 5",
+        "output": "Index 2",
+        "traceSteps": [
+          "low = 0, high = 4, mid = 2. arr[2] = 5 == target.",
+          "Lower Bound for 5: low=0, high=4. mid=2 (5 >= 5) -> high=2. mid=0 (1 < 5) -> low=1. mid=1 (3 < 5) -> low=2. Return index 2.",
+          "Search Insert Position returns index 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds target elements and exact boundary positions in logarithmic O(log N) time.",
+        "whenToUse": "When searching, inserting, or querying range boundaries in sorted data.",
+        "whereUsed": "Database range queries, C++ std::lower_bound / std::upper_bound, Java Arrays.binarySearch.",
+        "whyOptimal": "Halves the search space at each iteration, reducing O(N) linear scan to O(log N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lower_bound(arr: list[int], target: int) -> int:\n    low, high = 0, len(arr)\n    while low < high:\n        mid = (low + high) // 2\n        if arr[mid] >= target:\n            high = mid\n        else:\n            low = mid + 1\n    return low\n\ndef upper_bound(arr: list[int], target: int) -> int:\n    low, high = 0, len(arr)\n    while low < high:\n        mid = (low + high) // 2\n        if arr[mid] > target:\n            high = mid\n        else:\n            low = mid + 1\n    return low"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nint lowerBound(std::vector<int>& arr, int target) {\n    int low = 0, high = arr.size();\n    while (low < high) {\n        int mid = low + (high - low) / 2;\n        if (arr[mid] >= target) high = mid;\n        else low = mid + 1;\n    }\n    return low;\n}\n\nint upperBound(std::vector<int>& arr, int target) {\n    int low = 0, high = arr.size();\n    while (low < high) {\n        int mid = low + (high - low) / 2;\n        if (arr[mid] > target) high = mid;\n        else low = mid + 1;\n    }\n    return low;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class BinarySearchBounds {\n    public static int lowerBound(int[] arr, int target) {\n        int low = 0, high = arr.length;\n        while (low < high) {\n            int mid = low + (high - low) / 2;\n            if (arr[mid] >= target) high = mid;\n            else low = mid + 1;\n        }\n        return low;\n    }\n\n    public static int upperBound(int[] arr, int target) {\n        int low = 0, high = arr.length;\n        while (low < high) {\n            int mid = low + (high - low) / 2;\n            if (arr[mid] > target) high = mid;\n            else low = mid + 1;\n        }\n        return low;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lowerBound(arr, target) {\n    let low = 0, high = arr.length;\n    while (low < high) {\n        let mid = Math.floor((low + high) / 2);\n        if (arr[mid] >= target) high = mid;\n        else low = mid + 1;\n    }\n    return low;\n}\n\nfunction upperBound(arr, target) {\n    let low = 0, high = arr.length;\n    while (low < high) {\n        let mid = Math.floor((low + high) / 2);\n        if (arr[mid] > target) high = mid;\n        else low = mid + 1;\n    }\n    return low;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 35 - Search Insert Position",
+          "url": "https://leetcode.com/problems/search-insert-position/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 704 - Binary Search",
+          "url": "https://leetcode.com/problems/binary-search/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bs-first-last-occurrences",
+      "title": "First & Last Occurrence & Count in Sorted Array",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the first and last index of a target value in a sorted array and computes total occurrence count (last - first + 1) in O(log N) time.",
+      "explanation": [
+        "First Occurrence: Binary Search saving index when `arr[mid] == target`, then continuing search in left half (`high = mid - 1`).",
+        "Last Occurrence: Binary Search saving index when `arr[mid] == target`, then continuing search in right half (`low = mid + 1`).",
+        "Total Occurrence Count: If target exists, `count = last_occurrence - first_occurrence + 1`.",
+        "Avoids linear scanning when duplicate target values span a large portion of the array."
+      ],
+      "exampleTrace": {
+        "input": "nums = [5, 7, 7, 8, 8, 10], target = 8",
+        "output": "[3, 4] (Count = 2)",
+        "traceSteps": [
+          "Search First Occurrence of 8: mid index 3 (val 8) -> save bound=3, move high to 2. First occurrence = index 3.",
+          "Search Last Occurrence of 8: mid index 3 (val 8) -> save bound=3, move low to 4. mid index 4 (val 8) -> save bound=4, move low to 5. Last occurrence = index 4.",
+          "Range = [3, 4]. Total occurrences = 4 - 3 + 1 = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Locates boundary range of repeated elements in O(log N) logarithmic time.",
+        "whenToUse": "When finding first/last position or total count of duplicate items in sorted data.",
+        "whereUsed": "Database index range scans, frequency counting in sorted logs.",
+        "whyOptimal": "Replaces O(N) duplicate scanning with two O(log N) binary searches."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def searchRange(nums: list[int], target: int) -> list[int]:\n    def find_bound(is_first):\n        low, high = 0, len(nums) - 1\n        bound = -1\n        while low <= high:\n            mid = (low + high) // 2\n            if nums[mid] == target:\n                bound = mid\n                if is_first: high = mid - 1\n                else: low = mid + 1\n            elif nums[mid] < target:\n                low = mid + 1\n            else:\n                high = mid - 1\n        return bound\n        \n    first = find_bound(True)\n    if first == -1: return [-1, -1]\n    last = find_bound(False)\n    return [first, last]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nstd::vector<int> searchRange(std::vector<int>& nums, int target) {\n    auto findBound = [&](bool isFirst) {\n        int low = 0, high = nums.size() - 1, bound = -1;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (nums[mid] == target) {\n                bound = mid;\n                if (isFirst) high = mid - 1;\n                else low = mid + 1;\n            } else if (nums[mid] < target) low = mid + 1;\n            else high = mid - 1;\n        }\n        return bound;\n    };\n    int first = findBound(true);\n    if (first == -1) return {-1, -1};\n    return {first, findBound(false)};\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class FirstLastOccurrence {\n    public int[] searchRange(int[] nums, int target) {\n        int first = findBound(nums, target, true);\n        if (first == -1) return new int[]{-1, -1};\n        int last = findBound(nums, target, false);\n        return new int[]{first, last};\n    }\n    private int findBound(int[] nums, int target, boolean isFirst) {\n        int low = 0, high = nums.length - 1, bound = -1;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (nums[mid] == target) {\n                bound = mid;\n                if (isFirst) high = mid - 1;\n                else low = mid + 1;\n            } else if (nums[mid] < target) low = mid + 1;\n            else high = mid - 1;\n        }\n        return bound;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function searchRange(nums, target) {\n    const findBound = (isFirst) => {\n        let low = 0, high = nums.length - 1, bound = -1;\n        while (low <= high) {\n            let mid = Math.floor((low + high) / 2);\n            if (nums[mid] === target) {\n                bound = mid;\n                if (isFirst) high = mid - 1;\n                else low = mid + 1;\n            } else if (nums[mid] < target) low = mid + 1;\n            else high = mid - 1;\n        }\n        return bound;\n    };\n    const first = findBound(true);\n    if (first === -1) return [-1, -1];\n    return [first, findBound(false)];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 34 - Find First and Last Position of Element in Sorted Array",
+          "url": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bs-rotated-array-search-min",
+      "title": "Rotated Sorted Array (Search, Minimum & Rotation Point)",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Searches for a target, finds the minimum element, and determines rotation count in a rotated sorted array in O(log N) time.",
+      "explanation": [
+        "Key Insight: In a rotated sorted array, AT LEAST ONE HALF (left or right) is ALWAYS strictly sorted!",
+        "Search Target: Check if `nums[low] <= nums[mid]` (Left half sorted). If target lies in left range `[nums[low], nums[mid]]`, search left; else search right.",
+        "If right half is sorted (`nums[mid] <= nums[high]`), check if target lies in `[nums[mid], nums[high]]`.",
+        "Find Minimum / Rotation Point: Minimum element is the pivot point where `nums[mid] > nums[high]`. Index of minimum = number of rotations."
+      ],
+      "exampleTrace": {
+        "input": "nums = [4, 5, 6, 7, 0, 1, 2], target = 0",
+        "output": "Index 4 (Minimum element is 0 at index 4)",
+        "traceSteps": [
+          "low=0 (val 4), high=6 (val 2), mid=3 (val 7). Left half [4..7] is sorted.",
+          "Target 0 is not in range [4..7]. Search right half: low = 4.",
+          "low=4 (val 0), high=6 (val 2), mid=5 (val 1). Right half [0..2] is sorted.",
+          "mid index 4 has value 0 == target! Return index 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Searches and finds minimum elements in shifted/rotated sorted arrays.",
+        "whenToUse": "When array was sorted then rotated by unknown offset K.",
+        "whereUsed": "Circular buffer searching, time-series log offsets.",
+        "whyOptimal": "Identifies the sorted half at each step to maintain logarithmic O(log N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def searchRotated(nums: list[int], target: int) -> int:\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target: return mid\n        if nums[low] <= nums[mid]:\n            if nums[low] <= target < nums[mid]: high = mid - 1\n            else: low = mid + 1\n        else:\n            if nums[mid] < target <= nums[high]: low = mid + 1\n            else: high = mid - 1\n    return -1\n\ndef findMinRotated(nums: list[int]) -> int:\n    low, high = 0, len(nums) - 1\n    while low < high:\n        mid = (low + high) // 2\n        if nums[mid] > nums[high]: low = mid + 1\n        else: high = mid\n    return nums[low]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nint searchRotated(std::vector<int>& nums, int target) {\n    int low = 0, high = nums.size() - 1;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (nums[mid] == target) return mid;\n        if (nums[low] <= nums[mid]) {\n            if (nums[low] <= target && target < nums[mid]) high = mid - 1;\n            else low = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[high]) low = mid + 1;\n            else high = mid - 1;\n        }\n    }\n    return -1;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class RotatedArraySearch {\n    public int search(int[] nums, int target) {\n        int low = 0, high = nums.length - 1;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (nums[mid] == target) return mid;\n            if (nums[low] <= nums[mid]) {\n                if (nums[low] <= target && target < nums[mid]) high = mid - 1;\n                else low = mid + 1;\n            } else {\n                if (nums[mid] < target && target <= nums[high]) low = mid + 1;\n                else high = mid - 1;\n            }\n        }\n        return -1;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function searchRotated(nums, target) {\n    let low = 0, high = nums.length - 1;\n    while (low <= high) {\n        let mid = Math.floor((low + high) / 2);\n        if (nums[mid] === target) return mid;\n        if (nums[low] <= nums[mid]) {\n            if (nums[low] <= target && target < nums[mid]) high = mid - 1;\n            else low = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[high]) low = mid + 1;\n            else high = mid - 1;\n        }\n    }\n    return -1;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 33 - Search in Rotated Sorted Array",
+          "url": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 153 - Find Minimum in Rotated Sorted Array",
+          "url": "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bs-answer-koko-shipping",
+      "title": "BS on Answer: Koko Eating Bananas & Ship Packages",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log(MaxVal - MinVal))",
+      "spaceComplexity": "O(1)",
+      "summary": "Solves minimum capacity / speed problems by binary searching over monotonic answer range `[1...MaxVal]` with a feasibility helper function.",
+      "explanation": [
+        "Pattern: When asked to find minimum capacity or rate K such that a task can be finished within D days / H hours.",
+        "Define Search Range: `low = 1` or `max(weights)`, `high = max(piles)` or `sum(weights)`.",
+        "Feasibility Helper `is_possible(k)`: Calculates total hours/days needed if eating speed / ship capacity is `k`.",
+        "If `is_possible(mid) <= H`: `mid` is valid! Try smaller speed `high = mid - 1`.",
+        "Else: Speed too slow, increase speed `low = mid + 1`."
+      ],
+      "exampleTrace": {
+        "input": "piles = [3, 6, 7, 11], h = 8",
+        "output": "4 (Eating speed = 4 bananas/hr)",
+        "traceSteps": [
+          "Search Range: low = 1, high = 11.",
+          "mid = 6: Hours needed = 1+1+2+2 = 6 <= 8 (Valid!). Try smaller speed: high = 5.",
+          "mid = 3: Hours needed = 1+2+3+4 = 10 > 8 (Too slow!). low = 4.",
+          "mid = 4: Hours needed = 1+2+2+3 = 8 <= 8 (Valid!). Try high = 3.",
+          "Min eating speed = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds minimum valid threshold capacity or speed across monotonic search spaces.",
+        "whenToUse": "When optimizing a rate/capacity constraint with monotonic binary feasibility (True/False transition).",
+        "whereUsed": "Resource rate allocation, bandwidth throttling, deadline scheduling.",
+        "whyOptimal": "Replaces brute force rate checking with logarithmic range evaluation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import math\n\ndef minEatingSpeed(piles: list[int], h: int) -> int:\n    def can_finish(speed):\n        return sum(math.ceil(p / speed) for p in piles) <= h\n        \n    low, high = 1, max(piles)\n    ans = high\n    while low <= high:\n        mid = (low + high) // 2\n        if can_finish(mid):\n            ans = mid\n            high = mid - 1\n        else:\n            low = mid + 1\n    return ans"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n#include <cmath>\n\nint minEatingSpeed(std::vector<int>& piles, int h) {\n    auto canFinish = [&](int speed) {\n        long long hours = 0;\n        for (int p : piles) hours += (p + speed - 1) / speed;\n        return hours <= h;\n    };\n    int low = 1, high = *std::max_element(piles.begin(), piles.end()), ans = high;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (canFinish(mid)) {\n            ans = mid;\n            high = mid - 1;\n        } else low = mid + 1;\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class KokoEatingBananas {\n    public int minEatingSpeed(int[] piles, int h) {\n        int low = 1, high = Arrays.stream(piles).max().getAsInt(), ans = high;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (canFinish(piles, mid, h)) {\n                ans = mid;\n                high = mid - 1;\n            } else low = mid + 1;\n        }\n        return ans;\n    }\n    private boolean canFinish(int[] piles, int speed, int h) {\n        long hours = 0;\n        for (int p : piles) hours += (p + speed - 1) / speed;\n        return hours <= h;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minEatingSpeed(piles, h) {\n    const canFinish = (speed) => {\n        let hours = 0;\n        for (let p of piles) hours += Math.ceil(p / speed);\n        return hours <= h;\n    };\n    let low = 1, high = Math.max(...piles), ans = high;\n    while (low <= high) {\n        let mid = Math.floor((low + high) / 2);\n        if (canFinish(mid)) {\n            ans = mid;\n            high = mid - 1;\n        } else low = mid + 1;\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 875 - Koko Eating Bananas",
+          "url": "https://leetcode.com/problems/koko-eating-bananas/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 1011 - Capacity To Ship Packages Within D Days",
+          "url": "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "bs-answer-aggressive-cows",
+      "title": "BS on Answer: Aggressive Cows & Max-Min Distance",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log(MaxDist)) after sorting stalls in O(N log N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Maximizes the minimum distance between C placed elements (e.g. cows in stalls or balls in buckets) using Binary Search on Answer.",
+      "explanation": [
+        "Problem: Place C cows into N stalls such that the minimum distance between any two cows is as LARGE as possible.",
+        "Sort stall positions.",
+        "Define distance search range `low = 1` and `high = stalls[N-1] - stalls[0]`.",
+        "Feasibility Helper `can_place(dist)`: Greedily place first cow at stall 0. Place next cow at first stall with distance `>= dist`.",
+        "If `can_place(mid) >= C`: Distance `mid` is valid! Try larger distance `ans = mid`, `low = mid + 1`.",
+        "Else: Distance too large, decrease distance `high = mid - 1`."
+      ],
+      "exampleTrace": {
+        "input": "stalls = [1, 2, 4, 8, 9], k = 3 cows",
+        "output": "3 (Maximum Minimum Distance)",
+        "traceSteps": [
+          "Sorted stalls = [1, 2, 4, 8, 9]. Distance range: low = 1, high = 8.",
+          "mid = 4: Place cows at 1, 8. Total cows = 2 < 3 (Failed!). Try high = 3.",
+          "mid = 3: Place cows at 1, 4, 8. Total cows = 3 >= 3 (Valid!). Try low = 4.",
+          "Maximum minimum distance between 3 cows = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maximizes minimum separation distance among placed objects.",
+        "whenToUse": "When finding maximum minimum distance in spatial placement problems.",
+        "whereUsed": "Cellular tower placement, distance optimization in wireless networks.",
+        "whyOptimal": "Greedy feasibility check + Binary search on distance gives O(N log(Range)) efficiency."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def aggressive_cows(stalls: list[int], k: int) -> int:\n    stalls.sort()\n    \n    def can_place(dist):\n        count = 1\n        last = stalls[0]\n        for i in range(1, len(stalls)):\n            if stalls[i] - last >= dist:\n                count += 1\n                last = stalls[i]\n                if count >= k: return True\n        return False\n\n    low, high = 1, stalls[-1] - stalls[0]\n    ans = 0\n    while low <= high:\n        mid = (low + high) // 2\n        if can_place(mid):\n            ans = mid\n            low = mid + 1\n        else:\n            high = mid - 1\n    return ans"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n\nint aggressiveCows(std::vector<int>& stalls, int k) {\n    std::sort(stalls.begin(), stalls.end());\n    auto canPlace = [&](int dist) {\n        int count = 1, last = stalls[0];\n        for (size_t i = 1; i < stalls.size(); i++) {\n            if (stalls[i] - last >= dist) {\n                count++;\n                last = stalls[i];\n                if (count >= k) return true;\n            }\n        }\n        return false;\n    };\n    int low = 1, high = stalls.back() - stalls.front(), ans = 0;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (canPlace(mid)) {\n            ans = mid;\n            low = mid + 1;\n        } else high = mid - 1;\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class AggressiveCows {\n    public static int aggressiveCows(int[] stalls, int k) {\n        Arrays.sort(stalls);\n        int low = 1, high = stalls[stalls.length - 1] - stalls[0], ans = 0;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (canPlace(stalls, k, mid)) {\n                ans = mid;\n                low = mid + 1;\n            } else high = mid - 1;\n        }\n        return ans;\n    }\n    private static boolean canPlace(int[] stalls, int k, int dist) {\n        int count = 1, last = stalls[0];\n        for (int i = 1; i < stalls.length; i++) {\n            if (stalls[i] - last >= dist) {\n                count++;\n                last = stalls[i];\n                if (count >= k) return true;\n            }\n        }\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function aggressiveCows(stalls, k) {\n    stalls.sort((a, b) => a - b);\n    const canPlace = (dist) => {\n        let count = 1, last = stalls[0];\n        for (let i = 1; i < stalls.length; i++) {\n            if (stalls[i] - last >= dist) {\n                count++;\n                last = stalls[i];\n                if (count >= k) return true;\n            }\n        }\n        return false;\n    };\n    let low = 1, high = stalls[stalls.length - 1] - stalls[0], ans = 0;\n    while (low <= high) {\n        let mid = Math.floor((low + high) / 2);\n        if (canPlace(mid)) {\n            ans = mid;\n            low = mid + 1;\n        } else high = mid - 1;\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1552 - Magnetic Force Between Two Balls",
+          "url": "https://leetcode.com/problems/magnetic-force-between-two-balls/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "GeeksforGeeks - Aggressive Cows",
+          "url": "https://practice.geeksforgeeks.org/problems/aggressive-cows/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "bs-answer-allocate-books",
+      "title": "BS on Answer: Allocate Books & Split Array Sum",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log(Sum - Max))",
+      "spaceComplexity": "O(1)",
+      "summary": "Minimizes the maximum subarray sum when allocating N contiguous items to M partitions (Book Allocation, Painter's Partition, Split Array Largest Sum).",
+      "explanation": [
+        "Problem: Allocate N contiguous books to M students such that the maximum pages assigned to any student is MINIMIZED.",
+        "Range: `low = max(pages)` (at least largest single book), `high = sum(pages)` (one student gets all books).",
+        "Feasibility Helper `is_possible(max_pages)`: Iterate through books adding pages. If current student exceeds `max_pages`, allocate to a new student.",
+        "If required students `<= M`: Capacity `max_pages` is valid! Try smaller capacity `ans = mid`, `high = mid - 1`.",
+        "Else: Capacity too small, increase capacity `low = mid + 1`."
+      ],
+      "exampleTrace": {
+        "input": "nums = [7, 2, 5, 10, 8], k = 2 students",
+        "output": "18 (Partitions: [7, 2, 5] sum=14 and [10, 8] sum=18)",
+        "traceSteps": [
+          "Range: low = 10, high = 32.",
+          "mid = 21: Partition 1 [7,2,5,10] sum=24 > 21 -> split: [7,2,5]=14, [10,8]=18. Students needed = 2 <= 2 (Valid!). Try high = 20.",
+          "mid = 18: Partition 1 [7,2,5]=14, Partition 2 [10,8]=18. Students needed = 2 <= 2 (Valid!). Try high = 17.",
+          "mid = 17: Partition 1 [7,2,5]=14, Partition 2 [10]=10, Partition 3 [8]=8. Students = 3 > 2 (Failed!). low = 18.",
+          "Minimum max-subarray sum = 18."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Minimizes the maximum workload among M parallel partitions.",
+        "whenToUse": "When partitioning contiguous items to M workers/subarrays to balance load.",
+        "whereUsed": "Load balancers, CPU thread task partitioners, painter partitioning.",
+        "whyOptimal": "Binary search on max capacity guarantees global optimal balance in logarithmic steps."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def splitArray(nums: list[int], k: int) -> int:\n    def can_split(max_sum):\n        count = 1\n        curr_sum = 0\n        for num in nums:\n            if curr_sum + num > max_sum:\n                count += 1\n                curr_sum = num\n            else:\n                curr_sum += num\n        return count <= k\n\n    low, high = max(nums), sum(nums)\n    ans = high\n    while low <= high:\n        mid = (low + high) // 2\n        if can_split(mid):\n            ans = mid\n            high = mid - 1\n        else:\n            low = mid + 1\n    return ans"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <numeric>\n#include <algorithm>\n\nint splitArray(std::vector<int>& nums, int k) {\n    auto canSplit = [&](int maxSum) {\n        int count = 1, currSum = 0;\n        for (int num : nums) {\n            if (currSum + num > maxSum) {\n                count++;\n                currSum = num;\n            } else currSum += num;\n        }\n        return count <= k;\n    };\n    int low = *std::max_element(nums.begin(), nums.end());\n    int high = std::accumulate(nums.begin(), nums.end(), 0), ans = high;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        if (canSplit(mid)) {\n            ans = mid;\n            high = mid - 1;\n        } else low = mid + 1;\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\npublic class SplitArray {\n    public int splitArray(int[] nums, int k) {\n        int low = Arrays.stream(nums).max().getAsInt();\n        int high = Arrays.stream(nums).sum(), ans = high;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (canSplit(nums, k, mid)) {\n                ans = mid;\n                high = mid - 1;\n            } else low = mid + 1;\n        }\n        return ans;\n    }\n    private boolean canSplit(int[] nums, int k, int maxSum) {\n        int count = 1, currSum = 0;\n        for (int num : nums) {\n            if (currSum + num > maxSum) {\n                count++;\n                currSum = num;\n            } else currSum += num;\n        }\n        return count <= k;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function splitArray(nums, k) {\n    const canSplit = (maxSum) => {\n        let count = 1, currSum = 0;\n        for (let num of nums) {\n            if (currSum + num > maxSum) {\n                count++;\n                currSum = num;\n            } else currSum += num;\n        }\n        return count <= k;\n    };\n    let low = Math.max(...nums);\n    let high = nums.reduce((a, b) => a + b, 0), ans = high;\n    while (low <= high) {\n        let mid = Math.floor((low + high) / 2);\n        if (canSplit(mid)) {\n            ans = mid;\n            high = mid - 1;\n        } else low = mid + 1;\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 410 - Split Array Largest Sum",
+          "url": "https://leetcode.com/problems/split-array-largest-sum/",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "InterviewBit - Allocate Books",
+          "url": "https://www.interviewbit.com/problems/allocate-books/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "bs-2d-matrix-search",
+      "title": "2D Binary Search & Staircase Search Matrix",
+      "categoryId": "binary_search",
+      "categoryTitle": "Binary Search & Monotonic Space",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log(M*N)) for 1D mapped matrix, O(M + N) for Staircase search",
+      "spaceComplexity": "O(1)",
+      "summary": "Searches for a target value in 2D sorted matrices using index mapping virtual 1D binary search or top-right staircase elimination.",
+      "explanation": [
+        "Pattern 1 (Fully Sorted 2D Matrix): Treat M x N matrix as a virtual 1D sorted array of length M*N.",
+        "Map 1D index `mid` to 2D matrix cell: `row = mid // N`, `col = mid % N`.",
+        "Perform standard binary search on `low = 0` to `high = M*N - 1` in O(log(M*N)) time.",
+        "Pattern 2 (Row-wise & Column-wise Sorted Matrix II): Start at Top-Right corner `row = 0, col = N - 1`.",
+        "If `matrix[row][col] == target`: Found!",
+        "If `matrix[row][col] > target`: Move Left (`col--`).",
+        "If `matrix[row][col] < target`: Move Down (`row++`). Time: O(M + N)."
+      ],
+      "exampleTrace": {
+        "input": "matrix = [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], target = 3",
+        "output": "True",
+        "traceSteps": [
+          "Matrix 3x4 -> virtual 1D length = 12.",
+          "low=0, high=11. mid=5 -> row = 5//4 = 1, col = 5%4 = 1 -> matrix[1][1] = 11.",
+          "11 > 3 -> high = 4.",
+          "mid=2 -> row = 2//4 = 0, col = 2%4 = 2 -> matrix[0][2] = 5.",
+          "5 > 3 -> high = 1.",
+          "mid=1 -> row = 1//4 = 0, col = 1%4 = 1 -> matrix[0][1] = 3 == target!",
+          "Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds targets in 2D grid structures without scanning all cells.",
+        "whenToUse": "When searching in sorted 2D matrices or grids.",
+        "whereUsed": "Image pixel region lookup, GIS spatial grid queries, database 2D index lookup.",
+        "whyOptimal": "Replaces O(M*N) grid scan with O(log(M*N)) or O(M+N) staircase search."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def searchMatrix(matrix: list[list[int]], target: int) -> bool:\n    if not matrix or not matrix[0]: return False\n    m, n = len(matrix), len(matrix[0])\n    low, high = 0, m * n - 1\n    \n    while low <= high:\n        mid = (low + high) // 2\n        r, c = mid // n, mid % n\n        val = matrix[r][c]\n        if val == target: return True\n        elif val < target: low = mid + 1\n        else: high = mid - 1\n    return False\n\ndef searchMatrixII(matrix: list[list[int]], target: int) -> bool:\n    if not matrix or not matrix[0]: return False\n    r, c = 0, len(matrix[0]) - 1\n    while r < len(matrix) and c >= 0:\n        val = matrix[r][c]\n        if val == target: return True\n        elif val > target: c -= 1\n        else: r += 1\n    return False"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nbool searchMatrix(std::vector<std::vector<int>>& matrix, int target) {\n    if (matrix.empty() || matrix[0].empty()) return false;\n    int m = matrix.size(), n = matrix[0].size();\n    int low = 0, high = m * n - 1;\n    while (low <= high) {\n        int mid = low + (high - low) / 2;\n        int val = matrix[mid / n][mid % n];\n        if (val == target) return true;\n        else if (val < target) low = mid + 1;\n        else high = mid - 1;\n    }\n    return false;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MatrixSearch {\n    public boolean searchMatrix(int[][] matrix, int target) {\n        if (matrix == null || matrix.length == 0) return false;\n        int m = matrix.length, n = matrix[0].length;\n        int low = 0, high = m * n - 1;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            int val = matrix[mid / n][mid % n];\n            if (val == target) return true;\n            else if (val < target) low = mid + 1;\n            else high = mid - 1;\n        }\n        return false;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function searchMatrix(matrix, target) {\n    if (!matrix.length || !matrix[0].length) return false;\n    const m = matrix.length, n = matrix[0].length;\n    let low = 0, high = m * n - 1;\n    while (low <= high) {\n        let mid = Math.floor((low + high) / 2);\n        let val = matrix[Math.floor(mid / n)][mid % n];\n        if (val === target) return true;\n        else if (val < target) low = mid + 1;\n        else high = mid - 1;\n    }\n    return false;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 74 - Search a 2D Matrix",
+          "url": "https://leetcode.com/problems/search-a-2d-matrix/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 240 - Search a 2D Matrix II",
+          "url": "https://leetcode.com/problems/search-a-2d-matrix-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

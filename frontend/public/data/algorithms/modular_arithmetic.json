@@ -1,0 +1,237 @@
+{
+  "id": "modular_arithmetic",
+  "category": {
+    "id": "modular_arithmetic",
+    "title": "Modular Arithmetic & Fast Exponentiation",
+    "icon": "Zap",
+    "description": "Modular properties, negative modulo handling, Fast Binary Exponentiation, Modular Inverse via Fermat's Theorem & Extended GCD, and Chinese Remainder Theorem."
+  },
+  "totalAlgorithms": 4,
+  "algorithms": [
+    {
+      "id": "modular-operations-basics",
+      "title": "Modular Arithmetic Operations (Add, Sub, Mul, Div)",
+      "categoryId": "modular_arithmetic",
+      "categoryTitle": "Modular Arithmetic & Fast Exponentiation",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "Safe fundamental modular operations preventing integer overflow and handling negative remainders.",
+      "explanation": [
+        "1. Modular Addition: `(A + B) % M = ((A % M) + (B % M)) % M`.",
+        "2. Modular Subtraction: `(A - B) % M = ((A % M) - (B % M) + M) % M` (adds M to prevent negative result).",
+        "3. Modular Multiplication: `(A * B) % M = ((A % M) * (B % M)) % M`.",
+        "4. Modular Division: `(A / B) % M = (A * B^(-1)) % M` where `B^(-1)` is the modular inverse of B modulo M."
+      ],
+      "exampleTrace": {
+        "title": "Trace (-5 - 8) mod 7",
+        "traceSteps": [
+          "(-5) mod 7 = 2.",
+          "8 mod 7 = 1.",
+          "Sub: 2 - 1 = 1.",
+          "Alternatively: (-13 % 7 + 7) % 7 = (-6 + 7) % 7 = 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Prevents integer overflow and negative modulo bugs in competitive programming.",
+        "whenToUse": "In all problems asking for answer modulo 10^9+7 or 998244353.",
+        "whereUsed": "Combinatorics, graph counting, dynamic programming DP modulo results.",
+        "whyOptimal": "O(1) constant time arithmetic operations."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "MOD = 1_000_000_007\n\ndef mod_add(a: int, b: int, m: int = MOD) -> int:\n    return (a % m + b % m) % m\n\ndef mod_sub(a: int, b: int, m: int = MOD) -> int:\n    return (a % m - b % m + m) % m\n\ndef mod_mul(a: int, b: int, m: int = MOD) -> int:\n    return ((a % m) * (b % m)) % m"
+        },
+        {
+          "language": "cpp",
+          "code": "const int MOD = 1e9 + 7;\n\nlong long modAdd(long long a, long long b, long long m = MOD) {\n    return ((a % m) + (b % m)) % m;\n}\nlong long modSub(long long a, long long b, long long m = MOD) {\n    return ((a % m) - (b % m) + m) % m;\n}\nlong long modMul(long long a, long long b, long long m = MOD) {\n    return ((a % m) * (b % m)) % m;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static final long MOD = 1000000007;\n    public static long modAdd(long a, long b, long m) {\n        return ((a % m) + (b % m)) % m;\n    }\n    public static long modSub(long a, long b, long m) {\n        return ((a % m) - (b % m) + m) % m;\n    }\n    public static long modMul(long a, long b, long m) {\n        return ((a % m) * (b % m)) % m;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "const MOD = 1000000007;\nfunction modAdd(a, b, m = MOD) {\n  return Number((BigInt(a) + BigInt(b)) % BigInt(m));\n}\nfunction modSub(a, b, m = MOD) {\n  return Number(((BigInt(a) - BigInt(b)) % BigInt(m) + BigInt(m)) % BigInt(m));\n}\nfunction modMul(a, b, m = MOD) {\n  return Number((BigInt(a) * BigInt(b)) % BigInt(m));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Modular Arithmetic",
+          "url": "https://www.geeksforgeeks.org/modular-arithmetic/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-exponentiation",
+      "title": "Binary Exponentiation (Fast Power (A^B) % M)",
+      "categoryId": "modular_arithmetic",
+      "categoryTitle": "Modular Arithmetic & Fast Exponentiation",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log B)",
+      "spaceComplexity": "O(1)",
+      "summary": "Computes (A^B) % M in O(log B) logarithmic time by squaring base A and testing binary bits of exponent B.",
+      "explanation": [
+        "1. Divide & Conquer Bitwise Idea: `A^B = (A^(B/2))^2` if B is even, and `A * A^(B-1)` if B is odd.",
+        "2. Binary Bits: Iterate bits of B. If current bit is 1, multiply `res = (res * base) % M`.",
+        "3. Square Base: At every step, square `base = (base * base) % M` and halve `B >>= 1`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 3^13 mod 7",
+        "traceSteps": [
+          "B = 13 (binary 1101):",
+          "Bit 1 (val 1): res = (1 * 3) % 7 = 3, base = 3^2 = 9 % 7 = 2",
+          "Bit 0 (val 0): base = 2^2 = 4",
+          "Bit 1 (val 1): res = (3 * 4) % 7 = 12 % 7 = 5, base = 4^2 = 16 % 7 = 2",
+          "Bit 1 (val 1): res = (5 * 2) % 7 = 10 % 7 = 3",
+          "Result: 3^13 mod 7 = 3 in 4 steps!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes huge powers (e.g. A^10^18) in microseconds.",
+        "whenToUse": "When evaluating powers under modulo or calculating matrix exponentiation.",
+        "whereUsed": "RSA cryptography, fast Fibonacci matrix exponentiation, combinatorics.",
+        "whyOptimal": "O(log B) reduces 10^18 multiplication loops down to just ~60 steps."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def power(a: int, b: int, m: int) -> int:\n    res = 1\n    a %= m\n    while b > 0:\n        if b & 1:\n            res = (res * a) % m\n        a = (a * a) % m\n        b >>= 1\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "long long power(long long a, long long b, long long m) {\n    long long res = 1;\n    a %= m;\n    while (b > 0) {\n        if (b & 1) res = (res * a) % m;\n        a = (a * a) % m;\n        b >>= 1;\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long power(long a, long b, long m) {\n        long res = 1;\n        a %= m;\n        while (b > 0) {\n            if ((b & 1) == 1) res = (res * a) % m;\n            a = (a * a) % m;\n            b >>= 1;\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function power(a, b, m) {\n  let res = 1n;\n  let base = BigInt(a) % BigInt(m);\n  let exp = BigInt(b);\n  const mod = BigInt(m);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % mod;\n    base = (base * base) % mod;\n    exp >>= 1n;\n  }\n  return Number(res);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 50 - Pow(x, n)",
+          "url": "https://leetcode.com/problems/powx-n/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "modular-inverse-fermat-ext-gcd",
+      "title": "Modular Multiplicative Inverse (Fermat & Ext-GCD)",
+      "categoryId": "modular_arithmetic",
+      "categoryTitle": "Modular Arithmetic & Fast Exponentiation",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log M)",
+      "spaceComplexity": "O(1)",
+      "summary": "Find integer X such that (A * X) % M = 1 using Fermat's Little Theorem or Extended Euclidean Algorithm.",
+      "explanation": [
+        "1. Fermat's Little Theorem: If M is prime, `A^(M-1) ≡ 1 (mod M)`. Multiplying by `A^(-1)` yields `A^(-1) ≡ A^(M-2) (mod M)`.",
+        "2. Extended GCD Method: Works for any M co-prime to A (`gcd(A, M) = 1`). Solves `A*X + M*Y = 1`.",
+        "3. Division Modulo M: Computing `(A / B) % M` is performed as `(A * modInverse(B, M)) % M`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Modular Inverse of 3 mod 11 using Fermat",
+        "traceSteps": [
+          "M = 11 is prime.",
+          "Inverse = 3^(11-2) mod 11 = 3^9 mod 11.",
+          "3^9 = 19683. 19683 % 11 = 4.",
+          "Check: (3 * 4) % 11 = 12 % 11 = 1!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Enables division modulo M in O(log M) time.",
+        "whenToUse": "When calculating combinations `nCr % M` or dividing under modulo.",
+        "whereUsed": "Combinatorics `nCr` precomputations, RSA encryption key generation.",
+        "whyOptimal": "Logarithmic time O(log M) using fast exponentiation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def mod_inverse_fermat(a: int, p: int) -> int:\n    # Only when p is prime and gcd(a, p) == 1\n    return pow(a, p - 2, p)"
+        },
+        {
+          "language": "cpp",
+          "code": "long long power(long long a, long long b, long long m) {\n    long long res = 1; a %= m;\n    while (b > 0) {\n        if (b & 1) res = (res * a) % m;\n        a = (a * a) % m; b >>= 1;\n    }\n    return res;\n}\n\nlong long modInverseFermat(long long a, long long p) {\n    return power(a, p - 2, p);\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long power(long a, long b, long m) {\n        long res = 1; a %= m;\n        while (b > 0) {\n            if ((b & 1) == 1) res = (res * a) % m;\n            a = (a * a) % m; b >>= 1;\n        }\n        return res;\n    }\n    public static long modInverseFermat(long a, long p) {\n        return power(a, p - 2, p);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function power(a, b, m) {\n  let res = 1n, base = BigInt(a) % BigInt(m), exp = BigInt(b), mod = BigInt(m);\n  while (exp > 0n) {\n    if (exp & 1n) res = (res * base) % mod;\n    base = (base * base) % mod; exp >>= 1n;\n  }\n  return Number(res);\n}\nfunction modInverseFermat(a, p) {\n  return power(a, p - 2, p);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Modular Multiplicative Inverse",
+          "url": "https://www.geeksforgeeks.org/problems/modular-multiplicative-inverse-1587115620/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "chinese-remainder-theorem",
+      "title": "Chinese Remainder Theorem (CRT)",
+      "categoryId": "modular_arithmetic",
+      "categoryTitle": "Modular Arithmetic & Fast Exponentiation",
+      "difficulty": "Hard",
+      "timeComplexity": "O(K log(M))",
+      "spaceComplexity": "O(1)",
+      "summary": "Solves system of simultaneous congruences X ≡ a_i (mod m_i) for pairwise coprime moduli.",
+      "explanation": [
+        "1. Problem: Find X such that `X ≡ a1 (mod m1)`, `X ≡ a2 (mod m2)`, ..., `X ≡ ak (mod mk)`.",
+        "2. Total Product: `M = m1 * m2 * ... * mk`.",
+        "3. For each equation `i`: Let `M_i = M / m_i`. Compute `y_i = modInverse(M_i, m_i)`.",
+        "4. Solution: `X = (sum(a_i * M_i * y_i)) % M`."
+      ],
+      "exampleTrace": {
+        "title": "Trace X ≡ 2 (mod 3), X ≡ 3 (mod 4), X ≡ 1 (mod 5)",
+        "traceSteps": [
+          "M = 3 * 4 * 5 = 60.",
+          "i=1: a1=2, M1=20, y1 = inverse(20 mod 3 = 2) mod 3 = 2 -> term1 = 2*20*2 = 80.",
+          "i=2: a2=3, M2=15, y2 = inverse(15 mod 4 = 3) mod 4 = 3 -> term2 = 3*15*3 = 135.",
+          "i=3: a3=1, M3=12, y3 = inverse(12 mod 5 = 2) mod 5 = 3 -> term3 = 1*12*3 = 36.",
+          "Sum = 80 + 135 + 36 = 251. X = 251 % 60 = 11."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Solves system of remainder equations across coprime moduli in O(K log M) time.",
+        "whenToUse": "When evaluating large numbers represented by their remainders.",
+        "whereUsed": "RSA decryption acceleration, multi-precision arithmetic, secret sharing schemes.",
+        "whyOptimal": "Reconstructs unique solution modulo M without brute forcing."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def ext_gcd(a, b):\n    if b == 0: return (a, 1, 0)\n    g, x1, y1 = ext_gcd(b, a % b)\n    return (g, y1, x1 - (a // b) * y1)\n\ndef mod_inverse(a, m):\n    g, x, _ = ext_gcd(a, m)\n    return (x % m + m) % m\n\ndef chinese_remainder_theorem(num: list[int], rem: list[int]) -> int:\n    prod = 1\n    for n in num:\n        prod *= n\n    result = 0\n    for i in range(len(num)):\n        pp = prod // num[i]\n        result += rem[i] * mod_inverse(pp, num[i]) * pp\n    return result % prod"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nlong long extGCD(long long a, long long b, long long &x, long long &y) {\n    if (b == 0) { x = 1; y = 0; return a; }\n    long long x1, y1;\n    long long g = extGCD(b, a % b, x1, y1);\n    x = y1; y = x1 - (a / b) * y1;\n    return g;\n}\nlong long modInverse(long long a, long long m) {\n    long long x, y;\n    extGCD(a, m, x, y);\n    return (x % m + m) % m;\n}\nlong long chineseRemainder(vector<long long>& num, vector<long long>& rem) {\n    long long prod = 1;\n    for (long long n : num) prod *= n;\n    long long result = 0;\n    for (size_t i = 0; i < num.size(); i++) {\n        long long pp = prod / num[i];\n        result = (result + rem[i] * modInverse(pp, num[i]) % prod * pp % prod) % prod;\n    }\n    return result;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static long extGCD(long a, long b, long[] xy) {\n        if (b == 0) { xy[0] = 1; xy[1] = 0; return a; }\n        long[] xy1 = new long[2];\n        long g = extGCD(b, a % b, xy1);\n        xy[0] = xy1[1];\n        xy[1] = xy1[0] - (a / b) * xy1[1];\n        return g;\n    }\n    public static long modInverse(long a, long m) {\n        long[] xy = new long[2];\n        extGCD(a, m, xy);\n        return (xy[0] % m + m) % m;\n    }\n    public static long chineseRemainder(long[] num, long[] rem) {\n        long prod = 1;\n        for (long n : num) prod *= n;\n        long result = 0;\n        for (int i = 0; i < num.length; i++) {\n            long pp = prod / num[i];\n            result = (result + rem[i] * modInverse(pp, num[i]) % prod * (pp % prod)) % prod;\n        }\n        return result;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function extGCD(a, b) {\n  if (b === 0n) return { g: a, x: 1n, y: 0n };\n  const res = extGCD(b, a % b);\n  const x = res.y;\n  const y = res.x - (a / b) * res.y;\n  return { g: res.g, x, y };\n}\nfunction modInverse(a, m) {\n  const res = extGCD(BigInt(a), BigInt(m));\n  return Number((res.x % BigInt(m) + BigInt(m)) % BigInt(m));\n}\nfunction chineseRemainder(num, rem) {\n  let prod = 1n;\n  for (const n of num) prod *= BigInt(n);\n  let result = 0n;\n  for (let i = 0; i < num.length; i++) {\n    let pp = prod / BigInt(num[i]);\n    let inv = BigInt(modInverse(pp, num[i]));\n    result = (result + BigInt(rem[i]) * inv * pp) % prod;\n  }\n  return Number(result);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Chinese Remainder Theorem",
+          "url": "https://www.geeksforgeeks.org/chinese-remainder-theorem-set-1-introduction/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

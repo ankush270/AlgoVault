@@ -1,0 +1,1760 @@
+{
+  "id": "design-oriented-data-structures",
+  "category": {
+    "id": "design-oriented-data-structures",
+    "title": "Design-Oriented Data Structures",
+    "icon": "🏗️",
+    "description": "Designing efficient data structures by combining multiple structures to support real-world operations with optimal time and space complexity."
+  },
+  "totalAlgorithms": 24,
+  "algorithms": [
+    {
+      "id": "min-stack",
+      "title": "Min Stack",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) for push, pop, top, and getMin",
+      "spaceComplexity": "O(n)",
+      "summary": "A stack that can return the minimum element in O(1) time.",
+      "explanation": [
+        "Normal stack gives push, pop, and top in O(1).",
+        "The extra problem is finding the minimum quickly.",
+        "We can maintain another stack called minStack.",
+        "minStack stores the minimum value seen so far.",
+        "Whenever we push a value, we also update minStack if the new value is smaller.",
+        "When we pop, we remove the value from both stacks.",
+        "This makes getMin() O(1)."
+      ],
+      "exampleTrace": {
+        "input": "push(5), push(3), push(7), getMin(), pop(), getMin()",
+        "output": "3, 3",
+        "traceSteps": [
+          "Push 5 -> stack = [5], minStack = [5]",
+          "Push 3 -> stack = [5,3], minStack = [5,3]",
+          "Push 7 -> stack = [5,3,7], minStack = [5,3,3]",
+          "getMin() -> 3",
+          "Pop 7",
+          "getMin() -> 3"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Find the minimum element of a stack without scanning the whole stack.",
+        "whenToUse": "When stack operations and minimum queries happen frequently.",
+        "whereUsed": "Expression processing, monitoring systems, interview problems.",
+        "whyOptimal": "The minimum is maintained during insertion, so no extra scan is needed."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n\n    def push(self, x):\n        self.stack.append(x)\n        if not self.min_stack or x <= self.min_stack[-1]:\n            self.min_stack.append(x)\n\n    def pop(self):\n        x = self.stack.pop()\n        if x == self.min_stack[-1]:\n            self.min_stack.pop()\n        return x\n\n    def top(self):\n        return self.stack[-1]\n\n    def getMin(self):\n        return self.min_stack[-1]"
+        },
+        {
+          "language": "c++",
+          "code": "class MinStack {\n    stack<int> st, minSt;\npublic:\n    void push(int x) {\n        st.push(x);\n        if (minSt.empty() || x <= minSt.top()) minSt.push(x);\n    }\n\n    int pop() {\n        int x = st.top();\n        st.pop();\n        if (x == minSt.top()) minSt.pop();\n        return x;\n    }\n\n    int top() { return st.top(); }\n    int getMin() { return minSt.top(); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class MinStack {\n    Stack<Integer> stack = new Stack<>();\n    Stack<Integer> minStack = new Stack<>();\n\n    public void push(int x) {\n        stack.push(x);\n        if (minStack.isEmpty() || x <= minStack.peek()) {\n            minStack.push(x);\n        }\n    }\n\n    public int pop() {\n        int x = stack.pop();\n        if (x == minStack.peek()) minStack.pop();\n        return x;\n    }\n\n    public int top() { return stack.peek(); }\n    public int getMin() { return minStack.peek(); }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Min Stack",
+          "url": "https://leetcode.com/problems/min-stack/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "max-stack",
+      "title": "Max Stack",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) for push, top, and peekMax; O(log n) for popMax with ordered structure",
+      "spaceComplexity": "O(n)",
+      "summary": "A stack that can also return and remove the maximum element efficiently.",
+      "explanation": [
+        "A normal stack only knows the top element.",
+        "For maximum queries, we need another structure to track maximum values.",
+        "A max stack can use a stack plus an ordered structure.",
+        "The stack keeps insertion order.",
+        "The ordered structure helps find the maximum quickly.",
+        "When popMax is required, we locate the maximum and remove it."
+      ],
+      "exampleTrace": {
+        "input": "push(5), push(1), push(7), peekMax(), popMax()",
+        "output": "7, 7",
+        "traceSteps": [
+          "Push 5",
+          "Push 1",
+          "Push 7",
+          "peekMax() -> 7",
+          "popMax() removes 7"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides normal stack operations plus maximum-element operations.",
+        "whenToUse": "When both LIFO access and maximum queries are required.",
+        "whereUsed": "Priority-aware stacks and interview design problems.",
+        "whyOptimal": "A second ordered structure avoids scanning the entire stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MaxStack:\n    def __init__(self):\n        self.stack = []\n\n    def push(self, x):\n        self.stack.append(x)\n\n    def pop(self):\n        return self.stack.pop()\n\n    def top(self):\n        return self.stack[-1]\n\n    def peekMax(self):\n        return max(self.stack)\n\n    def popMax(self):\n        m = max(self.stack)\n        i = len(self.stack) - 1 - self.stack[::-1].index(m)\n        return self.stack.pop(i)"
+        },
+        {
+          "language": "c++",
+          "code": "class MaxStack {\n    vector<int> st;\npublic:\n    void push(int x) { st.push_back(x); }\n    int pop() {\n        int x = st.back();\n        st.pop_back();\n        return x;\n    }\n    int top() { return st.back(); }\n    int peekMax() { return *max_element(st.begin(), st.end()); }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class MaxStack {\n    Stack<Integer> stack = new Stack<>();\n\n    public void push(int x) { stack.push(x); }\n    public int pop() { return stack.pop(); }\n    public int top() { return stack.peek(); }\n    public int peekMax() {\n        return Collections.max(stack);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Max Stack",
+          "url": "https://leetcode.com/problems/max-stack/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "lru-cache",
+      "title": "LRU Cache",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) for get and put",
+      "spaceComplexity": "O(capacity)",
+      "summary": "A cache that removes the least recently used item when it becomes full.",
+      "explanation": [
+        "LRU means Least Recently Used.",
+        "Suppose a cache can store only 2 items.",
+        "If we access one item, that item becomes recently used.",
+        "When the cache is full and a new item arrives, we remove the least recently used item.",
+        "HashMap gives O(1) lookup.",
+        "Doubly linked list gives O(1) insertion and removal.",
+        "The combination of HashMap and Doubly Linked List gives O(1) get and put."
+      ],
+      "exampleTrace": {
+        "input": "capacity = 2, put(1,A), put(2,B), get(1), put(3,C)",
+        "output": "Cache contains {1:A, 3:C}",
+        "traceSteps": [
+          "put(1,A) -> [1]",
+          "put(2,B) -> [1,2]",
+          "get(1) -> 1 becomes recently used -> [2,1]",
+          "put(3,C) -> 2 is least recently used",
+          "Remove 2 -> cache = [1,3]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Keeps only recently used items when cache capacity is limited.",
+        "whenToUse": "Browser cache, API cache, database cache, memory cache.",
+        "whereUsed": "Operating systems, databases, web servers, distributed systems.",
+        "whyOptimal": "HashMap gives direct lookup and doubly linked list gives O(1) recency updates."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import OrderedDict\n\nclass LRUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.cache = OrderedDict()\n\n    def get(self, key):\n        if key not in self.cache:\n            return -1\n        self.cache.move_to_end(key)\n        return self.cache[key]\n\n    def put(self, key, value):\n        if key in self.cache:\n            self.cache.move_to_end(key)\n        self.cache[key] = value\n\n        if len(self.cache) > self.capacity:\n            self.cache.popitem(last=False)"
+        },
+        {
+          "language": "c++",
+          "code": "class LRUCache {\n    int capacity;\n    list<pair<int,int>> items;\n    unordered_map<int, list<pair<int,int>>::iterator> mp;\npublic:\n    LRUCache(int c) : capacity(c) {}\n\n    int get(int key) {\n        if (!mp.count(key)) return -1;\n        auto it = mp[key];\n        int value = it->second;\n        items.splice(items.end(), items, it);\n        return value;\n    }\n\n    void put(int key, int value) {\n        if (mp.count(key)) {\n            auto it = mp[key];\n            it->second = value;\n            items.splice(items.end(), items, it);\n            return;\n        }\n\n        items.push_back({key, value});\n        mp[key] = prev(items.end());\n\n        if (items.size() > capacity) {\n            int oldKey = items.front().first;\n            mp.erase(oldKey);\n            items.pop_front();\n        }\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class LRUCache extends LinkedHashMap<Integer, Integer> {\n    private final int capacity;\n\n    LRUCache(int capacity) {\n        super(capacity, 0.75f, true);\n        this.capacity = capacity;\n    }\n\n    public int get(int key) {\n        return containsKey(key) ? super.get(key) : -1;\n    }\n\n    protected boolean removeEldestEntry(Map.Entry<Integer,Integer> e) {\n        return size() > capacity;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LRU Cache",
+          "url": "https://leetcode.com/problems/lru-cache/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "lfu-cache",
+      "title": "LFU Cache",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1) average for get and put",
+      "spaceComplexity": "O(n)",
+      "summary": "A cache that removes the least frequently used item.",
+      "explanation": [
+        "LFU means Least Frequently Used.",
+        "Every item has a frequency count.",
+        "When an item is accessed, its frequency increases.",
+        "If the cache is full, we remove the item with the smallest frequency.",
+        "If multiple items have the same frequency, we usually remove the least recently used one.",
+        "A HashMap stores keys.",
+        "Another map connects frequency to a doubly linked list."
+      ],
+      "exampleTrace": {
+        "input": "capacity = 2, put(1,A), put(2,B), get(1), put(3,C)",
+        "output": "Key 2 is removed",
+        "traceSteps": [
+          "Key 1 frequency = 1",
+          "Key 2 frequency = 1",
+          "get(1) -> frequency of 1 becomes 2",
+          "put(3,C) -> key 2 has lower frequency",
+          "Remove key 2"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Removes rarely used cache entries instead of simply removing old entries.",
+        "whenToUse": "When access frequency matters more than only recency.",
+        "whereUsed": "Caching systems and memory management.",
+        "whyOptimal": "Frequency buckets allow finding the lowest-frequency items efficiently."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import defaultdict, OrderedDict\n\nclass LFUCache:\n    def __init__(self, capacity):\n        self.capacity = capacity\n        self.values = {}\n        self.freq = defaultdict(OrderedDict)\n        self.count = {}\n        self.min_freq = 0\n\n    def get(self, key):\n        if key not in self.values:\n            return -1\n        self._touch(key)\n        return self.values[key]\n\n    def _touch(self, key):\n        f = self.count[key]\n        del self.freq[f][key]\n        if not self.freq[f]:\n            del self.freq[f]\n            if self.min_freq == f:\n                self.min_freq += 1\n        self.count[key] = f + 1\n        self.freq[f + 1][key] = None\n\n    def put(self, key, value):\n        if self.capacity == 0:\n            return\n        if key in self.values:\n            self.values[key] = value\n            self._touch(key)\n            return\n        if len(self.values) == self.capacity:\n            old = next(iter(self.freq[self.min_freq]))\n            del self.freq[self.min_freq][old]\n            del self.values[old]\n            del self.count[old]\n        self.values[key] = value\n        self.count[key] = 1\n        self.freq[1][key] = None\n        self.min_freq = 1"
+        },
+        {
+          "language": "c++",
+          "code": "class LFUCache {\n    int cap, minFreq;\n    unordered_map<int, pair<int,int>> data;\n    unordered_map<int, list<int>> freqList;\n    unordered_map<int, list<int>::iterator> pos;\npublic:\n    LFUCache(int capacity) : cap(capacity), minFreq(0) {}\n\n    int get(int key) {\n        if (!data.count(key)) return -1;\n        int value = data[key].first;\n        update(key);\n        return value;\n    }\n\n    void update(int key) {\n        int f = data[key].second;\n        freqList[f].erase(pos[key]);\n        if (freqList[f].empty() && minFreq == f) minFreq++;\n        data[key].second++;\n        freqList[f + 1].push_back(key);\n        pos[key] = prev(freqList[f + 1].end());\n    }\n\n    void put(int key, int value) {\n        if (cap == 0) return;\n        if (data.count(key)) {\n            data[key].first = value;\n            update(key);\n            return;\n        }\n        if (data.size() == cap) {\n            int old = freqList[minFreq].front();\n            freqList[minFreq].pop_front();\n            data.erase(old);\n            pos.erase(old);\n        }\n        data[key] = {value, 1};\n        freqList[1].push_back(key);\n        pos[key] = prev(freqList[1].end());\n        minFreq = 1;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class LFUCache {\n    private final int capacity;\n    private final Map<Integer,Integer> values = new HashMap<>();\n    private final Map<Integer,Integer> count = new HashMap<>();\n\n    LFUCache(int capacity) {\n        this.capacity = capacity;\n    }\n\n    public int get(int key) {\n        if (!values.containsKey(key)) return -1;\n        count.put(key, count.get(key) + 1);\n        return values.get(key);\n    }\n\n    public void put(int key, int value) {\n        if (capacity == 0) return;\n        if (values.containsKey(key)) {\n            values.put(key, value);\n            count.put(key, count.get(key) + 1);\n            return;\n        }\n        if (values.size() == capacity) {\n            int victim = Collections.min(count.entrySet(),\n                Comparator.comparingInt(Map.Entry::getValue)).getKey();\n            values.remove(victim);\n            count.remove(victim);\n        }\n        values.put(key, value);\n        count.put(key, 1);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LFU Cache",
+          "url": "https://leetcode.com/problems/lfu-cache/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "randomized-set",
+      "title": "Insert Delete GetRandom O(1)",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) average",
+      "spaceComplexity": "O(n)",
+      "summary": "A structure supporting insert, delete, and random element retrieval in O(1) average time.",
+      "explanation": [
+        "A hash set gives O(1) insert and delete but does not support random access.",
+        "An array gives O(1) random access but deleting an arbitrary element can be O(n).",
+        "Use both an array and a HashMap.",
+        "The map stores value -> index.",
+        "To delete, swap the target with the last element.",
+        "Then remove the last array position.",
+        "This avoids shifting elements."
+      ],
+      "exampleTrace": {
+        "input": "insert(10), insert(20), remove(10), getRandom()",
+        "output": "20",
+        "traceSteps": [
+          "Array = [10]",
+          "Insert 20 -> [10,20]",
+          "Remove 10 by swapping it with 20",
+          "Array becomes [20]",
+          "getRandom() -> 20"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines fast lookup, deletion, insertion, and random selection.",
+        "whenToUse": "When all four operations need to be fast.",
+        "whereUsed": "Random sampling, game systems, randomized testing.",
+        "whyOptimal": "Array provides random access and HashMap provides O(1) index lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import random\n\nclass RandomizedSet:\n    def __init__(self):\n        self.arr = []\n        self.pos = {}\n\n    def insert(self, val):\n        if val in self.pos:\n            return False\n        self.pos[val] = len(self.arr)\n        self.arr.append(val)\n        return True\n\n    def remove(self, val):\n        if val not in self.pos:\n            return False\n        i = self.pos[val]\n        last = self.arr[-1]\n        self.arr[i] = last\n        self.pos[last] = i\n        self.arr.pop()\n        del self.pos[val]\n        return True\n\n    def getRandom(self):\n        return random.choice(self.arr)"
+        },
+        {
+          "language": "c++",
+          "code": "class RandomizedSet {\n    vector<int> arr;\n    unordered_map<int,int> pos;\npublic:\n    bool insert(int val) {\n        if (pos.count(val)) return false;\n        pos[val] = arr.size();\n        arr.push_back(val);\n        return true;\n    }\n\n    bool remove(int val) {\n        if (!pos.count(val)) return false;\n        int i = pos[val];\n        int last = arr.back();\n        arr[i] = last;\n        pos[last] = i;\n        arr.pop_back();\n        pos.erase(val);\n        return true;\n    }\n\n    int getRandom() {\n        return arr[rand() % arr.size()];\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class RandomizedSet {\n    List<Integer> list = new ArrayList<>();\n    Map<Integer,Integer> pos = new HashMap<>();\n    Random random = new Random();\n\n    public boolean insert(int val) {\n        if (pos.containsKey(val)) return false;\n        pos.put(val, list.size());\n        list.add(val);\n        return true;\n    }\n\n    public boolean remove(int val) {\n        if (!pos.containsKey(val)) return false;\n        int i = pos.get(val);\n        int last = list.get(list.size() - 1);\n        list.set(i, last);\n        pos.put(last, i);\n        list.remove(list.size() - 1);\n        pos.remove(val);\n        return true;\n    }\n\n    public int getRandom() {\n        return list.get(random.nextInt(list.size()));\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Insert Delete GetRandom O(1)",
+          "url": "https://leetcode.com/problems/insert-delete-getrandom-o1/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "randomized-collection",
+      "title": "Insert Delete GetRandom O(1) With Duplicates",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1) average",
+      "spaceComplexity": "O(n)",
+      "summary": "An extension of Randomized Set that allows duplicate values.",
+      "explanation": [
+        "Duplicates make deletion harder.",
+        "A single value cannot point to only one index.",
+        "So the map stores value -> set of indexes.",
+        "The array stores all values.",
+        "During deletion, replace the removed element with the last array element.",
+        "Update the index sets accordingly."
+      ],
+      "exampleTrace": {
+        "input": "insert(5), insert(5), insert(8), remove(5)",
+        "output": "Two possible remaining arrays: [5,8]",
+        "traceSteps": [
+          "Array = [5]",
+          "Insert another 5 -> [5,5]",
+          "Insert 8 -> [5,5,8]",
+          "Remove one 5 by swapping with last element"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Supports duplicates while keeping insert, delete, and random operations fast.",
+        "whenToUse": "When duplicate values are allowed.",
+        "whereUsed": "Randomized collections and sampling systems.",
+        "whyOptimal": "The index set lets us find one occurrence without scanning."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import random\nfrom collections import defaultdict\n\nclass RandomizedCollection:\n    def __init__(self):\n        self.arr = []\n        self.pos = defaultdict(set)\n\n    def insert(self, val):\n        self.arr.append(val)\n        self.pos[val].add(len(self.arr) - 1)\n        return len(self.pos[val]) == 1\n\n    def remove(self, val):\n        if not self.pos[val]:\n            return False\n        i = self.pos[val].pop()\n        last = self.arr[-1]\n        self.arr[i] = last\n        self.pos[last].add(i)\n        self.pos[last].discard(len(self.arr) - 1)\n        self.arr.pop()\n        return True\n\n    def getRandom(self):\n        return random.choice(self.arr)"
+        },
+        {
+          "language": "c++",
+          "code": "class RandomizedCollection {\n    vector<int> arr;\n    unordered_map<int, unordered_set<int>> pos;\npublic:\n    bool insert(int val) {\n        bool first = pos[val].empty();\n        pos[val].insert(arr.size());\n        arr.push_back(val);\n        return first;\n    }\n\n    bool remove(int val) {\n        if (pos[val].empty()) return false;\n        int i = *pos[val].begin();\n        int last = arr.back();\n        pos[val].erase(i);\n        if (i != arr.size() - 1) {\n            arr[i] = last;\n            pos[last].erase(arr.size() - 1);\n            pos[last].insert(i);\n        }\n        arr.pop_back();\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class RandomizedCollection {\n    List<Integer> list = new ArrayList<>();\n    Map<Integer, Set<Integer>> pos = new HashMap<>();\n    Random random = new Random();\n\n    public boolean insert(int val) {\n        pos.computeIfAbsent(val, k -> new HashSet<>());\n        boolean first = pos.get(val).isEmpty();\n        pos.get(val).add(list.size());\n        list.add(val);\n        return first;\n    }\n\n    public boolean remove(int val) {\n        if (!pos.containsKey(val) || pos.get(val).isEmpty()) return false;\n        int i = pos.get(val).iterator().next();\n        int last = list.get(list.size() - 1);\n        pos.get(val).remove(i);\n        if (i != list.size() - 1) {\n            list.set(i, last);\n            pos.get(last).remove(list.size() - 1);\n            pos.get(last).add(i);\n        }\n        list.remove(list.size() - 1);\n        return true;\n    }\n\n    public int getRandom() {\n        return list.get(random.nextInt(list.size()));\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Insert Delete GetRandom O(1) - Duplicates allowed",
+          "url": "https://leetcode.com/problems/insert-delete-getrandom-o1-duplicates-allowed/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "design-hashmap",
+      "title": "Design HashMap",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) average for put, get, remove",
+      "spaceComplexity": "O(n)",
+      "summary": "Build a HashMap without using a built-in hash table.",
+      "explanation": [
+        "A HashMap converts a key into an array index using a hash function.",
+        "Different keys can produce the same index.",
+        "This is called a collision.",
+        "One simple solution is chaining.",
+        "Each bucket stores a list of key-value pairs.",
+        "For get or remove, we search only inside that bucket."
+      ],
+      "exampleTrace": {
+        "input": "put(1,A), put(11,B), get(1)",
+        "output": "A",
+        "traceSteps": [
+          "Suppose bucket count = 10.",
+          "1 % 10 = 1.",
+          "11 % 10 = 1, so collision occurs.",
+          "Both values are stored in bucket 1.",
+          "get(1) searches bucket 1 and returns A."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Stores key-value pairs with fast lookup.",
+        "whenToUse": "Whenever direct key-based access is required.",
+        "whereUsed": "Databases, caches, compilers, web applications.",
+        "whyOptimal": "A good hash function spreads keys across buckets."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class MyHashMap:\n    def __init__(self):\n        self.size = 1000\n        self.table = [[] for _ in range(self.size)]\n\n    def _bucket(self, key):\n        return key % self.size\n\n    def put(self, key, value):\n        bucket = self.table[self._bucket(key)]\n        for i, (k, v) in enumerate(bucket):\n            if k == key:\n                bucket[i] = (key, value)\n                return\n        bucket.append((key, value))\n\n    def get(self, key):\n        for k, v in self.table[self._bucket(key)]:\n            if k == key:\n                return v\n        return -1\n\n    def remove(self, key):\n        bucket = self.table[self._bucket(key)]\n        for i, (k, v) in enumerate(bucket):\n            if k == key:\n                bucket.pop(i)\n                return"
+        },
+        {
+          "language": "c++",
+          "code": "class MyHashMap {\n    static const int SIZE = 1000;\n    vector<pair<int,int>> table[SIZE];\npublic:\n    void put(int key, int value) {\n        auto &b = table[key % SIZE];\n        for (auto &p : b) {\n            if (p.first == key) {\n                p.second = value;\n                return;\n            }\n        }\n        b.push_back({key,value});\n    }\n\n    int get(int key) {\n        for (auto p : table[key % SIZE])\n            if (p.first == key) return p.second;\n        return -1;\n    }\n\n    void remove(int key) {\n        auto &b = table[key % SIZE];\n        b.erase(remove_if(b.begin(), b.end(),\n            [&](auto p){ return p.first == key; }), b.end());\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class MyHashMap {\n    private final int SIZE = 1000;\n    private List<int[]>[] table;\n\n    MyHashMap() {\n        table = new ArrayList[SIZE];\n        for (int i = 0; i < SIZE; i++) table[i] = new ArrayList<>();\n    }\n\n    public void put(int key, int value) {\n        List<int[]> bucket = table[key % SIZE];\n        for (int[] p : bucket) {\n            if (p[0] == key) {\n                p[1] = value;\n                return;\n            }\n        }\n        bucket.add(new int[]{key, value});\n    }\n\n    public int get(int key) {\n        for (int[] p : table[key % SIZE])\n            if (p[0] == key) return p[1];\n        return -1;\n    }\n\n    public void remove(int key) {\n        table[key % SIZE].removeIf(p -> p[0] == key);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design HashMap",
+          "url": "https://leetcode.com/problems/design-hashmap/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+
+    {
+      "id": "time-based-key-value-store",
+      "title": "Time Based Key-Value Store",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log n) for get and O(1) amortized for set",
+      "spaceComplexity": "O(n)",
+      "summary": "Stores multiple values for a key at different timestamps and returns the latest valid value.",
+      "explanation": [
+        "A key can have many values.",
+        "Every value is associated with a timestamp.",
+        "For get(key, time), we need the value with the largest timestamp less than or equal to time.",
+        "Store timestamps in sorted order.",
+        "Binary search finds the correct timestamp quickly."
+      ],
+      "exampleTrace": {
+        "input": "set('foo','A',1), set('foo','B',3), get('foo',2)",
+        "output": "A",
+        "traceSteps": [
+          "foo has (1,A)",
+          "foo has (3,B)",
+          "Requested time = 2",
+          "Timestamp 1 is valid.",
+          "Timestamp 3 is too large.",
+          "Return A."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Retrieves historical values efficiently.",
+        "whenToUse": "When data changes over time and old versions matter.",
+        "whereUsed": "Configuration systems, versioned data, event history.",
+        "whyOptimal": "Sorted timestamps allow binary search."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import defaultdict\nfrom bisect import bisect_right\n\nclass TimeMap:\n    def __init__(self):\n        self.data = defaultdict(list)\n\n    def set(self, key, value, timestamp):\n        self.data[key].append((timestamp, value))\n\n    def get(self, key, timestamp):\n        arr = self.data[key]\n        i = bisect_right(arr, (timestamp, chr(255))) - 1\n        return arr[i][1] if i >= 0 else ''"
+        },
+        {
+          "language": "c++",
+          "code": "class TimeMap {\n    unordered_map<string, vector<pair<int,string>>> mp;\npublic:\n    void set(string key, string value, int timestamp) {\n        mp[key].push_back({timestamp,value});\n    }\n\n    string get(string key, int timestamp) {\n        auto &v = mp[key];\n        int l = 0, r = v.size() - 1;\n        string ans = \"\";\n        while (l <= r) {\n            int m = (l + r) / 2;\n            if (v[m].first <= timestamp) {\n                ans = v[m].second;\n                l = m + 1;\n            } else r = m - 1;\n        }\n        return ans;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class TimeMap {\n    Map<String, List<int[]>> times = new HashMap<>();\n    Map<String, List<String>> values = new HashMap<>();\n\n    public void set(String key, String value, int timestamp) {\n        times.computeIfAbsent(key, k -> new ArrayList<>()).add(new int[]{timestamp, 0});\n        values.computeIfAbsent(key, k -> new ArrayList<>()).add(value);\n    }\n\n    public String get(String key, int timestamp) {\n        if (!times.containsKey(key)) return \"\";\n        List<int[]> t = times.get(key);\n        int l = 0, r = t.size() - 1, ans = -1;\n        while (l <= r) {\n            int m = (l + r) / 2;\n            if (t.get(m)[0] <= timestamp) {\n                ans = m;\n                l = m + 1;\n            } else r = m - 1;\n        }\n        return ans == -1 ? \"\" : values.get(key).get(ans);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Time Based Key-Value Store",
+          "url": "https://leetcode.com/problems/time-based-key-value-store/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "median-finder",
+      "title": "Find Median from Data Stream",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log n) addNum, O(1) findMedian",
+      "spaceComplexity": "O(n)",
+      "summary": "Maintains the median while numbers arrive one by one.",
+      "explanation": [
+        "The median is the middle value after sorting.",
+        "Sorting every time would be expensive.",
+        "Use two heaps.",
+        "Max-heap stores the smaller half.",
+        "Min-heap stores the larger half.",
+        "Keep their sizes almost equal.",
+        "Then the median can be read directly from the heap tops."
+      ],
+      "exampleTrace": {
+        "input": "add(5), add(2), add(10)",
+        "output": "Median = 5",
+        "traceSteps": [
+          "Add 5 -> left=[5], right=[]",
+          "Add 2 -> left=[2], right=[5]",
+          "Add 10 -> left=[5,2], right=[10]",
+          "Median = top of left = 5"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the median of a growing stream without sorting everything again.",
+        "whenToUse": "Real-time statistics and streaming data.",
+        "whereUsed": "Monitoring, analytics, financial streams.",
+        "whyOptimal": "Two heaps maintain the middle values dynamically."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.left = []\n        self.right = []\n\n    def addNum(self, num):\n        heapq.heappush(self.left, -num)\n        heapq.heappush(self.right, -heapq.heappop(self.left))\n        if len(self.right) > len(self.left):\n            heapq.heappush(self.left, -heapq.heappop(self.right))\n\n    def findMedian(self):\n        if len(self.left) > len(self.right):\n            return -self.left[0]\n        return (-self.left[0] + self.right[0]) / 2"
+        },
+        {
+          "language": "c++",
+          "code": "class MedianFinder {\n    priority_queue<int> left;\n    priority_queue<int, vector<int>, greater<int>> right;\npublic:\n    void addNum(int num) {\n        left.push(num);\n        right.push(left.top());\n        left.pop();\n        if (right.size() > left.size()) {\n            left.push(right.top());\n            right.pop();\n        }\n    }\n\n    double findMedian() {\n        if (left.size() > right.size()) return left.top();\n        return (left.top() + right.top()) / 2.0;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class MedianFinder {\n    PriorityQueue<Integer> left = new PriorityQueue<>(Collections.reverseOrder());\n    PriorityQueue<Integer> right = new PriorityQueue<>();\n\n    public void addNum(int num) {\n        left.offer(num);\n        right.offer(left.poll());\n        if (right.size() > left.size()) {\n            left.offer(right.poll());\n        }\n    }\n\n    public double findMedian() {\n        if (left.size() > right.size()) return left.peek();\n        return (left.peek() + right.peek()) / 2.0;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Find Median from Data Stream",
+          "url": "https://leetcode.com/problems/find-median-from-data-stream/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "trie",
+      "title": "Trie / Prefix Tree",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(L) for insert, search, and prefix search",
+      "spaceComplexity": "O(total characters)",
+      "summary": "A tree designed specifically for fast prefix-based string operations.",
+      "explanation": [
+        "A Trie stores words character by character.",
+        "For example, cat and car share the path c -> a.",
+        "Each node contains links to next characters.",
+        "A word-ending marker tells us where a complete word ends.",
+        "Search and prefix operations depend mainly on word length, not number of stored words."
+      ],
+      "exampleTrace": {
+        "input": "insert('cat'), insert('car'), startsWith('ca')",
+        "output": "true",
+        "traceSteps": [
+          "Insert cat -> c -> a -> t",
+          "Insert car -> c -> a -> r",
+          "Both words share c -> a",
+          "startsWith('ca') reaches the a node",
+          "Return true"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Fast word and prefix searching.",
+        "whenToUse": "Autocomplete, dictionary lookup, prefix matching.",
+        "whereUsed": "Search boxes, IDE autocomplete, spell checkers.",
+        "whyOptimal": "Each character is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            node = node.children.setdefault(ch, TrieNode())\n        node.end = True\n\n    def search(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return node.end\n\n    def startsWith(self, prefix):\n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return True"
+        },
+        {
+          "language": "c++",
+          "code": "struct Node {\n    Node* child[26]{};\n    bool end = false;\n};\n\nclass Trie {\n    Node* root = new Node();\npublic:\n    void insert(string word) {\n        Node* cur = root;\n        for (char c : word) {\n            int i = c - 'a';\n            if (!cur->child[i]) cur->child[i] = new Node();\n            cur = cur->child[i];\n        }\n        cur->end = true;\n    }\n\n    bool search(string word) {\n        Node* cur = root;\n        for (char c : word) {\n            if (!cur->child[c-'a']) return false;\n            cur = cur->child[c-'a'];\n        }\n        return cur->end;\n    }\n\n    bool startsWith(string prefix) {\n        Node* cur = root;\n        for (char c : prefix) {\n            if (!cur->child[c-'a']) return false;\n            cur = cur->child[c-'a'];\n        }\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class TrieNode {\n    TrieNode[] child = new TrieNode[26];\n    boolean end;\n}\n\nclass Trie {\n    TrieNode root = new TrieNode();\n\n    public void insert(String word) {\n        TrieNode cur = root;\n        for (char c : word.toCharArray()) {\n            int i = c - 'a';\n            if (cur.child[i] == null) cur.child[i] = new TrieNode();\n            cur = cur.child[i];\n        }\n        cur.end = true;\n    }\n\n    public boolean search(String word) {\n        TrieNode cur = root;\n        for (char c : word.toCharArray()) {\n            if (cur.child[c-'a'] == null) return false;\n            cur = cur.child[c-'a'];\n        }\n        return cur.end;\n    }\n\n    public boolean startsWith(String prefix) {\n        TrieNode cur = root;\n        for (char c : prefix.toCharArray()) {\n            if (cur.child[c-'a'] == null) return false;\n            cur = cur.child[c-'a'];\n        }\n        return true;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Implement Trie",
+          "url": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "autocomplete-system",
+      "title": "Autocomplete System",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(L + K log K) depending on ranking implementation",
+      "spaceComplexity": "O(total characters)",
+      "summary": "Uses a Trie and ranking information to suggest words while the user types.",
+      "explanation": [
+        "Autocomplete starts with a prefix.",
+        "A Trie quickly finds the node representing that prefix.",
+        "From that node, we can explore possible words.",
+        "Each word can also store a frequency or popularity score.",
+        "The highest-ranked matching words are returned.",
+        "This combines Trie, DFS, and ranking."
+      ],
+      "exampleTrace": {
+        "input": "Words: apple(10), app(5), application(3), prefix='app'",
+        "output": "apple, app, application",
+        "traceSteps": [
+          "Search Trie for 'app'.",
+          "Reach the node representing app.",
+          "Explore words below this node.",
+          "Collect matching words.",
+          "Sort by popularity and return suggestions."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides search suggestions as a user types.",
+        "whenToUse": "Search boxes and command interfaces.",
+        "whereUsed": "Search engines, IDEs, e-commerce websites.",
+        "whyOptimal": "Trie avoids scanning every stored word."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.words = []\n\nclass Autocomplete:\n    def __init__(self, words):\n        self.root = TrieNode()\n        for word in words:\n            self.insert(word)\n\n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            node = node.children.setdefault(ch, TrieNode())\n        node.words.append(word)\n\n    def suggest(self, prefix):\n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return []\n            node = node.children[ch]\n        return self.collect(node)\n\n    def collect(self, node):\n        result = list(node.words)\n        for child in node.children.values():\n            result.extend(self.collect(child))\n        return result"
+        },
+        {
+          "language": "c++",
+          "code": "struct Node {\n    map<char, Node*> child;\n    vector<string> words;\n};\n\nclass Autocomplete {\n    Node* root = new Node();\npublic:\n    void insert(string word) {\n        Node* cur = root;\n        for (char c : word) {\n            if (!cur->child[c]) cur->child[c] = new Node();\n            cur = cur->child[c];\n        }\n        cur->words.push_back(word);\n    }\n\n    vector<string> suggest(string prefix) {\n        Node* cur = root;\n        for (char c : prefix) {\n            if (!cur->child.count(c)) return {};\n            cur = cur->child[c];\n        }\n        return cur->words;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    Map<Character, Node> children = new HashMap<>();\n    List<String> words = new ArrayList<>();\n}\n\nclass Autocomplete {\n    Node root = new Node();\n\n    public void insert(String word) {\n        Node cur = root;\n        for (char c : word.toCharArray()) {\n            cur.children.putIfAbsent(c, new Node());\n            cur = cur.children.get(c);\n        }\n        cur.words.add(word);\n    }\n\n    public List<String> suggest(String prefix) {\n        Node cur = root;\n        for (char c : prefix.toCharArray()) {\n            if (!cur.children.containsKey(c)) return new ArrayList<>();\n            cur = cur.children.get(c);\n        }\n        return new ArrayList<>(cur.words);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Search Autocomplete System",
+          "url": "https://leetcode.com/problems/design-search-autocomplete-system/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "all-oone-data-structure",
+      "title": "All O(1) Data Structure",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(1) average for increment, decrement, getMinKey, getMaxKey",
+      "spaceComplexity": "O(n)",
+      "summary": "Maintains key frequencies while supporting minimum and maximum frequency queries in O(1).",
+      "explanation": [
+        "Each key has a count.",
+        "We need to increase and decrease counts.",
+        "We also need the key with minimum count and maximum count.",
+        "A HashMap stores key -> frequency node.",
+        "A doubly linked list keeps frequency groups in sorted order.",
+        "Each frequency node stores all keys having that frequency."
+      ],
+      "exampleTrace": {
+        "input": "inc(a), inc(a), inc(b), getMaxKey(), getMinKey()",
+        "output": "a, b",
+        "traceSteps": [
+          "inc(a) -> a count = 1",
+          "inc(a) -> a count = 2",
+          "inc(b) -> b count = 1",
+          "Maximum frequency is 2 -> a",
+          "Minimum frequency is 1 -> b"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains dynamic frequencies with constant-time min/max access.",
+        "whenToUse": "When frequency updates and extreme-frequency queries are both frequent.",
+        "whereUsed": "Frequency counters and analytics systems.",
+        "whyOptimal": "Frequency buckets are connected directly through a doubly linked list."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class AllOne:\n    def __init__(self):\n        self.count = {}\n\n    def inc(self, key):\n        self.count[key] = self.count.get(key, 0) + 1\n\n    def dec(self, key):\n        self.count[key] -= 1\n        if self.count[key] == 0:\n            del self.count[key]\n\n    def getMaxKey(self):\n        return max(self.count, key=self.count.get, default='')\n\n    def getMinKey(self):\n        return min(self.count, key=self.count.get, default='')"
+        },
+        {
+          "language": "c++",
+          "code": "class AllOne {\n    unordered_map<string,int> count;\npublic:\n    void inc(string key) { count[key]++; }\n\n    void dec(string key) {\n        if (--count[key] == 0) count.erase(key);\n    }\n\n    string getMaxKey() {\n        string ans;\n        int best = 0;\n        for (auto &[k,v] : count) if (v > best) best = v, ans = k;\n        return ans;\n    }\n\n    string getMinKey() {\n        string ans;\n        int best = INT_MAX;\n        for (auto &[k,v] : count) if (v < best) best = v, ans = k;\n        return ans;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class AllOne {\n    Map<String,Integer> count = new HashMap<>();\n\n    public void inc(String key) {\n        count.put(key, count.getOrDefault(key, 0) + 1);\n    }\n\n    public void dec(String key) {\n        int v = count.get(key) - 1;\n        if (v == 0) count.remove(key);\n        else count.put(key, v);\n    }\n\n    public String getMaxKey() {\n        return count.entrySet().stream()\n            .max(Map.Entry.comparingByValue())\n            .map(Map.Entry::getKey).orElse(\"\");\n    }\n\n    public String getMinKey() {\n        return count.entrySet().stream()\n            .min(Map.Entry.comparingByValue())\n            .map(Map.Entry::getKey).orElse(\"\");\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "All O(1) Data Structure",
+          "url": "https://leetcode.com/problems/all-oone-data-structure/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "design-hit-counter",
+      "title": "Hit Counter",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) with fixed-size circular array",
+      "spaceComplexity": "O(1)",
+      "summary": "Counts events that happened within a recent time window.",
+      "explanation": [
+        "Suppose we want the number of hits during the last 5 minutes.",
+        "We do not need old events forever.",
+        "A circular array can store counts for each second.",
+        "Each position represents one time slot.",
+        "When the slot is old, overwrite it.",
+        "This is a common time-window data structure."
+      ],
+      "exampleTrace": {
+        "input": "hit(1), hit(2), hit(2), getHits(3)",
+        "output": "3",
+        "traceSteps": [
+          "At time 1 -> one hit.",
+          "At time 2 -> two hits.",
+          "At time 3 -> all three hits are inside the window.",
+          "Return 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts recent events efficiently.",
+        "whenToUse": "Monitoring and traffic tracking.",
+        "whereUsed": "Analytics, APIs, rate limiting, observability.",
+        "whyOptimal": "Old time slots can be reused instead of storing unlimited events."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\nclass HitCounter:\n    def __init__(self):\n        self.q = deque()\n\n    def hit(self, timestamp):\n        self.q.append(timestamp)\n\n    def getHits(self, timestamp):\n        while self.q and self.q[0] <= timestamp - 300:\n            self.q.popleft()\n        return len(self.q)"
+        },
+        {
+          "language": "c++",
+          "code": "class HitCounter {\n    queue<int> q;\npublic:\n    void hit(int timestamp) {\n        q.push(timestamp);\n    }\n\n    int getHits(int timestamp) {\n        while (!q.empty() && q.front() <= timestamp - 300)\n            q.pop();\n        return q.size();\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class HitCounter {\n    Queue<Integer> q = new ArrayDeque<>();\n\n    public void hit(int timestamp) {\n        q.offer(timestamp);\n    }\n\n    public int getHits(int timestamp) {\n        while (!q.isEmpty() && q.peek() <= timestamp - 300)\n            q.poll();\n        return q.size();\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Hit Counter",
+          "url": "https://leetcode.com/problems/design-hit-counter/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "logger-rate-limiter",
+      "title": "Logger Rate Limiter",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) average",
+      "spaceComplexity": "O(n)",
+      "summary": "Allows a message to be printed only once during a fixed time interval.",
+      "explanation": [
+        "Store the last timestamp when each message was printed.",
+        "When a new message arrives, check its previous timestamp.",
+        "If enough time has passed, allow it.",
+        "Otherwise reject it.",
+        "A HashMap is enough for this problem."
+      ],
+      "exampleTrace": {
+        "input": "message='hello' at 1, 2, 11",
+        "output": "true, false, true",
+        "traceSteps": [
+          "At time 1 -> first occurrence -> print.",
+          "At time 2 -> only 1 second passed -> reject.",
+          "At time 11 -> 10 seconds passed -> print."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Prevents repeated messages from being processed too frequently.",
+        "whenToUse": "Logging, notifications, duplicate-event prevention.",
+        "whereUsed": "Backend services and monitoring systems.",
+        "whyOptimal": "Only the latest timestamp for each message is required."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Logger:\n    def __init__(self):\n        self.last = {}\n\n    def shouldPrintMessage(self, timestamp, message):\n        if message not in self.last or timestamp - self.last[message] >= 10:\n            self.last[message] = timestamp\n            return True\n        return False"
+        },
+        {
+          "language": "c++",
+          "code": "class Logger {\n    unordered_map<string,int> last;\npublic:\n    bool shouldPrintMessage(int timestamp, string message) {\n        if (!last.count(message) || timestamp - last[message] >= 10) {\n            last[message] = timestamp;\n            return true;\n        }\n        return false;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Logger {\n    Map<String,Integer> last = new HashMap<>();\n\n    public boolean shouldPrintMessage(int timestamp, String message) {\n        if (!last.containsKey(message) || timestamp - last.get(message) >= 10) {\n            last.put(message, timestamp);\n            return true;\n        }\n        return false;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Logger Rate Limiter",
+          "url": "https://leetcode.com/problems/logger-rate-limiter/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+
+    {
+      "id": "snapshot-array",
+      "title": "Snapshot Array",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log n) for get, O(1) amortized for set and snap",
+      "spaceComplexity": "O(number of changes)",
+      "summary": "Stores versions of an array so an old snapshot can be queried later.",
+      "explanation": [
+        "Normally changing an array destroys its old value.",
+        "Snapshot Array keeps historical versions.",
+        "Instead of copying the entire array on every snapshot, store only changes.",
+        "Each index keeps a list of (snapshotId, value).",
+        "For get, binary search finds the latest change before the requested snapshot."
+      ],
+      "exampleTrace": {
+        "input": "set(0,5), snap(), set(0,8), get(0,0)",
+        "output": "5",
+        "traceSteps": [
+          "Set index 0 to 5.",
+          "snap() creates snapshot 0.",
+          "Change index 0 to 8.",
+          "Ask for snapshot 0.",
+          "The value in snapshot 0 is still 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides historical versions without copying the whole array.",
+        "whenToUse": "Versioning and undo/history systems.",
+        "whereUsed": "Editors, configuration management, versioned storage.",
+        "whyOptimal": "Only changed values are stored."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from bisect import bisect_right\n\nclass SnapshotArray:\n    def __init__(self, length):\n        self.data = [[(0, 0)] for _ in range(length)]\n        self.snap_id = 0\n\n    def set(self, index, val):\n        self.data[index].append((self.snap_id, val))\n\n    def snap(self):\n        self.snap_id += 1\n        return self.snap_id - 1\n\n    def get(self, index, snap_id):\n        arr = self.data[index]\n        i = bisect_right(arr, (snap_id, float('inf'))) - 1\n        return arr[i][1]"
+        },
+        {
+          "language": "c++",
+          "code": "class SnapshotArray {\n    vector<vector<pair<int,int>>> data;\n    int snapId = 0;\npublic:\n    SnapshotArray(int length) : data(length) {\n        for (auto &v : data) v.push_back({0,0});\n    }\n\n    void set(int index, int val) {\n        data[index].push_back({snapId,val});\n    }\n\n    int snap() { return snapId++; }\n\n    int get(int index, int id) {\n        auto &v = data[index];\n        int l = 0, r = v.size() - 1, ans = 0;\n        while (l <= r) {\n            int m = (l+r)/2;\n            if (v[m].first <= id) ans = v[m].second, l = m+1;\n            else r = m-1;\n        }\n        return ans;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class SnapshotArray {\n    List<int[]>[] data;\n    int snapId = 0;\n\n    SnapshotArray(int length) {\n        data = new ArrayList[length];\n        for (int i = 0; i < length; i++) {\n            data[i] = new ArrayList<>();\n            data[i].add(new int[]{0, 0});\n        }\n    }\n\n    public void set(int index, int val) {\n        data[index].add(new int[]{snapId, val});\n    }\n\n    public int snap() { return snapId++; }\n\n    public int get(int index, int id) {\n        List<int[]> list = data[index];\n        int l = 0, r = list.size() - 1, ans = 0;\n        while (l <= r) {\n            int m = (l+r)/2;\n            if (list.get(m)[0] <= id) {\n                ans = list.get(m)[1];\n                l = m+1;\n            } else r = m-1;\n        }\n        return ans;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Snapshot Array",
+          "url": "https://leetcode.com/problems/snapshot-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "range-sum-query-mutable",
+      "title": "Range Sum Query Mutable",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log n) update and query",
+      "spaceComplexity": "O(n)",
+      "summary": "Supports updating an array value and finding the sum of a range efficiently.",
+      "explanation": [
+        "If we calculate a range sum by looping every element, it can be O(n).",
+        "When many updates and queries happen, this becomes slow.",
+        "A Fenwick Tree can maintain prefix sums.",
+        "An update changes a few tree positions.",
+        "A range sum can be calculated using two prefix sums."
+      ],
+      "exampleTrace": {
+        "input": "array=[1,3,5], sumRange(0,2), update(1,2), sumRange(0,2)",
+        "output": "9, 8",
+        "traceSteps": [
+          "Initial sum = 1+3+5 = 9.",
+          "Change index 1 from 3 to 2.",
+          "New array = [1,2,5].",
+          "New sum = 8."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Supports range sum queries with dynamic updates.",
+        "whenToUse": "Large arrays with many updates and range queries.",
+        "whereUsed": "Analytics, game scores, numeric databases.",
+        "whyOptimal": "Fenwick Tree reduces both operations to O(log n)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Fenwick:\n    def __init__(self, n):\n        self.bit = [0] * (n + 1)\n\n    def add(self, i, delta):\n        i += 1\n        while i < len(self.bit):\n            self.bit[i] += delta\n            i += i & -i\n\n    def sum(self, i):\n        ans = 0\n        i += 1\n        while i:\n            ans += self.bit[i]\n            i -= i & -i\n        return ans\n\n    def range_sum(self, l, r):\n        return self.sum(r) - (self.sum(l - 1) if l else 0)"
+        },
+        {
+          "language": "c++",
+          "code": "class Fenwick {\n    vector<int> bit;\npublic:\n    Fenwick(int n) : bit(n+1) {}\n\n    void add(int i, int delta) {\n        for (++i; i < bit.size(); i += i & -i)\n            bit[i] += delta;\n    }\n\n    int sum(int i) {\n        int ans = 0;\n        for (++i; i > 0; i -= i & -i)\n            ans += bit[i];\n        return ans;\n    }\n\n    int rangeSum(int l, int r) {\n        return sum(r) - (l ? sum(l-1) : 0);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Fenwick {\n    int[] bit;\n\n    Fenwick(int n) { bit = new int[n + 1]; }\n\n    void add(int i, int delta) {\n        for (++i; i < bit.length; i += i & -i)\n            bit[i] += delta;\n    }\n\n    int sum(int i) {\n        int ans = 0;\n        for (++i; i > 0; i -= i & -i)\n            ans += bit[i];\n        return ans;\n    }\n\n    int rangeSum(int l, int r) {\n        return sum(r) - (l > 0 ? sum(l-1) : 0);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Range Sum Query - Mutable",
+          "url": "https://leetcode.com/problems/range-sum-query-mutable/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "segment-tree",
+      "title": "Segment Tree",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log n) update and range query",
+      "spaceComplexity": "O(n)",
+      "summary": "A tree that stores information about ranges and supports fast updates and queries.",
+      "explanation": [
+        "A Segment Tree divides an array into smaller ranges.",
+        "Each tree node represents one range.",
+        "For example, the root may represent the whole array.",
+        "Its children represent the left and right halves.",
+        "Queries visit only the ranges that are necessary.",
+        "This makes dynamic range operations efficient."
+      ],
+      "exampleTrace": {
+        "input": "array=[1,3,5,7], query sum [1,3]",
+        "output": "15",
+        "traceSteps": [
+          "Range [1,3] means values 3,5,7.",
+          "Segment Tree combines the required nodes.",
+          "3 + 5 + 7 = 15."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Fast range queries with updates.",
+        "whenToUse": "When Fenwick Tree is not flexible enough for the required operation.",
+        "whereUsed": "Competitive programming and query-heavy systems.",
+        "whyOptimal": "Each operation touches only O(log n) tree levels."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class SegmentTree:\n    def __init__(self, nums):\n        self.n = len(nums)\n        self.tree = [0] * (4 * self.n)\n        self.build(nums, 1, 0, self.n - 1)\n\n    def build(self, a, node, l, r):\n        if l == r:\n            self.tree[node] = a[l]\n            return\n        m = (l + r) // 2\n        self.build(a, node*2, l, m)\n        self.build(a, node*2+1, m+1, r)\n        self.tree[node] = self.tree[node*2] + self.tree[node*2+1]\n\n    def query(self, node, l, r, ql, qr):\n        if qr < l or r < ql:\n            return 0\n        if ql <= l and r <= qr:\n            return self.tree[node]\n        m = (l+r)//2\n        return self.query(node*2,l,m,ql,qr) + self.query(node*2+1,m+1,r,ql,qr)"
+        },
+        {
+          "language": "c++",
+          "code": "class SegmentTree {\n    vector<int> tree;\n    int n;\n\n    void build(vector<int>& a, int node, int l, int r) {\n        if (l == r) { tree[node] = a[l]; return; }\n        int m = (l+r)/2;\n        build(a,node*2,l,m);\n        build(a,node*2+1,m+1,r);\n        tree[node] = tree[node*2] + tree[node*2+1];\n    }\n\npublic:\n    SegmentTree(vector<int>& a) {\n        n = a.size();\n        tree.resize(4*n);\n        build(a,1,0,n-1);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class SegmentTree {\n    int[] tree;\n    int n;\n\n    SegmentTree(int[] a) {\n        n = a.length;\n        tree = new int[4*n];\n        build(a,1,0,n-1);\n    }\n\n    void build(int[] a, int node, int l, int r) {\n        if (l == r) {\n            tree[node] = a[l];\n            return;\n        }\n        int m = (l+r)/2;\n        build(a,node*2,l,m);\n        build(a,node*2+1,m+1,r);\n        tree[node] = tree[node*2] + tree[node*2+1];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Range Sum Query - Mutable",
+          "url": "https://leetcode.com/problems/range-sum-query-mutable/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "disjoint-set-union",
+      "title": "Disjoint Set Union",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "Almost O(1) amortized per operation",
+      "spaceComplexity": "O(n)",
+      "summary": "Maintains groups of connected elements and efficiently merges groups.",
+      "explanation": [
+        "DSU is also called Union-Find.",
+        "Each element belongs to a group.",
+        "find tells us which group an element belongs to.",
+        "union combines two groups.",
+        "Path compression makes find faster.",
+        "Union by size or rank keeps the tree shallow."
+      ],
+      "exampleTrace": {
+        "input": "union(1,2), union(2,3), find(3)",
+        "output": "Same group as 1",
+        "traceSteps": [
+          "Initially 1,2,3 are separate.",
+          "union(1,2) creates group {1,2}.",
+          "union(2,3) creates group {1,2,3}.",
+          "find(3) returns the representative of this group."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Tracks connected components while edges are added.",
+        "whenToUse": "Dynamic connectivity and grouping problems.",
+        "whereUsed": "Network connectivity, Kruskal's algorithm, clustering.",
+        "whyOptimal": "Path compression and union by size make operations almost constant time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.size = [1] * n\n\n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])\n        return self.parent[x]\n\n    def union(self, a, b):\n        a, b = self.find(a), self.find(b)\n        if a == b:\n            return False\n        if self.size[a] < self.size[b]:\n            a, b = b, a\n        self.parent[b] = a\n        self.size[a] += self.size[b]\n        return True"
+        },
+        {
+          "language": "c++",
+          "code": "class DSU {\n    vector<int> parent, sz;\npublic:\n    DSU(int n) : parent(n), sz(n,1) {\n        iota(parent.begin(), parent.end(), 0);\n    }\n\n    int find(int x) {\n        return parent[x] == x ? x : parent[x] = find(parent[x]);\n    }\n\n    bool unite(int a, int b) {\n        a = find(a); b = find(b);\n        if (a == b) return false;\n        if (sz[a] < sz[b]) swap(a,b);\n        parent[b] = a;\n        sz[a] += sz[b];\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class DSU {\n    int[] parent, size;\n\n    DSU(int n) {\n        parent = new int[n];\n        size = new int[n];\n        for (int i = 0; i < n; i++) {\n            parent[i] = i;\n            size[i] = 1;\n        }\n    }\n\n    int find(int x) {\n        if (parent[x] != x) parent[x] = find(parent[x]);\n        return parent[x];\n    }\n\n    boolean union(int a, int b) {\n        a = find(a);\n        b = find(b);\n        if (a == b) return false;\n        if (size[a] < size[b]) {\n            int t = a; a = b; b = t;\n        }\n        parent[b] = a;\n        size[a] += size[b];\n        return true;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Number of Operations to Make Network Connected",
+          "url": "https://leetcode.com/problems/number-of-operations-to-make-network-connected/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "priority-queue",
+      "title": "Priority Queue / Heap",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(log n) insertion and deletion, O(1) peek",
+      "spaceComplexity": "O(n)",
+      "summary": "Maintains the most important or highest-priority element at the top.",
+      "explanation": [
+        "A normal queue processes elements in arrival order.",
+        "A priority queue processes elements according to priority.",
+        "A heap is commonly used to implement it.",
+        "In a min-heap, the smallest value stays at the top.",
+        "In a max-heap, the largest value stays at the top."
+      ],
+      "exampleTrace": {
+        "input": "push(5), push(2), push(8), pop()",
+        "output": "2",
+        "traceSteps": [
+          "Insert 5.",
+          "Insert 2 -> 2 becomes the minimum.",
+          "Insert 8.",
+          "pop() removes 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Efficiently retrieves the highest-priority element.",
+        "whenToUse": "Scheduling, top-K problems, shortest path.",
+        "whereUsed": "Operating systems, task schedulers, networking.",
+        "whyOptimal": "Heap keeps the extreme element at the root."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\npq = []\nheapq.heappush(pq, 5)\nheapq.heappush(pq, 2)\nheapq.heappush(pq, 8)\n\nminimum = heapq.heappop(pq)\nprint(minimum)"
+        },
+        {
+          "language": "c++",
+          "code": "priority_queue<int, vector<int>, greater<int>> pq;\npq.push(5);\npq.push(2);\npq.push(8);\n\nint minimum = pq.top();\npq.pop();"
+        },
+        {
+          "language": "java",
+          "code": "PriorityQueue<Integer> pq = new PriorityQueue<>();\npq.offer(5);\npq.offer(2);\npq.offer(8);\n\nint minimum = pq.poll();"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Kth Largest Element in an Array",
+          "url": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "deque",
+      "title": "Deque",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) insertion and deletion from both ends",
+      "spaceComplexity": "O(n)",
+      "summary": "A double-ended queue that supports operations from both front and back.",
+      "explanation": [
+        "A deque allows insertion and deletion from both ends.",
+        "It can behave like a stack or a queue.",
+        "This makes it useful in sliding-window problems.",
+        "A deque can also maintain candidates in increasing or decreasing order."
+      ],
+      "exampleTrace": {
+        "input": "pushBack(1), pushBack(2), pushFront(0), popBack()",
+        "output": "1",
+        "traceSteps": [
+          "Deque = [1]",
+          "Push 2 -> [1,2]",
+          "Push 0 at front -> [0,1,2]",
+          "Pop back -> removes 2",
+          "Deque = [0,1]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides efficient access from both ends.",
+        "whenToUse": "Sliding windows, queues, stacks.",
+        "whereUsed": "Scheduling and streaming algorithms.",
+        "whyOptimal": "Both-end operations are constant time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndq = deque()\ndq.append(1)\ndq.append(2)\ndq.appendleft(0)\ndq.pop()\nprint(dq)"
+        },
+        {
+          "language": "c++",
+          "code": "deque<int> dq;\ndq.push_back(1);\ndq.push_back(2);\ndq.push_front(0);\ndq.pop_back();"
+        },
+        {
+          "language": "java",
+          "code": "Deque<Integer> dq = new ArrayDeque<>();\ndq.addLast(1);\ndq.addLast(2);\ndq.addFirst(0);\ndq.removeLast();"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Sliding Window Maximum",
+          "url": "https://leetcode.com/problems/sliding-window-maximum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "monotonic-stack",
+      "title": "Monotonic Stack",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "summary": "A stack maintained in increasing or decreasing order to solve next greater or smaller element problems.",
+      "explanation": [
+        "A monotonic stack keeps values in a fixed order.",
+        "For a next greater element problem, we can maintain a decreasing stack.",
+        "When a larger value arrives, smaller values can be removed.",
+        "Every element enters and leaves the stack at most once.",
+        "Therefore the total work is O(n)."
+      ],
+      "exampleTrace": {
+        "input": "[2,1,3]",
+        "output": "[3,3,-1]",
+        "traceSteps": [
+          "2 waits for a greater element.",
+          "1 is smaller than 2, so both stay.",
+          "3 arrives and is greater than 1 -> next greater of 1 is 3.",
+          "3 is also greater than 2 -> next greater of 2 is 3.",
+          "3 has no greater value -> -1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds next greater, next smaller, previous greater, or previous smaller values efficiently.",
+        "whenToUse": "When the problem asks about the nearest greater or smaller element.",
+        "whereUsed": "Stock span, histogram, temperature problems.",
+        "whyOptimal": "Each element is pushed and popped at most once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def next_greater(nums):\n    ans = [-1] * len(nums)\n    stack = []\n\n    for i, x in enumerate(nums):\n        while stack and nums[stack[-1]] < x:\n            ans[stack.pop()] = x\n        stack.append(i)\n\n    return ans"
+        },
+        {
+          "language": "c++",
+          "code": "vector<int> nextGreater(vector<int>& nums) {\n    vector<int> ans(nums.size(), -1);\n    stack<int> st;\n\n    for (int i = 0; i < nums.size(); i++) {\n        while (!st.empty() && nums[st.top()] < nums[i]) {\n            ans[st.top()] = nums[i];\n            st.pop();\n        }\n        st.push(i);\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "int[] nextGreater(int[] nums) {\n    int[] ans = new int[nums.length];\n    Arrays.fill(ans, -1);\n    Stack<Integer> st = new Stack<>();\n\n    for (int i = 0; i < nums.length; i++) {\n        while (!st.isEmpty() && nums[st.peek()] < nums[i]) {\n            ans[st.pop()] = nums[i];\n        }\n        st.push(i);\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Next Greater Element I",
+          "url": "https://leetcode.com/problems/next-greater-element-i/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "Largest Rectangle in Histogram",
+          "url": "https://leetcode.com/problems/largest-rectangle-in-histogram/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "monotonic-queue",
+      "title": "Monotonic Queue",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(k)",
+      "summary": "A deque that maintains values in sorted order to answer sliding-window maximum or minimum queries.",
+      "explanation": [
+        "Suppose we need the maximum of every window of size k.",
+        "Checking every window separately can take O(nk).",
+        "A monotonic decreasing deque keeps the largest useful element at the front.",
+        "Elements that can never become maximum are removed.",
+        "Each element enters and leaves once.",
+        "Therefore the entire process is O(n)."
+      ],
+      "exampleTrace": {
+        "input": "nums=[1,3,-1,-3,5], k=3",
+        "output": "[3,3,5]",
+        "traceSteps": [
+          "Window [1,3,-1] -> maximum 3.",
+          "Window [3,-1,-3] -> maximum 3.",
+          "Window [-1,-3,5] -> maximum 5.",
+          "Deque keeps only useful candidates."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers sliding-window maximum or minimum queries efficiently.",
+        "whenToUse": "Large arrays with fixed-size sliding windows.",
+        "whereUsed": "Streaming and time-window analytics.",
+        "whyOptimal": "Every element is processed a constant number of times."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef max_sliding_window(nums, k):\n    dq = deque()\n    ans = []\n\n    for i, x in enumerate(nums):\n        while dq and dq[0] <= i - k:\n            dq.popleft()\n        while dq and nums[dq[-1]] <= x:\n            dq.pop()\n        dq.append(i)\n        if i >= k - 1:\n            ans.append(nums[dq[0]])\n    return ans"
+        },
+        {
+          "language": "c++",
+          "code": "vector<int> maxSlidingWindow(vector<int>& nums, int k) {\n    deque<int> dq;\n    vector<int> ans;\n\n    for (int i = 0; i < nums.size(); i++) {\n        while (!dq.empty() && dq.front() <= i-k) dq.pop_front();\n        while (!dq.empty() && nums[dq.back()] <= nums[i]) dq.pop_back();\n        dq.push_back(i);\n        if (i >= k-1) ans.push_back(nums[dq.front()]);\n    }\n    return ans;\n}"
+        },
+        {
+          "language": "java",
+          "code": "int[] maxSlidingWindow(int[] nums, int k) {\n    Deque<Integer> dq = new ArrayDeque<>();\n    int[] ans = new int[nums.length-k+1];\n    int p = 0;\n\n    for (int i = 0; i < nums.length; i++) {\n        while (!dq.isEmpty() && dq.peekFirst() <= i-k) dq.pollFirst();\n        while (!dq.isEmpty() && nums[dq.peekLast()] <= nums[i]) dq.pollLast();\n        dq.offerLast(i);\n        if (i >= k-1) ans[p++] = nums[dq.peekFirst()];\n    }\n    return ans;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Sliding Window Maximum",
+          "url": "https://leetcode.com/problems/sliding-window-maximum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "circular-buffer",
+      "title": "Circular Buffer",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) enqueue and dequeue",
+      "spaceComplexity": "O(capacity)",
+      "summary": "A fixed-size queue where the end connects back to the beginning.",
+      "explanation": [
+        "A circular buffer has a fixed capacity.",
+        "When the end of the array is reached, we wrap around to index 0.",
+        "Two pointers can track the front and rear.",
+        "This avoids shifting elements.",
+        "It is useful when memory size must remain fixed."
+      ],
+      "exampleTrace": {
+        "input": "capacity=3, enqueue(1), enqueue(2), dequeue(), enqueue(3), enqueue(4)",
+        "output": "[2,3,4]",
+        "traceSteps": [
+          "Insert 1 -> [1]",
+          "Insert 2 -> [1,2]",
+          "Remove 1 -> [2]",
+          "Insert 3 -> [2,3]",
+          "Insert 4 wraps around to the free position."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Implements a fixed-size queue without shifting elements.",
+        "whenToUse": "Streaming systems and fixed-memory queues.",
+        "whereUsed": "Operating systems, networking, device buffers.",
+        "whyOptimal": "Array positions are reused through circular indexing."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class CircularBuffer:\n    def __init__(self, capacity):\n        self.buf = [None] * capacity\n        self.capacity = capacity\n        self.head = 0\n        self.tail = 0\n        self.size = 0\n\n    def enqueue(self, x):\n        if self.size == self.capacity:\n            return False\n        self.buf[self.tail] = x\n        self.tail = (self.tail + 1) % self.capacity\n        self.size += 1\n        return True\n\n    def dequeue(self):\n        if self.size == 0:\n            return None\n        x = self.buf[self.head]\n        self.head = (self.head + 1) % self.capacity\n        self.size -= 1\n        return x"
+        },
+        {
+          "language": "c++",
+          "code": "class CircularBuffer {\n    vector<int> buf;\n    int head=0, tail=0, size=0;\npublic:\n    CircularBuffer(int n): buf(n) {}\n\n    bool enqueue(int x) {\n        if (size == buf.size()) return false;\n        buf[tail] = x;\n        tail = (tail+1)%buf.size();\n        size++;\n        return true;\n    }\n\n    int dequeue() {\n        if (size == 0) return -1;\n        int x = buf[head];\n        head = (head+1)%buf.size();\n        size--;\n        return x;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class CircularBuffer {\n    int[] buf;\n    int head = 0, tail = 0, size = 0;\n\n    CircularBuffer(int capacity) {\n        buf = new int[capacity];\n    }\n\n    boolean enqueue(int x) {\n        if (size == buf.length) return false;\n        buf[tail] = x;\n        tail = (tail + 1) % buf.length;\n        size++;\n        return true;\n    }\n\n    int dequeue() {\n        if (size == 0) return -1;\n        int x = buf[head];\n        head = (head + 1) % buf.length;\n        size--;\n        return x;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Circular Queue",
+          "url": "https://leetcode.com/problems/design-circular-queue/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "design-twitter-feed",
+      "title": "Design Twitter Feed",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O((F + T) log F) for feed generation",
+      "spaceComplexity": "O(users + tweets)",
+      "summary": "Combines hash maps, sets, lists, and heaps to build a social-media news feed.",
+      "explanation": [
+        "Each user can post tweets.",
+        "Users can follow other users.",
+        "A feed should show recent tweets from the user and followed users.",
+        "A HashMap stores tweets for each user.",
+        "A Set stores follow relationships.",
+        "A heap can merge recent tweets from multiple users."
+      ],
+      "exampleTrace": {
+        "input": "User 1 follows User 2. User 2 posts A. User 1 posts B.",
+        "output": "[B,A]",
+        "traceSteps": [
+          "User 1 follows user 2.",
+          "User 2 posts tweet A.",
+          "User 1 posts tweet B.",
+          "Feed considers tweets from users 1 and 2.",
+          "Newest tweet B appears before A."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Builds a feed from multiple users while keeping posts ordered by recency.",
+        "whenToUse": "Social feed and timeline design problems.",
+        "whereUsed": "Social networks and activity feeds.",
+        "whyOptimal": "A heap efficiently merges sorted tweet streams."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import defaultdict\nimport heapq\n\nclass Twitter:\n    def __init__(self):\n        self.time = 0\n        self.tweets = defaultdict(list)\n        self.following = defaultdict(set)\n\n    def postTweet(self, userId, tweetId):\n        self.tweets[userId].append((self.time, tweetId))\n        self.time += 1\n\n    def follow(self, followerId, followeeId):\n        self.following[followerId].add(followeeId)\n\n    def unfollow(self, followerId, followeeId):\n        self.following[followerId].discard(followeeId)\n\n    def getNewsFeed(self, userId):\n        users = self.following[userId] | {userId}\n        all_tweets = []\n        for u in users:\n            all_tweets.extend(self.tweets[u])\n        all_tweets.sort(reverse=True)\n        return [tweet for _, tweet in all_tweets[:10]]"
+        },
+        {
+          "language": "c++",
+          "code": "class Twitter {\n    int timer = 0;\n    unordered_map<int, vector<pair<int,int>>> tweets;\n    unordered_map<int, unordered_set<int>> follow;\npublic:\n    void postTweet(int userId, int tweetId) {\n        tweets[userId].push_back({timer++,tweetId});\n    }\n\n    void followUser(int a, int b) { follow[a].insert(b); }\n    void unfollowUser(int a, int b) { follow[a].erase(b); }\n\n    vector<int> getNewsFeed(int userId) {\n        vector<pair<int,int>> all;\n        all.insert(all.end(), tweets[userId].begin(), tweets[userId].end());\n        for (int u : follow[userId])\n            all.insert(all.end(), tweets[u].begin(), tweets[u].end());\n        sort(all.rbegin(), all.rend());\n        vector<int> ans;\n        for (int i=0; i<min(10,(int)all.size()); i++) ans.push_back(all[i].second);\n        return ans;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Twitter {\n    int time = 0;\n    Map<Integer,List<int[]>> tweets = new HashMap<>();\n    Map<Integer,Set<Integer>> following = new HashMap<>();\n\n    public void postTweet(int userId, int tweetId) {\n        tweets.computeIfAbsent(userId,k->new ArrayList<>())\n              .add(new int[]{time++,tweetId});\n    }\n\n    public void follow(int a, int b) {\n        following.computeIfAbsent(a,k->new HashSet<>()).add(b);\n    }\n\n    public void unfollow(int a, int b) {\n        if (following.containsKey(a)) following.get(a).remove(b);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Twitter",
+          "url": "https://leetcode.com/problems/design-twitter/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "file-system-trie",
+      "title": "Design File System Using Trie",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(path length)",
+      "spaceComplexity": "O(total path characters)",
+      "summary": "Represents hierarchical file paths using a Trie-like tree.",
+      "explanation": [
+        "A file system contains paths such as /home/user/docs.",
+        "Each directory is a node.",
+        "The next directory is a child node.",
+        "This naturally forms a tree.",
+        "A HashMap inside each node allows fast child lookup."
+      ],
+      "exampleTrace": {
+        "input": "create('/a',1), create('/a/b',2), get('/a/b')",
+        "output": "2",
+        "traceSteps": [
+          "Create directory a with value 1.",
+          "Inside a, create directory b with value 2.",
+          "Lookup follows a then b.",
+          "Return 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Stores hierarchical paths and associated values.",
+        "whenToUse": "Whenever data has a tree-like path structure.",
+        "whereUsed": "File systems, routing, URL trees.",
+        "whyOptimal": "Each path component is processed once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self):\n        self.children = {}\n        self.value = None\n\nclass FileSystem:\n    def __init__(self):\n        self.root = Node()\n\n    def create(self, path, value):\n        node = self.root\n        for part in path.split('/')[1:]:\n            node = node.children.setdefault(part, Node())\n        node.value = value\n\n    def get(self, path):\n        node = self.root\n        for part in path.split('/')[1:]:\n            if part not in node.children:\n                return -1\n            node = node.children[part]\n        return node.value"
+        },
+        {
+          "language": "c++",
+          "code": "struct Node {\n    unordered_map<string,Node*> child;\n    int value = -1;\n};\n\nclass FileSystem {\n    Node* root = new Node();\npublic:\n    void create(string path, int value) {\n        Node* cur = root;\n        string part;\n        stringstream ss(path);\n        while (getline(ss, part, '/')) {\n            if (part.empty()) continue;\n            if (!cur->child.count(part)) cur->child[part] = new Node();\n            cur = cur->child[part];\n        }\n        cur->value = value;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    Map<String,Node> child = new HashMap<>();\n    int value = -1;\n}\n\nclass FileSystem {\n    Node root = new Node();\n\n    public void create(String path, int value) {\n        Node cur = root;\n        for (String part : path.split(\"/\")) {\n            if (part.isEmpty()) continue;\n            cur.child.putIfAbsent(part, new Node());\n            cur = cur.child.get(part);\n        }\n        cur.value = value;\n    }\n\n    public int get(String path) {\n        Node cur = root;\n        for (String part : path.split(\"/\")) {\n            if (part.isEmpty()) continue;\n            if (!cur.child.containsKey(part)) return -1;\n            cur = cur.child.get(part);\n        }\n        return cur.value;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design In-Memory File System",
+          "url": "https://leetcode.com/problems/design-in-memory-file-system/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "range-module",
+      "title": "Range Module",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log n) to O(n) depending on interval structure",
+      "spaceComplexity": "O(n)",
+      "summary": "Tracks intervals and supports adding, removing, and querying whether a complete range is covered.",
+      "explanation": [
+        "A range module stores intervals such as [10,20).",
+        "Adding a new range may merge overlapping ranges.",
+        "Removing a range may split an existing interval.",
+        "Query checks whether every point in a range is covered.",
+        "Ordered intervals or a Segment Tree can be used."
+      ],
+      "exampleTrace": {
+        "input": "add [10,20), remove [14,16), query [10,14)",
+        "output": "true",
+        "traceSteps": [
+          "Initially add [10,20).",
+          "Remove [14,16).",
+          "Covered ranges become [10,14) and [16,20).",
+          "Query [10,14) is completely covered.",
+          "Return true."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains dynamic covered and uncovered ranges.",
+        "whenToUse": "When intervals are repeatedly added, removed, and queried.",
+        "whereUsed": "Booking systems, permissions, resource allocation.",
+        "whyOptimal": "Ordered intervals avoid checking every individual point."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class RangeModule:\n    def __init__(self):\n        self.ranges = []\n\n    def addRange(self, left, right):\n        self.ranges.append((left, right))\n        self.ranges.sort()\n        merged = []\n        for l, r in self.ranges:\n            if not merged or l > merged[-1][1]:\n                merged.append([l,r])\n            else:\n                merged[-1][1] = max(merged[-1][1], r)\n        self.ranges = [tuple(x) for x in merged]\n\n    def queryRange(self, left, right):\n        return any(l <= left and right <= r for l,r in self.ranges)"
+        },
+        {
+          "language": "c++",
+          "code": "class RangeModule {\n    map<int,int> ranges;\npublic:\n    void addRange(int left, int right) {\n        auto it = ranges.lower_bound(left);\n        if (it != ranges.begin() && prev(it)->second >= left) --it;\n        while (it != ranges.end() && it->first <= right) {\n            left = min(left, it->first);\n            right = max(right, it->second);\n            it = ranges.erase(it);\n        }\n        ranges[left] = right;\n    }\n\n    bool queryRange(int left, int right) {\n        auto it = ranges.upper_bound(left);\n        if (it == ranges.begin()) return false;\n        --it;\n        return it->second >= right;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class RangeModule {\n    TreeMap<Integer,Integer> map = new TreeMap<>();\n\n    public void addRange(int left, int right) {\n        Integer start = map.floorKey(left);\n        if (start != null && map.get(start) >= left) {\n            left = start;\n            right = Math.max(right, map.get(start));\n            map.remove(start);\n        }\n        while (true) {\n            Integer next = map.ceilingKey(left);\n            if (next == null || next > right) break;\n            right = Math.max(right, map.get(next));\n            map.remove(next);\n        }\n        map.put(left, right);\n    }\n\n    public boolean queryRange(int left, int right) {\n        Integer start = map.floorKey(left);\n        return start != null && map.get(start) >= right;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Range Module",
+          "url": "https://leetcode.com/problems/range-module/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+
+    {
+      "id": "design-parking-system",
+      "title": "Design Parking System",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(1)",
+      "summary": "A simple state-based data structure that tracks available parking spaces.",
+      "explanation": [
+        "There are different parking slot types.",
+        "Each type has a remaining capacity.",
+        "When a car arrives, check the capacity for its type.",
+        "If capacity is available, decrease it and return true.",
+        "Otherwise return false."
+      ],
+      "exampleTrace": {
+        "input": "big=1, medium=1, small=0; add big, add small",
+        "output": "true, false",
+        "traceSteps": [
+          "Big slot count = 1.",
+          "Add big car -> count becomes 0.",
+          "Small slot count = 0.",
+          "Add small car -> no slot available."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains limited resources by category.",
+        "whenToUse": "Simple resource allocation problems.",
+        "whereUsed": "Parking, inventory, capacity management.",
+        "whyOptimal": "Only a fixed number of counters is needed."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class ParkingSystem:\n    def __init__(self, big, medium, small):\n        self.slots = [0, big, medium, small]\n\n    def addCar(self, carType):\n        if self.slots[carType] == 0:\n            return False\n        self.slots[carType] -= 1\n        return True"
+        },
+        {
+          "language": "c++",
+          "code": "class ParkingSystem {\n    int slots[4];\npublic:\n    ParkingSystem(int big, int medium, int small) {\n        slots[1]=big; slots[2]=medium; slots[3]=small;\n    }\n\n    bool addCar(int carType) {\n        if (slots[carType] == 0) return false;\n        slots[carType]--;\n        return true;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class ParkingSystem {\n    int[] slots;\n\n    ParkingSystem(int big, int medium, int small) {\n        slots = new int[]{0,big,medium,small};\n    }\n\n    public boolean addCar(int carType) {\n        if (slots[carType] == 0) return false;\n        slots[carType]--;\n        return true;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Parking System",
+          "url": "https://leetcode.com/problems/design-parking-system/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+
+    {
+      "id": "hash-map-with-expiry",
+      "title": "Key-Value Store with Expiration",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) average lookup and update",
+      "spaceComplexity": "O(n)",
+      "summary": "Stores key-value pairs that automatically become invalid after a specified time.",
+      "explanation": [
+        "Normal HashMap stores values until they are removed.",
+        "An expiring key-value store also stores an expiration timestamp.",
+        "During get, compare the current time with expiration time.",
+        "If the value has expired, return an invalid result.",
+        "A HashMap is enough for basic lazy expiration."
+      ],
+      "exampleTrace": {
+        "input": "set('A',100, expiry=10), get('A',5), get('A',11)",
+        "output": "100, expired",
+        "traceSteps": [
+          "A is valid until time 10.",
+          "At time 5 -> return 100.",
+          "At time 11 -> value has expired.",
+          "Return invalid result."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Stores temporary data that should automatically expire.",
+        "whenToUse": "Sessions, temporary tokens, cached responses.",
+        "whereUsed": "Redis-like systems and web backends.",
+        "whyOptimal": "Expiration metadata can be checked directly during lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class ExpiringMap:\n    def __init__(self):\n        self.data = {}\n\n    def set(self, key, value, expiry):\n        self.data[key] = (value, expiry)\n\n    def get(self, key, now):\n        if key not in self.data:\n            return None\n        value, expiry = self.data[key]\n        if now >= expiry:\n            del self.data[key]\n            return None\n        return value"
+        },
+        {
+          "language": "c++",
+          "code": "class ExpiringMap {\n    unordered_map<string,pair<int,long long>> mp;\npublic:\n    void set(string key, int value, long long expiry) {\n        mp[key] = {value,expiry};\n    }\n\n    int get(string key, long long now) {\n        if (!mp.count(key) || now >= mp[key].second) return -1;\n        return mp[key].first;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class ExpiringMap {\n    static class Entry {\n        int value;\n        long expiry;\n        Entry(int value, long expiry) {\n            this.value = value;\n            this.expiry = expiry;\n        }\n    }\n\n    Map<String,Entry> map = new HashMap<>();\n\n    void set(String key, int value, long expiry) {\n        map.put(key, new Entry(value, expiry));\n    }\n\n    Integer get(String key, long now) {\n        Entry e = map.get(key);\n        if (e == null || now >= e.expiry) return null;\n        return e.value;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design a Time-Based Key-Value Store",
+          "url": "https://leetcode.com/problems/time-based-key-value-store/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+
+    {
+      "id": "rate-limiter-token-bucket",
+      "title": "Token Bucket Rate Limiter",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) per request",
+      "spaceComplexity": "O(number of users)",
+      "summary": "Controls how many requests a user can make during a period using refillable tokens.",
+      "explanation": [
+        "Imagine a bucket containing tokens.",
+        "Every request consumes one token.",
+        "Tokens are added back over time.",
+        "If no token is available, the request is rejected.",
+        "Each user can have a separate bucket.",
+        "This combines a HashMap with time and counter information."
+      ],
+      "exampleTrace": {
+        "input": "capacity=3, requests=4 without refill",
+        "output": "allow, allow, allow, reject",
+        "traceSteps": [
+          "Start with 3 tokens.",
+          "Request 1 consumes one -> 2 left.",
+          "Request 2 consumes one -> 1 left.",
+          "Request 3 consumes one -> 0 left.",
+          "Request 4 has no token -> reject."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Controls request traffic so a user cannot send unlimited requests.",
+        "whenToUse": "API protection and traffic control.",
+        "whereUsed": "Web APIs, gateways, microservices.",
+        "whyOptimal": "Only token count and last refill time need to be maintained."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import time\n\nclass TokenBucket:\n    def __init__(self, capacity, refill_rate):\n        self.capacity = capacity\n        self.tokens = capacity\n        self.refill_rate = refill_rate\n        self.last = time.time()\n\n    def allow(self):\n        now = time.time()\n        elapsed = now - self.last\n        self.tokens = min(self.capacity,\n                          self.tokens + elapsed * self.refill_rate)\n        self.last = now\n\n        if self.tokens >= 1:\n            self.tokens -= 1\n            return True\n        return False"
+        },
+        {
+          "language": "c++",
+          "code": "class TokenBucket {\n    double capacity, tokens, rate;\n    chrono::steady_clock::time_point last;\npublic:\n    TokenBucket(double c, double r)\n        : capacity(c), tokens(c), rate(r), last(chrono::steady_clock::now()) {}\n\n    bool allow() {\n        auto now = chrono::steady_clock::now();\n        double elapsed = chrono::duration<double>(now-last).count();\n        tokens = min(capacity, tokens + elapsed*rate);\n        last = now;\n        if (tokens >= 1) {\n            tokens -= 1;\n            return true;\n        }\n        return false;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class TokenBucket {\n    double capacity;\n    double tokens;\n    double rate;\n    long last;\n\n    TokenBucket(double capacity, double rate) {\n        this.capacity = capacity;\n        this.tokens = capacity;\n        this.rate = rate;\n        this.last = System.nanoTime();\n    }\n\n    boolean allow() {\n        long now = System.nanoTime();\n        double elapsed = (now-last) / 1_000_000_000.0;\n        tokens = Math.min(capacity, tokens + elapsed*rate);\n        last = now;\n\n        if (tokens >= 1) {\n            tokens--;\n            return true;\n        }\n        return false;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Design Rate Limiter",
+          "url": "https://leetcode.com/",
+          "difficulty": "Design"
+        }
+      ]
+    },
+
+    {
+      "id": "consistent-hashing-ring",
+      "title": "Consistent Hashing Ring",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log n) node lookup",
+      "spaceComplexity": "O(n)",
+      "summary": "Maps keys to servers while minimizing key movement when servers are added or removed.",
+      "explanation": [
+        "Imagine all hash values arranged in a circle.",
+        "Each server is assigned one or more positions on this circle.",
+        "A key is hashed to a position.",
+        "Move clockwise until the first server is found.",
+        "If a server is added, only nearby keys need to move.",
+        "A TreeMap or ordered map can represent the ring."
+      ],
+      "exampleTrace": {
+        "input": "Servers A at 10, B at 50. Key hashes to 30.",
+        "output": "Key goes to B",
+        "traceSteps": [
+          "Hash key -> position 30.",
+          "Move clockwise from 30.",
+          "Server B is at 50.",
+          "Therefore key is assigned to B."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Distributes keys across servers while reducing redistribution.",
+        "whenToUse": "Distributed caching and sharded systems.",
+        "whereUsed": "Distributed databases and cache clusters.",
+        "whyOptimal": "Adding one server does not require remapping every key."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from bisect import bisect_left\n\nclass ConsistentHashRing:\n    def __init__(self):\n        self.positions = []\n        self.servers = {}\n\n    def add_server(self, position, server):\n        from bisect import insort\n        insort(self.positions, position)\n        self.servers[position] = server\n\n    def get_server(self, key_hash):\n        if not self.positions:\n            return None\n        i = bisect_left(self.positions, key_hash)\n        if i == len(self.positions):\n            i = 0\n        return self.servers[self.positions[i]]"
+        },
+        {
+          "language": "c++",
+          "code": "class ConsistentHashRing {\n    map<int,string> ring;\npublic:\n    void addServer(int hash, string server) {\n        ring[hash] = server;\n    }\n\n    string getServer(int hash) {\n        if (ring.empty()) return \"\";\n        auto it = ring.lower_bound(hash);\n        if (it == ring.end()) it = ring.begin();\n        return it->second;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class ConsistentHashRing {\n    TreeMap<Integer,String> ring = new TreeMap<>();\n\n    void addServer(int hash, String server) {\n        ring.put(hash, server);\n    }\n\n    String getServer(int hash) {\n        if (ring.isEmpty()) return null;\n        Map.Entry<Integer,String> e = ring.ceilingEntry(hash);\n        if (e == null) e = ring.firstEntry();\n        return e.getValue();\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Consistent Hashing",
+          "url": "https://en.wikipedia.org/wiki/Consistent_hashing",
+          "difficulty": "Advanced"
+        }
+      ]
+    },
+
+    {
+      "id": "bloom-filter",
+      "title": "Bloom Filter",
+      "categoryId": "design-oriented-data-structures",
+      "categoryTitle": "Design-Oriented Data Structures",
+      "difficulty": "Hard",
+      "timeComplexity": "O(k) for insert and query",
+      "spaceComplexity": "O(m)",
+      "summary": "A memory-efficient probabilistic structure for checking whether an item may exist in a set.",
+      "explanation": [
+        "A Bloom Filter uses a bit array and multiple hash functions.",
+        "When an item is inserted, several bit positions are set to 1.",
+        "When checking an item, those positions are inspected.",
+        "If any required bit is 0, the item definitely does not exist.",
+        "If all are 1, the item may exist.",
+        "False positives are possible, but false negatives are not in a standard Bloom Filter."
+      ],
+      "exampleTrace": {
+        "input": "Insert 'cat', then query 'cat' and 'dog'",
+        "output": "cat -> possibly exists, dog -> probably does not exist",
+        "traceSteps": [
+          "Hash cat using multiple hash functions.",
+          "Set the corresponding bits.",
+          "Query cat -> all required bits are 1.",
+          "Query dog -> if one required bit is 0, dog definitely was not inserted."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Checks set membership using very little memory.",
+        "whenToUse": "When occasional false positives are acceptable.",
+        "whereUsed": "Databases, caches, web crawlers, distributed systems.",
+        "whyOptimal": "Stores bits instead of complete objects."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class BloomFilter:\n    def __init__(self, size=1000):\n        self.bits = [False] * size\n        self.size = size\n\n    def hashes(self, value):\n        h = hash(value)\n        return [h % self.size, (h * 31 + 7) % self.size]\n\n    def add(self, value):\n        for i in self.hashes(value):\n            self.bits[i] = True\n\n    def might_contain(self, value):\n        return all(self.bits[i] for i in self.hashes(value))"
+        },
+        {
+          "language": "c++",
+          "code": "class BloomFilter {\n    vector<bool> bits;\npublic:\n    BloomFilter(int n): bits(n,false) {}\n\n    int h1(string s) {\n        return hash<string>{}(s) % bits.size();\n    }\n\n    int h2(string s) {\n        return (hash<string>{}(s) * 31 + 7) % bits.size();\n    }\n\n    void add(string s) {\n        bits[h1(s)] = true;\n        bits[h2(s)] = true;\n    }\n\n    bool mightContain(string s) {\n        return bits[h1(s)] && bits[h2(s)];\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class BloomFilter {\n    boolean[] bits;\n\n    BloomFilter(int size) {\n        bits = new boolean[size];\n    }\n\n    int h1(String s) {\n        return Math.abs(s.hashCode()) % bits.length;\n    }\n\n    int h2(String s) {\n        return Math.abs((s.hashCode() * 31 + 7)) % bits.length;\n    }\n\n    void add(String s) {\n        bits[h1(s)] = true;\n        bits[h2(s)] = true;\n    }\n\n    boolean mightContain(String s) {\n        return bits[h1(s)] && bits[h2(s)];\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Bloom Filter",
+          "url": "https://en.wikipedia.org/wiki/Bloom_filter",
+          "difficulty": "Advanced"
+        }
+      ]
+    }
+  ]
+}

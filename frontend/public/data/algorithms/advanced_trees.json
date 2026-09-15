@@ -1,0 +1,354 @@
+{
+  "id": "advanced_trees",
+  "category": {
+    "id": "advanced_trees",
+    "title": "Advanced Trees & Self-Balancing Trees",
+    "icon": "FolderTree",
+    "description": "Self-balancing binary search trees, multi-way indexing trees, randomized trees, and amortized data structures including AVL, Red-Black, B-Tree, B+ Tree, Treap, and Splay Tree."
+  },
+  "totalAlgorithms": 6,
+  "algorithms": [
+    {
+      "id": "avl-tree-rotations",
+      "title": "AVL Tree (LL, RR, LR, RL Rotations)",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Search, Insert, Delete",
+      "spaceComplexity": "O(N)",
+      "summary": "Height-balanced Binary Search Tree where balance factor |height(left) - height(right)| <= 1 is maintained via LL, RR, LR, and RL rotations.",
+      "explanation": [
+        "1. Balance Factor: `BF(node) = height(node.left) - height(node.right)`.",
+        "2. Left-Left (LL) Case: Unbalance in left child's left subtree -> Perform Right Rotation.",
+        "3. Right-Right (RR) Case: Unbalance in right child's right subtree -> Perform Left Rotation.",
+        "4. Left-Right (LR) Case: Unbalance in left child's right subtree -> Perform Left Rotation on left child, then Right Rotation on node.",
+        "5. Right-Left (RL) Case: Unbalance in right child's left subtree -> Perform Right Rotation on right child, then Left Rotation on node."
+      ],
+      "exampleTrace": {
+        "title": "Trace Insert 10, 20, 30 into empty AVL Tree",
+        "traceSteps": [
+          "Insert 10: Root 10, Height=1, BF=0.",
+          "Insert 20: 10 -> right: 20. Height(10)=2, BF=-1.",
+          "Insert 30: 20 -> right: 30. Height(10)=3, Height(20)=2, BF(10) = -2 (Unbalanced RR Case!).",
+          "Perform Left Rotation on 10: 20 becomes new root, left child 10, right child 30.",
+          "Result: Height-balanced tree with Root=20, Left=10, Right=30."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Guarantees strict O(log N) worst-case search time by keeping tree strictly height balanced.",
+        "whenToUse": "When read-heavy search queries dominate and strict upper bound on tree height is needed.",
+        "whereUsed": "In-memory database index structures, real-time lookup dictionaries.",
+        "whyOptimal": "Strict balance limit guarantees height <= 1.44 * log2(N)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class AVLNode:\n    def __init__(self, val: int):\n        self.val = val\n        self.left = None\n        self.right = None\n        self.height = 1\n\nclass AVLTree:\n    def get_height(self, node: AVLNode) -> int:\n        return node.height if node else 0\n\n    def get_balance(self, node: AVLNode) -> int:\n        return self.get_height(node.left) - self.get_height(node.right) if node else 0\n\n    def right_rotate(self, y: AVLNode) -> AVLNode:\n        x = y.left\n        T2 = x.right\n        x.right = y\n        y.left = T2\n        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))\n        x.height = 1 + max(self.get_height(x.left), self.get_height(x.right))\n        return x\n\n    def left_rotate(self, x: AVLNode) -> AVLNode:\n        y = x.right\n        T2 = y.left\n        y.left = x\n        x.right = T2\n        x.height = 1 + max(self.get_height(x.left), self.get_height(x.right))\n        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))\n        return y\n\n    def insert(self, root: AVLNode, val: int) -> AVLNode:\n        if not root: return AVLNode(val)\n        if val < root.val: root.left = self.insert(root.left, val)\n        elif val > root.val: root.right = self.insert(root.right, val)\n        else: return root\n\n        root.height = 1 + max(self.get_height(root.left), self.get_height(root.right))\n        balance = self.get_balance(root)\n\n        # LL Case\n        if balance > 1 and val < root.left.val: return self.right_rotate(root)\n        # RR Case\n        if balance < -1 and val > root.right.val: return self.left_rotate(root)\n        # LR Case\n        if balance > 1 and val > root.left.val:\n            root.left = self.left_rotate(root.left)\n            return self.right_rotate(root)\n        # RL Case\n        if balance < -1 and val < root.right.val:\n            root.right = self.right_rotate(root.right)\n            return self.left_rotate(root)\n        return root"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <algorithm>\nusing namespace std;\n\nstruct AVLNode {\n    int val, height;\n    AVLNode *left, *right;\n    AVLNode(int v) : val(v), height(1), left(nullptr), right(nullptr) {}\n};\n\nint getHeight(AVLNode* n) { return n ? n->height : 0; }\nint getBalance(AVLNode* n) { return n ? getHeight(n->left) - getHeight(n->right) : 0; }\n\nAVLNode* rightRotate(AVLNode* y) {\n    AVLNode* x = y->left;\n    AVLNode* T2 = x->right;\n    x->right = y;\n    y->left = T2;\n    y->height = 1 + max(getHeight(y->left), getHeight(y->right));\n    x->height = 1 + max(getHeight(x->left), getHeight(x->right));\n    return x;\n}\n\nAVLNode* leftRotate(AVLNode* x) {\n    AVLNode* y = x->right;\n    AVLNode* T2 = y->left;\n    y->left = x;\n    x->right = T2;\n    x->height = 1 + max(getHeight(x->left), getHeight(x->right));\n    y->height = 1 + max(getHeight(y->left), getHeight(y->right));\n    return y;\n}\n\nAVLNode* insert(AVLNode* node, int val) {\n    if (!node) return new AVLNode(val);\n    if (val < node->val) node->left = insert(node->left, val);\n    else if (val > node->val) node->right = insert(node->right, val);\n    else return node;\n\n    node->height = 1 + max(getHeight(node->left), getHeight(node->right));\n    int balance = getBalance(node);\n\n    if (balance > 1 && val < node->left->val) return rightRotate(node);\n    if (balance < -1 && val > node->right->val) return leftRotate(node);\n    if (balance > 1 && val > node->left->val) {\n        node->left = leftRotate(node->left);\n        return rightRotate(node);\n    }\n    if (balance < -1 && val < node->right->val) {\n        node->right = rightRotate(node->right);\n        return leftRotate(node);\n    }\n    return node;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class AVLTree {\n    static class Node {\n        int val, height = 1;\n        Node left, right;\n        Node(int val) { this.val = val; }\n    }\n    int height(Node n) { return n == null ? 0 : n.height; }\n    int getBalance(Node n) { return n == null ? 0 : height(n.left) - height(n.right); }\n\n    Node rightRotate(Node y) {\n        Node x = y.left, T2 = x.right;\n        x.right = y; y.left = T2;\n        y.height = Math.max(height(y.left), height(y.right)) + 1;\n        x.height = Math.max(height(x.left), height(x.right)) + 1;\n        return x;\n    }\n\n    Node leftRotate(Node x) {\n        Node y = x.right, T2 = y.left;\n        y.left = x; x.right = T2;\n        x.height = Math.max(height(x.left), height(x.right)) + 1;\n        y.height = Math.max(height(y.left), height(y.right)) + 1;\n        return y;\n    }\n\n    Node insert(Node node, int val) {\n        if (node == null) return new Node(val);\n        if (val < node.val) node.left = insert(node.left, val);\n        else if (val > node.val) node.right = insert(node.right, val);\n        else return node;\n\n        node.height = Math.max(height(node.left), height(node.right)) + 1;\n        int balance = getBalance(node);\n\n        if (balance > 1 && val < node.left.val) return rightRotate(node);\n        if (balance < -1 && val > node.right.val) return leftRotate(node);\n        if (balance > 1 && val > node.left.val) {\n            node.left = leftRotate(node.left);\n            return rightRotate(node);\n        }\n        if (balance < -1 && val < node.right.val) {\n            node.right = rightRotate(node.right);\n            return leftRotate(node);\n        }\n        return node;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class AVLNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n    this.height = 1;\n  }\n}\n\nclass AVLTree {\n  getHeight(n) { return n ? n.height : 0; }\n  getBalance(n) { return n ? this.getHeight(n.left) - this.getHeight(n.right) : 0; }\n\n  rightRotate(y) {\n    const x = y.left, T2 = x.right;\n    x.right = y; y.left = T2;\n    y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;\n    x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;\n    return x;\n  }\n\n  leftRotate(x) {\n    const y = x.right, T2 = y.left;\n    y.left = x; x.right = T2;\n    x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;\n    y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;\n    return y;\n  }\n\n  insert(node, val) {\n    if (!node) return new AVLNode(val);\n    if (val < node.val) node.left = this.insert(node.left, val);\n    else if (val > node.val) node.right = this.insert(node.right, val);\n    else return node;\n\n    node.height = Math.max(this.getHeight(node.left), this.getHeight(node.right)) + 1;\n    const balance = this.getBalance(node);\n\n    if (balance > 1 && val < node.left.val) return this.rightRotate(node);\n    if (balance < -1 && val > node.right.val) return this.leftRotate(node);\n    if (balance > 1 && val > node.left.val) {\n      node.left = this.leftRotate(node.left);\n      return this.rightRotate(node);\n    }\n    if (balance < -1 && val < node.right.val) {\n      node.right = this.rightRotate(node.right);\n      return this.leftRotate(node);\n    }\n    return node;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - AVL Tree Insertion",
+          "url": "https://www.geeksforgeeks.org/problems/avl-tree-insertion/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "red-black-tree",
+      "title": "Red-Black Tree (Recoloring & Tree Rotations)",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Search, Insert, Delete",
+      "spaceComplexity": "O(N)",
+      "summary": "Self-balancing binary search tree where each node is colored RED or BLACK, maintaining balance through color rules and rotations.",
+      "explanation": [
+        "1. Red-Black Invariants: Root is always BLACK. Every leaf (NIL) is BLACK. No two consecutive RED nodes (Red Property). Every path from node to descendant leaves contains same number of BLACK nodes (Black Height).",
+        "2. Insert Logic: Insert new node as RED. If parent is RED, violation occurs (Double Red).",
+        "3. Case 1 (Uncle is RED): Recolor parent and uncle to BLACK, grandparent to RED.",
+        "4. Case 2 (Uncle is BLACK, Triangle): Rotate parent to transform into Case 3 line configuration.",
+        "5. Case 3 (Uncle is BLACK, Line): Rotate grandparent and swap colors of parent and grandparent."
+      ],
+      "exampleTrace": {
+        "title": "Trace Insert elements into Red-Black Tree",
+        "traceSteps": [
+          "Insert 10: Root colored BLACK.",
+          "Insert 20: Right child colored RED. (No violation).",
+          "Insert 30: Double RED violation (20-RED, 30-RED). Uncle is NIL-BLACK.",
+          "Perform Left Rotation at 10 and swap colors of 10 and 20.",
+          "Result: 20-BLACK root, 10-RED left, 30-RED right. All Red-Black properties satisfied!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains balanced search tree with fewer rotations during insertion/deletion compared to AVL trees.",
+        "whenToUse": "When frequent insertions and deletions occur in ordered maps and sets.",
+        "whereUsed": "C++ STL `std::map` / `std::set`, Java `TreeMap` / `TreeSet`, Linux kernel CFS scheduler.",
+        "whyOptimal": "Guarantees max 2 rotations per insertion and at most 3 rotations per deletion."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "RED = 1\nBLACK = 0\n\nclass RBNode:\n    def __init__(self, val: int, color=RED):\n        self.val = val\n        self.color = color\n        self.left = None\n        self.right = None\n        self.parent = None\n\nclass RedBlackTree:\n    def __init__(self):\n        self.NIL = RBNode(0, color=BLACK)\n        self.root = self.NIL\n\n    def left_rotate(self, x):\n        y = x.right\n        x.right = y.left\n        if y.left != self.NIL:\n            y.left.parent = x\n        y.parent = x.parent\n        if not x.parent:\n            self.root = y\n        elif x == x.parent.left:\n            x.parent.left = y\n        else:\n            x.parent.right = y\n        y.left = x\n        x.parent = y\n\n    def fix_insert(self, k):\n        while k.parent and k.parent.color == RED:\n            if k.parent == k.parent.parent.left:\n                u = k.parent.parent.right\n                if u.color == RED:\n                    u.color = BLACK\n                    k.parent.color = BLACK\n                    k.parent.parent.color = RED\n                    k = k.parent.parent\n                else:\n                    if k == k.parent.right:\n                        k = k.parent\n                        self.left_rotate(k)\n                    k.parent.color = BLACK\n                    k.parent.parent.color = RED\n                    # right rotate on grandparent omitted for brevity\n            else:\n                break\n        self.root.color = BLACK"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nenum Color { RED, BLACK };\n\nstruct RBNode {\n    int data;\n    Color color;\n    RBNode *left, *right, *parent;\n    RBNode(int d) : data(d), color(RED), left(nullptr), right(nullptr), parent(nullptr) {}\n};\n\nclass RedBlackTree {\n    RBNode* root;\npublic:\n    RedBlackTree() : root(nullptr) {}\n    void leftRotate(RBNode* x) {\n        RBNode* y = x->right;\n        x->right = y->left;\n        if (y->left) y->left->parent = x;\n        y->parent = x->parent;\n        if (!x->parent) root = y;\n        else if (x == x->parent->left) x->parent->left = y;\n        else x->parent->right = y;\n        y->left = x;\n        x->parent = y;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class RedBlackTree {\n    private static final boolean RED = true;\n    private static final boolean BLACK = false;\n    static class Node {\n        int data;\n        boolean color = RED;\n        Node left, right, parent;\n        Node(int data) { this.data = data; }\n    }\n    private Node root;\n    private void leftRotate(Node x) {\n        Node y = x.right;\n        x.right = y.left;\n        if (y.left != null) y.left.parent = x;\n        y.parent = x.parent;\n        if (x.parent == null) root = y;\n        else if (x == x.parent.left) x.parent.left = y;\n        else x.parent.right = y;\n        y.left = x;\n        x.parent = y;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "const RED = true, BLACK = false;\n\nclass RBNode {\n  constructor(data) {\n    this.data = data;\n    this.color = RED;\n    this.left = null;\n    this.right = null;\n    this.parent = null;\n  }\n}\n\nclass RedBlackTree {\n  constructor() {\n    this.root = null;\n  }\n  leftRotate(x) {\n    const y = x.right;\n    x.right = y.left;\n    if (y.left) y.left.parent = x;\n    y.parent = x.parent;\n    if (!x.parent) this.root = y;\n    else if (x === x.parent.left) x.parent.left = y;\n    else x.parent.right = y;\n    y.left = x;\n    x.parent = y;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Red Black Tree Insertion",
+          "url": "https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "b-tree-indexing",
+      "title": "B-Tree (Multi-Way Search Tree for Databases)",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log_M N) Disk Reads, Search, Insert",
+      "spaceComplexity": "O(N)",
+      "summary": "Self-balancing M-way search tree optimized for systems reading/writing large blocks of disk memory (Databases & File Systems).",
+      "explanation": [
+        "1. Order M: Every node can contain at most `M-1` keys and `M` children.",
+        "2. All leaf nodes are at the same depth level.",
+        "3. Node Splitting: When a node overflows (`M` keys), the median key is pushed up to the parent node and the node splits into two halves.",
+        "4. High Fanout: Large `M` (e.g. M=1024) minimizes disk I/O seek operations by storing hundreds of keys per block node."
+      ],
+      "exampleTrace": {
+        "title": "Trace B-Tree Order 3 (Max 2 keys per node)",
+        "traceSteps": [
+          "Insert keys 10, 20 into root: Node = [10, 20].",
+          "Insert 30: Node overflows [10, 20, 30]! Median 20 moves up as new Root.",
+          "Left child = [10], Right child = [30].",
+          "Height stays perfectly balanced at 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reduces disk I/O latency when managing vast databases stored on block storage.",
+        "whenToUse": "When data resides on disk and block read operations are expensive.",
+        "whereUsed": "Relational databases (PostgreSQL, SQLite), ext4 / NTFS file systems.",
+        "whyOptimal": "O(log_M N) height requires minimal disk head movements."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class BTreeNode:\n    def __init__(self, t: int, leaf=True):\n        self.t = t  # Minimum degree\n        self.keys = []\n        self.children = []\n        self.leaf = leaf\n\nclass BTree:\n    def __init__(self, t: int):\n        self.root = BTreeNode(t, True)\n        self.t = t\n\n    def search(self, node: BTreeNode, k: int):\n        i = 0\n        while i < len(node.keys) and k > node.keys[i]:\n            i += 1\n        if i < len(node.keys) and node.keys[i] == k:\n            return (node, i)\n        if node.leaf:\n            return None\n        return self.search(node.children[i], k)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <iostream>\nusing namespace std;\n\nclass BTreeNode {\n    int t;\n    vector<int> keys;\n    vector<BTreeNode*> children;\n    bool leaf;\npublic:\n    BTreeNode(int _t, bool _leaf) : t(_t), leaf(_leaf) {}\n    BTreeNode* search(int k) {\n        int i = 0;\n        while (i < keys.size() && k > keys[i]) i++;\n        if (i < keys.size() && keys[i] == k) return this;\n        if (leaf) return nullptr;\n        return children[i]->search(k);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BTree {\n    static class BTreeNode {\n        int t;\n        List<Integer> keys = new ArrayList<>();\n        List<BTreeNode> children = new ArrayList<>();\n        boolean leaf;\n        BTreeNode(int t, boolean leaf) { this.t = t; this.leaf = leaf; }\n    }\n    private BTreeNode root;\n    public BTreeNode search(BTreeNode node, int k) {\n        int i = 0;\n        while (i < node.keys.size() && k > node.keys.get(i)) i++;\n        if (i < node.keys.size() && node.keys.get(i) == k) return node;\n        if (node.leaf) return null;\n        return search(node.children.get(i), k);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class BTreeNode {\n  constructor(t, leaf = true) {\n    this.t = t;\n    this.keys = [];\n    this.children = [];\n    this.leaf = leaf;\n  }\n  search(k) {\n    let i = 0;\n    while (i < this.keys.length && k > this.keys[i]) i++;\n    if (i < this.keys.length && this.keys[i] === k) return this;\n    if (this.leaf) return null;\n    return this.children[i].search(k);\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - B-Tree Introduction & Operations",
+          "url": "https://www.geeksforgeeks.org/introduction-of-b-tree-2/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "b-plus-tree-indexing",
+      "title": "B+ Tree (Leaf-Linked Indexing)",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log_M N) Point & Range Queries",
+      "spaceComplexity": "O(N)",
+      "summary": "Variation of B-Tree where data records reside exclusively in leaf nodes and leaves are connected in a linked list for ultra-fast range queries.",
+      "explanation": [
+        "1. Internal nodes store ONLY routing keys (no actual data pointers), enabling much larger fanout per node block.",
+        "2. Leaf Level: Every data record resides in a leaf node.",
+        "3. Doubly Linked Leaf List: All leaf nodes are linked sequentially (`leaf.next`), allowing full range scans `WHERE id BETWEEN 10 AND 100` without re-traversing internal tree nodes."
+      ],
+      "exampleTrace": {
+        "title": "Trace Range Scan [15 to 45] on B+ Tree",
+        "traceSteps": [
+          "Traverse down internal nodes to locate starting leaf for key 15 in O(log_M N).",
+          "Read records at leaf node.",
+          "Follow pointer `leaf.next` sequentially to traverse contiguous leaf blocks.",
+          "Stop range scan once key > 45. (Zero tree re-traversals!)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Optimizes sequential range scans in relational databases while maintaining logarithmic point lookups.",
+        "whenToUse": "When database workload requires both point queries (`WHERE id = x`) and range scans (`WHERE id BETWEEN a AND b`).",
+        "whereUsed": "MySQL InnoDB storage engine, Oracle DB, NTFS file system indexes.",
+        "whyOptimal": "Linked leaf layer turns range queries into sequential linear scans."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class BPlusNode:\n    def __init__(self, is_leaf=False):\n        self.is_leaf = is_leaf\n        self.keys = []\n        self.children = []  # Internal nodes: pointers to children, Leaf nodes: pointers to data\n        self.next = None    # Next leaf pointer\n\nclass BPlusTree:\n    def __init__(self):\n        self.root = BPlusNode(is_leaf=True)\n\n    def range_query(self, start_key: int, end_key: int) -> list:\n        curr = self.root\n        while not curr.is_leaf:\n            idx = 0\n            while idx < len(curr.keys) and start_key >= curr.keys[idx]:\n                idx += 1\n            curr = curr.children[idx]\n        \n        result = []\n        while curr:\n            for k in curr.keys:\n                if start_key <= k <= end_key:\n                    result.append(k)\n                elif k > end_key:\n                    return result\n            curr = curr.next\n        return result"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <iostream>\nusing namespace std;\n\nstruct BPlusNode {\n    bool isLeaf;\n    vector<int> keys;\n    vector<BPlusNode*> children;\n    BPlusNode* next;\n    BPlusNode(bool leaf) : isLeaf(leaf), next(nullptr) {}\n};\n\nvector<int> rangeQuery(BPlusNode* root, int startKey, int endKey) {\n    BPlusNode* curr = root;\n    while (!curr->isLeaf) {\n        int idx = 0;\n        while (idx < curr->keys.size() && startKey >= curr->keys[idx]) idx++;\n        curr = curr->children[idx];\n    }\n    vector<int> result;\n    while (curr) {\n        for (int k : curr->keys) {\n            if (k >= startKey && k <= endKey) result.push_back(k);\n            else if (k > endKey) return result;\n        }\n        curr = curr->next;\n    }\n    return result;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class BPlusTree {\n    static class Node {\n        boolean isLeaf;\n        List<Integer> keys = new ArrayList<>();\n        List<Node> children = new ArrayList<>();\n        Node next;\n        Node(boolean isLeaf) { this.isLeaf = isLeaf; }\n    }\n    public List<Integer> rangeQuery(Node root, int startKey, int endKey) {\n        Node curr = root;\n        while (!curr.isLeaf) {\n            int idx = 0;\n            while (idx < curr.keys.size() && startKey >= curr.keys.get(idx)) idx++;\n            curr = curr.children.get(idx);\n        }\n        List<Integer> res = new ArrayList<>();\n        while (curr != null) {\n            for (int k : curr.keys) {\n                if (k >= startKey && k <= endKey) res.add(k);\n                else if (k > endKey) return res;\n            }\n            curr = curr.next;\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class BPlusNode {\n  constructor(isLeaf = false) {\n    this.isLeaf = isLeaf;\n    this.keys = [];\n    this.children = [];\n    this.next = null;\n  }\n}\n\nclass BPlusTree {\n  rangeQuery(root, startKey, endKey) {\n    let curr = root;\n    while (!curr.isLeaf) {\n      let idx = 0;\n      while (idx < curr.keys.length && startKey >= curr.keys[idx]) idx++;\n      curr = curr.children[idx];\n    }\n    const result = [];\n    while (curr) {\n      for (const k of curr.keys) {\n        if (k >= startKey && k <= endKey) result.push(k);\n        else if (k > endKey) return result;\n      }\n      curr = curr.next;\n    }\n    return result;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - B+ Tree Set 1 (Introduction)",
+          "url": "https://www.geeksforgeeks.org/introduction-of-b-tree/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "treap-split-merge",
+      "title": "Treap (Randomized BST with Split & Merge)",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Expected Search, Split, Merge",
+      "spaceComplexity": "O(N)",
+      "summary": "Randomized data structure combining Binary Search Tree property on keys with Heap property on randomly generated priorities.",
+      "explanation": [
+        "1. Dual Invariant: BST ordering on key `val` and Max-Heap ordering on random priority `priority`.",
+        "2. Split Operation: `split(root, key)` splits tree into two Treaps `T1` (keys <= key) and `T2` (keys > key) in O(log N).",
+        "3. Merge Operation: `merge(T1, T2)` combines two Treaps into one (assuming max_key(T1) < min_key(T2)) in O(log N).",
+        "4. High probabilistic balance: Random priority assignment ensures expected height remains logarithmic O(log N) without complex explicit balancing rules."
+      ],
+      "exampleTrace": {
+        "title": "Trace Split Treap at key K=15",
+        "traceSteps": [
+          "Treap contains keys [5, 10, 15, 20, 25] with max-heap priority nodes.",
+          "Execute Split at K=15.",
+          "Left Treap T1 contains [5, 10, 15] maintaining priority heap order.",
+          "Right Treap T2 contains [20, 25] maintaining priority heap order.",
+          "Operation completes recursively in O(log N) steps."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides extremely clean implementation of balanced BSTs with non-trivial range cut/paste operations.",
+        "whenToUse": "When building implicit treaps for dynamic array operations (rope data structures, interval moves).",
+        "whereUsed": "Rope data structure text editors, randomized order-statistic trees.",
+        "whyOptimal": "Split and Merge primitives make complex tree restructuring effortless."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import random\n\nclass TreapNode:\n    def __init__(self, key: int):\n        self.key = key\n        self.priority = random.random()\n        self.left = None\n        self.right = None\n\ndef split(root: TreapNode, key: int):\n    if not root: return (None, None)\n    if root.key <= key:\n        l, r = split(root.right, key)\n        root.right = l\n        return (root, r)\n    else:\n        l, r = split(root.left, key)\n        root.left = r\n        return (l, root)\n\ndef merge(l: TreapNode, r: TreapNode) -> TreapNode:\n    if not l or not r: return l or r\n    if l.priority > r.priority:\n        l.right = merge(l.right, r)\n        return l\n    else:\n        r.left = merge(l, r.left)\n        return r"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\n#include <cstdlib>\nusing namespace std;\n\nstruct TreapNode {\n    int key, priority;\n    TreapNode *left, *right;\n    TreapNode(int k) : key(k), priority(rand()), left(nullptr), right(nullptr) {}\n};\n\nvoid split(TreapNode* root, int key, TreapNode*& l, TreapNode*& r) {\n    if (!root) { l = r = nullptr; return; }\n    if (root->key <= key) {\n        split(root->right, key, root->right, r);\n        l = root;\n    } else {\n        split(root->left, key, l, root->left);\n        r = root;\n    }\n}\n\nTreapNode* merge(TreapNode* l, TreapNode* r) {\n    if (!l || !r) return l ? l : r;\n    if (l->priority > r->priority) {\n        l->right = merge(l->right, r);\n        return l;\n    } else {\n        r->left = merge(l, r->left);\n        return r;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Random;\n\npublic class Treap {\n    static class Node {\n        int key;\n        double priority;\n        Node left, right;\n        Node(int key) {\n            this.key = key;\n            this.priority = new Random().nextDouble();\n        }\n    }\n    static Node[] split(Node root, int key) {\n        if (root == null) return new Node[]{null, null};\n        if (root.key <= key) {\n            Node[] res = split(root.right, key);\n            root.right = res[0];\n            return new Node[]{root, res[1]};\n        } else {\n            Node[] res = split(root.left, key);\n            root.left = res[1];\n            return new Node[]{res[0], root};\n        }\n    }\n    static Node merge(Node l, Node r) {\n        if (l == null || r == null) return l != null ? l : r;\n        if (l.priority > r.priority) {\n            l.right = merge(l.right, r);\n            return l;\n        } else {\n            r.left = merge(l, r.left);\n            return r;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class TreapNode {\n  constructor(key) {\n    this.key = key;\n    this.priority = Math.random();\n    this.left = null;\n    this.right = null;\n  }\n}\n\nfunction split(root, key) {\n  if (!root) return [null, null];\n  if (root.key <= key) {\n    const [l, r] = split(root.right, key);\n    root.right = l;\n    return [root, r];\n  } else {\n    const [l, r] = split(root.left, key);\n    root.left = r;\n    return [l, root];\n  }\n}\n\nfunction merge(l, r) {\n  if (!l || !r) return l || r;\n  if (l.priority > r.priority) {\n    l.right = merge(l.right, r);\n    return l;\n  } else {\n    r.left = merge(l, r.left);\n    return r;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "SPOJ - Treap / Implicit Treap Problems",
+          "url": "https://www.spoj.com/problems/TREAP/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "splay-tree",
+      "title": "Splay Tree (Splaying & Amortized O(log N))",
+      "categoryId": "advanced_trees",
+      "categoryTitle": "Advanced Trees & Self-Balancing Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(log N) Amortized time per operation",
+      "spaceComplexity": "O(N)",
+      "summary": "Self-adjusting binary search tree that moves recently accessed nodes to the root using Splaying rotations (Zig, Zag, Zig-Zig, Zag-Zag).",
+      "explanation": [
+        "1. Locality Principle: Frequently accessed elements stay near the root for ultra-fast repeated access.",
+        "2. Splay Operation: Whenever a node is searched, inserted, or updated, it is splayed to the root via tree rotations.",
+        "3. Zig Step: Single rotation when target's parent is root.",
+        "4. Zig-Zig / Zag-Zag Step: Double rotation in same direction when node and parent are both left or both right children.",
+        "5. Zig-Zag / Zag-Zig Step: Double rotation in opposite directions when node and parent are opposite children."
+      ],
+      "exampleTrace": {
+        "title": "Trace Splay key 10 to Root",
+        "traceSteps": [
+          "Access node 10 at depth 3.",
+          "Check parent & grandparent configuration.",
+          "Apply Zig-Zig or Zig-Zag double rotations.",
+          "Node 10 ascends directly to become new Root.",
+          "Tree balance improves along access path."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Achieves O(log N) amortized performance without storing balance factor or color bits at nodes.",
+        "whenToUse": "When data accesses exhibit temporal locality (recently accessed items accessed again).",
+        "whereUsed": "GC garbage collection memory allocators, network packet cache routers.",
+        "whyOptimal": "Zero explicit balance metadata per node, automatically self-optimizes based on access patterns."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class SplayNode:\n    def __init__(self, key: int):\n        self.key = key\n        self.left = None\n        self.right = None\n\nclass SplayTree:\n    def right_rotate(self, x: SplayNode) -> SplayNode:\n        y = x.left\n        x.left = y.right\n        y.right = x\n        return y\n\n    def left_rotate(self, x: SplayNode) -> SplayNode:\n        y = x.right\n        x.right = y.left\n        y.left = x\n        return y\n\n    def splay(self, root: SplayNode, key: int) -> SplayNode:\n        if not root or root.key == key: return root\n\n        if key < root.key:\n            if not root.left: return root\n            # Zig-Zig (Left Left)\n            if key < root.left.key:\n                root.left.left = self.splay(root.left.left, key)\n                root = self.right_rotate(root)\n            # Zig-Zag (Left Right)\n            elif key > root.left.key:\n                root.left.right = self.splay(root.left.right, key)\n                if root.left.right: root.left = self.left_rotate(root.left)\n            return self.right_rotate(root) if root.left else root\n        else:\n            if not root.right: return root\n            # Zag-Zig (Right Left)\n            if key < root.right.key:\n                root.right.left = self.splay(root.right.left, key)\n                if root.right.left: root.right = self.right_rotate(root.right)\n            # Zag-Zag (Right Right)\n            elif key > root.right.key:\n                root.right.right = self.splay(root.right.right, key)\n                root = self.left_rotate(root)\n            return self.left_rotate(root) if root.right else root"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <iostream>\nusing namespace std;\n\nstruct SplayNode {\n    int key;\n    SplayNode *left, *right;\n    SplayNode(int k) : key(k), left(nullptr), right(nullptr) {}\n};\n\nSplayNode* rightRotate(SplayNode* x) {\n    SplayNode* y = x->left;\n    x->left = y->right;\n    y->right = x;\n    return y;\n}\n\nSplayNode* leftRotate(SplayNode* x) {\n    SplayNode* y = x->right;\n    x->right = y->left;\n    y->left = x;\n    return y;\n}\n\nSplayNode* splay(SplayNode* root, int key) {\n    if (!root || root->key == key) return root;\n    if (key < root->key) {\n        if (!root->left) return root;\n        if (key < root->left->key) {\n            root->left->left = splay(root->left->left, key);\n            root = rightRotate(root);\n        } else if (key > root->left->key) {\n            root->left->right = splay(root->left->right, key);\n            if (root->left->right) root->left = leftRotate(root->left);\n        }\n        return root->left ? rightRotate(root) : root;\n    } else {\n        if (!root->right) return root;\n        if (key < root->right->key) {\n            root->right->left = splay(root->right->left, key);\n            if (root->right->left) root->right = rightRotate(root->right);\n        } else if (key > root->right->key) {\n            root->right->right = splay(root->right->right, key);\n            root = leftRotate(root);\n        }\n        return root->right ? leftRotate(root) : root;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class SplayTree {\n    static class Node {\n        int key;\n        Node left, right;\n        Node(int key) { this.key = key; }\n    }\n    Node rightRotate(Node x) {\n        Node y = x.left; x.left = y.right; y.right = x;\n        return y;\n    }\n    Node leftRotate(Node x) {\n        Node y = x.right; x.right = y.left; y.left = x;\n        return y;\n    }\n    Node splay(Node root, int key) {\n        if (root == null || root.key == key) return root;\n        if (key < root.key) {\n            if (root.left == null) return root;\n            if (key < root.left.key) {\n                root.left.left = splay(root.left.left, key);\n                root = rightRotate(root);\n            } else if (key > root.left.key) {\n                root.left.right = splay(root.left.right, key);\n                if (root.left.right != null) root.left = leftRotate(root.left);\n            }\n            return root.left != null ? rightRotate(root) : root;\n        } else {\n            if (root.right == null) return root;\n            if (key < root.right.key) {\n                root.right.left = splay(root.right.left, key);\n                if (root.right.left != null) root.right = rightRotate(root.right);\n            } else if (key > root.right.key) {\n                root.right.right = splay(root.right.right, key);\n                root = leftRotate(root);\n            }\n            return root.right != null ? leftRotate(root) : root;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class SplayNode {\n  constructor(key) {\n    this.key = key;\n    this.left = null;\n    this.right = null;\n  }\n}\n\nclass SplayTree {\n  rightRotate(x) {\n    const y = x.left;\n    x.left = y.right;\n    y.right = x;\n    return y;\n  }\n  leftRotate(x) {\n    const y = x.right;\n    x.right = y.left;\n    y.left = x;\n    return y;\n  }\n  splay(root, key) {\n    if (!root || root.key === key) return root;\n    if (key < root.key) {\n      if (!root.left) return root;\n      if (key < root.left.key) {\n        root.left.left = this.splay(root.left.left, key);\n        root = this.rightRotate(root);\n      } else if (key > root.left.key) {\n        root.left.right = this.splay(root.left.right, key);\n        if (root.left.right) root.left = this.leftRotate(root.left);\n      }\n      return root.left ? this.rightRotate(root) : root;\n    } else {\n      if (!root.right) return root;\n      if (key < root.right.key) {\n        root.right.left = this.splay(root.right.left, key);\n        if (root.right.left) root.right = this.rightRotate(root.right);\n      } else if (key > root.right.key) {\n        root.right.right = this.splay(root.right.right, key);\n        root = this.leftRotate(root);\n      }\n      return root.right ? this.leftRotate(root) : root;\n    }\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Splay Tree Set 1 (Search)",
+          "url": "https://www.geeksforgeeks.org/splay-tree-set-1-insert/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}

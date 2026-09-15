@@ -1,0 +1,1805 @@
+{
+  "id": "trees",
+  "category": {
+    "id": "trees",
+    "title": "Trees & Binary Trees",
+    "icon": "FolderTree",
+    "description": "Tree traversals, views, construction, height/depth, and path sum problems."
+  },
+  "totalAlgorithms": 31,
+  "algorithms": [
+    {
+      "id": "tree-traversal-inorder",
+      "title": "Binary Tree Inorder Traversal (Left -> Root -> Right)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Traverse tree in order: visit Left Subtree, process Root node, then visit Right Subtree. For Binary Search Trees, this produces strictly sorted elements.",
+      "explanation": [
+        "Inorder Sequence: Left Subtree -> Current Node -> Right Subtree.",
+        "Recursive Approach: `inorder(node.left)`, process `node.val`, `inorder(node.right)`.",
+        "Iterative Approach: Push all left descendants onto an explicit Stack. Pop top node, process value, and move to node's right child."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> right: 2 -> 2.left: 3",
+        "output": "Inorder Order: [1, 3, 2]",
+        "traceSteps": [
+          "Step 1: Start at root 1. Push 1 to stack. Go left (null).",
+          "Step 2: Pop 1 from stack. Add 1 to output -> [1]. Move to right child 2.",
+          "Step 3: At node 2. Push 2 to stack. Move to left child 3.",
+          "Step 4: At node 3. Push 3 to stack. Go left (null).",
+          "Step 5: Pop 3 from stack. Add 3 to output -> [1, 3]. Move to right child (null).",
+          "Step 6: Pop 2 from stack. Add 2 to output -> [1, 3, 2]. Right child is null. Traversal Complete."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Visits tree nodes in Left-Root-Right sequence. Generates sorted output for BSTs.",
+        "whenToUse": "When elements must be evaluated in ascending order (BST) or for infix arithmetic expression evaluation.",
+        "whereUsed": "BST iterators, database index range queries, infix arithmetic expression tree parser.",
+        "whyOptimal": "Visits every node exactly once in O(N) time with recursion stack depth bounded by height O(H)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def inorderTraversal(root: TreeNode) -> list[int]:\n    res, stack = [], []\n    curr = root\n    while curr or stack:\n        while curr:\n            stack.append(curr)\n            curr = curr.left\n        curr = stack.pop()\n        res.append(curr.val)\n        curr = curr.right\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> inorderTraversal(TreeNode* root) {\n    vector<int> res;\n    stack<TreeNode*> st;\n    TreeNode* curr = root;\n    while (curr || !st.empty()) {\n        while (curr) {\n            st.push(curr);\n            curr = curr->left;\n        }\n        curr = st.top(); st.pop();\n        res.push_back(curr->val);\n        curr = curr->right;\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> inorderTraversal(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        Stack<TreeNode> stack = new Stack<>();\n        TreeNode curr = root;\n        while (curr != null || !stack.isEmpty()) {\n            while (curr != null) {\n                stack.push(curr);\n                curr = curr.left;\n            }\n            curr = stack.pop();\n            res.add(curr.val);\n            curr = curr.right;\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function inorderTraversal(root) {\n  const res = [];\n  const stack = [];\n  let curr = root;\n  while (curr || stack.length > 0) {\n    while (curr) {\n      stack.push(curr);\n      curr = curr.left;\n    }\n    curr = stack.pop();\n    res.push(curr.val);\n    curr = curr.right;\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 94 - Binary Tree Inorder Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-preorder",
+      "title": "Binary Tree Preorder Traversal (Root -> Left -> Right)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Traverse tree in preorder sequence: process Root first, then visit Left Subtree, and finally visit Right Subtree.",
+      "explanation": [
+        "Preorder Sequence: Current Node -> Left Subtree -> Right Subtree.",
+        "Recursive Approach: Process `node.val`, `preorder(node.left)`, `preorder(node.right)`.",
+        "Iterative Approach: Push root onto Stack. While stack is not empty, pop top node, process its value, then push right child first, then left child (so left is popped first)."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.left: 4, 2.right: 5",
+        "output": "Preorder Order: [1, 2, 4, 5, 3]",
+        "traceSteps": [
+          "Step 1: Push root 1 onto stack.",
+          "Step 2: Pop 1. Output: [1]. Push right child 3, then left child 2.",
+          "Step 3: Pop 2. Output: [1, 2]. Push right child 5, then left child 4.",
+          "Step 4: Pop 4. Output: [1, 2, 4]. No children.",
+          "Step 5: Pop 5. Output: [1, 2, 4, 5]. No children.",
+          "Step 6: Pop 3. Output: [1, 2, 4, 5, 3]. Traversal Complete."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Visits root before any descendants. Preserves top-down parent-child structural relationship.",
+        "whenToUse": "When copying/cloning a tree structure, creating prefix expressions, or serializing tree nodes.",
+        "whereUsed": "Tree duplication/cloning algorithms, polish prefix notation compiler generators.",
+        "whyOptimal": "O(N) runtime visiting each node once with stack storing at most height O(H) nodes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def preorderTraversal(root: TreeNode) -> list[int]:\n    if not root: return []\n    res, stack = [], [root]\n    while stack:\n        node = stack.pop()\n        res.append(node.val)\n        if node.right: stack.append(node.right)\n        if node.left: stack.append(node.left)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\nusing namespace std;\n\nvector<int> preorderTraversal(TreeNode* root) {\n    if (!root) return {};\n    vector<int> res;\n    stack<TreeNode*> st;\n    st.push(root);\n    while (!st.empty()) {\n        TreeNode* node = st.top(); st.pop();\n        res.push_back(node->val);\n        if (node->right) st.push(node->right);\n        if (node->left) st.push(node->left);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> preorderTraversal(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        if (root == null) return res;\n        Stack<TreeNode> stack = new Stack<>();\n        stack.push(root);\n        while (!stack.isEmpty()) {\n            TreeNode node = stack.pop();\n            res.add(node.val);\n            if (node.right != null) stack.push(node.right);\n            if (node.left != null) stack.push(node.left);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function preorderTraversal(root) {\n  if (!root) return [];\n  const res = [];\n  const stack = [root];\n  while (stack.length > 0) {\n    const node = stack.pop();\n    res.push(node.val);\n    if (node.right) stack.push(node.right);\n    if (node.left) stack.push(node.left);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 144 - Binary Tree Preorder Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-preorder-traversal/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-postorder",
+      "title": "Binary Tree Postorder Traversal (Left -> Right -> Root)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Traverse tree in postorder sequence: visit Left Subtree, visit Right Subtree, and finally process Root node.",
+      "explanation": [
+        "Postorder Sequence: Left Subtree -> Right Subtree -> Current Node.",
+        "Recursive Approach: `postorder(node.left)`, `postorder(node.right)`, process `node.val`.",
+        "Two-Stack Iterative Approach: Perform modified Preorder (Root -> Right -> Left) pushing to Stack 1, pop from Stack 1 and push to Stack 2. Pop all from Stack 2 for exact postorder sequence.",
+        "One-Stack Approach: Maintain a `last_visited` node reference to know when right subtree has been fully traversed."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.left: 4, 2.right: 5",
+        "output": "Postorder Order: [4, 5, 2, 3, 1]",
+        "traceSteps": [
+          "Step 1: Traverse left subtree of 1 -> reach 2 -> reach leaf 4.",
+          "Step 2: Leaf 4 has no children -> Process 4. Output: [4].",
+          "Step 3: Move to right sibling leaf 5 -> Process 5. Output: [4, 5].",
+          "Step 4: Subtrees of 2 completed -> Process parent 2. Output: [4, 5, 2].",
+          "Step 5: Move to right child of 1 (node 3) -> Process 3. Output: [4, 5, 2, 3].",
+          "Step 6: Both subtrees of root 1 completed -> Process root 1. Output: [4, 5, 2, 3, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Processes children nodes completely before evaluating parent. Essential for bottom-up computation.",
+        "whenToUse": "When deleting/freeing tree nodes, evaluating postfix (RPN) expressions, or computing subtree sizes/heights.",
+        "whereUsed": "Garbage collection memory deallocation, directory disk space aggregation, postfix arithmetic evaluation.",
+        "whyOptimal": "Guarantees children are fully evaluated before parent node logic executes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "# 2-Stack Iterative Approach\ndef postorderTraversal(root: TreeNode) -> list[int]:\n    if not root: return []\n    s1, s2 = [root], []\n    while s1:\n        node = s1.pop()\n        s2.append(node)\n        if node.left: s1.append(node.left)\n        if node.right: s1.append(node.right)\n    return [node.val for node in reversed(s2)]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <stack>\n#include <algorithm>\nusing namespace std;\n\nvector<int> postorderTraversal(TreeNode* root) {\n    if (!root) return {};\n    vector<int> res;\n    stack<TreeNode*> s1, s2;\n    s1.push(root);\n    while (!s1.empty()) {\n        TreeNode* node = s1.top(); s1.pop();\n        s2.push(node);\n        if (node->left) s1.push(node->left);\n        if (node->right) s1.push(node->right);\n    }\n    while (!s2.empty()) {\n        res.push_back(s2.top()->val); s2.pop();\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> postorderTraversal(TreeNode root) {\n        LinkedList<Integer> res = new LinkedList<>();\n        if (root == null) return res;\n        Stack<TreeNode> stack = new Stack<>();\n        stack.push(root);\n        while (!stack.isEmpty()) {\n            TreeNode node = stack.pop();\n            res.addFirst(node.val);\n            if (node.left != null) stack.push(node.left);\n            if (node.right != null) stack.push(node.right);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function postorderTraversal(root) {\n  if (!root) return [];\n  const res = [];\n  const s1 = [root], s2 = [];\n  while (s1.length > 0) {\n    const node = s1.pop();\n    s2.push(node);\n    if (node.left) s1.push(node.left);\n    if (node.right) s1.push(node.right);\n  }\n  while (s2.length > 0) {\n    res.push(s2.pop().val);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 145 - Binary Tree Postorder Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-postorder-traversal/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-levelorder",
+      "title": "Binary Tree Level Order Traversal (BFS)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(W)",
+      "summary": "Traverse binary tree level by level from top to bottom, left to right using a Queue data structure.",
+      "explanation": [
+        "Breadth-First Search (BFS) on Trees.",
+        "Queue Data Structure: Push root to Queue. At each level, measure `level_size = queue.size()`. Loop `level_size` times popping nodes, collecting their values, and pushing non-null left and right children."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Level Order: [[3], [9, 20], [15, 7]]",
+        "traceSteps": [
+          "Step 1: Level 0: Queue = [3]. Size = 1. Pop 3. Add 9 and 20 to queue. Level 0 result: [3].",
+          "Step 2: Level 1: Queue = [9, 20]. Size = 2.",
+          "Step 3: Pop 9 (no children). Pop 20, add 15 and 7 to queue. Level 1 result: [9, 20].",
+          "Step 4: Level 2: Queue = [15, 7]. Size = 2.",
+          "Step 5: Pop 15 and 7 (no children). Level 2 result: [15, 7].",
+          "Step 6: Queue empty. Traversal complete."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Processes nodes in horizontal layer order from shallowest depth to deepest depth.",
+        "whenToUse": "When finding shortest distance from root, level views, connect next right pointers, or minimum depth.",
+        "whereUsed": "Hierarchical web crawling, social network distance levels, UI tree layout generation.",
+        "whyOptimal": "O(N) time with max queue space proportional to maximum tree width O(W)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef levelOrder(root: TreeNode) -> list[list[int]]:\n    if not root: return []\n    res, queue = [], deque([root])\n    while queue:\n        level_size = len(queue)\n        level_nodes = []\n        for _ in range(level_size):\n            node = queue.popleft()\n            level_nodes.append(node.val)\n            if node.left: queue.append(node.left)\n            if node.right: queue.append(node.right)\n        res.append(level_nodes)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nvector<vector<int>> levelOrder(TreeNode* root) {\n    if (!root) return {};\n    vector<vector<int>> res;\n    queue<TreeNode*> q;\n    q.push(root);\n    while (!q.empty()) {\n        int sz = q.size();\n        vector<int> level;\n        for (int i = 0; i < sz; i++) {\n            TreeNode* node = q.front(); q.pop();\n            level.push_back(node->val);\n            if (node->left) q.push(node->left);\n            if (node->right) q.push(node->right);\n        }\n        res.push_back(level);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> levelOrder(TreeNode root) {\n        List<List<Integer>> res = new ArrayList<>();\n        if (root == null) return res;\n        Queue<TreeNode> queue = new LinkedList<>();\n        queue.add(root);\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            List<Integer> level = new ArrayList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode node = queue.poll();\n                level.add(node.val);\n                if (node.left != null) queue.add(node.left);\n                if (node.right != null) queue.add(node.right);\n            }\n            res.add(level);\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function levelOrder(root) {\n  if (!root) return [];\n  const res = [];\n  const queue = [root];\n  while (queue.length > 0) {\n    const size = queue.length;\n    const level = [];\n    for (let i = 0; i < size; i++) {\n      const node = queue.shift();\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    res.push(level);\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 102 - Binary Tree Level Order Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-zigzag",
+      "title": "Binary Tree Zigzag / Spiral Level Order Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(W)",
+      "summary": "Traverse tree level by level in alternating directions: Left-to-Right for even levels and Right-to-Left for odd levels.",
+      "explanation": [
+        "BFS Level Order with Direction Flag: Maintain a boolean flag `left_to_right = True`.",
+        "At each level, insert node values at normal order or reversed order into level array (using Deque `addFirst` or array reversal). Toggle `left_to_right = not left_to_right` at end of each level."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Zigzag Order: [[3], [20, 9], [15, 7]]",
+        "traceSteps": [
+          "Step 1: Level 0 (Left-to-Right): [3]. Flag flips to Right-to-Left.",
+          "Step 2: Level 1 (Right-to-Left): Queue has [9, 20]. Reverse level values -> [20, 9]. Flag flips to Left-to-Right.",
+          "Step 3: Level 2 (Left-to-Right): Queue has [15, 7]. Keep normal order -> [15, 7].",
+          "Step 4: Combined result: [[3], [20, 9], [15, 7]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Alternates horizontal scanning direction between consecutive tree levels.",
+        "whenToUse": "When rendering spiral UI hierarchies, alternating serpent layout patterns, or bi-directional level traversal.",
+        "whereUsed": "Serpentine game grid layouts, alternating tree visualizations.",
+        "whyOptimal": "O(N) single-pass BFS with O(1) level inversion cost."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef zigzagLevelOrder(root: TreeNode) -> list[list[int]]:\n    if not root: return []\n    res, queue = [], deque([root])\n    left_to_right = True\n    while queue:\n        sz = len(queue)\n        level = deque()\n        for _ in range(sz):\n            node = queue.popleft()\n            if left_to_right: level.append(node.val)\n            else: level.appendleft(node.val)\n            if node.left: queue.append(node.left)\n            if node.right: queue.append(node.right)\n        res.append(list(level))\n        left_to_right = not left_to_right\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n#include <algorithm>\nusing namespace std;\n\nvector<vector<int>> zigzagLevelOrder(TreeNode* root) {\n    if (!root) return {};\n    vector<vector<int>> res;\n    queue<TreeNode*> q;\n    q.push(root);\n    bool leftToRight = true;\n    while (!q.empty()) {\n        int sz = q.size();\n        vector<int> level(sz);\n        for (int i = 0; i < sz; i++) {\n            TreeNode* node = q.front(); q.pop();\n            int idx = leftToRight ? i : (sz - 1 - i);\n            level[idx] = node->val;\n            if (node->left) q.push(node->left);\n            if (node->right) q.push(node->right);\n        }\n        res.push_back(level);\n        leftToRight = !leftToRight;\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {\n        List<List<Integer>> res = new ArrayList<>();\n        if (root == null) return res;\n        Queue<TreeNode> queue = new LinkedList<>();\n        queue.add(root);\n        boolean leftToRight = true;\n        while (!queue.isEmpty()) {\n            int size = queue.size();\n            LinkedList<Integer> level = new LinkedList<>();\n            for (int i = 0; i < size; i++) {\n                TreeNode node = queue.poll();\n                if (leftToRight) level.addLast(node.val);\n                else level.addFirst(node.val);\n                if (node.left != null) queue.add(node.left);\n                if (node.right != null) queue.add(node.right);\n            }\n            res.add(level);\n            leftToRight = !leftToRight;\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function zigzagLevelOrder(root) {\n  if (!root) return [];\n  const res = [];\n  const queue = [root];\n  let leftToRight = true;\n  while (queue.length > 0) {\n    const size = queue.length;\n    const level = [];\n    for (let i = 0; i < size; i++) {\n      const node = queue.shift();\n      if (leftToRight) level.push(node.val);\n      else level.unshift(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    res.push(level);\n    leftToRight = !leftToRight;\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 103 - Binary Tree Zigzag Level Order Traversal",
+          "url": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-vertical",
+      "title": "Binary Tree Vertical Order Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Group binary tree nodes by vertical columns (Horizontal Distance `col`) sorted from leftmost column to rightmost column, then by level, and finally by node value.",
+      "explanation": [
+        "Coordinate System `(col, row)`: Root is at `(col=0, row=0)`. Left child is `(col-1, row+1)`, right child is `(col+1, row+1)`.",
+        "Level Order BFS with Coordinate Tuples: Maintain a HashMap/Map mapping `col -> list of (row, val)`.",
+        "Sort columns from minimum column to maximum column. Sort nodes within same column primarily by row and secondarily by node value."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Vertical Order: [[9], [3, 15], [20], [7]]",
+        "traceSteps": [
+          "Step 1: Node 3 at (col=0, row=0).",
+          "Step 2: Node 9 at (col=-1, row=1). Node 20 at (col=1, row=1).",
+          "Step 3: Node 15 at (col=0, row=2). Node 7 at (col=2, row=2).",
+          "Step 4: Group by col: col -1 -> [9], col 0 -> [3, 15], col 1 -> [20], col 2 -> [7].",
+          "Step 5: Output in column order: [[9], [3, 15], [20], [7]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Organizes tree nodes into vertical columns based on horizontal spatial alignment.",
+        "whenToUse": "When mapping hierarchical trees to 2D column grids or rendering vertical alignment columns.",
+        "whereUsed": "Columnar layout UI trees, 2D chart projections of decision trees.",
+        "whyOptimal": "O(N log N) time complexity due to coordinate sorting."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import defaultdict, deque\n\ndef verticalTraversal(root: TreeNode) -> list[list[int]]:\n    nodes = defaultdict(list)\n    queue = deque([(root, 0, 0)])\n    while queue:\n        node, col, row = queue.popleft()\n        if node:\n            nodes[col].append((row, node.val))\n            queue.append((node.left, col - 1, row + 1))\n            queue.append((node.right, col + 1, row + 1))\n            \n    res = []\n    for c in sorted(nodes.keys()):\n        col_nodes = sorted(nodes[c], key=lambda x: (x[0], x[1]))\n        res.append([val for r, val in col_nodes])\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <map>\n#include <set>\n#include <queue>\nusing namespace std;\n\nvector<vector<int>> verticalTraversal(TreeNode* root) {\n    map<int, map<int, multiset<int>>> nodes;\n    queue<pair<TreeNode*, pair<int, int>>> q;\n    q.push({root, {0, 0}});\n    while (!q.empty()) {\n        auto p = q.front(); q.pop();\n        TreeNode* node = p.first;\n        int col = p.second.first, row = p.second.second;\n        nodes[col][row].insert(node->val);\n        if (node->left) q.push({node->left, {col - 1, row + 1}});\n        if (node->right) q.push({node->right, {col + 1, row + 1}});\n    }\n    vector<vector<int>> res;\n    for (auto& [col, rows] : nodes) {\n        vector<int> colVals;\n        for (auto& [row, vals] : rows) {\n            colVals.insert(colVals.end(), vals.begin(), vals.end());\n        }\n        res.push_back(colVals);\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<List<Integer>> verticalTraversal(TreeNode root) {\n        TreeMap<Integer, TreeMap<Integer, PriorityQueue<Integer>>> map = new TreeMap<>();\n        Queue<Tuple> q = new LinkedList<>();\n        q.add(new Tuple(root, 0, 0));\n        while (!q.isEmpty()) {\n            Tuple t = q.poll();\n            map.putIfAbsent(t.col, new TreeMap<>());\n            map.get(t.col).putIfAbsent(t.row, new PriorityQueue<>());\n            map.get(t.col).get(t.row).add(t.node.val);\n            if (t.node.left != null) q.add(new Tuple(t.node.left, t.col - 1, t.row + 1));\n            if (t.node.right != null) q.add(new Tuple(t.node.right, t.col + 1, t.row + 1));\n        }\n        List<List<Integer>> res = new ArrayList<>();\n        for (TreeMap<Integer, PriorityQueue<Integer>> cols : map.values()) {\n            List<Integer> colVals = new ArrayList<>();\n            for (PriorityQueue<Integer> pq : cols.values()) {\n                while (!pq.isEmpty()) colVals.add(pq.poll());\n            }\n            res.add(colVals);\n        }\n        return res;\n    }\n    static class Tuple {\n        TreeNode node; int col, row;\n        Tuple(TreeNode n, int c, int r) { node = n; col = c; row = r; }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function verticalTraversal(root) {\n  const nodes = [];\n  function dfs(node, col, row) {\n    if (!node) return;\n    nodes.push({ node, col, row });\n    dfs(node.left, col - 1, row + 1);\n    dfs(node.right, col + 1, row + 1);\n  }\n  dfs(root, 0, 0);\n  nodes.sort((a, b) => a.col - b.col || a.row - b.row || a.node.val - b.node.val);\n  const map = new Map();\n  for (const { node, col } of nodes) {\n    if (!map.has(col)) map.set(col, []);\n    map.get(col).push(node.val);\n  }\n  return Array.from(map.values());\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 987 - Vertical Order Traversal of a Binary Tree",
+          "url": "https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-diagonal",
+      "title": "Binary Tree Diagonal Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Traverse tree along diagonal lines (nodes belonging to the same diagonal share the same slope where moving right stays on same diagonal and moving left advances diagonal index).",
+      "explanation": [
+        "Diagonal Property: Moving to `right` child retains diagonal index `d`. Moving to `left` child increments diagonal index `d + 1`.",
+        "Queue-based Traversal: Push root to Queue. Pop node, traverse all its `right` descendants while pushing their `left` children onto Queue."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 8 -> left: 3, right: 10 -> 3.left: 1, 3.right: 6, 10.right: 14",
+        "output": "Diagonal Traversal: [8, 10, 14, 3, 6, 1]",
+        "traceSteps": [
+          "Step 1: Start at root 8. Move right: 8 -> 10 -> 14. Add to Diagonal 0: [8, 10, 14]. Push left children (3) to Queue.",
+          "Step 2: Pop 3 from Queue. Move right: 3 -> 6. Add to Diagonal 1: [3, 6]. Push left children (1) to Queue.",
+          "Step 3: Pop 1 from Queue. Add to Diagonal 2: [1]. No left/right children.",
+          "Step 4: Combined output: [8, 10, 14, 3, 6, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Groups tree nodes along parallel diagonal lines from top-right to bottom-left.",
+        "whenToUse": "When inspecting diagonal matrix layouts, anti-diagonal tree projections, or 45-degree ray tracing.",
+        "whereUsed": "Isometric game map rendering, diagonal tree pattern matching.",
+        "whyOptimal": "O(N) time visiting every node along right-child chains using a FIFO queue."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef diagonalTraversal(root: TreeNode) -> list[int]:\n    if not root: return []\n    res, queue = [], deque([root])\n    while queue:\n        curr = queue.popleft()\n        while curr:\n            res.append(curr.val)\n            if curr.left:\n                queue.append(curr.left)\n            curr = curr.right\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\nusing namespace std;\n\nvector<int> diagonalTraversal(TreeNode* root) {\n    if (!root) return {};\n    vector<int> res;\n    queue<TreeNode*> q;\n    q.push(root);\n    while (!q.empty()) {\n        TreeNode* curr = q.front(); q.pop();\n        while (curr) {\n            res.push_back(curr->val);\n            if (curr->left) q.push(curr->left);\n            curr = curr->right;\n        }\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> diagonalTraversal(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        if (root == null) return res;\n        Queue<TreeNode> q = new LinkedList<>();\n        q.add(root);\n        while (!q.isEmpty()) {\n            TreeNode curr = q.poll();\n            while (curr != null) {\n                res.add(curr.val);\n                if (curr.left != null) q.add(curr.left);\n                curr = curr.right;\n            }\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function diagonalTraversal(root) {\n  if (!root) return [];\n  const res = [];\n  const queue = [root];\n  while (queue.length > 0) {\n    let curr = queue.shift();\n    while (curr) {\n      res.push(curr.val);\n      if (curr.left) queue.push(curr.left);\n      curr = curr.right;\n    }\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Diagonal Traversal of Binary Tree",
+          "url": "https://www.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-boundary",
+      "title": "Binary Tree Boundary Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Traverse the anti-clockwise boundary of a binary tree: Left Boundary (excluding leaves), all Leaf Nodes, and Right Boundary in reverse (excluding leaves).",
+      "explanation": [
+        "Step 1: Add root value (if not a leaf).",
+        "Step 2: Collect Left Boundary (start from root.left, move left if left child exists else right, exclude leaves).",
+        "Step 3: Collect Leaf Nodes (using DFS preorder/inorder traversal across whole tree).",
+        "Step 4: Collect Right Boundary in reverse (start from root.right, move right if right child exists else left, exclude leaves, push to stack/list and reverse)."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.left: 4, 2.right: 5 -> 3.left: 6",
+        "output": "Boundary Traversal: [1, 2, 4, 5, 6, 3]",
+        "traceSteps": [
+          "Step 1: Root 1 added -> [1].",
+          "Step 2: Left boundary from 2 -> node 2 added (4 is leaf, so stop) -> [1, 2].",
+          "Step 3: Leaves traversal -> 4, 5, 6 added -> [1, 2, 4, 5, 6].",
+          "Step 4: Right boundary from 3 -> node 3 added in reverse -> [1, 2, 4, 5, 6, 3]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Extracts the complete outer perimeter of a binary tree structure in anti-clockwise order.",
+        "whenToUse": "When finding geometric convex hull boundaries or visual perimeters of tree topologies.",
+        "whereUsed": "Convex hull algorithms, image outline boundary tracing.",
+        "whyOptimal": "O(N) time with three modular DFS/BFS traversals."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def boundaryOfBinaryTree(root: TreeNode) -> list[int]:\n    if not root: return []\n    def is_leaf(n):\n        return n and not n.left and not n.right\n        \n    res = []\n    if not is_leaf(root): res.append(root.val)\n    \n    # Left Boundary\n    curr = root.left\n    while curr:\n        if not is_leaf(curr): res.append(curr.val)\n        curr = curr.left if curr.left else curr.right\n        \n    # Leaves\n    def add_leaves(n):\n        if not n: return\n        if is_leaf(n): res.append(n.val)\n        else:\n            add_leaves(n.left)\n            add_leaves(n.right)\n    add_leaves(root)\n    \n    # Right Boundary Reverse\n    right_b = []\n    curr = root.right\n    while curr:\n        if not is_leaf(curr): right_b.append(curr.val)\n        curr = curr.right if curr.right else curr.left\n    res.extend(reversed(right_b))\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    bool isLeaf(TreeNode* n) { return n && !n->left && !n->right; }\n    void addLeaves(TreeNode* n, vector<int>& res) {\n        if (!n) return;\n        if (isLeaf(n)) res.push_back(n->val);\n        else {\n            addLeaves(n->left, res);\n            addLeaves(n->right, res);\n        }\n    }\npublic:\n    vector<int> boundaryOfBinaryTree(TreeNode* root) {\n        if (!root) return {};\n        vector<int> res;\n        if (!isLeaf(root)) res.push_back(root->val);\n        TreeNode* curr = root->left;\n        while (curr) {\n            if (!isLeaf(curr)) res.push_back(curr->val);\n            curr = curr->left ? curr->left : curr->right;\n        }\n        addLeaves(root, res);\n        vector<int> rightB;\n        curr = root->right;\n        while (curr) {\n            if (!isLeaf(curr)) rightB.push_back(curr->val);\n            curr = curr->right ? curr->right : curr->left;\n        }\n        for (int i = rightB.size() - 1; i >= 0; i--) res.push_back(rightB[i]);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private boolean isLeaf(TreeNode n) { return n != null && n.left == null && n.right == null; }\n    public List<Integer> boundaryOfBinaryTree(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        if (root == null) return res;\n        if (!isLeaf(root)) res.add(root.val);\n        TreeNode curr = root.left;\n        while (curr != null) {\n            if (!isLeaf(curr)) res.add(curr.val);\n            curr = curr.left != null ? curr.left : curr.right;\n        }\n        addLeaves(root, res);\n        List<Integer> rightB = new ArrayList<>();\n        curr = root.right;\n        while (curr != null) {\n            if (!isLeaf(curr)) rightB.add(curr.val);\n            curr = curr.right != null ? curr.right : curr.left;\n        }\n        for (int i = rightB.size() - 1; i >= 0; i--) res.add(rightB.get(i));\n        return res;\n    }\n    private void addLeaves(TreeNode n, List<Integer> res) {\n        if (n == null) return;\n        if (isLeaf(n)) res.add(n.val);\n        else {\n            addLeaves(n.left, res);\n            addLeaves(n.right, res);\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function boundaryOfBinaryTree(root) {\n  if (!root) return [];\n  const isLeaf = (n) => n && !n.left && !n.right;\n  const res = [];\n  if (!isLeaf(root)) res.push(root.val);\n  let curr = root.left;\n  while (curr) {\n    if (!isLeaf(curr)) res.push(curr.val);\n    curr = curr.left ? curr.left : curr.right;\n  }\n  function addLeaves(n) {\n    if (!n) return;\n    if (isLeaf(n)) res.push(n.val);\n    else {\n      addLeaves(n.left);\n      addLeaves(n.right);\n    }\n  }\n  addLeaves(root);\n  const rightB = [];\n  curr = root.right;\n  while (curr) {\n    if (!isLeaf(curr)) rightB.push(curr.val);\n    curr = curr.right ? curr.right : curr.left;\n  }\n  for (let i = rightB.length - 1; i >= 0; i--) res.push(rightB[i]);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 545 - Boundary of Binary Tree",
+          "url": "https://leetcode.com/problems/boundary-of-boundary-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-traversal-morris",
+      "title": "Morris Traversal (Inorder & Preorder in O(1) Auxiliary Space)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Traverse binary tree in Inorder/Preorder sequence without recursion or stack using Threaded Binary Tree pointers (`pred.right = curr`).",
+      "explanation": [
+        "Threaded Binary Tree Concept: Utilize null right pointers of leaf nodes to point back to their inorder predecessor parent.",
+        "Algorithm Steps: 1) If `curr.left` is null, process `curr.val` and move `curr = curr.right`.",
+        "2) Otherwise, find `curr`'s Inorder Predecessor (`pred = curr.left` while `pred.right and pred.right != curr`).",
+        "3) If `pred.right` is null, set `pred.right = curr` (create thread) and move `curr = curr.left`.",
+        "4) If `pred.right == curr`, revert thread `pred.right = None`, process `curr.val`, and move `curr = curr.right`."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 2 -> left: 1, right: 3",
+        "output": "Morris Inorder Output: [1, 2, 3] with 0 extra memory",
+        "traceSteps": [
+          "Step 1: Start at root 2. Left child 1 exists. Find predecessor of 2 -> Node 1.",
+          "Step 2: Set thread: 1.right = 2. Move curr to left child 1.",
+          "Step 3: At node 1. Left child is null. Process 1 -> [1]. Follow thread to curr = 1.right (Node 2).",
+          "Step 4: At node 2. Find predecessor -> Node 1. `pred.right == 2` (thread exists). Break thread `1.right = None`. Process 2 -> [1, 2]. Move to right child 3.",
+          "Step 5: At node 3. Left child is null. Process 3 -> [1, 2, 3]. Right child is null.",
+          "Step 6: Traversal Complete. Tree structure fully restored!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Traverses binary tree with O(1) auxiliary space, bypassing execution call stack limitations.",
+        "whenToUse": "When memory budget is strictly O(1) or stack overflow risk exists on deep unbalanced trees.",
+        "whereUsed": "Embedded devices, low-memory firmware tree parsers, kernel memory diagnostics.",
+        "whyOptimal": "O(N) time where each edge is traversed at most twice, using exactly O(1) extra space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def morrisInorder(root: TreeNode) -> list[int]:\n    res = []\n    curr = root\n    while curr:\n        if not curr.left:\n            res.append(curr.val)\n            curr = curr.right\n        else:\n            pred = curr.left\n            while pred.right and pred.right != curr:\n                pred = pred.right\n            if not pred.right:\n                pred.right = curr # Create Thread\n                curr = curr.left\n            else:\n                pred.right = None # Remove Thread\n                res.append(curr.val)\n                curr = curr.right\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<int> morrisInorder(TreeNode* root) {\n    vector<int> res;\n    TreeNode* curr = root;\n    while (curr) {\n        if (!curr->left) {\n            res.push_back(curr->val);\n            curr = curr->right;\n        } else {\n            TreeNode* pred = curr->left;\n            while (pred->right && pred->right != curr) pred = pred->right;\n            if (!pred->right) {\n                pred->right = curr;\n                curr = curr->left;\n            } else {\n                pred->right = nullptr;\n                res.push_back(curr->val);\n                curr = curr->right;\n            }\n        }\n    }\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> morrisInorder(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        TreeNode curr = root;\n        while (curr != null) {\n            if (curr.left == null) {\n                res.add(curr.val);\n                curr = curr.right;\n            } else {\n                TreeNode pred = curr.left;\n                while (pred.right != null && pred.right != curr) pred = pred.right;\n                if (pred.right == null) {\n                    pred.right = curr;\n                    curr = curr.left;\n                } else {\n                    pred.right = null;\n                    res.add(curr.val);\n                    curr = curr.right;\n                }\n            }\n        }\n        return res;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function morrisInorder(root) {\n  const res = [];\n  let curr = root;\n  while (curr) {\n    if (!curr.left) {\n      res.push(curr.val);\n      curr = curr.right;\n    } else {\n      let pred = curr.left;\n      while (pred.right && pred.right !== curr) pred = pred.right;\n      if (!pred.right) {\n        pred.right = curr;\n        curr = curr.left;\n      } else {\n        pred.right = null;\n        res.push(curr.val);\n        curr = curr.right;\n      }\n    }\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 94 - Binary Tree Inorder Traversal (Morris O(1) Challenge)",
+          "url": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-view-left",
+      "title": "Left View of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Computes the set of nodes visible when binary tree is viewed from the left side (first node at each vertical level).",
+      "explanation": [
+        "Definition: First node encountered at each level depth `level`.",
+        "DFS Preorder Approach (Node -> Left -> Right): Maintain `max_level` variable. If `current_level > max_level`, add node value to result and update `max_level = current_level`.",
+        "BFS Level Order Approach: At each level queue loop, record `queue.front()` (first element) into result array."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.right: 5, 3.right: 4",
+        "output": "Left View: [1, 2, 5]",
+        "traceSteps": [
+          "Step 1: Level 0: First node is 1 -> Left View: [1].",
+          "Step 2: Level 1: Queue has [2, 3]. First node is 2 -> Left View: [1, 2].",
+          "Step 3: Level 2: Queue has [5, 4]. First node is 5 -> Left View: [1, 2, 5].",
+          "Step 4: Output: [1, 2, 5]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates 2D left silhouette perspective of binary tree.",
+        "whenToUse": "When determining left-side boundary visibility or shadow projections.",
+        "whereUsed": "Camera perspective occlusion engines, side-scroller game tree visibility.",
+        "whyOptimal": "O(N) single-pass DFS/BFS recording first node per level."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def leftSideView(root: TreeNode) -> list[int]:\n    res = []\n    def dfs(node, level):\n        if not node: return\n        if level == len(res):\n            res.append(node.val)\n        dfs(node.left, level + 1)\n        dfs(node.right, level + 1)\n    dfs(root, 0)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass Solution {\n    vector<int> res;\n    void dfs(TreeNode* node, int level) {\n        if (!node) return;\n        if (level == res.size()) res.push_back(node->val);\n        dfs(node->left, level + 1);\n        dfs(node->right, level + 1);\n    }\npublic:\n    vector<int> leftSideView(TreeNode* root) {\n        dfs(root, 0);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> leftSideView(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        dfs(root, 0, res);\n        return res;\n    }\n    private void dfs(TreeNode node, int level, List<Integer> res) {\n        if (node == null) return;\n        if (level == res.size()) res.add(node.val);\n        dfs(node.left, level + 1, res);\n        dfs(node.right, level + 1, res);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function leftSideView(root) {\n  const res = [];\n  function dfs(node, level) {\n    if (!node) return;\n    if (level === res.length) res.push(node.val);\n    dfs(node.left, level + 1);\n    dfs(node.right, level + 1);\n  }\n  dfs(root, 0);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Left View of Binary Tree",
+          "url": "https://www.geeksforgeeks.org/problems/left-view-of-binary-tree/1",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-view-right",
+      "title": "Right View of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Computes nodes visible when viewing binary tree from right side (last node at each vertical level).",
+      "explanation": [
+        "Definition: Last node encountered at each level depth `level`.",
+        "DFS Preorder Variant (Node -> Right -> Left): Visit right child first! If `level == len(result)`, append node value.",
+        "BFS Level Order Approach: At each level loop, push last node `level_nodes[size - 1]` to result."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.right: 5, 3.right: 4",
+        "output": "Right View: [1, 3, 4]",
+        "traceSteps": [
+          "Step 1: Level 0: Last node is 1 -> [1].",
+          "Step 2: Level 1: Queue has [2, 3]. Last node is 3 -> [1, 3].",
+          "Step 3: Level 2: Queue has [5, 4]. Last node is 4 -> [1, 3, 4].",
+          "Step 4: Output: [1, 3, 4]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates 2D right silhouette projection of binary tree.",
+        "whenToUse": "When extracting rightmost tree boundary nodes or right-hand perspective view.",
+        "whereUsed": "Right boundary rendering, 3D object silhouette generation.",
+        "whyOptimal": "O(N) time using simple Node -> Right -> Left DFS."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rightSideView(root: TreeNode) -> list[int]:\n    res = []\n    def dfs(node, level):\n        if not node: return\n        if level == len(res):\n            res.append(node.val)\n        dfs(node.right, level + 1)\n        dfs(node.left, level + 1)\n    dfs(root, 0)\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass Solution {\n    vector<int> res;\n    void dfs(TreeNode* node, int level) {\n        if (!node) return;\n        if (level == res.size()) res.push_back(node->val);\n        dfs(node->right, level + 1);\n        dfs(node->left, level + 1);\n    }\npublic:\n    vector<int> rightSideView(TreeNode* root) {\n        dfs(root, 0);\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> rightSideView(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        dfs(root, 0, res);\n        return res;\n    }\n    private void dfs(TreeNode node, int level, List<Integer> res) {\n        if (node == null) return;\n        if (level == res.size()) res.add(node.val);\n        dfs(node.right, level + 1, res);\n        dfs(node.left, level + 1, res);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function rightSideView(root) {\n  const res = [];\n  function dfs(node, level) {\n    if (!node) return;\n    if (level === res.length) res.push(node.val);\n    dfs(node.right, level + 1);\n    dfs(node.left, level + 1);\n  }\n  dfs(root, 0);\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 199 - Binary Tree Right Side View",
+          "url": "https://leetcode.com/problems/binary-tree-right-side-view/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-view-top",
+      "title": "Top View of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Computes nodes visible when looking at binary tree from top overhead view (first node encountered at each horizontal column distance `hd`).",
+      "explanation": [
+        "Horizontal Distance Mapping `hd`: Root at `hd = 0`, left child at `hd - 1`, right child at `hd + 1`.",
+        "Level Order BFS: Maintain Map mapping `hd -> node.val`. During level order BFS, if horizontal distance `hd` is NOT in map, insert `map[hd] = node.val` (first node at this `hd`).",
+        "Sort result keys from minimum `hd` to maximum `hd`."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.right: 4, 3.right: 5",
+        "output": "Top View: [2, 1, 3, 5]",
+        "traceSteps": [
+          "Step 1: Node 1 at hd=0 -> Map: {0: 1}.",
+          "Step 2: Node 2 at hd=-1 -> Map: {-1: 2, 0: 1}.",
+          "Step 3: Node 3 at hd=1 -> Map: {-1: 2, 0: 1, 1: 3}.",
+          "Step 4: Node 4 at hd=0 (0 already in map, ignore).",
+          "Step 5: Node 5 at hd=2 -> Map: {-1: 2, 0: 1, 1: 3, 2: 5}.",
+          "Step 6: Sort by hd [-1, 0, 1, 2] -> Output: [2, 1, 3, 5]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes overhead top perspective projection of tree nodes.",
+        "whenToUse": "When determining top boundary visibility or vertical shadow occlusion.",
+        "whereUsed": "Architectural top-down view generation, camera vertical projection.",
+        "whyOptimal": "O(N) level-order BFS ensuring shallowest node per column is chosen first."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef topView(root: TreeNode) -> list[int]:\n    if not root: return []\n    hd_map = {}\n    queue = deque([(root, 0)])\n    while queue:\n        node, hd = queue.popleft()\n        if hd not in hd_map:\n            hd_map[hd] = node.val\n        if node.left: queue.append((node.left, hd - 1))\n        if node.right: queue.append((node.right, hd + 1))\n    return [hd_map[hd] for hd in sorted(hd_map.keys())]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <map>\n#include <queue>\nusing namespace std;\n\nvector<int> topView(TreeNode* root) {\n    if (!root) return {};\n    map<int, int> hdMap;\n    queue<pair<TreeNode*, int>> q;\n    q.push({root, 0});\n    while (!q.empty()) {\n        auto p = q.front(); q.pop();\n        TreeNode* node = p.first; int hd = p.second;\n        if (hdMap.find(hd) == hdMap.end()) hdMap[hd] = node->val;\n        if (node->left) q.push({node->left, hd - 1});\n        if (node->right) q.push({node->right, hd + 1});\n    }\n    vector<int> res;\n    for (auto& [hd, val] : hdMap) res.push_back(val);\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> topView(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        if (root == null) return res;\n        TreeMap<Integer, Integer> map = new TreeMap<>();\n        Queue<Pair> q = new LinkedList<>();\n        q.add(new Pair(root, 0));\n        while (!q.isEmpty()) {\n            Pair p = q.poll();\n            map.putIfAbsent(p.hd, p.node.val);\n            if (p.node.left != null) q.add(new Pair(p.node.left, p.hd - 1));\n            if (p.node.right != null) q.add(new Pair(p.node.right, p.hd + 1));\n        }\n        res.addAll(map.values());\n        return res;\n    }\n    static class Pair { TreeNode node; int hd; Pair(TreeNode n, int h) { node = n; hd = h; } }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function topView(root) {\n  if (!root) return [];\n  const map = new Map();\n  const queue = [{ node: root, hd: 0 }];\n  while (queue.length > 0) {\n    const { node, hd } = queue.shift();\n    if (!map.has(hd)) map.set(hd, node.val);\n    if (node.left) queue.push({ node: node.left, hd: hd - 1 });\n    if (node.right) queue.push({ node: node.right, hd: hd + 1 });\n  }\n  const sortedHds = Array.from(map.keys()).sort((a, b) => a - b);\n  return sortedHds.map(hd => map.get(hd));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Top View of Binary Tree",
+          "url": "https://www.geeksforgeeks.org/problems/top-view-of-binary-tree/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-view-bottom",
+      "title": "Bottom View of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Computes nodes visible when looking at binary tree from bottom view (last node encountered at each horizontal column distance `hd`).",
+      "explanation": [
+        "Horizontal Distance Mapping `hd`: Root at `hd = 0`, left child at `hd - 1`, right child at `hd + 1`.",
+        "Level Order BFS: Maintain Map mapping `hd -> node.val`. During level order BFS, ALWAYS overwrite `map[hd] = node.val` (last node at this `hd` replaces previous).",
+        "Sort result keys from minimum `hd` to maximum `hd`."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 20 -> left: 8, right: 22 -> 8.left: 5, 8.right: 3 -> 3.left: 10, 3.right: 14",
+        "output": "Bottom View: [5, 10, 3, 14, 22]",
+        "traceSteps": [
+          "Step 1: Node 20 at hd=0 -> Map: {0: 20}.",
+          "Step 2: Node 8 at hd=-1, Node 22 at hd=1 -> Map: {-1: 8, 0: 20, 1: 22}.",
+          "Step 3: Node 5 at hd=-2, Node 3 at hd=0 (OVERWRITES 20!) -> Map: {-2: 5, -1: 8, 0: 3, 1: 22}.",
+          "Step 4: Node 10 at hd=-1 (OVERWRITES 8!), Node 14 at hd=1 (OVERWRITES 22!).",
+          "Step 5: Final Map sorted by hd [-2, -1, 0, 1, 2]: [5, 10, 3, 14, 22]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes bottom ground perspective projection of tree nodes.",
+        "whenToUse": "When determining lowest node visibility per vertical column.",
+        "whereUsed": "Ground-up camera occlusion engines, bottom silhouette rendering.",
+        "whyOptimal": "O(N) level order traversal updating latest node per column."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef bottomView(root: TreeNode) -> list[int]:\n    if not root: return []\n    hd_map = {}\n    queue = deque([(root, 0)])\n    while queue:\n        node, hd = queue.popleft()\n        hd_map[hd] = node.val # Overwrite with last node\n        if node.left: queue.append((node.left, hd - 1))\n        if node.right: queue.append((node.right, hd + 1))\n    return [hd_map[hd] for hd in sorted(hd_map.keys())]"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <map>\n#include <queue>\nusing namespace std;\n\nvector<int> bottomView(TreeNode* root) {\n    if (!root) return {};\n    map<int, int> hdMap;\n    queue<pair<TreeNode*, int>> q;\n    q.push({root, 0});\n    while (!q.empty()) {\n        auto p = q.front(); q.pop();\n        TreeNode* node = p.first; int hd = p.second;\n        hdMap[hd] = node->val; // Overwrite\n        if (node->left) q.push({node->left, hd - 1});\n        if (node->right) q.push({node->right, hd + 1});\n    }\n    vector<int> res;\n    for (auto& [hd, val] : hdMap) res.push_back(val);\n    return res;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public List<Integer> bottomView(TreeNode root) {\n        List<Integer> res = new ArrayList<>();\n        if (root == null) return res;\n        TreeMap<Integer, Integer> map = new TreeMap<>();\n        Queue<Pair> q = new LinkedList<>();\n        q.add(new Pair(root, 0));\n        while (!q.isEmpty()) {\n            Pair p = q.poll();\n            map.put(p.hd, p.node.val); // Overwrite\n            if (p.node.left != null) q.add(new Pair(p.node.left, p.hd - 1));\n            if (p.node.right != null) q.add(new Pair(p.node.right, p.hd + 1));\n        }\n        res.addAll(map.values());\n        return res;\n    }\n    static class Pair { TreeNode node; int hd; Pair(TreeNode n, int h) { node = n; hd = h; } }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function bottomView(root) {\n  if (!root) return [];\n  const map = new Map();\n  const queue = [{ node: root, hd: 0 }];\n  while (queue.length > 0) {\n    const { node, hd } = queue.shift();\n    map.set(hd, node.val); // Overwrite\n    if (node.left) queue.push({ node: node.left, hd: hd - 1 });\n    if (node.right) queue.push({ node: node.right, hd: hd + 1 });\n  }\n  const sortedHds = Array.from(map.keys()).sort((a, b) => a - b);\n  return sortedHds.map(hd => map.get(hd));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Bottom View of Binary Tree",
+          "url": "https://www.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-lowest-common-ancestor",
+      "title": "Lowest Common Ancestor (LCA) in Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Find the lowest shared ancestor node of two given nodes `p` and `q` in a binary tree.",
+      "explanation": [
+        "Definition: LCA of `p` and `q` is the deepest node that has both `p` and `q` as descendants.",
+        "Bottom-Up Recursion Strategy: `lowestCommonAncestor(root, p, q)`.",
+        "1) Base Case: If `root == null`, `root == p`, or `root == q`, return `root`.",
+        "2) Recurse left and right: `left = LCA(root.left, p, q)`, `right = LCA(root.right, p, q)`.",
+        "3) Decision: If BOTH `left` and `right` are non-null, `root` is the LCA! Return `root`.",
+        "4) If only one is non-null, return the non-null child."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 5, right: 1 -> 5.left: 6, 5.right: 2 -> p=5, q=1",
+        "output": "LCA(5, 1) = Node 3",
+        "traceSteps": [
+          "Step 1: Recurse on root 3. Left child is 5 (matches p). Return 5 up.",
+          "Step 2: Right child is 1 (matches q). Return 1 up.",
+          "Step 3: At root 3: Left child returned 5, Right child returned 1. Both non-null!",
+          "Step 4: Therefore, LCA is root node 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies the lowest common parent node uniting two target subtrees.",
+        "whenToUse": "When computing distance between two tree nodes or finding shared ancestry.",
+        "whereUsed": "Git merge base commit lookup, file system path resolution, phylogenetic lineage analysis.",
+        "whyOptimal": "Single-pass O(N) postorder recursion with O(H) call stack."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def lowestCommonAncestor(root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:\n    if not root or root == p or root == q:\n        return root\n    left = lowestCommonAncestor(root.left, p, q)\n    right = lowestCommonAncestor(root.right, p, q)\n    if left and right:\n        return root\n    return left if left else right"
+        },
+        {
+          "language": "cpp",
+          "code": "TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {\n    if (!root || root == p || root == q) return root;\n    TreeNode* left = lowestCommonAncestor(root->left, p, q);\n    TreeNode* right = lowestCommonAncestor(root->right, p, q);\n    if (left && right) return root;\n    return left ? left : right;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {\n        if (root == null || root == p || root == q) return root;\n        TreeNode left = lowestCommonAncestor(root.left, p, q);\n        TreeNode right = lowestCommonAncestor(root.right, p, q);\n        if (left != null && right != null) return root;\n        return left != null ? left : right;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function lowestCommonAncestor(root, p, q) {\n  if (!root || root === p || root === q) return root;\n  const left = lowestCommonAncestor(root.left, p, q);\n  const right = lowestCommonAncestor(root.right, p, q);\n  if (left && right) return root;\n  return left ? left : right;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 236 - Lowest Common Ancestor of a Binary Tree",
+          "url": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-max-path-sum",
+      "title": "Maximum Path Sum in Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Find maximum path sum where path can start and end at any node in binary tree.",
+      "explanation": [
+        "Path Definition: Sequence of nodes connected by parent-child edges where no node appears more than once.",
+        "Bottom-Up Postorder helper function `max_gain(node)`.",
+        "Left gain = `max(0, max_gain(node.left))`, Right gain = `max(0, max_gain(node.right))`.",
+        "Path turning at node = `node.val + left_gain + right_gain`. Update global `max_sum = max(max_sum, path_turning)`.",
+        "Return `node.val + max(left_gain, right_gain)` up to parent."
+      ],
+      "exampleTrace": {
+        "input": "Tree: -10 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Maximum Path Sum = 42 (Path: 15 -> 20 -> 7)",
+        "traceSteps": [
+          "Step 1: Leaf 9 returns gain 9.",
+          "Step 2: Leaf 15 returns gain 15. Leaf 7 returns gain 7.",
+          "Step 3: Node 20 evaluates path turning at 20: 20 + 15 + 7 = 42 -> global max_sum = 42.",
+          "Step 4: Node 20 returns gain to parent: 20 + max(15, 7) = 35.",
+          "Step 5: Root -10 evaluates turning path: -10 + 9 + 35 = 34.",
+          "Step 6: Global Maximum Path Sum remains 42."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds highest value non-repeating node path across tree topology.",
+        "whenToUse": "When calculating maximal throughput across tree network paths with negative node values.",
+        "whereUsed": "Network routing max capacity optimization, game tree utility maximization.",
+        "whyOptimal": "O(N) single-pass postorder recursion updating max sum in constant time per node."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxPathSum(root: TreeNode) -> int:\n    max_sum = float('-inf')\n    def max_gain(node):\n        nonlocal max_sum\n        if not node: return 0\n        left_gain = max(0, max_gain(node.left))\n        right_gain = max(0, max_gain(node.right))\n        current_path = node.val + left_gain + right_gain\n        max_sum = max(max_sum, current_path)\n        return node.val + max(left_gain, right_gain)\n    max_gain(root)\n    return max_sum"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <algorithm>\n#include <climits>\nusing namespace std;\n\nclass Solution {\n    int maxSum = INT_MIN;\n    int maxGain(TreeNode* node) {\n        if (!node) return 0;\n        int leftGain = max(0, maxGain(node->left));\n        int rightGain = max(0, maxGain(node->right));\n        maxSum = max(maxSum, node->val + leftGain + rightGain);\n        return node->val + max(leftGain, rightGain);\n    }\npublic:\n    int maxPathSum(TreeNode* root) {\n        maxGain(root);\n        return maxSum;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    private int maxSum = Integer.MIN_VALUE;\n    public int maxPathSum(TreeNode root) {\n        maxGain(root);\n        return maxSum;\n    }\n    private int maxGain(TreeNode node) {\n        if (node == null) return 0;\n        int leftGain = Math.max(0, maxGain(node.left));\n        int rightGain = Math.max(0, maxGain(node.right));\n        maxSum = Math.max(maxSum, node.val + leftGain + rightGain);\n        return node.val + Math.max(leftGain, rightGain);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxPathSum(root) {\n  let maxSum = -Infinity;\n  function maxGain(node) {\n    if (!node) return 0;\n    const leftGain = Math.max(0, maxGain(node.left));\n    const rightGain = Math.max(0, maxGain(node.right));\n    maxSum = Math.max(maxSum, node.val + leftGain + rightGain);\n    return node.val + Math.max(leftGain, rightGain);\n  }\n  maxGain(root);\n  return maxSum;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 124 - Binary Tree Maximum Path Sum",
+          "url": "https://leetcode.com/problems/binary-tree-maximum-path-sum/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "tree-diameter",
+      "title": "Diameter of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Calculate length of longest path between any two nodes in a binary tree.",
+      "explanation": [
+        "Diameter = Maximum value of `left_height + right_height` across all nodes.",
+        "Bottom-Up Postorder function `height(node)` returns height of subtree.",
+        "At node: `left_h = height(node.left)`, `right_h = height(node.right)`.",
+        "Update global `max_diameter = max(max_diameter, left_h + right_h)`. Return `1 + max(left_h, right_h)`."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.left: 4, 2.right: 5",
+        "output": "Diameter = 3 (Path: 4 -> 2 -> 1 -> 3)",
+        "traceSteps": [
+          "Step 1: Leaves 4, 5, 3 return height 1.",
+          "Step 2: Node 2 has left_h=1, right_h=1 -> local path = 2.",
+          "Step 3: Root 1 has left_h=2, right_h=1 -> local path = 3. Global max_diameter = 3.",
+          "Step 4: Result = 3 edges."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds longest end-to-end path distance in a binary tree.",
+        "whenToUse": "When computing network latency diameter or longest path bound.",
+        "whereUsed": "Network topology bottleneck analysis.",
+        "whyOptimal": "O(N) single-pass height calculation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def diameterOfBinaryTree(root: TreeNode) -> int:\n    diameter = 0\n    def height(node):\n        nonlocal diameter\n        if not node: return 0\n        lh = height(node.left)\n        rh = height(node.right)\n        diameter = max(diameter, lh + rh)\n        return 1 + max(lh, rh)\n    height(root)\n    return diameter"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    int diameter = 0;\n    int height(TreeNode* node) {\n        if (!node) return 0;\n        int lh = height(node->left);\n        int rh = height(node->right);\n        diameter = max(diameter, lh + rh);\n        return 1 + max(lh, rh);\n    }\npublic:\n    int diameterOfBinaryTree(TreeNode* root) {\n        height(root);\n        return diameter;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    private int diameter = 0;\n    public int diameterOfBinaryTree(TreeNode root) {\n        height(root);\n        return diameter;\n    }\n    private int height(TreeNode node) {\n        if (node == null) return 0;\n        int lh = height(node.left);\n        int rh = height(node.right);\n        diameter = Math.max(diameter, lh + rh);\n        return 1 + Math.max(lh, rh);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function diameterOfBinaryTree(root) {\n  let diameter = 0;\n  function height(node) {\n    if (!node) return 0;\n    const lh = height(node.left);\n    const rh = height(node.right);\n    diameter = Math.max(diameter, lh + rh);\n    return 1 + Math.max(lh, rh);\n  }\n  height(root);\n  return diameter;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 543 - Diameter of Binary Tree",
+          "url": "https://leetcode.com/problems/diameter-of-binary-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-balanced-check",
+      "title": "Balanced Binary Tree Check & Height Calculation",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Check if height difference between left and right subtrees never exceeds 1 at any node in binary tree.",
+      "explanation": [
+        "Height-Balanced Definition: `abs(height(left) - height(right)) <= 1` for all nodes.",
+        "Bottom-Up Optimization: `checkHeight(node)` returns height if subtree is balanced, or `-1` if unbalanced.",
+        "If `left_h == -1` or `right_h == -1` or `abs(left_h - right_h) > 1`, return `-1` immediately (early pruning)."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Is Balanced = True",
+        "traceSteps": [
+          "Step 1: Leaf 9 returns height 1.",
+          "Step 2: Subtree at 20 has left height 1, right height 1 -> abs(1-1)=0 <= 1 -> returns height 2.",
+          "Step 3: Root 3 has left height 1, right height 2 -> abs(1-2)=1 <= 1 -> Balanced!",
+          "Step 4: Output True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies that tree maintain logarithmically bounded height.",
+        "whenToUse": "When checking search tree balance health (AVL / Red-Black criteria).",
+        "whereUsed": "Database index integrity check.",
+        "whyOptimal": "O(N) bottom-up pass with O(1) early exit upon imbalance."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isBalanced(root: TreeNode) -> bool:\n    def check(node):\n        if not node: return 0\n        lh = check(node.left)\n        if lh == -1: return -1\n        rh = check(node.right)\n        if rh == -1: return -1\n        if abs(lh - rh) > 1: return -1\n        return 1 + max(lh, rh)\n    return check(root) != -1"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <cmath>\n#include <algorithm>\nusing namespace std;\n\nclass Solution {\n    int check(TreeNode* node) {\n        if (!node) return 0;\n        int lh = check(node->left);\n        if (lh == -1) return -1;\n        int rh = check(node->right);\n        if (rh == -1) return -1;\n        if (abs(lh - rh) > 1) return -1;\n        return 1 + max(lh, rh);\n    }\npublic:\n    bool isBalanced(TreeNode* root) {\n        return check(root) != -1;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean isBalanced(TreeNode root) {\n        return check(root) != -1;\n    }\n    private int check(TreeNode node) {\n        if (node == null) return 0;\n        int lh = check(node.left);\n        if (lh == -1) return -1;\n        int rh = check(node.right);\n        if (rh == -1) return -1;\n        if (Math.abs(lh - rh) > 1) return -1;\n        return 1 + Math.max(lh, rh);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isBalanced(root) {\n  function check(node) {\n    if (!node) return 0;\n    const lh = check(node.left);\n    if (lh === -1) return -1;\n    const rh = check(node.right);\n    if (rh === -1) return -1;\n    if (Math.abs(lh - rh) > 1) return -1;\n    return 1 + Math.max(lh, rh);\n  }\n  return check(root) !== -1;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 110 - Balanced Binary Tree",
+          "url": "https://leetcode.com/problems/balanced-binary-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-symmetric-check",
+      "title": "Symmetric & Mirror Tree Verification",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Check whether binary tree is a symmetric mirror of itself around its vertical center axis.",
+      "explanation": [
+        "Symmetry Invariant: Two subtrees `t1` and `t2` are mirror images if `t1.val == t2.val` AND `isMirror(t1.left, t2.right)` AND `isMirror(t1.right, t2.left)`.",
+        "DFS Recursion: `isMirror(root.left, root.right)`.",
+        "Queue Iterative Approach: Enqueue pair `(root.left, root.right)` and verify mirrored children pairs."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2 (left: 3, right: 4), right: 2 (left: 4, right: 3)",
+        "output": "Is Symmetric = True",
+        "traceSteps": [
+          "Step 1: Check root 1 children: t1=2 (left), t2=2 (right) -> Values equal (2 == 2).",
+          "Step 2: Compare t1.left (3) with t2.right (3) -> Values equal (3 == 3).",
+          "Step 3: Compare t1.right (4) with t2.left (4) -> Values equal (4 == 4).",
+          "Step 4: All mirror checks pass -> Output True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies bilateral mirror symmetry across tree structure.",
+        "whenToUse": "When checking palindromic or mirrored tree layouts.",
+        "whereUsed": "UI layout symmetry checkers, graphics rendering reflection transforms.",
+        "whyOptimal": "O(N) time evaluating pairwise node equality."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isSymmetric(root: TreeNode) -> bool:\n    def isMirror(t1, t2):\n        if not t1 and not t2: return True\n        if not t1 or not t2: return False\n        return (t1.val == t2.val and \n                isMirror(t1.left, t2.right) and \n                isMirror(t1.right, t2.left))\n    return isMirror(root.left, root.right) if root else True"
+        },
+        {
+          "language": "cpp",
+          "code": "class Solution {\n    bool isMirror(TreeNode* t1, TreeNode* t2) {\n        if (!t1 && !t2) return true;\n        if (!t1 || !t2) return false;\n        return (t1->val == t2->val) && isMirror(t1->left, t2->right) && isMirror(t1->right, t2->left);\n    }\npublic:\n    bool isSymmetric(TreeNode* root) {\n        return !root || isMirror(root->left, root->right);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean isSymmetric(TreeNode root) {\n        return root == null || isMirror(root.left, root.right);\n    }\n    private boolean isMirror(TreeNode t1, TreeNode t2) {\n        if (t1 == null && t2 == null) return true;\n        if (t1 == null || t2 == null) return false;\n        return (t1.val == t2.val) && isMirror(t1.left, t2.right) && isMirror(t1.right, t2.left);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isSymmetric(root) {\n  function isMirror(t1, t2) {\n    if (!t1 && !t2) return true;\n    if (!t1 || !t2) return false;\n    return (t1.val === t2.val) && isMirror(t1.left, t2.right) && isMirror(t1.right, t2.left);\n  }\n  return !root || isMirror(root.left, root.right);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 101 - Symmetric Tree",
+          "url": "https://leetcode.com/problems/symmetric-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "bst-validation-search",
+      "title": "Binary Search Tree (BST) Validation, Search & Insertion",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(H) search, O(N) validation",
+      "spaceComplexity": "O(H)",
+      "summary": "Enforce BST Invariant: Left subtree values < Root value < Right subtree values.",
+      "explanation": [
+        "BST Invariant Range: Every node value must strictly fall within open range `(min_val, max_val)`.",
+        "Validation DFS: `validate(node, min_val, max_val)`.",
+        "Recurse left: `validate(node.left, min_val, node.val)`. Recurse right: `validate(node.right, node.val, max_val)`.",
+        "Search & Insertion: Compare `target` with `curr.val`. If `target < curr.val`, go left; else go right."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 5 -> left: 1, right: 4 (left: 3, right: 6)",
+        "output": "Is Valid BST = False (Node 4 in right subtree has left child 3 which is valid, but node 4 itself < root 5!)",
+        "traceSteps": [
+          "Step 1: Root 5 valid in (-inf, +inf).",
+          "Step 2: Left child 1 valid in (-inf, 5).",
+          "Step 3: Right child 4 checked in range (5, +inf) -> VIOLATION! 4 is NOT > 5.",
+          "Step 4: Output False."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Maintains and validates sorted logarithmic search structure.",
+        "whenToUse": "When implementing fast O(log N) key-value search dictionaries.",
+        "whereUsed": "Database indexes, Java TreeMap, C++ std::map.",
+        "whyOptimal": "O(H) search with strict interval bound checks."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isValidBST(root: TreeNode) -> bool:\n    def validate(node, low=float('-inf'), high=float('inf')):\n        if not node: return True\n        if not (low < node.val < high): return False\n        return validate(node.left, low, node.val) and validate(node.right, node.val, high)\n    return validate(root)"
+        },
+        {
+          "language": "cpp",
+          "code": "class Solution {\n    bool validate(TreeNode* node, long long low, long long high) {\n        if (!node) return true;\n        if (node->val <= low || node->val >= high) return false;\n        return validate(node->left, low, node->val) && validate(node->right, node->val, high);\n    }\npublic:\n    bool isValidBST(TreeNode* root) {\n        return validate(root, LLONG_MIN, LLONG_MAX);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public boolean isValidBST(TreeNode root) {\n        return validate(root, Long.MIN_VALUE, Long.MAX_VALUE);\n    }\n    private boolean validate(TreeNode node, long low, long high) {\n        if (node == null) return true;\n        if (node.val <= low || node.val >= high) return false;\n        return validate(node.left, low, node.val) && validate(node.right, node.val, high);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isValidBST(root) {\n  function validate(node, low = -Infinity, high = Infinity) {\n    if (!node) return true;\n    if (node.val <= low || node.val >= high) return false;\n    return validate(node.left, low, node.val) && validate(node.right, node.val, high);\n  }\n  return validate(root);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 98 - Validate Binary Search Tree",
+          "url": "https://leetcode.com/problems/validate-binary-search-tree/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 700 - Search in a Binary Search Tree",
+          "url": "https://leetcode.com/problems/search-in-a-binary-search-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-max-depth",
+      "title": "Maximum Depth / Height of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Find the maximum depth (height) of a binary tree, defined as the number of nodes along the longest path from root to leaf.",
+      "explanation": [
+        "Definition: Maximum depth = 1 + max(depth(left_child), depth(right_child)).",
+        "DFS Bottom-Up Approach: If `root == null`, depth is 0. Otherwise, recursively compute left subtree depth and right subtree depth, returning `1 + max(left_depth, right_depth)`.",
+        "BFS Level Order Approach: Perform level-order traversal with a Queue. Increment `depth` counter for each level processed until Queue is empty."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Maximum Depth = 3",
+        "traceSteps": [
+          "Step 1: DFS at root 3. Recurse on left child 9 -> left_depth = 1.",
+          "Step 2: Recurse on right child 20 -> recurse on 15 (depth 1) and 7 (depth 1) -> right_depth = 1 + max(1, 1) = 2.",
+          "Step 3: Root 3 computes 1 + max(1, 2) = 3.",
+          "Step 4: Return maximum depth = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Measures vertical height of binary tree from root to deepest leaf.",
+        "whenToUse": "When determining tree balance, call stack recursion limits, or tree depth properties.",
+        "whereUsed": "Tree height metrics, GUI window layout depth calculation.",
+        "whyOptimal": "O(N) single-pass traversal inspecting each node once."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxDepth(root: TreeNode) -> int:\n    if not root: return 0\n    return 1 + max(maxDepth(root.left), maxDepth(root.right))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <algorithm>\nusing namespace std;\n\nint maxDepth(TreeNode* root) {\n    if (!root) return 0;\n    return 1 + max(maxDepth(root->left), maxDepth(root->right));\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int maxDepth(TreeNode root) {\n        if (root == null) return 0;\n        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxDepth(root) {\n  if (!root) return 0;\n  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 104 - Maximum Depth of Binary Tree",
+          "url": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-min-depth",
+      "title": "Minimum Depth of Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(W)",
+      "summary": "Find minimum depth of binary tree, defined as the number of nodes along the shortest path from root down to the nearest leaf node.",
+      "explanation": [
+        "Important Edge Case: A leaf node has no left child AND no right child (`not node.left and not node.right`). If a node has only one child, we MUST continue down the existing child path!",
+        "BFS Level Order Optimization (Optimal for Min Depth): Perform BFS level by level. The VERY FIRST leaf node encountered during BFS gives the absolute minimum depth! Terminate BFS immediately."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 9, right: 20 -> 20.left: 15, 20.right: 7",
+        "output": "Minimum Depth = 2 (Root 3 -> Leaf 9)",
+        "traceSteps": [
+          "Step 1: Level 1: Queue has [3]. Depth = 1.",
+          "Step 2: Pop 3. Add children 9 and 20. Level 2 begins.",
+          "Step 3: Pop 9. Node 9 has NO left and NO right child -> IT IS A LEAF!",
+          "Step 4: Early Termination! Minimum Depth = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds shortest path distance from root to any leaf node.",
+        "whenToUse": "When finding earliest leaf node without searching the entire deep tree.",
+        "whereUsed": "Shortest-path decision trees, earliest exit goal state search.",
+        "whyOptimal": "BFS early termination finds nearest leaf in O(V) time without exploring deeper levels."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef minDepth(root: TreeNode) -> int:\n    if not root: return 0\n    queue = deque([(root, 1)])\n    while queue:\n        node, depth = queue.popleft()\n        if not node.left and not node.right:\n            return depth # First leaf encountered!\n        if node.left: queue.append((node.left, depth + 1))\n        if node.right: queue.append((node.right, depth + 1))\n    return 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <queue>\nusing namespace std;\n\nint minDepth(TreeNode* root) {\n    if (!root) return 0;\n    queue<pair<TreeNode*, int>> q;\n    q.push({root, 1});\n    while (!q.empty()) {\n        auto [node, depth] = q.front(); q.pop();\n        if (!node->left && !node->right) return depth;\n        if (node->left) q.push({node->left, depth + 1});\n        if (node->right) q.push({node->right, depth + 1});\n    }\n    return 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int minDepth(TreeNode root) {\n        if (root == null) return 0;\n        Queue<Pair> q = new LinkedList<>();\n        q.add(new Pair(root, 1));\n        while (!q.isEmpty()) {\n            Pair p = q.poll();\n            if (p.node.left == null && p.node.right == null) return p.depth;\n            if (p.node.left != null) q.add(new Pair(p.node.left, p.depth + 1));\n            if (p.node.right != null) q.add(new Pair(p.node.right, p.depth + 1));\n        }\n        return 0;\n    }\n    static class Pair { TreeNode node; int depth; Pair(TreeNode n, int d) { node = n; depth = d; } }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minDepth(root) {\n  if (!root) return 0;\n  const queue = [{ node: root, depth: 1 }];\n  while (queue.length > 0) {\n    const { node, depth } = queue.shift();\n    if (!node.left && !node.right) return depth;\n    if (node.left) queue.push({ node: node.left, depth: depth + 1 });\n    if (node.right) queue.push({ node: node.right, depth: depth + 1 });\n  }\n  return 0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 111 - Minimum Depth of Binary Tree",
+          "url": "https://leetcode.com/problems/minimum-depth-of-binary-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-invert-mirror",
+      "title": "Invert / Mirror Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Invert a binary tree in-place so that the left and right subtrees of every node are swapped (creating a mirror image).",
+      "explanation": [
+        "Inversion Invariant: For every node in the binary tree, `node.left` becomes `node.right` and `node.right` becomes `node.left`.",
+        "DFS Preorder/Postorder: Swap `root.left` and `root.right`. Recurse `invertTree(root.left)` and `invertTree(root.right)`.",
+        "Famous Max Howell Tweet Problem: 'Google: 90% of our engineers use the software you wrote (Homebrew), but you can’t invert a binary tree on a whiteboard so fuck off.'"
+      ],
+      "exampleTrace": {
+        "input": "Tree: 4 -> left: 2 (left: 1, right: 3), right: 7 (left: 6, right: 9)",
+        "output": "Inverted Tree: 4 -> left: 7 (left: 9, right: 6), right: 2 (left: 3, right: 1)",
+        "traceSteps": [
+          "Step 1: Start at root 4. Swap left child 2 and right child 7.",
+          "Step 2: Recurse on new left child 7. Swap its children 6 and 9 -> 7.left=9, 7.right=6.",
+          "Step 3: Recurse on new right child 2. Swap its children 1 and 3 -> 2.left=3, 2.right=1.",
+          "Step 4: Tree fully inverted!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Transforms tree into its exact mirror reflection in-place.",
+        "whenToUse": "When creating mirrored graphic renders, RTL layout flips, or reverse tree structures.",
+        "whereUsed": "GUI RTL (Right-to-Left) mirroring, 3D graphics model reflection.",
+        "whyOptimal": "O(N) single pass swapping pointers in O(1) space per node."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def invertTree(root: TreeNode) -> TreeNode:\n    if not root: return None\n    root.left, root.right = root.right, root.left\n    invertTree(root.left)\n    invertTree(root.right)\n    return root"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <algorithm>\nusing namespace std;\n\nTreeNode* invertTree(TreeNode* root) {\n    if (!root) return nullptr;\n    swap(root->left, root->right);\n    invertTree(root->left);\n    invertTree(root->right);\n    return root;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public TreeNode invertTree(TreeNode root) {\n        if (root == null) return null;\n        TreeNode temp = root.left;\n        root.left = root.right;\n        root.right = temp;\n        invertTree(root.left);\n        invertTree(root.right);\n        return root;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function invertTree(root) {\n  if (!root) return null;\n  [root.left, root.right] = [root.right, root.left];\n  invertTree(root.left);\n  invertTree(root.right);\n  return root;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 226 - Invert Binary Tree",
+          "url": "https://leetcode.com/problems/invert-binary-tree/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-path-sums",
+      "title": "Binary Tree Path Sums (Path Sum I, II & III)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(H)",
+      "summary": "Master Path Sum problems: Root-to-Leaf target sum verification (Path Sum I), collecting all Root-to-Leaf path sequences (Path Sum II), and Prefix Sum HashMap for arbitrary downward paths (Path Sum III).",
+      "explanation": [
+        "Path Sum I: Top-down recursion `hasPathSum(node, remainingSum - node.val)`. True if leaf node has `remainingSum == node.val`.",
+        "Path Sum II: Collect paths in `current_path` list. Backtrack `current_path.pop()` after recursing.",
+        "Path Sum III (Arbitrary Downward Paths): Use Prefix Sum HashMap `prefix_map[curr_sum]`. At node, `curr_sum += node.val`. Target paths ending at node = `prefix_map[curr_sum - targetSum]`. Update map, recurse children, then remove `curr_sum` from map (backtrack)."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 5 -> left: 4 -> 4.left: 11 (left: 7, right: 2), targetSum = 22",
+        "output": "Path Sum I = True, Path Sum II = [[5, 4, 11, 2]]",
+        "traceSteps": [
+          "Step 1: Root 5: remainingSum = 22 - 5 = 17.",
+          "Step 2: Node 4: remainingSum = 17 - 4 = 13.",
+          "Step 3: Node 11: remainingSum = 13 - 11 = 2.",
+          "Step 4: Leaf 2: remainingSum = 2 - 2 = 0 -> Leaf reached with 0 remaining! Path [5, 4, 11, 2] valid!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds root-to-leaf or arbitrary downward paths adding up to target sum value.",
+        "whenToUse": "When searching for path constraints, cumulative cost limits, or subtree total sums.",
+        "whereUsed": "Financial ledger subtree auditing, network packet path cost verification.",
+        "whyOptimal": "HashMap prefix-sum technique solves Path Sum III in single O(N) pass."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "# Path Sum I\ndef hasPathSum(root: TreeNode, targetSum: int) -> bool:\n    if not root: return False\n    if not root.left and not root.right:\n        return root.val == targetSum\n    return (hasPathSum(root.left, targetSum - root.val) or \n            hasPathSum(root.right, targetSum - root.val))\n\n# Path Sum III (Prefix Sum HashMap)\nfrom collections import defaultdict\ndef pathSum3(root: TreeNode, targetSum: int) -> int:\n    prefix = defaultdict(int)\n    prefix[0] = 1\n    def dfs(node, curr_sum):\n        if not node: return 0\n        curr_sum += node.val\n        count = prefix[curr_sum - targetSum]\n        prefix[curr_sum] += 1\n        count += dfs(node.left, curr_sum) + dfs(node.right, curr_sum)\n        prefix[curr_sum] -= 1 # Backtrack\n        return count\n    return dfs(root, 0)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <unordered_map>\nusing namespace std;\n\nclass Solution {\n    unordered_map<long long, int> prefix;\n    int dfs(TreeNode* node, long long currSum, int targetSum) {\n        if (!node) return 0;\n        currSum += node->val;\n        int count = prefix[currSum - targetSum];\n        prefix[currSum]++;\n        count += dfs(node->left, currSum, targetSum) + dfs(node->right, currSum, targetSum);\n        prefix[currSum]--; // Backtrack\n        return count;\n    }\npublic:\n    int pathSum(TreeNode* root, int targetSum) {\n        prefix[0] = 1;\n        return dfs(root, 0, targetSum);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public int pathSum(TreeNode root, int targetSum) {\n        Map<Long, Integer> prefix = new HashMap<>();\n        prefix.put(0L, 1);\n        return dfs(root, 0L, targetSum, prefix);\n    }\n    private int dfs(TreeNode node, long currSum, int targetSum, Map<Long, Integer> prefix) {\n        if (node == null) return 0;\n        currSum += node.val;\n        int count = prefix.getOrDefault(currSum - targetSum, 0);\n        prefix.put(currSum, prefix.getOrDefault(currSum, 0) + 1);\n        count += dfs(node.left, currSum, targetSum, prefix) + dfs(node.right, currSum, targetSum, prefix);\n        prefix.put(currSum, prefix.get(currSum) - 1); // Backtrack\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function pathSum(root, targetSum) {\n  const prefix = new Map();\n  prefix.set(0, 1);\n  function dfs(node, currSum) {\n    if (!node) return 0;\n    currSum += node.val;\n    let count = prefix.get(currSum - targetSum) || 0;\n    prefix.set(currSum, (prefix.get(currSum) || 0) + 1);\n    count += dfs(node.left, currSum) + dfs(node.right, currSum);\n    prefix.set(currSum, prefix.get(currSum) - 1); // Backtrack\n    return count;\n  }\n  return dfs(root, 0);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 112 - Path Sum",
+          "url": "https://leetcode.com/problems/path-sum/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 113 - Path Sum II",
+          "url": "https://leetcode.com/problems/path-sum-ii/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 437 - Path Sum III",
+          "url": "https://leetcode.com/problems/path-sum-iii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-nodes-at-distance-k",
+      "title": "All Nodes Distance K in Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Find all nodes at distance `K` from a given target node in a binary tree by converting parent pointers into an undirected graph representation.",
+      "explanation": [
+        "Problem Challenge: Standard binary tree pointers only point downwards (Left & Right), but distance `K` nodes can lie upwards through parent pointers!",
+        "Step 1: Traverse tree with DFS/BFS to populate `parent_map` mapping `child_node -> parent_node`.",
+        "Step 2: Perform BFS starting from `target` node moving in 3 directions: `left`, `right`, and `parent`.",
+        "Step 3: Track `visited` set to avoid infinite cycles. When BFS level reaches `K`, all nodes in queue are exactly distance `K` away!"
+      ],
+      "exampleTrace": {
+        "input": "Tree: 3 -> left: 5, right: 1. Target = 5, K = 2",
+        "output": "Nodes at Distance 2: [7, 4, 1]",
+        "traceSteps": [
+          "Step 1: Map parent pointers: parent[5]=3, parent[1]=3, parent[6]=5, parent[2]=5.",
+          "Step 2: Start BFS at target node 5. Distance 0: Queue = [5]. Visited = {5}.",
+          "Step 3: Distance 1: Move to left(6), right(2), parent(3). Queue = [6, 2, 3].",
+          "Step 4: Distance 2: From 6 (leaves 7, 4 under 2), from 3 moves to right child 1. Queue = [7, 4, 1].",
+          "Step 5: Distance 2 reached! Return [7, 4, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds all network nodes within exact radial hop distance K of target node.",
+        "whenToUse": "When finding radial neighbors, infection propagation limits, or multi-directional tree hops.",
+        "whereUsed": "Social graph k-hop connections, network virus propagation radius.",
+        "whyOptimal": "O(N) graph conversion + BFS shortest distance lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef distanceK(root: TreeNode, target: TreeNode, k: int) -> list[int]:\n    parents = {}\n    def mark_parents(node, par=None):\n        if not node: return\n        parents[node] = par\n        mark_parents(node.left, node)\n        mark_parents(node.right, node)\n    mark_parents(root)\n    \n    queue = deque([(target, 0)])\n    visited = {target}\n    res = []\n    while queue:\n        node, dist = queue.popleft()\n        if dist == k:\n            res.append(node.val)\n        elif dist < k:\n            for neighbor in (node.left, node.right, parents[node]):\n                if neighbor and neighbor not in visited:\n                    visited.add(neighbor)\n                    queue.append((neighbor, dist + 1))\n    return res"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <unordered_set>\n#include <queue>\nusing namespace std;\n\nclass Solution {\n    unordered_map<TreeNode*, TreeNode*> parents;\n    void markParents(TreeNode* node, TreeNode* par = nullptr) {\n        if (!node) return;\n        parents[node] = par;\n        markParents(node->left, node);\n        markParents(node->right, node);\n    }\npublic:\n    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {\n        markParents(root);\n        queue<pair<TreeNode*, int>> q;\n        unordered_set<TreeNode*> visited;\n        q.push({target, 0});\n        visited.insert(target);\n        vector<int> res;\n        while (!q.empty()) {\n            auto [node, dist] = q.front(); q.pop();\n            if (dist == k) res.push_back(node->val);\n            else if (dist < k) {\n                for (TreeNode* nextNode : {node->left, node->right, parents[node]}) {\n                    if (nextNode && !visited.count(nextNode)) {\n                        visited.insert(nextNode);\n                        q.push({nextNode, dist + 1});\n                    }\n                }\n            }\n        }\n        return res;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private Map<TreeNode, TreeNode> parents = new HashMap<>();\n    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {\n        markParents(root, null);\n        Queue<TreeNode> q = new LinkedList<>();\n        Set<TreeNode> visited = new HashSet<>();\n        q.add(target);\n        visited.add(target);\n        int dist = 0;\n        while (!q.isEmpty()) {\n            int sz = q.size();\n            if (dist == k) {\n                List<Integer> res = new ArrayList<>();\n                for (TreeNode n : q) res.add(n.val);\n                return res;\n            }\n            for (int i = 0; i < sz; i++) {\n                TreeNode curr = q.poll();\n                for (TreeNode next : Arrays.asList(curr.left, curr.right, parents.get(curr))) {\n                    if (next != null && !visited.contains(next)) {\n                        visited.add(next);\n                        q.add(next);\n                    }\n                }\n            }\n            dist++;\n        }\n        return new ArrayList<>();\n    }\n    private void markParents(TreeNode node, TreeNode par) {\n        if (node == null) return;\n        parents.put(node, par);\n        markParents(node.left, node);\n        markParents(node.right, node);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function distanceK(root, target, k) {\n  const parents = new Map();\n  function markParents(node, par = null) {\n    if (!node) return;\n    parents.set(node, par);\n    markParents(node.left, node);\n    markParents(node.right, node);\n  }\n  markParents(root);\n  const queue = [{ node: target, dist: 0 }];\n  const visited = new Set([target]);\n  const res = [];\n  while (queue.length > 0) {\n    const { node, dist } = queue.shift();\n    if (dist === k) res.push(node.val);\n    else if (dist < k) {\n      for (const nextNode of [node.left, node.right, parents.get(node)]) {\n        if (nextNode && !visited.has(nextNode)) {\n          visited.add(nextNode);\n          queue.push({ node: nextNode, dist: dist + 1 });\n        }\n      }\n    }\n  }\n  return res;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 863 - All Nodes Distance K in Binary Tree",
+          "url": "https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-burning-tree",
+      "title": "Burn a Binary Tree / Min Time to Infect Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Calculate minimum time required to burn/infect an entire binary tree starting from a given target node.",
+      "explanation": [
+        "Fire Spreading Rule: Fire spreads to left child, right child, and parent node simultaneously in 1 second.",
+        "Step 1: Map parent pointers for all nodes in tree using DFS.",
+        "Step 2: Perform BFS starting from target node. At each second level, spread fire to unburned left, right, and parent neighbors.",
+        "Step 3: Increment `time` counter per level until entire tree is burned. Return total time."
+      ],
+      "exampleTrace": {
+        "input": "Tree: 1 -> left: 2, right: 3 -> 2.left: 4, 2.right: 5 -> 5.left: 7, 5.right: 8. Start Target = 8",
+        "output": "Min Time to Burn Tree = 7 seconds",
+        "traceSteps": [
+          "Time 0: Target node 8 catches fire.",
+          "Time 1: Fire spreads to parent node 5.",
+          "Time 2: Fire spreads from 5 to node 2 and node 7.",
+          "Time 3: Fire spreads from 2 to node 1 and node 4.",
+          "Time 4: Fire spreads from 1 to node 3.",
+          "Tree completely burned in 4 time units!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes time taken for radial infection/fire wave to consume entire network topology.",
+        "whenToUse": "When calculating maximum propagation delay or epidemic spread time.",
+        "whereUsed": "Network malware propagation analysis, wildfire spread simulation.",
+        "whyOptimal": "O(N) parent mapping combined with BFS level tracking."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "from collections import deque\n\ndef minTimeToBurnTree(root: TreeNode, target_val: int) -> int:\n    parents = {}\n    target_node = None\n    def dfs(node, par=None):\n        nonlocal target_node\n        if not node: return\n        if node.val == target_val: target_node = node\n        parents[node] = par\n        dfs(node.left, node)\n        dfs(node.right, node)\n    dfs(root)\n    \n    queue = deque([target_node])\n    visited = {target_node}\n    time = -1\n    while queue:\n        sz = len(queue)\n        time += 1\n        for _ in range(sz):\n            curr = queue.popleft()\n            for nextNode in (curr.left, curr.right, parents[curr]):\n                if nextNode and nextNode not in visited:\n                    visited.add(nextNode)\n                    queue.append(nextNode)\n    return time"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <unordered_map>\n#include <unordered_set>\n#include <queue>\nusing namespace std;\n\nclass Solution {\n    unordered_map<TreeNode*, TreeNode*> parents;\n    TreeNode* targetNode = nullptr;\n    void dfs(TreeNode* node, int target, TreeNode* par = nullptr) {\n        if (!node) return;\n        if (node->val == target) targetNode = node;\n        parents[node] = par;\n        dfs(node->left, target, node);\n        dfs(node->right, target, node);\n    }\npublic:\n    int amountOfTime(TreeNode* root, int start) {\n        dfs(root, start);\n        queue<TreeNode*> q;\n        unordered_set<TreeNode*> visited;\n        q.push(targetNode);\n        visited.insert(targetNode);\n        int time = -1;\n        while (!q.empty()) {\n            int sz = q.size();\n            time++;\n            for (int i = 0; i < sz; i++) {\n                TreeNode* curr = q.front(); q.pop();\n                for (TreeNode* nextNode : {curr->left, curr->right, parents[curr]}) {\n                    if (nextNode && !visited.count(nextNode)) {\n                        visited.insert(nextNode);\n                        q.push(nextNode);\n                    }\n                }\n            }\n        }\n        return time;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    private Map<TreeNode, TreeNode> parents = new HashMap<>();\n    private TreeNode targetNode = null;\n    public int amountOfTime(TreeNode root, int start) {\n        dfs(root, start, null);\n        Queue<TreeNode> q = new LinkedList<>();\n        Set<TreeNode> visited = new HashSet<>();\n        q.add(targetNode);\n        visited.add(targetNode);\n        int time = -1;\n        while (!q.isEmpty()) {\n            int sz = q.size();\n            time++;\n            for (int i = 0; i < sz; i++) {\n                TreeNode curr = q.poll();\n                for (TreeNode next : Arrays.asList(curr.left, curr.right, parents.get(curr))) {\n                    if (next != null && !visited.contains(next)) {\n                        visited.add(next);\n                        q.add(next);\n                    }\n                }\n            }\n        }\n        return time;\n    }\n    private void dfs(TreeNode node, int start, TreeNode par) {\n        if (node == null) return;\n        if (node.val == start) targetNode = node;\n        parents.put(node, par);\n        dfs(node.left, start, node);\n        dfs(node.right, start, node);\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function amountOfTime(root, start) {\n  const parents = new Map();\n  let targetNode = null;\n  function dfs(node, par = null) {\n    if (!node) return;\n    if (node.val === start) targetNode = node;\n    parents.set(node, par);\n    dfs(node.left, node);\n    dfs(node.right, node);\n  }\n  dfs(root);\n  const queue = [targetNode];\n  const visited = new Set([targetNode]);\n  let time = -1;\n  while (queue.length > 0) {\n    const size = queue.length;\n    time++;\n    for (let i = 0; i < size; i++) {\n      const curr = queue.shift();\n      for (const nextNode of [curr.left, curr.right, parents.get(curr)]) {\n        if (nextNode && !visited.has(nextNode)) {\n          visited.add(nextNode);\n          queue.push(nextNode);\n        }\n      }\n    }\n  }\n  return time;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 2385 - Amount of Time for Binary Tree to Be Infected",
+          "url": "https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "GeeksforGeeks - Burning Tree",
+          "url": "https://www.geeksforgeeks.org/problems/burning-tree/1",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "binary-tree-count-nodes-complete",
+      "title": "Count Nodes in Complete Binary Tree in O(log^2 N)",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O((log N)^2)",
+      "spaceComplexity": "O(log N)",
+      "summary": "Count total nodes in a Complete Binary Tree in O(log^2 N) time by exploiting complete tree height matching properties.",
+      "explanation": [
+        "Complete Binary Tree Property: All levels except possibly the last are completely filled, and all nodes in the last level are as far left as possible.",
+        "Algorithm: Compare Left Height `left_h` (traverse left child chain) and Right Height `right_h` (traverse right child chain).",
+        "1) If `left_h == right_h`: The subtree is a Perfect Binary Tree! Total nodes = `2^left_h - 1` (computed via bit shift `(1 << left_h) - 1`).",
+        "2) If `left_h != right_h`: Recurse `1 + countNodes(node.left) + countNodes(node.right)`."
+      ],
+      "exampleTrace": {
+        "input": "Complete Binary Tree with 6 nodes (depth 3)",
+        "output": "Total Nodes = 6",
+        "traceSteps": [
+          "Step 1: At root 1: left_h = 3, right_h = 2 (not equal).",
+          "Step 2: Recurse left on node 2: left_h = 2, right_h = 2 (equal!). Total nodes at node 2 = (1 << 2) - 1 = 3 nodes.",
+          "Step 3: Recurse right on node 3: left_h = 2, right_h = 1 (not equal). Subtree has 2 nodes.",
+          "Step 4: Total = 1 (root 1) + 3 (left subtree) + 2 (right subtree) = 6 nodes."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts total nodes in complete binary trees in strictly sub-linear O(log^2 N) time.",
+        "whenToUse": "When counting complete heap trees or filled binary trees without linear O(N) traversal.",
+        "whereUsed": "Binary Heap size calculation, Complete Tree capacity analysis.",
+        "whyOptimal": "O(log^2 N) time vs linear O(N) by jumping full perfect subtrees."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def countNodes(root: TreeNode) -> int:\n    if not root: return 0\n    def get_left_height(node):\n        h = 0\n        while node: h += 1; node = node.left\n        return h\n    def get_right_height(node):\n        h = 0\n        while node: h += 1; node = node.right\n        return h\n        \n    lh = get_left_height(root)\n    rh = get_right_height(root)\n    if lh == rh:\n        return (1 << lh) - 1 # 2^lh - 1\n    return 1 + countNodes(root.left) + countNodes(root.right)"
+        },
+        {
+          "language": "cpp",
+          "code": "class Solution {\n    int getLeftHeight(TreeNode* node) {\n        int h = 0;\n        while (node) { h++; node = node->left; }\n        return h;\n    }\n    int getRightHeight(TreeNode* node) {\n        int h = 0;\n        while (node) { h++; node = node->right; }\n        return h;\n    }\npublic:\n    int countNodes(TreeNode* root) {\n        if (!root) return 0;\n        int lh = getLeftHeight(root);\n        int rh = getRightHeight(root);\n        if (lh == rh) return (1 << lh) - 1;\n        return 1 + countNodes(root->left) + countNodes(root->right);\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public int countNodes(TreeNode root) {\n        if (root == null) return 0;\n        int lh = getLeftHeight(root);\n        int rh = getRightHeight(root);\n        if (lh == rh) return (1 << lh) - 1;\n        return 1 + countNodes(root.left) + countNodes(root.right);\n    }\n    private int getLeftHeight(TreeNode node) {\n        int h = 0;\n        while (node != null) { h++; node = node.left; }\n        return h;\n    }\n    private int getRightHeight(TreeNode node) {\n        int h = 0;\n        while (node != null) { h++; node = node.right; }\n        return h;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function countNodes(root) {\n  if (!root) return 0;\n  function getLeftHeight(node) {\n    let h = 0;\n    while (node) { h++; node = node.left; }\n    return h;\n  }\n  function getRightHeight(node) {\n    let h = 0;\n    while (node) { h++; node = node.right; }\n    return h;\n  }\n  const lh = getLeftHeight(root);\n  const rh = getRightHeight(root);\n  if (lh === rh) return (1 << lh) - 1;\n  return 1 + countNodes(root.left) + countNodes(root.right);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 222 - Count Complete Tree Nodes",
+          "url": "https://leetcode.com/problems/count-complete-tree-nodes/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "tree-kth-ancestor",
+      "title": "Kth Ancestor of a Node in Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N) preprocessing, O(log K) query with Binary Lifting",
+      "spaceComplexity": "O(N log N)",
+      "summary": "Finds the K-th ancestor of a given node in a binary tree using recursive backtracking or Binary Lifting (sparse table technique).",
+      "explanation": [
+        "1. Recursive Parent DFS: Traverse tree and maintain path or parent pointers. K-th ancestor is node at distance K up the path.",
+        "2. Binary Lifting: Compute `up[node][j]`, representing the 2^j-th ancestor of `node`.",
+        "3. Recurrence: `up[node][j] = up[up[node][j-1]][j-1]`.",
+        "4. For query (node, k), break K into binary powers of 2 (e.g. k=5 -> jump 4 steps, then 1 step) to answer in O(log K) time."
+      ],
+      "exampleTrace": {
+        "title": "Trace K=2 Ancestor for Node 5 in Tree [1, 2, 3, 4, 5]",
+        "traceSteps": [
+          "Tree Structure: Root 1 -> Left 2 -> Right 5.",
+          "Query: KthAncestor(node=5, k=2).",
+          "1st Ancestor of 5 (k=1): Parent is 2.",
+          "2nd Ancestor of 5 (k=2): Parent of 2 is 1.",
+          "Result: 1."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Quickly determines the ancestor K levels above any node in tree structures.",
+        "whenToUse": "Use when multiple K-th ancestor queries are asked on static trees.",
+        "whereUsed": "LCA algorithms, hierarchical file systems, org charts, network node routing.",
+        "whyOptimal": "Binary lifting reduces linear height traversal from O(K) down to logarithmic O(log K) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TreeAncestor:\n    def __init__(self, n: int, parent: list[int]):\n        self.LOG = 16\n        self.up = [[-1] * self.LOG for _ in range(n)]\n        for i in range(n):\n            self.up[i][0] = parent[i]\n        for j in range(1, self.LOG):\n            for i in range(n):\n                if self.up[i][j-1] != -1:\n                    self.up[i][j] = self.up[self.up[i][j-1]][j-1]\n\n    def getKthAncestor(self, node: int, k: int) -> int:\n        for j in range(self.LOG):\n            if (k >> j) & 1:\n                node = self.up[node][j]\n                if node == -1:\n                    break\n        return node"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nclass TreeAncestor {\n    vector<vector<int>> up;\n    int LOG = 16;\npublic:\n    TreeAncestor(int n, vector<int>& parent) {\n        up.assign(n, vector<int>(LOG, -1));\n        for (int i = 0; i < n; i++) up[i][0] = parent[i];\n        for (int j = 1; j < LOG; j++) {\n            for (int i = 0; i < n; i++) {\n                if (up[i][j-1] != -1) up[i][j] = up[up[i][j-1]][j-1];\n            }\n        }\n    }\n    int getKthAncestor(int node, int k) {\n        for (int j = 0; j < LOG; j++) {\n            if ((k >> j) & 1) {\n                node = up[node][j];\n                if (node == -1) break;\n            }\n        }\n        return node;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.Arrays;\n\nclass TreeAncestor {\n    int[][] up;\n    int LOG = 16;\n    public TreeAncestor(int n, int[] parent) {\n        up = new int[n][LOG];\n        for (int i = 0; i < n; i++) Arrays.fill(up[i], -1);\n        for (int i = 0; i < n; i++) up[i][0] = parent[i];\n        for (int j = 1; j < LOG; j++) {\n            for (int i = 0; i < n; i++) {\n                if (up[i][j-1] != -1) up[i][j] = up[up[i][j-1]][j-1];\n            }\n        }\n    }\n    public int getKthAncestor(int node, int k) {\n        for (int j = 0; j < LOG; j++) {\n            if (((k >> j) & 1) == 1) {\n                node = up[node][j];\n                if (node == -1) break;\n            }\n        }\n        return node;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class TreeAncestor {\n  constructor(n, parent) {\n    this.LOG = 16;\n    this.up = Array.from({ length: n }, () => new Array(this.LOG).fill(-1));\n    for (let i = 0; i < n; i++) this.up[i][0] = parent[i];\n    for (let j = 1; j < this.LOG; j++) {\n      for (let i = 0; i < n; i++) {\n        if (this.up[i][j-1] !== -1) {\n          this.up[i][j] = this.up[this.up[i][j-1]][j-1];\n        }\n      }\n    }\n  }\n  getKthAncestor(node, k) {\n    for (let j = 0; j < this.LOG; j++) {\n      if ((k >> j) & 1) {\n        node = this.up[node][j];\n        if (node === -1) break;\n      }\n    }\n    return node;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1483 - Kth Ancestor of a Tree Node",
+          "url": "https://leetcode.com/problems/kth-ancestor-of-a-tree-node/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "tree-construct-preorder-inorder",
+      "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) with Hash Map lookup",
+      "spaceComplexity": "O(N) for recursion stack and index map",
+      "summary": "Reconstructs a unique binary tree given its preorder and inorder traversal arrays using divide-and-conquer.",
+      "explanation": [
+        "1. Preorder sequence processes nodes in `Root -> Left -> Right` order. Thus, `preorder[0]` is always the root of the tree.",
+        "2. Locate root in `inorder` array. All elements to its left belong to the Left Subtree, and elements to its right belong to the Right Subtree.",
+        "3. Use a HashMap to store `inorder[val] -> index` mapping for O(1) index lookups.",
+        "4. Recursively build Left Subtree and Right Subtree by calculating subarray bounds."
+      ],
+      "exampleTrace": {
+        "title": "Trace Preorder=[3,9,20,15,7], Inorder=[9,3,15,20,7]",
+        "traceSteps": [
+          "Root node is Preorder[0] = 3.",
+          "Inorder index of 3 is 1.",
+          "Left Inorder subarray = [9] (size 1) -> Left Child = 9.",
+          "Right Inorder subarray = [15, 20, 7] (size 3) -> Root of Right Subtree is 20.",
+          "Reconstructed Tree: 3 -> (Left: 9, Right: 20 -> (Left: 15, Right: 7))."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Rebuilds exact original binary tree structure from serialized preorder and inorder traversals.",
+        "whenToUse": "Use when unique node values and both preorder & inorder traversals are available.",
+        "whereUsed": "Tree deserialization, AST reconstruction in compiler parsers.",
+        "whyOptimal": "HashMap lookups reduce search time per node from O(N) to O(1), ensuring overall O(N) linear runtime."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef buildTree(preorder: list[int], inorder: list[int]) -> TreeNode:\n    in_map = {val: i for i, val in enumerate(inorder)}\n    pre_idx = 0\n    def helper(in_left, in_right):\n        nonlocal pre_idx\n        if in_left > in_right:\n            return None\n        root_val = preorder[pre_idx]\n        pre_idx += 1\n        root = TreeNode(root_val)\n        idx = in_map[root_val]\n        root.left = helper(in_left, idx - 1)\n        root.right = helper(idx + 1, in_right)\n        return root\n    return helper(0, len(inorder) - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nstruct TreeNode {\n    int val;\n    TreeNode *left, *right;\n    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}\n};\n\nTreeNode* build(vector<int>& pre, int& pIdx, int inLeft, int inRight, unordered_map<int,int>& inMap) {\n    if (inLeft > inRight) return nullptr;\n    int rootVal = pre[pIdx++];\n    TreeNode* root = new TreeNode(rootVal);\n    int idx = inMap[rootVal];\n    root->left = build(pre, pIdx, inLeft, idx - 1, inMap);\n    root->right = build(pre, pIdx, idx + 1, inRight, inMap);\n    return root;\n}\n\nTreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {\n    unordered_map<int,int> inMap;\n    for (int i = 0; i < inorder.size(); i++) inMap[inorder[i]] = i;\n    int pIdx = 0;\n    return build(preorder, pIdx, 0, inorder.size() - 1, inMap);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    static class TreeNode {\n        int val;\n        TreeNode left, right;\n        TreeNode(int x) { val = x; }\n    }\n    int pIdx = 0;\n    Map<Integer, Integer> inMap = new HashMap<>();\n    public TreeNode buildTree(int[] preorder, int[] inorder) {\n        for (int i = 0; i < inorder.length; i++) inMap.put(inorder[i], i);\n        return helper(preorder, 0, inorder.length - 1);\n    }\n    private TreeNode helper(int[] preorder, int inLeft, int inRight) {\n        if (inLeft > inRight) return null;\n        int rootVal = preorder[pIdx++];\n        TreeNode root = new TreeNode(rootVal);\n        int idx = inMap.get(rootVal);\n        root.left = helper(preorder, inLeft, idx - 1);\n        root.right = helper(preorder, idx + 1, inRight);\n        return root;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function buildTree(preorder, inorder) {\n  const inMap = new Map();\n  inorder.forEach((val, i) => inMap.set(val, i));\n  let pIdx = 0;\n  function helper(inLeft, inRight) {\n    if (inLeft > inRight) return null;\n    const rootVal = preorder[pIdx++];\n    const root = { val: rootVal, left: null, right: null };\n    const idx = inMap.get(rootVal);\n    root.left = helper(inLeft, idx - 1);\n    root.right = helper(idx + 1, inRight);\n    return root;\n  }\n  return helper(0, inorder.length - 1);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 105 - Construct Binary Tree from Preorder and Inorder Traversal",
+          "url": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-construct-postorder-inorder",
+      "title": "Construct Binary Tree from Postorder and Inorder Traversal",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) with Hash Map lookup",
+      "spaceComplexity": "O(N) for recursion stack and index map",
+      "summary": "Reconstructs a unique binary tree given its postorder and inorder traversal arrays using right-to-left postorder processing.",
+      "explanation": [
+        "1. Postorder sequence processes nodes in `Left -> Right -> Root` order. Thus, `postorder[-1]` is always the root of the tree.",
+        "2. Process postorder elements from right to left.",
+        "3. Because postorder right-to-left order visits `Root -> Right -> Left`, you MUST construct the Right Subtree before the Left Subtree!",
+        "4. Use a HashMap for O(1) index lookup of root in the inorder array."
+      ],
+      "exampleTrace": {
+        "title": "Trace Inorder=[9,3,15,20,7], Postorder=[9,15,7,20,3]",
+        "traceSteps": [
+          "Last Postorder element is Root = 3.",
+          "Inorder index of 3 is 1.",
+          "Build Right Subtree first for Inorder range [2, 4] ([15, 20, 7]) -> Root is 20.",
+          "Build Left Subtree for Inorder range [0, 0] ([9]) -> Root is 9.",
+          "Reconstructed Tree matches original binary tree structure."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reconstructs binary tree from bottom-up postorder and inorder sequences.",
+        "whenToUse": "Use when postorder and inorder traversals are given.",
+        "whereUsed": "Postfix expression tree reconstruction, memory image restoration.",
+        "whyOptimal": "Right-to-left postorder processing enables O(N) linear time construction without re-scanning arrays."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def buildTree(inorder: list[int], postorder: list[int]):\n    in_map = {val: i for i, val in enumerate(inorder)}\n    post_idx = len(postorder) - 1\n    def helper(in_left, in_right):\n        nonlocal post_idx\n        if in_left > in_right:\n            return None\n        root_val = postorder[post_idx]\n        post_idx -= 1\n        root = {'val': root_val, 'left': None, 'right': None}\n        idx = in_map[root_val]\n        root['right'] = helper(idx + 1, in_right)\n        root['left'] = helper(in_left, idx - 1)\n        return root\n    return helper(0, len(inorder) - 1)"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nstruct TreeNode {\n    int val;\n    TreeNode *left, *right;\n    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}\n};\n\nTreeNode* helper(vector<int>& post, int& pIdx, int inLeft, int inRight, unordered_map<int,int>& inMap) {\n    if (inLeft > inRight) return nullptr;\n    int rootVal = post[pIdx--];\n    TreeNode* root = new TreeNode(rootVal);\n    int idx = inMap[rootVal];\n    root->right = helper(post, pIdx, idx + 1, inRight, inMap);\n    root->left = helper(post, pIdx, inLeft, idx - 1, inMap);\n    return root;\n}\n\nTreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {\n    unordered_map<int,int> inMap;\n    for (int i = 0; i < inorder.size(); i++) inMap[inorder[i]] = i;\n    int pIdx = postorder.size() - 1;\n    return helper(postorder, pIdx, 0, inorder.size() - 1, inMap);\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    static class TreeNode {\n        int val;\n        TreeNode left, right;\n        TreeNode(int x) { val = x; }\n    }\n    int pIdx;\n    Map<Integer, Integer> inMap = new HashMap<>();\n    public TreeNode buildTree(int[] inorder, int[] postorder) {\n        pIdx = postorder.length - 1;\n        for (int i = 0; i < inorder.length; i++) inMap.put(inorder[i], i);\n        return helper(postorder, 0, inorder.length - 1);\n    }\n    private TreeNode helper(int[] postorder, int inLeft, int inRight) {\n        if (inLeft > inRight) return null;\n        int rootVal = postorder[pIdx--];\n        TreeNode root = new TreeNode(rootVal);\n        int idx = inMap.get(rootVal);\n        root.right = helper(postorder, idx + 1, inRight);\n        root.left = helper(postorder, inLeft, idx - 1);\n        return root;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function buildTree(inorder, postorder) {\n  const inMap = new Map();\n  inorder.forEach((val, i) => inMap.set(val, i));\n  let pIdx = postorder.length - 1;\n  function helper(inLeft, inRight) {\n    if (inLeft > inRight) return null;\n    const rootVal = postorder[pIdx--];\n    const root = { val: rootVal, left: null, right: null };\n    const idx = inMap.get(rootVal);\n    root.right = helper(idx + 1, inRight);\n    root.left = helper(inLeft, idx - 1);\n    return root;\n  }\n  return helper(0, inorder.length - 1);\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 106 - Construct Binary Tree from Inorder and Postorder Traversal",
+          "url": "https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "tree-serialize-deserialize",
+      "title": "Serialize and Deserialize Binary Tree",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N) for both serialize and deserialize",
+      "spaceComplexity": "O(N)",
+      "summary": "Encodes a binary tree structure into a string and decodes the string back into the exact original binary tree.",
+      "explanation": [
+        "1. Serialization: Use Preorder DFS or Level Order BFS. Append node values separated by commas. Use 'null' or '#' marker for empty children.",
+        "2. Example Serialized String: `'1,2,null,null,3,4,null,null,5,null,null'`.",
+        "3. Deserialization: Convert string into a Queue of tokens.",
+        "4. Recursively reconstruct tree: pop next token. If token is 'null', return None. Otherwise create node and recurse for `root.left` then `root.right`."
+      ],
+      "exampleTrace": {
+        "title": "Serialize & Deserialize Trace on [1, 2, 3, null, null, 4, 5]",
+        "traceSteps": [
+          "Preorder Serialize: '1,2,null,null,3,4,null,null,5,null,null'.",
+          "Deserialize Queue: ['1', '2', 'null', 'null', '3', '4', 'null', 'null', '5', 'null', 'null'].",
+          "Pop '1' -> Root 1.",
+          "Pop '2' -> Left Child 2. Next two 'null's end children of 2.",
+          "Pop '3' -> Right Child 3.",
+          "Pop '4' -> Left Child of 3.",
+          "Pop '5' -> Right Child of 3.",
+          "Exact tree structure restored."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Converts pointer-based dynamic binary tree into linear string format for persistence and network transfer.",
+        "whenToUse": "Use when storing trees in databases, sending over network APIs, or saving session state.",
+        "whereUsed": "DOM tree snapshotting, JSON tree serialization, game save states, RPC payload encoding.",
+        "whyOptimal": "Single pass O(N) pre-order traversal produces minimal string encoding without ambiguity."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Codec:\n    def serialize(self, root) -> str:\n        res = []\n        def dfs(node):\n            if not node:\n                res.append('null')\n                return\n            res.append(str(node.val))\n            dfs(node.left)\n            dfs(node.right)\n        dfs(root)\n        return ','.join(res)\n\n    def deserialize(self, data: str):\n        vals = iter(data.split(','))\n        def dfs():\n            val = next(vals)\n            if val == 'null':\n                return None\n            node = {'val': int(val), 'left': None, 'right': None}\n            node['left'] = dfs()\n            node['right'] = dfs()\n            return node\n        return dfs()"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <sstream>\n#include <queue>\nusing namespace std;\n\nstruct TreeNode {\n    int val;\n    TreeNode *left, *right;\n    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}\n};\n\nclass Codec {\npublic:\n    string serialize(TreeNode* root) {\n        if (!root) return \"null,\";\n        return to_string(root->val) + \",\" + serialize(root->left) + serialize(root->right);\n    }\n    TreeNode* deserialize(string data) {\n        stringstream ss(data);\n        string item;\n        queue<string> q;\n        while (getline(ss, item, ',')) q.push(item);\n        return helper(q);\n    }\nprivate:\n    TreeNode* helper(queue<string>& q) {\n        if (q.empty()) return nullptr;\n        string val = q.front(); q.pop();\n        if (val == \"null\") return nullptr;\n        TreeNode* node = new TreeNode(stoi(val));\n        node->left = helper(q);\n        node->right = helper(q);\n        return node;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Codec {\n    public String serialize(TreeNode root) {\n        if (root == null) return \"null,\";\n        return root.val + \",\" + serialize(root.left) + serialize(root.right);\n    }\n    public TreeNode deserialize(String data) {\n        Queue<String> q = new LinkedList<>(Arrays.asList(data.split(\",\")));\n        return helper(q);\n    }\n    private TreeNode helper(Queue<String> q) {\n        String val = q.poll();\n        if (val.equals(\"null\")) return null;\n        TreeNode node = new TreeNode(Integer.parseInt(val));\n        node.left = helper(q);\n        node.right = helper(q);\n        return node;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function serialize(root) {\n  const res = [];\n  function dfs(node) {\n    if (!node) {\n      res.push('null');\n      return;\n    }\n    res.push(node.val);\n    dfs(node.left);\n    dfs(node.right);\n  }\n  dfs(root);\n  return res.join(',');\n}\n\nfunction deserialize(data) {\n  const vals = data.split(',');\n  let idx = 0;\n  function dfs() {\n    if (idx >= vals.length) return null;\n    const val = vals[idx++];\n    if (val === 'null') return null;\n    const root = { val: parseInt(val), left: null, right: null };\n    root.left = dfs();\n    root.right = dfs();\n    return root;\n  }\n  return dfs();\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 297 - Serialize and Deserialize Binary Tree",
+          "url": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "tree-flatten-to-linked-list",
+      "title": "Flatten Binary Tree to Linked List",
+      "categoryId": "trees",
+      "categoryTitle": "Trees & Binary Trees",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1) with Morris Traversal / O(N) recursion",
+      "summary": "Flattens a binary tree into a right-skewed linked list in-place such that nodes follow the preorder traversal sequence.",
+      "explanation": [
+        "1. Goal: Mutate the binary tree so `left` child is always `None` and `right` points to the next node in preorder sequence.",
+        "2. Reverse Postorder DFS (Right -> Left -> Root): Maintain a `prev` pointer. Process `right` subtree, then `left` subtree, then set `root.right = prev`, `root.left = None`, `prev = root`.",
+        "3. In-place O(1) Space Morris-style**: For current node `curr`, if it has a left child, find the rightmost node of left subtree. Connect that node's right pointer to `curr.right`. Move `curr.left` to `curr.right` and set `curr.left = None`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Flatten on [1, 2, 5, 3, 4, null, 6]",
+        "traceSteps": [
+          "Node 1: Has left child 2. Rightmost node of left subtree is 4.",
+          "Attach 4.right -> 5.",
+          "Move 1.left (2) to 1.right. Set 1.left = None.",
+          "Move to node 2. Rightmost node of 2's left subtree (3) is 3. Attach 3.right -> 4.",
+          "Move 2.left to 2.right.",
+          "Resulting Right-Skewed Chain: 1 -> 2 -> 3 -> 4 -> 5 -> 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Transforms 2D tree hierarchy into 1D linear sequence in-place without using extra memory array.",
+        "whenToUse": "Use when converting tree data structures into flat linked list representations.",
+        "whereUsed": "In-memory list flattening, menu tree unraveling, UI tree view collapse.",
+        "whyOptimal": "Morris-style pointer manipulation achieves O(N) time with strict O(1) auxiliary memory."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def flatten(root) -> None:\n    curr = root\n    while curr:\n        if curr.left:\n            prev = curr.left\n            while prev.right:\n                prev = prev.right\n            prev.right = curr.right\n            curr.right = curr.left\n            curr.left = None\n        curr = curr.right"
+        },
+        {
+          "language": "cpp",
+          "code": "struct TreeNode {\n    int val;\n    TreeNode *left, *right;\n};\n\nvoid flatten(TreeNode* root) {\n    TreeNode* curr = root;\n    while (curr) {\n        if (curr->left) {\n            TreeNode* prev = curr->left;\n            while (prev->right) prev = prev->right;\n            prev->right = curr->right;\n            curr->right = curr->left;\n            curr->left = nullptr;\n        }\n        curr = curr->right;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    static class TreeNode {\n        int val;\n        TreeNode left, right;\n    }\n    public void flatten(TreeNode root) {\n        TreeNode curr = root;\n        while (curr != null) {\n            if (curr.left != null) {\n                TreeNode prev = curr.left;\n                while (prev.right != null) prev = prev.right;\n                prev.right = curr.right;\n                curr.right = curr.left;\n                curr.left = null;\n            }\n            curr = curr.right;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function flatten(root) {\n  let curr = root;\n  while (curr) {\n    if (curr.left) {\n      let prev = curr.left;\n      while (prev.right) prev = prev.right;\n      prev.right = curr.right;\n      curr.right = curr.left;\n      curr.left = null;\n    }\n    curr = curr.right;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 114 - Flatten Binary Tree to Linked List",
+          "url": "https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

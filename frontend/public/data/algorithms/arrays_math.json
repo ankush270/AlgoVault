@@ -1,0 +1,554 @@
+{
+  "id": "arrays_math",
+  "category": {
+    "id": "arrays_math",
+    "title": "Arrays & Math",
+    "icon": "Layers",
+    "description": "Array transformations, prefix sums, math, and number theory algorithms."
+  },
+  "totalAlgorithms": 10,
+  "algorithms": [
+    {
+      "id": "kadanes-algorithm",
+      "title": "Kadane's Algorithm (Maximum Subarray Sum)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the contiguous subarray with the maximum sum in a 1D array in linear O(N) time.",
+      "explanation": [
+        "Maintain two variables: `currMax` (sum of current subarray) and `maxSoFar` (global maximum sum).",
+        "Iterate through the array. For each element `x`, add it to `currMax`.",
+        "If `currMax` becomes negative, reset `currMax = 0` (starting a fresh subarray from next element).",
+        "Update `maxSoFar = max(maxSoFar, currMax)` at each step.",
+        "To handle all-negative arrays, initialize `maxSoFar` with the first element or negative infinity."
+      ],
+      "exampleTrace": {
+        "input": "nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]",
+        "output": "6 (Maximum Subarray: [4, -1, 2, 1])",
+        "traceSteps": [
+          "Initialize current_sum = 0, max_sum = -infinity.",
+          "Index 0 (val -2): current_sum = max(-2, 0 + -2) = -2, max_sum = max(-inf, -2) = -2.",
+          "Index 1 (val 1): current_sum = max(1, -2 + 1) = 1, max_sum = max(-2, 1) = 1.",
+          "Index 2 (val -3): current_sum = max(-3, 1 - 3) = -2, max_sum = max(1, -2) = 1.",
+          "Index 3 (val 4): current_sum = max(4, -2 + 4) = 4, max_sum = max(1, 4) = 4.",
+          "Index 4 (val -1): current_sum = max(-1, 4 - 1) = 3, max_sum = max(4, 3) = 4.",
+          "Index 5 (val 2): current_sum = max(2, 3 + 2) = 5, max_sum = max(4, 5) = 5.",
+          "Index 6 (val 1): current_sum = max(1, 5 + 1) = 6, max_sum = max(5, 6) = 6.",
+          "Index 7 (val -5): current_sum = max(-5, 6 - 5) = 1, max_sum = max(6, 1) = 6.",
+          "Index 8 (val 4): current_sum = max(4, 1 + 4) = 5, max_sum = max(6, 5) = 6.",
+          "Final Max Subarray Sum = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the contiguous sequence of numbers in an array that has the largest combined sum.",
+        "whenToUse": "When asked for maximum continuous subarray sum or maximum profit window in single-pass array problems.",
+        "whereUsed": "Financial stock portfolio maximum gain calculation, image processing signal peak detection, genomic sequence alignment scoring.",
+        "whyOptimal": "Reduces brute-force O(N³) or O(N²) nested loops to single linear scan O(N) with O(1) extra space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def max_subarray_sum(nums):\n    max_so_far = nums[0]\n    curr_max = nums[0]\n    \n    for i in range(1, len(nums)):\n        curr_max = max(nums[i], curr_max + nums[i])\n        max_so_far = max(max_so_far, curr_max)\n        \n    return max_so_far"
+        },
+        {
+          "language": "cpp",
+          "code": "int maxSubArray(vector<int>& nums) {\n    int maxSoFar = nums[0];\n    int currMax = nums[0];\n    for (size_t i = 1; i < nums.size(); ++i) {\n        currMax = max(nums[i], currMax + nums[i]);\n        maxSoFar = max(maxSoFar, currMax);\n    }\n    return maxSoFar;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public int maxSubArray(int[] nums) {\n    int maxSoFar = nums[0];\n    int currMax = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        currMax = Math.max(nums[i], currMax + nums[i]);\n        maxSoFar = Math.max(maxSoFar, currMax);\n    }\n    return maxSoFar;\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxSubArray(nums) {\n  let maxSoFar = nums[0];\n  let currMax = nums[0];\n  for (let i = 1; i < nums.length; i++) {\n    currMax = Math.max(nums[i], currMax + nums[i]);\n    maxSoFar = Math.max(maxSoFar, currMax);\n  }\n  return maxSoFar;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 53 - Maximum Subarray",
+          "url": "https://leetcode.com/problems/maximum-subarray/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "Striver A2Z - Kadane Algorithm",
+          "url": "https://takeuforward.org/data-structure/kadanes-algorithm-maximum-subarray-sum-in-an-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "dutch-national-flag",
+      "title": "Dutch National Flag Algorithm (Sort 0s, 1s, 2s)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Sorts an array containing only three distinct elements (e.g. 0s, 1s, 2s) in a single pass with O(1) space.",
+      "explanation": [
+        "Maintain three pointers: `low` (boundary for 0s), `mid` (current element scanner), `high` (boundary for 2s).",
+        "Initially `low = 0`, `mid = 0`, `high = n - 1`.",
+        "Loop while `mid <= high`:",
+        "  - If `arr[mid] == 0`: swap `arr[low]` & `arr[mid]`, then `low++`, `mid++`.",
+        "  - If `arr[mid] == 1`: just `mid++`.",
+        "  - If `arr[mid] == 2`: swap `arr[mid]` & `arr[high]`, then `high--` (do NOT increment mid yet)."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 0, 2, 1, 1, 0]",
+        "output": "[0, 0, 1, 1, 2, 2]",
+        "traceSteps": [
+          "Initialize pointers: low = 0, mid = 0, high = 5.",
+          "Step 1: nums[mid] = 2. Swap nums[mid] and nums[high] (swap 2 & 0). Array = [0, 0, 2, 1, 1, 2], high = 4.",
+          "Step 2: nums[mid] = 0. Swap nums[low] and nums[mid] (swap 0 & 0). low = 1, mid = 1. Array = [0, 0, 2, 1, 1, 2].",
+          "Step 3: nums[mid] = 0. Swap nums[low] and nums[mid] (swap 0 & 0). low = 2, mid = 2. Array = [0, 0, 2, 1, 1, 2].",
+          "Step 4: nums[mid] = 2. Swap nums[mid] and nums[high] (swap 2 & 1). Array = [0, 0, 1, 1, 2, 2], high = 3.",
+          "Step 5: nums[mid] = 1. mid++. mid = 3, low = 2, high = 3. Array = [0, 0, 1, 1, 2, 2].",
+          "Step 6: nums[mid] = 1. mid++. mid = 4 > high (3). Loop terminates.",
+          "Result array is sorted in O(N) time with 0 extra memory: [0, 0, 1, 1, 2, 2]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts a 3-valued array in-place without using extra counting arrays or multi-pass sorting algorithms.",
+        "whenToUse": "When an array contains 3 unique key values (e.g. 0/1/2, Red/White/Blue, Low/Medium/High risk tags).",
+        "whereUsed": "Partitioning elements in QuickSort pivot steps, multi-class classification bucket sorting in memory managers.",
+        "whyOptimal": "Guarantees exact O(N) time with only 3 pointers and zero memory allocation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sort_colors(nums):\n    low, mid, high = 0, 0, len(nums) - 1\n    while mid <= high:\n        if nums[mid] == 0:\n            nums[low], nums[mid] = nums[mid], nums[low]\n            low += 1\n            mid += 1\n        elif nums[mid] == 1:\n            mid += 1\n        else:\n            nums[mid], nums[high] = nums[high], nums[mid]\n            high -= 1"
+        },
+        {
+          "language": "cpp",
+          "code": "void sortColors(vector<int>& nums) {\n    int low = 0, mid = 0, high = nums.size() - 1;\n    while (mid <= high) {\n        if (nums[mid] == 0) {\n            swap(nums[low++], nums[mid++]);\n        } else if (nums[mid] == 1) {\n            mid++;\n        } else {\n            swap(nums[mid], nums[high--]);\n        }\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 75 - Sort Colors",
+          "url": "https://leetcode.com/problems/sort-colors/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "boyer-moore-majority-vote",
+      "title": "Boyer-Moore Majority Voting Algorithm (Majority Element > N/2)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds the majority element that appears more than N/2 times in an array in single pass O(N) time and O(1) space.",
+      "explanation": [
+        "Initialize `candidate = None` and `count = 0`.",
+        "Iterate through the array. For each element `x`:",
+        "  - If `count == 0`, set `candidate = x` and `count = 1`.",
+        "  - Else if `x == candidate`, increment `count++`.",
+        "  - Else, decrement `count--`.",
+        "The remaining `candidate` is guaranteed to be the majority element if one exists."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 2, 1, 1, 1, 2, 2]",
+        "output": "2 (Majority Element appearing > 7/2 = 3 times)",
+        "traceSteps": [
+          "Initialize candidate = None, count = 0.",
+          "i=0 (num=2): count == 0 -> candidate = 2, count = 1.",
+          "i=1 (num=2): num == candidate -> count = 2.",
+          "i=2 (num=1): num != candidate -> count = 1.",
+          "i=3 (num=1): num != candidate -> count = 0.",
+          "i=4 (num=1): count == 0 -> candidate = 1, count = 1.",
+          "i=5 (num=2): num != candidate -> count = 0.",
+          "i=6 (num=2): count == 0 -> candidate = 2, count = 1.",
+          "Candidate = 2. Verification step counts occurrences of 2: 4 times (> 7/2). Verified output: 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the element appearing strictly more than 50% of the time in linear time without hash maps.",
+        "whenToUse": "When finding dominant element in a stream or array with frequency > N/2 or > N/3.",
+        "whereUsed": "Consensus voting protocols in distributed systems, real-time telemetry anomaly filtering, stream processing.",
+        "whyOptimal": "Replaces Hash Map frequency count O(N) space with O(1) space and 1 linear pass."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def majorityElement(nums):\n    candidate, count = None, 0\n    for num in nums:\n        if count == 0:\n            candidate = num\n        count += (1 if num == candidate else -1)\n    return candidate"
+        },
+        {
+          "language": "cpp",
+          "code": "int majorityElement(vector<int>& nums) {\n    int candidate = 0, count = 0;\n    for (int num : nums) {\n        if (count == 0) candidate = num;\n        count += (num == candidate) ? 1 : -1;\n    }\n    return candidate;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 169 - Majority Element",
+          "url": "https://leetcode.com/problems/majority-element/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 229 - Majority Element II (> N/3)",
+          "url": "https://leetcode.com/problems/majority-element-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "next-permutation-algorithm",
+      "title": "Next Permutation Algorithm (Lexicographical Order)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Rearranges numbers into the lexicographically next greater permutation in-place in linear O(N) time.",
+      "explanation": [
+        "Step 1 (Find Break Point): Scan from right to left to find the first index `i` where `nums[i] < nums[i+1]`.",
+        "If no such index exists (array is strictly decreasing), reverse the whole array (first permutation).",
+        "Step 2 (Find Swap Target): Scan from right to left to find index `j` where `nums[j] > nums[i]`.",
+        "Step 3 (Swap): Swap `nums[i]` and `nums[j]`.",
+        "Step 4 (Reverse Suffix): Reverse the subarray from index `i+1` to end of array to get the smallest possible tail suffix."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 3, 5, 4, 2]",
+        "output": "[1, 4, 2, 3, 5]",
+        "traceSteps": [
+          "Step 1: Traverse right-to-left to find first dip where nums[i] < nums[i+1]. Dip at index i = 1 (val = 3, since 3 < 5).",
+          "Step 2: Traverse right-to-left to find smallest number > nums[1] (3). Index j = 3 (val = 4, since 4 > 3).",
+          "Step 3: Swap nums[1] and nums[3] (swap 3 and 4). Array becomes [1, 4, 5, 3, 2].",
+          "Step 4: Reverse elements after index 1 (indices 2 to 4: [5, 3, 2] -> [2, 3, 5]).",
+          "Final next lexicographical permutation: [1, 4, 2, 3, 5]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Generates the next lexicographical permutation of an array in-place without generating all N! permutations.",
+        "whenToUse": "When asked for next permutation, next lexicographical number sequence, or TSP permutation search.",
+        "whereUsed": "Combinatorial optimization solvers, permutation generators in C++ `std::next_permutation`, hardware test pattern sequence generator.",
+        "whyOptimal": "Replaces full DFS recursion generation O(N!) with O(N) single-pass in-place swap & reverse."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def nextPermutation(nums):\n    i = len(nums) - 2\n    while i >= 0 and nums[i] >= nums[i + 1]:\n        i -= 1\n    if i >= 0:\n        j = len(nums) - 1\n        while nums[j] <= nums[i]:\n            j -= 1\n        nums[i], nums[j] = nums[j], nums[i]\n    nums[i + 1:] = reversed(nums[i + 1:])"
+        },
+        {
+          "language": "cpp",
+          "code": "void nextPermutation(vector<int>& nums) {\n    int n = nums.size(), i = n - 2;\n    while (i >= 0 && nums[i] >= nums[i + 1]) i--;\n    if (i >= 0) {\n        int j = n - 1;\n        while (nums[j] <= nums[i]) j--;\n        swap(nums[i], nums[j]);\n    }\n    reverse(nums.begin() + i + 1, nums.end());\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 31 - Next Permutation",
+          "url": "https://leetcode.com/problems/next-permutation/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "array-reversal-rotation",
+      "title": "Reversal Algorithm for Array Rotation",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Rotates an array to the right or left by K steps in O(N) time and O(1) extra space using 3 reverse operations.",
+      "explanation": [
+        "Normalize `k = k % n` (in case `k > n`).",
+        "To rotate right by K steps:",
+        "  1. Reverse the entire array `[0...n-1]`.",
+        "  2. Reverse the first K elements `[0...k-1]`.",
+        "  3. Reverse the remaining elements `[k...n-1]`.",
+        "To rotate left by K steps: Reverse `[0...k-1]`, reverse `[k...n-1]`, then reverse entire array `[0...n-1]`."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 2, 3, 4, 5, 6, 7], k = 3 (Rotate right by 3)",
+        "output": "[5, 6, 7, 1, 2, 3, 4]",
+        "traceSteps": [
+          "Normalize k: k = 3 % 7 = 3.",
+          "Step 1: Reverse entire array [1, 2, 3, 4, 5, 6, 7] -> [7, 6, 5, 4, 3, 2, 1].",
+          "Step 2: Reverse first k elements [7, 6, 5] (index 0 to 2) -> [5, 6, 7]. Array = [5, 6, 7, 4, 3, 2, 1].",
+          "Step 3: Reverse remaining n-k elements [4, 3, 2, 1] (index 3 to 6) -> [1, 2, 3, 4]. Array = [5, 6, 7, 1, 2, 3, 4].",
+          "Rotated array achieved in O(N) time and O(1) space."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Rotates elements in an array by K positions in-place without creating a temporary copy array.",
+        "whenToUse": "When rotating arrays, cyclic shift operations, or ring buffer offset realignment.",
+        "whereUsed": "Circular buffer memory management, GUI carousel item shift, CPU cache line rotation.",
+        "whyOptimal": "Achieves O(N) time and O(1) auxiliary space compared to naive cyclic shifts taking O(N * K) or O(N) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def rotate(nums, k):\n    n = len(nums)\n    k %= n\n    def reverse(l, r):\n        while l < r:\n            nums[l], nums[r] = nums[r], nums[l]\n            l += 1; r -= 1\n    reverse(0, n - 1)\n    reverse(0, k - 1)\n    reverse(k, n - 1)"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 189 - Rotate Array",
+          "url": "https://leetcode.com/problems/rotate-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "merge-intervals-algorithm",
+      "title": "Merge Overlapping Intervals Algorithm",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Combines all overlapping intervals in an array of start-end pairs into non-overlapping ranges.",
+      "explanation": [
+        "Sort intervals by start time `intervals.sort(key=lambda x: x[0])`.",
+        "Initialize `merged = [intervals[0]]`.",
+        "For each interval `[start, end]` in sorted list:",
+        "  - Get last interval in `merged`: `lastStart, lastEnd = merged[-1]`.",
+        "  - If `start <= lastEnd` (overlap): merge by updating `merged[-1][1] = max(lastEnd, end)`.",
+        "  - Else (no overlap): append `[start, end]` to `merged`."
+      ],
+      "exampleTrace": {
+        "input": "intervals = [[1,3], [2,6], [8,10], [15,18]]",
+        "output": "[[1,6], [8,10], [15,18]]",
+        "traceSteps": [
+          "Step 1: Sort intervals by start time -> [[1,3], [2,6], [8,10], [15,18]].",
+          "Step 2: Add first interval [1,3] to merged list.",
+          "Step 3: Process [2,6]: Start 2 <= Last end 3 -> Overlap! Merge: end = max(3, 6) = 6. Last interval becomes [1,6].",
+          "Step 4: Process [8,10]: Start 8 > Last end 6 -> No overlap! Add [8,10] to merged list.",
+          "Step 5: Process [15,18]: Start 15 > Last end 10 -> No overlap! Add [15,18] to merged list.",
+          "Final non-overlapping merged intervals: [[1,6], [8,10], [15,18]]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Consolidates overlapping time windows or numerical ranges into minimal disjoint sets.",
+        "whenToUse": "When given calendar events, meeting rooms, IP range allocations, or line segment overlaps.",
+        "whereUsed": "Google Calendar meeting clash detection, OS memory segment allocation, network CIDR range aggregation.",
+        "whyOptimal": "Sorting reduces interval comparison complexity from O(N²) to O(N log N) single pass."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def merge(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = []\n    for interval in intervals:\n        if not merged or merged[-1][1] < interval[0]:\n            merged.append(interval)\n        else:\n            merged[-1][1] = max(merged[-1][1], interval[1])\n    return merged"
+        },
+        {
+          "language": "cpp",
+          "code": "vector<vector<int>> merge(vector<vector<int>>& intervals) {\n    sort(intervals.begin(), intervals.end());\n    vector<vector<int>> merged;\n    for (auto& interval : intervals) {\n        if (merged.empty() || merged.back()[1] < interval[0]) {\n            merged.push_back(interval);\n        } else {\n            merged.back()[1] = max(merged.back()[1], interval[1]);\n        }\n    }\n    return merged;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 56 - Merge Intervals",
+          "url": "https://leetcode.com/problems/merge-intervals/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 57 - Insert Interval",
+          "url": "https://leetcode.com/problems/insert-interval/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "prefix-sum-array",
+      "title": "Prefix Sum & Difference Array Technique",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N) Precomputation, O(1) Query",
+      "spaceComplexity": "O(N)",
+      "summary": "Precomputes cumulative sum array to perform range sum queries [L, R] in O(1) constant time.",
+      "explanation": [
+        "Precompute `prefix[i] = prefix[i-1] + arr[i]` with `prefix[0] = 0`.",
+        "Sum of range `[L, R]` is calculated instantly as `prefix[R + 1] - prefix[L]`.",
+        "Difference Array variant: To apply range addition `+V` to `[L, R]`, execute `diff[L] += V` and `diff[R + 1] -= V`. Take prefix sum at the end."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 4, 1, 3, 5], Range Query sum(1, 3)",
+        "output": "8 (Subarray sum from index 1 to 3: 4 + 1 + 3)",
+        "traceSteps": [
+          "Step 1: Build Prefix Sum array P where P[i] = P[i-1] + nums[i].",
+          "P[0] = 2",
+          "P[1] = 2 + 4 = 6",
+          "P[2] = 6 + 1 = 7",
+          "P[3] = 7 + 3 = 10",
+          "P[4] = 10 + 5 = 15 -> Prefix Array = [2, 6, 7, 10, 15].",
+          "Step 2: Range query sum(1, 3) = P[3] - P[1 - 1] = P[3] - P[0] = 10 - 2 = 8.",
+          "Query answered in O(1) time complexity."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Answers multi-range sum queries in O(1) time and applies batch range update operations.",
+        "whenToUse": "When querying subarray sums repeatedly or applying range updates (e.g. Subarray Sum Equals K, Car Pooling).",
+        "whereUsed": "2D Image integral images for face detection (Viola-Jones), audio loudness metering, database range aggregation.",
+        "whyOptimal": "Replaces O(N) range sum loops with O(1) single subtraction operation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class NumArray:\n    def __init__(self, nums):\n        self.prefix = [0] * (len(nums) + 1)\n        for i, num in enumerate(nums):\n            self.prefix[i + 1] = self.prefix[i] + num\n\n    def sumRange(self, left: int, right: int) -> int:\n        return self.prefix[right + 1] - self.prefix[left]"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 303 - Range Sum Query - Immutable",
+          "url": "https://leetcode.com/problems/range-sum-query-immutable/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 560 - Subarray Sum Equals K",
+          "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "max-product-subarray",
+      "title": "Maximum Product Subarray (Kadane Variant)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Finds contiguous subarray with maximum product in O(N) time by tracking both current minimum and maximum products.",
+      "explanation": [
+        "Since multiplying two negative numbers yields a positive number, a negative number can turn a minimum product into maximum!",
+        "Maintain `currMax` and `currMin` initialized to `nums[0]`.",
+        "For each element `x` from index 1:",
+        "  - If `x < 0`: swap `currMax` and `currMin`.",
+        "  - `currMax = max(x, currMax * x)`.",
+        "  - `currMin = min(x, currMin * x)`.",
+        "  - Update global `ans = max(ans, currMax)`."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 3, -2, 4]",
+        "output": "6 (Subarray [2, 3])",
+        "traceSteps": [
+          "Initialize curMax = 1, curMin = 1, ans = max(nums) = 4.",
+          "i=0 (val 2): curMax = max(2, 1*2, 1*2) = 2, curMin = min(2, 1*2, 1*2) = 2. ans = max(4, 2) = 4.",
+          "i=1 (val 3): curMax = max(3, 2*3, 2*3) = 6, curMin = min(3, 2*3, 2*3) = 3. ans = max(4, 6) = 6.",
+          "i=2 (val -2): curMax = max(-2, 6*-2, 3*-2) = -2, curMin = min(-2, 6*-2, 3*-2) = -12. ans = max(6, -2) = 6.",
+          "i=3 (val 4): curMax = max(4, -2*4, -12*4) = 4, curMin = min(4, -2*4, -12*4) = -48. ans = max(6, 4) = 6.",
+          "Final Maximum Product Subarray = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds contiguous subarray with maximum multiplicative product handling negative numbers & zeros.",
+        "whenToUse": "When multiplying elements in continuous subarray where negative signs flip product signs.",
+        "whereUsed": "Compound interest gain optimization, financial risk model product series analysis.",
+        "whyOptimal": "Computes max product in single linear scan O(N) with O(1) space instead of O(N²) nested loops."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxProduct(nums):\n    res = max(nums)\n    curr_max = curr_min = 1\n    for n in nums:\n        if n == 0:\n            curr_max = curr_min = 1\n            continue\n        tmp = curr_max * n\n        curr_max = max(n * curr_max, n * curr_min, n)\n        curr_min = min(tmp, n * curr_min, n)\n        res = max(res, curr_max)\n    return res"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 152 - Maximum Product Subarray",
+          "url": "https://leetcode.com/problems/maximum-product-subarray/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "count-inversions-merge-sort",
+      "title": "Count Inversions in Array (Modified Merge Sort)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Counts pairs (i, j) such that i < j and arr[i] > arr[j] in O(N log N) time using Divide and Conquer.",
+      "explanation": [
+        "An inversion pair indicates how far an array is from being sorted.",
+        "Modify Merge Sort during the `merge(left, right)` step.",
+        "When `arr[i] > arr[j]` (where `i` is in left half and `j` is in right half):",
+        "  - All remaining elements in left half from `i` to `mid` are also greater than `arr[j]`!",
+        "  - Add `(mid - i + 1)` to `inversion_count`.",
+        "Return total sum of inversions from left half, right half, and merge step."
+      ],
+      "exampleTrace": {
+        "input": "arr = [8, 4, 2, 1]",
+        "output": "6 inversions: (8,4), (8,2), (8,1), (4,2), (4,1), (2,1)",
+        "traceSteps": [
+          "Divide array into left [8, 4] and right [2, 1].",
+          "Merge [8] and [4]: 8 > 4 -> Inversion count += 1. Sorted left = [4, 8].",
+          "Merge [2] and [1]: 2 > 1 -> Inversion count += 1. Sorted right = [1, 2].",
+          "Merge sorted halves [4, 8] and [1, 2]:",
+          "Compare left[0]=4 with right[0]=1: 4 > 1 -> Inversion count += remaining elements in left (2 elements: 4, 8). count = 2 + 2 = 4.",
+          "Compare left[0]=4 with right[1]=2: 4 > 2 -> Inversion count += remaining elements in left (2 elements: 4, 8). count = 4 + 2 = 6.",
+          "Total Inversion Count = 6."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Measures how out-of-order an array is (number of swaps required to sort).",
+        "whenToUse": "When asked for inversion count, similarity between two ranked lists, or 15-puzzle solvability test.",
+        "whereUsed": "Recommendation engines (Collaborative Filtering preference similarity), Kendall tau distance calculation.",
+        "whyOptimal": "Reduces O(N²) pair comparison to O(N log N) using divide-and-conquer merge sort."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def count_inversions(arr):\n    def merge_sort(nums):\n        if len(nums) <= 1:\n            return nums, 0\n        mid = len(nums) // 2\n        left, count_l = merge_sort(nums[:mid])\n        right, count_r = merge_sort(nums[mid:])\n        merged, count_m = merge(left, right)\n        return merged, count_l + count_r + count_m\n\n    def merge(left, right):\n        res = []\n        i = j = count = 0\n        while i < len(left) and j < len(right):\n            if left[i] <= right[j]:\n                res.append(left[i]); i += 1\n            else:\n                res.append(right[j]); j += 1\n                count += (len(left) - i)\n        res.extend(left[i:]); res.extend(right[j:])\n        return res, count\n\n    _, total = merge_sort(arr)\n    return total"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "Striver A2Z - Count Inversions in Array",
+          "url": "https://takeuforward.org/data-structure/count-inversions-in-an-array/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "pascals-triangle-algorithm",
+      "title": "Pascal's Triangle Algorithm (Combinatorics & Row Generation)",
+      "categoryId": "arrays_math",
+      "categoryTitle": "Arrays & Math",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N²)",
+      "spaceComplexity": "O(N²)",
+      "summary": "Generates Pascal's triangle where each element is the sum of two numbers directly above it.",
+      "explanation": [
+        "Element at row `r` and column `c` (0-indexed) equals combination `nCr(r, c) = r! / (c! * (r - c)!)`.",
+        "To generate Row `R` in O(R) time: `val = val * (r - i) / i` iteratively.",
+        "To generate full Triangle up to N rows: Maintain 2D array where `row[i][j] = row[i-1][j-1] + row[i-1][j]` with edges = 1."
+      ],
+      "exampleTrace": {
+        "input": "rowIndex = 4 (0-indexed 5th row)",
+        "output": "[1, 4, 6, 4, 1]",
+        "traceSteps": [
+          "Initialize row[0] = 1, current_val = 1.",
+          "Element at col 1: current_val = 1 * (4 - 0) / (0 + 1) = 4.",
+          "Element at col 2: current_val = 4 * (4 - 1) / (1 + 1) = 6.",
+          "Element at col 3: current_val = 6 * (4 - 2) / (2 + 1) = 4.",
+          "Element at col 4: current_val = 4 * (4 - 3) / (3 + 1) = 1.",
+          "Generated Row 4 in O(N) time & O(1) auxiliary space: [1, 4, 6, 4, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes binomial coefficients, combinations `nCr`, and probability distribution matrices.",
+        "whenToUse": "When finding combination values, grid unique paths, or polynomial expansion coefficients.",
+        "whereUsed": "Binomial distribution calculations, Bezier curve rendering in computer graphics, combinatorics.",
+        "whyOptimal": "Generates Nth row in O(N) time without factorial integer overflow."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def generate_pascal(numRows):\n    triangle = []\n    for i in range(numRows):\n        row = [1] * (i + 1)\n        for j in range(1, i):\n            row[j] = triangle[i-1][j-1] + triangle[i-1][j]\n        triangle.append(row)\n    return triangle"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 118 - Pascal's Triangle",
+          "url": "https://leetcode.com/problems/pascals-triangle/",
+          "difficulty": "Easy"
+        }
+      ]
+    }
+  ]
+}

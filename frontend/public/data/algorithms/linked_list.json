@@ -1,0 +1,984 @@
+{
+  "id": "linked_list",
+  "category": {
+    "id": "linked_list",
+    "title": "Linked Lists & Memory Pointers",
+    "icon": "FolderTree",
+    "description": "Singly, doubly, circular linked lists, pointer reversal, and cycle detection."
+  },
+  "totalAlgorithms": 16,
+  "algorithms": [
+    {
+      "id": "floyds-cycle-detection",
+      "title": "Floyd's Cycle Detection (Tortoise and Hare Algorithm)",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Detects cycles in a linked list or sequence using two pointers moving at different speeds (slow = 1 step, fast = 2 steps).",
+      "explanation": [
+        "Initialize `slow` and `fast` pointers at head.",
+        "Move `slow` by 1 step (`slow = slow.next`) and `fast` by 2 steps (`fast = fast.next.next`).",
+        "If there is a cycle, `slow` and `fast` will eventually meet at the same node.",
+        "If `fast` reaches `null`, the list has no cycle.",
+        "To find cycle entry point: Reset `slow = head`. Move both `slow` and `fast` by 1 step. Their intersection point is the cycle start node."
+      ],
+      "exampleTrace": {
+        "input": "Linked List: 3 -> 2 -> 0 -> -4 -> (points back to 2)",
+        "output": "Cycle Detected! Entry node = 2",
+        "traceSteps": [
+          "Phase 1 (Detection): slow moves 1 step, fast moves 2 steps.",
+          "Step 1: slow=2, fast=0",
+          "Step 2: slow=0, fast=2",
+          "Step 3: slow=-4, fast=-4 -> Collision at node -4! Cycle exists.",
+          "Phase 2 (Find Entry): Reset slow to head (3), keep fast at collision (-4). Move both 1 step at a time.",
+          "Step 1: slow=2, fast=2 -> Met at node 2!",
+          "Cycle starting node identified as node 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Detects presence of cycles and entry point in linked lists or pseudo-random generator sequences.",
+        "whenToUse": "When asked if a linked list contains a loop or duplicate number in immutable array range [1, N].",
+        "whereUsed": "Memory leak detection in circular references, deadlock detection in OS resource graphs, Pollard rho factorization.",
+        "whyOptimal": "Uses zero auxiliary memory O(1) space compared to Hash Set lookup which takes O(N) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def hasCycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 141 - Linked List Cycle",
+          "url": "https://leetcode.com/problems/linked-list-cycle/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 142 - Linked List Cycle II",
+          "url": "https://leetcode.com/problems/linked-list-cycle-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "linked-list-topdown-vs-bottomup",
+      "title": "Linked List Paradigms: Iterative Pointer Rewiring vs Recursive Top-Down",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1) Iterative / O(N) Recursive",
+      "summary": "Compares Iterative Pointer Manipulation (Bottom-Up forward traversal O(1) space) against Recursive Stack Rewiring (Top-Down unwinding).",
+      "explanation": [
+        "Iterative Approach (Bottom-Up): Maintain pointers `prev`, `curr`, `next`. Traverse forward in O(1) space, updating `curr.next = prev` step by step.",
+        "Recursive Approach (Top-Down): Recurse to the last node first (`new_head = reverse(head.next)`).",
+        "During stack unwinding: set `head.next.next = head` and `head.next = None`.",
+        "Dummy Node Technique: Initialize `dummy = ListNode(0)` to handle edge cases where head node changes (e.g. deletion, insertion, merging)."
+      ],
+      "exampleTrace": {
+        "input": "List: 1 -> 2 -> 3 -> None",
+        "output": "Reversed List: 3 -> 2 -> 1 -> None",
+        "traceSteps": [
+          "Iterative: prev = None, curr = 1. next_node = 2. Set 1.next = None. prev = 1, curr = 2.",
+          "Step 2: curr = 2. next_node = 3. Set 2.next = 1. prev = 2, curr = 3.",
+          "Step 3: curr = 3. next_node = None. Set 3.next = 2. prev = 3, curr = None.",
+          "curr is None -> Loop ends. New head = prev = 3.",
+          "Recursive unwinding: Recurse 1->2->3. Base case at 3 returns head 3. Unwind at 2: 2.next.next=2 (3->2). Unwind at 1: 1.next.next=1 (2->1).",
+          "Both paradigms result in reversed list: 3 -> 2 -> 1 -> None."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Mastery of pointer manipulation and recursive stack unwinding in sequential nodes.",
+        "whenToUse": "Iterative for O(1) memory efficiency; Recursive for clean subproblem formulation.",
+        "whereUsed": "LRU Cache doubly linked lists, OS kernel thread list scheduling, undo history buffers.",
+        "whyOptimal": "O(N) linear time pass over all nodes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "# Iterative O(1) Space\ndef reverse_iterative(head):\n    prev, curr = None, head\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n    return prev\n\n# Recursive Top-Down\ndef reverse_recursive(head):\n    if not head or not head.next:\n        return head\n    new_head = reverse_recursive(head.next)\n    head.next.next = head\n    head.next = None\n    return new_head"
+        },
+        {
+          "language": "cpp",
+          "code": "struct ListNode { int val; ListNode* next; };\n\n// Iterative O(1) Space\nListNode* reverseListIterative(ListNode* head) {\n    ListNode *prev = nullptr, *curr = head;\n    while (curr) {\n        ListNode* nxt = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    return prev;\n}\n\n// Recursive Top-Down\nListNode* reverseListRecursive(ListNode* head) {\n    if (!head || !head->next) return head;\n    ListNode* newHead = reverseListRecursive(head->next);\n    head->next->next = head;\n    head->next = nullptr;\n    return newHead;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class LinkedListParadigms {\n    static class ListNode { int val; ListNode next; }\n    \n    // Iterative\n    public ListNode reverseIterative(ListNode head) {\n        ListNode prev = null, curr = head;\n        while (curr != null) {\n            ListNode nxt = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = nxt;\n        }\n        return prev;\n    }\n    \n    // Recursive\n    public ListNode reverseRecursive(ListNode head) {\n        if (head == null || head.next == null) return head;\n        ListNode newHead = reverseRecursive(head.next);\n        head.next.next = head;\n        head.next = null;\n        return newHead;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "// Iterative\nfunction reverseIterative(head) {\n  let prev = null, curr = head;\n  while (curr) {\n    const nxt = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = nxt;\n  }\n  return prev;\n}\n\n// Recursive\nfunction reverseRecursive(head) {\n  if (!head || !head.next) return head;\n  const newHead = reverseRecursive(head.next);\n  head.next.next = head;\n  head.next = null;\n  return newHead;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 206 - Reverse Linked List",
+          "url": "https://leetcode.com/problems/reverse-linked-list/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "merge-two-sorted-linked-lists",
+      "title": "Merge Two Sorted Linked Lists (Iterative & Recursive)",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(M + N)",
+      "spaceComplexity": "O(1) Iterative",
+      "summary": "Combines two sorted linked lists into a single sorted list by updating pointers in O(M+N) time.",
+      "explanation": [
+        "Dummy Node Pattern: Create `dummy = ListNode(-1)` and `tail = dummy`.",
+        "Compare `l1.val` and `l2.val`.",
+        "If `l1.val <= l2.val`: attach `tail.next = l1` and advance `l1 = l1.next`.",
+        "Else: attach `tail.next = l2` and advance `l2 = l2.next`.",
+        "Advance `tail = tail.next`.",
+        "Attach remaining non-empty list (`tail.next = l1 if l1 else l2`) and return `dummy.next`."
+      ],
+      "exampleTrace": {
+        "input": "l1 = 1 -> 2 -> 4, l2 = 1 -> 3 -> 4",
+        "output": "1 -> 1 -> 2 -> 3 -> 4 -> 4",
+        "traceSteps": [
+          "dummy = -1, tail = dummy.",
+          "Compare 1 vs 1: attach l1 (1), l1 moves to 2. List = -1 -> 1.",
+          "Compare 2 vs 1: attach l2 (1), l2 moves to 3. List = -1 -> 1 -> 1.",
+          "Compare 2 vs 3: attach l1 (2), l1 moves to 4. List = -1 -> 1 -> 1 -> 2.",
+          "Compare 4 vs 3: attach l2 (3), l2 moves to 4. List = -1 -> 1 -> 1 -> 2 -> 3.",
+          "Compare 4 vs 4: attach l1 (4), l1 moves to None.",
+          "l1 empty -> attach remaining l2 (4).",
+          "Merged Sorted List: 1 -> 1 -> 2 -> 3 -> 4 -> 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines 2 sorted linked sequences without instantiating new node memory.",
+        "whenToUse": "When performing Merge Sort on linked lists or merging sorted data streams.",
+        "whereUsed": "Merge Sort for linked lists, database external sort-merge join step.",
+        "whyOptimal": "O(M + N) time with zero extra node memory allocated."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def mergeTwoLists(l1, l2):\n    dummy = tail = ListNode(-1)\n    while l1 and l2:\n        if l1.val <= l2.val:\n            tail.next = l1\n            l1 = l1.next\n        else:\n            tail.next = l2\n            l2 = l2.next\n        tail = tail.next\n    tail.next = l1 if l1 else l2\n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "struct ListNode { int val; ListNode* next; ListNode(int x): val(x), next(nullptr){} };\n\nListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {\n    ListNode dummy(-1);\n    ListNode* tail = &dummy;\n    while (l1 && l2) {\n        if (l1->val <= l2->val) {\n            tail->next = l1;\n            l1 = l1->next;\n        } else {\n            tail->next = l2;\n            l2 = l2->next;\n        }\n        tail = tail->next;\n    }\n    tail->next = l1 ? l1 : l2;\n    return dummy.next;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MergeSortedLists {\n    static class ListNode { int val; ListNode next; ListNode(int v){val=v;} }\n    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode(-1);\n        ListNode tail = dummy;\n        while (l1 != null && l2 != null) {\n            if (l1.val <= l2.val) {\n                tail.next = l1;\n                l1 = l1.next;\n            } else {\n                tail.next = l2;\n                l2 = l2.next;\n            }\n            tail = tail.next;\n        }\n        tail.next = (l1 != null) ? l1 : l2;\n        return dummy.next;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function mergeTwoLists(l1, l2) {\n  const dummy = { val: -1, next: null };\n  let tail = dummy;\n  while (l1 && l2) {\n    if (l1.val <= l2.val) {\n      tail.next = l1;\n      l1 = l1.next;\n    } else {\n      tail.next = l2;\n      l2 = l2.next;\n    }\n    tail = tail.next;\n  }\n  tail.next = l1 || l2;\n  return dummy.next;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 21 - Merge Two Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 23 - Merge k Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "fast-slow-pointer-middle-find",
+      "title": "Fast & Slow Pointer Pattern (Middle Finding & Cycle)",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Uses two pointers moving at different speeds (slow by 1, fast by 2) to find the middle node or detect cycles in single pass.",
+      "explanation": [
+        "Initialize `slow = head` and `fast = head`.",
+        "While `fast` is not None and `fast.next` is not None:",
+        "  - Advance `slow = slow.next` (1 step).",
+        "  - Advance `fast = fast.next.next` (2 steps).",
+        "When `fast` reaches the end, `slow` will be exactly at the middle node of the list!",
+        "For even-length lists: `slow` rests at second middle node."
+      ],
+      "exampleTrace": {
+        "input": "List: 1 -> 2 -> 3 -> 4 -> 5 -> None",
+        "output": "Middle Node = 3",
+        "traceSteps": [
+          "Start: slow = 1, fast = 1.",
+          "Step 1: slow = 2, fast = 3.",
+          "Step 2: slow = 3, fast = 5.",
+          "Step 3: fast.next is None -> Loop terminates.",
+          "slow rests at node 3.",
+          "Middle Node = 3 found in a single pass O(N) time & O(1) space."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Locates the middle of a linked list or detects cycles in single-pass O(1) space.",
+        "whenToUse": "When splitting a linked list into two equal halves (e.g. Merge Sort, Palindrome check).",
+        "whereUsed": "Linked list merge sort partition, palindrome verification, cycle start detection.",
+        "whyOptimal": "O(N) single-pass with zero extra space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def middleNode(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow"
+        },
+        {
+          "language": "cpp",
+          "code": "struct ListNode { int val; ListNode* next; };\n\nListNode* middleNode(ListNode* head) {\n    ListNode *slow = head, *fast = head;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    return slow;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MiddleNode {\n    static class ListNode { int val; ListNode next; }\n    public ListNode middleNode(ListNode head) {\n        ListNode slow = head, fast = head;\n        while (fast != null && fast.next != null) {\n            slow = slow.next;\n            fast = fast.next.next;\n        }\n        return slow;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function middleNode(head) {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n  }\n  return slow;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 876 - Middle of the Linked List",
+          "url": "https://leetcode.com/problems/middle-of-the-linked-list/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 141 - Linked List Cycle",
+          "url": "https://leetcode.com/problems/linked-list-cycle/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "remove-nth-node-from-end",
+      "title": "Remove N-th Node From End of List (Two-Pointer Gap)",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Removes the N-th node from the end of a linked list in a single pass using a dummy node and a fixed-gap two-pointer technique.",
+      "explanation": [
+        "Initialize `dummy` node pointing to `head` (handles head deletion edge case).",
+        "Set `first = dummy` and `second = dummy`.",
+        "Advance `first` pointer by `n + 1` steps to create a fixed gap of size `n` between `first` and `second`.",
+        "Move both `first` and `second` forward together until `first` reaches `None`.",
+        "Now `second` points to the node BEFORE the target node!",
+        "Perform deletion: `second.next = second.next.next` and return `dummy.next`."
+      ],
+      "exampleTrace": {
+        "input": "List: 1 -> 2 -> 3 -> 4 -> 5, n = 2",
+        "output": "1 -> 2 -> 3 -> 5 (node 4 removed)",
+        "traceSteps": [
+          "dummy -> 1 -> 2 -> 3 -> 4 -> 5. first = dummy, second = dummy.",
+          "Advance first by n+1 (3 steps): first = node 3.",
+          "Move first and second together:",
+          "Step 1: first = node 4, second = node 1.",
+          "Step 2: first = node 5, second = node 2.",
+          "Step 3: first = None, second = node 3.",
+          "first is None -> second rests at node 3 (node before 4).",
+          "Delete node 4: node 3.next = node 5.",
+          "Result List: 1 -> 2 -> 3 -> 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Deletes the N-th node from the end in single-pass O(1) auxiliary space.",
+        "whenToUse": "When finding or modifying nodes relative to the end of a singly-linked list without storing length.",
+        "whereUsed": "Buffer eviction algorithms, memory garbage collection, LRU list node removal.",
+        "whyOptimal": "O(N) single-pass traversal."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def removeNthFromEnd(head, n):\n    dummy = ListNode(0, head)\n    first = second = dummy\n    for _ in range(n + 1):\n        first = first.next\n    while first:\n        first = first.next\n        second = second.next\n    second.next = second.next.next\n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "struct ListNode { int val; ListNode* next; ListNode(int x, ListNode* n): val(x), next(n){} };\n\nListNode* removeNthFromEnd(ListNode* head, int n) {\n    ListNode dummy(0, head);\n    ListNode *first = &dummy, *second = &dummy;\n    for (int i = 0; i <= n; i++) {\n        first = first->next;\n    }\n    while (first) {\n        first = first->next;\n        second = second->next;\n    }\n    second->next = second->next->next;\n    return dummy.next;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class RemoveNthNode {\n    static class ListNode { int val; ListNode next; ListNode(int v, ListNode n){val=v;next=n;} }\n    public ListNode removeNthFromEnd(ListNode head, int n) {\n        ListNode dummy = new ListNode(0, head);\n        ListNode first = dummy, second = dummy;\n        for (int i = 0; i <= n; i++) {\n            first = first.next;\n        }\n        while (first != null) {\n            first = first.next;\n            second = second.next;\n        }\n        second.next = second.next.next;\n        return dummy.next;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function removeNthFromEnd(head, n) {\n  const dummy = { val: 0, next: head };\n  let first = dummy, second = dummy;\n  for (let i = 0; i <= n; i++) {\n    first = first.next;\n  }\n  while (first) {\n    first = first.next;\n    second = second.next;\n  }\n  second.next = second.next.next;\n  return dummy.next;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 19 - Remove Nth Node From End of List",
+          "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "merge-sort-linked-list-topdown",
+      "title": "Merge Sort on Linked List (Top-Down Divide & Conquer O(N log N))",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(log N)",
+      "summary": "Sorts a linked list in O(N log N) time by finding the middle, splitting into two halves, recursively sorting both, and merging.",
+      "explanation": [
+        "Base Case: If `head` is None or `head.next` is None, return `head`.",
+        "Divide: Find middle node using Fast & Slow pointers. Split list into `left` half and `right` half (`mid.next = None`).",
+        "Conquer: Recursively call `sortList(left)` and `sortList(right)`.",
+        "Combine: Merge the two sorted halves using `mergeTwoLists(left, right)` and return merged head."
+      ],
+      "exampleTrace": {
+        "input": "List: 4 -> 2 -> 1 -> 3",
+        "output": "Sorted List: 1 -> 2 -> 3 -> 4",
+        "traceSteps": [
+          "Split 4->2->1->3 into left [4, 2] and right [1, 3].",
+          "Recursively sort left [4, 2]: split to [4] and [2] -> Merge returns [2, 4].",
+          "Recursively sort right [1, 3]: split to [1] and [3] -> Merge returns [1, 3].",
+          "Merge sorted halves [2, 4] and [1, 3]:",
+          "Compare 2 vs 1 -> attach 1.",
+          "Compare 2 vs 3 -> attach 2.",
+          "Compare 4 vs 3 -> attach 3.",
+          "Attach 4.",
+          "Final Sorted Linked List: 1 -> 2 -> 3 -> 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts a linked list in optimal O(N log N) time without needing random access array indices.",
+        "whenToUse": "When sorting linked lists efficiently (preferred over Quick Sort due to no random access overhead).",
+        "whereUsed": "C++ std::list::sort(), Java LinkedList.sort().",
+        "whyOptimal": "O(N log N) guaranteed worst-case sorting time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sortList(head):\n    if not head or not head.next:\n        return head\n    slow, fast = head, head.next\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    mid = slow.next\n    slow.next = None\n    left = sortList(head)\n    right = sortList(mid)\n    return merge(left, right)\n\ndef merge(l1, l2):\n    dummy = tail = ListNode(-1)\n    while l1 and l2:\n        if l1.val <= l2.val:\n            tail.next = l1; l1 = l1.next\n        else:\n            tail.next = l2; l2 = l2.next\n        tail = tail.next\n    tail.next = l1 or l2\n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "struct ListNode { int val; ListNode* next; };\n\nListNode* merge(ListNode* l1, ListNode* l2) {\n    ListNode dummy(-1);\n    ListNode* tail = &dummy;\n    while (l1 && l2) {\n        if (l1->val <= l2->val) { tail->next = l1; l1 = l1->next; }\n        else { tail->next = l2; l2 = l2->next; }\n        tail = tail->next;\n    }\n    tail->next = l1 ? l1 : l2;\n    return dummy.next;\n}\n\nListNode* sortList(ListNode* head) {\n    if (!head || !head->next) return head;\n    ListNode *slow = head, *fast = head->next;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    ListNode* mid = slow->next;\n    slow->next = nullptr;\n    return merge(sortList(head), sortList(mid));\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MergeSortLL {\n    static class ListNode { int val; ListNode next; ListNode(int v){val=v;} }\n    public ListNode sortList(ListNode head) {\n        if (head == null || head.next == null) return head;\n        ListNode slow = head, fast = head.next;\n        while (fast != null && fast.next != null) {\n            slow = slow.next;\n            fast = fast.next.next;\n        }\n        ListNode mid = slow.next;\n        slow.next = null;\n        return merge(sortList(head), sortList(mid));\n    }\n    private ListNode merge(ListNode l1, ListNode l2) {\n        ListNode dummy = new ListNode(-1);\n        ListNode tail = dummy;\n        while (l1 != null && l2 != null) {\n            if (l1.val <= l2.val) { tail.next = l1; l1 = l1.next; }\n            else { tail.next = l2; l2 = l2.next; }\n            tail = tail.next;\n        }\n        tail.next = (l1 != null) ? l1 : l2;\n        return dummy.next;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function sortList(head) {\n  if (!head || !head.next) return head;\n  let slow = head, fast = head.next;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n  }\n  const mid = slow.next;\n  slow.next = null;\n  return merge(sortList(head), sortList(mid));\n}\n\nfunction merge(l1, l2) {\n  const dummy = { val: -1, next: null };\n  let tail = dummy;\n  while (l1 && l2) {\n    if (l1.val <= l2.val) { tail.next = l1; l1 = l1.next; }\n    else { tail.next = l2; l2 = l2.next; }\n    tail = tail.next;\n  }\n  tail.next = l1 || l2;\n  return dummy.next;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 148 - Sort List",
+          "url": "https://leetcode.com/problems/sort-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-singly-linked-list",
+      "title": "Singly Linked List Foundations & Operations",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) Head Insert/Delete, O(N) Traversal/Search",
+      "spaceComplexity": "O(N) for N nodes",
+      "summary": "Linear node structure where each node holds data and a single forward pointer ('next') to the succeeding node.",
+      "explanation": [
+        "A Singly Linked List consists of dynamically allocated nodes connected sequentially via 'next' pointers.",
+        "Head pointer stores the start of the list. Last node points to None/null.",
+        "Insertion/Deletion at Head takes O(1) time. Searching or accessing by index K takes O(K) time.",
+        "Reversing a Singly Linked List requires updating 'next' pointers in a single pass using prev, curr, and nxt pointers."
+      ],
+      "exampleTrace": {
+        "input": "Insert 10, 20, 30 at head -> Reverse List",
+        "output": "10 -> 20 -> 30 -> None",
+        "traceSteps": [
+          "Insert 10 at head: Head -> [10]",
+          "Insert 20 at head: Head -> [20] -> [10]",
+          "Insert 30 at head: Head -> [30] -> [20] -> [10]",
+          "Reverse List: Iterate updating pointers: prev=None, curr=30.",
+          "Step 1: Point 30 to None.",
+          "Step 2: Point 20 to 30.",
+          "Step 3: Point 10 to 20.",
+          "Final Head points to 10: Head -> [10] -> [20] -> [30] -> None"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Provides dynamic size allocation without requiring contiguous physical memory allocation.",
+        "whenToUse": "When frequent insertions and deletions at the head are needed without array resizing penalties.",
+        "whereUsed": "Stack data structure implementation, hash table chaining for collision resolution, OS memory allocation blocks.",
+        "whyOptimal": "Avoids O(N) array element shifts during insertions and deletions."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass SinglyLinkedList:\n    def __init__(self):\n        self.head = None\n\n    def insert_head(self, val):\n        new_node = Node(val, self.head)\n        self.head = new_node\n\n    def delete_head(self):\n        if self.head:\n            self.head = self.head.next\n\n    def reverse(self):\n        prev, curr = None, self.head\n        while curr:\n            nxt = curr.next\n            curr.next = prev\n            prev = curr\n            curr = nxt\n        self.head = prev"
+        },
+        {
+          "language": "cpp",
+          "code": "struct Node {\n    int val;\n    Node* next;\n    Node(int v) : val(v), next(nullptr) {}\n};\n\nclass SinglyLinkedList {\npublic:\n    Node* head = nullptr;\n\n    void insertHead(int val) {\n        Node* newNode = new Node(val);\n        newNode->next = head;\n        head = newNode;\n    }\n\n    void deleteHead() {\n        if (!head) return;\n        Node* temp = head;\n        head = head->next;\n        delete temp;\n    }\n\n    void reverse() {\n        Node *prev = nullptr, *curr = head, *nxt = nullptr;\n        while (curr) {\n            nxt = curr->next;\n            curr->next = prev;\n            prev = curr;\n            curr = nxt;\n        }\n        head = prev;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    int val;\n    Node next;\n    Node(int v) { this.val = v; }\n}\n\npublic class SinglyLinkedList {\n    Node head = null;\n\n    public void insertHead(int val) {\n        Node newNode = new Node(val);\n        newNode.next = head;\n        head = newNode;\n    }\n\n    public void deleteHead() {\n        if (head != null) {\n            head = head.next;\n        }\n    }\n\n    public void reverse() {\n        Node prev = null, curr = head;\n        while (curr != null) {\n            Node nxt = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = nxt;\n        }\n        head = prev;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class Node {\n    constructor(val = 0, next = null) {\n        this.val = val;\n        this.next = next;\n    }\n}\n\nclass SinglyLinkedList {\n    constructor() {\n        this.head = null;\n    }\n\n    insertHead(val) {\n        this.head = new Node(val, this.head);\n    }\n\n    deleteHead() {\n        if (this.head) this.head = this.head.next;\n    }\n\n    reverse() {\n        let prev = null, curr = this.head;\n        while (curr) {\n            let nxt = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = nxt;\n        }\n        this.head = prev;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 206 - Reverse Linked List",
+          "url": "https://leetcode.com/problems/reverse-linked-list/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 707 - Design Linked List",
+          "url": "https://leetcode.com/problems/design-linked-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-doubly-linked-list",
+      "title": "Doubly Linked List Foundations & Operations",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) Insertion & Deletion with direct node reference",
+      "spaceComplexity": "O(N) for N nodes",
+      "summary": "Bi-directional node structure where each node holds data, a forward pointer ('next'), and a backward pointer ('prev').",
+      "explanation": [
+        "A Doubly Linked List allows two-way traversal (forward and backward).",
+        "Each node has both `prev` and `next` pointers. Head's `prev` is None, and Tail's `next` is None.",
+        "Deletion of a specific node given its pointer takes O(1) time because `node.prev.next = node.next` and `node.next.prev = node.prev` directly access neighbors.",
+        "Reversing a Doubly Linked List is simplified by swapping `prev` and `next` pointers for every node."
+      ],
+      "exampleTrace": {
+        "input": "Insert 10, 20 into Doubly Linked List -> Delete node 10",
+        "output": "Head -> [20] <-> [10] -> Null",
+        "traceSteps": [
+          "Insert 10: Head -> [10] (prev=Null, next=Null)",
+          "Insert 20: Head -> [20] <-> [10] (20.next = 10, 10.prev = 20)",
+          "Delete Node 10: 20.next updated to Null. Node 10 memory freed.",
+          "Final List: Head -> [20] -> Null"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Allows O(1) deletion of given nodes and bidirectional linear traversal.",
+        "whenToUse": "When backward traversal or fast removal of nodes from middle/tail is required.",
+        "whereUsed": "LRU Cache (HashMap + Doubly Linked List), Browser history back/forward navigation, Music player queues.",
+        "whyOptimal": "Provides constant time O(1) removal of any node given its reference."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, val=0):\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass DoublyLinkedList:\n    def __init__(self):\n        self.head = None\n        self.tail = None\n\n    def insert_head(self, val):\n        new_node = Node(val)\n        if not self.head:\n            self.head = self.tail = new_node\n        else:\n            new_node.next = self.head\n            self.head.prev = new_node\n            self.head = new_node\n\n    def delete_node(self, node):\n        if not node: return\n        if node.prev: node.prev.next = node.next\n        else: self.head = node.next\n        if node.next: node.next.prev = node.prev\n        else: self.tail = node.prev\n\n    def reverse(self):\n        curr = self.head\n        self.tail = self.head\n        while curr:\n            curr.prev, curr.next = curr.next, curr.prev\n            self.head = curr\n            curr = curr.prev"
+        },
+        {
+          "language": "cpp",
+          "code": "struct Node {\n    int val;\n    Node* prev;\n    Node* next;\n    Node(int v) : val(v), prev(nullptr), next(nullptr) {}\n};\n\nclass DoublyLinkedList {\npublic:\n    Node *head = nullptr, *tail = nullptr;\n\n    void insertHead(int val) {\n        Node* newNode = new Node(val);\n        if (!head) {\n            head = tail = newNode;\n        } else {\n            newNode->next = head;\n            head->prev = newNode;\n            head = newNode;\n        }\n    }\n\n    void deleteNode(Node* node) {\n        if (!node) return;\n        if (node->prev) node->prev->next = node->next;\n        else head = node->next;\n        if (node->next) node->next->prev = node->prev;\n        else tail = node->prev;\n        delete node;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    int val;\n    Node prev, next;\n    Node(int v) { this.val = v; }\n}\n\npublic class DoublyLinkedList {\n    Node head = null, tail = null;\n\n    public void insertHead(int val) {\n        Node newNode = new Node(val);\n        if (head == null) {\n            head = tail = newNode;\n        } else {\n            newNode.next = head;\n            head.prev = newNode;\n            head = newNode;\n        }\n    }\n\n    public void deleteNode(Node node) {\n        if (node == null) return;\n        if (node.prev != null) node.prev.next = node.next;\n        else head = node.next;\n        if (node.next != null) node.next.prev = node.prev;\n        else tail = node.prev;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class Node {\n    constructor(val = 0) {\n        this.val = val;\n        this.prev = null;\n        this.next = null;\n    }\n}\n\nclass DoublyLinkedList {\n    constructor() {\n        this.head = null;\n        this.tail = null;\n    }\n\n    insertHead(val) {\n        const newNode = new Node(val);\n        if (!this.head) {\n            this.head = this.tail = newNode;\n        } else {\n            newNode.next = this.head;\n            this.head.prev = newNode;\n            this.head = newNode;\n        }\n    }\n\n    deleteNode(node) {\n        if (!node) return;\n        if (node.prev) node.prev.next = node.next;\n        else this.head = node.next;\n        if (node.next) node.next.prev = node.prev;\n        else this.tail = node.prev;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 146 - LRU Cache",
+          "url": "https://leetcode.com/problems/lru-cache/",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "LeetCode 430 - Flatten a Multilevel Doubly Linked List",
+          "url": "https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-circular-singly-linked-list",
+      "title": "Circular Singly Linked List",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) Insert at Head/Tail with Tail pointer, O(N) Traversal",
+      "spaceComplexity": "O(N) for N nodes",
+      "summary": "Singly Linked List variant where the last node ('tail') points back to the first node ('head'), forming a closed loop.",
+      "explanation": [
+        "In a Circular Singly Linked List, there is no Null termination. The last node's `next` pointer links back to `head`.",
+        "Maintaining a `tail` pointer allows O(1) insertions at both head (`tail.next`) and tail.",
+        "Traversal loops continuously until `curr == head` again.",
+        "Useful for round-robin scheduling algorithms where process loops continuously."
+      ],
+      "exampleTrace": {
+        "input": "Insert 10, 20 in Circular Singly Linked List",
+        "output": "10 -> 20 -> (Back to 10)",
+        "traceSteps": [
+          "Insert 10: tail = [10], 10.next = 10",
+          "Insert 20 at tail: 20 added after 10. tail = [20]. 20.next = 10.",
+          "Traverse ring: 10 -> 20 -> 10 (Loop complete)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Eliminates null termination, allowing continuous cyclical traversal.",
+        "whenToUse": "When resources or tasks need to be accessed continuously in a circular loop.",
+        "whereUsed": "Operating System Round-Robin CPU scheduling, multiplayer board games (turn order), digital media playlists.",
+        "whyOptimal": "Seamless O(1) wrap-around from last element to first element without index reset code."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, val=0):\n        self.val = val\n        self.next = None\n\nclass CircularSinglyLinkedList:\n    def __init__(self):\n        self.tail = None\n\n    def insert_head(self, val):\n        new_node = Node(val)\n        if not self.tail:\n            self.tail = new_node\n            new_node.next = new_node\n        else:\n            new_node.next = self.tail.next\n            self.tail.next = new_node\n\n    def insert_tail(self, val):\n        self.insert_head(val)\n        self.tail = self.tail.next\n\n    def traverse(self):\n        if not self.tail: return []\n        res = []\n        curr = self.tail.next  # Start at Head\n        while True:\n            res.append(curr.val)\n            curr = curr.next\n            if curr == self.tail.next: break\n        return res"
+        },
+        {
+          "language": "cpp",
+          "code": "struct Node {\n    int val;\n    Node* next;\n    Node(int v) : val(v), next(nullptr) {}\n};\n\nclass CircularSinglyLinkedList {\npublic:\n    Node* tail = nullptr;\n\n    void insertHead(int val) {\n        Node* newNode = new Node(val);\n        if (!tail) {\n            tail = newNode;\n            newNode->next = newNode;\n        } else {\n            newNode->next = tail->next;\n            tail->next = newNode;\n        }\n    }\n\n    void insertTail(int val) {\n        insertHead(val);\n        tail = tail->next;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    int val;\n    Node next;\n    Node(int v) { this.val = v; }\n}\n\npublic class CircularSinglyLinkedList {\n    Node tail = null;\n\n    public void insertHead(int val) {\n        Node newNode = new Node(val);\n        if (tail == null) {\n            tail = newNode;\n            newNode.next = newNode;\n        } else {\n            newNode.next = tail.next;\n            tail.next = newNode;\n        }\n    }\n\n    public void insertTail(int val) {\n        insertHead(val);\n        tail = tail.next;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class Node {\n    constructor(val = 0) {\n        this.val = val;\n        this.next = null;\n    }\n}\n\nclass CircularSinglyLinkedList {\n    constructor() {\n        this.tail = null;\n    }\n\n    insertHead(val) {\n        const newNode = new Node(val);\n        if (!this.tail) {\n            this.tail = newNode;\n            newNode.next = newNode;\n        } else {\n            newNode.next = this.tail.next;\n            this.tail.next = newNode;\n        }\n    }\n\n    insertTail(val) {\n        this.insertHead(val);\n        this.tail = this.tail.next;\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 141 - Linked List Cycle",
+          "url": "https://leetcode.com/problems/linked-list-cycle/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 61 - Rotate List",
+          "url": "https://leetcode.com/problems/rotate-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-circular-doubly-linked-list",
+      "title": "Circular Doubly Linked List",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(1) Insertion/Deletion at Head & Tail",
+      "spaceComplexity": "O(N) for N nodes",
+      "summary": "Doubly Linked List variant where Head's `prev` points to Tail, and Tail's `next` points to Head, enabling instantaneous bidirectional loop navigation.",
+      "explanation": [
+        "Combines advantages of Doubly Linked List and Circular Linked List.",
+        "`head.prev` directly gives `tail`, and `tail.next` directly gives `head` in O(1) time without keeping a separate tail variable.",
+        "Node insertion and deletion at both ends involve updating 4 pointer references (`prev` & `next` for adjacent nodes).",
+        "Extremely powerful structure for deque implementations and Fibonacci Heaps."
+      ],
+      "exampleTrace": {
+        "input": "Insert 10, 20 into Circular Doubly Linked List",
+        "output": "[20] <-> [10] <-> (Circular Loop)",
+        "traceSteps": [
+          "Insert 10: head = 10, 10.prev = 10, 10.next = 10",
+          "Insert 20: 20.next = 10, 20.prev = 10, 10.next = 20, 10.prev = 20. head = 20.",
+          "Circular Verification: head.prev = 10 (Tail), tail.next = 20 (Head)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Enables O(1) bidirectional access to both ends of a circular list.",
+        "whenToUse": "When both forward/backward continuous looping and fast O(1) head/tail modifications are needed.",
+        "whereUsed": "Fibonacci Heap data structure, Advanced operating system kernel task schedulers, Undo-Redo circular ring buffers.",
+        "whyOptimal": "Provides constant time O(1) access to both ends without additional pointer overhead."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, val=0):\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass CircularDoublyLinkedList:\n    def __init__(self):\n        self.head = None\n\n    def insert_head(self, val):\n        new_node = Node(val)\n        if not self.head:\n            new_node.next = new_node.prev = new_node\n            self.head = new_node\n        else:\n            tail = self.head.prev\n            new_node.next = self.head\n            new_node.prev = tail\n            self.head.prev = new_node\n            tail.next = new_node\n            self.head = new_node\n\n    def delete_head(self):\n        if not self.head: return\n        if self.head.next == self.head:\n            self.head = None\n        else:\n            tail = self.head.prev\n            self.head = self.head.next\n            self.head.prev = tail\n            tail.next = self.head"
+        },
+        {
+          "language": "cpp",
+          "code": "struct Node {\n    int val;\n    Node* prev;\n    Node* next;\n    Node(int v) : val(v), prev(nullptr), next(nullptr) {}\n};\n\nclass CircularDoublyLinkedList {\npublic:\n    Node* head = nullptr;\n\n    void insertHead(int val) {\n        Node* newNode = new Node(val);\n        if (!head) {\n            newNode->next = newNode->prev = newNode;\n            head = newNode;\n        } else {\n            Node* tail = head->prev;\n            newNode->next = head;\n            newNode->prev = tail;\n            head->prev = newNode;\n            tail->next = newNode;\n            head = newNode;\n        }\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "class Node {\n    int val;\n    Node prev, next;\n    Node(int v) { this.val = v; }\n}\n\npublic class CircularDoublyLinkedList {\n    Node head = null;\n\n    public void insertHead(int val) {\n        Node newNode = new Node(val);\n        if (head == null) {\n            newNode.next = newNode.prev = newNode;\n            head = newNode;\n        } else {\n            Node tail = head.prev;\n            newNode.next = head;\n            newNode.prev = tail;\n            head.prev = newNode;\n            tail.next = newNode;\n            head = newNode;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class Node {\n    constructor(val = 0) {\n        this.val = val;\n        this.prev = null;\n        this.next = null;\n    }\n}\n\nclass CircularDoublyLinkedList {\n    constructor() {\n        this.head = null;\n    }\n\n    insertHead(val) {\n        const newNode = new Node(val);\n        if (!this.head) {\n            newNode.next = newNode.prev = newNode;\n            this.head = newNode;\n        } else {\n            const tail = this.head.prev;\n            newNode.next = this.head;\n            newNode.prev = tail;\n            this.head.prev = newNode;\n            tail.next = newNode;\n            this.head = newNode;\n        }\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 641 - Design Circular Deque",
+          "url": "https://leetcode.com/problems/design-circular-deque/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-merge-k-sorted-lists",
+      "title": "Merge K Sorted Linked Lists",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N log K) where N is total nodes, K is number of lists",
+      "spaceComplexity": "O(K) for Min-Heap Priority Queue",
+      "summary": "Merges K sorted linked lists into a single sorted linked list using a Min-Heap or Divide & Conquer approach.",
+      "explanation": [
+        "Push the head node of all K lists into a Min-Heap Priority Queue.",
+        "Repeatedly pop the smallest node from the heap, attach it to the merged list, and push its `next` node into the heap.",
+        "Alternatively, merge lists pairwise using Divide & Conquer (merge 2 lists at a time).",
+        "Achieves optimal O(N log K) time complexity."
+      ],
+      "exampleTrace": {
+        "input": "lists = [[1, 4, 5], [1, 3, 4], [2, 6]]",
+        "output": "1 -> 1 -> 2 -> 3 -> 4 -> 4 -> 5 -> 6",
+        "traceSteps": [
+          "Push initial heads (1 from L1, 1 from L2, 2 from L3) into Min-Heap.",
+          "Pop 1 (L1), push 4. Merged: [1]",
+          "Pop 1 (L2), push 3. Merged: [1, 1]",
+          "Pop 2 (L3), push 6. Merged: [1, 1, 2]",
+          "Pop 3 (L2), push 4. Merged: [1, 1, 2, 3]",
+          "Pop 4 (L1), push 5. Merged: [1, 1, 2, 3, 4]",
+          "Pop 4 (L2). Merged: [1, 1, 2, 3, 4, 4]",
+          "Pop 5 (L1), Pop 6 (L3). Final Output: [1, 1, 2, 3, 4, 4, 5, 6]"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines K sorted streams or linked lists into one unified sorted sequence efficiently.",
+        "whenToUse": "When merging multiple sorted logs, database partitions, or sorted linked list chains.",
+        "whereUsed": "External merge sort in database engines, distributed log aggregation engines.",
+        "whyOptimal": "Min-heap maintains logarithmic selection O(log K) for each of the N total nodes."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "import heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef mergeKLists(lists: list[ListNode]) -> ListNode:\n    heap = []\n    for i, l in enumerate(lists):\n        if l:\n            heapq.heappush(heap, (l.val, i, l))\n            \n    dummy = ListNode(0)\n    curr = dummy\n    \n    while heap:\n        val, i, node = heapq.heappop(heap)\n        curr.next = node\n        curr = curr.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, i, node.next))\n            \n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <queue>\n\nstruct ListNode {\n    int val;\n    ListNode *next;\n    ListNode(int x) : val(x), next(nullptr) {}\n};\n\nstruct Compare {\n    bool operator()(ListNode* a, ListNode* b) {\n        return a->val > b->val;\n    }\n};\n\nListNode* mergeKLists(std::vector<ListNode*>& lists) {\n    std::priority_queue<ListNode*, std::vector<ListNode*>, Compare> pq;\n    for (auto l : lists) {\n        if (l) pq.push(l);\n    }\n    ListNode dummy(0);\n    ListNode* curr = &dummy;\n    while (!pq.empty()) {\n        ListNode* node = pq.top(); pq.pop();\n        curr->next = node;\n        curr = curr->next;\n        if (node->next) pq.push(node->next);\n    }\n    return dummy.next;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.PriorityQueue;\n\nclass ListNode {\n    int val;\n    ListNode next;\n    ListNode(int x) { val = x; }\n}\n\npublic class MergeKLists {\n    public ListNode mergeKLists(ListNode[] lists) {\n        if (lists == null || lists.length == 0) return null;\n        PriorityQueue<ListNode> pq = new PriorityQueue<>((a, b) -> a.val - b.val);\n        for (ListNode l : lists) {\n            if (l != null) pq.add(l);\n        }\n        ListNode dummy = new ListNode(0);\n        ListNode curr = dummy;\n        while (!pq.isEmpty()) {\n            ListNode node = pq.poll();\n            curr.next = node;\n            curr = curr.next;\n            if (node.next != null) pq.add(node.next);\n        }\n        return dummy.next;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function mergeKLists(lists) {\n    if (!lists.length) return null;\n    let merge2Lists = (l1, l2) => {\n        let dummy = new ListNode(0), curr = dummy;\n        while (l1 && l2) {\n            if (l1.val < l2.val) { curr.next = l1; l1 = l1.next; }\n            else { curr.next = l2; l2 = l2.next; }\n            curr = curr.next;\n        }\n        curr.next = l1 || l2;\n        return dummy.next;\n    };\n\n    while (lists.length > 1) {\n        let merged = [];\n        for (let i = 0; i < lists.length; i += 2) {\n            let l1 = lists[i];\n            let l2 = i + 1 < lists.length ? lists[i + 1] : null;\n            merged.push(merge2Lists(l1, l2));\n        }\n        lists = merged;\n    }\n    return lists[0];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 23 - Merge k Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-k-sorted-lists/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "ll-intersection-two-lists",
+      "title": "Intersection of Two Linked Lists",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N + M) where N, M are lengths of the two lists",
+      "spaceComplexity": "O(1) extra space",
+      "summary": "Finds the node at which two singly linked lists intersect using two pointer traversal.",
+      "explanation": [
+        "Initialize pointer `pA` at headA and pointer `pB` at headB.",
+        "Traverse both lists. When `pA` reaches the end of list A, redirect it to headB.",
+        "When `pB` reaches the end of list B, redirect it to headA.",
+        "If the lists intersect, `pA` and `pB` will meet at the intersection node after traversing (LenA + LenB) steps.",
+        "If no intersection exists, both pointers will equal Null simultaneously."
+      ],
+      "exampleTrace": {
+        "input": "List A: [4, 1, 8, 4, 5], List B: [5, 6, 1, 8, 4, 5], Intersect at node 8",
+        "output": "Intersected at node with value 8",
+        "traceSteps": [
+          "Initialize pA at 4, pB at 5.",
+          "Advance both pointers. pA reaches end of A first, redirects to 5 (headB).",
+          "pB reaches end of B, redirects to 4 (headA).",
+          "Both pointers are now synchronized in distance to the intersection point!",
+          "pA and pB advance simultaneously and meet at node 8. Return node 8."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the exact memory junction node shared by two merging linked list paths.",
+        "whenToUse": "When detecting shared memory nodes or merged execution graphs without modifying data.",
+        "whereUsed": "Garbage collector reference counts, git commit branch merge base identification.",
+        "whyOptimal": "Requires zero extra space O(1) and exact single pass O(N+M)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def getIntersectionNode(headA: ListNode, headB: ListNode) -> ListNode:\n    if not headA or not headB: return None\n    pA, pB = headA, headB\n    while pA != pB:\n        pA = pA.next if pA else headB\n        pB = pB.next if pB else headA\n    return pA"
+        },
+        {
+          "language": "cpp",
+          "code": "ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {\n    if (!headA || !headB) return nullptr;\n    ListNode *pA = headA, *pB = headB;\n    while (pA != pB) {\n        pA = (pA == nullptr) ? headB : pA->next;\n        pB = (pB == nullptr) ? headA : pB->next;\n    }\n    return pA;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {\n        if (headA == null || headB == null) return null;\n        ListNode pA = headA, pB = headB;\n        while (pA != pB) {\n            pA = (pA == null) ? headB : pA.next;\n            pB = (pB == null) ? headA : pB.next;\n        }\n        return pA;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function getIntersectionNode(headA, headB) {\n    if (!headA || !headB) return null;\n    let pA = headA, pB = headB;\n    while (pA !== pB) {\n        pA = pA === null ? headB : pA.next;\n        pB = pB === null ? headA : pB.next;\n    }\n    return pA;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 160 - Intersection of Two Linked Lists",
+          "url": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "ll-flatten-multilevel",
+      "title": "Flatten a Multilevel Linked List",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) where N is total nodes across all levels",
+      "spaceComplexity": "O(N) for recursion stack or O(1) iterative pointer modification",
+      "summary": "Flattens a 2D or multilevel linked list with `child` pointers into a single-level doubly/singly linked list.",
+      "explanation": [
+        "Iterate through nodes. When a node has a `child` pointer:",
+        "Find the tail node of the child list.",
+        "Connect child tail's `next` pointer to `curr.next`.",
+        "Connect `curr.next` to `curr.child` and set `curr.child = None`.",
+        "Continue iterating until all levels are flattened into 1D."
+      ],
+      "exampleTrace": {
+        "input": "1-2-3-4 with node 3 having child 7-8",
+        "output": "1 -> 2 -> 3 -> 7 -> 8 -> 4",
+        "traceSteps": [
+          "Iterate curr to Node 3. Detect child Node 7.",
+          "Save nxt = Node 4.",
+          "Find tail of child list: Node 8.",
+          "Connect Node 8.next to Node 4.",
+          "Connect Node 3.next to Node 7 and clear child pointer.",
+          "Flattening Complete: 1 -> 2 -> 3 -> 7 -> 8 -> 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Transforms hierarchical 2D node graphs into a linear sequence.",
+        "whenToUse": "When unnesting recursive linked structures into a single continuous stream.",
+        "whereUsed": "Document tree flattening, DOM element sequence linearization, compiler AST unrolling.",
+        "whyOptimal": "Linear O(N) traversal without duplicating node data."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, val, prev=None, next=None, child=None):\n        self.val = val\n        self.prev = prev\n        self.next = next\n        self.child = child\n\ndef flatten(head: 'Node') -> 'Node':\n    if not head: return None\n    curr = head\n    while curr:\n        if curr.child:\n            nxt = curr.next\n            child_tail = curr.child\n            while child_tail.next:\n                child_tail = child_tail.next\n            child_tail.next = nxt\n            if nxt: nxt.prev = child_tail\n            curr.next = curr.child\n            curr.child.prev = curr\n            curr.child = None\n        curr = curr.next\n    return head"
+        },
+        {
+          "language": "cpp",
+          "code": "Node* flatten(Node* head) {\n    if (!head) return nullptr;\n    Node* curr = head;\n    while (curr) {\n        if (curr->child) {\n            Node* nxt = curr->next;\n            Node* childTail = curr->child;\n            while (childTail->next) childTail = childTail->next;\n            childTail->next = nxt;\n            if (nxt) nxt->prev = childTail;\n            curr->next = curr->child;\n            curr->child->prev = curr;\n            curr->child = nullptr;\n        }\n        curr = curr->next;\n    }\n    return head;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public Node flatten(Node head) {\n    if (head == null) return null;\n    Node curr = head;\n    while (curr != null) {\n        if (curr.child != null) {\n            Node nxt = curr.next;\n            Node childTail = curr.child;\n            while (childTail.next != null) childTail = childTail.next;\n            childTail.next = nxt;\n            if (nxt != null) nxt.prev = childTail;\n            curr.next = curr.child;\n            curr.child.prev = curr;\n            curr.child = null;\n        }\n        curr = curr.next;\n    }\n    return head;\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function flatten(head) {\n    if (!head) return null;\n    let curr = head;\n    while (curr) {\n        if (curr.child) {\n            let nxt = curr.next;\n            let childTail = curr.child;\n            while (childTail.next) childTail = childTail.next;\n            childTail.next = nxt;\n            if (nxt) nxt.prev = childTail;\n            curr.next = curr.child;\n            curr.child.prev = curr;\n            curr.child = null;\n        }\n        curr = curr.next;\n    }\n    return head;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 430 - Flatten a Multilevel Doubly Linked List",
+          "url": "https://leetcode.com/problems/flatten-a-multilevel-doubly-linked-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-clone-with-random-pointer",
+      "title": "Clone Linked List with Random Pointer",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) single/three-pass iteration",
+      "spaceComplexity": "O(1) extra space using node interleaving (or O(N) using HashMap)",
+      "summary": "Creates a deep copy of a linked list where each node contains an extra `random` pointer referencing any node or Null.",
+      "explanation": [
+        "Method (Interleaving):",
+        "Step 1: Create copied node A' right after original node A (A -> A' -> B -> B').",
+        "Step 2: Assign random pointers: `curr.next.random = curr.random.next` if `curr.random` exists.",
+        "Step 3: Separate original list and cloned list by updating `next` pointers.",
+        "Returns head of deep cloned list in O(N) time and O(1) auxiliary space."
+      ],
+      "exampleTrace": {
+        "input": "Node 7 -> Node 13 (random to 7)",
+        "output": "Cloned independent copies of 7 and 13 with random pointers intact",
+        "traceSteps": [
+          "Step 1 (Interleave): 7 -> 7' -> 13 -> 13'",
+          "Step 2 (Random pointers): Assign 7'.random = 7.random.next, 13'.random = 7'",
+          "Step 3 (Separate): Extract [7', 13'] into independent cloned list.",
+          "Original list restored to 7 -> 13."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Deep copies complex graph/linked-list structures containing arbitrary reference pointers.",
+        "whenToUse": "When cloning memory structures with arbitrary pointers without modifying originals.",
+        "whereUsed": "Object graph serialization, deep copy state cloning, virtual machine heap duplication.",
+        "whyOptimal": "Interleaving nodes avoids O(N) extra hash map memory overhead."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class Node:\n    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):\n        self.val = int(x)\n        self.next = next\n        self.random = random\n\ndef copyRandomList(head: 'Node') -> 'Node':\n    if not head: return None\n    \n    # Step 1: Interleave cloned nodes\n    curr = head\n    while curr:\n        nxt = curr.next\n        copy = Node(curr.val, nxt)\n        curr.next = copy\n        curr = nxt\n        \n    # Step 2: Assign random pointers\n    curr = head\n    while curr:\n        if curr.random:\n            curr.next.random = curr.random.next\n        curr = curr.next.next\n        \n    # Step 3: Separate lists\n    curr = head\n    dummy = Node(0)\n    copy_curr = dummy\n    while curr:\n        nxt = curr.next.next\n        copy = curr.next\n        copy_curr.next = copy\n        copy_curr = copy\n        curr.next = nxt\n        curr = nxt\n        \n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "Node* copyRandomList(Node* head) {\n    if (!head) return nullptr;\n    Node* curr = head;\n    while (curr) {\n        Node* copy = new Node(curr->val);\n        copy->next = curr->next;\n        curr->next = copy;\n        curr = copy->next;\n    }\n    curr = head;\n    while (curr) {\n        if (curr->random) curr->next->random = curr->random->next;\n        curr = curr->next->next;\n    }\n    curr = head;\n    Node dummy(0);\n    Node* copyCurr = &dummy;\n    while (curr) {\n        Node* nxt = curr->next->next;\n        Node* copy = curr->next;\n        copyCurr->next = copy;\n        copyCurr = copy;\n        curr->next = nxt;\n        curr = nxt;\n    }\n    return dummy.next;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public Node copyRandomList(Node head) {\n    if (head == null) return null;\n    Node curr = head;\n    while (curr != null) {\n        Node copy = new Node(curr.val);\n        copy.next = curr.next;\n        curr.next = copy;\n        curr = copy.next;\n    }\n    curr = head;\n    while (curr != null) {\n        if (curr.random != null) curr.next.random = curr.random.next;\n        curr = curr.next.next;\n    }\n    curr = head;\n    Node dummy = new Node(0);\n    Node copyCurr = dummy;\n    while (curr != null) {\n        Node nxt = curr.next.next;\n        Node copy = curr.next;\n        copyCurr.next = copy;\n        copyCurr = copy;\n        curr.next = nxt;\n        curr = nxt;\n    }\n    return dummy.next;\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function copyRandomList(head) {\n    if (!head) return null;\n    let curr = head;\n    while (curr) {\n        let copy = new Node(curr.val, curr.next, null);\n        curr.next = copy;\n        curr = copy.next;\n    }\n    curr = head;\n    while (curr) {\n        if (curr.random) curr.next.random = curr.random.next;\n        curr = curr.next.next;\n    }\n    curr = head;\n    let dummy = new Node(0), copyCurr = dummy;\n    while (curr) {\n        let nxt = curr.next.next;\n        let copy = curr.next;\n        copyCurr.next = copy;\n        copyCurr = copy;\n        curr.next = nxt;\n        curr = nxt;\n    }\n    return dummy.next;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 138 - Copy List with Random Pointer",
+          "url": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "ll-palindrome-linked-list",
+      "title": "Palindrome Linked List",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N) time",
+      "spaceComplexity": "O(1) extra space",
+      "summary": "Checks if a singly linked list is a palindrome in O(N) time and O(1) auxiliary space.",
+      "explanation": [
+        "Step 1: Find the middle of the linked list using Fast & Slow pointers.",
+        "Step 2: Reverse the second half of the linked list in-place.",
+        "Step 3: Compare values of the first half and reversed second half node-by-node.",
+        "Step 4: (Optional) Restore the original list structure by re-reversing the second half.",
+        "Returns True if symmetric, False otherwise."
+      ],
+      "exampleTrace": {
+        "input": "1 -> 2 -> 2 -> 1",
+        "output": "True",
+        "traceSteps": [
+          "Find middle using fast/slow pointer: slow points to 2nd '2'.",
+          "Reverse second half [2, 1] -> becomes [1, 2].",
+          "Compare 1st half [1, 2] with reversed 2nd half [1, 2].",
+          "All elements match! Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines whether node values form a palindrome without extra array memory.",
+        "whenToUse": "When checking symmetry in linked structures with strict O(1) space constraint.",
+        "whereUsed": "Bioinformatics DNA sequence symmetry checks, text processing queues.",
+        "whyOptimal": "Reversing second half in-place achieves linear O(N) time with zero extra space O(1)."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isPalindrome(head: ListNode) -> bool:\n    if not head or not head.next: return True\n    \n    # Step 1: Find middle\n    slow, fast = head, head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        \n    # Step 2: Reverse second half\n    prev = None\n    curr = slow\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n        \n    # Step 3: Compare halves\n    first, second = head, prev\n    while second:\n        if first.val != second.val:\n            return False\n        first = first.next\n        second = second.next\n        \n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "bool isPalindrome(ListNode* head) {\n    if (!head || !head->next) return true;\n    ListNode *slow = head, *fast = head;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    ListNode *prev = nullptr, *curr = slow;\n    while (curr) {\n        ListNode* nxt = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    ListNode *first = head, *second = prev;\n    while (second) {\n        if (first->val != second->val) return false;\n        first = first->next;\n        second = second->next;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public boolean isPalindrome(ListNode head) {\n    if (head == null || head.next == null) return true;\n    ListNode slow = head, fast = head;\n    while (fast != null && fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    ListNode prev = null, curr = slow;\n    while (curr != null) {\n        ListNode nxt = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    ListNode first = head, second = prev;\n    while (second != null) {\n        if (first.val != second.val) return false;\n        first = first.next;\n        second = second.next;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isPalindrome(head) {\n    if (!head || !head.next) return true;\n    let slow = head, fast = head;\n    while (fast && fast.next) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    let prev = null, curr = slow;\n    while (curr) {\n        let nxt = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    let first = head, second = prev;\n    while (second) {\n        if (first.val !== second.val) return false;\n        first = first.next;\n        second = second.next;\n    }\n    return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 234 - Palindrome Linked List",
+          "url": "https://leetcode.com/problems/palindrome-linked-list/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "ll-sort-list",
+      "title": "Sort Linked List (Merge Sort O(N log N))",
+      "categoryId": "linked_list",
+      "categoryTitle": "Linked Lists & Memory Pointers",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N log N)",
+      "spaceComplexity": "O(log N) recursion stack space (or O(1) iterative bottom-up)",
+      "summary": "Sorts a linked list in O(N log N) time using Top-Down or Bottom-Up Merge Sort.",
+      "explanation": [
+        "Split list into two halves using Fast & Slow pointer middle finding.",
+        "Recursively sort left and right sublists.",
+        "Merge two sorted sublists together using standard two-pointer merge algorithm.",
+        "Optimal sorting algorithm for linked list memory structures."
+      ],
+      "exampleTrace": {
+        "input": "4 -> 2 -> 1 -> 3",
+        "output": "1 -> 2 -> 3 -> 4",
+        "traceSteps": [
+          "Split list at middle: Left [4, 2], Right [1, 3].",
+          "Recursively sort Left: [2, 4].",
+          "Recursively sort Right: [1, 3].",
+          "Merge [2, 4] and [1, 3]: Compare 2 & 1 -> append 1. Compare 2 & 3 -> append 2. Compare 4 & 3 -> append 3. Append remaining 4.",
+          "Final Sorted List: 1 -> 2 -> 3 -> 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Sorts linked list nodes efficiently without converting to array.",
+        "whenToUse": "When sorting linked lists in guaranteed O(N log N) time.",
+        "whereUsed": "Sorting external dynamic memory lists, kernel task priority sorting.",
+        "whyOptimal": "Merge Sort is ideal for Linked Lists because elements can be re-linked in O(1) auxiliary space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def sortList(head: ListNode) -> ListNode:\n    if not head or not head.next: return head\n    \n    # Find middle (slow will point to node before mid)\n    slow, fast = head, head.next\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        \n    mid = slow.next\n    slow.next = None  # Cut list\n    \n    left = sortList(head)\n    right = sortList(mid)\n    \n    # Merge sorted lists\n    dummy = ListNode(0)\n    curr = dummy\n    while left and right:\n        if left.val < right.val:\n            curr.next = left\n            left = left.next\n        else:\n            curr.next = right\n            right = right.next\n        curr = curr.next\n    curr.next = left or right\n    return dummy.next"
+        },
+        {
+          "language": "cpp",
+          "code": "ListNode* sortList(ListNode* head) {\n    if (!head || !head->next) return head;\n    ListNode *slow = head, *fast = head->next;\n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n    }\n    ListNode* mid = slow->next;\n    slow->next = nullptr;\n    ListNode* left = sortList(head);\n    ListNode* right = sortList(mid);\n    ListNode dummy(0);\n    ListNode* curr = &dummy;\n    while (left && right) {\n        if (left->val < right->val) { curr->next = left; left = left->next; }\n        else { curr->next = right; right = right->next; }\n        curr = curr->next;\n    }\n    curr->next = left ? left : right;\n    return dummy.next;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public ListNode sortList(ListNode head) {\n    if (head == null || head.next == null) return head;\n    ListNode slow = head, fast = head.next;\n    while (fast != null && fast.next != null) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    ListNode mid = slow.next;\n    slow.next = null;\n    ListNode left = sortList(head);\n    ListNode right = sortList(mid);\n    ListNode dummy = new ListNode(0);\n    ListNode curr = dummy;\n    while (left != null && right != null) {\n        if (left.val < right.val) { curr.next = left; left = left.next; }\n        else { curr.next = right; right = right.next; }\n        curr = curr.next;\n    }\n    curr.next = (left != null) ? left : right;\n    return dummy.next;\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function sortList(head) {\n    if (!head || !head.next) return head;\n    let slow = head, fast = head.next;\n    while (fast && fast.next) {\n        slow = slow.next;\n        fast = fast.next.next;\n    }\n    let mid = slow.next;\n    slow.next = null;\n    let left = sortList(head);\n    let right = sortList(mid);\n    let dummy = new ListNode(0), curr = dummy;\n    while (left && right) {\n        if (left.val < right.val) { curr.next = left; left = left.next; }\n        else { curr.next = right; right = right.next; }\n        curr = curr.next;\n    }\n    curr.next = left || right;\n    return dummy.next;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 148 - Sort List",
+          "url": "https://leetcode.com/problems/sort-list/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

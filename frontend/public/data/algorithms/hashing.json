@@ -1,0 +1,563 @@
+{
+  "id": "hashing",
+  "category": {
+    "id": "hashing",
+    "title": "Hashing & Hash Tables",
+    "icon": "Building",
+    "description": "Hash maps, hash sets, frequency maps, two-sum lookups, and prefix sum hashing."
+  },
+  "totalAlgorithms": 9,
+  "algorithms": [
+    {
+      "id": "hashing-foundations-collisions",
+      "title": "Hash Table Architecture & Collision Resolution",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Easy",
+      "timeComplexity": "O(1) Average Lookup/Insert, O(N) Worst Case",
+      "spaceComplexity": "O(N) for bucket memory",
+      "summary": "Core hash table concepts including hash functions, load factor α = N/M, rehashing, and collision resolution techniques (Chaining vs. Open Addressing).",
+      "explanation": [
+        "Hash Function: Maps arbitrary keys (strings, numbers, objects) to an integer index within an array bucket of size M.",
+        "Load Factor (α = N/M): Ratio of stored items N to bucket size M. When α exceeds a threshold (~0.75), Rehashing creates a 2x larger table and re-maps all keys.",
+        "Separate Chaining: Each bucket holds a Linked List or BST of colliding key-value pairs.",
+        "Open Addressing: Resolves collisions within the main array using Linear Probing (index + i), Quadratic Probing (index + i²), or Double Hashing (index + i * hash2(key))."
+      ],
+      "exampleTrace": {
+        "input": "Insert ('apple', 10), ('banana', 20), ('cat', 30) into capacity 5 table",
+        "output": "Buckets populated with chaining pointers",
+        "traceSteps": [
+          "hash('apple') % 5 = 2. Insert into bucket 2.",
+          "hash('banana') % 5 = 0. Insert into bucket 0.",
+          "hash('cat') % 5 = 2 (Collision!). Chain ('cat', 30) after ('apple', 10) in bucket 2.",
+          "Table state: Bucket 0: [banana:20], Bucket 2: [apple:10 -> cat:30]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Enables expected constant-time O(1) key-value insertion, deletion, and lookup.",
+        "whenToUse": "When instant O(1) data retrieval by unique key is required.",
+        "whereUsed": "Database indexing, in-memory caches (Redis/Memcached), compiler symbol tables, language dictionaries.",
+        "whyOptimal": "Provides expected O(1) lookup speed compared to O(log N) in BSTs or O(N) in linear arrays."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "class HashTableChaining:\n    def __init__(self, capacity=10):\n        self.capacity = capacity\n        self.size = 0\n        self.table = [[] for _ in range(capacity)]\n\n    def _hash(self, key):\n        return hash(key) % self.capacity\n\n    def put(self, key, value):\n        idx = self._hash(key)\n        for i, (k, v) in enumerate(self.table[idx]):\n            if k == key:\n                self.table[idx][i] = (key, value)\n                return\n        self.table[idx].append((key, value))\n        self.size += 1\n\n    def get(self, key):\n        idx = self._hash(key)\n        for k, v in self.table[idx]:\n            if k == key: return v\n        return None"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <list>\n#include <string>\n\nclass HashTableChaining {\n    int capacity;\n    std::vector<std::list<std::pair<std::string, int>>> table;\n    \n    int hashFunc(std::string key) {\n        int hash = 0;\n        for (char c : key) hash = (hash * 31 + c) % capacity;\n        return hash;\n    }\npublic:\n    HashTableChaining(int cap = 10) : capacity(cap), table(cap) {}\n\n    void put(std::string key, int value) {\n        int idx = hashFunc(key);\n        for (auto& pair : table[idx]) {\n            if (pair.first == key) { pair.second = value; return; }\n        }\n        table[idx].push_back({key, value});\n    }\n\n    int get(std::string key) {\n        int idx = hashFunc(key);\n        for (auto& pair : table[idx]) {\n            if (pair.first == key) return pair.second;\n        }\n        return -1;\n    }\n};"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.LinkedList;\n\npublic class HashTableChaining {\n    static class Node {\n        String key; int val;\n        Node(String k, int v) { key = k; val = v; }\n    }\n    private LinkedList<Node>[] table;\n    private int capacity;\n\n    public HashTableChaining(int cap) {\n        capacity = cap;\n        table = new LinkedList[cap];\n        for (int i = 0; i < cap; i++) table[i] = new LinkedList<>();\n    }\n\n    public void put(String key, int val) {\n        int idx = Math.abs(key.hashCode()) % capacity;\n        for (Node node : table[idx]) {\n            if (node.key.equals(key)) { node.val = val; return; }\n        }\n        table[idx].add(new Node(key, val));\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "class HashTableChaining {\n    constructor(capacity = 10) {\n        this.capacity = capacity;\n        this.table = new Array(capacity).fill(null).map(() => []);\n    }\n    _hash(key) {\n        let hash = 0;\n        for (let c of key) hash = (hash * 31 + c.charCodeAt(0)) % this.capacity;\n        return hash;\n    }\n    put(key, value) {\n        const idx = this._hash(key);\n        const bucket = this.table[idx];\n        for (let pair of bucket) {\n            if (pair[0] === key) { pair[1] = value; return; }\n        }\n        bucket.push([key, value]);\n    }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 705 - Design HashSet",
+          "url": "https://leetcode.com/problems/design-hashset/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 706 - Design HashMap",
+          "url": "https://leetcode.com/problems/design-hashmap/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "hashing-frequency-anagrams",
+      "title": "Frequency Map & Anagram Pattern",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N) for string length N",
+      "spaceComplexity": "O(K) where K is alphabet size (e.g. 26 characters)",
+      "summary": "Uses a Hash Map or fixed frequency array to count element occurrences and verify Anagram equivalence.",
+      "explanation": [
+        "Two strings s and t are Anagrams if they contain the exact same character frequencies.",
+        "Count character frequencies of s into a Hash Map (+1 for each char).",
+        "Decrement frequency counts using string t (-1 for each char).",
+        "If all HashMap counts return to 0, s and t are valid anagrams."
+      ],
+      "exampleTrace": {
+        "input": "s = 'anagram', t = 'nagaram'",
+        "output": "True",
+        "traceSteps": [
+          "Build freq map from s: {'a':3, 'n':1, 'g':1, 'r':1, 'm':1}.",
+          "Process t: decrement frequencies for 'n', 'a', 'g', 'a', 'r', 'a', 'm'.",
+          "All character counts reduced to 0.",
+          "Strings are valid anagrams. Return True."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Verifies structural equivalence and permutation matches in linear time.",
+        "whenToUse": "When checking for anagrams, character counts, or word frequency matches.",
+        "whereUsed": "Plagiarism detectors, search query spell checkers, word game engines.",
+        "whyOptimal": "Replaces O(N log N) string sorting with O(N) linear hash counting."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def isAnagram(s: str, t: str) -> bool:\n    if len(s) != len(t): return False\n    counts = {}\n    for char in s:\n        counts[char] = counts.get(char, 0) + 1\n    for char in t:\n        if char not in counts or counts[char] == 0:\n            return False\n        counts[char] -= 1\n    return True"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <string>\n#include <vector>\n\nbool isAnagram(std::string s, std::string t) {\n    if (s.length() != t.length()) return false;\n    int count[26] = {0};\n    for (char c : s) count[c - 'a']++;\n    for (char c : t) {\n        if (--count[c - 'a'] < 0) return false;\n    }\n    return true;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class ValidAnagram {\n    public boolean isAnagram(String s, String t) {\n        if (s.length() != t.length()) return false;\n        int[] count = new int[26];\n        for (char c : s.toCharArray()) count[c - 'a']++;\n        for (char c : t.toCharArray()) {\n            if (--count[c - 'a'] < 0) return false;\n        }\n        return true;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function isAnagram(s, t) {\n    if (s.length !== t.length) return false;\n    const count = {};\n    for (let c of s) count[c] = (count[c] || 0) + 1;\n    for (let c of t) {\n        if (!count[c]) return false;\n        count[c]--;\n    }\n    return true;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 242 - Valid Anagram",
+          "url": "https://leetcode.com/problems/valid-anagram/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 49 - Group Anagrams",
+          "url": "https://leetcode.com/problems/group-anagrams/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-majority-element",
+      "title": "Majority Element Pattern (HashMap & Boyer-Moore)",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N) with HashMap or O(1) with Boyer-Moore Voting",
+      "summary": "Finds the majority element that appears more than ⌊N/2⌋ times using Hash Map counting or Boyer-Moore Voting algorithm.",
+      "explanation": [
+        "HashMap Approach: Store frequency count of each element. If `count[x] > N/2`, return `x`.",
+        "Boyer-Moore Voting Algorithm (O(1) Space): Maintain candidate and count.",
+        "Iterate through array. If count is 0, pick current element as candidate.",
+        "Increment count if num == candidate, else decrement count.",
+        "The surviving candidate is guaranteed to be the majority element."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 2, 1, 1, 1, 2, 2]",
+        "output": "2",
+        "traceSteps": [
+          "Index 0 (val 2): candidate=2, count=1",
+          "Index 1 (val 2): count=2",
+          "Index 2 (val 1): count=1",
+          "Index 3 (val 1): count=0",
+          "Index 4 (val 1): candidate=1, count=1",
+          "Index 5 (val 2): count=0",
+          "Index 6 (val 2): candidate=2, count=1",
+          "Final majority element candidate = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Identifies the dominant majority element in linear time.",
+        "whenToUse": "When finding elements occurring more than N/2 (or N/3) times.",
+        "whereUsed": "Consensus algorithms, streaming analytics, voting systems.",
+        "whyOptimal": "Boyer-Moore achieves O(N) time with O(1) space."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def majorityElement(nums: list[int]) -> int:\n    candidate = None\n    count = 0\n    for num in nums:\n        if count == 0:\n            candidate = num\n        count += (1 if num == candidate else -1)\n    return candidate"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n\nint majorityElement(std::vector<int>& nums) {\n    int candidate = 0, count = 0;\n    for (int num : nums) {\n        if (count == 0) candidate = num;\n        count += (num == candidate) ? 1 : -1;\n    }\n    return candidate;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class MajorityElement {\n    public int majorityElement(int[] nums) {\n        int candidate = 0, count = 0;\n        for (int num : nums) {\n            if (count == 0) candidate = num;\n            count += (num == candidate) ? 1 : -1;\n        }\n        return candidate;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function majorityElement(nums) {\n    let candidate = null, count = 0;\n    for (let num of nums) {\n        if (count === 0) candidate = num;\n        count += (num === candidate ? 1 : -1);\n    }\n    return candidate;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 169 - Majority Element",
+          "url": "https://leetcode.com/problems/majority-element/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 229 - Majority Element II",
+          "url": "https://leetcode.com/problems/majority-element-ii/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-two-sum-duplicates",
+      "title": "Two Sum & Duplicate Detection Lookup Pattern",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N) for Hash Map / Set",
+      "summary": "Solves Two Sum and Duplicate Detection by maintaining a Hash Map/Set of visited elements to perform O(1) complement lookups.",
+      "explanation": [
+        "For each element `x` at index `i`, calculate required complement `target - x`.",
+        "Check if `target - x` exists in Hash Map.",
+        "If found: Return `[map[target - x], i]` immediately.",
+        "If not found: Store `map[x] = i` and continue single-pass iteration."
+      ],
+      "exampleTrace": {
+        "input": "nums = [2, 7, 11, 15], target = 9",
+        "output": "[0, 1]",
+        "traceSteps": [
+          "i = 0 (val 2): diff = 9 - 2 = 7. Not in map. Store seen[2] = 0.",
+          "i = 1 (val 7): diff = 9 - 7 = 2. Found in map at index 0!",
+          "Return indices [0, 1]."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds element pairs meeting a target condition in single-pass linear time.",
+        "whenToUse": "When searching for complement pairs, duplicates, or target sums in unsorted arrays.",
+        "whereUsed": "Transaction matching, database join optimization, deduplication pipelines.",
+        "whyOptimal": "Reduces O(N²) nested loop checks to single-pass O(N) time using O(1) hash lookups."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def twoSum(nums: list[int], target: int) -> list[int]:\n    seen = {}\n    for i, num in enumerate(nums):\n        diff = target - num\n        if diff in seen:\n            return [seen[diff], i]\n        seen[num] = i\n    return []"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n\nstd::vector<int> twoSum(std::vector<int>& nums, int target) {\n    std::unordered_map<int, int> seen;\n    for (int i = 0; i < nums.size(); i++) {\n        int diff = target - nums[i];\n        if (seen.count(diff)) return {seen[diff], i};\n        seen[nums[i]] = i;\n    }\n    return {};\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\n\npublic class TwoSum {\n    public int[] twoSum(int[] nums, int target) {\n        HashMap<Integer, Integer> seen = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int diff = target - nums[i];\n            if (seen.containsKey(diff)) return new int[]{seen.get(diff), i};\n            seen.put(nums[i], i);\n        }\n        return new int[]{};\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function twoSum(nums, target) {\n    const seen = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const diff = target - nums[i];\n        if (seen.has(diff)) return [seen.get(diff), i];\n        seen.set(nums[i], i);\n    }\n    return [];\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 1 - Two Sum",
+          "url": "https://leetcode.com/problems/two-sum/",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "LeetCode 217 - Contains Duplicate",
+          "url": "https://leetcode.com/problems/contains-duplicate/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "hashing-longest-consecutive-sequence",
+      "title": "Longest Consecutive Sequence (HashSet O(N))",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) time",
+      "spaceComplexity": "O(N) for HashSet",
+      "summary": "Finds the length of the longest consecutive elements sequence in an unsorted array in linear O(N) time.",
+      "explanation": [
+        "Insert all numbers into a HashSet.",
+        "Iterate through numbers in HashSet.",
+        "Check if `num - 1` exists in HashSet. If `num - 1` exists, `num` is NOT the start of a sequence (skip it).",
+        "If `num - 1` does NOT exist, `num` is the START of a consecutive sequence!",
+        "Count length by iteratively checking `num + 1`, `num + 2`, etc., in the HashSet. Update max length."
+      ],
+      "exampleTrace": {
+        "input": "nums = [100, 4, 200, 1, 3, 2]",
+        "output": "4 (Sequence: [1, 2, 3, 4])",
+        "traceSteps": [
+          "Insert all into HashSet: {100, 4, 200, 1, 3, 2}.",
+          "Inspect 100: (99 not in set) -> chain: [100]. length=1.",
+          "Inspect 4: (3 in set) -> skip.",
+          "Inspect 200: (199 not in set) -> chain: [200]. length=1.",
+          "Inspect 1: (0 not in set) -> sequence start! Count 1, 2, 3, 4. length=4.",
+          "Max consecutive length = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds the longest contiguous numerical range without sorting the array.",
+        "whenToUse": "When finding consecutive sequences in unsorted data under O(N) time constraint.",
+        "whereUsed": "Data gap analysis, consecutive log session detection, interval grouping.",
+        "whyOptimal": "Replaces O(N log N) sorting with linear O(N) set lookups by only starting chains at true sequence boundaries."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def longestConsecutive(nums: list[int]) -> int:\n    num_set = set(nums)\n    max_len = 0\n    \n    for num in num_set:\n        if (num - 1) not in num_set:\n            curr_num = num\n            curr_len = 1\n            while (curr_num + 1) in num_set:\n                curr_num += 1\n                curr_len += 1\n            max_len = max(max_len, curr_len)\n            \n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_set>\n#include <algorithm>\n\nint longestConsecutive(std::vector<int>& nums) {\n    std::unordered_set<int> numSet(nums.begin(), nums.end());\n    int maxLen = 0;\n    for (int num : numSet) {\n        if (!numSet.count(num - 1)) {\n            int currNum = num;\n            int currLen = 1;\n            while (numSet.count(currNum + 1)) {\n                currNum++;\n                currLen++;\n            }\n            maxLen = std::max(maxLen, currLen);\n        }\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class LongestConsecutive {\n    public int longestConsecutive(int[] nums) {\n        Set<Integer> set = new HashSet<>();\n        for (int num : nums) set.add(num);\n        int maxLen = 0;\n        for (int num : set) {\n            if (!set.contains(num - 1)) {\n                int currNum = num;\n                int currLen = 1;\n                while (set.contains(currNum + 1)) {\n                    currNum++;\n                    currLen++;\n                }\n                maxLen = Math.max(maxLen, currLen);\n            }\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function longestConsecutive(nums) {\n    const set = new Set(nums);\n    let maxLen = 0;\n    for (let num of set) {\n        if (!set.has(num - 1)) {\n            let currNum = num;\n            let currLen = 1;\n            while (set.has(currNum + 1)) {\n                currNum++;\n                currLen++;\n            }\n            maxLen = Math.max(maxLen, currLen);\n        }\n    }\n    return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 128 - Longest Consecutive Sequence",
+          "url": "https://leetcode.com/problems/longest-consecutive-sequence/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-subarray-sum-equals-k",
+      "title": "Subarray Sum Equals K (Prefix Sum + HashMap)",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N) single pass",
+      "spaceComplexity": "O(N) for HashMap",
+      "summary": "Finds total number of continuous subarrays whose sum equals K using Prefix Sum hashing.",
+      "explanation": [
+        "Maintain `curr_prefix_sum` while iterating through array.",
+        "Key Insight: If `curr_prefix_sum - K` was seen previously in our prefix sum map, then the subarray between that previous index and current index sums to K!",
+        "Maintain HashMap `map[prefix_sum] = frequency`.",
+        "Initialize `map[0] = 1` (handles subarrays starting at index 0).",
+        "At each step: `count += map[curr_prefix_sum - K]`, then increment `map[curr_prefix_sum] += 1`."
+      ],
+      "exampleTrace": {
+        "input": "nums = [1, 1, 1], k = 2",
+        "output": "2",
+        "traceSteps": [
+          "Init map = {0: 1}, curr_sum = 0, count = 0.",
+          "Num 1: curr_sum = 1. diff = 1 - 2 = -1 (not in map). map = {0:1, 1:1}.",
+          "Num 1: curr_sum = 2. diff = 2 - 2 = 0 (found in map, val=1!). count = 1. map = {0:1, 1:1, 2:1}.",
+          "Num 1: curr_sum = 3. diff = 3 - 2 = 1 (found in map, val=1!). count = 2. map = {0:1, 1:1, 2:1, 3:1}.",
+          "Total Subarrays = 2."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Counts continuous range subarrays matching a target sum K.",
+        "whenToUse": "When counting continuous subarrays with sum K in arrays containing positive & negative integers.",
+        "whereUsed": "Financial ledger sub-transaction matching, signal processing window detection.",
+        "whyOptimal": "Reduces O(N²) range sum checks to single-pass O(N) using HashMap lookup."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def subarraySum(nums: list[int], k: int) -> int:\n    prefix_map = {0: 1}\n    curr_sum = 0\n    count = 0\n    \n    for num in nums:\n        curr_sum += num\n        diff = curr_sum - k\n        if diff in prefix_map:\n            count += prefix_map[diff]\n        prefix_map[curr_sum] = prefix_map.get(curr_sum, 0) + 1\n        \n    return count"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n\nint subarraySum(std::vector<int>& nums, int k) {\n    std::unordered_map<int, int> prefixMap;\n    prefixMap[0] = 1;\n    int currSum = 0, count = 0;\n    for (int num : nums) {\n        currSum += num;\n        if (prefixMap.count(currSum - k)) {\n            count += prefixMap[currSum - k];\n        }\n        prefixMap[currSum]++;\n    }\n    return count;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\n\npublic class SubarraySumK {\n    public int subarraySum(int[] nums, int k) {\n        HashMap<Integer, Integer> prefixMap = new HashMap<>();\n        prefixMap.put(0, 1);\n        int currSum = 0, count = 0;\n        for (int num : nums) {\n            currSum += num;\n            if (prefixMap.containsKey(currSum - k)) {\n                count += prefixMap.get(currSum - k);\n            }\n            prefixMap.put(currSum, prefixMap.getOrDefault(currSum, 0) + 1);\n        }\n        return count;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function subarraySum(nums, k) {\n    const map = new Map([[0, 1]]);\n    let currSum = 0, count = 0;\n    for (let num of nums) {\n        currSum += num;\n        if (map.has(currSum - k)) {\n            count += map.get(currSum - k);\n        }\n        map.set(currSum, (map.get(currSum) || 0) + 1);\n    }\n    return count;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 560 - Subarray Sum Equals K",
+          "url": "https://leetcode.com/problems/subarray-sum-equals-k/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-longest-subarray-sum-k",
+      "title": "Longest Subarray with Sum K",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N) for HashMap",
+      "summary": "Finds the maximum length of a continuous subarray that sums to K using Prefix Sum first-occurrence HashMap tracking.",
+      "explanation": [
+        "Maintain prefix sum `curr_sum` and a HashMap storing `first_occurrence[prefix_sum] = index`.",
+        "If `curr_sum == K`: max_len = max(max_len, i + 1).",
+        "If `(curr_sum - K)` exists in HashMap: max_len = max(max_len, i - first_occurrence[curr_sum - K]).",
+        "Only store `first_occurrence` when `curr_sum` is seen for the FIRST time to maximize window length."
+      ],
+      "exampleTrace": {
+        "input": "nums = [10, 5, 2, 7, 1, 9], k = 15",
+        "output": "4 (Subarray: [5, 2, 7, 1])",
+        "traceSteps": [
+          "i=0 (val 10): sum=10. first_occ[10]=0.",
+          "i=1 (val 5): sum=15 == k! max_len = 2 [10, 5]. first_occ[15]=1.",
+          "i=2 (val 2): sum=17. first_occ[17]=2.",
+          "i=3 (val 7): sum=24. diff = 24 - 15 = 9 (not in map). first_occ[24]=3.",
+          "i=4 (val 1): sum=25. diff = 25 - 15 = 10 (found at idx 0!). len = 4 - 0 = 4. max_len = 4.",
+          "Max length = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximum contiguous window length matching target sum K.",
+        "whenToUse": "When finding maximum length subarray summing to K in arrays with negative/positive numbers.",
+        "whereUsed": "Maximum span detection in audio/sensor signals, financial maximum gain windows.",
+        "whyOptimal": "Storing first occurrence guarantees maximum possible subarray width."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxLenSubarraySumK(nums: list[int], k: int) -> int:\n    first_occ = {}\n    curr_sum = 0\n    max_len = 0\n    \n    for i, num in enumerate(nums):\n        curr_sum += num\n        if curr_sum == k:\n            max_len = i + 1\n        if (curr_sum - k) in first_occ:\n            max_len = max(max_len, i - first_occ[curr_sum - k])\n        if curr_sum not in first_occ:\n            first_occ[curr_sum] = i\n            \n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <algorithm>\n\nint maxLenSubarraySumK(std::vector<int>& nums, int k) {\n    std::unordered_map<int, int> firstOcc;\n    int currSum = 0, maxLen = 0;\n    for (int i = 0; i < nums.size(); i++) {\n        currSum += nums[i];\n        if (currSum == k) maxLen = i + 1;\n        if (firstOcc.count(currSum - k)) {\n            maxLen = std::max(maxLen, i - firstOcc[currSum - k]);\n        }\n        if (!firstOcc.count(currSum)) firstOcc[currSum] = i;\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\n\npublic class LongestSubarrayK {\n    public int maxLenSubarraySumK(int[] nums, int k) {\n        HashMap<Integer, Integer> firstOcc = new HashMap<>();\n        int currSum = 0, maxLen = 0;\n        for (int i = 0; i < nums.length; i++) {\n            currSum += nums[i];\n            if (currSum == k) maxLen = i + 1;\n            if (firstOcc.containsKey(currSum - k)) {\n                maxLen = Math.max(maxLen, i - firstOcc.get(currSum - k));\n            }\n            if (!firstOcc.containsKey(currSum)) firstOcc.put(currSum, i);\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxLenSubarraySumK(nums, k) {\n    const firstOcc = new Map();\n    let currSum = 0, maxLen = 0;\n    for (let i = 0; i < nums.length; i++) {\n        currSum += nums[i];\n        if (currSum === k) maxLen = i + 1;\n        if (firstOcc.has(currSum - k)) {\n            maxLen = Math.max(maxLen, i - firstOcc.get(currSum - k));\n        }\n        if (!firstOcc.has(currSum)) firstOcc.set(currSum, i);\n    }\n    return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Longest Subarray with Sum K",
+          "url": "https://practice.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-zero-sum-subarray",
+      "title": "Zero-Sum Subarray Detection & Length",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Detects if a zero-sum subarray exists and finds its maximum length using prefix sum repetition property.",
+      "explanation": [
+        "Mathematical Property: Subarray [i...j] sums to 0 if and only if `prefixSum[j] == prefixSum[i-1]`.",
+        "Iterate through array while maintaining running `prefix_sum`.",
+        "If `prefix_sum == 0` or `prefix_sum` was seen previously in HashSet/HashMap, a zero-sum subarray exists!",
+        "To find maximum length: store `first_occurrence[prefix_sum] = index` and calculate `i - first_occurrence[prefix_sum]`."
+      ],
+      "exampleTrace": {
+        "input": "arr = [15, -2, 2, -8, 1, 7, 10, 23]",
+        "output": "5 (Subarray: [-2, 2, -8, 1, 7])",
+        "traceSteps": [
+          "Init map = {0: -1}.",
+          "i=0 (15): sum=15. map[15]=0.",
+          "i=1 (-2): sum=13. map[13]=1.",
+          "i=2 (2): sum=15 (seen at idx 0!). len = 2 - 0 = 2.",
+          "i=3 (-8): sum=7. map[7]=3.",
+          "i=4 (1): sum=8. map[8]=4.",
+          "i=5 (7): sum=15 (seen at idx 0!). len = 5 - 0 = 5. max_len = 5.",
+          "Max zero-sum subarray length = 5."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Detects zero-sum sub-ranges or balanced net zero fluctuations.",
+        "whenToUse": "When checking if a sequence contains any zero-sum window or longest zero-sum sub-array.",
+        "whereUsed": "Net zero financial balance calculations, game score reset detection.",
+        "whyOptimal": "Prefix sum repetition detection yields exact O(N) performance."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def maxLenZeroSumSubarray(arr: list[int]) -> int:\n    first_occ = {0: -1}\n    curr_sum = 0\n    max_len = 0\n    for i, num in enumerate(arr):\n        curr_sum += num\n        if curr_sum in first_occ:\n            max_len = max(max_len, i - first_occ[curr_sum])\n        else:\n            first_occ[curr_sum] = i\n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <algorithm>\n\nint maxLenZeroSumSubarray(std::vector<int>& arr) {\n    std::unordered_map<int, int> firstOcc;\n    firstOcc[0] = -1;\n    int currSum = 0, maxLen = 0;\n    for (int i = 0; i < arr.size(); i++) {\n        currSum += arr[i];\n        if (firstOcc.count(currSum)) {\n            maxLen = std::max(maxLen, i - firstOcc[currSum]);\n        } else {\n            firstOcc[currSum] = i;\n        }\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\n\npublic class ZeroSumSubarray {\n    public int maxLenZeroSumSubarray(int[] arr) {\n        HashMap<Integer, Integer> firstOcc = new HashMap<>();\n        firstOcc.put(0, -1);\n        int currSum = 0, maxLen = 0;\n        for (int i = 0; i < arr.length; i++) {\n            currSum += arr[i];\n            if (firstOcc.containsKey(currSum)) {\n                maxLen = Math.max(maxLen, i - firstOcc.get(currSum));\n            } else {\n                firstOcc.put(currSum, i);\n            }\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function maxLenZeroSumSubarray(arr) {\n    const firstOcc = new Map([[0, -1]]);\n    let currSum = 0, maxLen = 0;\n    for (let i = 0; i < arr.length; i++) {\n        currSum += arr[i];\n        if (firstOcc.has(currSum)) {\n            maxLen = Math.max(maxLen, i - firstOcc.get(currSum));\n        } else {\n            firstOcc.set(currSum, i);\n        }\n    }\n    return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Largest Subarray with 0 Sum",
+          "url": "https://practice.geeksforgeeks.org/problems/largest-subarray-with-0-sum/1",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "hashing-equal-zeros-and-ones",
+      "title": "Contiguous Array with Equal 0s and 1s",
+      "categoryId": "hashing",
+      "categoryTitle": "Hashing & Hash Tables",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(N)",
+      "summary": "Finds the maximum length of a contiguous subarray with an equal number of 0s and 1s by transforming 0s to -1s.",
+      "explanation": [
+        "Transformation trick: Treat every '0' as '-1' and every '1' as '+1'.",
+        "An equal number of 0s and 1s in a subarray now means the sum of transformed elements equals 0!",
+        "Maintain running count: `curr_sum += 1` if num == 1 else `curr_sum -= 1`.",
+        "Use HashMap to store `first_occurrence[curr_sum] = index` initialized with `{0: -1}`.",
+        "If `curr_sum` repeats at index `i`, max_len = max(max_len, i - first_occurrence[curr_sum])."
+      ],
+      "exampleTrace": {
+        "input": "nums = [0, 1, 0, 1]",
+        "output": "4",
+        "traceSteps": [
+          "Transform 0s to -1: [-1, +1, -1, +1]. Init map = {0: -1}.",
+          "i=0 (val -1): sum = -1. map[-1] = 0.",
+          "i=1 (val +1): sum = 0 (seen at idx -1!). len = 1 - (-1) = 2.",
+          "i=2 (val -1): sum = -1 (seen at idx 0!). len = 2 - 0 = 2.",
+          "i=3 (val +1): sum = 0 (seen at idx -1!). len = 3 - (-1) = 4. max_len = 4.",
+          "Max length of equal 0s and 1s = 4."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Finds maximum length subarray with balanced binary counts.",
+        "whenToUse": "When checking for equal counts of two binary states (0 vs 1, win vs loss, true vs false).",
+        "whereUsed": "Binary signal balance analyzers, fair A/B testing window calculations.",
+        "whyOptimal": "Transforming 0 to -1 converts the problem to Zero-Sum Subarray in single-pass O(N) time."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def findMaxLength(nums: list[int]) -> int:\n    first_occ = {0: -1}\n    curr_sum = 0\n    max_len = 0\n    \n    for i, num in enumerate(nums):\n        curr_sum += 1 if num == 1 else -1\n        if curr_sum in first_occ:\n            max_len = max(max_len, i - first_occ[curr_sum])\n        else:\n            first_occ[curr_sum] = i\n            \n    return max_len"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_map>\n#include <algorithm>\n\nint findMaxLength(std::vector<int>& nums) {\n    std::unordered_map<int, int> firstOcc;\n    firstOcc[0] = -1;\n    int currSum = 0, maxLen = 0;\n    for (int i = 0; i < nums.size(); i++) {\n        currSum += (nums[i] == 1) ? 1 : -1;\n        if (firstOcc.count(currSum)) {\n            maxLen = std::max(maxLen, i - firstOcc[currSum]);\n        } else {\n            firstOcc[currSum] = i;\n        }\n    }\n    return maxLen;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.HashMap;\n\npublic class ContiguousArray {\n    public int findMaxLength(int[] nums) {\n        HashMap<Integer, Integer> firstOcc = new HashMap<>();\n        firstOcc.put(0, -1);\n        int currSum = 0, maxLen = 0;\n        for (int i = 0; i < nums.length; i++) {\n            currSum += (nums[i] == 1) ? 1 : -1;\n            if (firstOcc.containsKey(currSum)) {\n                maxLen = Math.max(maxLen, i - firstOcc.get(currSum));\n            } else {\n                firstOcc.put(currSum, i);\n            }\n        }\n        return maxLen;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findMaxLength(nums) {\n    const firstOcc = new Map([[0, -1]]);\n    let currSum = 0, maxLen = 0;\n    for (let i = 0; i < nums.length; i++) {\n        currSum += nums[i] === 1 ? 1 : -1;\n        if (firstOcc.has(currSum)) {\n            maxLen = Math.max(maxLen, i - firstOcc.get(currSum));\n        } else {\n            firstOcc.set(currSum, i);\n        }\n    }\n    return maxLen;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 525 - Contiguous Array",
+          "url": "https://leetcode.com/problems/contiguous-array/",
+          "difficulty": "Medium"
+        }
+      ]
+    }
+  ]
+}

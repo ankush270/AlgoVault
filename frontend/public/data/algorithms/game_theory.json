@@ -1,0 +1,404 @@
+{
+  "id": "game_theory",
+  "category": {
+    "id": "game_theory",
+    "title": "Game Theory & Adversarial Search",
+    "icon": "Target",
+    "description": "Impartial & Partisan Games, Winning vs Losing States, Nim Game, Nim-Sum, Sprague-Grundy Theorem, Grundy Numbers (Mex), and Minimax with Alpha-Beta Pruning."
+  },
+  "totalAlgorithms": 7,
+  "algorithms": [
+    {
+      "id": "game-theory-winning-losing-states",
+      "title": "Winning and Losing States (N-Positions & P-Positions)",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Easy",
+      "timeComplexity": "O(States)",
+      "spaceComplexity": "O(States)",
+      "summary": "Classifies game positions into Winning States (N-Positions where Next player wins) and Losing States (P-Positions where Previous player wins).",
+      "explanation": [
+        "1. Terminal Position: Position with no valid outgoing moves is a Losing State (P-position under normal play).",
+        "2. Winning State (N-position): A position is a Winning State if there exists AT LEAST ONE move to a Losing State.",
+        "3. Losing State (P-position): A position is a Losing State if ALL valid outgoing moves lead to Winning States.",
+        "4. Dynamic Programming / Backward Induction: Evaluate game graph from terminal states backward to classify all positions."
+      ],
+      "exampleTrace": {
+        "title": "Trace Subtraction Game (Take 1 or 2 stones from N=4)",
+        "traceSteps": [
+          "N=0: Terminal -> Losing State (P-position).",
+          "N=1: Can move to N=0 (P-pos) -> Winning State (N-position).",
+          "N=2: Can move to N=0 (P-pos) -> Winning State (N-position).",
+          "N=3: Can move to N=1 (N-pos) or N=2 (N-pos) -> All moves lead to N-positions -> Losing State (P-position).",
+          "N=4: Can move to N=3 (P-pos) -> Winning State!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines optimal game outcome (Win or Loss) from any given state.",
+        "whenToUse": "When analyzing impartial two-player finite games under normal play rules.",
+        "whereUsed": "Combinatorial game analysis, subtraction games, coin pile games.",
+        "whyOptimal": "Backward induction DP evaluates all reachable states linearly."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def winning_losing_states(n: int, allowed_moves: list[int]) -> list[bool]:\n    # dp[i] = True if Winning State (N-pos), False if Losing State (P-pos)\n    dp = [False] * (n + 1)\n    for i in range(1, n + 1):\n        for m in allowed_moves:\n            if i >= m and not dp[i - m]:\n                dp[i] = True\n                break\n    return dp"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nvector<bool> winningLosingStates(int n, vector<int>& allowedMoves) {\n    vector<bool> dp(n + 1, false);\n    for (int i = 1; i <= n; i++) {\n        for (int m : allowedMoves) {\n            if (i >= m && !dp[i - m]) {\n                dp[i] = true;\n                break;\n            }\n        }\n    }\n    return dp;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    public static boolean[] winningLosingStates(int n, int[] allowedMoves) {\n        boolean[] dp = new boolean[n + 1];\n        for (int i = 1; i <= n; i++) {\n            for (int m : allowedMoves) {\n                if (i >= m && !dp[i - m]) {\n                    dp[i] = true;\n                    break;\n                }\n            }\n        }\n        return dp;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function winningLosingStates(n, allowedMoves) {\n  const dp = new Array(n + 1).fill(false);\n  for (let i = 1; i <= n; i++) {\n    for (const m of allowedMoves) {\n      if (i >= m && !dp[i - m]) {\n        dp[i] = true;\n        break;\n      }\n    }\n  }\n  return dp;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 292 - Nim Game",
+          "url": "https://leetcode.com/problems/nim-game/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "nim-game-classic",
+      "title": "Classic Game of Nim",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Easy",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Classic multi-pile impartial game where two players take turns removing any number of objects from a single pile.",
+      "explanation": [
+        "1. Rules: Given N piles of stones. On a turn, a player chooses one non-empty pile and removes any positive number of stones.",
+        "2. Normal Play Convention: The last player to make a move (taking the final stone) wins.",
+        "3. Game State Evaluation: If total XOR sum of all pile sizes is non-zero, the first player has a guaranteed winning strategy."
+      ],
+      "exampleTrace": {
+        "title": "Trace Nim with Piles [3, 4, 5]",
+        "traceSteps": [
+          "Piles: 3, 4, 5.",
+          "XOR sum: 3 ^ 4 ^ 5 = 2 != 0 -> Winning state for Player 1.",
+          "Player 1 reduces pile of size 5 to size 3 (since 5 ^ 2 = 7... change pile 3 of size 5 to 3^4^0 = 7? Change pile 1 of 3 to 3^2 = 1).",
+          "New piles [1, 4, 5] -> XOR sum = 1 ^ 4 ^ 5 = 0 (Losing state for Player 2!)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Determines optimal winner in multi-heap stone removal games.",
+        "whenToUse": "When analyzing impartial games with independent heaps/piles.",
+        "whereUsed": "Combinatorial game theory, competitive programming heap games.",
+        "whyOptimal": "Single pass O(N) evaluation using Nim-Sum theorem."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def can_win_nim(heaps: list[int]) -> bool:\n    nim_sum = 0\n    for h in heaps:\n        nim_sum ^= h\n    return nim_sum != 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool canWinNim(vector<int>& heaps) {\n    int nimSum = 0;\n    for (int h : heaps) nimSum ^= h;\n    return nimSum != 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static boolean canWinNim(int[] heaps) {\n        int nimSum = 0;\n        for (int h : heaps) nimSum ^= h;\n        return nimSum != 0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function canWinNim(heaps) {\n  let nimSum = 0;\n  for (const h of heaps) nimSum ^= h;\n  return nimSum !== 0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "LeetCode 292 - Nim Game",
+          "url": "https://leetcode.com/problems/nim-game/",
+          "difficulty": "Easy"
+        }
+      ]
+    },
+    {
+      "id": "nim-sum-xor-property",
+      "title": "Nim-Sum & XOR Invariant Property",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Medium",
+      "timeComplexity": "O(N)",
+      "spaceComplexity": "O(1)",
+      "summary": "Calculates Nim-Sum (bitwise XOR sum of pile sizes) and constructs the optimal winning move.",
+      "explanation": [
+        "1. Nim-Sum Definition: `S = x1 ^ x2 ^ ... ^ xn`.",
+        "2. Winning Invariant: If `S != 0`, there exists at least one pile `x_i` such that `x_i ^ S < x_i`.",
+        "3. Optimal Move Strategy: Reduce pile `x_i` to `x_i' = x_i ^ S`. The new Nim-Sum becomes `S' = S ^ x_i ^ x_i' = S ^ x_i ^ (x_i ^ S) = 0`.",
+        "4. Opponent's Forced Result: From any state with `S = 0`, ANY valid move MUST change `S` to a non-zero value."
+      ],
+      "exampleTrace": {
+        "title": "Trace Nim-Sum Winning Move for Piles [3, 4, 5]",
+        "traceSteps": [
+          "S = 3 ^ 4 ^ 5 = 2.",
+          "Check pile 3 (val 3): 3 ^ 2 = 1 < 3 -> VALID MOVE!",
+          "Reduce pile 1 from 3 to 1.",
+          "New piles: [1, 4, 5]. New S' = 1 ^ 4 ^ 5 = 0.",
+          "Opponent receives losing state (S' = 0)."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes exact pile reduction required to guarantee a win.",
+        "whenToUse": "When finding the explicit winning move in a Game of Nim.",
+        "whereUsed": "AI game agents, optimal move generation.",
+        "whyOptimal": "O(N) search for target pile with x_i ^ S < x_i."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def find_winning_move(heaps: list[int]) -> tuple[int, int] | None:\n    s = 0\n    for h in heaps:\n        s ^= h\n    if s == 0:\n        return None  # No winning move possible (Losing State)\n    for i, h in enumerate(heaps):\n        if (h ^ s) < h:\n            target_size = h ^ s\n            return (i, target_size)  # Reduce heap i to target_size\n    return None"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <utility>\nusing namespace std;\n\npair<int, int> findWinningMove(vector<int>& heaps) {\n    int s = 0;\n    for (int h : heaps) s ^= h;\n    if (s == 0) return {-1, -1};\n    for (size_t i = 0; i < heaps.size(); i++) {\n        if ((heaps[i] ^ s) < heaps[i]) {\n            return { (int)i, heaps[i] ^ s };\n        }\n    }\n    return {-1, -1};\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static int[] findWinningMove(int[] heaps) {\n        int s = 0;\n        for (int h : heaps) s ^= h;\n        if (s == 0) return new int[]{-1, -1};\n        for (int i = 0; i < heaps.length; i++) {\n            if ((heaps[i] ^ s) < heaps[i]) {\n                return new int[]{i, heaps[i] ^ s};\n            }\n        }\n        return new int[]{-1, -1};\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function findWinningMove(heaps) {\n  let s = 0;\n  for (const h of heaps) s ^= h;\n  if (s === 0) return null;\n  for (let i = 0; i < heaps.length; i++) {\n    if ((heaps[i] ^ s) < heaps[i]) {\n      return { heapIndex: i, targetSize: heaps[i] ^ s };\n    }\n  }\n  return null;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Nim-Sum",
+          "url": "https://www.geeksforgeeks.org/combinatorial-game-theory-set-2-sprague-grundy-theorem-with-n-piles/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "grundy-numbers-mex",
+      "title": "Grundy Numbers & Mex Function",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Medium",
+      "timeComplexity": "O(States * Transitions)",
+      "spaceComplexity": "O(States)",
+      "summary": "Calculates Grundy values using Minimum Excluded Value (Mex) function to measure state advantage.",
+      "explanation": [
+        "1. Mex Function: `Mex(Set)` returns the smallest non-negative integer NOT present in `Set` (e.g. `Mex({0, 1, 3}) = 2`).",
+        "2. Grundy Number `G(u)`: `G(u) = Mex({ G(v) | v is reachable from u in 1 move })`.",
+        "3. Terminal Position: `G(terminal) = Mex({}) = 0`.",
+        "4. Interpretation: A state `u` is a Losing State iff `G(u) == 0`."
+      ],
+      "exampleTrace": {
+        "title": "Trace Mex and Grundy numbers for subtraction game {1, 2, 3}",
+        "traceSteps": [
+          "G(0) = Mex({}) = 0",
+          "G(1) = Mex({G(0)}) = Mex({0}) = 1",
+          "G(2) = Mex({G(1), G(0)}) = Mex({1, 0}) = 2",
+          "G(3) = Mex({G(2), G(1), G(0)}) = Mex({2, 1, 0}) = 3",
+          "G(4) = Mex({G(3), G(2), G(1)}) = Mex({3, 2, 1}) = 0"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes exact Grundy value of any game state using Mex reduction.",
+        "whenToUse": "When evaluating non-standard impartial game components.",
+        "whereUsed": "Combinatorial games, graph game solvers.",
+        "whyOptimal": "O(1) set mex lookups after DP precomputation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def mex(s: set[int]) -> int:\n    m = 0\n    while m in s:\n        m += 1\n    return m\n\ndef compute_grundy(n: int, moves: list[int]) -> list[int]:\n    g = [0] * (n + 1)\n    for i in range(1, n + 1):\n        reachable = set()\n        for m in moves:\n            if i >= m:\n                reachable.add(g[i - m])\n        g[i] = mex(reachable)\n    return g"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <unordered_set>\nusing namespace std;\n\nint mex(const unordered_set<int>& s) {\n    int m = 0;\n    while (s.count(m)) m++;\n    return m;\n}\n\nvector<int> computeGrundy(int n, vector<int>& moves) {\n    vector<int> g(n + 1, 0);\n    for (int i = 1; i <= n; i++) {\n        unordered_set<int> reachable;\n        for (int m : moves) {\n            if (i >= m) reachable.insert(g[i - m]);\n        }\n        g[i] = mex(reachable);\n    }\n    return g;\n}"
+        },
+        {
+          "language": "java",
+          "code": "import java.util.*;\n\npublic class Solution {\n    static int mex(Set<Integer> set) {\n        int m = 0;\n        while (set.contains(m)) m++;\n        return m;\n    }\n    public static int[] computeGrundy(int n, int[] moves) {\n        int[] g = new int[n + 1];\n        for (int i = 1; i <= n; i++) {\n            Set<Integer> reachable = new HashSet<>();\n            for (int m : moves) {\n                if (i >= m) reachable.add(g[i - m]);\n            }\n            g[i] = mex(reachable);\n        }\n        return g;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function mex(set) {\n  let m = 0;\n  while (set.has(m)) m++;\n  return m;\n}\nfunction computeGrundy(n, moves) {\n  const g = new Array(n + 1).fill(0);\n  for (let i = 1; i <= n; i++) {\n    const reachable = new Set();\n    for (const m of moves) {\n      if (i >= m) reachable.add(g[i - m]);\n    }\n    g[i] = mex(reachable);\n  }\n  return g;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Grundy Numbers",
+          "url": "https://www.geeksforgeeks.org/combinatorial-game-theory-set-2-sprague-grundy-theorem-with-n-piles/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "sprague-grundy-theorem",
+      "title": "Sprague-Grundy Theorem (Combining Sub-games)",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Hard",
+      "timeComplexity": "O(N * States)",
+      "spaceComplexity": "O(States)",
+      "summary": "Proves any impartial game is equivalent to a Nim pile of size G(u), allowing independent sub-games to be combined via XOR sum.",
+      "explanation": [
+        "1. Theorem: Every impartial game under normal play is equivalent to a Nim pile of size equal to its Grundy number `G(u)`.",
+        "2. Multi-Component Games: If a game consists of independent sub-games `G1, G2, ..., Gk`, the overall game's Grundy value is `G_total = G1 ^ G2 ^ ... ^ Gk`.",
+        "3. Winning Criterion: First player wins iff `G_total != 0`."
+      ],
+      "exampleTrace": {
+        "title": "Trace 3 independent sub-games with Grundy values G1=3, G2=5, G3=6",
+        "traceSteps": [
+          "Sub-game 1 Grundy = 3",
+          "Sub-game 2 Grundy = 5",
+          "Sub-game 3 Grundy = 6",
+          "Total Combined Grundy G_total = 3 ^ 5 ^ 6 = 0.",
+          "G_total == 0 -> Losing state for current player!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Combines complex composite impartial games into a single Nim-Sum evaluation.",
+        "whenToUse": "When a game splits into multiple independent sub-games.",
+        "whereUsed": "Chess endgame piece simplification, multi-pile custom move games.",
+        "whyOptimal": "Replaces exponential joint state exploration with independent sub-game XOR summation."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def evaluate_composite_game(subgame_states: list[int], grundy_lookup: list[int]) -> bool:\n    total_grundy = 0\n    for state in subgame_states:\n        total_grundy ^= grundy_lookup[state]\n    return total_grundy != 0"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\nusing namespace std;\n\nbool evaluateCompositeGame(const vector<int>& subgameStates, const vector<int>& grundyLookup) {\n    int totalGrundy = 0;\n    for (int state : subgameStates) {\n        totalGrundy ^= grundyLookup[state];\n    }\n    return totalGrundy != 0;\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static boolean evaluateCompositeGame(int[] subgameStates, int[] grundyLookup) {\n        int totalGrundy = 0;\n        for (int state : subgameStates) {\n            totalGrundy ^= grundyLookup[state];\n        }\n        return totalGrundy != 0;\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function evaluateCompositeGame(subgameStates, grundyLookup) {\n  let totalGrundy = 0;\n  for (const state of subgameStates) {\n    totalGrundy ^= grundyLookup[state];\n  }\n  return totalGrundy !== 0;\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Sprague-Grundy Theorem",
+          "url": "https://www.geeksforgeeks.org/combinatorial-game-theory-set-2-sprague-grundy-theorem-with-n-piles/",
+          "difficulty": "Hard"
+        }
+      ]
+    },
+    {
+      "id": "minimax-algorithm",
+      "title": "Minimax Algorithm",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Medium",
+      "timeComplexity": "O(B^D)",
+      "spaceComplexity": "O(D)",
+      "summary": "Adversarial game-tree search algorithm maximizing agent score assuming opponent minimizes it.",
+      "explanation": [
+        "1. Maximizer Node: Chooses the child move that yields maximum value `max(child_values)`.",
+        "2. Minimizer Node: Chooses the child move that yields minimum value `min(child_values)`.",
+        "3. Leaf Evaluation: Evaluates board state utility value when depth limit is reached or terminal node found."
+      ],
+      "exampleTrace": {
+        "title": "Trace Depth 2 Minimax Tree",
+        "traceSteps": [
+          "Root (Maximizer): Evaluates left child (Minimizer) and right child (Minimizer).",
+          "Left Minimizer yields min(3, 5) = 3.",
+          "Right Minimizer yields min(2, 9) = 2.",
+          "Root Maximizer chooses max(3, 2) = 3."
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Computes optimal strategy in zero-sum two-player deterministic games.",
+        "whenToUse": "When creating AI opponents for turn-based games like Tic-Tac-Toe, Checkers.",
+        "whereUsed": "Board game AI, decision theory.",
+        "whyOptimal": "Guarantees best possible outcome against optimal opponent."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minimax(depth: int, node_idx: int, is_max: bool, scores: list[int], max_depth: int) -> int:\n    if depth == max_depth:\n        return scores[node_idx]\n    if is_max:\n        return max(minimax(depth + 1, node_idx * 2, False, scores, max_depth),\n                   minimax(depth + 1, node_idx * 2 + 1, False, scores, max_depth))\n    else:\n        return min(minimax(depth + 1, node_idx * 2, True, scores, max_depth),\n                   minimax(depth + 1, node_idx * 2 + 1, True, scores, max_depth))"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint minimax(int depth, int nodeIdx, bool isMax, vector<int>& scores, int maxDepth) {\n    if (depth == maxDepth) return scores[nodeIdx];\n    if (isMax) {\n        return max(minimax(depth + 1, nodeIdx * 2, false, scores, maxDepth),\n                   minimax(depth + 1, nodeIdx * 2 + 1, false, scores, maxDepth));\n    } else {\n        return min(minimax(depth + 1, nodeIdx * 2, true, scores, maxDepth),\n                   minimax(depth + 1, nodeIdx * 2 + 1, true, scores, maxDepth));\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static int minimax(int depth, int nodeIdx, boolean isMax, int[] scores, int maxDepth) {\n        if (depth == maxDepth) return scores[nodeIdx];\n        if (isMax) {\n            return Math.max(minimax(depth + 1, nodeIdx * 2, false, scores, maxDepth),\n                            minimax(depth + 1, nodeIdx * 2 + 1, false, scores, maxDepth));\n        } else {\n            return Math.min(minimax(depth + 1, nodeIdx * 2, true, scores, maxDepth),\n                            minimax(depth + 1, nodeIdx * 2 + 1, true, scores, maxDepth));\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minimax(depth, nodeIdx, isMax, scores, maxDepth) {\n  if (depth === maxDepth) return scores[nodeIdx];\n  if (isMax) {\n    return Math.max(minimax(depth + 1, nodeIdx * 2, false, scores, maxDepth),\n                    minimax(depth + 1, nodeIdx * 2 + 1, false, scores, maxDepth));\n  } else {\n    return Math.min(minimax(depth + 1, nodeIdx * 2, true, scores, maxDepth),\n                    minimax(depth + 1, nodeIdx * 2 + 1, true, scores, maxDepth));\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Minimax Algorithm in Game Theory",
+          "url": "https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-1-introduction/",
+          "difficulty": "Medium"
+        }
+      ]
+    },
+    {
+      "id": "alpha-beta-pruning",
+      "title": "Alpha-Beta Pruning Optimization",
+      "categoryId": "game_theory",
+      "categoryTitle": "Game Theory & Adversarial Search",
+      "difficulty": "Hard",
+      "timeComplexity": "O(B^(D/2)) Best-case vs O(B^D) Minimax",
+      "spaceComplexity": "O(D)",
+      "summary": "Prunes subtrees in Minimax game search tree using Alpha (max lower bound) and Beta (min upper bound) cutoff threshold comparison.",
+      "explanation": [
+        "1. Alpha: The best score the Maximizer player is currently guaranteed at or above this level.",
+        "2. Beta: The best score the Minimizer player is currently guaranteed at or below this level.",
+        "3. Pruning Condition: If `beta <= alpha`, the current branch cannot affect the final decision. Prune remaining sibling branches immediately."
+      ],
+      "exampleTrace": {
+        "title": "Trace Alpha-Beta Pruning Cutoff",
+        "traceSteps": [
+          "Maximizer evaluates left branch -> Score = 5. Alpha becomes 5.",
+          "Minimizer evaluates right branch's 1st child -> Score = 3.",
+          "Since Minimizer chooses <= 3 and Maximizer already has 5 on left, Beta = 3 <= Alpha = 5!",
+          "PRUNE remaining right child branches!"
+        ]
+      },
+      "wAnswers": {
+        "whatItSolves": "Reduces game tree search nodes by up to 50% depth factor.",
+        "whenToUse": "When searching deep game trees (Chess, Checkers, Go).",
+        "whereUsed": "Stockfish, Deep Blue, modern game tree search engines.",
+        "whyOptimal": "Prunes unpromising subtrees without affecting the final minimax decision."
+      },
+      "codeTemplates": [
+        {
+          "language": "python",
+          "code": "def minimax_alpha_beta(depth: int, node_idx: int, is_max: bool, scores: list[int], alpha: int, beta: int, max_depth: int) -> int:\n    if depth == max_depth:\n        return scores[node_idx]\n    if is_max:\n        best = float('-inf')\n        for i in range(2):\n            val = minimax_alpha_beta(depth + 1, node_idx * 2 + i, False, scores, alpha, beta, max_depth)\n            best = max(best, val)\n            alpha = max(alpha, best)\n            if beta <= alpha:\n                break  # Beta Pruning\n        return best\n    else:\n        best = float('inf')\n        for i in range(2):\n            val = minimax_alpha_beta(depth + 1, node_idx * 2 + i, True, scores, alpha, beta, max_depth)\n            best = min(best, val)\n            beta = min(beta, best)\n            if beta <= alpha:\n                break  # Alpha Pruning\n        return best"
+        },
+        {
+          "language": "cpp",
+          "code": "#include <vector>\n#include <algorithm>\n#include <climits>\nusing namespace std;\n\nint minimaxAlphaBeta(int depth, int nodeIdx, bool isMax, vector<int>& scores, int alpha, int beta, int maxDepth) {\n    if (depth == maxDepth) return scores[nodeIdx];\n    if (isMax) {\n        int best = INT_MIN;\n        for (int i = 0; i < 2; i++) {\n            int val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, false, scores, alpha, beta, maxDepth);\n            best = max(best, val);\n            alpha = max(alpha, best);\n            if (beta <= alpha) break; // Beta cutoff\n        }\n        return best;\n    } else {\n        int best = INT_MAX;\n        for (int i = 0; i < 2; i++) {\n            int val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, true, scores, alpha, beta, maxDepth);\n            best = min(best, val);\n            beta = min(beta, best);\n            if (beta <= alpha) break; // Alpha cutoff\n        }\n        return best;\n    }\n}"
+        },
+        {
+          "language": "java",
+          "code": "public class Solution {\n    public static int minimaxAlphaBeta(int depth, int nodeIdx, boolean isMax, int[] scores, int alpha, int beta, int maxDepth) {\n        if (depth == maxDepth) return scores[nodeIdx];\n        if (isMax) {\n            int best = Integer.MIN_VALUE;\n            for (int i = 0; i < 2; i++) {\n                int val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, false, scores, alpha, beta, maxDepth);\n                best = Math.max(best, val);\n                alpha = Math.max(alpha, best);\n                if (beta <= alpha) break;\n            }\n            return best;\n        } else {\n            int best = Integer.MAX_VALUE;\n            for (int i = 0; i < 2; i++) {\n                int val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, true, scores, alpha, beta, maxDepth);\n                best = Math.min(best, val);\n                beta = Math.min(beta, best);\n                if (beta <= alpha) break;\n            }\n            return best;\n        }\n    }\n}"
+        },
+        {
+          "language": "javascript",
+          "code": "function minimaxAlphaBeta(depth, nodeIdx, isMax, scores, alpha, beta, maxDepth) {\n  if (depth === maxDepth) return scores[nodeIdx];\n  if (isMax) {\n    let best = -Infinity;\n    for (let i = 0; i < 2; i++) {\n      const val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, false, scores, alpha, beta, maxDepth);\n      best = Math.max(best, val);\n      alpha = Math.max(alpha, best);\n      if (beta <= alpha) break;\n    }\n    return best;\n  } else {\n    let best = Infinity;\n    for (let i = 0; i < 2; i++) {\n      const val = minimaxAlphaBeta(depth + 1, nodeIdx * 2 + i, true, scores, alpha, beta, maxDepth);\n      best = Math.min(best, val);\n      beta = Math.min(beta, best);\n      if (beta <= alpha) break;\n    }\n    return best;\n  }\n}"
+        }
+      ],
+      "practiceProblems": [
+        {
+          "title": "GeeksforGeeks - Alpha-Beta Pruning",
+          "url": "https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/",
+          "difficulty": "Hard"
+        }
+      ]
+    }
+  ]
+}
