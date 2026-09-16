@@ -1,13 +1,13 @@
 import { TopicItem } from '../types';
 
 /**
- * JavaScript Topic Registry with 100% Verbatim Markdown Notes & Assets
- * Dynamically generated from public/data/javascript.json (Season 1 & Season 2 - 25 Episodes)
+ * JavaScript Topic Registry (Namaste JavaScript Master Edition - 25 Episodes)
+ * Generated from public/data/javascript.json
  */
 export const javascriptTopics: TopicItem[] = [
   {
     "id": "js-execution-context",
-    "title": "Episode 1 : Execution Context",
+    "title": "Episode 1: Execution Context & Thread of Execution",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -21,37 +21,35 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 1 : Execution Context with full code and visual diagrams.",
+    "summary": "All JS code executes inside an Execution Context containing a Memory Component (Variable Environment) and Code Component (Thread of Execution). JS is single-threaded and synchronous.",
     "keyConcepts": [
-      "Everything in JS happens inside the execution context. Imagine a sealed-off container inside which JS runs.",
-      "In the container the first component is memory component and the 2nd one is code component",
-      "Memory component has all the variables and functions in key value pairs. It is also called Variable environment.",
-      "Code component is the place where code is executed one line at a time. It is also called the Thread of Execution.",
-      "JS is a synchronous, single-threaded language",
-      "Synchronous:- In a specific synchronous order.",
-      "Single-threaded:- One command at a time."
+      "Execution Context = Variable Environment (Memory) + Thread of Execution (Code).",
+      "JavaScript is single-threaded (executes one command at a time).",
+      "JavaScript is synchronous (executes code in sequential top-to-bottom order).",
+      "Global Execution Context (GEC) is created automatically when a script runs.",
+      "Each function invocation creates a new Function Execution Context (FEC)."
     ],
-    "detailedContent": "# Episode 1 : Execution Context\n\n- Everything in JS happens inside the execution context. Imagine a sealed-off container inside which JS runs.\n  It is an abstract concept that hold info about the env. within the current code is being executed.\n  ![Execution Context](/assets/namaste-js/execution-context.jpg \"Execution Context\")\n\n- In the container the first component is **memory component** and the 2nd one is **code component**\n\n- Memory component has all the variables and functions in key value pairs. It is also called **Variable environment**.\n\n- Code component is the place where code is executed one line at a time. It is also called the **Thread of Execution**.\n\n- JS is a **synchronous**, **single-threaded** language\n  - Synchronous:- In a specific synchronous order.\n  - Single-threaded:- One command at a time.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 1: Execution Context & Thread of Execution\n\n## Overview\nAn Execution Context is an abstract container created by the JavaScript engine whenever code is executed. It houses the environment, memory space, and sequential code execution pipeline for the currently running script or function.\n\n## Detailed Explanation\nEverything in JavaScript happens inside an **Execution Context**. You can visualize it as a container with two distinct compartments:\n\n1. **Memory Component (Variable Environment)**: A key-value store where variables and function declarations are stored in memory before execution begins (e.g., `a: 10`, `fn: f()`).\n2. **Code Component (Thread of Execution)**: The single-threaded pipeline where code is evaluated and executed line-by-line.\n\nJavaScript is a **synchronous, single-threaded language**. 'Single-threaded' means it can execute only one command at a time. 'Synchronous' means code is executed in a strict, top-to-bottom order.\n\n## Real-World Analogy\n🏢 Single-Counter Kitchen: A chef (Thread of Execution) works at a single kitchen counter with a recipe notebook (Variable Environment). The chef looks up ingredients on the counter and follows recipe steps sequentially line-by-line.\n\n## Key Architectural Concepts\n- Execution Context = Variable Environment (Memory) + Thread of Execution (Code).\n- JavaScript is single-threaded (executes one command at a time).\n- JavaScript is synchronous (executes code in sequential top-to-bottom order).\n- Global Execution Context (GEC) is created automatically when a script runs.\n- Each function invocation creates a new Function Execution Context (FEC).",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "// Core syntax demonstration for Episode 1 : Execution Context\nconsole.log('Episode 1 : Execution Context active in JS execution context');"
+        "code": "// Phase 1: Memory Allocation\n// n: undefined\n// square: function square(num) { ... }\n// square2: undefined\n\nvar n = 2;\nfunction square(num) {\n  var ans = num * num;\n  return ans;\n}\nvar square2 = square(n);\nconsole.log(square2); // 4"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is an Execution Context in JavaScript and what are its components?",
-        "answer": "An Execution Context is an abstract container created by the JS engine whenever JS code is executed. It consists of two components: 1) Memory Component (Variable Environment), which stores variables and function declarations as key-value pairs, and 2) Code Component (Thread of Execution), where code is executed line-by-line synchronously."
+        "question": "What is an Execution Context in JavaScript and what are its two components?",
+        "answer": "An Execution Context is an abstract environment container created by the JS engine to manage code execution. Its two components are: 1) Memory Component (Variable Environment), which holds variable and function declarations as key-value pairs, and 2) Code Component (Thread of Execution), which executes statements sequentially line-by-line."
       },
       {
-        "question": "Why is JavaScript called a single-threaded synchronous language?",
-        "answer": "JavaScript is single-threaded because it has only one call stack and can execute only one command at a time. It is synchronous because it executes code line-by-line in a specific top-to-bottom sequence."
+        "question": "Why is JavaScript defined as a single-threaded synchronous language?",
+        "answer": "JavaScript is single-threaded because it has only one Call Stack and can execute only one instruction at any given instant. It is synchronous because instructions are evaluated sequentially in a fixed order, moving to the next line only after the current line finishes."
       }
     ]
   },
   {
     "id": "js-call-stack",
-    "title": "Episode 2 : How JS is executed & Call Stack",
+    "title": "Episode 2: How JS Code Executes & Call Stack Mechanics",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -65,38 +63,35 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 2 : How JS is executed & Call Stack with full code and visual diagrams.",
+    "summary": "JS code executes in 2 phases (Memory Creation & Code Execution). The Call Stack manages creation, ordering, and destruction of Execution Contexts.",
     "keyConcepts": [
-      "When a JS program is ran, a global execution context is created.",
-      "The execution context is created in two phases.",
-      "Memory creation phase - JS will allocate memory to variables and functions.",
-      "Code execution phase",
-      "Let's consider the below example and its code execution steps:",
-      "Javascript manages code execution context creation and deletion with the the help of Call Stack.",
-      "Call Stack is a mechanism to keep track of its place in script that calls multiple function.",
-      "Call Stack maintains the order of execution of execution contexts. It is also known as Program Stack, Control Stack, Runtime stack, Machine Stack, Execution context stack."
+      "Phase 1 (Memory Allocation): Variables = undefined, Functions = Full body definition.",
+      "Phase 2 (Code Execution): Line-by-line evaluation and variable assignment.",
+      "Call Stack (LIFO data structure) controls execution context lifecycle.",
+      "Call Stack alternate names: Program Stack, Control Stack, Runtime Stack, Machine Stack.",
+      "GEC sits at the bottom of the Call Stack until the browser tab or process closes."
     ],
-    "detailedContent": "# Episode 2 : How JS is executed & Call Stack\n\n- When a JS program is ran, a **global execution context** is created.\n\n- The execution context is created in two phases.\n\n  - Memory creation phase - JS will allocate memory to variables and functions.\n  - Code execution phase\n\n- Let's consider the below example and its code execution steps:\n\n```js\nvar n = 2;\nfunction square(num) {\n  var ans = num * num;\n  return ans;\n}\nvar square2 = square(n);\nvar square4 = square(4);\n```\n\nThe very **first** thing which JS does is **memory creation phase**, so it goes to line one of above code snippet, and **allocates a memory space** for variable **'n'** and then goes to line two, and **allocates a memory space** for **function 'square'**. When allocating memory **for n it stores 'undefined'**, a special value for 'n'. **For 'square', it stores the whole code of the function inside its memory space.** Then, as square2 and square4 are variables as well, it allocates memory and stores 'undefined' for them, and this is the end of first phase i.e. memory creation phase.\n\nSo O/P will look something like\n\n![Execution Context Phase 1](/assets/namaste-js/phase1.jpg \"Execution Context\")\n\nNow, in **2nd phase** i.e. code execution phase, it starts going through the whole code line by line. As it encounters var n = 2, it assigns 2 to 'n'. Until now, the value of 'n' was undefined. For function, there is nothing to execute. As these lines were already dealt with in memory creation phase.\n\nComing to line 6 i.e. **var square2 = square(n)**, here **functions are a bit different than any other language. A new execution context is created altogether.** Again in this new execution context, in memory creation phase, we allocate memory to num and ans the two variables. And undefined is placed in them. Now, in code execution phase of this execution context, first 2 is assigned to num. Then var ans = num \\* num will store 4 in ans. After that, return ans returns the control of program back to where this function was invoked from.\n\n![Execution Context Phase 2](/assets/namaste-js/phase2.jpg \"Execution Context\")\n\nWhen **return** keyword is encountered, It returns the control to the called line and also **the function execution context is deleted**.\nSame thing will be repeated for square4 and then after that is finished, the global execution context will be destroyed.\nSo the **final diagram** before deletion would look something like:\n\n![Execution Context Phase 2](/assets/namaste-js/final_execution_context.jpg \"Execution Context\")\n\n- Javascript manages code execution context creation and deletion with the the help of **Call Stack**.\n\n- Call Stack is a mechanism to keep track of its place in script that calls multiple function.\n\n- Call Stack maintains the order of execution of execution contexts. It is also known as Program Stack, Control Stack, Runtime stack, Machine Stack, Execution context stack.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 2: How JS Code Executes & Call Stack Mechanics\n\n## Overview\nWhen a JS program runs, the engine creates the Global Execution Context (GEC) in two phases: Memory Creation Phase and Code Execution Phase. The engine manages nested function execution using the Call Stack.\n\n## Detailed Explanation\nExecution context creation occurs in two distinct phases:\n\n1. **Phase 1 - Memory Creation Phase**: The engine scans the script, allocating memory for variables (`var` initialized to `undefined`) and functions (storing the entire function body).\n2. **Phase 2 - Code Execution Phase**: The engine runs code line-by-line, assigning values and executing functions.\n\nWhenever a function is called, a new **Function Execution Context (FEC)** is created and pushed onto the **Call Stack**. When the function returns, its execution context is popped off the stack and destroyed.\n\n## Real-World Analogy\n📚 Stack of Plates: The Global Execution Context is the base plate. Calling a function places a new plate on top of the stack. Returning from a function removes the top plate. The Call Stack always processes the plate on top.\n\n## Key Architectural Concepts\n- Phase 1 (Memory Allocation): Variables = undefined, Functions = Full body definition.\n- Phase 2 (Code Execution): Line-by-line evaluation and variable assignment.\n- Call Stack (LIFO data structure) controls execution context lifecycle.\n- Call Stack alternate names: Program Stack, Control Stack, Runtime Stack, Machine Stack.\n- GEC sits at the bottom of the Call Stack until the browser tab or process closes.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "var n = 2;\nfunction square(num) {\n  var ans = num * num;\n  return ans;\n}\nvar square2 = square(n);\nvar square4 = square(4);"
+        "code": "var num = 5;\n\nfunction multiplyByTwo(n) {\n  var result = n * 2;\n  return result;\n}\n\nvar output1 = multiplyByTwo(num);\nvar output2 = multiplyByTwo(10);\n\n// 1. GEC pushed to Call Stack.\n// 2. multiplyByTwo(5) creates FEC -> Pushed to stack.\n// 3. returns 10 -> FEC popped and destroyed.\n// 4. multiplyByTwo(10) creates FEC -> Pushed to stack -> returns 20 -> FEC popped."
       }
     ],
     "interviewQuestions": [
       {
-        "question": "How does the JS Call Stack manage function execution?",
-        "answer": "The Call Stack is a LIFO (Last In, First Out) data structure that tracks the execution of contexts. The Global Execution Context (GEC) is pushed first. Whenever a function is invoked, a new Function Execution Context (FEC) is created and pushed onto the stack. When the function finishes or returns, its FEC is popped off."
+        "question": "Walk through what happens during Phase 1 vs Phase 2 of JavaScript code execution.",
+        "answer": "In Phase 1 (Memory Creation), JS scans the code and allocates memory space. Variables declared with 'var' are assigned 'undefined', while function declarations store their full body. In Phase 2 (Code Execution), JS executes code line-by-line, updating variable values in memory and executing function calls."
       },
       {
-        "question": "What causes a 'Maximum call stack size exceeded' error?",
-        "answer": "This error occurs when unbounded or deep recursion pushes function execution contexts continuously onto the Call Stack without returning, exceeding memory limits."
+        "question": "What is the Call Stack and what is its role in JS runtime?",
+        "answer": "The Call Stack is a LIFO (Last In, First Out) stack data structure that tracks execution contexts. It maintains the order of execution: pushing new function execution contexts when functions are invoked and popping them off when they return."
       }
     ]
   },
   {
     "id": "js-hoisting",
-    "title": "Episode 3 : Hoisting in JavaScript (variables & functions)",
+    "title": "Episode 3: Hoisting in JavaScript (Variables & Functions)",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -110,43 +105,35 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 3 : Hoisting in JavaScript (variables & functions) with full code and visual diagrams.",
+    "summary": "Hoisting allocates memory before execution. Function declarations hoist with full implementation; `var` variables hoist initialized to `undefined`.",
     "keyConcepts": [
-      "Let's observe the below code and it's explaination:",
-      "It should have been an outright error in many other languages, as it is not possible to even access something which is not even created (defined) yet But in JS, We know that in memory creation phase it assigns undefined and puts the content of function to function's memory. And in execution, it then executes whatever is asked. Here, as execution goes line by line and not after compiling, it could only print undefined and nothing else. This phenomenon, is not an error. However, if we remove var x = 7; then it gives error. Uncaught ReferenceError: x is not defined",
-      "Hoisting is a concept which enables us to extract values of variables and functions even before initialising/assigning value without getting error and this is happening due to the 1st phase (memory creation phase) of the Execution Context.",
-      "So in previous lecture, we learnt that execution context gets created in two phase, so even before code execution, memory is created so in case of variable, it will be initialized as undefined while in case of function the whole function code is placed in the memory. Example:",
-      "Now let's observe a different example and try to understand the output."
+      "Hoisting is not physical code movement; it is pre-execution memory allocation.",
+      "Function declarations are hoisted with their complete function implementation.",
+      "Variables declared with 'var' are hoisted and initialized to 'undefined'.",
+      "Arrow functions & function expressions assigned to 'var' hoist as 'undefined'.",
+      "Accessing undeclared variables throws ReferenceError: x is not defined."
     ],
-    "detailedContent": "# Episode 3 : Hoisting in JavaScript (variables & functions)\n\n- Let's observe the below code and it's explaination:\n\n```js\ngetName(); // Namaste Javascript\nconsole.log(x); // undefined\nvar x = 7;\nfunction getName() {\n  console.log(\"Namaste Javascript\");\n}\n```\n\n- It should have been an outright error in many other languages, as it is not possible to even access something which is not even created (defined) yet But in JS, We know that in memory creation phase it assigns undefined and puts the content of function to function's memory. And in execution, it then executes whatever is asked. Here, as execution goes line by line and not after compiling, it could only print undefined and nothing else. This phenomenon, is not an error. However, if we remove var x = 7; then it gives error. Uncaught ReferenceError: x is not defined\n\n- **Hoisting** is a concept which enables us to extract values of variables and functions even before initialising/assigning value without getting error and this is happening due to the 1st phase (memory creation phase) of the Execution Context.\n\n- So in previous lecture, we learnt that execution context gets created in two phase, so even before code execution, memory is created so in case of variable, it will be initialized as undefined while in case of function the whole function code is placed in the memory. Example:\n\n```js\ngetName(); // Namaste JavaScript\nconsole.log(x); // Uncaught Reference: x is not defined.\nconsole.log(getName); // f getName(){ console.log(\"Namaste JavaScript); }\nfunction getName() {\n  console.log(\"Namaste JavaScript\");\n}\n```\n\n- Now let's observe a different example and try to understand the output.\n\n```js\ngetName(); // Uncaught TypeError: getName is not a function\nconsole.log(getName);\nvar getName = function () {\n  console.log(\"Namaste JavaScript\");\n};\n// The code won't execute as the first line itself throws an TypeError.\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 3: Hoisting in JavaScript (Variables & Functions)\n\n## Overview\nHoisting is JavaScript behavior where variable and function declarations are allocated memory during Phase 1 before code execution begins. This allows functions and 'var' variables to be accessed prior to their lines of declaration.\n\n## Detailed Explanation\nBecause the JS engine allocates memory in Phase 1 before executing code in Phase 2:\n\n- **Function Declarations** can be invoked before their definition in code because their full body is loaded into memory during Phase 1.\n- **`var` Variables** accessed before declaration return `undefined` rather than throwing a ReferenceError.\n- **Function Expressions / Arrow Functions** assigned to `var` evaluate to `undefined` during Phase 1. Invoking them early results in `TypeError: fn is not a function`.\n\n## Real-World Analogy\n🏷️ Reserved Name Badges: Name tags are placed on conference tables before attendees arrive. Attendees can see their name tag exists (`var = undefined`), but the attendee isn't seated until code execution reaches their arrival line.\n\n## Key Architectural Concepts\n- Hoisting is not physical code movement; it is pre-execution memory allocation.\n- Function declarations are hoisted with their complete function implementation.\n- Variables declared with 'var' are hoisted and initialized to 'undefined'.\n- Arrow functions & function expressions assigned to 'var' hoist as 'undefined'.\n- Accessing undeclared variables throws ReferenceError: x is not defined.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "getName(); // Namaste Javascript\nconsole.log(x); // undefined\nvar x = 7;\nfunction getName() {\n  console.log(\"Namaste Javascript\");\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "getName(); // Namaste JavaScript\nconsole.log(x); // Uncaught Reference: x is not defined.\nconsole.log(getName); // f getName(){ console.log(\"Namaste JavaScript); }\nfunction getName() {\n  console.log(\"Namaste JavaScript\");\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "getName(); // Uncaught TypeError: getName is not a function\nconsole.log(getName);\nvar getName = function () {\n  console.log(\"Namaste JavaScript\");\n};\n// The code won't execute as the first line itself throws an TypeError."
+        "code": "greet(); // Output: 'Hello World!'\nconsole.log(x); // Output: undefined\n// sayHi(); // Uncaught TypeError: sayHi is not a function\n\nvar x = 10;\n\nfunction greet() {\n  console.log('Hello World!');\n}\n\nvar sayHi = () => {\n  console.log('Hi!');\n};"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is Hoisting in JavaScript?",
-        "answer": "Hoisting is JS behavior where variable and function declarations are moved to the top of their containing scope during the Memory Allocation Phase before code execution starts. Variables declared with 'var' are initialized to 'undefined', function declarations store their full code, while 'let' and 'const' remain uninitialized in TDZ."
+        "question": "What is Hoisting in JavaScript and why does it happen?",
+        "answer": "Hoisting is the behavior where variable and function declarations are allocated memory in Phase 1 before code execution. It happens because the JS engine scans the file and prepares memory space before executing line-by-line code in Phase 2."
       },
       {
-        "question": "How do function declarations differ from function expressions during hoisting?",
-        "answer": "Function declarations (`function foo() {}`) are fully hoisted with their implementation stored in memory. Function expressions (`var foo = function() {}`) are treated as variables during hoisting, so 'foo' is initialized to 'undefined' during memory allocation."
+        "question": "What is the difference between hoisting a function declaration vs an arrow function assigned to var?",
+        "answer": "A function declaration is hoisted with its full function body, so it can be called before declaration. An arrow function assigned to 'var' is treated as a variable in Phase 1 and initialized to 'undefined'; calling it early throws a TypeError."
       }
     ]
   },
   {
     "id": "js-functions-variable-environments",
-    "title": "Episode 4 : Functions and Variable Environments",
+    "title": "Episode 4: Functions & Independent Variable Environments",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -160,33 +147,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 4 : Functions and Variable Environments with full code and visual diagrams.",
+    "summary": "Every function call creates a new Function Execution Context with an isolated Variable Environment. Returning destroys the local context.",
     "keyConcepts": [
-      "The Global Execution Context (GEC) is created (the big box with Memory and Code subparts). Also GEC is pushed into Call Stack",
-      "In first phase of GEC (memory phase), variable x:undefined and a and b have their entire function code as value initialized",
-      "In second phase of GEC (execution phase), when the function is called, a new local Execution Context is created. After x = 1 assigned to GEC x, a() is called. So local EC for a is made inside code part of GEC.",
-      "For local EC, a totally different x variable assigned undefined(x inside a()) in phase 1 , and in phase 2 it is assigned 10 and printed in console log. After printing, no more commands to run, so a() local EC is removed from both GEC and from Call stack",
-      "Cursor goes back to b() function call. Same steps repeat.",
-      "Finally GEC is deleted and also removed from call stack. Program ends.",
-      "reference:"
+      "Each function call instantiates a new Function Execution Context.",
+      "Variable Environments are strictly isolated per execution context.",
+      "Local variable assignments do not affect outer variables of the same name.",
+      "When a function returns, its execution context and local variables are garbage collected."
     ],
-    "detailedContent": "# Episode 4 : Functions and Variable Environments\n\n```js\nvar x = 1;\na();\nb(); // we are calling the functions before defining them. This will work properly, as seen in Hoisting.\nconsole.log(x); // 3\n\nfunction a() {\n  var x = 10; // localscope because of separate execution context\n  console.log(x); // 1\n}\n\nfunction b() {\n  var x = 100;\n  console.log(x); // 2\n}\n```\n\nOutputs:\n\n> 10\n\n> 100\n\n> 1\n\n## Code Flow in terms of Execution Context\n\n- The Global Execution Context (GEC) is created (the big box with Memory and Code subparts). Also GEC is pushed into Call Stack\n\n> Call Stack : GEC\n\n- In first phase of GEC (memory phase), variable x:undefined and a and b have their entire function code as value initialized\n\n- In second phase of GEC (execution phase), when the function is called, a new local Execution Context is created. After x = 1 assigned to GEC x, a() is called. So local EC for a is made inside code part of GEC.\n\n> Call Stack: [GEC, a()]\n\n- For local EC, a totally different x variable assigned undefined(x inside a()) in phase 1 , and in phase 2 it is assigned 10 and printed in console log. After printing, no more commands to run, so a() local EC is removed from both GEC and from Call stack\n\n> Call Stack: GEC\n\n- Cursor goes back to b() function call. Same steps repeat.\n\n> Call Stack :[GEC, b()] -> GEC (after printing yet another totally different x value as 100 in console log)\n\n- Finally GEC is deleted and also removed from call stack. Program ends.\n\n- reference:\n\n![Execution Context Phase 1](/assets/namaste-js/function.jpg \"Execution Context\")\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 4: Functions & Independent Variable Environments\n\n## Overview\nEvery function invocation creates a separate Function Execution Context with its own isolated Variable Environment. Local variables inside one function context do not collide with or mutate variables in other scopes.\n\n## Detailed Explanation\nEven if variables in different functions share the exact same name (e.g., `var x = 1` in global, `var x = 10` inside `a()`, and `var x = 100` inside `b()`), each function creates its own isolated memory space.\n\nWhen `a()` executes, it reads and updates `x` in `a()`'s Variable Environment. Once `a()` returns, its context is destroyed, leaving the global `x` untouched.\n\n## Real-World Analogy\n📦 Private Apartments: Each apartment (Function Context) has its own living room table (`var x`). Changing the table in Apartment A does not alter the table in Apartment B or the main lobby (Global Scope).\n\n## Key Architectural Concepts\n- Each function call instantiates a new Function Execution Context.\n- Variable Environments are strictly isolated per execution context.\n- Local variable assignments do not affect outer variables of the same name.\n- When a function returns, its execution context and local variables are garbage collected.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "var x = 1;\na();\nb(); // we are calling the functions before defining them. This will work properly, as seen in Hoisting.\nconsole.log(x); // 3\n\nfunction a() {\n  var x = 10; // localscope because of separate execution context\n  console.log(x); // 1\n}\n\nfunction b() {\n  var x = 100;\n  console.log(x); // 2\n}"
+        "code": "var x = 1;\n\nfunction a() {\n  var x = 10;\n  console.log('Inside a():', x); // 10\n}\n\nfunction b() {\n  var x = 100;\n  console.log('Inside b():', x); // 100\n}\n\na();\nb();\nconsole.log('Global scope:', x); // 1"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What happens when multiple functions with the same variable name execute?",
-        "answer": "Each function call creates its own isolated Function Execution Context with its own Variable Environment. Local variables inside one execution context do not overwrite or collide with variables in another execution context."
+        "question": "How does JavaScript isolate variables with identical names across different functions?",
+        "answer": "JavaScript creates a new Function Execution Context with an isolated Variable Environment for every function invocation. Variables declared inside a function are scoped to its local Variable Environment, preventing collisions with outer variables."
       }
     ]
   },
   {
     "id": "js-shortest-program-window-this",
-    "title": "Episode 5 : Shortest JS Program, window & this keyword",
+    "title": "Episode 5: Shortest JS Program, window Object & this Keyword",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -200,30 +184,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 5 : Shortest JS Program, window & this keyword with full code and visual diagrams.",
+    "summary": "An empty JS file creates a Global Execution Context, `window` object, and binds `this === window` at global scope.",
     "keyConcepts": [
-      "The shortest JS program is empty file. Because even then, JS engine does a lot of things. As always, even in this case, it creates the GEC which has memory space and the execution context.",
-      "JS engine creates something known as 'window'. It is an object, which is created in the global space. It contains lots of functions and variables. These functions and variables can be accessed from anywhere in the program. JS engine also creates a this keyword, which points to the window object at the global level. So, in summary, along with GEC, a global object (window) and a this variable are created.",
-      "In different engines, the name of global object changes. Window in browsers, but in nodeJS it is called something else. At global level, this === window",
-      "If we create any variable in the global scope, then the variables get attached to the global object."
+      "An empty `.js` file creates Global Execution Context, `window` object, and `this` reference.",
+      "In browsers, Global Object = `window`. In Node.js, Global Object = `global`.",
+      "At global scope, `this === window` evaluates to `true`.",
+      "Global variables (`var a = 10`) attach directly to `window.a`."
     ],
-    "detailedContent": "# Episode 5 : Shortest JS Program, window & this keyword\n\n- The shortest JS program is empty file. Because even then, JS engine does a lot of things. As always, even in this case, it creates the GEC which has memory space and the execution context.\n\n- JS engine creates something known as '**window**'. It is an object, which is created in the global space. It contains lots of functions and variables. These functions and variables can be accessed from anywhere in the program. JS engine also creates a **this** keyword, which points to the **window object** at the global level. So, in summary, along with GEC, a global object (window) and a this variable are created.\n\n- In different engines, the name of global object changes. Window in browsers, but in nodeJS it is called something else. At global level, this === window\n\n- If we create any variable in the global scope, then the variables get attached to the global object.\n\neg:\n\n```js\nvar x = 10;\nconsole.log(x); // 10\nconsole.log(this.x); // 10\nconsole.log(window.x); // 10\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 5: Shortest JS Program, window Object & this Keyword\n\n## Overview\nAn empty file is the shortest JavaScript program. Even with zero lines of code, the JS engine creates the Global Execution Context, instantiates the Global Object (`window` in browsers), and binds the global `this` keyword to it.\n\n## Detailed Explanation\nEven when your JavaScript file contains zero code, the engine works under the hood:\n\n1. Creates the Global Execution Context (GEC).\n2. Instantiates the Global Object (`window` in browser environments, `global` in Node.js).\n3. Binds `this` at the global level to the Global Object (`this === window` evaluates to `true`).\n\nAny variable or function declared in the global scope automatically attaches as a property on the global `window` object.\n\n## Real-World Analogy\n🌐 Blank Digital Canvas: Opening a new blank document still initializes document margins, default font settings, and cursor coordinates. An empty JS file initializes GEC, `window`, and `this`.\n\n## Key Architectural Concepts\n- An empty `.js` file creates Global Execution Context, `window` object, and `this` reference.\n- In browsers, Global Object = `window`. In Node.js, Global Object = `global`.\n- At global scope, `this === window` evaluates to `true`.\n- Global variables (`var a = 10`) attach directly to `window.a`.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "var x = 10;\nconsole.log(x); // 10\nconsole.log(this.x); // 10\nconsole.log(window.x); // 10"
+        "code": "var a = 10;\nfunction b() {\n  var x = 20;\n}\n\nconsole.log(a); // 10\nconsole.log(window.a); // 10\nconsole.log(this.a); // 10\nconsole.log(this === window); // true"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is the shortest JavaScript program and what does it create?",
-        "answer": "An empty file is the shortest JS program. Even with zero lines of code, the JS engine creates a Global Execution Context, the global 'window' object (in browsers), and the global 'this' keyword pointing to 'window'."
+        "question": "What is the shortest JavaScript program and what does the JS engine create for it?",
+        "answer": "An empty file is the shortest JS program. The engine creates the Global Execution Context, the Global Object ('window' in browsers), and binds the 'this' keyword to the Global Object."
       }
     ]
   },
   {
     "id": "js-undefined-vs-not-defined",
-    "title": "Episode 6 : undefined vs not defined in JS",
+    "title": "Episode 6: undefined vs not defined in JavaScript",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Easy",
@@ -237,32 +221,29 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 6 : undefined vs not defined in JS with full code and visual diagrams.",
+    "summary": "`undefined` is a memory placeholder for declared variables. `not defined` is a ReferenceError for undeclared identifiers.",
     "keyConcepts": [
-      "In first phase (memory allocation) JS assigns each variable a placeholder called undefined.",
-      "undefined is when memory is allocated for the variable, but no value is assigned yet.",
-      "If an object/variable is not even declared/found in memory allocation phase, and tried to access it then it is Not defined",
-      "Not Defined !== Undefined",
-      "JS is a loosely typed / weakly typed language. It doesn't attach variables to any datatype. We can say var a = 5, and then change the value to boolean a = true or string a = 'hello' later on.",
-      "Never assign undefined to a variable manually. Let it happen on it's own accord."
+      "`undefined` is a primitive type value assigned during Memory Allocation Phase.",
+      "`not defined` is a ReferenceError thrown at runtime for undeclared variables.",
+      "Never manually assign `a = undefined`; use `null` for intentional absence of value."
     ],
-    "detailedContent": "# Episode 6 : undefined vs not defined in JS\n\n- In first phase (memory allocation) JS assigns each variable a placeholder called **undefined**.\n\n- **undefined** is when memory is allocated for the variable, but no value is assigned yet.\n\n- If an object/variable is not even declared/found in memory allocation phase, and tried to access it then it is **Not defined**\n\n- Not Defined !== Undefined\n\n> When variable is declared but not assigned value, its current value is **undefined**. But when the variable itself is not declared but called in code, then it is **not defined**.\n\n```js\nconsole.log(x); // undefined\nvar x = 25;\nconsole.log(x); // 25\nconsole.log(a); // Uncaught ReferenceError: a is not defined\n```\n\n- JS is a **loosely typed / weakly typed** language. It doesn't attach variables to any datatype. We can say _var a = 5_, and then change the value to boolean _a = true_ or string _a = 'hello'_ later on.\n- **Never** assign _undefined_ to a variable manually. Let it happen on it's own accord.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 6: undefined vs not defined in JavaScript\n\n## Overview\n`undefined` is a special primitive value assigned to variables during Phase 1 memory allocation before explicit assignment. `not defined` is a ReferenceError thrown when accessing a variable that was never declared in any scope.\n\n## Detailed Explanation\nUnderstanding the distinction is vital:\n\n- **`undefined`**: The variable has been declared and allocated memory in Phase 1, but has not yet been assigned a value in Phase 2.\n- **`not defined`**: The variable was never declared in any accessible scope. Accessing it throws `Uncaught ReferenceError: x is not defined`.\n\n`undefined` takes up actual memory space in JavaScript and acts as a placeholder value.\n\n## Real-World Analogy\n🏷️ Reserved Seat vs No Ticket: An empty seat with a reservation tag is `undefined` (space reserved, person hasn't arrived). Searching for a seat number that doesn't exist in the theater is `not defined`.\n\n## Key Architectural Concepts\n- `undefined` is a primitive type value assigned during Memory Allocation Phase.\n- `not defined` is a ReferenceError thrown at runtime for undeclared variables.\n- Never manually assign `a = undefined`; use `null` for intentional absence of value.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(x); // undefined\nvar x = 25;\nconsole.log(x); // 25\nconsole.log(a); // Uncaught ReferenceError: a is not defined"
+        "code": "var a;\nconsole.log(a); // Output: undefined\n\na = 10;\nconsole.log(a); // Output: 10\n\n// console.log(b); // Uncaught ReferenceError: b is not defined"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is the difference between 'undefined' and 'not defined' in JavaScript?",
-        "answer": "'undefined' is a special primitive value assigned to variables during the Memory Allocation phase before assignment. 'not defined' is a ReferenceError thrown when attempting to access a variable that was never declared in any scope."
+        "question": "Explain the difference between undefined and not defined in JavaScript.",
+        "answer": "'undefined' is a primitive value assigned to declared variables during the Memory Allocation phase before assignment. 'not defined' is a ReferenceError thrown when attempting to access a variable that was never declared."
       }
     ]
   },
   {
     "id": "js-scope-chain-lexical-environment",
-    "title": "Episode 7 : The Scope Chain, Scope & Lexical Environment",
+    "title": "Episode 7: Scope Chain, Lexical Environment & Identifier Resolution",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -276,60 +257,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 7 : The Scope Chain, Scope & Lexical Environment with full code and visual diagrams.",
+    "summary": "Lexical Environment = Local Memory + Outer Reference. Scope Chain traverses parent lexical environments to resolve variables.",
     "keyConcepts": [
-      "Scope in Javascript is directly related to Lexical Environment.",
-      "Let's observe the below examples:",
-      "Let's try to understand the output in each of the cases above.",
-      "In case 1: function a is able to access variable b from Global scope.",
-      "In case 2: 10 is printed. It means that within nested function too, the global scope variable can be accessed.",
-      "In case 3: 100 is printed meaning local variable of the same name took precedence over a global variable.",
-      "In case 4: A function can access a global variable, but the global execution context can't access any local variable.",
-      "So, Lexical Environment = local memory + lexical env of its parent. Hence, Lexical Environement is the local memory along with the lexical environment of its parent",
-      "Lexical: In hierarchy, In order",
-      "Whenever an Execution Context is created, a Lexical environment(LE) is also created and is referenced in the local Execution Context(in memory space)."
+      "Lexical Environment = Local Memory + Outer Lexical Environment Reference.",
+      "Scope Chain is the mechanism of searching variables up parent lexical environments.",
+      "Inner scopes can access outer scope variables; outer scopes CANNOT access inner scope variables.",
+      "Parent lexical reference of Global Execution Context is null."
     ],
-    "detailedContent": "# Episode 7 : The Scope Chain, Scope & Lexical Environment\n\n- **Scope** in Javascript is directly related to **Lexical Environment**.\n\n- Let's observe the below examples:\n\n```js\n// CASE 1\nfunction a() {\n  console.log(b); // 10\n  // Instead of printing undefined it prints 10, So somehow this a function could access the variable b outside the function scope.\n}\nvar b = 10;\na();\n```\n\n```js\n// CASE 2\nfunction a() {\n  c();\n  function c() {\n    console.log(b); // 10\n  }\n}\nvar b = 10;\na();\n```\n\n```js\n// CASE 3\nfunction a() {\n  c();\n  function c() {\n    var b = 100;\n    console.log(b); // 100\n  }\n}\nvar b = 10;\na();\n```\n\n```js\n// CASE 4\nfunction a() {\n  var b = 10;\n  c();\n  function c() {\n    console.log(b); // 10\n  }\n}\na();\nconsole.log(b); // Error, Not Defined\n```\n\n- Let's try to understand the output in each of the cases above.\n  - In **case 1**: function a is able to access variable b from Global scope.\n  - In **case 2**: 10 is printed. It means that within nested function too, the global scope variable can be accessed.\n  - In **case 3**: 100 is printed meaning local variable of the same name took precedence over a global variable.\n  - In **case 4**: A function can access a global variable, but the global execution context can't access any local variable.\n    ```\n    To summarize the above points in terms of execution context:\n    call_stack = [GEC, a(), c()]\n    Now lets also assign the memory sections of each execution context in call_stack.\n    c() = [[lexical environment pointer pointing to a()]]\n    a() = [b:10, c:{}, [lexical environment pointer pointing to GEC]]\n    GEC =  [a:{},[lexical_environment pointer pointing to null]]\n    ```\n    ![Lexical Scope Explaination](/assets/namaste-js/lexical.jpg \"Lexical Scope\")\n    ![Lexical Scope Explaination](/assets/namaste-js/lexical2.jpg \"Lexical Scope\")\n\n<br>\n\n- So, **Lexical Environment** = local memory + lexical env of its parent. Hence, Lexical Environement is the local memory along with the lexical environment of its parent\n\n- **Lexical**: In hierarchy, In order\n\n- Whenever an Execution Context is created, a Lexical environment(LE) is also created and is referenced in the local Execution Context(in memory space).\n\n- The process of going one by one to parent and checking for values is called scope chain or Lexcial environment chain.\n\n- ```js\n  function a() {\n    function c() {\n      // logic here\n    }\n    c(); // c is lexically inside a\n  } // a is lexically inside global execution\n  ```\n\n- Lexical or Static scope refers to the accessibility of variables, functions and object based on physical location in source code.\n\n  ```js\n  Global {\n      Outer {\n          Inner\n      }\n  }\n  // Inner is surrounded by lexical scope of Outer\n  ```\n\n- **TLDR**; An inner function can access variables which are in outer functions even if inner function is nested deep. In any other case, a function can't access variables not in its scope.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 7: Scope Chain, Lexical Environment & Identifier Resolution\n\n## Overview\nA Lexical Environment consists of local memory space plus a reference to the parent (outer) Lexical Environment. The Scope Chain is the recursive chain of Lexical Environment references used to resolve variable identifiers.\n\n## Detailed Explanation\n'Lexical' means in hierarchy or sequence. Whenever an Execution Context is created, a **Lexical Environment** is created alongside it.\n\n```\nLexical Environment = Local Memory + Reference to Lexical Environment of Parent Scope\n```\n\nWhen a variable is accessed inside a function:\n1. The engine checks local memory.\n2. If not found, it follows the outer reference to the parent's Lexical Environment.\n3. It traverses up the chain until it finds the variable or reaches Global Scope (where parent reference is `null`).\n4. If still not found, it throws `ReferenceError`.\n\n## Real-World Analogy\n🏠 Nested Russian Dolls: An inner doll can look outside into the outer doll's compartment. The outer doll cannot look inside the inner doll. The Scope Chain searches outwards layer by layer.\n\n## Key Architectural Concepts\n- Lexical Environment = Local Memory + Outer Lexical Environment Reference.\n- Scope Chain is the mechanism of searching variables up parent lexical environments.\n- Inner scopes can access outer scope variables; outer scopes CANNOT access inner scope variables.\n- Parent lexical reference of Global Execution Context is null.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "// CASE 1\nfunction a() {\n  console.log(b); // 10\n  // Instead of printing undefined it prints 10, So somehow this a function could access the variable b outside the function scope.\n}\nvar b = 10;\na();"
-      },
-      {
-        "language": "javascript",
-        "code": "// CASE 2\nfunction a() {\n  c();\n  function c() {\n    console.log(b); // 10\n  }\n}\nvar b = 10;\na();"
-      },
-      {
-        "language": "javascript",
-        "code": "// CASE 3\nfunction a() {\n  c();\n  function c() {\n    var b = 100;\n    console.log(b); // 100\n  }\n}\nvar b = 10;\na();"
-      },
-      {
-        "language": "javascript",
-        "code": "// CASE 4\nfunction a() {\n  var b = 10;\n  c();\n  function c() {\n    console.log(b); // 10\n  }\n}\na();\nconsole.log(b); // Error, Not Defined"
-      },
-      {
-        "language": "javascript",
-        "code": "To summarize the above points in terms of execution context:\n    call_stack = [GEC, a(), c()]\n    Now lets also assign the memory sections of each execution context in call_stack.\n    c() = [[lexical environment pointer pointing to a()]]\n    a() = [b:10, c:{}, [lexical environment pointer pointing to GEC]]\n    GEC =  [a:{},[lexical_environment pointer pointing to null]]"
-      },
-      {
-        "language": "javascript",
-        "code": "function a() {\n    function c() {\n      // logic here\n    }\n    c(); // c is lexically inside a\n  } // a is lexically inside global execution"
-      },
-      {
-        "language": "javascript",
-        "code": "Global {\n      Outer {\n          Inner\n      }\n  }\n  // Inner is surrounded by lexical scope of Outer"
+        "code": "function a() {\n  var b = 10;\n  c();\n  function c() {\n    console.log(b); // 10 (Found in parent function a's lexical environment)\n  }\n}\na();\n// console.log(b); // ReferenceError: b is not defined (Global cannot look into a's scope)"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is a Lexical Environment and how does Scope Chain resolution work?",
-        "answer": "A Lexical Environment consists of local memory plus a reference to the parent (outer) Lexical Environment. Scope Chain resolution searches for a variable locally first; if not found, it traverses outer Lexical Environments recursively until reaching Global Scope or throwing ReferenceError."
+        "question": "What is a Lexical Environment and how does the Scope Chain work?",
+        "answer": "A Lexical Environment is local memory plus a pointer to the outer parent's Lexical Environment. The Scope Chain is the process of resolving variables by searching local memory first, then recursively following outer lexical pointers up to Global Scope."
       }
     ]
   },
   {
     "id": "js-let-const-temporal-dead-zone",
-    "title": "Episode 8 : let & const in JS, Temporal Dead Zone",
+    "title": "Episode 8: let, const & Temporal Dead Zone (TDZ)",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -343,48 +294,35 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 8 : let & const in JS, Temporal Dead Zone with full code and visual diagrams.",
+    "summary": "`let` and `const` hoist into Script/Block scope. Accessing them in TDZ throws ReferenceError. `const` prevents reassignment.",
     "keyConcepts": [
-      "let and const declarations are hoisted. But its different from var",
-      "Both a and b are actually initialized as undefined in hoisting stage. But var b is inside the storage space of GLOBAL, and a is in a separate memory object called script, where it can be accessed only after assigning some value to it first ie. one can access 'a' only if it is assigned. Thus, it throws error.",
-      "Temporal Dead Zone : Time since when the let variable was hoisted until it is initialized some value.",
-      "So any line till before \"let a = 10\" is the TDZ for a",
-      "Since a is not accessible on global, its not accessible in window/this also. window.b or this.b -> 15; But window.a or this.a ->undefined, just like window.x->undefined (x isn't declared anywhere)",
-      "Reference Error are thrown when variables are in temporal dead zone.",
-      "Syntax Error doesn't even let us run single line of code.",
-      "js",
-      "Let is a stricter version of var. Now, const is even more stricter than let.",
-      "Types of Error: Syntax, Reference, and Type."
+      "`let` and `const` ARE hoisted, but stored in Script/Block scope (not `window`).",
+      "TDZ is the window between memory allocation and initialization line.",
+      "Accessing `let`/`const` in TDZ throws ReferenceError.",
+      "Re-declaring `let` or `const` in the same scope throws SyntaxError.",
+      "`const` must be initialized immediately; reassignment throws TypeError."
     ],
-    "detailedContent": "# Episode 8 : let & const in JS, Temporal Dead Zone\n\n- let and const declarations are hoisted. But its different from **var**\n  ```js\n  console.log(a); // ReferenceError: Cannot access 'a' before initialization\n  console.log(b); // prints undefined as expected\n  let a = 10;\n  console.log(a); // 10\n  var b = 15;\n  console.log(window.a); // undefined\n  console.log(window.b); // 15\n  ```\n  It looks like let isn't hoisted, **but it is**, let's understand\n  - Both a and b are actually initialized as _undefined_ in hoisting stage. But var **b** is inside the storage space of GLOBAL, and **a** is in a separate memory object called script, where it can be accessed only after assigning some value to it first ie. one can access 'a' only if it is assigned. Thus, it throws error.\n\n<br>\n\n- **Temporal Dead Zone** : Time since when the let variable was hoisted until it is initialized some value.\n\n  - So any line till before \"let a = 10\" is the TDZ for a\n  - Since a is not accessible on global, its not accessible in _window/this_ also. window.b or this.b -> 15; But window.a or this.a ->undefined, just like window.x->undefined (x isn't declared anywhere)\n\n- **Reference Error** are thrown when variables are in temporal dead zone.\n\n- **Syntax Error** doesn't even let us run single line of code.\n\n  - ```js\n      let a = 10;\n      let a = 100;  //this code is rejected upfront as SyntaxError. (duplicate declaration)\n      ------------------\n      let a = 10;\n      var a = 100; // this code also rejected upfront as SyntaxError. (can't use same name in same scope)\n    ```\n\n- **Let** is a stricter version of **var**. Now, **const** is even more stricter than **let**.\n\n  ```js\n  let a;\n  a = 10;\n  console.log(a) // 10. Note declaration and assigning of a is in different lines.\n  ------------------\n  const b;\n  b = 10;\n  console.log(b); // SyntaxError: Missing initializer in const declaration. (This type of declaration won't work with const. const b = 10 only will work)\n  ------------------\n  const b = 100;\n  b = 1000; //this gives us TypeError: Assignment to constant variable.\n  ```\n\n- Types of **Error**: Syntax, Reference, and Type.\n\n  - Uncaught ReferenceError: x is not defined at ...\n\n    - This Error signifies that x has never been in the scope of the program. This literally means that x was never defined/declared and is being tried to be accesed.\n\n  - Uncaught ReferenceError: cannot access 'a' before initialization\n\n    - This Error signifies that 'a' cannot be accessed because it is declared as 'let' and since it is not assigned a value, it is its Temporal Dead Zone. Thus, this error occurs.\n\n  - Uncaught SyntaxError: Identifier 'a' has already been declared\n\n    - This Error signifies that we are redeclaring a variable that is 'let' declared. No execution will take place.\n\n  - Uncaught SyntaxError: Missing initializer in const declaration\n\n    - This Error signifies that we haven't initialized or assigned value to a const declaration.\n\n  - Uncaught TypeError: Assignment to constant variable\n    - This Error signifies that we are reassigning to a const variable.\n\n### SOME GOOD PRACTICES:\n\n- Try using const wherever possible.\n- If not, use let, Avoid var.\n- Declare and initialize all variables with let to the top to avoid errors to shrink temporal dead zone window to zero.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 8: let, const & Temporal Dead Zone (TDZ)\n\n## Overview\n`let` and `const` declarations are hoisted into a separate Script/Block memory space (not `window`). The Temporal Dead Zone (TDZ) is the period between when a `let`/`const` variable is hoisted and when it is initialized with a value.\n\n## Detailed Explanation\nUnlike `var` (which attaches to `window`/`global`), `let` and `const` variables are hoisted into a separate memory space called **Script Scope**.\n\n- **Temporal Dead Zone (TDZ)**: The phase from the start of scope execution until the variable's declaration line is evaluated. Accessing a `let` or `const` variable in TDZ throws `ReferenceError: Cannot access 'x' before initialization`.\n- **Re-declaration**: `var` permits duplicate declarations. `let` and `const` throw `SyntaxError: Identifier 'x' has already been declared`.\n- **`const`**: Must be initialized at declaration line; reassignment throws `TypeError: Assignment to constant variable`.\n\n## Real-World Analogy\n🚧 Construction Hazard Zone: A building plot is reserved (`let` hoisted), but cordoned off with warning tape (TDZ). You cannot step inside until construction completes (initialization line).\n\n## Key Architectural Concepts\n- `let` and `const` ARE hoisted, but stored in Script/Block scope (not `window`).\n- TDZ is the window between memory allocation and initialization line.\n- Accessing `let`/`const` in TDZ throws ReferenceError.\n- Re-declaring `let` or `const` in the same scope throws SyntaxError.\n- `const` must be initialized immediately; reassignment throws TypeError.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(a); // ReferenceError: Cannot access 'a' before initialization\n  console.log(b); // prints undefined as expected\n  let a = 10;\n  console.log(a); // 10\n  var b = 15;\n  console.log(window.a); // undefined\n  console.log(window.b); // 15"
-      },
-      {
-        "language": "javascript",
-        "code": "let a = 10;\n      let a = 100;  //this code is rejected upfront as SyntaxError. (duplicate declaration)\n      ------------------\n      let a = 10;\n      var a = 100; // this code also rejected upfront as SyntaxError. (can't use same name in same scope)"
-      },
-      {
-        "language": "javascript",
-        "code": "let a;\n  a = 10;\n  console.log(a) // 10. Note declaration and assigning of a is in different lines.\n  ------------------\n  const b;\n  b = 10;\n  console.log(b); // SyntaxError: Missing initializer in const declaration. (This type of declaration won't work with const. const b = 10 only will work)\n  ------------------\n  const b = 100;\n  b = 1000; //this gives us TypeError: Assignment to constant variable."
+        "code": "// console.log(a); // ReferenceError: Cannot access 'a' before initialization (TDZ!)\nlet a = 10;\nconsole.log(a); // 10\n\nconst b = 100;\n// b = 200; // TypeError: Assignment to constant variable.\n// let a = 50; // SyntaxError: Identifier 'a' has already been declared."
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is the Temporal Dead Zone (TDZ)?",
-        "answer": "TDZ is the time period between when a 'let' or 'const' variable is hoisted (allocated memory in Script scope) and when it is initialized with a value. Accessing a variable in TDZ throws a ReferenceError."
+        "question": "Are let and const hoisted in JavaScript? Explain Temporal Dead Zone (TDZ).",
+        "answer": "Yes, 'let' and 'const' are hoisted, but allocated in a separate Script/Block scope rather than attached to global object. TDZ is the period from scope entry until the line of declaration is evaluated; accessing the variable during TDZ throws a ReferenceError."
       },
       {
-        "question": "How do var, let, and const differ in scoping and re-declaration?",
-        "answer": "'var' is function-scoped, permits re-declaration, and attaches to global object. 'let' and 'const' are block-scoped, forbid re-declaration within same scope, and stay in TDZ until initialized. 'const' requires immediate assignment and cannot be reassigned."
+        "question": "Differentiate between SyntaxError, ReferenceError, and TypeError with let/const.",
+        "answer": "SyntaxError occurs when re-declaring let/const or omitting const initialization. ReferenceError occurs when accessing let/const during TDZ. TypeError occurs when reassigning a const variable."
       }
     ]
   },
   {
     "id": "js-block-scope-shadowing",
-    "title": "Episode 9 : Block Scope & Shadowing in JS",
+    "title": "Episode 9: Block Scope, Compound Statements & Variable Shadowing",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -398,67 +336,37 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 9 : Block Scope & Shadowing in JS with full code and visual diagrams.",
+    "summary": "`let` and `const` are block-scoped. Shadowing overrides outer variables within a block. Illegal shadowing (`let` -> `var`) throws SyntaxError.",
     "keyConcepts": [
-      "Block aka compound statement is used to group JS statements together into 1 group. We group them within {...}",
-      "Block Scope and its accessibility example",
-      "Reason?",
-      "In the BLOCK SCOPE; we get b and c inside it initialized as undefined as a part of hoisting (in a seperate memory space called block)",
-      "While, a is stored inside a GLOBAL scope.",
-      "Thus we say, let and const are BLOCK SCOPED. They are stored in a separate mem space which is reserved for this block. Also, they can't be accessed outside this block. But var a can be accessed anywhere as it is in global scope. Thus, we can't access them outside the Block.",
-      "js",
-      "So, If one has same named variable outside the block, the variable inside the block shadows the outside variable. This happens only for var",
-      "Let's observe the behaviour in case of let and const and understand it's reason.",
-      "Same logic is true even for functions"
+      "Block Scope stores `let` and `const` in a dedicated Block memory space.",
+      "`var` is function-scoped/global-scoped and ignores block boundaries.",
+      "Shadowing overrides access to outer variables within the block.",
+      "Illegal Shadowing: `let` outside shadowed by `var` inside a block throws SyntaxError."
     ],
-    "detailedContent": "# Episode 9 : Block Scope & Shadowing in JS\n\nWhat is a **Block**?\n\n- Block aka _compound statement_ is used to group JS statements together into 1 group. We group them within {...}\n\n  ```js\n  {\n    var a = 10;\n    let b = 20;\n    const c = 30;\n    // Here let and const are hoisted in Block scope,\n    // While, var is hoisted in Global scope.\n  }\n  ```\n\n- Block Scope and its accessibility example\n\n  ```js\n  {\n    var a = 10;\n    let b = 20;\n    const c = 30;\n  }\n  console.log(a); // 10\n  console.log(b); // Uncaught ReferenceError: b is not defined\n  ```\n\n  - Reason?\n\n    - In the BLOCK SCOPE; we get b and c inside it initialized as _undefined_ as a part of hoisting (in a seperate memory space called **block**)\n    - While, a is stored inside a GLOBAL scope.\n\n    - Thus we say, _let_ and _const_ are BLOCK SCOPED. They are stored in a separate mem space which is reserved for this block. Also, they can't be accessed outside this block. But var a can be accessed anywhere as it is in global scope. Thus, we can't access them outside the Block.\n\nWhat is **Shadowing**?\n\n- ```js\n  var a = 100;\n  {\n    var a = 10; // same name as global var\n    let b = 20;\n    const c = 30;\n    console.log(a); // 10\n    console.log(b); // 20\n    console.log(c); // 30\n  }\n  console.log(a); // 10, instead of the 100 we were expecting. So block \"a\" modified val of global \"a\" as well. In console, only b and c are in block space. a initially is in global space(a = 100), and when a = 10 line is run, a is not created in block space, but replaces 100 with 10 in global space itself.\n  ```\n\n- So, If one has same named variable outside the block, the variable inside the block _shadows_ the outside variable. **This happens only for var**\n\n- Let's observe the behaviour in case of let and const and understand it's reason.\n\n  ```js\n  let b = 100;\n  {\n    var a = 10;\n    let b = 20;\n    const c = 30;\n    console.log(b); // 20\n  }\n  console.log(b); // 100, Both b's are in separate spaces (one in Block(20) and one in Script(another arbitrary mem space)(100)). Same is also true for *const* declarations.\n  ```\n\n  ![Block Scope Explaination](/assets/namaste-js/scope.jpg \"Lexical Scope\")\n\n- Same logic is true even for **functions**\n  ```js\n  const c = 100;\n  function x() {\n    const c = 10;\n    console.log(c); // 10\n  }\n  x();\n  console.log(c); // 100\n  ```\n\nWhat is **Illegal Shadowing**?\n\n- ```js\n  let a = 20;\n  {\n    var a = 20;\n  }\n  // Uncaught SyntaxError: Identifier 'a' has already been declared\n  ```\n  - We cannot shadow let with var. But it is **valid** to shadow a let using a let. However, we can shadow var with let.\n  - All scope rules that work in function are same in arrow functions too.\n  - Since var is function scoped, it is not a problem with the code below.\n    ```js\n    let a = 20;\n    function x() {\n      var a = 20;\n    }\n    ```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 9: Block Scope, Compound Statements & Variable Shadowing\n\n## Overview\nA Block (`{}`) groups multiple statements into a single compound statement. `let` and `const` are block-scoped. Variable Shadowing occurs when a variable declared inside a block hides an outer variable of the same name.\n\n## Detailed Explanation\n- **Block**: Defined by `{}`. Used where JS expects a single statement (e.g., `if (true) { ... }`).\n- **Block Scope**: `let` and `const` declared inside `{}` are allocated in a separate **Block Scope** memory container and destroyed when the block finishes.\n- **Variable Shadowing**: Declaring `var a = 10` globally and `var a = 100` inside a block modifies the exact same global variable (because `var` is not block-scoped). For `let` and `const`, inner block variables shadow outer variables in memory without mutating the outer scope.\n- **Illegal Shadowing**: Shadowing a `let` variable with a `var` inside a block throws `SyntaxError` because `var` attempts to leak into the same scope.\n\n## Real-World Analogy\n🕶️ Tinted Sunglasses: Wearing sunglasses (inner block variable) shadows bright sunlight (outer variable). Taking off sunglasses restores the original outer brightness without changing the sun.\n\n## Key Architectural Concepts\n- Block Scope stores `let` and `const` in a dedicated Block memory space.\n- `var` is function-scoped/global-scoped and ignores block boundaries.\n- Shadowing overrides access to outer variables within the block.\n- Illegal Shadowing: `let` outside shadowed by `var` inside a block throws SyntaxError.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "{\n    var a = 10;\n    let b = 20;\n    const c = 30;\n    // Here let and const are hoisted in Block scope,\n    // While, var is hoisted in Global scope.\n  }"
-      },
-      {
-        "language": "javascript",
-        "code": "{\n    var a = 10;\n    let b = 20;\n    const c = 30;\n  }\n  console.log(a); // 10\n  console.log(b); // Uncaught ReferenceError: b is not defined"
-      },
-      {
-        "language": "javascript",
-        "code": "var a = 100;\n  {\n    var a = 10; // same name as global var\n    let b = 20;\n    const c = 30;\n    console.log(a); // 10\n    console.log(b); // 20\n    console.log(c); // 30\n  }\n  console.log(a); // 10, instead of the 100 we were expecting. So block \"a\" modified val of global \"a\" as well. In console, only b and c are in block space. a initially is in global space(a = 100), and when a = 10 line is run, a is not created in block space, but replaces 100 with 10 in global space itself."
-      },
-      {
-        "language": "javascript",
-        "code": "let b = 100;\n  {\n    var a = 10;\n    let b = 20;\n    const c = 30;\n    console.log(b); // 20\n  }\n  console.log(b); // 100, Both b's are in separate spaces (one in Block(20) and one in Script(another arbitrary mem space)(100)). Same is also true for *const* declarations."
-      },
-      {
-        "language": "javascript",
-        "code": "const c = 100;\n  function x() {\n    const c = 10;\n    console.log(c); // 10\n  }\n  x();\n  console.log(c); // 100"
-      },
-      {
-        "language": "javascript",
-        "code": "let a = 20;\n  {\n    var a = 20;\n  }\n  // Uncaught SyntaxError: Identifier 'a' has already been declared"
-      },
-      {
-        "language": "javascript",
-        "code": "let a = 20;\n    function x() {\n      var a = 20;\n    }"
+        "code": "var a = 100;\nlet b = 200;\n{\n  var a = 10; // Shadows global 'a' (mutates global memory!)\n  let b = 20; // Shadows outer 'b' in Block Scope memory\n  const c = 30;\n  console.log(a); // 10\n  console.log(b); // 20\n}\nconsole.log(a); // 10 (Global 'a' was mutated by var)\nconsole.log(b); // 200 (Outer 'b' remains 200 in Script scope)\n// console.log(c); // ReferenceError: c is not defined"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is Block Scope and Variable Shadowing?",
-        "answer": "A block (`{}`) groups statements. 'let' and 'const' are block-scoped. Variable shadowing occurs when an inner variable shares the same name as an outer variable, overriding access to the outer variable within that inner block."
+        "question": "What is Block Scope and how does Variable Shadowing work?",
+        "answer": "Block Scope isolates 'let' and 'const' variables inside a '{}' block. Variable Shadowing occurs when an inner block variable shares the same name as an outer variable, overriding access within that block."
       },
       {
-        "question": "What is illegal shadowing in JavaScript?",
-        "answer": "Illegal shadowing occurs when trying to shadow a 'let' or 'const' variable using a 'var' variable inside a block, because 'var' leaks out of block scope and attempts to re-declare the 'let' variable in the same scope."
+        "question": "What is Illegal Shadowing in JavaScript?",
+        "answer": "Illegal Shadowing occurs when trying to shadow an outer 'let' variable using a 'var' inside a block. Because 'var' is not block-scoped, it attempts to re-declare the 'let' variable in the outer scope, causing a SyntaxError."
       }
     ]
   },
   {
     "id": "js-closures",
-    "title": "Episode 10 : Closures in JS",
+    "title": "Episode 10: Closures in JavaScript & Lexical Memory Retention",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
-    "difficulty": "Hard",
+    "difficulty": "Medium",
     "companyTags": [
       "Google",
       "Amazon",
@@ -469,64 +377,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 10 : Closures in JS with full code and visual diagrams.",
+    "summary": "A Closure is a function bundled with its lexical environment. Inner functions retain access to outer scope variables post-return.",
     "keyConcepts": [
-      "Function bundled along with it's lexical scope is closure.",
-      "JavaScript has a lexcial scope environment. If a function needs to access a variable, it first goes to its local memory. When it does not find it there, it goes to the memory of its lexical parent. See Below code, Over here function y along with its lexical scope i.e. (function x) would be called a closure.",
-      "In above code, When y is returned, not only is the function returned but the entire closure (fun y + its lexical scope) is returned and put inside z. So when z is used somewhere else in program, it still remembers var a inside x()",
-      "Another Example",
-      "Thus In simple words, we can say:",
-      "\\A closure is a function that has access to its outer function scope even after the function has returned. Meaning, A closure can remember and access variables and arguments reference of its outer function even after the function has returned.\\",
-      "![Closure Explaination](/assets/namaste-js/closure.jpg \"Lexical Scope\")",
-      "Advantages of Closure:",
-      "The module design pattern allows us to encapsulate related",
-      "Example: Suppose we're building a web application, and we want"
+      "Closure = Function + Lexical Environment Reference.",
+      "Functions remember variables from their birth scope even after outer functions return.",
+      "Closures hold variable references in memory, NOT static copied values.",
+      "Overuse of closures without cleanup can lead to memory leaks."
     ],
-    "detailedContent": "# Episode 10 : Closures in JS\n\n- Function bundled along with it's lexical scope is **closure**.\n\n- JavaScript has a lexcial scope environment. If a function needs to access a variable, it first goes to its local memory. When it does not find it there, it goes to the memory of its lexical parent. See Below code, Over here function **y** along with its lexical scope i.e. (function x) would be called a closure.\n\n  ```js\n  function x() {\n    var a = 7;\n    function y() {\n      console.log(a);\n    }\n    return y;\n  }\n  var z = x();\n  console.log(z); // value of z is entire code of function y.\n  ```\n\n  - In above code, When y is returned, not only is the function returned but the entire closure (fun y + its lexical scope) is returned and put inside z. So when z is used somewhere else in program, it still remembers var a inside x()\n\n- Another Example\n\n```js\nfunction z() {\n  var b = 900;\n  function x() {\n    var a = 7;\n    function y() {\n      console.log(a, b);\n    }\n    y();\n  }\n  x();\n}\nz(); // 7 900\n```\n\n- Thus In simple words, we can say:\n  - **\\*A closure is a function** that has access to its outer function scope even after the function has returned. Meaning, A closure can remember and access variables and arguments reference of its outer function even after the function has returned.\\*\n\n<br>\n\n- ![Closure Explaination](/assets/namaste-js/closure.jpg \"Lexical Scope\")\n\n* Advantages of Closure:\n\n      Certainly! Let's explore examples for each of the advantages you've\n      mentioned:\n\n  1.  **Module Design Pattern**:\n\n      - The module design pattern allows us to encapsulate related\n        functionality into a single module or file. It helps organize\n        code, prevent global namespace pollution, and promotes\n        reusability.\n      - Example: Suppose we're building a web application, and we want\n        to create a module for handling user authentication. We can\n        create a `auth.js` module that exports functions like `login`,\n        `logout`, and `getUserInfo`.\n\n        ```js\n        // auth.js\n        const authModule = (function () {\n          let loggedInUser = null;\n\n          function login(username, password) {\n            // Authenticate user logic...\n            loggedInUser = username;\n          }\n\n          function logout() {\n            loggedInUser = null;\n          }\n\n          function getUserInfo() {\n            return loggedInUser;\n          }\n\n          return {\n            login,\n            logout,\n            getUserInfo,\n          };\n        })();\n\n        // Usage\n        authModule.login(\"john_doe\", \"secret\");\n        console.log(authModule.getUserInfo()); // 'john_doe'\n        ```\n\n  2.  **Currying**:\n\n      - Currying is a technique where a function that takes multiple\n        arguments is transformed into a series of functions that take\n        one argument each. It enables partial function application and\n        enhances code flexibility.\n      - Example: Let's create a curried function to calculate the total\n        price of items with tax.\n\n        ```js\n        const calculateTotalPrice = (taxRate) => (price) =>\n          price + price * (taxRate / 100);\n\n        const calculateSalesTax = calculateTotalPrice(8); // 8% sales tax\n        const totalPrice = calculateSalesTax(100); // Price with tax\n        console.log(totalPrice); // 108\n        ```\n\n  3.  **Memoization**:\n\n      - Memoization optimizes expensive function calls by caching their\n        results. It's useful for recursive or repetitive computations.\n      - Example: Implement a memoized Fibonacci function.\n\n        ```js\n        function fibonacci(n, memo = {}) {\n          if (n in memo) return memo[n];\n          if (n <= 1) return n;\n\n          memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);\n          return memo[n];\n        }\n\n        console.log(fibonacci(10)); // 55\n        ```\n\n  4.  **Data Hiding and Encapsulation**:\n\n      - Encapsulation hides the internal details of an object and\n        exposes only necessary methods and properties. It improves code\n        maintainability and security.\n      - Example: Create a `Person` class with private properties.\n\n        ```js\n        class Person {\n          #name; // Private field\n\n          constructor(name) {\n            this.#name = name;\n          }\n\n          getName() {\n            return this.#name;\n          }\n        }\n\n        const person = new Person(\"Alice\");\n        console.log(person.getName()); // 'Alice'\n        // console.log(person.#name); // Error: Private field '#name' must be declared in an enclosing class\n        ```\n\n  5.  **setTimeouts**:\n\n      - `setTimeout` allows scheduling a function to run after a\n        specified delay. It's commonly used for asynchronous tasks,\n        animations, and event handling.\n      - Example: Delayed message display.\n\n        ```js\n        function showMessage(message, delay) {\n          setTimeout(() => {\n            console.log(message);\n          }, delay);\n        }\n\n        showMessage(\"Hello, world!\", 2000); // Display after 2 seconds\n        ```\n\n  These examples demonstrate the power and versatility of closures in\n  JavaScript! 🚀\n\n- Disadvantages of Closure:\n  - Over consumption of memory\n  - Memory Leak\n  - Freeze browser\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 10: Closures in JavaScript & Lexical Memory Retention\n\n## Overview\nA Closure is the combination of a function bundled together (enclosed) with references to its surrounding Lexical Environment. Closures give inner functions access to outer function scopes even after outer functions have returned.\n\n## Detailed Explanation\nWhen a function is returned from another function in JavaScript, it does not return alone. It returns **bundled together with its Lexical Environment**.\n\n```js\nfunction x() {\n  var a = 7;\n  function y() {\n    console.log(a);\n  }\n  return y;\n}\nvar z = x();\nz(); // Logs 7!\n```\n\nEven though `x()` finished executing and its context was popped off the Call Stack, `z()` retains a reference to `a` because `y` formed a **Closure** over the lexical scope of `x`.\n\n## Real-World Analogy\n🎒 Student Backpack: When a student leaves school (outer function returns), they carry their backpack (closure memory) containing their textbooks (`a = 7`). Anywhere they go later (`z()`), they can open their backpack and access their books.\n\n## Key Architectural Concepts\n- Closure = Function + Lexical Environment Reference.\n- Functions remember variables from their birth scope even after outer functions return.\n- Closures hold variable references in memory, NOT static copied values.\n- Overuse of closures without cleanup can lead to memory leaks.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "function x() {\n    var a = 7;\n    function y() {\n      console.log(a);\n    }\n    return y;\n  }\n  var z = x();\n  console.log(z); // value of z is entire code of function y."
-      },
-      {
-        "language": "javascript",
-        "code": "function z() {\n  var b = 900;\n  function x() {\n    var a = 7;\n    function y() {\n      console.log(a, b);\n    }\n    y();\n  }\n  x();\n}\nz(); // 7 900"
-      },
-      {
-        "language": "javascript",
-        "code": "// auth.js\n        const authModule = (function () {\n          let loggedInUser = null;\n\n          function login(username, password) {\n            // Authenticate user logic...\n            loggedInUser = username;\n          }\n\n          function logout() {\n            loggedInUser = null;\n          }\n\n          function getUserInfo() {\n            return loggedInUser;\n          }\n\n          return {\n            login,\n            logout,\n            getUserInfo,\n          };\n        })();\n\n        // Usage\n        authModule.login(\"john_doe\", \"secret\");\n        console.log(authModule.getUserInfo()); // 'john_doe'"
-      },
-      {
-        "language": "javascript",
-        "code": "const calculateTotalPrice = (taxRate) => (price) =>\n          price + price * (taxRate / 100);\n\n        const calculateSalesTax = calculateTotalPrice(8); // 8% sales tax\n        const totalPrice = calculateSalesTax(100); // Price with tax\n        console.log(totalPrice); // 108"
-      },
-      {
-        "language": "javascript",
-        "code": "function fibonacci(n, memo = {}) {\n          if (n in memo) return memo[n];\n          if (n <= 1) return n;\n\n          memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);\n          return memo[n];\n        }\n\n        console.log(fibonacci(10)); // 55"
-      },
-      {
-        "language": "javascript",
-        "code": "class Person {\n          #name; // Private field\n\n          constructor(name) {\n            this.#name = name;\n          }\n\n          getName() {\n            return this.#name;\n          }\n        }\n\n        const person = new Person(\"Alice\");\n        console.log(person.getName()); // 'Alice'\n        // console.log(person.#name); // Error: Private field '#name' must be declared in an enclosing class"
-      },
-      {
-        "language": "javascript",
-        "code": "function showMessage(message, delay) {\n          setTimeout(() => {\n            console.log(message);\n          }, delay);\n        }\n\n        showMessage(\"Hello, world!\", 2000); // Display after 2 seconds"
+        "code": "function z() {\n  var b = 900;\n  function x() {\n    var a = 7;\n    function y() {\n      console.log(a, b); // Logs 7, 900\n    }\n    y();\n  }\n  x();\n}\nz();"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is a Closure in JavaScript?",
-        "answer": "A closure is a function bundled together with references to its lexical environment. It grants an inner function access to its outer function's scope even after the outer function has finished executing and returned."
-      },
-      {
-        "question": "What are common use cases and drawbacks of closures?",
-        "answer": "Use cases: Data privacy/encapsulation, module patterns, currying, memoization, event listeners. Drawbacks: Increased memory consumption and potential memory leaks if referenced variables are not garbage collected."
+        "question": "What is a Closure in JavaScript and how does it work?",
+        "answer": "A Closure is a function combined with references to its outer Lexical Environment. Even after the outer function executes and returns, the inner function retains access to outer variables because it preserves a closure reference to that memory."
       }
     ]
   },
   {
     "id": "js-settimeout-closures-interview",
-    "title": "Episode 11 : setTimeout + Closures Interview Question",
+    "title": "Episode 11: setTimeout, Closures & Loop Binding Pitfalls",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -540,48 +414,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 11 : setTimeout + Closures Interview Question with full code and visual diagrams.",
+    "summary": "`var` in `for` loop shares a single reference for `setTimeout`. Fix using block-scoped `let` or closure functions.",
     "keyConcepts": [
-      "js",
-      "We expect JS to wait 3 sec, print 1 and then go down and print the string. But JS prints string immediately, waits 3 sec and then prints 1.",
-      "The function inside setTimeout forms a closure (remembers reference to i). So wherever function goes it carries this ref along with it.",
-      "setTimeout takes this callback function & attaches timer of 3000ms and stores it. Goes to next line without waiting and prints string.",
-      "After 3000ms runs out, JS takes function, puts it into call stack and runs it.",
-      "Q: Print 1 after 1 sec, 2 after 2 sec till 5 : Tricky interview question",
-      "Reason?",
-      "This happens because of closures. When setTimeout stores the function somewhere and attaches timer to it, the function remembers its reference to i, not value of i. All 5 copies of function point to same reference of i. JS stores these 5 functions, prints string and then comes back to the functions. By then the timer has run fully. And due to looping, the i value became 6. And when the callback fun runs the variable i = 6. So same 6 is printed in each log",
-      "To avoid this, we can use let instead of var as let has Block scope. For each iteration, the i is a new variable altogether(new copy of i). Everytime setTimeout is run, the inside function forms closure with new variable i",
-      "But what if interviewer ask us to implement using var?"
+      "`setTimeout` does not block execution; timer runs asynchronously in Web APIs.",
+      "`var` in loop header shares one variable reference across all iterations.",
+      "`let` in loop header creates a new block-scoped binding per iteration.",
+      "Closures can solve `var` binding issues by creating new function scope bounds."
     ],
-    "detailedContent": "# Episode 11 : setTimeout + Closures Interview Question\n\n> **Time, tide and Javascript wait for none.**\n\n- ```js\n  function x() {\n    var i = 1;\n    setTimeout(function () {\n      console.log(i);\n    }, 3000);\n    console.log(\"Namaste Javascript\");\n  }\n  x();\n  // Output:\n  // Namaste Javascript\n  // 1 // after waiting 3 seconds\n  ```\n\n  - We expect JS to wait 3 sec, print 1 and then go down and print the string. But JS prints string immediately, waits 3 sec and then prints 1.\n  - The function inside setTimeout forms a closure (remembers reference to i). So wherever function goes it carries this ref along with it.\n  - setTimeout takes this callback function & attaches timer of 3000ms and stores it. Goes to next line without waiting and prints string.\n  - After 3000ms runs out, JS takes function, puts it into call stack and runs it.\n\n- Q: Print 1 after 1 sec, 2 after 2 sec till 5 : Tricky interview question\n\n  We assume this has a simple approach as below\n\n  ```js\n  function x() {\n    for (var i = 1; i <= 5; i++) {\n      setTimeout(function () {\n        console.log(i);\n      }, i * 1000);\n    }\n    console.log(\"Namaste Javascript\");\n  }\n  x();\n  // Output:\n  // Namaste Javascript\n  // 6\n  // 6\n  // 6\n  // 6\n  // 6\n  ```\n\n  - Reason?\n\n    - This happens because of closures. When setTimeout stores the function somewhere and attaches timer to it, the function remembers its reference to i, **not value of i**. All 5 copies of function point to same reference of i. JS stores these 5 functions, prints string and then comes back to the functions. By then the timer has run fully. And due to looping, the i value became 6. And when the callback fun runs the variable i = 6. So same 6 is printed in each log\n\n    - To avoid this, we can use **let** instead of **var** as let has Block scope. For each iteration, the i is a new variable altogether(new copy of i). Everytime setTimeout is run, the inside function forms closure with new variable i\n\n  - But what if interviewer ask us to implement using **var**?\n\n    ```js\n    function x() {\n      for (var i = 1; i <= 5; i++) {\n        function close(i) {\n          setTimeout(function () {\n            console.log(i);\n          }, i * 1000);\n          // put the setT function inside new function close()\n        }\n        close(i); // everytime you call close(i) it creates new copy of i. Only this time, it is with var itself!\n      }\n      console.log(\"Namaste Javascript\");\n    }\n    x();\n    ```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 11: setTimeout, Closures & Loop Binding Pitfalls\n\n## Overview\n`setTimeout` stores a timer in the Web APIs environment and registers a callback. A famous interview problem involves using `var` inside a `for` loop with `setTimeout`, where all callbacks close over the same shared variable reference.\n\n## Detailed Explanation\nConsider this classic question:\n\n```js\nfor (var i = 1; i <= 5; i++) {\n  setTimeout(() => console.log(i), i * 1000);\n}\n```\n\n**Output**: Prints `6` five times after each second!\n\n**Why?**: `var` is function-scoped. All 5 `setTimeout` callbacks close over the **exact same memory reference `i`**. By the time the 1-second timer expires, the loop has completed and `i` has become 6.\n\n**Solutions**:\n1. Use `let i`: `let` is block-scoped, creating a brand new `i` binding for every loop iteration.\n2. Use a Closure / IIFE: Wrap `setTimeout` inside a helper function to pass `i` by value into a distinct parameter scope.\n\n## Real-World Analogy\n🎟️ Shared Token vs Individual Ticket: Passing a shared token (`var i`) means everyone reads the number updated at the end (6). Giving everyone their own ticket (`let i`) preserves their individual number (1 to 5).\n\n## Key Architectural Concepts\n- `setTimeout` does not block execution; timer runs asynchronously in Web APIs.\n- `var` in loop header shares one variable reference across all iterations.\n- `let` in loop header creates a new block-scoped binding per iteration.\n- Closures can solve `var` binding issues by creating new function scope bounds.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "function x() {\n    var i = 1;\n    setTimeout(function () {\n      console.log(i);\n    }, 3000);\n    console.log(\"Namaste Javascript\");\n  }\n  x();\n  // Output:\n  // Namaste Javascript\n  // 1 // after waiting 3 seconds"
-      },
-      {
-        "language": "javascript",
-        "code": "function x() {\n    for (var i = 1; i <= 5; i++) {\n      setTimeout(function () {\n        console.log(i);\n      }, i * 1000);\n    }\n    console.log(\"Namaste Javascript\");\n  }\n  x();\n  // Output:\n  // Namaste Javascript\n  // 6\n  // 6\n  // 6\n  // 6\n  // 6"
-      },
-      {
-        "language": "javascript",
-        "code": "function x() {\n      for (var i = 1; i <= 5; i++) {\n        function close(i) {\n          setTimeout(function () {\n            console.log(i);\n          }, i * 1000);\n          // put the setT function inside new function close()\n        }\n        close(i); // everytime you call close(i) it creates new copy of i. Only this time, it is with var itself!\n      }\n      console.log(\"Namaste Javascript\");\n    }\n    x();"
+        "code": "// Solution 1: Using block-scoped let\nfor (let i = 1; i <= 5; i++) {\n  setTimeout(() => console.log('let i:', i), i * 1000);\n}\n\n// Solution 2: Using Closure with helper function\nfor (var i = 1; i <= 5; i++) {\n  (function(x) {\n    setTimeout(() => console.log('closure x:', x), x * 1000);\n  })(i);\n}"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "Why does `for (var i=1; i<=5; i++) { setTimeout(() => console.log(i), 1000); }` print 6 five times?",
-        "answer": "Because 'var' is function-scoped. All callbacks close over the exact same variable reference 'i'. By the time callbacks run after 1s, the loop has finished and 'i' evaluates to 6."
-      },
-      {
-        "question": "How do you fix the setTimeout loop issue to print 1 to 5?",
-        "answer": "1) Use `let i` in the loop header so each iteration creates a new block-scoped binding. 2) Wrap `setTimeout` inside an IIFE or helper function passing `i` as a argument to create a closure over a distinct copy."
+        "question": "Why does a for loop with var i and setTimeout print 6 five times, and how do you fix it?",
+        "answer": "Because 'var' is function-scoped, all callback functions close over the same memory reference 'i'. When timers expire after 1s, the loop has finished and 'i' is 6. Fix it by 1) replacing 'var' with block-scoped 'let', or 2) wrapping setTimeout in an IIFE/closure passing 'i' as a parameter."
       }
     ]
   },
   {
     "id": "js-closure-interview-questions",
-    "title": "Episode 12 : Famous Interview Questions ft. Closures",
+    "title": "Episode 12: Famous Closure Interview Questions & Design Patterns",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Hard",
@@ -595,59 +451,34 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 12 : Famous Interview Questions ft. Closures with full code and visual diagrams.",
+    "summary": "Closures enable Data Hiding, Memoization, and Module Patterns. Beware of memory leaks from uncollected closure variables.",
     "keyConcepts": [
-      "Module Design Pattern",
-      "Currying",
-      "Memoize",
-      "Data hiding and encapsulation",
-      "setTimeouts etc."
+      "Encapsulation hides internal implementation variables using closures.",
+      "Constructor functions can encapsulate state using `this.increment` closures.",
+      "Garbage Collector cannot reclaim variables referenced inside active closures.",
+      "V8 Smart Garbage Collection optimizes unreferenced closure variables when possible."
     ],
-    "detailedContent": "# Episode 12 : Famous Interview Questions ft. Closures\n\n### Q1: What is Closure in Javascript?\n\n**Ans**: A function along with reference to its outer environment together forms a closure. Or in other words, A Closure is a combination of a function and its lexical scope bundled together.\neg:\n\n```js\nfunction outer() {\n  var a = 10;\n  function inner() {\n    console.log(a);\n  } // inner forms a closure with outer\n  return inner;\n}\nouter()(); // 10 // over here first `()` will return inner function and then using second `()` to call inner function\n```\n\n### Q2: Will the below code still forms a closure?\n\n```js\nfunction outer() {\n  function inner() {\n    console.log(a);\n  }\n  var a = 10;\n  return inner;\n}\nouter()(); // 10\n```\n\n**Ans**: Yes, because inner function forms a closure with its outer environment so sequence doesn't matter.\n\n### Q3: Changing var to let, will it make any difference?\n\n```js\nfunction outer() {\n  let a = 10;\n  function inner() {\n    console.log(a);\n  }\n  return inner;\n}\nouter()(); // 10\n```\n\n**Ans**: It will still behave the same way.\n\n### Q4: Will inner function have the access to outer function argument?\n\n```js\nfunction outer(str) {\n  let a = 10;\n  function inner() {\n    console.log(a, str);\n  }\n  return inner;\n}\nouter(\"Hello There\")(); // 10 \"Hello There\"\n```\n\n**Ans**: Inner function will now form closure and will have access to both a and str.\n\n### Q5: In below code, will inner form closure with **outest**?\n\n```js\nfunction outest() {\n  var c = 20;\n  function outer(str) {\n    let a = 10;\n    function inner() {\n      console.log(a, c, str);\n    }\n    return inner;\n  }\n  return outer;\n}\noutest()(\"Hello There\")(); // 10 20 \"Hello There\"\n```\n\n**Ans**: Yes, inner will have access to all its outer environment.\n\n### Q6: Output of below code and explaination?\n\n```js\nfunction outest() {\n  var c = 20;\n  function outer(str) {\n    let a = 10;\n    function inner() {\n      console.log(a, c, str);\n    }\n    return inner;\n  }\n  return outer;\n}\nlet a = 100;\noutest()(\"Hello There\")(); // 10 20 \"Hello There\"\n```\n\n**Ans**: Still the same output, the inner function will have reference to inner a, so conflicting name won't matter here. If it wouldn't have find a inside outer function then it would have went more outer to find a and thus have printed 100. So, it try to resolve variable in scope chain and if a wouldn't have been found it would have given reference error.\n\n### Q7: Advantage of Closure?\n\n- Module Design Pattern\n- Currying\n- Memoize\n- Data hiding and encapsulation\n- setTimeouts etc.\n\n### Q8: Discuss more on Data hiding and encapsulation?\n\n```js\n// without closures\nvar count = 0;\nfunction increment(){\n  count++;\n}\n// in the above code, anyone can access count and change it.\n\n------------------------------------------------------------------\n\n// (with closures) -> put everything into a function\nfunction counter() {\n  var count = 0;\n  function increment(){\n    count++;\n  }\n}\nconsole.log(count); // this will give referenceError as count can't be accessed. So now we are able to achieve hiding of data\n\n------------------------------------------------------------------\n\n//(increment with function using closure) true function\nfunction counter() {\n  var count = 0;\n  return function increment(){\n    count++;\n    console.log(count);\n  }\n}\nvar counter1 = counter(); //counter function has closure with count var.\ncounter1(); // increments counter\n\nvar counter2 = counter();\ncounter2(); // here counter2 is whole new copy of counter function and it wont impack the output of counter1\n\n*************************\n\n// Above code is not good and scalable for say, when you plan to implement decrement counter at a later stage.\n// To address this issue, we use *constructors*\n\n// Adding decrement counter and refactoring code:\nfunction Counter() {\n//constructor function. Good coding would be to capitalize first letter of constructor function.\n  var count = 0;\n  this.incrementCounter = function() { //anonymous function\n    count++;\n    console.log(count);\n  }\n   this.decrementCounter = function() {\n    count--;\n    console.log(count);\n  }\n}\n\nvar counter1 = new Counter();  // new keyword for constructor fun\ncounter1.incrementCounter();\ncounter1.incrementCounter();\ncounter1.decrementCounter();\n// returns 1 2 1\n```\n\n### Q9: Disadvantage of closure?\n\n**Ans**: Overconsumption of memory when using closure as everytime as those closed over variables are not garbage collected till program expires.\nSo when creating many closures, more memory is accumulated and this can create memory leaks if not handled.\n\n**Garbage collector** : Program in JS engine or browser that frees up unused memory. In highlevel languages like C++ or JAVA, garbage collection is left to the programmer, but in JS engine its done implicitly.\n\n```js\nfunction a() {\n  var x = 0;\n  return function b() {\n    console.log(x);\n  };\n}\n\nvar y = a(); // y is a copy of b()\ny();\n\n// Once a() is called, its element x should be garbage collected ideally. But fun b has closure over var x. So mem of x cannot be freed. Like this if more closures formed, it becomes an issue. To tacke this, JS engines like v8 and Chrome have smart garbage collection mechanisms. Say we have var x = 0, z = 10 in above code. When console log happens, x is printed as 0 but z is removed automatically.\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 12: Famous Closure Interview Questions & Design Patterns\n\n## Overview\nClosures power core JavaScript design patterns including Data Hiding/Encapsulation, Constructor Functions, Module Patterns, Memoization, and Currying. They are heavily tested in senior technical interviews.\n\n## Detailed Explanation\nKey application patterns enabled by closures:\n\n1. **Data Hiding & Encapsulation**: Restrict access to variables from outside the function scope.\n2. **Constructor Function Closures**: Create stateful objects with private count state.\n3. **Memoization**: Cache expensive function outputs using a closure-scoped cache object.\n4. **Function Currying**: Transform `f(a, b)` into `f(a)(b)` via closures.\n\n**Disadvantages of Closures**:\n- Variables closed over are not garbage collected automatically, leading to higher memory footprint.\n- Unhandled closures in long-lived applications cause memory leaks.\n\n## Real-World Analogy\n🔒 Bank ATM Machine: Customers cannot directly touch money inside the vault (`count` variable). They must interact through private interface buttons (`increment()`, `decrement()`).\n\n## Key Architectural Concepts\n- Encapsulation hides internal implementation variables using closures.\n- Constructor functions can encapsulate state using `this.increment` closures.\n- Garbage Collector cannot reclaim variables referenced inside active closures.\n- V8 Smart Garbage Collection optimizes unreferenced closure variables when possible.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "function outer() {\n  var a = 10;\n  function inner() {\n    console.log(a);\n  } // inner forms a closure with outer\n  return inner;\n}\nouter()(); // 10 // over here first `()` will return inner function and then using second `()` to call inner function"
-      },
-      {
-        "language": "javascript",
-        "code": "function outer() {\n  function inner() {\n    console.log(a);\n  }\n  var a = 10;\n  return inner;\n}\nouter()(); // 10"
-      },
-      {
-        "language": "javascript",
-        "code": "function outer() {\n  let a = 10;\n  function inner() {\n    console.log(a);\n  }\n  return inner;\n}\nouter()(); // 10"
-      },
-      {
-        "language": "javascript",
-        "code": "function outer(str) {\n  let a = 10;\n  function inner() {\n    console.log(a, str);\n  }\n  return inner;\n}\nouter(\"Hello There\")(); // 10 \"Hello There\""
-      },
-      {
-        "language": "javascript",
-        "code": "function outest() {\n  var c = 20;\n  function outer(str) {\n    let a = 10;\n    function inner() {\n      console.log(a, c, str);\n    }\n    return inner;\n  }\n  return outer;\n}\noutest()(\"Hello There\")(); // 10 20 \"Hello There\""
-      },
-      {
-        "language": "javascript",
-        "code": "function outest() {\n  var c = 20;\n  function outer(str) {\n    let a = 10;\n    function inner() {\n      console.log(a, c, str);\n    }\n    return inner;\n  }\n  return outer;\n}\nlet a = 100;\noutest()(\"Hello There\")(); // 10 20 \"Hello There\""
-      },
-      {
-        "language": "javascript",
-        "code": "// without closures\nvar count = 0;\nfunction increment(){\n  count++;\n}\n// in the above code, anyone can access count and change it.\n\n------------------------------------------------------------------\n\n// (with closures) -> put everything into a function\nfunction counter() {\n  var count = 0;\n  function increment(){\n    count++;\n  }\n}\nconsole.log(count); // this will give referenceError as count can't be accessed. So now we are able to achieve hiding of data\n\n------------------------------------------------------------------\n\n//(increment with function using closure) true function\nfunction counter() {\n  var count = 0;\n  return function increment(){\n    count++;\n    console.log(count);\n  }\n}\nvar counter1 = counter(); //counter function has closure with count var.\ncounter1(); // increments counter\n\nvar counter2 = counter();\ncounter2(); // here counter2 is whole new copy of counter function and it wont impack the output of counter1\n\n*************************\n\n// Above code is not good and scalable for say, when you plan to implement decrement counter at a later stage.\n// To address this issue, we use *constructors*\n\n// Adding decrement counter and refactoring code:\nfunction Counter() {\n//constructor function. Good coding would be to capitalize first letter of constructor function.\n  var count = 0;\n  this.incrementCounter = function() { //anonymous function\n    count++;\n    console.log(count);\n  }\n   this.decrementCounter = function() {\n    count--;\n    console.log(count);\n  }\n}\n\nvar counter1 = new Counter();  // new keyword for constructor fun\ncounter1.incrementCounter();\ncounter1.incrementCounter();\ncounter1.decrementCounter();\n// returns 1 2 1"
-      },
-      {
-        "language": "javascript",
-        "code": "function a() {\n  var x = 0;\n  return function b() {\n    console.log(x);\n  };\n}\n\nvar y = a(); // y is a copy of b()\ny();\n\n// Once a() is called, its element x should be garbage collected ideally. But fun b has closure over var x. So mem of x cannot be freed. Like this if more closures formed, it becomes an issue. To tacke this, JS engines like v8 and Chrome have smart garbage collection mechanisms. Say we have var x = 0, z = 10 in above code. When console log happens, x is printed as 0 but z is removed automatically."
+        "code": "function Counter() {\n  var count = 0; // Private variable hidden from outer scope\n\n  this.incrementCounter = function() {\n    count++;\n    console.log('Count:', count);\n  };\n\n  this.decrementCounter = function() {\n    count--;\n    console.log('Count:', count);\n  };\n}\n\nvar counter1 = new Counter();\ncounter1.incrementCounter(); // Count: 1\ncounter1.incrementCounter(); // Count: 2\n// console.log(counter1.count); // undefined (Data Hiding!)"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "How do you implement a private counter using closures?",
-        "answer": "Create an outer function `Counter()` with a private variable `count = 0` and return inner methods `increment()`, `decrement()`, and `getCount()` that form closures over `count`."
+        "question": "How do you implement data hiding and encapsulation using Closures in JavaScript?",
+        "answer": "Declare variables inside an outer function and return inner functions that access those variables. Outer code cannot access or modify the variables directly, enforcing data privacy."
+      },
+      {
+        "question": "What are the drawbacks of Closures and how can they cause memory leaks?",
+        "answer": "Variables retained in closure memory are not garbage collected while inner functions remain active. If closures are attached to long-lived objects or global event listeners without cleanup, memory accumulates, causing memory leaks."
       }
     ]
   },
   {
     "id": "js-first-class-functions",
-    "title": "Episode 13 : First Class Functions ft. Anonymous Functions",
+    "title": "Episode 13: First-Class Functions, Function Statements vs Expressions",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -661,56 +492,34 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 13 : First Class Functions ft. Anonymous Functions with full code and visual diagrams.",
+    "summary": "First-Class Functions can be assigned, passed, and returned. Function Declarations hoist fully; Function Expressions hoist as `undefined`.",
     "keyConcepts": [
-      "They don't have their own identity. So an anonymous function without code inside it results in an error.",
-      "Anonymous functions are used when functions are used as values eg. the code sample for function expression above."
+      "Function Statement = Function Declaration (fully hoisted).",
+      "Function Expression = Variable assigned a function (hoisted as undefined).",
+      "First-Class Functions = Ability to pass, return, and assign functions as values.",
+      "Parameters are placeholders in function definition; Arguments are actual values passed."
     ],
-    "detailedContent": "# Episode 13 : First Class Functions ft. Anonymous Functions\n\n> Functions are heart ♥ of Javascript.\n\n### Q: What is Function statement?\n\nBelow way of creating function are function statement.\n\n```js\nfunction a() {\n  console.log(\"Hello\");\n}\na(); // Hello\n```\n\n### Q: What is Function Expression?\n\nAssigning a function to a variable. Function acts like a value.\n\n```js\nvar b = function () {\n  console.log(\"Hello\");\n};\nb();\n```\n\n### Q: Difference between function statement and expression\n\nThe major difference between these two lies in **Hoisting**.\n\n```js\na(); // \"Hello A\"\nb(); // TypeError\nfunction a() {\n  console.log(\"Hello A\");\n}\nvar b = function () {\n  console.log(\"Hello B\");\n};\n// Why? During mem creation phase a is created in memory and function assigned to a. But b is created like a variable (b:undefined) and until code reaches the function()  part, it is still undefined. So it cannot be called.\n```\n\n### Q: What is Function Declaration?\n\nOther name for **function statement**.\n\n### Q: What is Anonymous Function?\n\nA function without a name.\n\n```js\nfunction () {\n\n}// this is going to throw Syntax Error - Function Statement requires function name.\n```\n\n- They don't have their own identity. So an anonymous function without code inside it results in an error.\n- Anonymous functions are used when functions are used as values eg. the code sample for **function expression** above.\n\n### Q: What is Named Function Expression?\n\nSame as Function Expression but function has a name instead of being anonymous.\n\n```js\nvar b = function xyz() {\n  console.log(\"b called\");\n};\nb(); // \"b called\"\nxyz(); // Throws ReferenceError:xyz is not defined.\n// xyz function is not created in global scope. So it can't be called.\n```\n\n### Q: Parameters vs Arguments?\n\n```js\nvar b = function (param1, param2) {\n  // labels/identifiers are parameters\n  console.log(\"b called\");\n};\nb(arg1, arg2); // arguments - values passed inside function call\n```\n\n### Q: What is First Class Function aka First Class Citizens?\n\nWe can pass functions inside a function as arguments and\n/or return a function(HOF). These ability are altogether known as First class function. It is programming concept available in some other languages too.\n\n```js\nvar b = function (param1) {\n  console.log(param1); // prints \" f() {} \"\n};\nb(function () {});\n\n// Other way of doing the same thing:\nvar b = function (param1) {\n  console.log(param1);\n};\nfunction xyz() {}\nb(xyz); // same thing as prev code\n\n// we can return a function from a function:\nvar b = function (param1) {\n  return function () {};\n};\nconsole.log(b()); //we log the entire fun within b.\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 13: First-Class Functions, Function Statements vs Expressions\n\n## Overview\nJavaScript treats Functions as First-Class Citizens (First-Class Functions). This means functions can be stored in variables, passed as arguments to other functions, and returned from functions.\n\n## Detailed Explanation\nCore terminology to master:\n\n- **Function Statement / Declaration**: Defined with `function a() {}`. Fully hoisted.\n- **Function Expression**: Assigning a function to a variable `var b = function() {}`. Hoisted as `undefined`.\n- **Anonymous Function**: A function without a name (`function() {}`). Used as values in expressions.\n- **Named Function Expression**: `var b = function xyz() {}`. Note: `xyz()` is scoped inside `xyz`'s own body, calling `xyz()` in outer scope throws `ReferenceError`.\n- **First-Class Functions (First-Class Citizens)**: The capability to pass functions as arguments, return them from functions, and assign them to variables.\n\n## Real-World Analogy\n🎁 Passable Gift Box: A function is like a gift box. You can label it (declaration), store it on a shelf (variable), hand it to a friend (argument), or receive it as a gift (return value).\n\n## Key Architectural Concepts\n- Function Statement = Function Declaration (fully hoisted).\n- Function Expression = Variable assigned a function (hoisted as undefined).\n- First-Class Functions = Ability to pass, return, and assign functions as values.\n- Parameters are placeholders in function definition; Arguments are actual values passed.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "function a() {\n  console.log(\"Hello\");\n}\na(); // Hello"
-      },
-      {
-        "language": "javascript",
-        "code": "var b = function () {\n  console.log(\"Hello\");\n};\nb();"
-      },
-      {
-        "language": "javascript",
-        "code": "a(); // \"Hello A\"\nb(); // TypeError\nfunction a() {\n  console.log(\"Hello A\");\n}\nvar b = function () {\n  console.log(\"Hello B\");\n};\n// Why? During mem creation phase a is created in memory and function assigned to a. But b is created like a variable (b:undefined) and until code reaches the function()  part, it is still undefined. So it cannot be called."
-      },
-      {
-        "language": "javascript",
-        "code": "function () {\n\n}// this is going to throw Syntax Error - Function Statement requires function name."
-      },
-      {
-        "language": "javascript",
-        "code": "var b = function xyz() {\n  console.log(\"b called\");\n};\nb(); // \"b called\"\nxyz(); // Throws ReferenceError:xyz is not defined.\n// xyz function is not created in global scope. So it can't be called."
-      },
-      {
-        "language": "javascript",
-        "code": "var b = function (param1, param2) {\n  // labels/identifiers are parameters\n  console.log(\"b called\");\n};\nb(arg1, arg2); // arguments - values passed inside function call"
-      },
-      {
-        "language": "javascript",
-        "code": "var b = function (param1) {\n  console.log(param1); // prints \" f() {} \"\n};\nb(function () {});\n\n// Other way of doing the same thing:\nvar b = function (param1) {\n  console.log(param1);\n};\nfunction xyz() {}\nb(xyz); // same thing as prev code\n\n// we can return a function from a function:\nvar b = function (param1) {\n  return function () {};\n};\nconsole.log(b()); //we log the entire fun within b."
+        "code": "// First-Class Function: Passing function as argument and returning function\nfunction b(param1) {\n  return function inner() {\n    console.log('Returned function executed!');\n  };\n}\n\nfunction sampleArg() {\n  console.log('Sample Argument');\n}\n\nvar res = b(sampleArg);\nres(); // Logs: 'Returned function executed!'"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What are First-Class Functions in JavaScript?",
-        "answer": "First-class functions mean functions are treated as first-class citizens: they can be stored in variables, passed as arguments to other functions, and returned from other functions."
+        "question": "What is the difference between Function Statement and Function Expression?",
+        "answer": "A Function Statement (Declaration) is fully hoisted with its function body and can be invoked before definition. A Function Expression assigns a function to a variable, so it is hoisted as 'undefined' and throws TypeError if invoked early."
       },
       {
-        "question": "What is the difference between Function Statement and Function Expression?",
-        "answer": "A Function Statement (`function a() {}`) is hoisted with full body definition. A Function Expression (`var a = function() {}`) assigns an anonymous function to a variable, so 'a' is hoisted as `undefined`."
+        "question": "What does 'First-Class Functions' mean in JavaScript?",
+        "answer": "First-Class Functions means functions are treated as first-class values: they can be assigned to variables, passed as arguments into other functions, and returned from functions."
       }
     ]
   },
   {
     "id": "js-callback-functions-event-listeners",
-    "title": "Episode 14 : Callback Functions in JS ft. Event Listeners",
+    "title": "Episode 14: Callback Functions & Event Listener Memory Management",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -724,56 +533,34 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 14 : Callback Functions in JS ft. Event Listeners with full code and visual diagrams.",
+    "summary": "Callbacks pass functions as arguments for async/event execution. Clean up Event Listeners to prevent memory leaks.",
     "keyConcepts": [
-      "Functions are first class citizens ie. take a function A and pass it to another function B. Here, A is a callback function. So basically I am giving access to function B to call function A. This callback function gives us the access to whole Asynchronous world in Synchronous world.",
-      "JS is a synchronous and single threaded language. But due to callbacks, we can do async things in JS.",
-      "js",
-      "In the call stack, first x and y are present. After code execution, they go away and stack is empty. Then after 5 seconds (from beginning) anonymous suddenly appear up in stack ie. setTimeout",
-      "All 3 functions are executed through call stack. If any operation blocks the call stack, its called blocking the main thread.",
-      "Say if x() takes 30 sec to run, then JS has to wait for it to finish as it has only 1 call stack/1 main thread. Never block main thread.",
-      "Always use async for functions that take time eg. setTimeout",
-      "js",
-      "We will create a button in html and attach event to it.",
-      "Lets implement a increment counter button."
+      "Callback function is passed as an argument to execute asynchronously or later.",
+      "Blocking the Main Thread occurs when heavy synchronous code runs inside callbacks.",
+      "Event Listeners retain closure scope memory until explicitly removed.",
+      "Always clean up event listeners to prevent memory bloat in Single Page Applications (SPAs)."
     ],
-    "detailedContent": "# Episode 14 : Callback Functions in JS ft. Event Listeners\n\n### Callback Functions\n\n- Functions are first class citizens ie. take a function A and pass it to another function B. Here, A is a callback function. So basically I am giving access to function B to call function A. This callback function gives us the access to whole **Asynchronous** world in **Synchronous** world.\n\n```js\nsetTimeout(function () {\n  console.log(\"Timer\");\n}, 1000); // first argument is callback function and second is timer.\n```\n\n- JS is a synchronous and single threaded language. But due to callbacks, we can do async things in JS.\n\n- ```js\n  setTimeout(function () {\n    console.log(\"timer\");\n  }, 5000);\n  function x(y) {\n    console.log(\"x\");\n    y();\n  }\n  x(function y() {\n    console.log(\"y\");\n  });\n  // x y timer\n  ```\n\n  - In the call stack, first x and y are present. After code execution, they go away and stack is empty. Then after 5 seconds (from beginning) anonymous suddenly appear up in stack ie. setTimeout\n  - All 3 functions are executed through call stack. If any operation blocks the call stack, its called blocking the main thread.\n  - Say if x() takes 30 sec to run, then JS has to wait for it to finish as it has only 1 call stack/1 main thread. Never block main thread.\n  - Always use **async** for functions that take time eg. setTimeout\n\n- ```js\n  // Another Example of callback\n  function printStr(str, cb) {\n    setTimeout(() => {\n      console.log(str);\n      cb();\n    }, Math.floor(Math.random() * 100) + 1);\n  }\n  function printAll() {\n    printStr(\"A\", () => {\n      printStr(\"B\", () => {\n        printStr(\"C\", () => {});\n      });\n    });\n  }\n  printAll(); // A B C // in order\n  ```\n\n### Event Listener\n\n- We will create a button in html and attach event to it.\n\n  ```js\n  // index.html\n  <button id=\"clickMe\">Click Me!</button>;\n\n  // in index.js\n  document.getElementById(\"clickMe\").addEventListener(\"click\", function xyz() {\n    //when event click occurs, this callback function (xyz) is called into callstack\n    console.log(\"Button clicked\");\n  });\n  ```\n\n- Lets implement a increment counter button.\n  - Using global variable (not good as anyone can change it)\n    ```js\n    let count = 0;\n    document\n      .getElementById(\"clickMe\")\n      .addEventListener(\"click\", function xyz() {\n        console.log(\"Button clicked\", ++count);\n      });\n    ```\n  - Use closures for data abstraction\n    ```js\n    function attachEventList() {\n      //creating new function for closure\n      let count = 0;\n      document\n        .getElementById(\"clickMe\")\n        .addEventListener(\"click\", function xyz() {\n          console.log(\"Button clicked\", ++count); //now callback function forms closure with outer scope(count)\n        });\n    }\n    attachEventList();\n    ```\n    ![Event Listerner Demo](/assets/namaste-js/event.jpg)\n\n### Garbage Collection and removeEventListeners\n\n- Event listeners are heavy as they form closures. So even when call stack is empty, EventListener won't free up memory allocated to count as it doesn't know when it may need count again. So we remove event listeners when we don't need them (garbage collected) onClick, onHover, onScroll all in a page can slow it down heavily.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 14: Callback Functions & Event Listener Memory Management\n\n## Overview\nA Callback Function is a function passed into another function as an argument, to be executed later. Event Listeners use callbacks with closures to track DOM user interactions.\n\n## Detailed Explanation\nBecause functions are first-class citizens, we can pass function `y` into function `x`:\n\n```js\nfunction x(y) {\n  console.log('x');\n  y();\n}\nx(function y() {\n  console.log('y');\n});\n```\n\n**Event Listeners & Garbage Collection**:\nEvent listeners form closures over their outer variables. If a page has 1,000 DOM buttons with attached event listeners closing over large scope data, that memory **cannot be garbage collected** while the DOM elements exist.\n\nRemoving event listeners (`removeEventListener`) frees up memory when elements are unmounted.\n\n## Real-World Analogy\n📞 Callback Phone Number: Leaving your phone number (callback function) at a desk. When your turn arrives, the receptionist calls you back to take action.\n\n## Key Architectural Concepts\n- Callback function is passed as an argument to execute asynchronously or later.\n- Blocking the Main Thread occurs when heavy synchronous code runs inside callbacks.\n- Event Listeners retain closure scope memory until explicitly removed.\n- Always clean up event listeners to prevent memory bloat in Single Page Applications (SPAs).",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "setTimeout(function () {\n  console.log(\"Timer\");\n}, 1000); // first argument is callback function and second is timer."
-      },
-      {
-        "language": "javascript",
-        "code": "setTimeout(function () {\n    console.log(\"timer\");\n  }, 5000);\n  function x(y) {\n    console.log(\"x\");\n    y();\n  }\n  x(function y() {\n    console.log(\"y\");\n  });\n  // x y timer"
-      },
-      {
-        "language": "javascript",
-        "code": "// Another Example of callback\n  function printStr(str, cb) {\n    setTimeout(() => {\n      console.log(str);\n      cb();\n    }, Math.floor(Math.random() * 100) + 1);\n  }\n  function printAll() {\n    printStr(\"A\", () => {\n      printStr(\"B\", () => {\n        printStr(\"C\", () => {});\n      });\n    });\n  }\n  printAll(); // A B C // in order"
-      },
-      {
-        "language": "javascript",
-        "code": "// index.html\n  <button id=\"clickMe\">Click Me!</button>;\n\n  // in index.js\n  document.getElementById(\"clickMe\").addEventListener(\"click\", function xyz() {\n    //when event click occurs, this callback function (xyz) is called into callstack\n    console.log(\"Button clicked\");\n  });"
-      },
-      {
-        "language": "javascript",
-        "code": "let count = 0;\n    document\n      .getElementById(\"clickMe\")\n      .addEventListener(\"click\", function xyz() {\n        console.log(\"Button clicked\", ++count);\n      });"
-      },
-      {
-        "language": "javascript",
-        "code": "function attachEventList() {\n      //creating new function for closure\n      let count = 0;\n      document\n        .getElementById(\"clickMe\")\n        .addEventListener(\"click\", function xyz() {\n          console.log(\"Button clicked\", ++count); //now callback function forms closure with outer scope(count)\n        });\n    }\n    attachEventList();"
+        "code": "function attachEventListener() {\n  let count = 0;\n  const button = document.getElementById('clickMe');\n  \n  function handleClick() {\n    console.log('Button Clicked', ++count);\n  }\n  \n  button.addEventListener('click', handleClick);\n  \n  // Return cleanup function for memory management\n  return function remove() {\n    button.removeEventListener('click', handleClick);\n  };\n}"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is a Callback Function and why are event listeners dangerous if not cleaned up?",
-        "answer": "A callback function is passed into another function to be executed later. Event listeners create closures that hold memory references; failing to remove them when elements unmount causes memory leaks."
+        "question": "What is a Callback Function in JavaScript?",
+        "answer": "A callback function is a function passed as an argument into another function, intended to be executed later after an operation completes or an event occurs."
+      },
+      {
+        "question": "Why should Event Listeners be removed when no longer needed?",
+        "answer": "Event listeners form closures over outer variables, preventing those variables from being garbage collected. Unremoved listeners on unmounted elements cause memory leaks."
       }
     ]
   },
   {
     "id": "js-event-loop-microtask-queue",
-    "title": "Episode 15 : Asynchronous JavaScript & EVENT LOOP from scratch",
+    "title": "Episode 15: Asynchronous JS, Event Loop & Microtask Queue",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Hard",
@@ -787,48 +574,35 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 15 : Asynchronous JavaScript & EVENT LOOP from scratch with full code and visual diagrams.",
+    "summary": "The Event Loop checks Call Stack emptiness. Drains Microtask Queue (Promises) first, then processes Callback Queue (`setTimeout`).",
     "keyConcepts": [
-      "Browser has JS Engine which has Call Stack which has Global execution context, local execution context etc.",
-      "But browser has many other superpowers - Local storage space, Timer, place to enter URL, Bluetooth access, Geolocation access and so on.",
-      "Now JS needs some way to connect the callstack with all these superpowers. This is done using Web APIs.",
-      "setTimeout(), DOM APIs, fetch(), localstorage, console (yes, even console.log is not JS!!), location and so many more.",
-      "setTimeout() : Timer function",
-      "DOM APIs : eg.Document.xxxx ; Used to access HTML DOM tree. (Document Object Manipulation)",
-      "fetch() : Used to make connection with external servers eg. Netflix servers etc.",
-      "We get all these inside call stack through global object ie. window",
-      "Use window keyword like : window.setTimeout(), window.localstorage, window.console.log() to log something inside console.",
-      "As window is global obj, and all the above functions are present in global object, we don't explicity write window but it is implied."
+      "Event Loop continuously checks if Call Stack is empty.",
+      "Microtask Queue priority > Callback Queue (Task Queue) priority.",
+      "Promises and MutationObserver callbacks go to Microtask Queue.",
+      "`setTimeout`, `setInterval`, DOM events go to Callback Queue.",
+      "Microtask starvation occurs if microtasks recursively add new microtasks."
     ],
-    "detailedContent": "# Episode 15 : Asynchronous JavaScript & EVENT LOOP from scratch\n\n> Note: Call stack will execeute any execeution context which enters it. Time, tide and JS waits for none. TLDR; Call stack has no timer.\n\n- Browser has JS Engine which has Call Stack which has Global execution context, local execution context etc.\n  - But browser has many other superpowers - Local storage space, Timer, place to enter URL, Bluetooth access, Geolocation access and so on.\n  - Now JS needs some way to connect the callstack with all these superpowers. This is done using Web APIs.\n    ![Event Loop 1 Demo](/assets/namaste-js/eventloop1.jpg)\n\n### WebAPIs\n\nNone of the below are part of Javascript! These are extra superpowers that browser has. Browser gives access to JS callstack to use these powers.\n![Event Loop 2 Demo](/assets/namaste-js/eventloop2.jpg)\n\n- setTimeout(), DOM APIs, fetch(), localstorage, console (yes, even console.log is not JS!!), location and so many more.\n\n  - setTimeout() : Timer function\n  - DOM APIs : eg.Document.xxxx ; Used to access HTML DOM tree. (Document Object Manipulation)\n  - fetch() : Used to make connection with external servers eg. Netflix servers etc.\n\n- We get all these inside call stack through global object ie. window\n\n  - Use window keyword like : window.setTimeout(), window.localstorage, window.console.log() to log something inside console.\n  - As window is global obj, and all the above functions are present in global object, we don't explicity write window but it is implied.\n\n- Let's undertand the below code image and its explaination:\n  ![Event Loop 3 Demo](/assets/namaste-js/eventloop3.jpg)\n  - ```js\n    console.log(\"start\");\n    setTimeout(function cb() {\n      console.log(\"timer\");\n    }, 5000);\n    console.log(\"end\");\n    // start end timer\n    ```\n  - First a GEC is created and put inside call stack.\n  - console.log(\"Start\"); // this calls the console web api (through window) which in turn actually modifies values in console.\n  - setTimeout(function cb() { //this calls the setTimeout web api which gives access to timer feature. It stores the callback cb() and starts timer. console.log(\"Callback\");}, 5000);\n  - console.log(\"End\"); // calls console api and logs in console window. After this GEC pops from call stack.\n  - While all this is happening, the timer is constantly ticking. After it becomes 0, the callback cb() has to run.\n  - Now we need this cb to go into call stack. Only then will it be executed. For this we need **event loop** and **Callback queue**\n\n### Event Loops and Callback Queue\n\nQ: How after 5 secs timer is console?\n\n- cb() cannot simply directly go to callstack to be execeuted. It goes through the callback queue when timer expires.\n- Event loop keep checking the callback queue, and see if it has any element to puts it into call stack. It is like a gate keeper.\n- Once cb() is in callback queue, eventloop pushes it to callstack to run. Console API is used and log printed\n- ![Event Loop 4 Demo](/assets/namaste-js/eventloop4.jpg)\n\nQ: Another example to understand Eventloop & Callback Queue.\n\nSee the below Image and code and try to understand the reason:\n![Event Loop 5 Demo](/assets/namaste-js/eventloop5.jpg)\nExplaination?\n\n- ```js\n  console.log(\"Start\");\n  document.getElementById(\"btn\").addEventListener(\"click\", function cb() {\n    // cb() registered inside webapi environment and event(click) attached to it. i.e. REGISTERING CALLBACK AND ATTACHING EVENT TO IT.\n    console.log(\"Callback\");\n  });\n  console.log(\"End\"); // calls console api and logs in console window. After this GEC get removed from call stack.\n  // In above code, even after console prints \"Start\" and \"End\" and pops GEC out, the eventListener stays in webapi env(with hope that user may click it some day) until explicitly removed, or the browser is closed.\n  ```\n\n- Eventloop has just one job to keep checking callback queue and if found something push it to call stack and delete from callback queue.\n\nQ: Need of callback queue?\n\n**Ans**: Suppose user clciks button x6 times. So 6 cb() are put inside callback queue. Event loop sees if call stack is empty/has space and whether callback queue is not empty(6 elements here). Elements of callback queue popped off, put in callstack, executed and then popped off from call stack.\n\n<br>\n\n### Behaviour of fetch (**Microtask Queue?**)\n\nLet's observe the code below and try to understand\n\n```js\nconsole.log(\"Start\"); // this calls the console web api (through window) which in turn actually modifies values in console.\nsetTimeout(function cbT() {\n  console.log(\"CB Timeout\");\n}, 5000);\nfetch(\"https://api.netflix.com\").then(function cbF() {\n    console.log(\"CB Netflix\");\n}); // take 2 seconds to bring response\n// millions lines of code\nconsole.log(\"End\");\n\nCode Explaination:\n* Same steps for everything before fetch() in above code.\n* fetch registers cbF into webapi environment along with existing cbT.\n* cbT is waiting for 5000ms to end so that it can be put inside callback queue. cbF is waiting for data to be returned from Netflix servers gonna take 2 seconds.\n* After this millions of lines of code is running, by the time millions line of code will execute, 5 seconds has finished and now the timer has expired and response from Netflix server is ready.\n* Data back from cbF ready to be executed gets stored into something called a Microtask Queue.\n* Also after expiration of timer, cbT is ready to execute in Callback Queue.\n* Microtask Queue is exactly same as Callback Queue, but it has higher priority. Functions in Microtask Queue are executed earlier than Callback Queue.\n* In console, first Start and End are printed in console. First cbF goes in callstack and \"CB Netflix\" is printed. cbF popped from callstack. Next cbT is removed from callback Queue, put in Call Stack, \"CB Timeout\" is printed, and cbT removed from callstack.\n* See below Image for more understanding\n```\n\n![Event Loop 6 Demo](/assets/namaste-js/eventloop6.jpg)\nMicrotask Priority Visualization\n![Event Loop 7 Demo](/assets/namaste-js/microtask.gif)\n\n#### What enters the Microtask Queue ?\n\n- All the callback functions that come through promises go in microtask Queue.\n- **Mutation Observer** : Keeps on checking whether there is mutation in DOM tree or not, and if there, then it execeutes some callback function.\n- Callback functions that come through promises and mutation observer go inside **Microtask Queue**.\n- All the rest goes inside **Callback Queue aka. Task Queue**.\n- If the task in microtask Queue keeps creating new tasks in the queue, element in callback queue never gets chance to be run. This is called **starvation**\n\n### Some Important Questions\n\n1. **When does the event loop actually start ? -** Event loop, as the name suggests, is a single-thread, loop that is _almost infinite_. It's always running and doing its job.\n\n2. **Are only asynchronous web api callbacks are registered in web api environment? -** YES, the synchronous callback functions like what we pass inside map, filter and reduce aren't registered in the Web API environment. It's just those async callback functions which go through all this.\n\n3. **Does the web API environment stores only the callback function and pushes the same callback to queue/microtask queue? -** Yes, the callback functions are stored, and a reference is scheduled in the queues. Moreover, in the case of event listeners(for example click handlers), the original callbacks stay in the web API environment forever, that's why it's adviced to explicitly remove the listeners when not in use so that the garbage collector does its job.\n\n4. **How does it matter if we delay for setTimeout would be 0ms. Then callback will move to queue without any wait ? -** No, there are trust issues with setTimeout() 😅. The callback function needs to wait until the Call Stack is empty. So the 0 ms callback might have to wait for 100ms also if the stack is busy.\n\n<br>\n\n### Observation of Eventloop, Callback Queue & Microtask Queue [**GiF**]\n\n![microtask 1 Demo](/assets/namaste-js/microtask1.gif)\n![microtask 2 Demo](/assets/namaste-js/microtask2.gif)\n![microtask 3 Demo](/assets/namaste-js/microtask3.gif)\n![microtask 4 Demo](/assets/namaste-js/microtask4.gif)\n![microtask 5 Demo](/assets/namaste-js/microtask5.gif)\n![microtask 6 Demo](/assets/namaste-js/microtask6.gif)\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 15: Asynchronous JS, Event Loop & Microtask Queue\n\n## Overview\nThe Event Loop is an orchestration mechanism that monitors the Call Stack, Microtask Queue, and Callback (Task) Queue. It pushes queued asynchronous callbacks onto the Call Stack when the stack becomes empty.\n\n## Detailed Explanation\nJavaScript runtime environment consists of:\n\n1. **Call Stack**: Executes synchronous code.\n2. **Web APIs**: Browser features (`setTimeout`, `fetch`, DOM events, `console`, `localStorage`).\n3. **Callback Queue (Task Queue)**: Holds callbacks from `setTimeout`, DOM events, `setInterval`.\n4. **Microtask Queue**: Holds high-priority callbacks from **Promises** and **MutationObserver**.\n\n**Event Loop Algorithm**:\n1. Continuously checks if the Call Stack is empty.\n2. When Call Stack is empty, it processes **ALL tasks in the Microtask Queue** first.\n3. Only after the Microtask Queue is completely empty does it take **ONE task from the Callback Queue** and push it to the Call Stack.\n4. **Starvation**: If microtasks continually spawn new microtasks, the Callback Queue is starved of execution.\n\n## Real-World Analogy\n🎟️ VIP vs Regular Queue: Microtask Queue is the VIP airport line (Promises). Callback Queue is the regular line (`setTimeout`). VIP line must be completely cleared before a single regular passenger is processed.\n\n## Key Architectural Concepts\n- Event Loop continuously checks if Call Stack is empty.\n- Microtask Queue priority > Callback Queue (Task Queue) priority.\n- Promises and MutationObserver callbacks go to Microtask Queue.\n- `setTimeout`, `setInterval`, DOM events go to Callback Queue.\n- Microtask starvation occurs if microtasks recursively add new microtasks.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(\"start\");\n    setTimeout(function cb() {\n      console.log(\"timer\");\n    }, 5000);\n    console.log(\"end\");\n    // start end timer"
-      },
-      {
-        "language": "javascript",
-        "code": "console.log(\"Start\");\n  document.getElementById(\"btn\").addEventListener(\"click\", function cb() {\n    // cb() registered inside webapi environment and event(click) attached to it. i.e. REGISTERING CALLBACK AND ATTACHING EVENT TO IT.\n    console.log(\"Callback\");\n  });\n  console.log(\"End\"); // calls console api and logs in console window. After this GEC get removed from call stack.\n  // In above code, even after console prints \"Start\" and \"End\" and pops GEC out, the eventListener stays in webapi env(with hope that user may click it some day) until explicitly removed, or the browser is closed."
-      },
-      {
-        "language": "javascript",
-        "code": "console.log(\"Start\"); // this calls the console web api (through window) which in turn actually modifies values in console.\nsetTimeout(function cbT() {\n  console.log(\"CB Timeout\");\n}, 5000);\nfetch(\"https://api.netflix.com\").then(function cbF() {\n    console.log(\"CB Netflix\");\n}); // take 2 seconds to bring response\n// millions lines of code\nconsole.log(\"End\");\n\nCode Explaination:\n* Same steps for everything before fetch() in above code.\n* fetch registers cbF into webapi environment along with existing cbT.\n* cbT is waiting for 5000ms to end so that it can be put inside callback queue. cbF is waiting for data to be returned from Netflix servers gonna take 2 seconds.\n* After this millions of lines of code is running, by the time millions line of code will execute, 5 seconds has finished and now the timer has expired and response from Netflix server is ready.\n* Data back from cbF ready to be executed gets stored into something called a Microtask Queue.\n* Also after expiration of timer, cbT is ready to execute in Callback Queue.\n* Microtask Queue is exactly same as Callback Queue, but it has higher priority. Functions in Microtask Queue are executed earlier than Callback Queue.\n* In console, first Start and End are printed in console. First cbF goes in callstack and \"CB Netflix\" is printed. cbF popped from callstack. Next cbT is removed from callback Queue, put in Call Stack, \"CB Timeout\" is printed, and cbT removed from callstack.\n* See below Image for more understanding"
+        "code": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('setTimeout Callback (Task Queue)');\n}, 0);\n\nPromise.resolve().then(() => {\n  console.log('Promise Microtask (Microtask Queue)');\n});\n\nconsole.log('End');\n\n// Output Order:\n// 1. Start\n// 2. End\n// 3. Promise Microtask (Microtask Queue)\n// 4. setTimeout Callback (Task Queue)"
       }
     ],
     "interviewQuestions": [
       {
         "question": "How does the JavaScript Event Loop work?",
-        "answer": "The Event Loop continuously checks if the Call Stack is empty. When empty, it checks the Microtask Queue first and processes all microtasks (Promises, MutationObserver). Then it takes the top task from Callback/Task Queue (setTimeout, DOM events) and pushes it to Call Stack."
+        "answer": "The Event Loop continuously checks if the Call Stack is empty. When empty, it drains all tasks in the Microtask Queue (Promises). Once empty, it takes the first task from the Callback Queue (setTimeout) and pushes it to Call Stack."
       },
       {
-        "question": "Which has higher priority: Microtask Queue or Callback Queue?",
-        "answer": "Microtask Queue has higher priority. All microtasks are processed completely before the Event Loop executes a single task from the Callback Queue."
+        "question": "Which queue has higher priority: Microtask Queue or Callback Queue?",
+        "answer": "Microtask Queue has higher priority. All microtasks are executed before a single task from the Callback Queue is processed."
       }
     ]
   },
   {
     "id": "js-engine-v8-architecture",
-    "title": "Episode 16 : JS Engine Exposed, Google's V8 Architecture",
+    "title": "Episode 16: Google V8 Engine Architecture: Parser, AST & JIT Compiler",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Hard",
@@ -842,36 +616,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 16 : JS Engine Exposed, Google's V8 Architecture with full code and visual diagrams.",
+    "summary": "V8 Engine parses code to AST, Ignition generates Bytecode, and TurboFan JIT compiles hot code into optimized machine code.",
     "keyConcepts": [
-      "JS runs literally everywhere from smart watch to robots to browsers because of Javascript Runtime Environment (JRE).",
-      "JRE is like a big container which has everything which are required to run Javascript code.",
-      "JRE consists of a JS Engine (❤️ of JRE), set of APIs to connect with outside environment, event loop, Callback queue, Microtask queue etc.",
-      "Browser can execute javascript code because it has the Javascript Runtime Environment.",
-      "ECMAScript is a governing body of JS. It has set of rules which are followed by all JS engines like Chakra(Internet Explorer), V8 Engine (Edge) Spidermonkey(Firefox)(first javascript engine created by JS creator himself), v8(Chrome)",
-      "Javascript Engine is not a machine. Its software written in low level languages (eg. C++) that takes in hi-level code in JS and spits out low level machine code.",
-      "Code inside Javascript Engine passes through 3 steps : Parsing, Compilation and Execution",
-      "Companies use different JS engines and each try to make theirs the best.",
-      "v8 of Google has Interpreter called Ignition, a compiler called Turbo Fan and garbage collector called Orinoco",
-      "v8 architecture:"
+      "JS Engine Architecture = Parser -> AST -> Interpreter (Ignition) -> JIT Compiler (TurboFan).",
+      "AST (Abstract Syntax Tree) is a tree representation of source code structure.",
+      "JIT (Just-In-Time) compilation compiles code during runtime.",
+      "Garbage Collector in V8 is called Orinoco (uses generational Mark-Sweep-Compact)."
     ],
-    "detailedContent": "# Episode 16 : JS Engine Exposed, Google's V8 Architecture\n\n- JS runs literally everywhere from smart watch to robots to browsers because of Javascript Runtime Environment (JRE).\n\n- JRE is like a big container which has everything which are required to run Javascript code.\n\n- JRE consists of a JS Engine (❤️ of JRE), set of APIs to connect with outside environment, event loop, Callback queue, Microtask queue etc.\n\n- Browser can execute javascript code because it has the Javascript Runtime Environment.\n\n- ECMAScript is a governing body of JS. It has set of rules which are followed by all JS engines like Chakra(Internet Explorer), V8 Engine (Edge) Spidermonkey(Firefox)(first javascript engine created by JS creator himself), v8(Chrome)\n\n- Javascript Engine is not a machine. Its software written in low level languages (eg. C++) that takes in hi-level code in JS and spits out low level machine code.\n\n- Code inside Javascript Engine passes through 3 steps : **Parsing**, **Compilation** and **Execution**\n\n  1. **Parsing** - Code is broken down into tokens. In \"let a = 7\" -> let, a, =, 7 are all tokens. Also we have a syntax parser that takes code and converts it into an AST (Abstract Syntax Tree) which is a JSON with all key values like type, start, end, body etc (looks like package.json but for a line of code in JS. Kinda unimportant)(Check out astexplorer.net -> converts line of code into AST).\n  2. **Compilation** - JS has something called Just-in-time(JIT) Compilation - uses both interpreter & compiler. Also compilation and execution both go hand in hand. The AST from previous step goes to interpreter which converts hi-level code to byte code and moves to execeution. While interpreting, compiler also works hand in hand to compile and form optimized code during runtime. **Does JavaScript really Compiles?** The answer is a loud **YES**. More info at: [Link 1](https://github.com/getify/You-Dont-Know-JS/blob/2nd-ed/get-started/ch1.md#whats-in-an-interpretation), [Link 2](https://web.stanford.edu/class/cs98si/slides/overview.html), [Link 3](https://blog.greenroots.info/javascript-interpreted-or-compiled-the-debate-is-over-ckb092cv302mtl6s17t14hq1j). JS used to be only interpreter in old times, but now has both to compile and interpreter code and this make JS a JIT compiled language, its like best of both world.\n  3. **Execution** - Needs 2 components ie. Memory heap(place where all memory is stored) and Call Stack(same call stack from prev episodes). There is also a garbage collector. It uses an algo called **Mark and Sweep**.\n     ![JS Engine Demo](/assets/namaste-js/jsengine.jpg)\n     GiF Demo\n     ![JS Engine Demo](/assets/namaste-js/jsenginegif.gif)\n\n- Companies use different JS engines and each try to make theirs the best.\n  - v8 of Google has Interpreter called Ignition, a compiler called Turbo Fan and garbage collector called Orinoco\n  - v8 architecture:\n    ![JS Engine Demo](/assets/namaste-js/jsengine.png)\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 16: Google V8 Engine Architecture: Parser, AST & JIT Compiler\n\n## Overview\nThe JavaScript Engine (such as Google V8) parses code into an Abstract Syntax Tree (AST), interprets bytecode via Ignition, and compiles hot code paths into optimized machine code via the TurboFan JIT compiler.\n\n## Detailed Explanation\nCore pipeline of the Google V8 Engine:\n\n1. **Parsing Phase**:\n   - **Lexical Analysis (Tokenizer)**: Breaks raw JS code string into tokens.\n   - **Syntax Analysis (Parser)**: Converts tokens into an **Abstract Syntax Tree (AST)**.\n2. **Interpretation Phase (Ignition)**:\n   - Ignition Interpreter converts AST into portable **Bytecode** and executes it immediately.\n3. **Compilation Phase (TurboFan JIT Compiler)**:\n   - **Just-In-Time (JIT) Compilation**: While bytecode runs, V8 identifies 'Hot Code' (frequently invoked functions).\n   - TurboFan compiles Hot Code directly into **Optimized Machine Code**.\n   - **Deoptimization**: If variable types change dynamically in hot functions, TurboFan de-optimizes back to Bytecode.\n\n## Real-World Analogy\n🏎️ Interpreter & Nitro Boost: Ignition Interpreter is a standard engine getting car moving instantly. TurboFan JIT Compiler is a nitro boost activated for straight paths (hot code), switching back to standard engine if road turns bumpy (type change).\n\n## Key Architectural Concepts\n- JS Engine Architecture = Parser -> AST -> Interpreter (Ignition) -> JIT Compiler (TurboFan).\n- AST (Abstract Syntax Tree) is a tree representation of source code structure.\n- JIT (Just-In-Time) compilation compiles code during runtime.\n- Garbage Collector in V8 is called Orinoco (uses generational Mark-Sweep-Compact).",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "// Core syntax demonstration for Episode 16 : JS Engine Exposed, Google's V8 Architecture\nconsole.log('Episode 16 : JS Engine Exposed, Google's V8 Architecture active in JS execution context');"
+        "code": "// Monomorphic function (V8 TurboFan optimizes aggressively)\nfunction add(a, b) {\n  return a + b;\n}\n\n// Invoked 100,000 times with same types (numbers)\nfor (let i = 0; i < 100000; i++) {\n  add(10, 20); // Hot Code Path -> TurboFan Machine Code\n}\n\n// Deoptimization Trigger:\nadd('hello', 'world'); // Type shape changed! TurboFan deoptimizes to Bytecode."
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What are the main components of Google's V8 Engine?",
-        "answer": "1) Parser (Generates AST - Abstract Syntax Tree). 2) Ignition Interpreter (Converts AST to Bytecode). 3) TurboFan JIT Compiler (Compiles hot code paths into optimized machine code)."
+        "question": "Explain the major components of Google V8 JavaScript Engine.",
+        "answer": "V8 consists of: 1) Parser (breaks code into Abstract Syntax Tree - AST), 2) Ignition Interpreter (converts AST into Bytecode for fast startup), and 3) TurboFan JIT Compiler (compiles hot code paths into optimized machine code)."
       }
     ]
   },
   {
     "id": "js-settimeout-trust-issues",
-    "title": "Episode 17 : Trust issues with setTimeout()",
+    "title": "Episode 17: Trust Issues with setTimeout() & Concurrency Delays",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -885,40 +653,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 17 : Trust issues with setTimeout() with full code and visual diagrams.",
+    "summary": "`setTimeout` guarantees minimum delay time. Execution will be delayed if Call Stack is blocked by synchronous code.",
     "keyConcepts": [
-      "setTimeout with timer of 5 secs sometimes does not exactly guarantees that the callback function will execute exactly after 5s.",
-      "Let's observe the below code and it's explaination",
-      "First GEC is created and pushed in callstack.",
-      "Start is printed in console",
-      "When setTimeout is seen, callback function is registered into webapi's env. And timer is attached to it and started. callback waits for its turn to be execeuted once timer expires. But JS waits for none. Goes to next line.",
-      "End is printed in console.",
-      "After \"End\", we have 1 million lines of code that takes 10 sec(say) to finish execution. So GEC won't pop out of stack. It runs all the code for 10 sec.",
-      "But in the background, the timer runs for 5s. While callstack runs the 1M line of code, this timer has already expired and callback fun has been pushed to Callback queue and waiting to pushed to callstack to get executed.",
-      "Event loop keeps checking if callstack is empty or not. But here GEC is still in stack so cb can't be popped from callback Queue and pushed to CallStack. Though setTimeout is only for 5s, it waits for 10s until callstack is empty before it can execute (When GEC popped after 10sec, callstack() is pushed into call stack and immediately executed (Whatever is pushed to callstack is executed instantly).",
-      "This is called as the [Concurrency model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop) of JS. This is the logic behind setTimeout's trust issues."
+      "`setTimeout` delay parameter specifies minimum waiting time, not exact execution time.",
+      "Call Stack must be empty before Event Loop pushes timer callbacks.",
+      "Synchronous code always blocks timer execution.",
+      "`setTimeout(fn, 0)` is used to defer execution after current synchronous call stack clears."
     ],
-    "detailedContent": "# Episode 17 : Trust issues with setTimeout()\n\n- setTimeout with timer of 5 secs sometimes does not exactly guarantees that the callback function will execute exactly after 5s.\n\n- Let's observe the below code and it's explaination\n\n  ```js\n  console.log(\"Start\");\n  setTimeout(function cb() {\n    console.log(\"Callback\");\n  }, 5000);\n  console.log(\"End\");\n  // Millions of lines of code to execute\n\n  // o/p: Over here setTimeout exactly doesn't guarantee that the callback function will be called exactly after 5s. Maybe 6,7 or even 10! It all depends on callstack. Why?\n  ```\n\n  Reason?\n\n  - First GEC is created and pushed in callstack.\n  - Start is printed in console\n  - When setTimeout is seen, callback function is registered into webapi's env. And timer is attached to it and started. callback waits for its turn to be execeuted once timer expires. But JS waits for none. Goes to next line.\n  - End is printed in console.\n  - After \"End\", we have 1 million lines of code that takes 10 sec(say) to finish execution. So GEC won't pop out of stack. It runs all the code for 10 sec.\n  - But in the background, the timer runs for 5s. While callstack runs the 1M line of code, this timer has already expired and callback fun has been pushed to Callback queue and waiting to pushed to callstack to get executed.\n  - Event loop keeps checking if callstack is empty or not. But here GEC is still in stack so cb can't be popped from callback Queue and pushed to CallStack. **Though setTimeout is only for 5s, it waits for 10s until callstack is empty before it can execute** (When GEC popped after 10sec, callstack() is pushed into call stack and immediately executed (Whatever is pushed to callstack is executed instantly).\n  - This is called as the **[Concurrency model](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)** of JS. This is the logic behind setTimeout's trust issues.\n\n- The First rule of JavaScript: Do not **block the main thread** (as JS is a single threaded(only 1 callstack) language).\n\n- In below example, we are blocking the main thread. Observe Questiona and Output.\n  ![setTimeout Demo](/assets/namaste-js/settimeout1.jpg)\n\n- setTimeout guarantees that it will take at least the given timer to execute the code.\n\n- JS is a synchronous single threaded language. With just 1 thread it runs all pieces of code. It becomes kind of an interpreter language, and runs code very fast inside browser (no need to wait for code to be compiled) (JIT - Just in time compilation). And there are still ways to do async operations as well.\n\n- What if **timeout = 0sec**?\n  ```js\n  console.log(\"Start\");\n  setTimeout(function cb() {\n    console.log(\"Callback\");\n  }, 0);\n  console.log(\"End\");\n  // Even though timer = 0s, the cb() has to go through the queue. Registers calback in webapi's env , moves to callback queue, and execute once callstack is empty.\n  // O/p - Start End Callback\n  // This method of putting timer = 0, can be used to defer a less imp function by a little so the more important function(here printing \"End\") can take place\n  ```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 17: Trust Issues with setTimeout() & Concurrency Delays\n\n## Overview\n`setTimeout(fn, delay)` does NOT guarantee execution after exactly `delay` milliseconds. It guarantees a MINIMUM delay of `delay` milliseconds before the callback is placed in the Task Queue.\n\n## Detailed Explanation\nIf you write `setTimeout(cb, 5000)`, the browser starts a 5000ms timer in Web APIs.\n\nHowever, if the Call Stack is currently occupied executing a heavy synchronous 10-second `while` loop, the 5000ms timer callback **must wait in the Task Queue** until the Call Stack becomes completely empty.\n\nAs a result, a 5-second `setTimeout` callback may end up running after 10+ seconds!\n\n## Real-World Analogy\n🚦 Doctor's Appointment Window: Booking an appointment for 5:00 PM means you won't be seen BEFORE 5:00 PM. If a complex surgery runs over, you may wait until 5:30 PM before entering.\n\n## Key Architectural Concepts\n- `setTimeout` delay parameter specifies minimum waiting time, not exact execution time.\n- Call Stack must be empty before Event Loop pushes timer callbacks.\n- Synchronous code always blocks timer execution.\n- `setTimeout(fn, 0)` is used to defer execution after current synchronous call stack clears.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(\"Start\");\n  setTimeout(function cb() {\n    console.log(\"Callback\");\n  }, 5000);\n  console.log(\"End\");\n  // Millions of lines of code to execute\n\n  // o/p: Over here setTimeout exactly doesn't guarantee that the callback function will be called exactly after 5s. Maybe 6,7 or even 10! It all depends on callstack. Why?"
-      },
-      {
-        "language": "javascript",
-        "code": "console.log(\"Start\");\n  setTimeout(function cb() {\n    console.log(\"Callback\");\n  }, 0);\n  console.log(\"End\");\n  // Even though timer = 0s, the cb() has to go through the queue. Registers calback in webapi's env , moves to callback queue, and execute once callstack is empty.\n  // O/p - Start End Callback\n  // This method of putting timer = 0, can be used to defer a less imp function by a little so the more important function(here printing \"End\") can take place"
+        "code": "console.log('Start');\n\nsetTimeout(() => {\n  console.log('Callback executed!');\n}, 1000);\n\n// Simulate 3-second heavy synchronous blocking loop\nconst startDate = Date.now();\nlet endDate = startDate;\nwhile (endDate < startDate + 3000) {\n  endDate = Date.now();\n}\n\nconsole.log('Blocking Loop End');\n\n// Console Output:\n// Start\n// (3 second delay)\n// Blocking Loop End\n// Callback executed! (Ran after 3 seconds instead of 1 second!)"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "Why is `setTimeout(fn, 5000)` not guaranteed to run after exactly 5000ms?",
-        "answer": "The timer guarantees a MINIMUM delay of 5000ms. If the Call Stack is blocked by long-running synchronous execution, the callback must wait in the queue until the Call Stack becomes completely free."
+        "question": "Is setTimeout guaranteed to execute after the specified delay?",
+        "answer": "No. The delay parameter specifies the minimum delay before the callback is placed in the Task Queue. If the Call Stack is blocked by synchronous code, execution will be delayed until the Call Stack is empty."
       }
     ]
   },
   {
     "id": "js-higher-order-functions",
-    "title": "Episode 18 : Higher-Order Functions ft. Functional Programming",
+    "title": "Episode 18: Higher-Order Functions & Functional Programming",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -932,39 +690,29 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 18 : Higher-Order Functions ft. Functional Programming with full code and visual diagrams.",
+    "summary": "Higher-Order Functions take or return functions. Promotes reusability, DRY code, and functional programming.",
     "keyConcepts": [
-      "Complete breakdown and execution steps for Episode 18 : Higher-Order Functions ft. Functional Programming."
+      "Higher-Order Function = Function accepting/returning another function.",
+      "Polymorphism via callbacks: Decouples algorithm iteration from calculation logic.",
+      "Custom `Array.prototype.myMap` polyfill implementation using HOF pattern."
     ],
-    "detailedContent": "# Episode 18 : Higher-Order Functions ft. Functional Programming\n\n### Q: What is Higher Order Function?\n\n**Ans**: Higher-order functions are regular functions that take one or more functions as arguments and/or return functions as a value from it. Eg:\n\n```js\nfunction x() {\n  console.log(\"Hi\");\n}\nfunction y(x) {\n  x();\n}\ny(x); // Hi\n// y is a higher order function\n// x is a callback function\n```\n\nLet's try to understand how we should approach solution in interview.\nI have an array of radius and I have to calculate area using these radius and store in an array.\n\nFirst Approach:\n\n```js\nconst radius = [1, 2, 3, 4];\nconst calculateArea = function (radius) {\n  const output = [];\n  for (let i = 0; i < radius.length; i++) {\n    output.push(Math.PI * radius[i] * radius[i]);\n  }\n  return output;\n};\nconsole.log(calculateArea(radius));\n```\n\nThe above solution works perfectly fine but what if we have now requirement to calculate array of circumference. Code now be like\n\n```js\nconst radius = [1, 2, 3, 4];\nconst calculateCircumference = function (radius) {\n  const output = [];\n  for (let i = 0; i < radius.length; i++) {\n    output.push(2 * Math.PI * radius[i]);\n  }\n  return output;\n};\nconsole.log(calculateCircumference(radius));\n```\n\nBut over here we are violating some principle like DRY Principle, now lets observe the better approach.\n\n```js\nconst radiusArr = [1, 2, 3, 4];\n\n// logic to calculate area\nconst area = function (radius) {\n    return Math.PI * radius * radius;\n}\n\n// logic to calculate circumference\nconst circumference = function (radius) {\n    return 2 * Math.PI * radius;\n}\n\nconst calculate = function(radiusArr, operation) {\n    const output = [];\n    for (let i = 0; i < radiusArr.length; i++) {\n        output.push(operation(radiusArr[i]));\n    }\n    return output;\n}\nconsole.log(calculate(radiusArr, area));\nconsole.log(calculate(radiusArr, circumference));\n// Over here calculate is HOF\n// Over here we have extracted logic into separate functions. This is the beauty of functional programming.\n\nPolyfill of map\n// Over here calculate is nothing but polyfill of map function\n// console.log(radiusArr.map(area)) == console.log(calculate(radiusArr, area));\n\n***************************************************\nLets convert above calculate function as map function and try to use. So,\n\nArray.prototype.calculate = function(operation) {\n    const output = [];\n    for (let i = 0; i < this.length; i++) {\n        output.push(operation(this[i]));\n    }\n    return output;\n}\nconsole.log(radiusArr.calculate(area))\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 18: Higher-Order Functions & Functional Programming\n\n## Overview\nA Higher-Order Function (HOF) is a function that takes one or more functions as arguments, or returns a function as its output. HOFs form the bedrock of Functional Programming in JavaScript.\n\n## Detailed Explanation\nFunctions that accept or return other functions are Higher-Order Functions. The functions passed into them are Callback Functions.\n\n**DRY Principle (Don't Repeat Yourself)**:\nInstead of writing repetitive `for` loops to compute Area, Circumference, and Diameter of circles, write a single reusable Higher-Order Function `calculate(radiusArr, logicFn)` and pass specific logic functions into it.\n\n## Real-World Analogy\n🔌 Universal Power Socket: The socket (Higher-Order Function) accepts various plugs (logic functions: laptop charger, lamp, fan) to perform different tasks without changing socket wiring.\n\n## Key Architectural Concepts\n- Higher-Order Function = Function accepting/returning another function.\n- Polymorphism via callbacks: Decouples algorithm iteration from calculation logic.\n- Custom `Array.prototype.myMap` polyfill implementation using HOF pattern.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "function x() {\n  console.log(\"Hi\");\n}\nfunction y(x) {\n  x();\n}\ny(x); // Hi\n// y is a higher order function\n// x is a callback function"
-      },
-      {
-        "language": "javascript",
-        "code": "const radius = [1, 2, 3, 4];\nconst calculateArea = function (radius) {\n  const output = [];\n  for (let i = 0; i < radius.length; i++) {\n    output.push(Math.PI * radius[i] * radius[i]);\n  }\n  return output;\n};\nconsole.log(calculateArea(radius));"
-      },
-      {
-        "language": "javascript",
-        "code": "const radius = [1, 2, 3, 4];\nconst calculateCircumference = function (radius) {\n  const output = [];\n  for (let i = 0; i < radius.length; i++) {\n    output.push(2 * Math.PI * radius[i]);\n  }\n  return output;\n};\nconsole.log(calculateCircumference(radius));"
-      },
-      {
-        "language": "javascript",
-        "code": "const radiusArr = [1, 2, 3, 4];\n\n// logic to calculate area\nconst area = function (radius) {\n    return Math.PI * radius * radius;\n}\n\n// logic to calculate circumference\nconst circumference = function (radius) {\n    return 2 * Math.PI * radius;\n}\n\nconst calculate = function(radiusArr, operation) {\n    const output = [];\n    for (let i = 0; i < radiusArr.length; i++) {\n        output.push(operation(radiusArr[i]));\n    }\n    return output;\n}\nconsole.log(calculate(radiusArr, area));\nconsole.log(calculate(radiusArr, circumference));\n// Over here calculate is HOF\n// Over here we have extracted logic into separate functions. This is the beauty of functional programming.\n\nPolyfill of map\n// Over here calculate is nothing but polyfill of map function\n// console.log(radiusArr.map(area)) == console.log(calculate(radiusArr, area));\n\n***************************************************\nLets convert above calculate function as map function and try to use. So,\n\nArray.prototype.calculate = function(operation) {\n    const output = [];\n    for (let i = 0; i < this.length; i++) {\n        output.push(operation(this[i]));\n    }\n    return output;\n}\nconsole.log(radiusArr.calculate(area))"
+        "code": "const radius = [3, 1, 2, 4];\n\nconst area = (r) => Math.PI * r * r;\nconst circumference = (r) => 2 * Math.PI * r;\n\n// Higher-Order Function\nconst calculate = function(arr, logic) {\n  const output = [];\n  for (let i = 0; i < arr.length; i++) {\n    output.push(logic(arr[i]));\n  }\n  return output;\n};\n\nconsole.log(calculate(radius, area));\nconsole.log(calculate(radius, circumference));"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is a Higher-Order Function (HOF)?",
-        "answer": "A Higher-Order Function is a function that takes one or more functions as arguments or returns a function. Examples: `map()`, `filter()`, `reduce()`, `calculate(radiusArray, logicFunction)`."
+        "question": "What is a Higher-Order Function in JavaScript?",
+        "answer": "A Higher-Order Function is a function that takes another function as an argument, returns a function, or both. Common examples include map(), filter(), reduce(), and custom utility wrappers."
       }
     ]
   },
   {
     "id": "js-map-filter-reduce",
-    "title": "Episode 19 : map, filter & reduce",
+    "title": "Episode 19: Array Functional Utilities: map, filter & reduce",
     "domain": "javascript",
     "category": "Season 1: Core JS Execution Engine & Fundamentals",
     "difficulty": "Medium",
@@ -978,55 +726,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 19 : map, filter & reduce with full code and visual diagrams.",
+    "summary": "`map` transforms arrays, `filter` extracts matching elements, and `reduce` aggregates elements into a single value.",
     "keyConcepts": [
-      "Complete breakdown and execution steps for Episode 19 : map, filter & reduce."
+      "`map()` transforms array 1-to-1.",
+      "`filter()` selects elements matching boolean test.",
+      "`reduce()` aggregates array into a single accumulator value.",
+      "Chaining `map` and `filter` provides clean data transformations."
     ],
-    "detailedContent": "# Episode 19 : map, filter & reduce\n\n> map, filter & reducer are Higher Order Functions.\n\n## Map function\n\nIt is basically used to transform a array. The map() method creates a new array with the results of calling a function for every array element.\n\nconst output = arr.map(_function_) // this _function_ tells map that what transformation I want on each element of array\n\n```js\nconst arr = [5, 1, 3, 2, 6];\n// Task 1: Double the array element: [10, 2, 6, 4, 12]\nfunction double(x) {\n  return x * 2;\n}\nconst doubleArr = arr.map(double); // Internally map will run double function for each element of array and create a new array and returns it.\nconsole.log(doubleArr); // [10, 2, 6, 4, 12]\n```\n\n```js\n// Task 2: Triple the array element\nconst arr = [5, 1, 3, 2, 6];\n// Transformation logic\nfunction triple(x) {\n  return x * 3;\n}\nconst tripleArr = arr.map(triple);\nconsole.log(tripleArr); // [15, 3, 9, 6, 18]\n```\n\n```js\n// Task 3: Convert array elements to binary\nconst arr = [5, 1, 3, 2, 6];\n// Transformation logic:\nfunction binary(x) {\n\treturn x.toString(2);\n}\nconst binaryArr = arr.map(binary);\n\n// The above code can be rewritten as :\nconst binaryArr = arr.map(function binary(x) {\n\treturn x.toString(2);\n}\n\n// OR -> Arrow function\nconst binaryArr = arr.map((x) => x.toString(2));\n```\n\nSo basically map function is mapping each and every value and transforming it based on given condition.\n\n## Filter function\n\nFilter function is basically used to filter the value inside an array. The arr.filter() method is used to create a new array from a given array consisting of only those elements from the given array which satisfy a condition set by the argument method.\n\n```js\nconst array = [5, 1, 3, 2, 6];\n// filter odd values\nfunction isOdd(x) {\n  return x % 2;\n}\nconst oddArr = array.filter(isOdd); // [5,1,3]\n\n// Other way of writing the above:\nconst oddArr = arr.filter((x) => x % 2);\n```\n\nFilter function creates an array and store only those values which evaluates to true.\n\n## Reduce function\n\nIt is a function which take all the values of array and gives a single output of it. It reduces the array to give a single output.\n\n```js\nconst array = [5, 1, 3, 2, 6];\n// Calculate sum of elements of array - Non functional programming way\nfunction findSum(arr) {\n  let sum = 0;\n  for (let i = 0; i < arr.length; i++) {\n    sum = sum + arr[i];\n  }\n  return sum;\n}\nconsole.log(findSum(array)); // 17\n\n// reduce function way\nconst sumOfElem = arr.reduce(function (accumulator, current) {\n  // current represent the value of array\n  // accumulator is used the result from element of array.\n  // In comparison to previous code snippet, *sum* variable is *accumulator* and *arr[i]* is *current*\n  accumulator = accumulator + current;\n  return accumulator;\n}, 0); //In above example sum was initialized with 0, so over here accumulator also needs to be initialized, so the second argument to reduce function represent the initialization value.\nconsole.log(sumOfElem); // 17\n```\n\n```js\n// find max inside array: Non functional programming way:\nconst array = [5, 1, 3, 2, 6];\nfunction findMax(arr) {\n    let max = 0;\n    for(let i = 0; i < arr.length; i++ {\n        if (arr[i] > max) {\n            max = arr[i]\n        }\n    }\n    return max;\n}\nconsole.log(findMax(array)); // 6\n\n// using reduce\nconst output = arr.reduce((acc, current) => {\n\tif (current > acc ) {\n\t\tacc = current;\n\t}\n\treturn acc;\n}, 0);\nconsole.log(output); // 6\n\n// acc is just a label which represent the accumulated value till now,\n// so we can also label it as max in this case\nconst output = arr.reduce((max, current) => {\n\tif (current > max) {\n\t\tmax= current;\n\t}\n\treturn max;\n}, 0);\nconsole.log(output); // 6\n```\n\n## Tricky MAP\n\n```js\nconst users = [\n\t{ firstName: \"Alok\", lastName: \"Raj\", age: 23 },\n\t{ firstName: \"Ashish\", lastName: \"Kumar\", age: 29 },\n\t{ firstName: \"Ankit\", lastName: \"Roy\", age: 29 },\n\t{ firstName: \"Pranav\", lastName: \"Mukherjee\", age: 50 },\n];\n// Get array of full name : [\"Alok Raj\", \"Ashish Kumar\", ...]\nconst fullNameArr = users.map((user) => user.firstName + \" \" + user.lastName);\nconsole.log(fullNameArr); // [\"Alok Raj\", \"Ashish Kumar\", ...]\n\n----------------------------------------------------------\n\n// Get the count/report of how many unique people with unique age are there\n// like: {29 : 2, 75 : 1, 50 : 1}\n// We should use reduce, why? we want to deduce some information from the array. Basically we want to get a single object as output\nconst report = users.reduce((acc, curr) => {\n\tif(acc[curr.age]) {\n\t\tacc[curr.age] = ++ acc[curr.age] ;\n\t} else {\n\t\tacc[curr.age] = 1;\n\t}\n\n\treturn acc;  //to every time return update object\n}, {})\nconsole.log(report) // {29 : 2, 75 : 1, 50 : 1}\n```\n\n## Function Chaining\n\n```js\n// First name of all people whose age is less than 30\nconst users = [\n  { firstName: \"Alok\", lastName: \"Raj\", age: 23 },\n  { firstName: \"Ashish\", lastName: \"Kumar\", age: 29 },\n  { firstName: \"Ankit\", lastName: \"Roy\", age: 29 },\n  { firstName: \"Pranav\", lastName: \"Mukherjee\", age: 50 },\n];\n\n// function chaining\nconst output = users\n  .filter((user) => user.age < 30)\n  .map((user) => user.firstName);\nconsole.log(output); // [\"Alok\", \"Ashish\", \"Ankit\"]\n\n// Homework challenge: Implement the same logic using reduce\nconst output = users.reduce((acc, curr) => {\n  if (curr.age < 30) {\n    acc.push(curr.firstName);\n  }\n  return acc;\n}, []);\nconsole.log(output); // [\"Alok\", \"Ashish\", \"Ankit\"]\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 19: Array Functional Utilities: map, filter & reduce\n\n## Overview\n`map()`, `filter()`, and `reduce()` are Higher-Order Array Methods used for transformation, filtering, and aggregation of array datasets without mutating original array memory.\n\n## Detailed Explanation\n- **`map(fn)`**: Transforms every element in an array by applying a function, returning a new array of equal length.\n- **`filter(fn)`**: Evaluates every element against a boolean test, returning a new array with elements that pass (`true`).\n- **`reduce(fn, initialVal)`**: Iterates through elements, accumulating values into a single output result (number, object, array).\n\n## Real-World Analogy\n🌾 Grain Processing Factory:\n- `map()`: Milling wheat into flour packets (1-to-1 transformation).\n- `filter()`: Sifting out bad grains (selective filtering).\n- `reduce()`: Packing all flour packets into 1 big shipping crate (aggregation).\n\n## Key Architectural Concepts\n- `map()` transforms array 1-to-1.\n- `filter()` selects elements matching boolean test.\n- `reduce()` aggregates array into a single accumulator value.\n- Chaining `map` and `filter` provides clean data transformations.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "const arr = [5, 1, 3, 2, 6];\n// Task 1: Double the array element: [10, 2, 6, 4, 12]\nfunction double(x) {\n  return x * 2;\n}\nconst doubleArr = arr.map(double); // Internally map will run double function for each element of array and create a new array and returns it.\nconsole.log(doubleArr); // [10, 2, 6, 4, 12]"
-      },
-      {
-        "language": "javascript",
-        "code": "// Task 2: Triple the array element\nconst arr = [5, 1, 3, 2, 6];\n// Transformation logic\nfunction triple(x) {\n  return x * 3;\n}\nconst tripleArr = arr.map(triple);\nconsole.log(tripleArr); // [15, 3, 9, 6, 18]"
-      },
-      {
-        "language": "javascript",
-        "code": "// Task 3: Convert array elements to binary\nconst arr = [5, 1, 3, 2, 6];\n// Transformation logic:\nfunction binary(x) {\n\treturn x.toString(2);\n}\nconst binaryArr = arr.map(binary);\n\n// The above code can be rewritten as :\nconst binaryArr = arr.map(function binary(x) {\n\treturn x.toString(2);\n}\n\n// OR -> Arrow function\nconst binaryArr = arr.map((x) => x.toString(2));"
-      },
-      {
-        "language": "javascript",
-        "code": "const array = [5, 1, 3, 2, 6];\n// filter odd values\nfunction isOdd(x) {\n  return x % 2;\n}\nconst oddArr = array.filter(isOdd); // [5,1,3]\n\n// Other way of writing the above:\nconst oddArr = arr.filter((x) => x % 2);"
-      },
-      {
-        "language": "javascript",
-        "code": "const array = [5, 1, 3, 2, 6];\n// Calculate sum of elements of array - Non functional programming way\nfunction findSum(arr) {\n  let sum = 0;\n  for (let i = 0; i < arr.length; i++) {\n    sum = sum + arr[i];\n  }\n  return sum;\n}\nconsole.log(findSum(array)); // 17\n\n// reduce function way\nconst sumOfElem = arr.reduce(function (accumulator, current) {\n  // current represent the value of array\n  // accumulator is used the result from element of array.\n  // In comparison to previous code snippet, *sum* variable is *accumulator* and *arr[i]* is *current*\n  accumulator = accumulator + current;\n  return accumulator;\n}, 0); //In above example sum was initialized with 0, so over here accumulator also needs to be initialized, so the second argument to reduce function represent the initialization value.\nconsole.log(sumOfElem); // 17"
-      },
-      {
-        "language": "javascript",
-        "code": "// find max inside array: Non functional programming way:\nconst array = [5, 1, 3, 2, 6];\nfunction findMax(arr) {\n    let max = 0;\n    for(let i = 0; i < arr.length; i++ {\n        if (arr[i] > max) {\n            max = arr[i]\n        }\n    }\n    return max;\n}\nconsole.log(findMax(array)); // 6\n\n// using reduce\nconst output = arr.reduce((acc, current) => {\n\tif (current > acc ) {\n\t\tacc = current;\n\t}\n\treturn acc;\n}, 0);\nconsole.log(output); // 6\n\n// acc is just a label which represent the accumulated value till now,\n// so we can also label it as max in this case\nconst output = arr.reduce((max, current) => {\n\tif (current > max) {\n\t\tmax= current;\n\t}\n\treturn max;\n}, 0);\nconsole.log(output); // 6"
-      },
-      {
-        "language": "javascript",
-        "code": "const users = [\n\t{ firstName: \"Alok\", lastName: \"Raj\", age: 23 },\n\t{ firstName: \"Ashish\", lastName: \"Kumar\", age: 29 },\n\t{ firstName: \"Ankit\", lastName: \"Roy\", age: 29 },\n\t{ firstName: \"Pranav\", lastName: \"Mukherjee\", age: 50 },\n];\n// Get array of full name : [\"Alok Raj\", \"Ashish Kumar\", ...]\nconst fullNameArr = users.map((user) => user.firstName + \" \" + user.lastName);\nconsole.log(fullNameArr); // [\"Alok Raj\", \"Ashish Kumar\", ...]\n\n----------------------------------------------------------\n\n// Get the count/report of how many unique people with unique age are there\n// like: {29 : 2, 75 : 1, 50 : 1}\n// We should use reduce, why? we want to deduce some information from the array. Basically we want to get a single object as output\nconst report = users.reduce((acc, curr) => {\n\tif(acc[curr.age]) {\n\t\tacc[curr.age] = ++ acc[curr.age] ;\n\t} else {\n\t\tacc[curr.age] = 1;\n\t}\n\n\treturn acc;  //to every time return update object\n}, {})\nconsole.log(report) // {29 : 2, 75 : 1, 50 : 1}"
-      },
-      {
-        "language": "javascript",
-        "code": "// First name of all people whose age is less than 30\nconst users = [\n  { firstName: \"Alok\", lastName: \"Raj\", age: 23 },\n  { firstName: \"Ashish\", lastName: \"Kumar\", age: 29 },\n  { firstName: \"Ankit\", lastName: \"Roy\", age: 29 },\n  { firstName: \"Pranav\", lastName: \"Mukherjee\", age: 50 },\n];\n\n// function chaining\nconst output = users\n  .filter((user) => user.age < 30)\n  .map((user) => user.firstName);\nconsole.log(output); // [\"Alok\", \"Ashish\", \"Ankit\"]\n\n// Homework challenge: Implement the same logic using reduce\nconst output = users.reduce((acc, curr) => {\n  if (curr.age < 30) {\n    acc.push(curr.firstName);\n  }\n  return acc;\n}, []);\nconsole.log(output); // [\"Alok\", \"Ashish\", \"Ankit\"]"
+        "code": "const users = [\n  { firstName: 'Akshay', lastName: 'Saini', age: 26 },\n  { firstName: 'Donald', lastName: 'Trump', age: 75 },\n  { firstName: 'Elon', lastName: 'Musk', age: 50 },\n  { firstName: 'Deepika', lastName: 'Padukone', age: 26 }\n];\n\n// 1. map: Full names list\nconst fullNames = users.map(u => `${u.firstName} ${u.lastName}`);\n\n// 2. reduce: Age frequency count object\nconst ageCount = users.reduce((acc, curr) => {\n  acc[curr.age] = (acc[curr.age] || 0) + 1;\n  return acc;\n}, {});\n\n// 3. Chaining filter + map: First names of users age < 30\nconst youngUsers = users\n  .filter(u => u.age < 30)\n  .map(u => u.firstName);\n\nconsole.log(youngUsers); // ['Akshay', 'Deepika']"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "How do map, filter, and reduce differ?",
-        "answer": "`map()` creates a new array by transforming every element. `filter()` creates a new array with elements that pass a test condition. `reduce()` executes a reducer function to accumulate array elements into a single value."
+        "question": "Explain the difference between map, filter, and reduce.",
+        "answer": "'map' transforms each array element into a new array of same length. 'filter' returns a new array with elements matching a boolean predicate. 'reduce' accumulates array elements into a single aggregated output value."
       }
     ]
   },
   {
     "id": "js-callback-hell",
-    "title": "Episode 20 : Callback",
+    "title": "Episode 20: Callback Hell, Pyramid of Doom & Inversion of Control",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Medium",
@@ -1040,54 +763,29 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 20 : Callback with full code and visual diagrams.",
+    "summary": "Callback Hell causes Pyramid of Doom. Inversion of Control surrenders execution control to external APIs. Promises resolve both.",
     "keyConcepts": [
-      "There are 2 Parts of Callback:",
-      "Callback Hell",
-      "Inversion of control",
-      "Understanding of Bad part of callback is super important to learn Promise in next lecture."
+      "Callback Hell creates nested unmaintainable Pyramid of Doom structure.",
+      "Inversion of Control = Surrendering function execution control to external APIs.",
+      "Promises resolve IoC by keeping control in caller hands via resolved objects."
     ],
-    "detailedContent": "# Episode 20 : Callback\n\n- There are 2 Parts of Callback:\n\n  1. Good Part of callback - Callback are super important while writing asynchronous code in JS\n  2. Bad Part of Callback - Using callback we can face issue:\n     - Callback Hell\n     - Inversion of control\n\n- Understanding of Bad part of callback is super important to learn Promise in next lecture.\n\n> 💡 JavaScript is synchronous, single threaded language. It can Just do one thing at a time, it has just one call-stack and it can execute one thing at a time. Whatever code we give to Javascript will be quickly executed by Javascript engine, it does not wait.\n\n```js\nconsole.log(\"Namaste\");\nconsole.log(\"JavaScript\");\nconsole.log(\"Season 2\");\n// Namaste\n// JavaScript\n// Season 2\n\n// 💡 It is quickly printing because `Time, tide & Javascript waits for none.`\n```\n\n_But what if we have to delay execution of any line, we could utilize callback, How?_\n\n```js\nconsole.log(\"Namaste\");\nsetTimeout(function () {\n  console.log(\"JavaScript\");\n}, 5000);\nconsole.log(\"Season 2\");\n// Namaste\n// Season 2\n// JavaScript\n\n// 💡 Here we are delaying the execution using callback approach of setTimeout.\n```\n\n### 🛒 e-Commerce web app situation\n\nAssume a scenario of e-Commerce web, where one user is placing order, he has added items like, shoes, pants and kurta in cart and now he is placing order. So in backend the situation could look something like this.\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n// Two steps to place a order\n// 1. Create a Order\n// 2. Proceed to Payment\n\n// It could look something like this:\napi.createOrder();\napi.proceedToPayment();\n```\n\nAssumption, once order is created then only we can proceed to payment, so there is a dependency. So How to manage this dependency.\nCallback can come as rescue, How?\n\n```js\napi.createOrder(cart, function () {\n  api.proceedToPayment();\n});\n// 💡 Over here `createOrder` api is first creating a order then it is responsible to call `api.proceedToPayment()` as part of callback approach.\n```\n\nTo make it a bit complicated, what if after payment is done, you have to show Order summary by calling `api.showOrderSummary()` and now it has dependency on `api.proceedToPayment()`\nNow my code should look something like this:\n\n```js\napi.createOrder(cart, function () {\n  api.proceedToPayment(function () {\n    api.showOrderSummary();\n  });\n});\n```\n\nNow what if we have to update the wallet, now this will have a dependency over `showOrderSummary`\n\n```js\napi.createOrder(cart, function () {\n  api.proceedToPayment(function () {\n    api.showOrderSummary(function () {\n      api.updateWallet();\n    });\n  });\n});\n// 💡 Callback Hell\n```\n\nWhen we have a large codebase and multiple apis and have dependency on each other, then we fall into callback hell.\nThese codes are tough to maintain.\nThese callback hell structure is also known as **Pyramid of Doom**.\n\nTill this point we are comfortable with concept of callback hell but now lets discuss about `Inversion of Control`. It is very important to understand in order to get comfortable around the concept of promise.\n\n> 💡 Inversion of control is like that you lose the control of code when we are using callback.\n\nLet's understand with the help of example code and comments:\n\n```js\napi.createOrder(cart, function () {\n  api.proceedToPayment();\n});\n\n// 💡 So over here, we are creating a order and then we are blindly trusting `createOrder` to call `proceedToPayment`.\n\n// 💡 It is risky, as `proceedToPayment` is important part of code and we are blindly trusting `createOrder` to call it and handle it.\n\n// 💡 When we pass a function as a callback, basically we are dependant on our parent function that it is his responsibility to run that function. This is called `inversion of control` because we are dependant on that function. What if parent function stopped working, what if it was developed by another programmer or callback runs two times or never run at all.\n\n// 💡 In next session, we will see how we can fix such problems.\n```\n\n> 💡 Async programming in JavaScript exists because callback exits.\n\nmore at `http://callbackhell.com/`\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 20: Callback Hell, Pyramid of Doom & Inversion of Control\n\n## Overview\nCallback Hell is the anti-pattern of deeply nested callbacks creating unreadable 'Pyramid of Doom' code. Inversion of Control occurs when passing a callback to a 3rd-party API forfeits control over when or how many times it executes.\n\n## Detailed Explanation\nTwo major issues with asynchronous callbacks:\n\n1. **Callback Hell (Pyramid of Doom)**:\n   Asynchronous operations growing horizontally instead of vertically:\n   ```js\n   createOrder(cart, function(orderId) {\n     proceedToPayment(orderId, function(paymentInfo) {\n       showOrderSummary(paymentInfo, function() {\n         updateWallet();\n       });\n     });\n   });\n   ```\n2. **Inversion of Control (IoC)**:\n   When you pass a callback function to `createOrder()`, you yield control to `createOrder`'s implementation. If `createOrder` has a bug, it might call your callback **0 times, twice, or with invalid arguments** (e.g. charging credit card twice!).\n\n## Real-World Analogy\n🔑 Blank Check Handout: Inversion of Control is like handing your blank signed check to a store clerk and trusting them to write the correct price. Promises replace this by giving you a receipt token instead.\n\n## Key Architectural Concepts\n- Callback Hell creates nested unmaintainable Pyramid of Doom structure.\n- Inversion of Control = Surrendering function execution control to external APIs.\n- Promises resolve IoC by keeping control in caller hands via resolved objects.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(\"Namaste\");\nconsole.log(\"JavaScript\");\nconsole.log(\"Season 2\");\n// Namaste\n// JavaScript\n// Season 2\n\n// 💡 It is quickly printing because `Time, tide & Javascript waits for none.`"
-      },
-      {
-        "language": "javascript",
-        "code": "console.log(\"Namaste\");\nsetTimeout(function () {\n  console.log(\"JavaScript\");\n}, 5000);\nconsole.log(\"Season 2\");\n// Namaste\n// Season 2\n// JavaScript\n\n// 💡 Here we are delaying the execution using callback approach of setTimeout."
-      },
-      {
-        "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n// Two steps to place a order\n// 1. Create a Order\n// 2. Proceed to Payment\n\n// It could look something like this:\napi.createOrder();\napi.proceedToPayment();"
-      },
-      {
-        "language": "javascript",
-        "code": "api.createOrder(cart, function () {\n  api.proceedToPayment();\n});\n// 💡 Over here `createOrder` api is first creating a order then it is responsible to call `api.proceedToPayment()` as part of callback approach."
-      },
-      {
-        "language": "javascript",
-        "code": "api.createOrder(cart, function () {\n  api.proceedToPayment(function () {\n    api.showOrderSummary();\n  });\n});"
-      },
-      {
-        "language": "javascript",
-        "code": "api.createOrder(cart, function () {\n  api.proceedToPayment(function () {\n    api.showOrderSummary(function () {\n      api.updateWallet();\n    });\n  });\n});\n// 💡 Callback Hell"
-      },
-      {
-        "language": "javascript",
-        "code": "api.createOrder(cart, function () {\n  api.proceedToPayment();\n});\n\n// 💡 So over here, we are creating a order and then we are blindly trusting `createOrder` to call `proceedToPayment`.\n\n// 💡 It is risky, as `proceedToPayment` is important part of code and we are blindly trusting `createOrder` to call it and handle it.\n\n// 💡 When we pass a function as a callback, basically we are dependant on our parent function that it is his responsibility to run that function. This is called `inversion of control` because we are dependant on that function. What if parent function stopped working, what if it was developed by another programmer or callback runs two times or never run at all.\n\n// 💡 In next session, we will see how we can fix such problems."
+        "code": "// Anti-Pattern: Inversion of Control & Pyramid of Doom\napi.createOrder(cart, function (orderId) {\n  api.proceedToPayment(orderId, function (paymentStatus) {\n    api.showSummary(paymentStatus, function () {\n      api.updateBalance();\n    });\n  });\n});"
       }
     ],
     "interviewQuestions": [
       {
         "question": "What is Callback Hell and Inversion of Control?",
-        "answer": "Callback Hell is deeply nested callbacks resulting in unreadable 'Pyramid of Doom' code. Inversion of Control happens when passing a callback to another API, giving up control over when, how many times, or if the callback is invoked."
+        "answer": "Callback Hell is deeply nested callbacks making code unmaintainable. Inversion of Control happens when passing a callback to another function yields control over when or if it gets executed. Promises fix both issues."
       }
     ]
   },
   {
     "id": "js-promises-introduction",
-    "title": "Episode 21 : Promises",
+    "title": "Episode 21: Promises Introduction, States & Immutability",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Medium",
@@ -1101,52 +799,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 21 : Promises with full code and visual diagrams.",
+    "summary": "Promises represent eventual async completion. States: `pending`, `fulfilled`, `rejected`. Resolves Inversion of Control.",
     "keyConcepts": [
-      "If we will deep dive and see, this promise object has 3 things",
-      "prototype, promiseState & promiseResult",
-      "& this promiseResult is the same data which we talked earlier as data",
-      "& initially promiseResult is undefined",
-      "promiseResult will store data returned from API call",
-      "promiseState will tell in which state the promise is currently, initially it will be in pending state and later it will become fulfilled",
-      "When above line is executed, fetch makes API call and return a promise instantly which is in Pending state and Javascript doesn't wait to get it fulfilled",
-      "And in next line it console out the pending promise.",
-      "NOTE: chrome browser has some in-consistency, the moment console happens it shows in pending state but if you will expand that it will show fulfilled because chrome updated the log when promise get fulfilled.",
-      "Once fulfilled data is there in promiseResult and it is inside body in ReadableStream format and there is a way to extract data."
+      "Promise is an object representing eventual async completion.",
+      "States: pending -> fulfilled OR rejected.",
+      "Promise result is immutable once settled.",
+      "Attach handlers using `.then(onFulfill)` and `.catch(onReject)`."
     ],
-    "detailedContent": "# Episode 21 : Promises\n\n> Promises are used to handle async operations in JavaScript.\n\nWe will discuss with code example that how things used to work before `Promises` and then how it works after `Promises`\n\nSuppose, taking an example of E-Commerce\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\n// Below two functions are asynchronous and dependent on each other\nconst orderId = createOrder(cart);\nproceedToPayment(orderId);\n\n// with Callback (Before Promise)\n// Below here, it is the responsibility of createOrder function to first create the order then call the callback function\ncreateOrder(cart, function () {\n  proceedToPayment(orderId);\n});\n// Above there is the issue of `Inversion of Control`\n```\n\nQ: How to fix the above issue?  \n_A: Using Promise._\n\nNow, we will make `createOrder` function return a promise and we will capture that `promise` into a `variable`\n\nPromise is nothing but we can assume it to be empty object with some data value in it, and this data value will hold whatever this `createOrder` function will return.\n\nSince `createOrder` function is an async function and we don't know how much time will it take to finish execution.\n\nSo the moment `createOrder` will get executed, it will return you a `undefined` value. Let's say after 5 secs execution finished so now `orderId` is ready so, it will fill the `undefined` value with the `orderId`.\n\nIn short, When `createOrder` get executed, it immediately returns a `promise object` with `undefined` value. then javascript will continue to execute with other lines of code. After sometime when `createOrder` has finished execution and `orderId` is ready then that will `automatically` be assigned to our returned `promise` which was earlier `undefined`.\n\nQ: Question is how we will get to know `response` is ready?  \n_A: So, we will attach a `callback` function to the `promise object` using `then` to get triggered automatically when `result` is ready._\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promiseRef = createOrder(cart);\n// this promiseRef has access to `then`\n\n// {data: undefined}\n// Initially it will be undefined so below code won't trigger\n// After some time, when execution has finished and promiseRef has the data then automatically the below line will get triggered.\n\npromiseRef.then(function () {\n  proceedToPayment(orderId);\n});\n```\n\nQ: How it is better than callback approach?\n\nIn Earlier solution we used to pass the function and then used to trust the function to execute the callback.\n\nBut with promise, we are attaching a callback function to a promiseObject.\n\nThere is difference between these words, passing a function and attaching a function.\n\nPromise guarantee, it will callback the attached function once it has the fulfilled data. And it will call it only once. Just once.\n\nEarlier we talked about promise are object with empty data but that's not entirely true, `Promise` are much more than that.\n\nNow let's understand and see a real promise object.\n\nfetch is a web-api which is utilized to make api call and it returns a promise.\n\nWe will be calling public github api to fetch data\nhttps://api.github.com/users/alok722\n\n```js\n// We will be calling public github api to fetch data\nconst URL = \"https://api.github.com/users/alok722\";\nconst user = fetch(URL);\n// User above will be a promise.\nconsole.log(user); // Promise {<Pending>}\n\n/** OBSERVATIONS:\n * If we will deep dive and see, this `promise` object has 3 things\n * `prototype`, `promiseState` & `promiseResult`\n * & this `promiseResult` is the same data which we talked earlier as data\n * & initially `promiseResult` is `undefined`\n *\n * `promiseResult` will store data returned from API call\n * `promiseState` will tell in which state the promise is currently, initially it will be in `pending` state and later it will become `fulfilled`\n */\n\n/**\n * When above line is executed, `fetch` makes API call and return a `promise` instantly which is in `Pending` state and Javascript doesn't wait to get it `fulfilled`\n * And in next line it console out the `pending promise`.\n * NOTE: chrome browser has some in-consistency, the moment console happens it shows in pending state but if you will expand that it will show fulfilled because chrome updated the log when promise get fulfilled.\n * Once fulfilled data is there in promiseResult and it is inside body in ReadableStream format and there is a way to extract data.\n */\n```\n\nNow we can attach callback to above response?\n\nUsing `.then`\n\n```js\nconst URL = \"https://api.github.com/users/alok722\";\nconst user = fetch(URL);\n\nuser.then(function (data) {\n  console.log(data);\n});\n// And this is how Promise is used.\n// It guarantees that it could be resolved only once, either it could be `success` or `failure`\n/**\n    A Promise is in one of these states:\n\n    pending: initial state, neither fulfilled nor rejected.\n    fulfilled: meaning that the operation was completed successfully.\n    rejected: meaning that the operation failed.\n */\n```\n\n💡Promise Object are immutable.  \n-> Once promise is fulfilled and we have data we can pass here and there and we don't have to worry that someone can mutate that data. So over above we can't directly mutate `user` promise object, we will have to use `.then`\n\n### Interview Guide\n\n💡What is Promise?  \n-> Promise object is a placeholder for certain period of time until we receive value from asynchronous operation.\n\n-> A container for a future value.\n\n-> **A Promise is an object representing the eventual completion or failure of an asynchronous operation.**\n\nWe are now done solving one issue of callback i.e. Inversion of Control\n\nBut there is one more issue, callback hell...\n\n```js\n// Callback Hell Example\ncreateOrder(cart, function (orderId) {\n  proceedToPayment(orderId, function (paymentInf) {\n    showOrderSummary(paymentInf, function (balance) {\n      updateWalletBalance(balance);\n    });\n  });\n});\n// And now above code is expanding horizontally and this is called pyramid of doom.\n// Callback hell is ugly and hard to maintain.\n\n// 💡 Promise fixes this issue too using `Promise Chaining`\n// Example Below is a Promise Chaining\ncreateOrder(cart)\n  .then(function (orderId) {\n    proceedToPayment(orderId);\n  })\n  .then(function (paymentInf) {\n    showOrderSummary(paymentInf);\n  })\n  .then(function (balance) {\n    updateWalletBalance(balance);\n  });\n\n// ⚠️ Common PitFall\n// We forget to return promise in Promise Chaining\n// The idea is promise/data returned from one .then become data for next .then\n// So,\ncreateOrder(cart)\n  .then(function (orderId) {\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInf) {\n    return showOrderSummary(paymentInf);\n  })\n  .then(function (balance) {\n    return updateWalletBalance(balance);\n  });\n\n// To improve readability you can use arrow function instead of regular function\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 21: Promises Introduction, States & Immutability\n\n## Overview\nA Promise is an object representing the eventual completion or failure of an asynchronous operation. Promises solve Inversion of Control by returning a trusted, immutable placeholder object.\n\n## Detailed Explanation\nInstead of passing a callback function into an async API, the async API returns a **Promise object** immediately.\n\nA Promise object has 3 states:\n- **`pending`**: Initial state, operation incomplete.\n- **`fulfilled`**: Operation completed successfully.\n- **`rejected`**: Operation failed.\n\n**Immutability**: Once a Promise settles (`fulfilled` or `rejected`), its data state is **immutable**. You attach listeners using `.then()` and `.catch()`, regaining complete control over execution flow.\n\n## Real-World Analogy\n🎟️ Food Court Token: Ordering food returns a buzzer token (Promise in `pending` state). When food is ready, token buzzes (`fulfilled` state). You walk to counter and collect food at your own command.\n\n## Key Architectural Concepts\n- Promise is an object representing eventual async completion.\n- States: pending -> fulfilled OR rejected.\n- Promise result is immutable once settled.\n- Attach handlers using `.then(onFulfill)` and `.catch(onReject)`.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\n// Below two functions are asynchronous and dependent on each other\nconst orderId = createOrder(cart);\nproceedToPayment(orderId);\n\n// with Callback (Before Promise)\n// Below here, it is the responsibility of createOrder function to first create the order then call the callback function\ncreateOrder(cart, function () {\n  proceedToPayment(orderId);\n});\n// Above there is the issue of `Inversion of Control`"
-      },
-      {
-        "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promiseRef = createOrder(cart);\n// this promiseRef has access to `then`\n\n// {data: undefined}\n// Initially it will be undefined so below code won't trigger\n// After some time, when execution has finished and promiseRef has the data then automatically the below line will get triggered.\n\npromiseRef.then(function () {\n  proceedToPayment(orderId);\n});"
-      },
-      {
-        "language": "javascript",
-        "code": "// We will be calling public github api to fetch data\nconst URL = \"https://api.github.com/users/alok722\";\nconst user = fetch(URL);\n// User above will be a promise.\nconsole.log(user); // Promise {<Pending>}\n\n/** OBSERVATIONS:\n * If we will deep dive and see, this `promise` object has 3 things\n * `prototype`, `promiseState` & `promiseResult`\n * & this `promiseResult` is the same data which we talked earlier as data\n * & initially `promiseResult` is `undefined`\n *\n * `promiseResult` will store data returned from API call\n * `promiseState` will tell in which state the promise is currently, initially it will be in `pending` state and later it will become `fulfilled`\n */\n\n/**\n * When above line is executed, `fetch` makes API call and return a `promise` instantly which is in `Pending` state and Javascript doesn't wait to get it `fulfilled`\n * And in next line it console out the `pending promise`.\n * NOTE: chrome browser has some in-consistency, the moment console happens it shows in pending state but if you will expand that it will show fulfilled because chrome updated the log when promise get fulfilled.\n * Once fulfilled data is there in promiseResult and it is inside body in ReadableStream format and there is a way to extract data.\n */"
-      },
-      {
-        "language": "javascript",
-        "code": "const URL = \"https://api.github.com/users/alok722\";\nconst user = fetch(URL);\n\nuser.then(function (data) {\n  console.log(data);\n});\n// And this is how Promise is used.\n// It guarantees that it could be resolved only once, either it could be `success` or `failure`\n/**\n    A Promise is in one of these states:\n\n    pending: initial state, neither fulfilled nor rejected.\n    fulfilled: meaning that the operation was completed successfully.\n    rejected: meaning that the operation failed.\n */"
-      },
-      {
-        "language": "javascript",
-        "code": "// Callback Hell Example\ncreateOrder(cart, function (orderId) {\n  proceedToPayment(orderId, function (paymentInf) {\n    showOrderSummary(paymentInf, function (balance) {\n      updateWalletBalance(balance);\n    });\n  });\n});\n// And now above code is expanding horizontally and this is called pyramid of doom.\n// Callback hell is ugly and hard to maintain.\n\n// 💡 Promise fixes this issue too using `Promise Chaining`\n// Example Below is a Promise Chaining\ncreateOrder(cart)\n  .then(function (orderId) {\n    proceedToPayment(orderId);\n  })\n  .then(function (paymentInf) {\n    showOrderSummary(paymentInf);\n  })\n  .then(function (balance) {\n    updateWalletBalance(balance);\n  });\n\n// ⚠️ Common PitFall\n// We forget to return promise in Promise Chaining\n// The idea is promise/data returned from one .then become data for next .then\n// So,\ncreateOrder(cart)\n  .then(function (orderId) {\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInf) {\n    return showOrderSummary(paymentInf);\n  })\n  .then(function (balance) {\n    return updateWalletBalance(balance);\n  });\n\n// To improve readability you can use arrow function instead of regular function"
+        "code": "const GITHUB_API = 'https://api.github.com/users/ankush270';\n\n// Fetch returns a Promise object immediately\nconst userPromise = fetch(GITHUB_API);\n\nconsole.log(userPromise); // Promise { <pending> }\n\nuserPromise.then(function (response) {\n  return response.json();\n}).then(function (data) {\n  console.log('User Data:', data.name);\n});"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What is a Promise and what are its states?",
-        "answer": "A Promise is an object representing eventual completion/failure of an async operation. States: `pending` (initial state), `fulfilled` (operation succeeded), `rejected` (operation failed). Once settled, a Promise's state and value are immutable."
+        "question": "What is a Promise in JavaScript and what are its states?",
+        "answer": "A Promise is an object representing eventual completion or failure of an async operation. It has 3 states: pending, fulfilled, and rejected. Once settled, its value is immutable."
       }
     ]
   },
   {
     "id": "js-promise-chaining-error-handling",
-    "title": "Episode 22 : Creating a Promise, Chaining & Error Handling",
+    "title": "Episode 22: Promise Chaining, Returning Promises & catch() Error Handling",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Hard",
@@ -1160,44 +836,29 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 22 : Creating a Promise, Chaining & Error Handling with full code and visual diagrams.",
+    "summary": "Chain Promises vertically by returning Promises inside `.then()`. Handle errors centrally using `.catch()`.",
     "keyConcepts": [
-      "1. validateCart",
-      "2. Insert in DB and get an orderId"
+      "Always return a Promise inside `.then()` callbacks to continue chain.",
+      "`.catch()` catches errors from any preceding `.then()` step.",
+      "Placing `.catch()` in middle of chain lets downstream `.then()` steps continue running."
     ],
-    "detailedContent": "# Episode 22 : Creating a Promise, Chaining & Error Handling\n\n###\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\n// Consumer part of promise\nconst promise = createOrder(cart); // orderId\n// Our expectation is above function is going to return me a promise.\n\npromise.then(function (orderId) {\n  proceedToPayment(orderId);\n});\n\n// Above snippet we have observed in our previous lecture itself.\n// Now we will see, how createOrder is implemented so that it is returning a promise\n// In short we will see, \"How we can create Promise\" and then return it.\n\n// Producer part of Promise\nfunction createOrder(cart) {\n  // JS provides a Promise constructor through which we can create promise\n  // It accepts a callback function with two parameter `resolve` & `reject`\n  const promise = new Promise(function (resolve, reject) {\n    // What is this `resolve` and `reject`?\n    // These are function which are passed by javascript to us in order to handle success and failure of function call.\n    // Now we will write logic to `createOrder`\n    /** Mock logic steps\n     * 1. validateCart\n     * 2. Insert in DB and get an orderId\n     */\n    // We are assuming in real world scenario, validateCart would be defined\n    if (!validateCart(cart)) {\n      // If cart not valid, reject the promise\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\"; // We got this id by calling to db (Assumption)\n    if (orderId) {\n      // Success scenario\n      resolve(orderId);\n    }\n  });\n  return promise;\n}\n```\n\nOver above, if your validateCart is returning true, so the above promise will be resolved (success),\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promise = createOrder(cart); // orderId\n// ❓ What will be printed in below line?\n// It prints Promise {<pending>}, but why?\n// Because above createOrder is going to take sometime to get resolved, so pending state. But once the promise is resolved, `.then` would be executed for callback.\nconsole.log(promise);\n\npromise.then(function (orderId) {\n  proceedToPayment(orderId);\n});\n\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}\n```\n\nNow let's see if there was some error and we are rejecting the promise, how we could catch that?  \n-> Using `.catch`\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promise = createOrder(cart); // orderId\n\n// Here we are consuming Promise and will try to catch promise error\npromise\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    proceedToPayment(orderId);\n  })\n  .catch(function (err) {\n    // ⚠️ failure aka reject handling\n    console.log(err);\n  });\n\n// Here we are creating Promise\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    // Assume below `validateCart` return false then the promise will be rejected\n    // And then our browser is going to throw the error.\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}\n```\n\nNow, Let's understand the concept of Promise Chaining  \n-> for this we will assume after `createOrder` we have to invoke `proceedToPayment`  \n-> In promise chaining, whatever is returned from first `.then` become data for next `.then` and so on...  \n-> At any point of promise chaining, if promise is rejected, the execution will fallback to `.catch` and others promise won't run.\n\n```js\nconst cart = [\"shoes\", \"pants\", \"kurta\"];\n\ncreateOrder(cart)\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    // 💡 we have return data or promise so that we can keep chaining the promises, here we are returning data\n    console.log(orderId);\n    return orderId;\n  })\n  .then(function (orderId) {\n    // Promise chaining\n    // 💡 we will make sure that `proceedToPayment` returns a promise too\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInfo) {\n    // from above, `proceedToPayment` is returning a promise so we can consume using `.then`\n    console.log(paymentInfo);\n  })\n  .catch(function (err) {\n    // ⚠️ failure aka reject handling\n    console.log(err);\n  });\n\n// Here we are creating Promise\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    // Assume below `validateCart` return false then the promise will be rejected\n    // And then our browser is going to throw the error.\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}\n\nfunction proceedToPayment(cart) {\n  return new Promise(function (resolve, reject) {\n    // For time being, we are simply `resolving` promise\n    resolve(\"Payment Successful\");\n  });\n}\n```\n\nQ: What if we want to continue execution even if any of my promise is failing, how to achieve this?  \n-> By placing the `.catch` block at some level after which we are not concerned with failure.  \n-> There could be multiple `.catch` too.\nEg:\n\n```js\ncreateOrder(cart)\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    // 💡 we have return data or promise so that we can keep chaining the promises, here we are returning data\n    console.log(orderId);\n    return orderId;\n  })\n    .catch(function (err) {\n    // ⚠️ Whatever fails below it, catch wont care\n    // this block is responsible for code block above it.\n    console.log(err);\n  });\n  .then(function (orderId) {\n    // Promise chaining\n    // 💡 we will make sure that `proceedToPayment` returns a promise too\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInfo) {\n    // from above, `proceedToPayment` is returning a promise so we can consume using `.then`\n    console.log(paymentInfo);\n  })\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 22: Promise Chaining, Returning Promises & catch() Error Handling\n\n## Overview\nPromise Chaining allows sequential asynchronous operations to be piped vertically by returning new Promises from `.then()` callbacks. `.catch()` catches errors thrown anywhere in preceding chain steps.\n\n## Detailed Explanation\nTo prevent Callback Hell, chain Promises vertically:\n\n```js\ncreateOrder(cart)\n  .then(orderId => proceedToPayment(orderId))\n  .then(paymentInfo => showOrderSummary(paymentInfo))\n  .then(summary => updateWallet(summary))\n  .catch(err => console.error(err.message));\n```\n\n**CRITICAL RULE**: Always **`return`** the Promise from inside a `.then()` callback so the data flows down to the next `.then()` step in the chain!\n\n**Error Bubbling**: A single `.catch()` at the end catches errors from any step in the pipeline.\n\n## Real-World Analogy\n🏭 Assembly Line Pipeline: Station 1 passes result to Station 2. If Station 2 fails, an emergency stop alarm (`.catch()`) triggers instantly, halting downstream processing safely.\n\n## Key Architectural Concepts\n- Always return a Promise inside `.then()` callbacks to continue chain.\n- `.catch()` catches errors from any preceding `.then()` step.\n- Placing `.catch()` in middle of chain lets downstream `.then()` steps continue running.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\n// Consumer part of promise\nconst promise = createOrder(cart); // orderId\n// Our expectation is above function is going to return me a promise.\n\npromise.then(function (orderId) {\n  proceedToPayment(orderId);\n});\n\n// Above snippet we have observed in our previous lecture itself.\n// Now we will see, how createOrder is implemented so that it is returning a promise\n// In short we will see, \"How we can create Promise\" and then return it.\n\n// Producer part of Promise\nfunction createOrder(cart) {\n  // JS provides a Promise constructor through which we can create promise\n  // It accepts a callback function with two parameter `resolve` & `reject`\n  const promise = new Promise(function (resolve, reject) {\n    // What is this `resolve` and `reject`?\n    // These are function which are passed by javascript to us in order to handle success and failure of function call.\n    // Now we will write logic to `createOrder`\n    /** Mock logic steps\n     * 1. validateCart\n     * 2. Insert in DB and get an orderId\n     */\n    // We are assuming in real world scenario, validateCart would be defined\n    if (!validateCart(cart)) {\n      // If cart not valid, reject the promise\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\"; // We got this id by calling to db (Assumption)\n    if (orderId) {\n      // Success scenario\n      resolve(orderId);\n    }\n  });\n  return promise;\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promise = createOrder(cart); // orderId\n// ❓ What will be printed in below line?\n// It prints Promise {<pending>}, but why?\n// Because above createOrder is going to take sometime to get resolved, so pending state. But once the promise is resolved, `.then` would be executed for callback.\nconsole.log(promise);\n\npromise.then(function (orderId) {\n  proceedToPayment(orderId);\n});\n\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\nconst promise = createOrder(cart); // orderId\n\n// Here we are consuming Promise and will try to catch promise error\npromise\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    proceedToPayment(orderId);\n  })\n  .catch(function (err) {\n    // ⚠️ failure aka reject handling\n    console.log(err);\n  });\n\n// Here we are creating Promise\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    // Assume below `validateCart` return false then the promise will be rejected\n    // And then our browser is going to throw the error.\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "const cart = [\"shoes\", \"pants\", \"kurta\"];\n\ncreateOrder(cart)\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    // 💡 we have return data or promise so that we can keep chaining the promises, here we are returning data\n    console.log(orderId);\n    return orderId;\n  })\n  .then(function (orderId) {\n    // Promise chaining\n    // 💡 we will make sure that `proceedToPayment` returns a promise too\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInfo) {\n    // from above, `proceedToPayment` is returning a promise so we can consume using `.then`\n    console.log(paymentInfo);\n  })\n  .catch(function (err) {\n    // ⚠️ failure aka reject handling\n    console.log(err);\n  });\n\n// Here we are creating Promise\nfunction createOrder(cart) {\n  const promise = new Promise(function (resolve, reject) {\n    // Assume below `validateCart` return false then the promise will be rejected\n    // And then our browser is going to throw the error.\n    if (!validateCart(cart)) {\n      const err = new Error(\"Cart is not Valid\");\n      reject(err);\n    }\n    const orderId = \"12345\";\n    if (orderId) {\n      resolve(orderId);\n    }\n  });\n  return promise;\n}\n\nfunction proceedToPayment(cart) {\n  return new Promise(function (resolve, reject) {\n    // For time being, we are simply `resolving` promise\n    resolve(\"Payment Successful\");\n  });\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "createOrder(cart)\n  .then(function (orderId) {\n    // ✅ success aka resolved promise handling\n    // 💡 we have return data or promise so that we can keep chaining the promises, here we are returning data\n    console.log(orderId);\n    return orderId;\n  })\n    .catch(function (err) {\n    // ⚠️ Whatever fails below it, catch wont care\n    // this block is responsible for code block above it.\n    console.log(err);\n  });\n  .then(function (orderId) {\n    // Promise chaining\n    // 💡 we will make sure that `proceedToPayment` returns a promise too\n    return proceedToPayment(orderId);\n  })\n  .then(function (paymentInfo) {\n    // from above, `proceedToPayment` is returning a promise so we can consume using `.then`\n    console.log(paymentInfo);\n  })"
+        "code": "function createOrder(cart) {\n  return new Promise((resolve, reject) => {\n    if (cart.length > 0) {\n      resolve('ORDER_12345');\n    } else {\n      reject(new Error('Cart is empty'));\n    }\n  });\n}\n\ncreateOrder(['laptop', 'phone'])\n  .then(orderId => {\n    console.log('Order Created:', orderId);\n    return orderId; // Return value for next chain step\n  })\n  .then(orderId => {\n    return 'PAYMENT_SUCCESS_' + orderId;\n  })\n  .then(paymentStatus => {\n    console.log('Status:', paymentStatus);\n  })\n  .catch(err => {\n    console.error('Pipeline Error:', err.message);\n  });"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "How does Promise Chaining and Error Handling with `.catch()` work?",
-        "answer": "Promise chaining passes returned values down a `.then()` pipeline. A `.catch()` block catches errors thrown anywhere in preceding `.then()` steps. Returning a new Promise from `.then()` defers downstream execution until that Promise resolves."
+        "question": "Why is returning a Promise inside .then() critical during Promise Chaining?",
+        "answer": "Returning a Promise inside .then() ensures the next .then() in the chain waits for that Promise to resolve before executing. If you forget to return, downstream handlers receive undefined immediately."
       }
     ]
   },
   {
     "id": "js-async-await",
-    "title": "Episode 23 : async await",
+    "title": "Episode 23: async & await Deep Dive & Call Stack Suspension",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Hard",
@@ -1211,69 +872,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 23 : async await with full code and visual diagrams.",
+    "summary": "`async` functions return Promises. `await` suspends function context until Promise resolves without blocking main thread.",
     "keyConcepts": [
-      "What is async?",
-      "What is await?",
-      "How async await works behind the scenes?",
-      "Example of using async/await",
-      "Error Handling",
-      "Interviews",
-      "Async await vs Promise.then/.catch"
+      "`async` functions always return a Promise.",
+      "`await` pauses function execution until Promise resolves.",
+      "`await` suspends function execution context without blocking main thread.",
+      "Use `try...catch` blocks for clean error handling with `async/await`."
     ],
-    "detailedContent": "# Episode 23 : async await\n\n###\n\nTopics Covered\n\n- What is async?\n- What is await?\n- How async await works behind the scenes?\n- Example of using async/await\n- Error Handling\n- Interviews\n- Async await vs Promise.then/.catch\n\nQ: What is async?  \nA: Async is a keyword that is used before a function to create a async function.\n\nQ: What is async function and how it is different from normal function?\n\n```js\n// 💡 async function always returns a promise, even if I return a simple string from below function, async keyword will wrap it under Promise and then return.\nasync function getData() {\n  return \"Namaste JavaScript\";\n}\nconst dataPromise = getData();\nconsole.log(dataPromise); // Promise {<fulfilled>: 'Namaste JavaScript'}\n\n//❓How to extract data from above promise? One way is using promise .then\ndataPromise.then((res) => console.log(res)); // Namaste JavaScript\n```\n\nAnother example where `async` function is returning a Promise\n\n```js\nconst p = new Promise((resolve, reject) => {\n  resolve(\"Promise resolved value!!\");\n});\n\nasync function getData() {\n  return p;\n}\n// In above case, since we are already returning a promise async function would simply return that instead of wrapping with a new Promise.\nconst dataPromise = getData();\nconsole.log(dataPromise); // Promise {<fulfilled>: 'Promise resolved value!!'}\ndataPromise.then((res) => console.log(res)); // Promise resolved value!!\n```\n\nQ: How we can use `await` along with async function?  \nA: `async` and `await` combo is used to handle promises.\n\nBut Question is how we used to handle promises earlier and why we even need async/await?\n\n```js\nconst p = new Promise((resolve, reject) => {\n  resolve(\"Promise resolved value!!\");\n});\n\nfunction getData() {\n  p.then((res) => console.log(res));\n}\n\ngetData(); // Promise resolved value!!\n\n//📌 Till now we have been using Promise.then/.catch to handle promise.\n// Now let's see how async await can help us and how it is different\n\n// The rule is we have to use keyword await in front of promise.\nasync function handlePromise() {\n  const val = await p;\n  console.log(val);\n}\nhandlePromise(); // Promise resolved value!!\n```\n\n📌 `await` is a keyword that can only be used inside a `async` function.\n\n```js\nawait function () {}; // Syntax error: await is only valid under async function.\n```\n\nQ: What makes `async`-`await` special?  \nA: Let's understand with one example where we will compare async-await way of resolving promise with older .then/.catch fashion. For that we will modify our promise `p`.\n\n```js\nconst p = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value!!\");\n  }, 3000);\n});\n\n// Let's now compare with some modification:\n\n// 📌 Promise.then/.catch way\nfunction getData() {\n  // JS engine will not wait for promise to be resolved\n  p.then((res) => console.log(res));\n  console.log(\"Hello There!\");\n}\n\ngetData(); // First `Hello There!` would be printed and then after 3 secs 'Promise resolved value!!' will be printed.\n// Above happened as Javascript wait for none, so it will register this promise and take this callback function and register separately then js will move on and execute the following console and later once promise is resolved, following console will be printed.\n\n//❓ Problem: Normally one used to get confused that JS will wait for promise to be resolved before executing following lines.\n\n// 📌 async-wait way:\nasync function handlePromise() {\n  // JS Engine will waiting for promise to resolve.\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n}\nhandlePromise(); // This time `Hello There!` won't be printed immediately instead after 3 secs `Hello There!` will be printed followed by 'Promise resolved value!!'\n// 💡 So basically code was waiting at `await` line to get the promise resolve before moving on to next line.\n\n// Above is the major difference between Promise.then/.catch vs async-await\n\n//🤓 Let's brainstorm more around async-await\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// In above code example, will our program wait for 2 time or will it execute parallely.\n//📌 `Hi` printed instantly -> now code will wait for 3 secs -> After 3 secs both promises will be resolved so ('Hello There!' 'Promise resolved value!!' 'Hello There! 2' 'Promise resolved value!!') will get printed immediately.\n\n// Let's create one promise and then resolve two different promise.\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 2000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// 📌 `Hi` printed instantly -> now code will wait for 3 secs -> After 3 secs both promises will be resolved so ('Hello There!' 'Promise resolved value!!' 'Hello There! 2' 'Promise resolved value by p2!!') will get printed immediately. So even though `p2` was resolved after 2 secs it had to wait for `p` to get resolved\n\n// Now let's reverse the order execution of promise and observe response.\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p2;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// 📌 `Hi` printed instantly -> now code will wait for 2 secs -> After 2 secs ('Hello There!' 'Promise resolved value by p2!!') will get printed and in the subsequent second i.e. after 3 secs ('Hello There! 2' 'Promise resolved value!!') will get printed\n```\n\nQ: Question is Is program actually waiting or what is happening behind the scene?  \nA: As we know, Time, Tide and JS wait for none. And it's true. Over here it appears that JS engine is waiting but JS engine is not waiting over here. It has not occupied the call stack if that would have been the case our page may have got frozen. So JS engine is not waiting. So if it is not waiting then what it is doing behind the scene? Let's understand with below code snippet.\n\n```js\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p1!!\");\n  }, 5000);\n});\n\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 10000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  debugger;\n  const val = await p1;\n  console.log(\"Hello There!\");\n  debugger;\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  debugger;\n  console.log(val2);\n}\nhandlePromise();\n// When this function is executed, it will go line by line as JS is synchronous single threaded language. Lets observe what is happening under call-stack. Above you can see we have set the break-points.\n\n// call stack flow -> handlePromise() is pushed -> It will log `Hi` to console -> Next it sees we have await where promise is suppose to be resolved -> So will it wait for promise to resolve and block call stack? No -> thus handlePromise() execution get suspended and moved out of call stack -> So when JS sees await keyword it suspend the execution of function till promise is resolved -> So `p1` will get resolved after 5 secs so handlePromise() will be pushed to call-stack again after 5 secs. -> But this time it will start executing from where it had left. -> Now it will log 'Hello There!' and 'Promise resolved value by p1!!' -> then it will check whether `p2` is resolved or not -> It will find since `p2` will take 10 secs to resolve so the same above process will repeat -> execution will be suspended until promise is resolved.\n\n// 📌 Thus JS is not waiting, call stack is not getting blocked.\n\n// Moreover in above scenario what if p1 would be taking 10 secs and p2 5 secs -> even though p2 got resolved earlier but JS is synchronous single threaded language so it will first wait for p1 to be resolved and then will immediately execute all.\n```\n\nQ: Explain code output and it's reason\n\n```js\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p1!!\");\n  }, 10000);\n});\n\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 5000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  debugger;\n  const val = await p1;\n  console.log(\"Hello There!\");\n  debugger;\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  debugger;\n  console.log(val2);\n}\nhandlePromise();\n\n// Hi will be printed then because of p1 await, it will for 10seconds and print `Promise resolved value by p1!!` followed by `Hello There!` and then instantly `Promise resolved value by p2!!` followed by `Hello There! 2`\n\n// ❓ Why p2 invoked instanly without waiting another 5 seconds?\n```\n\nA: 👉 Promises start executing immediately when they are created, not when they are awaited.\np1’s setTimeout(10s) starts right away\np2’s setTimeout(5s) also starts right away\nBoth timers begin ticking as soon as the file is executed, before handlePromise() even hits the first await.\n\nawait does NOT start a promise\nIt only waits for an already-running promise\n\nQ: How to make p2 wait after p1\nA:\n\n```js\nfunction createP1() {\n  return new Promise((resolve) =>\n    setTimeout(() => resolve(\"p1 resolved\"), 10000),\n  );\n}\n\nfunction createP2() {\n  return new Promise((resolve) =>\n    setTimeout(() => resolve(\"p2 resolved\"), 5000),\n  );\n}\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n\n  const val1 = await createP1();\n  console.log(val1);\n\n  const val2 = await createP2();\n  console.log(val2);\n}\n```\n\n### Real World example of async/await\n\n```js\nasync function handlePromise() {\n  // fetch() => Response Object which as body as Readable stream => Response.json() is also a promise which when resolved => value\n  const data = await fetch(\"https://api.github.com/users/alok722\");\n  const res = await data.json();\n  console.log(res);\n}\nhandlePromise();\n```\n\n### Error Handling\n\nWhile we were using normal Promise we were using .catch to handle error, now in `async-await` we would be using `try-catch` block to handle error.\n\n```js\nasync function handlePromise() {\n  try {\n    const data = await fetch(\"https://api.github.com/users/alok722\");\n    const res = await data.json();\n    console.log(res);\n  } catch (err) {\n    console.log(err);\n  }\n}\nhandlePromise();\n\n// In above whenever any error will occur the execution will move to catch block. One could try above with bad url which will result in error.\n\n// Other way of handling error:\nhandlePromise().catch((err) => console.log(err)); // this will work as handlePromise will return error promise in case of failure.\n```\n\n### Async await vs Promise.then/.catch\n\nWhat one should use? `async-await` is just a syntactic sugar around promise. Behind the scene `async-await` is just promise. So both are same, it's just `async-await` is new way of writing code. `async-await` solves few of the short-coming of Promise like `Promise Chaining`. `async-await` also increases the readability. So sort of it is always advisable to use `async-await.`\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 23: async & await Deep Dive & Call Stack Suspension\n\n## Overview\n`async` and `await` are ES8 syntactic sugar built on top of Promises. `async` functions always return a Promise, and `await` pauses execution of the `async` function until a Promise settles.\n\n## Detailed Explanation\n- **`async` keyword**: Prepended to a function declaration. It automatically wraps returned non-Promise values in a resolved Promise (`Promise.resolve(val)`).\n- **`await` keyword**: Can only be used inside an `async` function. It pauses execution at that line until the Promise resolves.\n\n**Under the Hood (Call Stack Behavior)**:\n`await` does NOT block the main thread! When `await` encounters an unresolved Promise:\n1. The `async` function's execution context is **suspended and removed from Call Stack**.\n2. Main Call Stack thread is freed to handle other user events.\n3. When Promise resolves, the `async` function context is pushed back onto Call Stack and resumes right after `await` line.\n\n## Real-World Analogy\n☕ Coffee Order Step-Aside: Ordering coffee at counter (`await`). Instead of blocking line, you step aside to lounge (Call Stack cleared). When coffee is ready, barista calls your name and you resume your task.\n\n## Key Architectural Concepts\n- `async` functions always return a Promise.\n- `await` pauses function execution until Promise resolves.\n- `await` suspends function execution context without blocking main thread.\n- Use `try...catch` blocks for clean error handling with `async/await`.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "// 💡 async function always returns a promise, even if I return a simple string from below function, async keyword will wrap it under Promise and then return.\nasync function getData() {\n  return \"Namaste JavaScript\";\n}\nconst dataPromise = getData();\nconsole.log(dataPromise); // Promise {<fulfilled>: 'Namaste JavaScript'}\n\n//❓How to extract data from above promise? One way is using promise .then\ndataPromise.then((res) => console.log(res)); // Namaste JavaScript"
-      },
-      {
-        "language": "javascript",
-        "code": "const p = new Promise((resolve, reject) => {\n  resolve(\"Promise resolved value!!\");\n});\n\nasync function getData() {\n  return p;\n}\n// In above case, since we are already returning a promise async function would simply return that instead of wrapping with a new Promise.\nconst dataPromise = getData();\nconsole.log(dataPromise); // Promise {<fulfilled>: 'Promise resolved value!!'}\ndataPromise.then((res) => console.log(res)); // Promise resolved value!!"
-      },
-      {
-        "language": "javascript",
-        "code": "const p = new Promise((resolve, reject) => {\n  resolve(\"Promise resolved value!!\");\n});\n\nfunction getData() {\n  p.then((res) => console.log(res));\n}\n\ngetData(); // Promise resolved value!!\n\n//📌 Till now we have been using Promise.then/.catch to handle promise.\n// Now let's see how async await can help us and how it is different\n\n// The rule is we have to use keyword await in front of promise.\nasync function handlePromise() {\n  const val = await p;\n  console.log(val);\n}\nhandlePromise(); // Promise resolved value!!"
-      },
-      {
-        "language": "javascript",
-        "code": "await function () {}; // Syntax error: await is only valid under async function."
-      },
-      {
-        "language": "javascript",
-        "code": "const p = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value!!\");\n  }, 3000);\n});\n\n// Let's now compare with some modification:\n\n// 📌 Promise.then/.catch way\nfunction getData() {\n  // JS engine will not wait for promise to be resolved\n  p.then((res) => console.log(res));\n  console.log(\"Hello There!\");\n}\n\ngetData(); // First `Hello There!` would be printed and then after 3 secs 'Promise resolved value!!' will be printed.\n// Above happened as Javascript wait for none, so it will register this promise and take this callback function and register separately then js will move on and execute the following console and later once promise is resolved, following console will be printed.\n\n//❓ Problem: Normally one used to get confused that JS will wait for promise to be resolved before executing following lines.\n\n// 📌 async-wait way:\nasync function handlePromise() {\n  // JS Engine will waiting for promise to resolve.\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n}\nhandlePromise(); // This time `Hello There!` won't be printed immediately instead after 3 secs `Hello There!` will be printed followed by 'Promise resolved value!!'\n// 💡 So basically code was waiting at `await` line to get the promise resolve before moving on to next line.\n\n// Above is the major difference between Promise.then/.catch vs async-await\n\n//🤓 Let's brainstorm more around async-await\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// In above code example, will our program wait for 2 time or will it execute parallely.\n//📌 `Hi` printed instantly -> now code will wait for 3 secs -> After 3 secs both promises will be resolved so ('Hello There!' 'Promise resolved value!!' 'Hello There! 2' 'Promise resolved value!!') will get printed immediately.\n\n// Let's create one promise and then resolve two different promise.\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 2000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// 📌 `Hi` printed instantly -> now code will wait for 3 secs -> After 3 secs both promises will be resolved so ('Hello There!' 'Promise resolved value!!' 'Hello There! 2' 'Promise resolved value by p2!!') will get printed immediately. So even though `p2` was resolved after 2 secs it had to wait for `p` to get resolved\n\n// Now let's reverse the order execution of promise and observe response.\nasync function handlePromise() {\n  console.log(\"Hi\");\n  const val = await p2;\n  console.log(\"Hello There!\");\n  console.log(val);\n\n  const val2 = await p;\n  console.log(\"Hello There! 2\");\n  console.log(val2);\n}\nhandlePromise();\n// 📌 `Hi` printed instantly -> now code will wait for 2 secs -> After 2 secs ('Hello There!' 'Promise resolved value by p2!!') will get printed and in the subsequent second i.e. after 3 secs ('Hello There! 2' 'Promise resolved value!!') will get printed"
-      },
-      {
-        "language": "javascript",
-        "code": "const p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p1!!\");\n  }, 5000);\n});\n\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 10000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  debugger;\n  const val = await p1;\n  console.log(\"Hello There!\");\n  debugger;\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  debugger;\n  console.log(val2);\n}\nhandlePromise();\n// When this function is executed, it will go line by line as JS is synchronous single threaded language. Lets observe what is happening under call-stack. Above you can see we have set the break-points.\n\n// call stack flow -> handlePromise() is pushed -> It will log `Hi` to console -> Next it sees we have await where promise is suppose to be resolved -> So will it wait for promise to resolve and block call stack? No -> thus handlePromise() execution get suspended and moved out of call stack -> So when JS sees await keyword it suspend the execution of function till promise is resolved -> So `p1` will get resolved after 5 secs so handlePromise() will be pushed to call-stack again after 5 secs. -> But this time it will start executing from where it had left. -> Now it will log 'Hello There!' and 'Promise resolved value by p1!!' -> then it will check whether `p2` is resolved or not -> It will find since `p2` will take 10 secs to resolve so the same above process will repeat -> execution will be suspended until promise is resolved.\n\n// 📌 Thus JS is not waiting, call stack is not getting blocked.\n\n// Moreover in above scenario what if p1 would be taking 10 secs and p2 5 secs -> even though p2 got resolved earlier but JS is synchronous single threaded language so it will first wait for p1 to be resolved and then will immediately execute all."
-      },
-      {
-        "language": "javascript",
-        "code": "const p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p1!!\");\n  }, 10000);\n});\n\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"Promise resolved value by p2!!\");\n  }, 5000);\n});\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n  debugger;\n  const val = await p1;\n  console.log(\"Hello There!\");\n  debugger;\n  console.log(val);\n\n  const val2 = await p2;\n  console.log(\"Hello There! 2\");\n  debugger;\n  console.log(val2);\n}\nhandlePromise();\n\n// Hi will be printed then because of p1 await, it will for 10seconds and print `Promise resolved value by p1!!` followed by `Hello There!` and then instantly `Promise resolved value by p2!!` followed by `Hello There! 2`\n\n// ❓ Why p2 invoked instanly without waiting another 5 seconds?"
-      },
-      {
-        "language": "javascript",
-        "code": "function createP1() {\n  return new Promise((resolve) =>\n    setTimeout(() => resolve(\"p1 resolved\"), 10000),\n  );\n}\n\nfunction createP2() {\n  return new Promise((resolve) =>\n    setTimeout(() => resolve(\"p2 resolved\"), 5000),\n  );\n}\n\nasync function handlePromise() {\n  console.log(\"Hi\");\n\n  const val1 = await createP1();\n  console.log(val1);\n\n  const val2 = await createP2();\n  console.log(val2);\n}"
-      },
-      {
-        "language": "javascript",
-        "code": "async function handlePromise() {\n  // fetch() => Response Object which as body as Readable stream => Response.json() is also a promise which when resolved => value\n  const data = await fetch(\"https://api.github.com/users/alok722\");\n  const res = await data.json();\n  console.log(res);\n}\nhandlePromise();"
-      },
-      {
-        "language": "javascript",
-        "code": "async function handlePromise() {\n  try {\n    const data = await fetch(\"https://api.github.com/users/alok722\");\n    const res = await data.json();\n    console.log(res);\n  } catch (err) {\n    console.log(err);\n  }\n}\nhandlePromise();\n\n// In above whenever any error will occur the execution will move to catch block. One could try above with bad url which will result in error.\n\n// Other way of handling error:\nhandlePromise().catch((err) => console.log(err)); // this will work as handlePromise will return error promise in case of failure."
+        "code": "const API_URL = 'https://api.github.com/users/ankush270';\n\nasync function fetchUserData() {\n  try {\n    console.log('Fetching user data...');\n    const response = await fetch(API_URL);\n    const data = await response.json();\n    console.log('User Login:', data.login);\n    return data;\n  } catch (err) {\n    console.error('Fetch Error:', err.message);\n  }\n}\n\nfetchUserData();"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "How does async/await work under the hood with Call Stack?",
-        "answer": "`async` functions return a Promise. When `await` is encountered on an unresolved promise, the function execution pauses, its execution context is suspended and removed from Call Stack, allowing thread to run other tasks. When promise resolves, execution resumes."
+        "question": "How does async/await work under the hood with the Call Stack?",
+        "answer": "When 'await' hits an unresolved Promise, the async function's execution context is suspended and popped off the Call Stack, keeping the main thread free. Once the Promise resolves, its context is pushed back onto the Call Stack to resume."
       }
     ]
   },
   {
     "id": "js-promise-apis",
-    "title": "Episode 24 : Promise APIs (all, allSettled, race, any) + Interview Questions 🔥",
+    "title": "Episode 24: Promise APIs: Promise.all, allSettled, race & any",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Hard",
@@ -1287,59 +909,30 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 24 : Promise APIs (all, allSettled, race, any) + Interview Questions 🔥 with full code and visual diagrams.",
+    "summary": "`Promise.all` fails fast. `allSettled` waits for all. `race` returns first settled. `any` returns first fulfilled.",
     "keyConcepts": [
-      "Promise.all()",
-      "Promise.allSettled()",
-      "Promise.race()",
-      "Promise.any()",
-      "Once promise is settled, it means -> got the result. Moreover, settled is broadly divided into two categories:"
+      "`Promise.all`: Fails fast on first rejection.",
+      "`Promise.allSettled`: Drains all promises, returning status array.",
+      "`Promise.race`: First to settle (resolve or reject) wins.",
+      "`Promise.any`: First to fulfill wins; all reject = AggregateError."
     ],
-    "detailedContent": "# Episode 24 : Promise APIs (all, allSettled, race, any) + Interview Questions 🔥\n\n###\n\n4 Promise APIs which are majorly used:\n\n- Promise.all()\n- Promise.allSettled()\n- Promise.race()\n- Promise.any()\n\n💡 One simply doesn't use async/await without knowing promises!\n\n### Promise.all()\n\n> A promise is a placeholder for a value that's going to be available sometime later. The promise helps handle asynchronous operations. JavaScript provides a helper function Promise.all(promisesArrayOrIterable) to handle multiple promises at once, in parallel, and get the results in a single aggregate array.\n\nQ: In what situation one could use above api?  \nA: Suppose, you have to make parallel API call and get the result, how one can do? This is where Promise.all can be utilized. It is used to handle multiple promises together.\n\nPromise.all([p1, p2, p3]) -> Lets assume we are making 3 API call to fetch data. Also assume **p1** takes **3 seconds**, **p2** takes **1 second**, **p3** takes **2 seconds**.\n\nIn first scenario let's assume all 3 promises are successful. So Promise.all will take **3secs** and will give promise value of result like [val1, val2, val3]. It will wait for all of them to finish then it will collect the results and give array as output.\n\nWhat if any of the promise gets rejected, for eg: Promise.all([p1, p2, p3]). But this time, p2 get rejected after 1 sec. Thus Promise.all will throw same error as p2 immediately as soon as error happened. It will not wait for other promise to either become success or failure. Moreover, p1 and p2 wont get cancelled as they are already triggered so it may result in success or failure depending upon their fate but Promise.all wont care. So its a situation of or/null.\n\n💡 To conclude, the Promise.all() waits for all the input promises to resolve and returns a new promise that resolves to an array containing the results of the input promises. If one of the input promises is rejected, the Promise.all() method immediately returns a promise that is rejected with an error of the first rejected promise.\n\n### Promise.allSettled()\n\n> Promise.allSettled() method that accepts a list of Promises and returns a new promise that resolves after all the input promises have settled, either resolved or rejected.\n\nPromise.allSettled([p1, p2, p3]) -> Lets assume we are making 3 API call to fetch data. Also assume **p1** takes **3 seconds**, **p2** takes **1 second**, **p3** takes **2 seconds**.\n\nIn first scenario let's assume all 3 promises are successful. So Promise.allSettled will take **3secs** and will give promise value of result like [val1, val2, val3]. It will wait for all of them to finish then it will collect the results and give array as output.\n\nWhat if any of the promise gets rejected, for eg: Promise.all([p1, p2, p3]). But this time, p2 get rejected after 1 sec. Thus Promise.allSettled will still wait for all promises to get settled. So After 3 secs, it will be [val1, err, val3]\n\n💡 Promise.all() -> Fail Fast  \n💡 Promise.allSettled() -> Will wait and provide accumulative result\n\n### Promise.race()\n\n> The Promise.race() static method accepts a list of promises as an iterable object and returns a new promise that fulfills or rejects as soon as there is one promise that fulfills or rejects, with the value or reason from that promise. The name of Promise.race() implies that all the promises race against each other with a single winner, either resolved or rejected.\n\nPromise.race([p1, p2, p3]) -> Lets assume we are making 3 API call to fetch data. Also assume **p1** takes **3 seconds**, **p2** takes **1 second**, **p3** takes **2 seconds**. So as soon as first promise will resolve or reject, it will give the output.\n\nSo in Happy scenario, Promise.race will give (val2) as output after 1sec as p2 got resolved at the earliest. Whereas if it would have been failed Promise.race would have still given output after 1 sec but this time with error.\n\n### Promise.any()\n\n> The Promise.any() method accepts a list of Promise objects as an iterable object. If one of the promises in the iterable object is fulfilled, the Promise.any() returns a single promise that resolves to a value which is the result of the fulfilled promise.\n\nPromise.any([p1, p2, p3]) -> Lets assume we are making 3 API call to fetch data. Also assume **p1** takes **3 seconds**, **p2** takes **1 second**, **p3** takes **2 seconds**. So as soon as first promise will be successful, it will give the output.\n\nIf in above situation what if p2 got rejected, nothing will happen as Promise.any seek for success, so the moment first success will happen that will become the result.\n\n❓ But what if all promises got failed, so the returned result will be aggregated error i.e. [err1, err2, err3].\n\n## Code Examples:\n\n### Promise.all()\n\n```js\n// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P3 Success\");\n  }, 2000);\n});\n\nPromise.all([p1, p2, p3]).then((results) => {\n  console.log(results); // ['P1 Success', 'P2 Success', 'P3 Success'] -> took 3 secs\n});\n```\n\n```js\n// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P2 Fail\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P3 Success\");\n  }, 2000);\n});\n\nPromise.all([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err)); // throws error after 1 sec i.e. 'P2 Fails'\n```\n\n### Promise.allSettled()\n\n💡This is safest among all Promises API.\n\n```js\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.allSettled([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// Over here, it will wait for all promises to be either settled or rejected and then return,\n/*\n    [\n      {status: 'fulfilled', value: 'P1 Success'},\n      {status: 'fulfilled', value: 'P2 Success'},\n      {status: 'rejected', reason: 'P3 Fail'}\n    ]\n  */\n```\n\n### Promise.race()\n\n```js\n// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.race([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// It will return as soon as first promise is resolved or rejected.\n// In above example O/P: \"P2 Success\"\n```\n\n```js\n// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.race([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n//After 2 secs O/P: \"P3 Fail\"\n```\n\nNotes:\n\n- Once promise is settled, it means -> got the result. Moreover, settled is broadly divided into two categories:\n\n1. resolve, success, fulfilled\n2. reject, failure, rejected\n\n### Promise.any()\n\n```js\n// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// It will wait for first settled **success**\n// In above, p3 will settled first, but since it is rejected, so it will wait further so at 3rd second it will print \"P1 Success\"\n```\n\n```js\n// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P1 Fail\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// After 5 secs: 'P2 Success'\n```\n\n```js\n// 📌 Third Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P1 Fail\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P2 Fail\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => {\n    console.error(err);\n    console.error(err.errors); // ['P1 Fail', 'P2 Fail', 'P3 Fail']\n  });\n\n// Since all are rejected, so it will give \"aggregate error\" as output\n// AggregateError: All promises were rejected\n// To get AggregateError array you need to write \"err.errors\"\n```\n\n### Summary\n\nThere are 6 static methods of Promise class:\n\n> Promise.all(promises) – waits for all promises to resolve and returns an array of their results. If any of the given promises rejects, it becomes the error of Promise.all, and all other results are ignored.\n\n> Promise.allSettled(promises) (recently added method) – waits for all promises to settle and returns their results as an array of objects with:\n> status: \"fulfilled\" or \"rejected\"\n> value (if fulfilled) or reason (if rejected).\n\n> Promise.race(promises) – waits for the first promise to settle, and its result/error becomes the outcome.\n\n> Promise.any(promises) (recently added method) – waits for the first promise to fulfill, and its result becomes the outcome. If all of the given promises are rejected, AggregateError becomes the error of Promise.any.\n\n> Promise.resolve(value) – makes a resolved promise with the given value.\n\n> Promise.reject(error) – makes a rejected promise with the given error.\n> Of all these, Promise.all is probably the most common in practice.\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 24: Promise APIs: Promise.all, allSettled, race & any\n\n## Overview\nPromise APIs (`Promise.all`, `Promise.allSettled`, `Promise.race`, `Promise.any`) are static combinator methods used to handle multiple concurrent asynchronous operations.\n\n## Detailed Explanation\nComparative matrix of the 4 Promise combinators:\n\n1. **`Promise.all([p1, p2, p3])`**:\n   - **Success**: Waits for ALL to resolve. Returns array of results `[r1, r2, r3]`.\n   - **Failure**: Fails FAST. As soon as ANY promise rejects, `Promise.all` immediately rejects with that error.\n2. **`Promise.allSettled([p1, p2, p3])`**:\n   - **Behavior**: Waits for ALL promises to settle (resolve OR reject). Never fails fast. Returns array of status objects `{ status: 'fulfilled'|'rejected', value/reason }`.\n3. **`Promise.race([p1, p2, p3])`**:\n   - **Behavior**: Returns result of the FIRST promise that settles (whether resolved OR rejected).\n4. **`Promise.any([p1, p2, p3])`**:\n   - **Behavior**: Waits for the FIRST FULFILLED promise. Ignores rejections unless ALL reject (throws `AggregateError`).\n\n## Real-World Analogy\n🏎️ Race Track Scenarios:\n- `all`: Team race. All 3 must cross finish line. If 1 crashes, team fails.\n- `allSettled`: Post-race audit. Wait until all cars finish or crash, then record all reports.\n- `race`: Sprint race. Whoever crosses line first (win or crash) decides result.\n- `any`: Gold medal search. First car to win gold takes trophy. Ignore crashes unless all crash.\n\n## Key Architectural Concepts\n- `Promise.all`: Fails fast on first rejection.\n- `Promise.allSettled`: Drains all promises, returning status array.\n- `Promise.race`: First to settle (resolve or reject) wins.\n- `Promise.any`: First to fulfill wins; all reject = AggregateError.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P3 Success\");\n  }, 2000);\n});\n\nPromise.all([p1, p2, p3]).then((results) => {\n  console.log(results); // ['P1 Success', 'P2 Success', 'P3 Success'] -> took 3 secs\n});"
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P2 Fail\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P3 Success\");\n  }, 2000);\n});\n\nPromise.all([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err)); // throws error after 1 sec i.e. 'P2 Fails'"
-      },
-      {
-        "language": "javascript",
-        "code": "const p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.allSettled([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// Over here, it will wait for all promises to be either settled or rejected and then return,\n/*\n    [\n      {status: 'fulfilled', value: 'P1 Success'},\n      {status: 'fulfilled', value: 'P2 Success'},\n      {status: 'rejected', reason: 'P3 Fail'}\n    ]\n  */"
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 1000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.race([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// It will return as soon as first promise is resolved or rejected.\n// In above example O/P: \"P2 Success\""
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.race([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n//After 2 secs O/P: \"P3 Fail\""
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 First Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P1 Success\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// It will wait for first settled **success**\n// In above, p3 will settled first, but since it is rejected, so it will wait further so at 3rd second it will print \"P1 Success\""
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 Second Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P1 Fail\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve(\"P2 Success\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => console.error(err));\n\n// After 5 secs: 'P2 Success'"
-      },
-      {
-        "language": "javascript",
-        "code": "// 📌 Third Scenario\n\nconst p1 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P1 Fail\");\n  }, 3000);\n});\nconst p2 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P2 Fail\");\n  }, 5000);\n});\nconst p3 = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    reject(\"P3 Fail\");\n  }, 2000);\n});\n\nPromise.any([p1, p2, p3])\n  .then((results) => console.log(results))\n  .catch((err) => {\n    console.error(err);\n    console.error(err.errors); // ['P1 Fail', 'P2 Fail', 'P3 Fail']\n  });\n\n// Since all are rejected, so it will give \"aggregate error\" as output\n// AggregateError: All promises were rejected\n// To get AggregateError array you need to write \"err.errors\""
+        "code": "const p1 = new Promise((res) => setTimeout(() => res('P1 Success'), 3000));\nconst p2 = new Promise((_, rej) => setTimeout(() => rej('P2 Failed'), 1000));\nconst p3 = new Promise((res) => setTimeout(() => res('P3 Success'), 2000));\n\n// Promise.all -> Fails fast at 1000ms with 'P2 Failed'\nPromise.all([p1, p3]).then(console.log); // ['P1 Success', 'P3 Success']\n\n// Promise.allSettled -> Drains all 3 promises\nPromise.allSettled([p1, p2, p3]).then(console.log);\n\n// Promise.race -> Wins at 1000ms with rejection 'P2 Failed'\nPromise.race([p1, p2, p3]).catch(console.error);\n\n// Promise.any -> First fulfilled at 2000ms is 'P3 Success'\nPromise.any([p1, p2, p3]).then(console.log);"
       }
     ],
     "interviewQuestions": [
       {
-        "question": "What are the differences between Promise.all, Promise.allSettled, Promise.race, and Promise.any?",
-        "answer": "- `Promise.all`: Waits for ALL to resolve; fails fast on FIRST rejection.\n- `Promise.allSettled`: Waits for ALL to settle (resolve/reject) and returns status objects.\n- `Promise.race`: Settles with first promise to settle (resolve or reject).\n- `Promise.any`: Returns first FULFILLED promise; rejects with AggregateError if ALL reject."
+        "question": "Compare Promise.all, Promise.allSettled, Promise.race, and Promise.any.",
+        "answer": "'all' waits for all to resolve and fails fast on first rejection. 'allSettled' waits for all to settle regardless of outcome. 'race' returns first settled promise. 'any' returns first fulfilled promise or AggregateError if all reject."
       }
     ]
   },
   {
     "id": "js-this-keyword",
-    "title": "Episode 25 : `this` keyword in JavaScript",
+    "title": "Episode 25: `this` Keyword Deep Dive across Scopes & Bindings",
     "domain": "javascript",
     "category": "Season 2: Asynchronous JavaScript & Advanced Patterns",
     "difficulty": "Hard",
@@ -1353,41 +946,25 @@ export const javascriptTopics: TopicItem[] = [
       "Apple"
     ],
     "importanceRating": 5,
-    "summary": "Complete lecture notes for Episode 25 : `this` keyword in JavaScript with full code and visual diagrams.",
+    "summary": "`this` depends on invocation context. Arrow functions retain lexical `this`. `call/apply/bind` set context explicitly.",
     "keyConcepts": [
-      "Complete breakdown and execution steps for Episode 25 : `this` keyword in JavaScript."
+      "`this` in global scope = Global Object (`window`).",
+      "`this` in strict mode function = `undefined`.",
+      "`this` in object method = calling object.",
+      "Explicit binding via `call()`, `apply()`, and `bind()`.",
+      "Arrow functions inherit lexical `this` from enclosing parent scope."
     ],
-    "detailedContent": "# Episode 25 : `this` keyword in JavaScript\n\n###\n\n> In JavaScript, the this keyword refers to an object, which object depends on how this is being invoked (used or called).\n\n## `this` in global space\n\nAnything defined globally is said to be in a global space.\n\n```js\nconsole.log(this); // refers to global object i.e. window in case of browser\n// 💡 global object differs based on runtime environment,\n```\n\n## `this` inside a function\n\n```js\nfunction x() {\n  // the below value depends on strict/non-strict mode\n  console.log(this);\n  // in strict mode - undefined\n  // in non-strict mode - refers to global window object\n}\nx();\n// 💡 Notes:\n\n// On the first go feels like `this` keyword in global space and inside function behaves same but in reality it's different.\n\n// The moment you make JS run in strict mode by using: \"use strict\" at the top, `this` keyword inside function returns `undefined` whereas global space will still refers to global window object\n```\n\n`this substitution` -> According to `this` substitution, if the value of `this` keyword is `null/undefined`, it will be replaced by globalObject only in non-strict mode. This is the reason why `this` refers to global window object inside function in non-strict mode.\n\n💡 So to summarize, the value of `this` keyword inside function is `undefined`, but because of `this substitution` in non-strict mode `this` keyword refers to `globalWindowObject` and in strict mode it will still be `undefined`\n\n`this` keyword value depends on how the `function` is called. For eg:  \nIn strict mode:\n\n```js\nx(); // undefined\nwindow.x(); // global window object\n```\n\n## `this` inside a object's method\n\n```js\n// `x` key below is a method as per terminology\nconst obj = {\n  a: 10,\n  x: function () {\n    console.log(this); // {a: 10, x: f()}\n    console.log(this.a); // 10\n  },\n};\nobj.x(); // value of `this` is referring to current object i.e. `obj`\n```\n\n## `call`, `apply` & `bind` methods\n\n> For detail around call, apply and bind method. Refer [here](https://www.youtube.com/watch?v=75W8UPQ5l7k&ab_channel=AkshaySaini).\n\n```js\nconst student = {\n  name: \"Alok\",\n  printName: function () {\n    console.log(this.name);\n  },\n};\nstudent.printName(); // Alok\n\nconst student2 = {\n  name: \"Kajal\",\n};\nstudent2.printName(); // throw error\n\n// ❓ how to re-use printName method from `student` object\nstudent.printName.call(student2); // Kajal\n// Above `call` method is taking the value of `this` keyword\n// So, Inside `printName` method value of `this` is now `student2` object\n\n// So, call, bind and apply is used to set the value of this keyword.\n```\n\n## `this` inside arrow function\n\nArrow function doesn't have their own `this` value, they take the value from enclosing lexical context.\n\n```js\nconst obj = {\n  a: 10,\n  x: () => {\n    console.log(this); // window object\n    // Above the value of `this` won't be obj anymore instead it will be enclosing lexical context i.e. window object in current scenario.\n  },\n};\nobj.x();\n\nconst obj2 = {\n  a: 10,\n  x: function () {\n    const y = () => {\n      console.log(this);\n      // Above the value of `this` will be obj2 as function y's enclosing lexical context is function `x`.\n    };\n    y();\n  },\n};\nobj2.x();\n```\n\n## `this` inside DOM\n\n> It refers to HTML element.\n\n```html\n<button onclick=\"alert(this)\">Click Me</button>\n<!-- [object HTMLButtonElement] Button element -->\n```\n\n\n\nWatch Live On Youtube below:",
+    "detailedContent": "# Episode 25: `this` Keyword Deep Dive across Scopes & Bindings\n\n## Overview\n`this` is a keyword whose evaluation depends strictly on HOW and WHERE a function is called (Execution Context runtime binding).\n\n## Detailed Explanation\n`this` binding behavior rules:\n\n1. **Global Scope**: `this` points to Global Object (`window` in browser, `global` in Node).\n2. **Inside Regular Function**:\n   - Non-strict mode: `this` points to Global Object (`window`).\n   - Strict mode (`'use strict'`): `this` is `undefined` (this substitution mechanism is disabled).\n3. **Inside Method Call (`obj.fn()`)**: `this` points to the object calling the method (`obj`).\n4. **Explicit Binding (`call`, `apply`, `bind`)**:\n   - `fn.call(obj, arg1, arg2)`: Invokes immediately setting `this` to `obj`.\n   - `fn.apply(obj, [arg1, arg2])`: Invokes immediately passing array of args.\n   - `fn.bind(obj)`: Returns a new function with permanent `this` bound to `obj`.\n5. **Inside Arrow Functions**: Arrow functions do NOT have their own `this`. They retain the **lexical `this`** of their enclosing parent scope.\n6. **Inside DOM Event Listeners**: `this` refers to the HTML element that received the event (`e.currentTarget`).\n\n## Real-World Analogy\n🎭 Actor & Character Costume: `this` is like an actor's costume. The actor's role (`this`) changes depending on which stage scene (execution context) they step into.\n\n## Key Architectural Concepts\n- `this` in global scope = Global Object (`window`).\n- `this` in strict mode function = `undefined`.\n- `this` in object method = calling object.\n- Explicit binding via `call()`, `apply()`, and `bind()`.\n- Arrow functions inherit lexical `this` from enclosing parent scope.",
     "codeTemplates": [
       {
         "language": "javascript",
-        "code": "console.log(this); // refers to global object i.e. window in case of browser\n// 💡 global object differs based on runtime environment,"
-      },
-      {
-        "language": "javascript",
-        "code": "function x() {\n  // the below value depends on strict/non-strict mode\n  console.log(this);\n  // in strict mode - undefined\n  // in non-strict mode - refers to global window object\n}\nx();\n// 💡 Notes:\n\n// On the first go feels like `this` keyword in global space and inside function behaves same but in reality it's different.\n\n// The moment you make JS run in strict mode by using: \"use strict\" at the top, `this` keyword inside function returns `undefined` whereas global space will still refers to global window object"
-      },
-      {
-        "language": "javascript",
-        "code": "x(); // undefined\nwindow.x(); // global window object"
-      },
-      {
-        "language": "javascript",
-        "code": "// `x` key below is a method as per terminology\nconst obj = {\n  a: 10,\n  x: function () {\n    console.log(this); // {a: 10, x: f()}\n    console.log(this.a); // 10\n  },\n};\nobj.x(); // value of `this` is referring to current object i.e. `obj`"
-      },
-      {
-        "language": "javascript",
-        "code": "const student = {\n  name: \"Alok\",\n  printName: function () {\n    console.log(this.name);\n  },\n};\nstudent.printName(); // Alok\n\nconst student2 = {\n  name: \"Kajal\",\n};\nstudent2.printName(); // throw error\n\n// ❓ how to re-use printName method from `student` object\nstudent.printName.call(student2); // Kajal\n// Above `call` method is taking the value of `this` keyword\n// So, Inside `printName` method value of `this` is now `student2` object\n\n// So, call, bind and apply is used to set the value of this keyword."
-      },
-      {
-        "language": "javascript",
-        "code": "const obj = {\n  a: 10,\n  x: () => {\n    console.log(this); // window object\n    // Above the value of `this` won't be obj anymore instead it will be enclosing lexical context i.e. window object in current scenario.\n  },\n};\nobj.x();\n\nconst obj2 = {\n  a: 10,\n  x: function () {\n    const y = () => {\n      console.log(this);\n      // Above the value of `this` will be obj2 as function y's enclosing lexical context is function `x`.\n    };\n    y();\n  },\n};\nobj2.x();"
+        "code": "const obj = {\n  a: 10,\n  x: function() {\n    console.log('Method this.a:', this.a); // 10\n    \n    // Lexical Arrow Function inside method\n    const y = () => {\n      console.log('Arrow this.a:', this.a); // 10 (Inherits from x)\n    };\n    y();\n  }\n};\nobj.x();\n\nconst obj2 = { a: 100 };\n// Explicitly bind obj.x to obj2\nobj.x.call(obj2); // Logs Method this.a: 100"
       }
     ],
     "interviewQuestions": [
       {
         "question": "How is the value of 'this' determined in JavaScript?",
-        "answer": "1) Global scope: `window` (browser) or `global` (Node). 2) Inside function: `window` (strict mode `undefined`). 3) Method call (`obj.fn()`): `obj`. 4) `call`/`apply`/`bind`: explicitly set object. 5) Arrow functions: lexical `this` inherited from enclosing scope."
+        "answer": "'this' is determined by invocation context. Global scope = window. Strict function = undefined. Method (obj.fn()) = obj. Explicit call/apply/bind = target object. Arrow functions = lexical 'this' from outer enclosing scope."
       }
     ]
   }
