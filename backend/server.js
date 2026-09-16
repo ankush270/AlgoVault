@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import syncRoutes from './routes/syncRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ app.get('/api/health', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/sync', syncRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 TechSwitch Pro Auth & Sync Server running on http://localhost:${PORT}`);

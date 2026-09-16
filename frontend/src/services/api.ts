@@ -66,3 +66,15 @@ export const apiSync = {
     return res.json();
   },
 };
+
+// 3. AI Chatbot API Calls (Sarvam AI)
+export const apiChat = {
+  async sendMessage(messages: { role: string; content: string }[]): Promise<{ success: boolean; reply?: string; message?: string }> {
+    const res = await fetch(`${API_BASE_URL}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages }),
+    });
+    return res.json();
+  },
+};

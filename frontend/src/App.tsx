@@ -14,6 +14,7 @@ import { LeetCodeExplorer } from './components/LeetCodeExplorer';
 import { StriverSheetView } from './components/StriverSheetView';
 import { AlgorithmHub } from './components/AlgorithmHub';
 import { InterviewExperiencesExplorer } from './components/InterviewExperiencesExplorer';
+import { AIChatbot } from './components/common/AIChatbot';
 import { DomainType, TopicItem } from './types';
 
 export const AppContent: React.FC = () => {
@@ -122,6 +123,9 @@ export const AppContent: React.FC = () => {
           onClose={() => setNoteModalTarget(null)}
         />
       )}
+
+      {/* Sarvam AI Chatbot */}
+      <AIChatbot />
     </div>
   );
 };
