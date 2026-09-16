@@ -22,6 +22,7 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
   const domainDefs: { id: DomainType; label: string; shortLabel: string; color: string; strokeColor: string }[] = [
     { id: 'dsa', label: 'DSA & Algorithms', shortLabel: 'DSA', color: '#f59e0b', strokeColor: 'rgba(245, 158, 11, 0.8)' },
     { id: 'system-design', label: 'System Design', shortLabel: 'SysDesign', color: '#c084fc', strokeColor: 'rgba(192, 132, 252, 0.8)' },
+    { id: 'oops', label: 'OOPs & LLD', shortLabel: 'OOPs/LLD', color: '#f97316', strokeColor: 'rgba(249, 115, 22, 0.8)' },
     { id: 'os', label: 'Operating Systems', shortLabel: 'OS', color: '#34d399', strokeColor: 'rgba(52, 211, 153, 0.8)' },
     { id: 'dbms-sql', label: 'DBMS & SQL', shortLabel: 'DBMS/SQL', color: '#22d3ee', strokeColor: 'rgba(34, 211, 238, 0.8)' },
     { id: 'computer-networks', label: 'Computer Networks', shortLabel: 'Networks', color: '#fb7185', strokeColor: 'rgba(251, 113, 133, 0.8)' },

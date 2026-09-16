@@ -1,0 +1,2648 @@
+[
+  {
+    "company": "Accenture",
+    "total_questions_extracted": 183,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 6,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 6,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 128,
+      "General & Other Technical": 37
+    }
+  },
+  {
+    "company": "Aci Worldwide",
+    "total_questions_extracted": 40,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 14,
+      "General & Other Technical": 22
+    }
+  },
+  {
+    "company": "Affinsys Ai",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Amadeus Labs",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Amazon",
+    "total_questions_extracted": 15,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Amdocs",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 1,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "American Express",
+    "total_questions_extracted": 26,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 8,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 10,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Anz",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Apple",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Aptiv",
+    "total_questions_extracted": 23,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 11,
+      "General & Other Technical": 12
+    }
+  },
+  {
+    "company": "Aqeeq Technologies Internship",
+    "total_questions_extracted": 38,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 8,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 6,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 16
+    }
+  },
+  {
+    "company": "Argusoft",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Ast Consulting",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 8,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Athenahealth",
+    "total_questions_extracted": 23,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 2,
+      "DBMS & SQL": 1,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 7,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 13
+    }
+  },
+  {
+    "company": "Atlassian",
+    "total_questions_extracted": 56,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 40
+    }
+  },
+  {
+    "company": "Avalara",
+    "total_questions_extracted": 12,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 2,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 3,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Bank Of America",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Bharti Airtel Limited",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Blackrock",
+    "total_questions_extracted": 16,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 12,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Blackrock Sde",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Blackwins Technologies",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 6,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Brane Enterprises Pvt Ltd",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Capgemini",
+    "total_questions_extracted": 13,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 2,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 6,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 3,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Capillary Technologies",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 6,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Catalog",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 2,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Caterpillar Inc",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Cboe Global Markets Cboe",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 1
+    }
+  },
+  {
+    "company": "Cisco",
+    "total_questions_extracted": 87,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 19,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 18,
+      "General & Other Technical": 40
+    }
+  },
+  {
+    "company": "Coforge",
+    "total_questions_extracted": 20,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 6,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 10,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Cognizant",
+    "total_questions_extracted": 46,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 2,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 4,
+      "Operating System": 0,
+      "DBMS & SQL": 10,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 14,
+      "General & Other Technical": 14
+    }
+  },
+  {
+    "company": "Comcast",
+    "total_questions_extracted": 16,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 4,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Commonwealth Bank Of Australia",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 1
+    }
+  },
+  {
+    "company": "Consultadd Services",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Csir Scientist",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "D.E.Shaw Ascend Educare Program For Women",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Datagrokr",
+    "total_questions_extracted": 60,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 7,
+      "Operating System": 0,
+      "DBMS & SQL": 18,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 33
+    }
+  },
+  {
+    "company": "Dealermatix",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 4,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Deloitte",
+    "total_questions_extracted": 37,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 12,
+      "General & Other Technical": 25
+    }
+  },
+  {
+    "company": "Deutsche Bank",
+    "total_questions_extracted": 81,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 4,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 1,
+      "DBMS & SQL": 3,
+      "Computer Networks": 4,
+      "OOPs & Object Oriented": 6,
+      "HR & Behavioral": 21,
+      "General & Other Technical": 42
+    }
+  },
+  {
+    "company": "Dish Network Technologies On Campus",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 6,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 4,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Embedur",
+    "total_questions_extracted": 5,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 1,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Energy Exemplar",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Eucloid Data Solutions",
+    "total_questions_extracted": 12,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Ey",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 4,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 2,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Ey Gds",
+    "total_questions_extracted": 27,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 6,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 4,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 3,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 12
+    }
+  },
+  {
+    "company": "Fanatics",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Fico",
+    "total_questions_extracted": 37,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 9,
+      "General & Other Technical": 28
+    }
+  },
+  {
+    "company": "Flipkart",
+    "total_questions_extracted": 3,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Fractal Analytics",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Futures First",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Gazelle Information Technologies",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "General",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 4,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 10
+    }
+  },
+  {
+    "company": "Global Logic",
+    "total_questions_extracted": 15,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 7
+    }
+  },
+  {
+    "company": "Google",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Gyansys",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "HCL Tech",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "HP",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Hashedin Technologies",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Hexaware",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Hexaware Technologies",
+    "total_questions_extracted": 7,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Hsbc",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Ibm",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Ibm Ciocampus",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Iit Gandhinagar",
+    "total_questions_extracted": 24,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 6,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 14
+    }
+  },
+  {
+    "company": "Iit Mandi Dual Degree Mtechr Phd",
+    "total_questions_extracted": 7,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 2,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Indmoney",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Informatica",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 2,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Intimtec",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "JPMorgan Chase",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Jones Lang Lasalle Jll",
+    "total_questions_extracted": 26,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 2,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 2,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 8,
+      "General & Other Technical": 12
+    }
+  },
+  {
+    "company": "Kotak Mahindra",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 2,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 2,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Kpit",
+    "total_questions_extracted": 17,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 6,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 7
+    }
+  },
+  {
+    "company": "Lg Soft India",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "London Stock Exchange Group Lseg",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Lti Mindtree",
+    "total_questions_extracted": 33,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 17,
+      "General & Other Technical": 14
+    }
+  },
+  {
+    "company": "Lti Mindtree On Campus",
+    "total_questions_extracted": 16,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 8,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Ltimindtree",
+    "total_questions_extracted": 41,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 4,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 4,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 11,
+      "General & Other Technical": 16
+    }
+  },
+  {
+    "company": "Mahindra Comviva",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Make My Trip",
+    "total_questions_extracted": 5,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 1,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Mastercard",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Meesho Dice Exam",
+    "total_questions_extracted": 3,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Meti Internship Application Process And",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 14
+    }
+  },
+  {
+    "company": "Microsoft",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Mindsprint Digital",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 8,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Morgan Stanley",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 2,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Mphasis",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Multicoreware",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Netradyne",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "New Relic",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 1
+    }
+  },
+  {
+    "company": "Nice Systems",
+    "total_questions_extracted": 39,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 4,
+      "Operating System": 2,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 7,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 20
+    }
+  },
+  {
+    "company": "Nutanix",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Nvidia",
+    "total_questions_extracted": 30,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 6,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 8,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 12
+    }
+  },
+  {
+    "company": "Omniscient Software Ltd",
+    "total_questions_extracted": 5,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Ongc",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Optum",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Oracle",
+    "total_questions_extracted": 218,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 6,
+      "System Design & Architecture": 3,
+      "Frontend & Web Dev": 12,
+      "Backend & Web Services": 11,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 3,
+      "Operating System": 10,
+      "DBMS & SQL": 18,
+      "Computer Networks": 10,
+      "OOPs & Object Oriented": 5,
+      "HR & Behavioral": 32,
+      "General & Other Technical": 106
+    }
+  },
+  {
+    "company": "Paltech",
+    "total_questions_extracted": 32,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 2,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 20
+    }
+  },
+  {
+    "company": "Pandoai",
+    "total_questions_extracted": 20,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 14
+    }
+  },
+  {
+    "company": "Paypal",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Paypal India",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 1,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Paytm",
+    "total_questions_extracted": 13,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 7,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Pegasystems Associate System Architect On Campus",
+    "total_questions_extracted": 41,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 4,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 4,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 21
+    }
+  },
+  {
+    "company": "Pharmeasy",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Polestar Solutions And Services",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Publicis Sapient",
+    "total_questions_extracted": 12,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Pwc",
+    "total_questions_extracted": 5,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Qualcomm Hardware",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Rappit Io Formerly Known As Vanenburg",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Rpsc",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 16
+    }
+  },
+  {
+    "company": "Rsl",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Rtcamp",
+    "total_questions_extracted": 95,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 3,
+      "Frontend & Web Dev": 3,
+      "Backend & Web Services": 5,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 10,
+      "Operating System": 0,
+      "DBMS & SQL": 11,
+      "Computer Networks": 14,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 5,
+      "General & Other Technical": 44
+    }
+  },
+  {
+    "company": "Salesforce",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 1,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Sap Labs",
+    "total_questions_extracted": 17,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 1,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 3,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 9
+    }
+  },
+  {
+    "company": "Sap Labs Summer",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Sapient",
+    "total_questions_extracted": 12,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 4,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Schneider Electric Technical",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Sewacity",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Sharechat",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 3,
+      "Computer Networks": 3,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Siemens",
+    "total_questions_extracted": 40,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 3,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 5,
+      "HR & Behavioral": 8,
+      "General & Other Technical": 24
+    }
+  },
+  {
+    "company": "Sigmoid",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 4,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Societe Generale",
+    "total_questions_extracted": 41,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 10,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 4,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 19
+    }
+  },
+  {
+    "company": "Springworks",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Straive Gramener",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 4,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Tech Mahindra",
+    "total_questions_extracted": 36,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 18,
+      "General & Other Technical": 16
+    }
+  },
+  {
+    "company": "Technoverse Solutions",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Tejas Networks",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Thinkbridge",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Tiger Analytics",
+    "total_questions_extracted": 10,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 2,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Toshiba",
+    "total_questions_extracted": 5,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 3
+    }
+  },
+  {
+    "company": "Twenty Point Nine Five Ventures",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Uneecops Technologies Ltd",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 6,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 8,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Unilever",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Ust",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 2,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 6,
+      "General & Other Technical": 8
+    }
+  },
+  {
+    "company": "Veersa Technology",
+    "total_questions_extracted": 1,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 1
+    }
+  },
+  {
+    "company": "Visa",
+    "total_questions_extracted": 18,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 2,
+      "DevOps, Cloud & Security": 2,
+      "Operating System": 4,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Vois",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Walmart",
+    "total_questions_extracted": 11,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 3,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 4,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Webkorps Services India",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 2,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Wells Fargo",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 4,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  },
+  {
+    "company": "Wipro",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Yamaha Motors Solution India Pvt Ltd",
+    "total_questions_extracted": 6,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 4
+    }
+  },
+  {
+    "company": "Yardi Software India Pvt Ltd",
+    "total_questions_extracted": 8,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Zenoti",
+    "total_questions_extracted": 2,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 2,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Zoho",
+    "total_questions_extracted": 14,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 3,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 1,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 3,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 7
+    }
+  },
+  {
+    "company": "Zomato",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 2,
+      "General & Other Technical": 0
+    }
+  },
+  {
+    "company": "Zoom Car",
+    "total_questions_extracted": 22,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 16,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 0,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 6
+    }
+  },
+  {
+    "company": "Zs Llm Engineer",
+    "total_questions_extracted": 4,
+    "subject_breakdown": {
+      "Data Structures & Algorithms": 0,
+      "System Design & Architecture": 0,
+      "Frontend & Web Dev": 0,
+      "Backend & Web Services": 0,
+      "AI, ML & GenAI": 0,
+      "DevOps, Cloud & Security": 0,
+      "Operating System": 0,
+      "DBMS & SQL": 2,
+      "Computer Networks": 0,
+      "OOPs & Object Oriented": 0,
+      "HR & Behavioral": 0,
+      "General & Other Technical": 2
+    }
+  }
+]

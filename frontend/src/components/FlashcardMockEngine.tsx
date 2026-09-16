@@ -5,7 +5,7 @@ import { Flashcard, DomainType } from '../types';
 import { Dices, Timer, Eye, CheckCircle2, RotateCcw, Sparkles, ArrowRight } from 'lucide-react';
 
 export const FlashcardMockEngine: React.FC = () => {
-  const { updateStatus } = useProgress();
+  const { recordRevision } = useProgress();
   const [cards, setCards] = useState<Flashcard[]>(sampleFlashcards);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -47,9 +47,9 @@ export const FlashcardMockEngine: React.FC = () => {
     setIsTimerRunning(false);
   };
 
-  const handleAnswerEval = (mastered: boolean) => {
+  const handleAnswerEval = (rating: 'easy' | 'medium' | 'hard' | 'failed') => {
     if (currentCard) {
-      updateStatus(currentCard.topicId, mastered ? 'mastered' : 'needs-revision');
+      recordRevision(currentCard.topicId, rating);
     }
     handleNextCard();
   };
@@ -92,7 +92,7 @@ export const FlashcardMockEngine: React.FC = () => {
 
       {/* Domain Filters */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        {(['all', 'dsa', 'system-design', 'os', 'dbms-sql', 'computer-networks', 'genai-ml'] as const).map(d => (
+        {(['all', 'dsa', 'system-design', 'oops', 'os', 'dbms-sql', 'computer-networks', 'genai-ml'] as const).map(d => (
           <button
             key={d}
             onClick={() => handleDomainFilter(d)}
@@ -159,20 +159,37 @@ export const FlashcardMockEngine: React.FC = () => {
 
           {/* Evaluation Action Buttons */}
           {isFlipped && (
-            <div className="grid grid-cols-2 gap-4 animate-fadeIn">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fadeIn">
               <button
-                onClick={() => handleAnswerEval(false)}
-                className="py-3 rounded-2xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 font-bold text-xs transition-all flex items-center justify-center gap-2"
+                onClick={() => handleAnswerEval('easy')}
+                className="py-3 px-2 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
-                <span>Needs Revision</span>
+                <span className="text-lg">😎</span>
+                <span>Easy (Pura)</span>
               </button>
 
               <button
-                onClick={() => handleAnswerEval(true)}
-                className="py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
+                onClick={() => handleAnswerEval('medium')}
+                className="py-3 px-2 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
-                <CheckCircle2 size={16} />
-                <span>Got It Right (Mastered)</span>
+                <span className="text-lg">🙂</span>
+                <span>Medium (Aadha)</span>
+              </button>
+
+              <button
+                onClick={() => handleAnswerEval('hard')}
+                className="py-3 px-2 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+              >
+                <span className="text-lg">😵</span>
+                <span>Hard (Kam)</span>
+              </button>
+
+              <button
+                onClick={() => handleAnswerEval('failed')}
+                className="py-3 px-2 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+              >
+                <span className="text-lg">❌</span>
+                <span>Failed (Nahi)</span>
               </button>
             </div>
           )}

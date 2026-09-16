@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Flame, 
   Search, 
-  Download, 
-  Upload, 
   Menu, 
   X, 
-  Sparkles,
-  Cloud,
-  CheckCircle2,
-  Bookmark,
-  RefreshCw,
-  User,
-  LogOut,
-  ShieldCheck,
-  ChevronDown
+  Cloud, 
+  Bookmark, 
+  User, 
+  LogOut, 
+  ShieldCheck, 
+  ChevronDown 
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
-import { checkMongoHealth, fetchFromMongo, pushToMongo } from '../services/mongoSync';
 import { useAuth } from '../context/AuthContext';
+import { useMongoSync } from '../hooks/useMongoSync';
 import { AuthModal } from './AuthModal';
+import { SyncModal } from '../features/sync/components/SyncModal';
 
 interface NavbarProps {
   searchQuery: string;
@@ -40,113 +36,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const { progress, exportProgressJSON, importProgressJSON } = useProgress();
   const { user, isAuthenticated, logout } = useAuth();
+  const {
+    mongoUserKey,
+    setMongoUserKey,
+    isSyncing,
+    showSyncModal,
+    setShowSyncModal,
+    syncSuccessMsg,
+    handleMongoPush,
+    handleMongoPull,
+  } = useMongoSync();
 
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showSyncModal, setShowSyncModal] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [importJsonText, setImportJsonText] = useState('');
-  const [syncSuccessMsg, setSyncSuccessMsg] = useState('');
-  const [syncTab, setSyncTab] = useState<'mongo' | 'file'>('mongo');
-
-  const [mongoUserKey, setMongoUserKey] = useState<string>(() => {
-    return user?.email || localStorage.getItem('mongo_sync_user_key') || 'ankush-user-1';
-  });
-  const [isSyncing, setIsSyncing] = useState(false);
-
-  // Sync user email when user logs in
-  useEffect(() => {
-    if (user?.email) {
-      setMongoUserKey(user.email);
-      // Auto fetch progress on login
-      fetchFromMongo(user.email).then((data) => {
-        if (data && data.leetcodeSolvedStatus) {
-          localStorage.setItem('leetcode_solved_questions_status_v1', JSON.stringify(data.leetcodeSolvedStatus));
-          window.dispatchEvent(new Event('storage'));
-        }
-      });
-    }
-  }, [user]);
-
-  const handleMongoPush = async () => {
-    if (!mongoUserKey.trim()) return;
-    setIsSyncing(true);
-    localStorage.setItem('mongo_sync_user_key', mongoUserKey.trim());
-    
-    // Gather LeetCode solved status from localStorage
-    let leetcodeSolvedStatus = {};
-    try {
-      const saved = localStorage.getItem('leetcode_solved_status');
-      if (saved) leetcodeSolvedStatus = JSON.parse(saved);
-    } catch (e) {}
-
-    const success = await pushToMongo(mongoUserKey, leetcodeSolvedStatus, progress);
-    setIsSyncing(false);
-
-    if (success) {
-      setSyncSuccessMsg(`Successfully synced data to MongoDB under Key '${mongoUserKey.trim()}'!`);
-      setTimeout(() => setSyncSuccessMsg(''), 3000);
-    } else {
-      alert('Could not push to MongoDB server. Ensure server.js is running.');
-    }
-  };
-
-  const handleMongoPull = async () => {
-    if (!mongoUserKey.trim()) return;
-    setIsSyncing(true);
-    localStorage.setItem('mongo_sync_user_key', mongoUserKey.trim());
-
-    const result = await fetchFromMongo(mongoUserKey);
-    setIsSyncing(false);
-
-    if (result) {
-      if (result.leetcodeSolvedStatus) {
-        localStorage.setItem('leetcode_solved_status', JSON.stringify(result.leetcodeSolvedStatus));
-      }
-      if (result.progressState && result.progressState.statuses) {
-        importProgressJSON(JSON.stringify(result.progressState));
-      }
-      setSyncSuccessMsg(`Restored synced data from MongoDB for Key '${mongoUserKey.trim()}'!`);
-      setTimeout(() => setSyncSuccessMsg(''), 3000);
-      window.location.reload(); // Refresh state
-    } else {
-      alert(`No data found for Key '${mongoUserKey.trim()}'. Click 'Push Data' first.`);
-    }
-  };
-
-  const handleImportSubmit = () => {
-    if (importProgressJSON(importJsonText)) {
-      setSyncSuccessMsg('Progress successfully restored from backup!');
-      setTimeout(() => {
-        setSyncSuccessMsg('');
-        setShowSyncModal(false);
-        setImportJsonText('');
-      }, 1500);
-    } else {
-      alert('Invalid JSON backup file. Please check the file contents.');
-    }
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const content = event.target?.result as string;
-        if (content) {
-          if (importProgressJSON(content)) {
-            setSyncSuccessMsg('Backup imported successfully!');
-            setTimeout(() => {
-              setSyncSuccessMsg('');
-              setShowSyncModal(false);
-            }, 1500);
-          } else {
-            alert('Could not parse JSON backup file.');
-          }
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
 
   return (
     <>
@@ -236,7 +138,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden md:inline">Sync & Cloud</span>
           </button>
 
-          {/* User Auth Section: Profile Dropdown or Sign In CTA */}
+          {/* User Auth Section */}
           {isAuthenticated && user ? (
             <div className="relative">
               <button
@@ -300,159 +202,20 @@ export const Navbar: React.FC<NavbarProps> = ({
       </header>
 
       {/* Backup & Import Modal */}
-      {showSyncModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-[#111827] border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
-            <button
-              onClick={() => setShowSyncModal(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-white"
-            >
-              <X size={20} />
-            </button>
+      <SyncModal
+        isOpen={showSyncModal}
+        onClose={() => setShowSyncModal(false)}
+        mongoUserKey={mongoUserKey}
+        setMongoUserKey={setMongoUserKey}
+        isSyncing={isSyncing}
+        onMongoPush={handleMongoPush}
+        onMongoPull={handleMongoPull}
+        onExportJSON={exportProgressJSON}
+        onImportJSON={importProgressJSON}
+        syncSuccessMsg={syncSuccessMsg}
+      />
 
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <Cloud size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Cloud & Cross-Device Sync</h3>
-                <p className="text-xs text-slate-400">Sync bookmarks & solved questions across Phone & PC</p>
-              </div>
-            </div>
-
-            {/* Modal Tabs: MongoDB vs File */}
-            <div className="flex gap-2 p-1 bg-slate-900 border border-slate-800 rounded-xl mb-4 text-xs font-semibold">
-              <button
-                onClick={() => setSyncTab('mongo')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${
-                  syncTab === 'mongo'
-                    ? 'bg-emerald-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                🍃 MongoDB Live Sync
-              </button>
-              <button
-                onClick={() => setSyncTab('file')}
-                className={`flex-1 py-1.5 rounded-lg transition-all ${
-                  syncTab === 'file'
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                💾 JSON File Backup
-              </button>
-            </div>
-
-            {syncSuccessMsg && (
-              <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2">
-                <CheckCircle2 size={16} />
-                <span>{syncSuccessMsg}</span>
-              </div>
-            )}
-
-            {syncTab === 'mongo' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
-                  <div>
-                    <label className="text-xs font-bold text-slate-300 block mb-1">Your Cross-Device Sync Key:</label>
-                    <input
-                      type="text"
-                      value={mongoUserKey}
-                      onChange={(e) => setMongoUserKey(e.target.value)}
-                      placeholder="e.g. ankush-sync-2026"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-cyan-300 focus:border-emerald-500 outline-none"
-                    />
-                    <p className="text-[10px] text-slate-400 mt-1">
-                      Enter the same key on both Computer & Phone to sync your bookmarks!
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button
-                      onClick={handleMongoPush}
-                      disabled={isSyncing}
-                      className="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-emerald-600/20"
-                    >
-                      <Cloud size={14} />
-                      <span>{isSyncing ? 'Syncing...' : 'Push to MongoDB'}</span>
-                    </button>
-
-                    <button
-                      onClick={handleMongoPull}
-                      disabled={isSyncing}
-                      className="py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-cyan-600/20"
-                    >
-                      <RefreshCw size={14} />
-                      <span>{isSyncing ? 'Pulling...' : 'Pull from MongoDB'}</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {syncTab === 'file' && (
-              <div className="space-y-4">
-                {/* Download Option */}
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
-                  <div>
-                    <h4 className="text-sm font-semibold text-white">Export Progress JSON</h4>
-                    <p className="text-xs text-slate-400">Download your study streak & notes backup</p>
-                  </div>
-                  <button
-                    onClick={exportProgressJSON}
-                    className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium flex items-center gap-1.5 transition-all"
-                  >
-                    <Download size={14} />
-                    <span>Download</span>
-                  </button>
-                </div>
-
-                {/* Upload Option */}
-                <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
-                  <div>
-                    <h4 className="text-sm font-semibold text-white">Import Backup File</h4>
-                    <p className="text-xs text-slate-400">Upload JSON backup file from your phone or PC</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <label className="cursor-pointer flex-1 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium flex items-center justify-center gap-2 border border-slate-700">
-                      <Upload size={14} />
-                      <span>Choose JSON File</span>
-                      <input
-                        type="file"
-                        accept=".json"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-
-                {/* Paste JSON raw option */}
-                <div className="space-y-2">
-                  <label className="text-xs font-medium text-slate-300">Or Paste JSON Data Directly:</label>
-                  <textarea
-                    value={importJsonText}
-                    onChange={(e) => setImportJsonText(e.target.value)}
-                    placeholder="Paste JSON content here..."
-                    className="w-full h-20 bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 font-mono focus:border-blue-500 outline-none"
-                  />
-                  <button
-                    onClick={handleImportSubmit}
-                    disabled={!importJsonText.trim()}
-                    className="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
-                  >
-                    <RefreshCw size={14} />
-                    <span>Restore Progress</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Auth Modal for Login & Register */}
+      {/* Auth Modal */}
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   );

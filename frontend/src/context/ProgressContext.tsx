@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { UserProgressState, ItemStatus } from '../types';
+import { UserProgressState, ItemStatus, RatingDifficulty, AlgorithmType, RevisionRecord, TopicItem } from '../types';
+import { calculateNextRevision, getTodayISO, calculateRetentionScore } from '../utils/spacedRepetition';
 
 interface ProgressContextType {
   progress: UserProgressState;
   updateStatus: (topicId: string, status: ItemStatus) => void;
+  recordRevision: (topicId: string, rating: RatingDifficulty, topicMeta?: Partial<TopicItem>) => RevisionRecord;
+  setAlgorithm: (algorithm: AlgorithmType) => void;
   toggleStar: (topicId: string) => void;
   saveNote: (topicId: string, noteText: string) => void;
   updateDailyGoal: (goal: number) => void;
@@ -13,26 +16,42 @@ interface ProgressContextType {
   resetProgress: () => void;
   getMasteredCount: (domain?: string) => number;
   getTotalCount: (domain?: string) => number;
+  getDueRevisionsCount: () => number;
+  getRevisionRecord: (topicId: string) => RevisionRecord | undefined;
 }
 
 const STORAGE_KEY = 'techswitch_pro_progress_v1';
 
 const getInitialState = (): UserProgressState => {
   const saved = localStorage.getItem(STORAGE_KEY);
+  const todayStr = getTodayISO();
+
   if (saved) {
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      return {
+        statuses: parsed.statuses || {},
+        starred: parsed.starred || {},
+        notes: parsed.notes || {},
+        revisions: parsed.revisions || {},
+        activeAlgorithm: parsed.activeAlgorithm || 'smart-adaptive',
+        streak: parsed.streak || 1,
+        lastActiveDate: parsed.lastActiveDate || todayStr,
+        dailyGoal: parsed.dailyGoal || 3,
+        todayCompletedCount: parsed.todayCompletedCount || 0,
+        completedDates: parsed.completedDates || [todayStr]
+      };
     } catch (e) {
       console.error('Failed to parse saved progress', e);
     }
   }
 
-  const todayStr = new Date().toISOString().split('T')[0];
-
   return {
     statuses: {},
     starred: {},
     notes: {},
+    revisions: {},
+    activeAlgorithm: 'smart-adaptive',
     streak: 1,
     lastActiveDate: todayStr,
     dailyGoal: 3,
@@ -53,7 +72,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Streak check on initial mount
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayISO();
     if (progress.lastActiveDate !== today) {
       const lastDate = new Date(progress.lastActiveDate);
       const currentDate = new Date(today);
@@ -61,14 +80,12 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       if (diffDays === 1) {
-        // Continuous streak
         setProgress(prev => ({
           ...prev,
           lastActiveDate: today,
           todayCompletedCount: 0
         }));
       } else if (diffDays > 1) {
-        // Streak broken
         setProgress(prev => ({
           ...prev,
           streak: 1,
@@ -86,10 +103,9 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       let todayCount = prev.todayCompletedCount;
       let newStreak = prev.streak;
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = getTodayISO();
       const updatedDates = new Set(prev.completedDates);
 
-      // Trigger celebratory confetti if topic marked as mastered
       if (status === 'mastered' && prevStatus !== 'mastered') {
         todayCount += 1;
         updatedDates.add(todayStr);
@@ -118,6 +134,100 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         completedDates: Array.from(updatedDates)
       };
     });
+  };
+
+  /**
+   * Evaluates and records a revision based on user comprehension input
+   */
+  const recordRevision = (
+    topicId: string,
+    rating: RatingDifficulty,
+    topicMeta?: Partial<TopicItem>
+  ): RevisionRecord => {
+    const existingRec = progress.revisions[topicId];
+    const newRecord = calculateNextRevision({
+      topicId,
+      rating,
+      intrinsicDifficulty: topicMeta?.difficulty,
+      importanceRating: topicMeta?.importanceRating,
+      companyTagsCount: topicMeta?.companyTags?.length || 0,
+      existingRecord: existingRec,
+      algorithm: progress.activeAlgorithm
+    });
+
+    const newStatus: ItemStatus =
+      rating === 'easy' || rating === 'medium' ? 'mastered' : 'needs-revision';
+
+    setProgress(prev => {
+      const newStatuses = { ...prev.statuses, [topicId]: newStatus };
+      const newRevisions = { ...prev.revisions, [topicId]: newRecord };
+
+      let todayCount = prev.todayCompletedCount;
+      let newStreak = prev.streak;
+      const todayStr = getTodayISO();
+      const updatedDates = new Set(prev.completedDates);
+
+      if ((rating === 'easy' || rating === 'medium') && prev.statuses[topicId] !== 'mastered') {
+        todayCount += 1;
+        updatedDates.add(todayStr);
+
+        try {
+          confetti({
+            particleCount: 70,
+            spread: 60,
+            origin: { y: 0.6 }
+          });
+        } catch (e) {}
+
+        if (todayCount >= prev.dailyGoal && !prev.completedDates.includes(todayStr)) {
+          newStreak += 1;
+        }
+      }
+
+      return {
+        ...prev,
+        statuses: newStatuses,
+        revisions: newRevisions,
+        todayCompletedCount: todayCount,
+        streak: newStreak,
+        lastActiveDate: todayStr,
+        completedDates: Array.from(updatedDates)
+      };
+    });
+
+    return newRecord;
+  };
+
+  const setAlgorithm = (algorithm: AlgorithmType) => {
+    setProgress(prev => ({
+      ...prev,
+      activeAlgorithm: algorithm
+    }));
+  };
+
+  const getDueRevisionsCount = (): number => {
+    const todayStr = getTodayISO();
+    let dueCount = 0;
+
+    // Count topics with nextRevisionDate <= today
+    Object.values(progress.revisions).forEach(rec => {
+      if (rec.nextRevisionDate <= todayStr) {
+        dueCount++;
+      }
+    });
+
+    // Also count topics explicitly marked as 'needs-revision' if not already in revisions
+    Object.entries(progress.statuses).forEach(([id, status]) => {
+      if (status === 'needs-revision' && !progress.revisions[id]) {
+        dueCount++;
+      }
+    });
+
+    return dueCount;
+  };
+
+  const getRevisionRecord = (topicId: string): RevisionRecord | undefined => {
+    return progress.revisions[topicId];
   };
 
   const toggleStar = (topicId: string) => {
@@ -151,7 +261,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(progress, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `techswitch_progress_backup_${new Date().toISOString().split('T')[0]}.json`);
+    downloadAnchor.setAttribute("download", `techswitch_progress_backup_${getTodayISO()}.json`);
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -171,11 +281,13 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const resetProgress = () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getTodayISO();
     const initial: UserProgressState = {
       statuses: {},
       starred: {},
       notes: {},
+      revisions: {},
+      activeAlgorithm: 'smart-adaptive',
       streak: 1,
       lastActiveDate: todayStr,
       dailyGoal: 3,
@@ -190,7 +302,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const getTotalCount = (domain?: string): number => {
-    return 18; // total sample topics
+    return 18;
   };
 
   return (
@@ -198,6 +310,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       value={{
         progress,
         updateStatus,
+        recordRevision,
+        setAlgorithm,
         toggleStar,
         saveNote,
         updateDailyGoal,
@@ -205,7 +319,9 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         importProgressJSON,
         resetProgress,
         getMasteredCount,
-        getTotalCount
+        getTotalCount,
+        getDueRevisionsCount,
+        getRevisionRecord
       }}
     >
       {children}

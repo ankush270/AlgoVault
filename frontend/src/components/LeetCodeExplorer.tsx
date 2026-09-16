@@ -680,7 +680,7 @@ export const LeetCodeExplorer: React.FC = () => {
       </div>
 
       {/* 🔍 Search & Filter Console */}
-      <div className="bg-[#0D1322] border border-slate-800/90 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl">
+      <div className="bg-[#0D1322] border border-slate-800/90 rounded-2xl p-4 sm:p-6 space-y-4 shadow-xl relative z-30">
         {/* Search & Select Row */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* Main Search Bar */}

@@ -12,7 +12,8 @@ export const AnalyticsCharts: React.FC = () => {
 
   const domains: { id: DomainType; label: string; color: string }[] = [
     { id: 'dsa', label: 'DSA & Algorithms', color: 'bg-amber-400' },
-    { id: 'system-design', label: 'System Design (HLD/LLD)', color: 'bg-purple-400' },
+    { id: 'system-design', label: 'System Design (HLD)', color: 'bg-purple-400' },
+    { id: 'oops', label: 'OOPs & Low-Level Design', color: 'bg-orange-400' },
     { id: 'os', label: 'Operating Systems', color: 'bg-emerald-400' },
     { id: 'dbms-sql', label: 'DBMS & SQL', color: 'bg-cyan-400' },
     { id: 'computer-networks', label: 'Computer Networks', color: 'bg-rose-400' },

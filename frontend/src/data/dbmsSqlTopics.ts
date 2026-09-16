@@ -1,119 +1,121 @@
+import dbmsRoadmapData from '../../public/data/dbmsRoadmap.json';
 import { TopicItem } from '../types';
 
-export const dbmsSqlTopics: TopicItem[] = [
-  {
-    id: 'dbms-acid-transactions-isolation',
-    title: 'ACID Properties, Transaction Isolation Levels & Concurrency Control',
-    domain: 'dbms-sql',
-    category: 'Database Internals',
-    difficulty: 'Hard',
-    companyTags: ['Oracle', 'Amazon', 'Uber', 'Razorpay', 'Salesforce'],
-    importanceRating: 5,
-    summary: 'Core principles of database transactions: Atomicity, Consistency, Isolation, Durability, WAL (Write-Ahead Logging), and SQL isolation anomaly levels.',
-    keyConcepts: [
-      'ACID Guarantees & Write-Ahead Logging (WAL)',
-      '4 ANSI SQL Isolation Levels: Read Uncommitted, Read Committed, Repeatable Read, Serializable',
-      '3 Read Anomalies: Dirty Read, Non-Repeatable Read, Phantom Read',
-      'Two-Phase Locking (2PL) vs MVCC (Multi-Version Concurrency Control)'
-    ],
-    detailedContent: `
-### Isolation Levels vs Anomalies Matrix
-| Isolation Level | Dirty Read | Non-Repeatable Read | Phantom Read |
-| :--- | :--- | :--- | :--- |
-| **Read Uncommitted** | ❌ Allowed | ❌ Allowed | ❌ Allowed |
-| **Read Committed** (Default in Postgres) | ✅ Prevented | ❌ Allowed | ❌ Allowed |
-| **Repeatable Read** (Default in MySQL InnoDB) | ✅ Prevented | ✅ Prevented | ❌ Allowed (MVCC prevents in InnoDB) |
-| **Serializable** | ✅ Prevented | ✅ Prevented | ✅ Prevented |
+/**
+ * DBMS & SQL Topic Registry
+ * Dynamically generated from dbmsRoadmap.json (Single Source of Truth)
+ * Exhaustive, rich deep-dive explanations for all 16 modules
+ */
+const sections = (dbmsRoadmapData as any).sections || (dbmsRoadmapData as any).modules || [];
 
-### MVCC (Multi-Version Concurrency Control)
-PostgreSQL and MySQL InnoDB use MVCC for high concurrency.
-- Readers do not block writers, and writers do not block readers.
-- Each transaction sees a snapshot of data at a specific point in time (xmin / xmax transaction IDs).
-- Updates create new tuple versions rather than overwriting in place.
-    `,
-    interviewQuestions: [
-      {
-        question: 'What is a Phantom Read and how is it different from a Non-Repeatable Read?',
-        answer: 'Non-Repeatable Read occurs when Transaction A reads a row, Transaction B updates that row and commits, then Transaction A re-reads the SAME row and sees changed values. Phantom Read occurs when Transaction A runs a range query (e.g. count WHERE age > 25), Transaction B INSERTS a new row matching that condition and commits, then Transaction A re-runs range query and sees new "phantom" rows.'
-      }
-    ]
-  },
-  {
-    id: 'dbms-indexing-b-trees',
-    title: 'Database Indexing: B-Trees, B+ Trees, Hash Index & Indexing Strategies',
-    domain: 'dbms-sql',
-    category: 'Indexing & Optimization',
-    difficulty: 'Medium',
-    companyTags: ['Google', 'Amazon', 'Meta', 'LinkedIn', 'Uber'],
-    importanceRating: 5,
-    summary: 'Understanding how database indices speed up queries, B+ Tree leaf node linked list chaining, Clustered vs Secondary Index, and Composite Index Leftmost Prefix Rule.',
-    keyConcepts: [
-      'Why B+ Trees are preferred over Binary Search Trees or B-Trees for Disk Storage',
-      'Clustered Index (Primary key ordering) vs Non-Clustered/Secondary Index',
-      'Composite Index & Leftmost Prefix Rule',
-      'Index Covering Query optimization'
-    ],
-    detailedContent: `
-### Why B+ Trees for Disk Storage?
-1. **High Fanout & Low Tree Height**: B+ Trees have high node capacity (hundreds of keys per page), resulting in 3-4 tree depth even for billions of records ($O(\\log_B N)$ Disk I/Os).
-2. **Sequential Leaf Node Scan**: Data pointers are stored ONLY in leaf nodes. Leaf nodes are linked together as a doubly linked list, enabling fast range queries (\`WHERE age BETWEEN 20 AND 30\`).
+export const dbmsSqlTopics: TopicItem[] = sections.flatMap((section: any) =>
+  section.topics.map((t: any) => {
+    let diff: 'Easy' | 'Medium' | 'Hard' = 'Medium';
+    const rawDiff = (t.difficulty || section.difficulty || 'medium').toLowerCase();
+    if (rawDiff === 'beginner' || rawDiff === 'easy') diff = 'Easy';
+    if (rawDiff === 'intermediate' || rawDiff === 'medium') diff = 'Medium';
+    if (rawDiff === 'advanced' || rawDiff === 'hard') diff = 'Hard';
 
-### Composite Index (a, b, c) Rule
-An index on \`(a, b, c)\` can satisfy queries filtering on:
-- \`WHERE a = 1\`
-- \`WHERE a = 1 AND b = 2\`
-- \`WHERE a = 1 AND b = 2 AND c = 3\`
-It CANNOT utilize the index for queries like \`WHERE b = 2\` without \`a\`!
-    `,
-    interviewQuestions: [
-      {
-        question: 'What is a Covering Index in SQL optimization?',
-        answer: 'A Covering Index is a secondary index that includes all the columns referenced in a SELECT query (both SELECT clause and WHERE clause). Because all needed columns exist inside the index tree, the database engine executes an Index Only Scan without incurring expensive disk lookup table fetches.'
-      }
-    ]
-  },
-  {
-    id: 'dbms-sql-queries-window-functions',
-    title: 'SQL Masterclass: Joins, Subqueries & Window Functions (ROW_NUMBER, DENSE_RANK)',
-    domain: 'dbms-sql',
-    category: 'SQL Practice',
-    difficulty: 'Medium',
-    companyTags: ['Amazon', 'Flipkart', 'Swiggy', 'PhonePe', 'Paytm'],
-    importanceRating: 5,
-    summary: 'Advanced SQL query writing, GROUP BY, HAVING, INNER/LEFT/FULL OUTER JOINs, and Analytic Window functions.',
-    keyConcepts: [
-      'ROW_NUMBER() vs RANK() vs DENSE_RANK()',
-      'PARTITION BY & ORDER BY clause in Window Functions',
-      'Self Join & Recursive CTEs for Hierarchical Data',
-      'GROUP BY aggregation vs HAVING clause filtering'
-    ],
-    detailedContent: `
-### Window Function Difference
-Given salaries: \`[100, 100, 90, 80]\`:
-- \`ROW_NUMBER()\`: \`1, 2, 3, 4\` (Unique strict sequence)
-- \`RANK()\`: \`1, 1, 3, 4\` (Ties get same rank, skips next number)
-- \`DENSE_RANK()\`: \`1, 1, 2, 3\` (Ties get same rank, NO skipping)
+    const defaultCompanyTags = [
+      'PostgreSQL',
+      'MySQL',
+      'Oracle',
+      'Amazon',
+      'Google',
+      'Uber',
+      'Razorpay',
+      'Microsoft',
+    ];
 
-### Example Query: Finding 2nd Highest Salary per Department
-\`\`\`sql
-WITH RankedSalaries AS (
-  SELECT 
-    emp_id, 
-    dept_id, 
-    salary,
-    DENSE_RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) as rnk
-  FROM employees
-)
-SELECT emp_id, dept_id, salary
-FROM RankedSalaries
-WHERE rnk = 2;
-\`\`\`
-    `,
-    interviewQuestions: [
-      {
-        question: 'What is the execution order of a standard SQL SELECT statement?',
-        answer: '1. FROM & JOINs -> 2. WHERE -> 3. GROUP BY -> 4. HAVING -> 5. SELECT -> 6. WINDOW Functions -> 7. DISTINCT -> 8. ORDER BY -> 9. LIMIT / OFFSET.'
-      }
-    ]
-  }
-];
+    const cleanTitle = t.title;
+    const topicIdStr = t.topicId ? t.topicId.replace('.', '-') : t.id;
+
+    // Detailed Markdown Content Generation
+    const mdLines: string[] = [];
+    mdLines.push(`### 📌 ${cleanTitle}\n`);
+
+    if (t.what_is_it) {
+      mdLines.push(`**What is it?**  \n${t.what_is_it}\n`);
+    }
+
+    if (t.simple_explanation) {
+      mdLines.push(`### 💡 Simple Explanation\n${t.simple_explanation}\n`);
+    }
+
+    if (t.real_world_analogy) {
+      mdLines.push(`> 🏢 **Real-World Analogy**:  \n> ${t.real_world_analogy}\n`);
+    }
+
+    if (t.why_it_exists && Array.isArray(t.why_it_exists) && t.why_it_exists.length > 0) {
+      mdLines.push(`### 🎯 Why It Exists & Core Objectives`);
+      t.why_it_exists.forEach((item: string) => mdLines.push(`- ${item}`));
+      mdLines.push('');
+    }
+
+    if (t.tech_world && Array.isArray(t.tech_world) && t.tech_world.length > 0) {
+      mdLines.push(`### 🌐 Real World & Tech Industry Usage`);
+      t.tech_world.forEach((item: string) => mdLines.push(`- ${item}`));
+      mdLines.push('');
+    }
+
+    if (t.key_points && Array.isArray(t.key_points) && t.key_points.length > 0) {
+      mdLines.push(`### 🔑 Key Takeaways & Core Concepts`);
+      t.key_points.forEach((item: string) => mdLines.push(`- ${item}`));
+      mdLines.push('');
+    }
+
+    if (t.syntaxOrCode) {
+      mdLines.push(`### 💻 SQL Syntax / Execution Plan / Diagram\n\`\`\`sql\n${t.syntaxOrCode}\n\`\`\`\n`);
+    }
+
+    if (t.quickRevisionNotes && Array.isArray(t.quickRevisionNotes) && t.quickRevisionNotes.length > 0) {
+      mdLines.push(`### 📝 Quick Revision & Interview Takeaways`);
+      t.quickRevisionNotes.forEach((item: string) => mdLines.push(`- ${item}`));
+      mdLines.push('');
+    }
+
+    if (t.interview_focus && Array.isArray(t.interview_focus) && t.interview_focus.length > 0) {
+      mdLines.push(`### 🎯 Top Interview Focus Areas`);
+      t.interview_focus.forEach((item: string) => mdLines.push(`- ${item}`));
+      mdLines.push('');
+    }
+
+    const detailedContent = mdLines.join('\n');
+
+    // Interview Questions
+    let interviewQuestions: { question: string; answer: string }[] | undefined = undefined;
+    if (t.interview_questions && Array.isArray(t.interview_questions) && t.interview_questions.length > 0) {
+      interviewQuestions = t.interview_questions.map((iq: any) => ({
+        question: iq.question,
+        answer: iq.answer,
+      }));
+    } else if (t.quickRevisionNotes && Array.isArray(t.quickRevisionNotes)) {
+      interviewQuestions = t.quickRevisionNotes.map((note: string, idx: number) => ({
+        question: `Key Takeaway #${idx + 1} for ${cleanTitle}`,
+        answer: note,
+      }));
+    }
+
+    return {
+      id: `dbms-${topicIdStr}`,
+      title: cleanTitle,
+      domain: 'dbms-sql' as const,
+      category: section.title.includes(': ') ? section.title.split(': ')[1] : section.title,
+      difficulty: diff,
+      companyTags: defaultCompanyTags,
+      importanceRating: (section.moduleNumber || 1) > 10 ? 5 : 4,
+      summary: (t.simple_explanation || t.what_is_it || '').slice(0, 160) + '...',
+      keyConcepts: t.key_points || t.keyConcepts || [cleanTitle],
+      detailedContent: detailedContent,
+      codeTemplates: t.syntaxOrCode
+        ? [
+            {
+              language: 'sql' as const,
+              code: t.syntaxOrCode,
+            },
+          ]
+        : undefined,
+      interviewQuestions: interviewQuestions,
+    };
+  })
+);

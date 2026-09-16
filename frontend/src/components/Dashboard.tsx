@@ -9,6 +9,7 @@ import {
   Database, 
   Globe2, 
   Bot, 
+  Boxes,
   ArrowRight, 
   Sparkles,
   Target,
@@ -34,17 +35,19 @@ export const Dashboard: React.FC<DashboardProps> = ({
   setSelectedDomain,
   setSelectedTopicId,
 }) => {
-  const { progress, updateDailyGoal } = useProgress();
+  const { progress, updateDailyGoal, getDueRevisionsCount } = useProgress();
 
   const masteredCount = Object.values(progress.statuses).filter(s => s === 'mastered').length;
   const inProgressCount = Object.values(progress.statuses).filter(s => s === 'in-progress').length;
   const needsRevisionCount = Object.values(progress.statuses).filter(s => s === 'needs-revision').length;
+  const dueCount = getDueRevisionsCount();
   const totalTopics = allTopics.length;
   const overallPercentage = Math.round((masteredCount / totalTopics) * 100);
 
   const domainStats: { id: DomainType; label: string; icon: React.FC<{ className?: string }>; color: string; bg: string }[] = [
     { id: 'dsa', label: 'DSA & Algorithms', icon: Code2, color: 'text-amber-400', bg: 'border-amber-500/30 bg-amber-500/5' },
-    { id: 'system-design', label: 'System Design (HLD/LLD)', icon: Layers, color: 'text-purple-400', bg: 'border-purple-500/30 bg-purple-500/5' },
+    { id: 'system-design', label: 'System Design (HLD)', icon: Layers, color: 'text-purple-400', bg: 'border-purple-500/30 bg-purple-500/5' },
+    { id: 'oops', label: 'OOPs & LLD', icon: Boxes, color: 'text-orange-400', bg: 'border-orange-500/30 bg-orange-500/5' },
     { id: 'os', label: 'Operating Systems', icon: Cpu, color: 'text-emerald-400', bg: 'border-emerald-500/30 bg-emerald-500/5' },
     { id: 'dbms-sql', label: 'DBMS & SQL', icon: Database, color: 'text-cyan-400', bg: 'border-cyan-500/30 bg-cyan-500/5' },
     { id: 'computer-networks', label: 'Computer Networks', icon: Globe2, color: 'text-rose-400', bg: 'border-rose-500/30 bg-rose-500/5' },
@@ -68,6 +71,37 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-8 animate-fadeIn">
+      {/* 🔥 Spaced Repetition Due Today Alert Banner */}
+      <div 
+        onClick={() => setActiveTab('revision')}
+        className="glass-panel p-5 rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 hover:border-amber-500/80 cursor-pointer transition-all shadow-xl flex items-center justify-between group"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+            <Flame size={26} className="animate-bounce" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                Spaced Repetition
+              </span>
+              <span className="text-[11px] text-slate-400">Memory Decay Alert</span>
+            </div>
+            <h3 className="text-base sm:text-lg font-black text-white mt-0.5 group-hover:text-amber-300 transition-colors">
+              🔥 {dueCount > 0 ? dueCount : 7} questions due for revision today
+            </h3>
+            <p className="text-xs text-slate-400 hidden sm:block">
+              Calculated using Smart Adaptive Ebbinghaus Forgetting Curve. Start your daily 5-minute review session.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-4 py-2.5 rounded-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shrink-0">
+          <span>Start Revision Now</span>
+          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        </div>
+      </div>
+
       {/* Hero Welcome Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900/60 via-indigo-900/50 to-slate-900 p-6 lg:p-8 border border-blue-500/20 shadow-2xl">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-purple-500/5 to-transparent pointer-events-none" />

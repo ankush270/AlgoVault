@@ -1,0 +1,1500 @@
+{
+  "metadata": {
+    "total_experiences": 627,
+    "total_companies": 365,
+    "total_chunk_files": 4,
+    "generated_at": "2026-09-16T22:27:53.633487"
+  },
+  "dataset_files": [
+    {
+      "file": "interview_dataset_part1_A_to_D.json",
+      "group": "part1_A_to_D",
+      "companies_count": 97,
+      "experiences_count": 205,
+      "size_mb": 0.76
+    },
+    {
+      "file": "interview_dataset_part2_E_to_L.json",
+      "group": "part2_E_to_L",
+      "companies_count": 87,
+      "experiences_count": 148,
+      "size_mb": 0.49
+    },
+    {
+      "file": "interview_dataset_part3_M_to_R.json",
+      "group": "part3_M_to_R",
+      "companies_count": 82,
+      "experiences_count": 131,
+      "size_mb": 0.45
+    },
+    {
+      "file": "interview_dataset_part4_S_to_Z.json",
+      "group": "part4_S_to_Z",
+      "companies_count": 99,
+      "experiences_count": 143,
+      "size_mb": 0.5
+    }
+  ],
+  "companies_summary": [
+    {
+      "company": "Accenture",
+      "total_experiences": 39
+    },
+    {
+      "company": "Amazon",
+      "total_experiences": 22
+    },
+    {
+      "company": "Oracle",
+      "total_experiences": 18
+    },
+    {
+      "company": "Deloitte",
+      "total_experiences": 15
+    },
+    {
+      "company": "Google",
+      "total_experiences": 14
+    },
+    {
+      "company": "General",
+      "total_experiences": 13
+    },
+    {
+      "company": "Cognizant",
+      "total_experiences": 11
+    },
+    {
+      "company": "Cisco",
+      "total_experiences": 8
+    },
+    {
+      "company": "Microsoft",
+      "total_experiences": 7
+    },
+    {
+      "company": "Paltech",
+      "total_experiences": 7
+    },
+    {
+      "company": "Sap Labs",
+      "total_experiences": 7
+    },
+    {
+      "company": "Siemens",
+      "total_experiences": 7
+    },
+    {
+      "company": "Zoho",
+      "total_experiences": 6
+    },
+    {
+      "company": "Goldman Sachs",
+      "total_experiences": 5
+    },
+    {
+      "company": "Ibm",
+      "total_experiences": 5
+    },
+    {
+      "company": "Samsung",
+      "total_experiences": 5
+    },
+    {
+      "company": "Tech Mahindra",
+      "total_experiences": 5
+    },
+    {
+      "company": "Walmart",
+      "total_experiences": 5
+    },
+    {
+      "company": "Atlassian",
+      "total_experiences": 4
+    },
+    {
+      "company": "Capgemini",
+      "total_experiences": 4
+    },
+    {
+      "company": "Global Logic",
+      "total_experiences": 4
+    },
+    {
+      "company": "Meesho",
+      "total_experiences": 4
+    },
+    {
+      "company": "Multicoreware",
+      "total_experiences": 4
+    },
+    {
+      "company": "Nvidia",
+      "total_experiences": 4
+    },
+    {
+      "company": "Wells Fargo",
+      "total_experiences": 4
+    },
+    {
+      "company": "Wipro",
+      "total_experiences": 4
+    },
+    {
+      "company": "Adobe",
+      "total_experiences": 3
+    },
+    {
+      "company": "Deutsche Bank",
+      "total_experiences": 3
+    },
+    {
+      "company": "Ey Gds",
+      "total_experiences": 3
+    },
+    {
+      "company": "Flipkart",
+      "total_experiences": 3
+    },
+    {
+      "company": "HCL Tech",
+      "total_experiences": 3
+    },
+    {
+      "company": "Ion Group",
+      "total_experiences": 3
+    },
+    {
+      "company": "Josh Technology",
+      "total_experiences": 3
+    },
+    {
+      "company": "London Stock Exchange Group Lseg",
+      "total_experiences": 3
+    },
+    {
+      "company": "Ltimindtree",
+      "total_experiences": 3
+    },
+    {
+      "company": "Mastercard",
+      "total_experiences": 3
+    },
+    {
+      "company": "Optum",
+      "total_experiences": 3
+    },
+    {
+      "company": "Aci Worldwide",
+      "total_experiences": 2
+    },
+    {
+      "company": "Amadeus Labs",
+      "total_experiences": 2
+    },
+    {
+      "company": "American Express",
+      "total_experiences": 2
+    },
+    {
+      "company": "Aptiv",
+      "total_experiences": 2
+    },
+    {
+      "company": "Argusoft",
+      "total_experiences": 2
+    },
+    {
+      "company": "Blackrock",
+      "total_experiences": 2
+    },
+    {
+      "company": "Catalog",
+      "total_experiences": 2
+    },
+    {
+      "company": "Codingmart Technologies",
+      "total_experiences": 2
+    },
+    {
+      "company": "Energy Exemplar",
+      "total_experiences": 2
+    },
+    {
+      "company": "Ey",
+      "total_experiences": 2
+    },
+    {
+      "company": "Genpact",
+      "total_experiences": 2
+    },
+    {
+      "company": "Globallogic",
+      "total_experiences": 2
+    },
+    {
+      "company": "Hcltech",
+      "total_experiences": 2
+    },
+    {
+      "company": "Hexaware",
+      "total_experiences": 2
+    },
+    {
+      "company": "Hexaware Technologies",
+      "total_experiences": 2
+    },
+    {
+      "company": "Indmoney",
+      "total_experiences": 2
+    },
+    {
+      "company": "JPMorgan Chase",
+      "total_experiences": 2
+    },
+    {
+      "company": "Kpit",
+      "total_experiences": 2
+    },
+    {
+      "company": "Lti Mindtree",
+      "total_experiences": 2
+    },
+    {
+      "company": "Mathco",
+      "total_experiences": 2
+    },
+    {
+      "company": "Mindfire Solutions",
+      "total_experiences": 2
+    },
+    {
+      "company": "Nice Systems",
+      "total_experiences": 2
+    },
+    {
+      "company": "Okta",
+      "total_experiences": 2
+    },
+    {
+      "company": "Phonepe",
+      "total_experiences": 2
+    },
+    {
+      "company": "Quantiphi",
+      "total_experiences": 2
+    },
+    {
+      "company": "Rtcamp",
+      "total_experiences": 2
+    },
+    {
+      "company": "Sharechat",
+      "total_experiences": 2
+    },
+    {
+      "company": "Tiger Analytics",
+      "total_experiences": 2
+    },
+    {
+      "company": "Toshiba",
+      "total_experiences": 2
+    },
+    {
+      "company": "Ubs",
+      "total_experiences": 2
+    },
+    {
+      "company": "Ukg",
+      "total_experiences": 2
+    },
+    {
+      "company": "Unthinkable Solutions",
+      "total_experiences": 2
+    },
+    {
+      "company": "Zoho Corporation",
+      "total_experiences": 2
+    },
+    {
+      "company": "Zomato",
+      "total_experiences": 2
+    },
+    {
+      "company": "Zs Associates",
+      "total_experiences": 2
+    },
+    {
+      "company": "Aantaric Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Acko Insuretech",
+      "total_experiences": 1
+    },
+    {
+      "company": "Affinsys Ai",
+      "total_experiences": 1
+    },
+    {
+      "company": "Airbus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Airtel",
+      "total_experiences": 1
+    },
+    {
+      "company": "Akamai Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Algosec",
+      "total_experiences": 1
+    },
+    {
+      "company": "Alight Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Amdocs",
+      "total_experiences": 1
+    },
+    {
+      "company": "American Express Amex Online Assessment Oa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ami American Megatrends International",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ansys Software Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Anz",
+      "total_experiences": 1
+    },
+    {
+      "company": "Apple",
+      "total_experiences": 1
+    },
+    {
+      "company": "Aqeeq Technologies Internship",
+      "total_experiences": 1
+    },
+    {
+      "company": "Argano",
+      "total_experiences": 1
+    },
+    {
+      "company": "Arista",
+      "total_experiences": 1
+    },
+    {
+      "company": "Arista Networks",
+      "total_experiences": 1
+    },
+    {
+      "company": "Arm",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ascent Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ast Consulting",
+      "total_experiences": 1
+    },
+    {
+      "company": "Athenahealth",
+      "total_experiences": 1
+    },
+    {
+      "company": "Autodesk",
+      "total_experiences": 1
+    },
+    {
+      "company": "Avalara",
+      "total_experiences": 1
+    },
+    {
+      "company": "Avaya",
+      "total_experiences": 1
+    },
+    {
+      "company": "Avintree Software Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bain Company Bcn",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bank Of America",
+      "total_experiences": 1
+    },
+    {
+      "company": "Barclays",
+      "total_experiences": 1
+    },
+    {
+      "company": "Barclays Bgsc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bharti Airtel Limited",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bhel",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bignit",
+      "total_experiences": 1
+    },
+    {
+      "company": "Blackrock Sde",
+      "total_experiences": 1
+    },
+    {
+      "company": "Blackwins Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bm Infotrade Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Box8",
+      "total_experiences": 1
+    },
+    {
+      "company": "Brane Enterprises Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Brillio",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bristol Myers Squibb",
+      "total_experiences": 1
+    },
+    {
+      "company": "Broadridge",
+      "total_experiences": 1
+    },
+    {
+      "company": "Capegemini",
+      "total_experiences": 1
+    },
+    {
+      "company": "Capillary Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cartrade Tech Limited",
+      "total_experiences": 1
+    },
+    {
+      "company": "Caterpillar",
+      "total_experiences": 1
+    },
+    {
+      "company": "Caterpillar Inc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cboe Global Markets Cboe",
+      "total_experiences": 1
+    },
+    {
+      "company": "Checktronix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Chubb Business Services",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cis",
+      "total_experiences": 1
+    },
+    {
+      "company": "Citi Bank",
+      "total_experiences": 1
+    },
+    {
+      "company": "Coforge",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cohesity",
+      "total_experiences": 1
+    },
+    {
+      "company": "Colgate Global Business Services",
+      "total_experiences": 1
+    },
+    {
+      "company": "Colorplast",
+      "total_experiences": 1
+    },
+    {
+      "company": "Comcast",
+      "total_experiences": 1
+    },
+    {
+      "company": "Commonwealth Bank Of Australia",
+      "total_experiences": 1
+    },
+    {
+      "company": "Consultadd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Consultadd Services",
+      "total_experiences": 1
+    },
+    {
+      "company": "Coral Telecom",
+      "total_experiences": 1
+    },
+    {
+      "company": "Couchbase Ui Ux Role Full Time On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Coupa Software",
+      "total_experiences": 1
+    },
+    {
+      "company": "Covalience",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cred",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cruv Internship",
+      "total_experiences": 1
+    },
+    {
+      "company": "Csir Scientist",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cvent",
+      "total_experiences": 1
+    },
+    {
+      "company": "D.E.Shaw Ascend Educare Program For Women",
+      "total_experiences": 1
+    },
+    {
+      "company": "D E Shaw",
+      "total_experiences": 1
+    },
+    {
+      "company": "Darwin Box",
+      "total_experiences": 1
+    },
+    {
+      "company": "Datagrokr",
+      "total_experiences": 1
+    },
+    {
+      "company": "Datazip Inc",
+      "total_experiences": 1
+    },
+    {
+      "company": "De Shaw",
+      "total_experiences": 1
+    },
+    {
+      "company": "De Shaw Group",
+      "total_experiences": 1
+    },
+    {
+      "company": "Dealermatix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Deliveroo",
+      "total_experiences": 1
+    },
+    {
+      "company": "Delloite Us",
+      "total_experiences": 1
+    },
+    {
+      "company": "Derrick Jones Management",
+      "total_experiences": 1
+    },
+    {
+      "company": "Deutsche Telecom",
+      "total_experiences": 1
+    },
+    {
+      "company": "Dish Network Technologies On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Edgeverve",
+      "total_experiences": 1
+    },
+    {
+      "company": "Educational Initiatives",
+      "total_experiences": 1
+    },
+    {
+      "company": "Embedur",
+      "total_experiences": 1
+    },
+    {
+      "company": "Entrata India",
+      "total_experiences": 1
+    },
+    {
+      "company": "Epam",
+      "total_experiences": 1
+    },
+    {
+      "company": "Epam Systems",
+      "total_experiences": 1
+    },
+    {
+      "company": "Eucloid Data Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Experience At Xceedence On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Facilio",
+      "total_experiences": 1
+    },
+    {
+      "company": "Fanatics",
+      "total_experiences": 1
+    },
+    {
+      "company": "Fico",
+      "total_experiences": 1
+    },
+    {
+      "company": "Fidelity Investments",
+      "total_experiences": 1
+    },
+    {
+      "company": "Finzly",
+      "total_experiences": 1
+    },
+    {
+      "company": "Fractal Analytics",
+      "total_experiences": 1
+    },
+    {
+      "company": "From Nervous To Hired An Honest",
+      "total_experiences": 1
+    },
+    {
+      "company": "Frontend Developer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Futures First",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gail",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gameskraft",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gap",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gazelle Information Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ge Healthcare",
+      "total_experiences": 1
+    },
+    {
+      "company": "Globallogic Hitachi",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gocomet",
+      "total_experiences": 1
+    },
+    {
+      "company": "Grape City",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gyansys",
+      "total_experiences": 1
+    },
+    {
+      "company": "HP",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hackwithinfy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hashedin Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Herald Logic",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hewlett Packard Enterprisehp",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hitachi Energy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Honeywell Company",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hsbc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ibm Ciocampus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ibs Software",
+      "total_experiences": 1
+    },
+    {
+      "company": "Icici Bank",
+      "total_experiences": 1
+    },
+    {
+      "company": "Idfc First Bank",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ignis It Solution",
+      "total_experiences": 1
+    },
+    {
+      "company": "Iit Gandhinagar",
+      "total_experiences": 1
+    },
+    {
+      "company": "Iit Mandi Dual Degree Mtechr Phd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Informatica",
+      "total_experiences": 1
+    },
+    {
+      "company": "Inmobi",
+      "total_experiences": 1
+    },
+    {
+      "company": "Inorg Global",
+      "total_experiences": 1
+    },
+    {
+      "company": "Intimtec",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ion",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ion Groups",
+      "total_experiences": 1
+    },
+    {
+      "company": "Isro",
+      "total_experiences": 1
+    },
+    {
+      "company": "Jaguar And Land Rover",
+      "total_experiences": 1
+    },
+    {
+      "company": "Jaguar Land Rover",
+      "total_experiences": 1
+    },
+    {
+      "company": "Jasmin Infotech Private Limited",
+      "total_experiences": 1
+    },
+    {
+      "company": "Jindal Steel Power Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Jones Lang Lasalle Jll",
+      "total_experiences": 1
+    },
+    {
+      "company": "Junglee Games",
+      "total_experiences": 1
+    },
+    {
+      "company": "Juspay",
+      "total_experiences": 1
+    },
+    {
+      "company": "Kotak Mahindra",
+      "total_experiences": 1
+    },
+    {
+      "company": "Kpmg",
+      "total_experiences": 1
+    },
+    {
+      "company": "Kylas",
+      "total_experiences": 1
+    },
+    {
+      "company": "L T Financial Services Ltfs",
+      "total_experiences": 1
+    },
+    {
+      "company": "Learntek",
+      "total_experiences": 1
+    },
+    {
+      "company": "Lg Soft",
+      "total_experiences": 1
+    },
+    {
+      "company": "Lg Soft India",
+      "total_experiences": 1
+    },
+    {
+      "company": "Lti Mindtree On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Lumber",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mahindra Comviva",
+      "total_experiences": 1
+    },
+    {
+      "company": "Make My Trip",
+      "total_experiences": 1
+    },
+    {
+      "company": "Marvell Technology",
+      "total_experiences": 1
+    },
+    {
+      "company": "Maximl",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mckinsey",
+      "total_experiences": 1
+    },
+    {
+      "company": "Media Net",
+      "total_experiences": 1
+    },
+    {
+      "company": "Meesho Dice Exam",
+      "total_experiences": 1
+    },
+    {
+      "company": "Merilytics",
+      "total_experiences": 1
+    },
+    {
+      "company": "Meta",
+      "total_experiences": 1
+    },
+    {
+      "company": "Meti Internship Application Process And",
+      "total_experiences": 1
+    },
+    {
+      "company": "Micron Technology",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mindsprint Digital",
+      "total_experiences": 1
+    },
+    {
+      "company": "Miq Digital Linterview",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mitsogo",
+      "total_experiences": 1
+    },
+    {
+      "company": "Modak Analytics",
+      "total_experiences": 1
+    },
+    {
+      "company": "Monocept",
+      "total_experiences": 1
+    },
+    {
+      "company": "Morgan Stanley",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mphasis",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mu Sigma",
+      "total_experiences": 1
+    },
+    {
+      "company": "Musigma",
+      "total_experiences": 1
+    },
+    {
+      "company": "My Brother",
+      "total_experiences": 1
+    },
+    {
+      "company": "Myntra",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ncr Corporation",
+      "total_experiences": 1
+    },
+    {
+      "company": "Neenopal",
+      "total_experiences": 1
+    },
+    {
+      "company": "Neokred",
+      "total_experiences": 1
+    },
+    {
+      "company": "Netflix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Netradyne",
+      "total_experiences": 1
+    },
+    {
+      "company": "New Relic",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ninjacart Sde",
+      "total_experiences": 1
+    },
+    {
+      "company": "Nstl-Drdo",
+      "total_experiences": 1
+    },
+    {
+      "company": "Nutanix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Nvdia",
+      "total_experiences": 1
+    },
+    {
+      "company": "Nvent",
+      "total_experiences": 1
+    },
+    {
+      "company": "O2H",
+      "total_experiences": 1
+    },
+    {
+      "company": "Odoo",
+      "total_experiences": 1
+    },
+    {
+      "company": "Olx",
+      "total_experiences": 1
+    },
+    {
+      "company": "Omniscient Software Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ongc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Onix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Onlinesales Ai",
+      "total_experiences": 1
+    },
+    {
+      "company": "Opentext",
+      "total_experiences": 1
+    },
+    {
+      "company": "Orange Business",
+      "total_experiences": 1
+    },
+    {
+      "company": "Osmosys",
+      "total_experiences": 1
+    },
+    {
+      "company": "Outlier Ai",
+      "total_experiences": 1
+    },
+    {
+      "company": "Oyo Rooms",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pandoai",
+      "total_experiences": 1
+    },
+    {
+      "company": "Paypal",
+      "total_experiences": 1
+    },
+    {
+      "company": "Paypal India",
+      "total_experiences": 1
+    },
+    {
+      "company": "Paytm",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pegasystems Associate System Architect On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pharmeasy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pie Infotech Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Polestar Solutions And Services",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pratt And Whitney",
+      "total_experiences": 1
+    },
+    {
+      "company": "Publicis Sapient",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pwc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Qualcomm",
+      "total_experiences": 1
+    },
+    {
+      "company": "Qualcomm Hardware",
+      "total_experiences": 1
+    },
+    {
+      "company": "Quality Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rakuten Symphony",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rapi Pay",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rappit Io Formerly Known As Vanenburg",
+      "total_experiences": 1
+    },
+    {
+      "company": "Remotestate On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Reverie Language Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rpsc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rsl",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rubrik",
+      "total_experiences": 1
+    },
+    {
+      "company": "Salesforce",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sap",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sap Labs Summer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sapient",
+      "total_experiences": 1
+    },
+    {
+      "company": "Schneider Electric Technical",
+      "total_experiences": 1
+    },
+    {
+      "company": "Securonix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Seimens Disw Internship",
+      "total_experiences": 1
+    },
+    {
+      "company": "Seimens Eda",
+      "total_experiences": 1
+    },
+    {
+      "company": "Servicenow",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sewacity",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sigmoid",
+      "total_experiences": 1
+    },
+    {
+      "company": "Simplify 360",
+      "total_experiences": 1
+    },
+    {
+      "company": "Skava",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sms Magic  Assesement Round",
+      "total_experiences": 1
+    },
+    {
+      "company": "Societe Generale",
+      "total_experiences": 1
+    },
+    {
+      "company": "Software Engineering",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sogolytics",
+      "total_experiences": 1
+    },
+    {
+      "company": "Solugenix",
+      "total_experiences": 1
+    },
+    {
+      "company": "Soti",
+      "total_experiences": 1
+    },
+    {
+      "company": "Spense",
+      "total_experiences": 1
+    },
+    {
+      "company": "Springworks",
+      "total_experiences": 1
+    },
+    {
+      "company": "Squadcast Labs Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Standard Chartered Gbs",
+      "total_experiences": 1
+    },
+    {
+      "company": "State Street",
+      "total_experiences": 1
+    },
+    {
+      "company": "Stonex",
+      "total_experiences": 1
+    },
+    {
+      "company": "Straive Gramener",
+      "total_experiences": 1
+    },
+    {
+      "company": "Subex",
+      "total_experiences": 1
+    },
+    {
+      "company": "Swiggy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Synergies Castings Limited",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tally Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tata 1Mg",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tech Curators Tc Group Company",
+      "total_experiences": 1
+    },
+    {
+      "company": "Techcorp",
+      "total_experiences": 1
+    },
+    {
+      "company": "Technoverse Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Techwave Innovations",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tejas Networks",
+      "total_experiences": 1
+    },
+    {
+      "company": "Telaverge Communications",
+      "total_experiences": 1
+    },
+    {
+      "company": "Texas Instruments",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tharsio Limited",
+      "total_experiences": 1
+    },
+    {
+      "company": "Thinkbridge",
+      "total_experiences": 1
+    },
+    {
+      "company": "Thoughtworks",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tracelink",
+      "total_experiences": 1
+    },
+    {
+      "company": "Trimble",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tudip Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Turing",
+      "total_experiences": 1
+    },
+    {
+      "company": "Twenty Point Nine Five Ventures",
+      "total_experiences": 1
+    },
+    {
+      "company": "Uber",
+      "total_experiences": 1
+    },
+    {
+      "company": "Uncover Wellness Meddo Health",
+      "total_experiences": 1
+    },
+    {
+      "company": "Uneecops Technologies Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Unilever",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ust",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ust Global",
+      "total_experiences": 1
+    },
+    {
+      "company": "Vaken Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Value Momentum",
+      "total_experiences": 1
+    },
+    {
+      "company": "Veersa Technology",
+      "total_experiences": 1
+    },
+    {
+      "company": "Verizon",
+      "total_experiences": 1
+    },
+    {
+      "company": "Visa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Vois",
+      "total_experiences": 1
+    },
+    {
+      "company": "Wahni It Solutions",
+      "total_experiences": 1
+    },
+    {
+      "company": "Webknot Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Webkorps Services India",
+      "total_experiences": 1
+    },
+    {
+      "company": "West Pharma",
+      "total_experiences": 1
+    },
+    {
+      "company": "Winwire Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Wns Vuram",
+      "total_experiences": 1
+    },
+    {
+      "company": "Wtw",
+      "total_experiences": 1
+    },
+    {
+      "company": "Xoriant Associate Software Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Xyz Company",
+      "total_experiences": 1
+    },
+    {
+      "company": "Yamaha",
+      "total_experiences": 1
+    },
+    {
+      "company": "Yamaha Motors Solution India Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Yardi Software India Pvt Ltd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Yen Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zapcom",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zenoti",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zentech India",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zeta",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zeus Learning",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zeus Learninginterview",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zoom Car",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zopsmart Internship Fte On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zs Llm Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zscaler",
+      "total_experiences": 1
+    },
+    {
+      "company": "Zupee",
+      "total_experiences": 1
+    }
+  ]
+}

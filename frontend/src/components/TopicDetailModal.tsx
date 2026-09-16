@@ -17,12 +17,133 @@ import {
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus, CodeTemplate } from '../types';
+import { DifficultyRatingModal } from './common/DifficultyRatingModal';
 
 interface TopicDetailModalProps {
   topic: TopicItem | null;
   onClose: () => void;
   onOpenNote: (topicId: string, topicTitle: string) => void;
 }
+
+// Formatted Markdown Renderer Helper Component
+const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
+  if (!content) return null;
+
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let inCodeBlock = false;
+  let codeBuffer: string[] = [];
+
+  const processInlineFormatting = (text: string) => {
+    // Split by **bold**, *italic*, and `code`
+    const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={index} className="font-bold text-white">{part.slice(2, -2)}</strong>;
+      }
+      if (part.startsWith('*') && part.endsWith('*')) {
+        return <em key={index} className="italic text-slate-300">{part.slice(1, -1)}</em>;
+      }
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return <code key={index} className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 font-mono text-cyan-300 text-xs">{part.slice(1, -1)}</code>;
+      }
+      return part;
+    });
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+
+    // Code block toggle
+    if (trimmed.startsWith('```')) {
+      if (inCodeBlock) {
+        elements.push(
+          <div key={`code-${index}`} className="my-3 p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-cyan-300 overflow-x-auto">
+            <pre>{codeBuffer.join('\n')}</pre>
+          </div>
+        );
+        codeBuffer = [];
+        inCodeBlock = false;
+      } else {
+        inCodeBlock = true;
+      }
+      return;
+    }
+
+    if (inCodeBlock) {
+      codeBuffer.push(line);
+      return;
+    }
+
+    // Headings (Removing raw # and formatting into styled headers)
+    if (trimmed.startsWith('#### ')) {
+      elements.push(
+        <h4 key={index} className="text-sm font-bold text-cyan-400 mt-4 mb-2">
+          {processInlineFormatting(trimmed.slice(5))}
+        </h4>
+      );
+      return;
+    }
+    if (trimmed.startsWith('### ')) {
+      elements.push(
+        <h3 key={index} className="text-base sm:text-lg font-black text-white mt-5 mb-2 pb-1 border-b border-slate-800">
+          {processInlineFormatting(trimmed.slice(4))}
+        </h3>
+      );
+      return;
+    }
+    if (trimmed.startsWith('## ')) {
+      elements.push(
+        <h2 key={index} className="text-lg sm:text-xl font-black text-white mt-6 mb-3">
+          {processInlineFormatting(trimmed.slice(3))}
+        </h2>
+      );
+      return;
+    }
+
+    // Unordered List Items (- or *)
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      elements.push(
+        <div key={index} className="flex items-start gap-2.5 my-1.5 ml-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-2 shrink-0" />
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            {processInlineFormatting(trimmed.slice(2))}
+          </p>
+        </div>
+      );
+      return;
+    }
+
+    // Numbered List Items (1. , 2. )
+    const numberedMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
+    if (numberedMatch) {
+      elements.push(
+        <div key={index} className="flex items-start gap-2.5 my-1.5 ml-2">
+          <span className="text-xs font-bold text-cyan-400 shrink-0 mt-0.5">{numberedMatch[1]}.</span>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            {processInlineFormatting(numberedMatch[2])}
+          </p>
+        </div>
+      );
+      return;
+    }
+
+    // Empty lines
+    if (!trimmed) {
+      elements.push(<div key={index} className="h-1.5" />);
+      return;
+    }
+
+    // Normal Paragraph Text
+    elements.push(
+      <p key={index} className="text-xs sm:text-sm text-slate-300 leading-relaxed my-1">
+        {processInlineFormatting(line)}
+      </p>
+    );
+  });
+
+  return <div className="space-y-1">{elements}</div>;
+};
 
 export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   topic,
@@ -31,16 +152,18 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 }) => {
   if (!topic) return null;
 
-  const { progress, updateStatus, toggleStar } = useProgress();
+  const { progress, updateStatus, toggleStar, recordRevision, getRevisionRecord } = useProgress();
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'code' | 'qa'>('overview');
   const [selectedLang, setSelectedLang] = useState<string>(
     topic.codeTemplates && topic.codeTemplates.length > 0 ? topic.codeTemplates[0].language : 'python'
   );
   const [copiedCode, setCopiedCode] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   const isStarred = !!progress.starred[topic.id];
   const currentStatus = progress.statuses[topic.id] || 'todo';
   const hasNote = !!progress.notes[topic.id];
+  const revRecord = getRevisionRecord(topic.id);
 
   const handleCopyCode = (code: string) => {
     navigator.clipboard.writeText(code);
@@ -69,6 +192,11 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               }`}>
                 {topic.difficulty}
               </span>
+              {revRecord && (
+                <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                  Next revision: {revRecord.nextRevisionDateFormatted}
+                </span>
+              )}
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
               {topic.title}
@@ -201,10 +329,8 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           )}
 
           {activeTab === 'content' && (
-            <div className="prose prose-invert prose-slate max-w-none text-xs sm:text-sm leading-relaxed space-y-4">
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-sans whitespace-pre-line text-slate-200">
-                {topic.detailedContent}
-              </div>
+            <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 text-slate-200">
+              <FormattedMarkdown content={topic.detailedContent} />
             </div>
           )}
 
@@ -267,7 +393,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         </div>
 
         {/* Footer Bar */}
-        <div className="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between">
+        <div className="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between gap-3">
           <button
             onClick={() => onOpenNote(topic.id, topic.title)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
@@ -280,14 +406,33 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <span>{hasNote ? 'Edit My Note' : 'Add Personal Note'}</span>
           </button>
 
-          <button
-            onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-600/20"
-          >
-            Done Reading
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowRatingModal(true)}
+              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
+            >
+              <Sparkles size={14} />
+              <span>Rate Understanding (Spaced Repetition)</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all border border-slate-700"
+            >
+              Done Reading
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Embedded Difficulty Rating Modal */}
+      {showRatingModal && (
+        <DifficultyRatingModal
+          topic={topic}
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+        />
+      )}
     </div>
   );
 };

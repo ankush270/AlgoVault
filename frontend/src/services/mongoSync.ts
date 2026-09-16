@@ -1,4 +1,12 @@
-const SERVER_URL = (import.meta.env.VITE_SYNC_SERVER_URL as string) || 'http://localhost:5000';
+const getSyncServerUrl = (): string => {
+  const syncUrl = import.meta.env.VITE_SYNC_SERVER_URL as string;
+  const apiUrl = import.meta.env.VITE_API_URL as string;
+  if (syncUrl) return syncUrl.replace(/\/$/, '');
+  if (apiUrl) return apiUrl.replace(/\/api\/?$/, '');
+  return 'http://localhost:5000';
+};
+
+const SERVER_URL = getSyncServerUrl();
 
 export interface MongoSyncData {
   userId: string;

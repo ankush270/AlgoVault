@@ -13,6 +13,7 @@ import { TopicDetailModal } from './components/TopicDetailModal';
 import { LeetCodeExplorer } from './components/LeetCodeExplorer';
 import { StriverSheetView } from './components/StriverSheetView';
 import { AlgorithmHub } from './components/AlgorithmHub';
+import { InterviewExperiencesExplorer } from './components/InterviewExperiencesExplorer';
 import { DomainType, TopicItem } from './types';
 
 export const AppContent: React.FC = () => {
@@ -78,6 +79,8 @@ export const AppContent: React.FC = () => {
               onOpenNote={handleOpenNote}
             />
           )}
+
+          {activeTab === 'interview-experiences' && <InterviewExperiencesExplorer />}
 
           {activeTab === 'striver-a2z' && <StriverSheetView />}
 

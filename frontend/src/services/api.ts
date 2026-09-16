@@ -1,5 +1,12 @@
-// Centralized API Service Client for TechSwitch Backend
-const API_BASE_URL = 'http://localhost:5000/api';
+const getApiBaseUrl = (): string => {
+  const syncUrl = import.meta.env.VITE_SYNC_SERVER_URL as string;
+  const apiUrl = import.meta.env.VITE_API_URL as string;
+  if (apiUrl) return apiUrl.replace(/\/$/, '');
+  if (syncUrl) return `${syncUrl.replace(/\/$/, '')}/api`;
+  return 'http://localhost:5000/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface User {
   id: string;

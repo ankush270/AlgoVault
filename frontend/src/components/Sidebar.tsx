@@ -14,7 +14,9 @@ import {
   BookOpen,
   FileText,
   Building2,
-  Flame
+  Flame,
+  Boxes,
+  Briefcase
 } from 'lucide-react';
 import { DomainType } from '../types';
 
@@ -38,15 +40,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const domains: { id: DomainType | 'all'; label: string; icon: React.FC<{ className?: string }>; color: string }[] = [
     { id: 'all', label: 'All Tech Modules', icon: BookOpen, color: 'text-blue-400' },
     { id: 'dsa', label: 'DSA & Algorithms', icon: Code2, color: 'text-amber-400' },
-    { id: 'system-design', label: 'System Design (HLD/LLD)', icon: Layers, color: 'text-purple-400' },
+    { id: 'system-design', label: 'System Design (HLD)', icon: Layers, color: 'text-purple-400' },
+    { id: 'oops', label: 'OOPs & LLD', icon: Boxes, color: 'text-orange-400' },
     { id: 'os', label: 'Operating Systems', icon: Cpu, color: 'text-emerald-400' },
     { id: 'dbms-sql', label: 'DBMS & SQL', icon: Database, color: 'text-cyan-400' },
     { id: 'computer-networks', label: 'Computer Networks', icon: Globe2, color: 'text-rose-400' },
     { id: 'genai-ml', label: 'Gen AI & AI/ML', icon: Bot, color: 'text-indigo-400' },
+    { id: 'javascript', label: 'JavaScript & V8 Engine', icon: Terminal, color: 'text-yellow-400' },
   ];
 
   const tools = [
-    { id: 'striver-a2z', label: "Striver's A2Z DSA Sheet", icon: Flame, badge: 'A2Z' },
+    { id: 'interview-experiences', label: 'Interview Experiences', icon: Briefcase, badge: '920+ Qs' },
+    { id: 'striver-a2z', label: "DSA Sheet", icon: Flame, badge: 'A2Z' },
     { id: 'leetcode-explorer', label: 'LeetCode Company Explorer', icon: Building2, badge: '3.4k Qs' },
     { id: 'algorithms', label: 'Algorithms Encyclopedia', icon: BookOpen, badge: 'NEW' },
     { id: 'sql-sandbox', label: 'Interactive SQL Sandbox', icon: Terminal, badge: 'LIVE' },
