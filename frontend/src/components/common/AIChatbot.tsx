@@ -122,9 +122,15 @@ export const AIChatbot: React.FC = () => {
     ]);
   };
 
-  // Helper to format code snippets & bold text inside messages
+  // Helper to format code snippets & clean text inside messages
   const renderFormattedMessage = (content: string) => {
-    const parts = content.split(/(```[\s\S]*?```)/g);
+    // Strip raw markdown headers (##, ###), dividers (---), and table grid symbols
+    const cleanedContent = content
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^[-\*]{3,}$/gm, '')
+      .replace(/\|[\s:-]+\|/g, '');
+
+    const parts = cleanedContent.split(/(```[\s\S]*?```)/g);
 
     return parts.map((part, index) => {
       if (part.startsWith('```') && part.endsWith('```')) {
