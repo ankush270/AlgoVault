@@ -71,38 +71,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* 🔥 Spaced Repetition Due Today Alert Banner */}
-      <div 
-        onClick={() => setActiveTab('revision')}
-        className="glass-panel p-5 rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 hover:border-amber-500/80 cursor-pointer transition-all shadow-xl flex items-center justify-between group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
-            <Flame size={26} className="animate-bounce" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                Spaced Repetition
-              </span>
-              <span className="text-[11px] text-slate-400">Memory Decay Alert</span>
-            </div>
-            <h3 className="text-base sm:text-lg font-black text-white mt-0.5 group-hover:text-amber-300 transition-colors">
-              🔥 {dueCount > 0 ? dueCount : 7} questions due for revision today
-            </h3>
-            <p className="text-xs text-slate-400 hidden sm:block">
-              Calculated using Smart Adaptive Ebbinghaus Forgetting Curve. Start your daily 5-minute review session.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-4 py-2.5 rounded-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shrink-0">
-          <span>Start Revision Now</span>
-          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-        </div>
-      </div>
-
-      {/* Hero Welcome Banner */}
+      {/* 1. Hero Welcome & Daily Goal Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900/60 via-indigo-900/50 to-slate-900 p-6 lg:p-8 border border-blue-500/20 shadow-2xl">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-500/10 via-purple-500/5 to-transparent pointer-events-none" />
         
@@ -163,7 +132,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* 2. Overview Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-2">
           <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
@@ -204,75 +173,50 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
-      {/* Quick Launch Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div 
-          onClick={() => setActiveTab('sql-sandbox')}
-          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
-        >
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
-            <Terminal size={22} />
+      {/* 3. 🔥 Spaced Repetition Due Today Alert Banner */}
+      <div 
+        onClick={() => setActiveTab('revision')}
+        className="glass-panel p-5 rounded-3xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-purple-500/10 to-blue-500/10 hover:border-amber-500/80 cursor-pointer transition-all shadow-xl flex items-center justify-between group"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+            <Flame size={26} className="animate-bounce" />
           </div>
           <div>
-            <h3 className="font-bold text-white group-hover:text-cyan-400 transition-colors">Interactive SQL Sandbox</h3>
-            <p className="text-xs text-slate-400 mt-1">Run live SQL queries on sample database tables in your browser.</p>
-          </div>
-          <div className="flex items-center text-xs font-semibold text-cyan-400 gap-1 pt-1">
-            <span>Launch Sandbox</span>
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black uppercase px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                Spaced Repetition
+              </span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-300">Memory Decay Alert</span>
+            </div>
+            <h3 className="text-lg sm:text-xl font-black text-white mt-1 group-hover:text-amber-300 transition-colors">
+              🔥 {dueCount > 0 ? dueCount : 7} questions due for revision today
+            </h3>
+            <p className="text-sm sm:text-base text-slate-200 mt-1 font-medium leading-normal hidden sm:block">
+              Calculated using Smart Adaptive Ebbinghaus Forgetting Curve. Start your daily 5-minute review session.
+            </p>
           </div>
         </div>
 
-        <div 
-          onClick={() => setActiveTab('flashcards')}
-          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
-        >
-          <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center">
-            <Dices size={22} />
-          </div>
-          <div>
-            <h3 className="font-bold text-white group-hover:text-purple-400 transition-colors">Mock Flashcard Simulator</h3>
-            <p className="text-xs text-slate-400 mt-1">Randomized quick question drawers with timer to test recall.</p>
-          </div>
-          <div className="flex items-center text-xs font-semibold text-purple-400 gap-1 pt-1">
-            <span>Start Practice</span>
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        <div 
-          onClick={() => setActiveTab('revision')}
-          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
-        >
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
-            <BookOpen size={22} />
-          </div>
-          <div>
-            <h3 className="font-bold text-white group-hover:text-amber-400 transition-colors">Spaced Repetition Queue</h3>
-            <p className="text-xs text-slate-400 mt-1">Review flagged topics & starred questions before interviews.</p>
-          </div>
-          <div className="flex items-center text-xs font-semibold text-amber-400 gap-1 pt-1">
-            <span>Review Queue ({needsRevisionCount})</span>
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </div>
+        <div className="flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-4 py-2.5 rounded-2xl group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shrink-0">
+          <span>Start Revision Now</span>
+          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </div>
       </div>
 
-      {/* Visual Analytics Summary Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <SkillRadarChart compact={true} />
-        <WeeklyActivityChart />
-      </div>
-
-      {/* Domain Mastery Grid */}
+      {/* 4. Interview Domains & Progress (Core Learning Modules) */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white">Interview Domains & Progress</h2>
+          <div>
+            <h2 className="text-xl font-extrabold text-white tracking-tight">Interview Domains & Core Subjects</h2>
+            <p className="text-xs text-slate-400">Select a subject to dive into structured modules and flashcards</p>
+          </div>
           <button 
             onClick={() => { setSelectedDomain('all'); setActiveTab('knowledge'); }}
-            className="text-xs text-blue-400 hover:underline font-semibold"
+            className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1.5 rounded-xl transition-all"
           >
-            Explore All Topics $\\rightarrow$
+            <span>Explore All Topics</span>
+            <ArrowRight size={14} />
           </button>
         </div>
 
@@ -318,6 +262,66 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* 5. Visual Analytics Summary Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SkillRadarChart compact={true} />
+        <WeeklyActivityChart />
+      </div>
+
+      {/* 6. Quick Launch Practice Tools */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div 
+          onClick={() => setActiveTab('sql-sandbox')}
+          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
+        >
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center">
+            <Terminal size={22} />
+          </div>
+          <div>
+            <h3 className="font-bold text-white group-hover:text-cyan-400 transition-colors">Interactive SQL Sandbox</h3>
+            <p className="text-xs text-slate-400 mt-1">Run live SQL queries on sample database tables in your browser.</p>
+          </div>
+          <div className="flex items-center text-xs font-semibold text-cyan-400 gap-1 pt-1">
+            <span>Launch Sandbox</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        <div 
+          onClick={() => setActiveTab('flashcards')}
+          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
+        >
+          <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center">
+            <Dices size={22} />
+          </div>
+          <div>
+            <h3 className="font-bold text-white group-hover:text-purple-400 transition-colors">Mock Flashcard Simulator</h3>
+            <p className="text-xs text-slate-400 mt-1">Randomized quick question drawers with timer to test recall.</p>
+          </div>
+          <div className="flex items-center text-xs font-semibold text-purple-400 gap-1 pt-1">
+            <span>Start Practice</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        <div 
+          onClick={() => setActiveTab('dsa-tricks')}
+          className="glass-panel glass-panel-hover p-5 rounded-2xl border border-slate-800 cursor-pointer group space-y-3"
+        >
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
+            <Sparkles size={22} />
+          </div>
+          <div>
+            <h3 className="font-bold text-white group-hover:text-amber-400 transition-colors">DSA Tricks & Patterns</h3>
+            <p className="text-xs text-slate-400 mt-1">48 high-frequency problem-solving tricks & cheat sheets.</p>
+          </div>
+          <div className="flex items-center text-xs font-semibold text-amber-400 gap-1 pt-1">
+            <span>View Tricks</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </div>
         </div>
       </div>
     </div>

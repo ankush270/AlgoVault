@@ -24,6 +24,7 @@ interface NavbarProps {
   setMobileMenuOpen: (open: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  onOpenAuth?: (tab?: 'login' | 'signup') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -33,6 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   setMobileMenuOpen,
   activeTab,
   setActiveTab,
+  onOpenAuth,
 }) => {
   const { progress, exportProgressJSON, importProgressJSON } = useProgress();
   const { user, isAuthenticated, logout } = useAuth();
@@ -191,7 +193,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           ) : (
             <button
-              onClick={() => setShowAuthModal(true)}
+              onClick={() => {
+                if (onOpenAuth) {
+                  onOpenAuth('login');
+                } else {
+                  setShowAuthModal(true);
+                }
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20 transition-all transform active:scale-95"
             >
               <User className="w-3.5 h-3.5" />

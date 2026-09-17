@@ -32,51 +32,53 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Top Banner Header */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 bg-gradient-to-r from-purple-900/40 via-slate-900 to-indigo-900/30 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-        <div className="space-y-2 z-10 max-w-xl">
+      {/* Compact Top Banner Header */}
+      <div className="glass-panel p-4 sm:p-5 rounded-2xl border border-slate-800 bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/40 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        {/* Left Info Column */}
+        <div className="space-y-1.5 min-w-0 max-w-2xl">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase tracking-wider flex items-center gap-1">
-              <Flame size={14} className="text-amber-400" />
-              <span>SPACED REPETITION ENGINE</span>
+            <span className="text-xs font-extrabold px-2.5 py-0.5 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase tracking-wider flex items-center gap-1">
+              <Flame size={13} className="text-amber-400" />
+              <span>Spaced Repetition Engine</span>
             </span>
-            <span className="text-xs text-amber-400 font-extrabold bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md">
               🔥 {dueCount} Questions Due Today
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+
+          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
             Memory & Revision Scheduler
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+
+          <p className="text-xs sm:text-sm text-slate-300 leading-snug">
             Review questions based on your comprehension level (😎 Easy, 🙂 Medium, 😵 Hard, ❌ Couldn't solve) and adaptive forgetting curve decay algorithms.
           </p>
         </div>
 
-        {/* Algorithm Switcher Widget */}
-        <div className="glass-panel p-4 rounded-2xl border border-slate-700/80 shrink-0 space-y-2.5 min-w-[240px]">
-          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block">Active Algorithm</span>
-          <div className="flex flex-col gap-1.5">
+        {/* Compact Horizontal Algorithm Switcher */}
+        <div className="bg-slate-950/90 p-1.5 rounded-xl border border-slate-800 shrink-0 self-start lg:self-center">
+          <div className="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider mb-1 px-1">
+            Active Algorithm
+          </div>
+          <div className="flex flex-wrap items-center gap-1">
             {(
               [
-                { id: 'smart-adaptive', label: '🧠 Smart Adaptive', sub: 'Ebbinghaus + Meta' },
-                { id: 'sm2', label: '⚡ SuperMemo SM-2', sub: 'Classic Anki' },
-                { id: 'leitner', label: '📦 Leitner 5-Box', sub: 'Box Progression' },
+                { id: 'smart-adaptive', label: 'Smart Adaptive', icon: '🧠' },
+                { id: 'sm2', label: 'SuperMemo SM-2', icon: '⚡' },
+                { id: 'leitner', label: 'Leitner 5-Box', icon: '📦' },
               ] as const
             ).map(algo => (
               <button
                 key={algo.id}
                 onClick={() => setAlgorithm(algo.id as AlgorithmType)}
-                className={`p-2 rounded-xl text-left transition-all border flex items-center justify-between ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap ${
                   progress.activeAlgorithm === algo.id
-                    ? 'bg-purple-600 text-white border-purple-400 shadow-md'
-                    : 'bg-slate-900/80 text-slate-300 border-slate-800 hover:bg-slate-800'
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30 border border-purple-400'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-900'
                 }`}
               >
-                <div>
-                  <div className="text-xs font-bold">{algo.label}</div>
-                  <div className="text-[10px] opacity-75">{algo.sub}</div>
-                </div>
-                {progress.activeAlgorithm === algo.id && <CheckCircle2 size={14} className="text-white" />}
+                <span>{algo.icon}</span>
+                <span>{algo.label}</span>
               </button>
             ))}
           </div>
@@ -150,29 +152,29 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
             return (
               <div
                 key={topic.id}
-                className={`glass-panel glass-panel-hover p-5 rounded-3xl border transition-all space-y-4 relative ${
+                className={`glass-panel glass-panel-hover p-5 sm:p-6 rounded-2xl border transition-all space-y-4 relative ${
                   isOverdue ? 'border-amber-500/40 bg-amber-500/5' : 'border-slate-800'
                 }`}
               >
                 {/* Header info */}
                 <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-purple-500/10 border border-purple-500/20 text-purple-400">
+                      <span className="text-xs font-extrabold uppercase px-2.5 py-0.5 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-300">
                         {topic.category}
                       </span>
                       {progress.starred[topic.id] && (
-                        <Star size={14} className="fill-amber-400 text-amber-400" />
+                        <Star size={16} className="fill-amber-400 text-amber-400" />
                       )}
                       {isOverdue && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
                           Due Now 🔥
                         </span>
                       )}
                     </div>
                     <h3
                       onClick={() => onSelectTopic(topic)}
-                      className="font-bold text-white text-sm hover:text-purple-300 transition-colors cursor-pointer"
+                      className="font-extrabold text-white text-base sm:text-lg hover:text-purple-300 transition-colors cursor-pointer leading-snug"
                     >
                       {topic.title}
                     </h3>
@@ -180,9 +182,9 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
 
                   {/* Retention Score Pill */}
                   <div className="text-right shrink-0">
-                    <span className="text-[10px] text-slate-400 font-semibold block">Retention</span>
+                    <span className="text-xs text-slate-400 font-semibold block mb-0.5">Retention</span>
                     <span
-                      className={`text-xs font-black px-2 py-0.5 rounded-lg border ${
+                      className={`text-xs sm:text-sm font-black px-2.5 py-1 rounded-lg border ${
                         retentionPct > 70
                           ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
                           : retentionPct > 40
@@ -196,29 +198,29 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
                 </div>
 
                 {/* Dates Information Display */}
-                <div className="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-slate-400">
+                <div className="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/80 space-y-2.5 text-xs sm:text-sm">
+                  <div className="flex items-center justify-between text-slate-300 font-medium">
                     <span>
-                      Last attempted: <strong className="text-slate-200">{lastAttempt}</strong>
+                      Last attempted: <strong className="text-white font-bold">{lastAttempt}</strong>
                     </span>
                     <span>
-                      Next due: <strong className="text-purple-300">{nextRev}</strong>
+                      Next due: <strong className="text-purple-300 font-bold">{nextRev}</strong>
                     </span>
                   </div>
 
                   {/* Next Revision Dates Sequence */}
-                  <div className="space-y-1 pt-1 border-t border-slate-900">
-                    <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">
+                  <div className="space-y-1.5 pt-2 border-t border-slate-900">
+                    <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                       Calculated Revision Schedule:
                     </span>
-                    <div className="flex items-center gap-1.5 overflow-x-auto text-[11px] font-semibold text-slate-300 pt-0.5">
+                    <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold text-slate-200 pt-0.5">
                       {scheduledDates.map((dStr, idx) => (
                         <span
                           key={idx}
-                          className={`px-2 py-0.5 rounded border text-[10px] whitespace-nowrap ${
+                          className={`px-2.5 py-1 rounded-md border text-xs whitespace-nowrap ${
                             idx === 0
                               ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 font-bold'
-                              : 'bg-slate-900 text-slate-400 border-slate-800'
+                              : 'bg-slate-900 text-slate-300 border-slate-800'
                           }`}
                         >
                           {dStr}
@@ -232,17 +234,17 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
                 <div className="flex items-center justify-between pt-1">
                   <button
                     onClick={() => onSelectTopic(topic)}
-                    className="text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1"
+                    className="text-xs sm:text-sm font-bold text-slate-300 hover:text-white flex items-center gap-1 transition-colors"
                   >
                     <span>Read Topic Notes</span>
-                    <ChevronRight size={14} />
+                    <ChevronRight size={15} />
                   </button>
 
                   <button
                     onClick={() => setRatingTargetTopic(topic)}
-                    className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
                   >
-                    <Flame size={14} />
+                    <Flame size={15} />
                     <span>Rate Comprehension</span>
                   </button>
                 </div>

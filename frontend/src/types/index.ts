@@ -7,7 +7,9 @@ export type DomainType =
   | 'genai-ml'
   | 'oops'
   | 'object-oriented-programming'
-  | 'javascript';
+  | 'javascript'
+  | 'react'
+  | 'nodejs';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 
@@ -36,6 +38,44 @@ export interface TopicItem {
   }[];
   diagramSvg?: string;
   importanceRating: number; // 1-5 stars
+}
+
+export interface TrickProblem {
+  number: number;
+  problem: string;
+  leetcode: string | null;
+  gfg: string | null;
+}
+
+export interface CodeTemplateItem {
+  name: string;
+  language: string;
+  code: string;
+}
+
+export interface RecognitionStep {
+  question?: string;
+  condition?: string;
+  action?: string;
+  result?: string;
+}
+
+export interface TrickItem {
+  id: number;
+  title: string;
+  slug: string;
+  rating: number;
+  category: string;
+  tags: string[];
+  description?: string;
+  whenToUse: {
+    intro: string;
+    items: string[];
+  };
+  codeTemplates: CodeTemplateItem[];
+  recognitionFlow: RecognitionStep[];
+  problems: TrickProblem[];
+  mustMaster?: string[];
 }
 
 export type RatingDifficulty = 'easy' | 'medium' | 'hard' | 'failed';

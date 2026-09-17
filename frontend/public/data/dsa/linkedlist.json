@@ -1,0 +1,864 @@
+{
+  "topic": {
+    "id": "linked-list",
+    "title": "Become Master in Linked List",
+    "category": "Data Structures",
+    "description": "A structured study guide covering linked-list fundamentals, pointer techniques, operations, and progressively harder problem-solving patterns.",
+    "difficulty": "beginner-to-advanced"
+  },
+
+  "learning_goals": [
+    "Understand how linked lists store data",
+    "Implement singly, doubly and circular linked lists",
+    "Master insertion and deletion",
+    "Master pointer manipulation",
+    "Recognize fast-slow pointer patterns",
+    "Recognize reversal patterns",
+    "Solve linked-list problems from easy to hard",
+    "Understand how linked lists are used in LRU and LFU caches"
+  ],
+
+  "prerequisites": [
+    "References / pointers",
+    "Classes / structures",
+    "Loops",
+    "Recursion basics",
+    "Time and space complexity"
+  ],
+
+  "core_concepts": {
+    "what_is_linked_list": {
+      "title": "What is a Linked List?",
+      "definition": "A linked list is a linear data structure consisting of nodes connected through references or pointers.",
+      "node_structure": {
+        "singly": {
+          "data": "value stored in the node",
+          "next": "reference to the next node"
+        },
+        "doubly": {
+          "data": "value stored in the node",
+          "prev": "reference to previous node",
+          "next": "reference to next node"
+        }
+      },
+      "visual": "HEAD -> [10|next] -> [20|next] -> [30|null]"
+    },
+
+    "array_vs_linked_list": {
+      "comparison": [
+        {
+          "feature": "Memory allocation",
+          "array": "Usually contiguous",
+          "linked_list": "Nodes can be non-contiguous"
+        },
+        {
+          "feature": "Size",
+          "array": "Fixed for basic arrays",
+          "linked_list": "Dynamic"
+        },
+        {
+          "feature": "Random access",
+          "array": "O(1)",
+          "linked_list": "O(n)"
+        },
+        {
+          "feature": "Search",
+          "array": "O(n) unsorted",
+          "linked_list": "O(n)"
+        },
+        {
+          "feature": "Insertion",
+          "array": "O(n) in general",
+          "linked_list": "O(1) when insertion position/node reference is already known"
+        },
+        {
+          "feature": "Deletion",
+          "array": "O(n) in general",
+          "linked_list": "O(1) when node/previous reference is already known"
+        }
+      ]
+    }
+  },
+
+  "types": [
+    {
+      "id": "singly",
+      "name": "Singly Linked List",
+      "description": "Each node points to the next node.",
+      "visual": "HEAD -> A -> B -> C -> null"
+    },
+    {
+      "id": "doubly",
+      "name": "Doubly Linked List",
+      "description": "Each node points to both previous and next nodes.",
+      "visual": "null <- A <-> B <-> C -> null"
+    },
+    {
+      "id": "circular",
+      "name": "Circular Linked List",
+      "description": "The last node points back to the first node.",
+      "visual": "A -> B -> C -> A"
+    },
+    {
+      "id": "circular_doubly",
+      "name": "Circular Doubly Linked List",
+      "description": "Each node has previous and next references and the ends are connected.",
+      "visual": "A <-> B <-> C <-> A"
+    }
+  ],
+
+  "complexity": {
+    "singly_linked_list": {
+      "access": "O(n)",
+      "search": "O(n)",
+      "insert_at_known_position": "O(1)",
+      "delete_at_known_position": "O(1)"
+    },
+    "note": "Finding the position/node itself may require O(n)."
+  },
+
+  "basic_operations": [
+    {
+      "id": "create",
+      "title": "Create Linked List",
+      "goal": "Create nodes and connect them.",
+      "pattern": [
+        "Create node",
+        "Store value",
+        "Connect previous node to new node",
+        "Update tail"
+      ],
+      "visual": "HEAD -> 10 -> 20 -> 30 -> null"
+    },
+    {
+      "id": "traverse",
+      "title": "Traverse Linked List",
+      "goal": "Visit every node.",
+      "template": "curr = head; while (curr != null) { process(curr); curr = curr.next; }",
+      "complexity": "O(n)"
+    },
+    {
+      "id": "insert",
+      "title": "Insert Node",
+      "key_rule": "Never lose the reference to the remaining list.",
+      "steps": [
+        "Find insertion location",
+        "Save required references",
+        "Connect new node",
+        "Reconnect remaining list"
+      ]
+    },
+    {
+      "id": "delete",
+      "title": "Delete Node",
+      "key_rule": "Reconnect the previous node to the node after the deleted node.",
+      "steps": [
+        "Find node or previous node",
+        "Save next reference if required",
+        "Change pointer/reference",
+        "Remove node"
+      ]
+    }
+  ],
+
+  "pointer_patterns": [
+    {
+      "id": "prev_curr_next",
+      "name": "Previous / Current / Next",
+      "used_for": [
+        "Reverse Linked List",
+        "Reversing a portion",
+        "Rearranging links"
+      ],
+      "variables": [
+        "prev",
+        "curr",
+        "next"
+      ],
+      "mental_model": "Before changing curr.next, save the original next node."
+    },
+    {
+      "id": "fast_slow",
+      "name": "Fast and Slow Pointers",
+      "used_for": [
+        "Finding middle",
+        "Detecting cycles",
+        "Finding cycle entry",
+        "Palindrome Linked List",
+        "Finding relative positions"
+      ],
+      "movement": {
+        "slow": "1 step",
+        "fast": "2 steps"
+      }
+    },
+    {
+      "id": "two_pointer_gap",
+      "name": "Two Pointers with Gap",
+      "used_for": [
+        "Remove Nth Node From End",
+        "Finding kth node from end"
+      ],
+      "idea": "Keep a fixed distance between two pointers."
+    },
+    {
+      "id": "pointer_switching",
+      "name": "Pointer Switching",
+      "used_for": [
+        "Intersection of Two Linked Lists"
+      ],
+      "idea": "Pointer A traverses A then B. Pointer B traverses B then A.",
+      "reason": "Both pointers travel the same total distance."
+    }
+  ],
+
+  "patterns": [
+    {
+      "id": "pattern-01",
+      "title": "Reverse Linked List",
+      "difficulty": "easy",
+      "recognition": [
+        "Reverse the entire list",
+        "Reverse a portion",
+        "Reverse nodes in groups"
+      ],
+      "core_idea": "Reverse each next pointer while maintaining references to previous and next nodes.",
+      "template": "prev = null; curr = head; while (curr != null) { next = curr.next; curr.next = prev; prev = curr; curr = next; } return prev;",
+      "key_variables": [
+        "prev",
+        "curr",
+        "next"
+      ],
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "practice": [
+        {
+          "id": 206,
+          "title": "Reverse Linked List",
+          "url": "https://leetcode.com/problems/reverse-linked-list/"
+        },
+        {
+          "id": 92,
+          "title": "Reverse Linked List II",
+          "url": "https://leetcode.com/problems/reverse-linked-list-ii/"
+        },
+        {
+          "id": 25,
+          "title": "Reverse Nodes in k-Group",
+          "url": "https://leetcode.com/problems/reverse-nodes-in-k-group/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-02",
+      "title": "Fast and Slow Pointer",
+      "difficulty": "easy-to-medium",
+      "recognition": [
+        "Middle of linked list",
+        "Cycle detection",
+        "Palindrome",
+        "Distance between nodes"
+      ],
+      "template": "slow = head; fast = head; while (fast != null && fast.next != null) { slow = slow.next; fast = fast.next.next; }",
+      "complexity": {
+        "time": "O(n)",
+        "space": "O(1)"
+      },
+      "practice": [
+        {
+          "id": 876,
+          "title": "Middle of the Linked List",
+          "url": "https://leetcode.com/problems/middle-of-the-linked-list/"
+        },
+        {
+          "id": 141,
+          "title": "Linked List Cycle",
+          "url": "https://leetcode.com/problems/linked-list-cycle/"
+        },
+        {
+          "id": 142,
+          "title": "Linked List Cycle II",
+          "url": "https://leetcode.com/problems/linked-list-cycle-ii/"
+        },
+        {
+          "id": 234,
+          "title": "Palindrome Linked List",
+          "url": "https://leetcode.com/problems/palindrome-linked-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-03",
+      "title": "Two Pointers with Gap",
+      "difficulty": "medium",
+      "recognition": [
+        "Nth node from end",
+        "Kth node from end",
+        "Maintain fixed distance"
+      ],
+      "template": "Move fast k steps ahead, then move fast and slow together until fast reaches the required boundary.",
+      "practice": [
+        {
+          "id": 19,
+          "title": "Remove Nth Node From End of List",
+          "url": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-04",
+      "title": "Intersection of Two Linked Lists",
+      "difficulty": "medium",
+      "recognition": [
+        "Two lists may merge",
+        "Need first common node",
+        "Different list lengths"
+      ],
+      "core_idea": "Traverse list A then B and list B then A.",
+      "template": "a = headA; b = headB; while (a != b) { a = a == null ? headB : a.next; b = b == null ? headA : b.next; } return a;",
+      "complexity": {
+        "time": "O(n + m)",
+        "space": "O(1)"
+      },
+      "practice": [
+        {
+          "id": 160,
+          "title": "Intersection of Two Linked Lists",
+          "url": "https://leetcode.com/problems/intersection-of-two-linked-lists/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-05",
+      "title": "Palindrome Linked List",
+      "difficulty": "medium",
+      "recognition": [
+        "Check whether values read same forward and backward"
+      ],
+      "steps": [
+        "Find middle using slow/fast",
+        "Reverse second half",
+        "Compare first half and reversed second half",
+        "Optionally restore the list"
+      ],
+      "practice": [
+        {
+          "id": 234,
+          "title": "Palindrome Linked List",
+          "url": "https://leetcode.com/problems/palindrome-linked-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-06",
+      "title": "Merge Sorted Linked Lists",
+      "difficulty": "easy-to-medium",
+      "recognition": [
+        "Two sorted linked lists",
+        "Merge multiple sorted lists"
+      ],
+      "core_idea": "Use a dummy node and repeatedly attach the smaller current node.",
+      "practice": [
+        {
+          "id": 21,
+          "title": "Merge Two Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-two-sorted-lists/"
+        },
+        {
+          "id": 23,
+          "title": "Merge k Sorted Lists",
+          "url": "https://leetcode.com/problems/merge-k-sorted-lists/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-07",
+      "title": "Dummy Node",
+      "difficulty": "easy-to-medium",
+      "recognition": [
+        "Insertion/deletion near head",
+        "Building a new linked list",
+        "Merging lists",
+        "Removing nodes"
+      ],
+      "core_idea": "Create a fake node before head to eliminate special cases.",
+      "template": "dummy.next = head",
+      "benefit": [
+        "Simplifies head deletion",
+        "Simplifies insertion before head",
+        "Reduces edge-case code"
+      ]
+    },
+
+    {
+      "id": "pattern-08",
+      "title": "Rearranging Links",
+      "difficulty": "medium",
+      "recognition": [
+        "Odd/even arrangement",
+        "Swapping nodes",
+        "Partitioning nodes",
+        "Reordering nodes"
+      ],
+      "practice": [
+        {
+          "id": 328,
+          "title": "Odd Even Linked List",
+          "url": "https://leetcode.com/problems/odd-even-linked-list/"
+        },
+        {
+          "id": 24,
+          "title": "Swap Nodes in Pairs",
+          "url": "https://leetcode.com/problems/swap-nodes-in-pairs/"
+        },
+        {
+          "id": 1721,
+          "title": "Swapping Nodes in a Linked List",
+          "url": "https://leetcode.com/problems/swapping-nodes-in-a-linked-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-09",
+      "title": "Sorting Linked Lists",
+      "difficulty": "medium-to-hard",
+      "recognition": [
+        "Sort linked list",
+        "Insertion sort",
+        "Merge sort"
+      ],
+      "important_note": "Merge sort is particularly suitable for linked lists because nodes can be rearranged without requiring random access.",
+      "practice": [
+        {
+          "id": 147,
+          "title": "Insertion Sort List",
+          "url": "https://leetcode.com/problems/insertion-sort-list/"
+        },
+        {
+          "id": 148,
+          "title": "Sort List",
+          "url": "https://leetcode.com/problems/sort-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-10",
+      "title": "Random Pointer / Deep Copy",
+      "difficulty": "medium",
+      "recognition": [
+        "Node has random pointer",
+        "Need deep copy",
+        "Pointers can point anywhere"
+      ],
+      "practice": [
+        {
+          "id": 138,
+          "title": "Copy List with Random Pointer",
+          "url": "https://leetcode.com/problems/copy-list-with-random-pointer/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-11",
+      "title": "Prefix State / HashMap with Linked List",
+      "difficulty": "medium",
+      "recognition": [
+        "Remove zero-sum consecutive nodes",
+        "Need to remember earlier node states"
+      ],
+      "practice": [
+        {
+          "id": 1171,
+          "title": "Remove Zero Sum Consecutive Nodes from Linked List",
+          "url": "https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-a-linked-list/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-12",
+      "title": "Doubly Linked List",
+      "difficulty": "medium",
+      "core_operations": [
+        "Insert at front",
+        "Insert at end",
+        "Insert before node",
+        "Insert after node",
+        "Delete front",
+        "Delete end",
+        "Delete before node",
+        "Delete after node"
+      ],
+      "node": {
+        "structure": "prev | data | next"
+      },
+      "key_rule": "Whenever a node is inserted or removed, update both prev and next references."
+    },
+
+    {
+      "id": "pattern-13",
+      "title": "Circular Linked List",
+      "difficulty": "medium",
+      "recognition": [
+        "Last node connects to first",
+        "Repeated traversal",
+        "Round-robin behavior"
+      ],
+      "key_rule": "There is no null at the end; traversal must use an explicit stopping condition."
+    },
+
+    {
+      "id": "pattern-14",
+      "title": "LRU Cache",
+      "difficulty": "hard",
+      "data_structures": [
+        "HashMap",
+        "Doubly Linked List"
+      ],
+      "core_idea": "HashMap provides O(1) lookup while a doubly linked list maintains usage order.",
+      "operations": {
+        "get": "O(1)",
+        "put": "O(1)"
+      },
+      "practice": [
+        {
+          "id": 146,
+          "title": "LRU Cache",
+          "url": "https://leetcode.com/problems/lru-cache/"
+        }
+      ]
+    },
+
+    {
+      "id": "pattern-15",
+      "title": "LFU Cache",
+      "difficulty": "hard",
+      "core_idea": "Track frequency and recency to determine which entry should be removed.",
+      "practice": [
+        {
+          "id": 460,
+          "title": "LFU Cache",
+          "url": "https://leetcode.com/problems/lfu-cache/"
+        }
+      ]
+    }
+  ],
+
+  "problem_roadmap": [
+    {
+      "order": 1,
+      "title": "Reverse Linked List",
+      "leetcode_id": 206,
+      "difficulty": "easy",
+      "pattern": "prev_curr_next"
+    },
+    {
+      "order": 2,
+      "title": "Middle of the Linked List",
+      "leetcode_id": 876,
+      "difficulty": "easy",
+      "pattern": "fast_slow"
+    },
+    {
+      "order": 3,
+      "title": "Delete Node in a Linked List",
+      "leetcode_id": 237,
+      "difficulty": "easy",
+      "pattern": "pointer_manipulation"
+    },
+    {
+      "order": 4,
+      "title": "Merge Two Sorted Lists",
+      "leetcode_id": 21,
+      "difficulty": "easy",
+      "pattern": "merge"
+    },
+    {
+      "order": 5,
+      "title": "Remove Duplicates from Sorted List",
+      "leetcode_id": 83,
+      "difficulty": "easy",
+      "pattern": "pointer_manipulation"
+    },
+    {
+      "order": 6,
+      "title": "Intersection of Two Linked Lists",
+      "leetcode_id": 160,
+      "difficulty": "easy",
+      "pattern": "pointer_switching"
+    },
+    {
+      "order": 7,
+      "title": "Linked List Cycle",
+      "leetcode_id": 141,
+      "difficulty": "easy",
+      "pattern": "fast_slow"
+    },
+    {
+      "order": 8,
+      "title": "Palindrome Linked List",
+      "leetcode_id": 234,
+      "difficulty": "easy",
+      "pattern": "fast_slow_reverse"
+    },
+    {
+      "order": 9,
+      "title": "Swapping Nodes in a Linked List",
+      "leetcode_id": 1721,
+      "difficulty": "medium",
+      "pattern": "two_pointer"
+    },
+    {
+      "order": 10,
+      "title": "Odd Even Linked List",
+      "leetcode_id": 328,
+      "difficulty": "medium",
+      "pattern": "rearranging_links"
+    },
+    {
+      "order": 11,
+      "title": "Remove Nth Node From End",
+      "leetcode_id": 19,
+      "difficulty": "medium",
+      "pattern": "two_pointer_gap"
+    },
+    {
+      "order": 12,
+      "title": "Add Two Numbers",
+      "leetcode_id": 2,
+      "difficulty": "medium",
+      "pattern": "carry"
+    },
+    {
+      "order": 13,
+      "title": "Swap Nodes in Pairs",
+      "leetcode_id": 24,
+      "difficulty": "medium",
+      "pattern": "rearranging_links"
+    },
+    {
+      "order": 14,
+      "title": "Split Linked List in Parts",
+      "leetcode_id": 725,
+      "difficulty": "medium",
+      "pattern": "length_and_partition"
+    },
+    {
+      "order": 15,
+      "title": "Insertion Sort List",
+      "leetcode_id": 147,
+      "difficulty": "medium",
+      "pattern": "sorting"
+    },
+    {
+      "order": 16,
+      "title": "Sort List",
+      "leetcode_id": 148,
+      "difficulty": "medium",
+      "pattern": "merge_sort"
+    },
+    {
+      "order": 17,
+      "title": "Copy List with Random Pointer",
+      "leetcode_id": 138,
+      "difficulty": "medium",
+      "pattern": "random_pointer"
+    },
+    {
+      "order": 18,
+      "title": "Remove Zero Sum Consecutive Nodes",
+      "leetcode_id": 1171,
+      "difficulty": "medium",
+      "pattern": "prefix_sum_hashmap"
+    },
+    {
+      "order": 19,
+      "title": "Merge k Sorted Lists",
+      "leetcode_id": 23,
+      "difficulty": "hard",
+      "pattern": "merge_heap"
+    },
+    {
+      "order": 20,
+      "title": "Reverse Nodes in k-Group",
+      "leetcode_id": 25,
+      "difficulty": "hard",
+      "pattern": "group_reverse"
+    },
+    {
+      "order": 21,
+      "title": "Doubly Linked List",
+      "difficulty": "medium",
+      "pattern": "doubly"
+    },
+    {
+      "order": 22,
+      "title": "Doubly Linked List Insertions",
+      "difficulty": "medium",
+      "pattern": "doubly"
+    },
+    {
+      "order": 23,
+      "title": "Doubly Linked List Deletions",
+      "difficulty": "medium",
+      "pattern": "doubly"
+    },
+    {
+      "order": 24,
+      "title": "Circular Doubly Linked List",
+      "difficulty": "medium",
+      "pattern": "circular_doubly"
+    },
+    {
+      "order": 25,
+      "title": "LRU Cache",
+      "leetcode_id": 146,
+      "difficulty": "medium",
+      "pattern": "hashmap_doubly_linked_list"
+    },
+    {
+      "order": 26,
+      "title": "LFU Cache",
+      "leetcode_id": 460,
+      "difficulty": "hard",
+      "pattern": "frequency_cache"
+    }
+  ],
+
+  "interview_checklist": [
+    "Can I define a linked-list node?",
+    "Can I traverse a linked list?",
+    "Can I insert at head?",
+    "Can I insert at tail?",
+    "Can I insert after a node?",
+    "Can I delete the head?",
+    "Can I delete a node?",
+    "Can I reverse a linked list without losing nodes?",
+    "Can I find the middle using two pointers?",
+    "Can I detect a cycle?",
+    "Can I find the cycle entry?",
+    "Can I find the kth node from the end?",
+    "Can I find intersection of two lists?",
+    "Can I check palindrome in O(n) time and O(1) space?",
+    "Can I merge sorted lists?",
+    "Can I reverse nodes in groups?",
+    "Can I implement a doubly linked list?",
+    "Can I implement an LRU cache?"
+  ],
+
+  "common_mistakes": [
+    {
+      "mistake": "Changing curr.next before saving the original next node",
+      "fix": "Store next = curr.next first."
+    },
+    {
+      "mistake": "Losing the head reference",
+      "fix": "Keep a stable head/dummy reference when modifying the list."
+    },
+    {
+      "mistake": "Forgetting null checks",
+      "fix": "Check head, head.next, fast and fast.next where appropriate."
+    },
+    {
+      "mistake": "Incorrectly updating doubly linked-list pointers",
+      "fix": "Whenever changing one side, verify both prev and next connections."
+    },
+    {
+      "mistake": "Creating unnecessary special cases for head operations",
+      "fix": "Use a dummy node."
+    },
+    {
+      "mistake": "Confusing node value with node reference",
+      "fix": "Compare nodes using references when the problem asks for the actual intersection/cycle node."
+    }
+  ],
+
+  "master_rules": [
+    {
+      "rule": 1,
+      "title": "Never Lose Your Reference",
+      "description": "Before breaking a link, save the node you still need."
+    },
+    {
+      "rule": 2,
+      "title": "Draw the Pointers",
+      "description": "For difficult linked-list problems, draw nodes and arrows before coding."
+    },
+    {
+      "rule": 3,
+      "title": "Know Your Pointer Movement",
+      "description": "Ask whether a pointer moves one step, two steps, or maintains a fixed gap."
+    },
+    {
+      "rule": 4,
+      "title": "Use Dummy Nodes",
+      "description": "Dummy nodes simplify operations involving the head."
+    },
+    {
+      "rule": 5,
+      "title": "Protect the Remaining List",
+      "description": "Whenever changing links, make sure the rest of the list remains reachable."
+    }
+  ],
+
+  "study_order": [
+    "Understand Node",
+    "Create Linked List",
+    "Traverse",
+    "Insert",
+    "Delete",
+    "Reverse",
+    "Fast and Slow Pointers",
+    "Cycle Detection",
+    "Two Pointer Gap",
+    "Intersection",
+    "Palindrome",
+    "Merge Lists",
+    "Rearrange Lists",
+    "Sort Lists",
+    "Random Pointer",
+    "Doubly Linked List",
+    "Circular Linked List",
+    "LRU Cache",
+    "LFU Cache"
+  ],
+
+  "ui": {
+    "recommended_sections": [
+      "Overview",
+      "Node Anatomy",
+      "Types",
+      "Operations",
+      "Pointer Patterns",
+      "Problem Patterns",
+      "Problem Roadmap",
+      "Interview Checklist",
+      "Common Mistakes"
+    ],
+    "card_fields": [
+      "title",
+      "difficulty",
+      "recognition",
+      "core_idea",
+      "template",
+      "complexity",
+      "practice"
+    ],
+    "difficulty_colors": {
+      "easy": "green",
+      "medium": "yellow",
+      "hard": "red"
+    }
+  }
+}

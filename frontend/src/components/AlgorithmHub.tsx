@@ -495,7 +495,7 @@ export const AlgorithmHub: React.FC = () => {
       })
       .catch((err) => {
         console.warn('/data/algorithms/index.json not found, attempting fallback to algorithms_master.json', err);
-        fetch('/data/algorithms_master.json')
+        fetch('/data/algorithms/algorithms_master.json')
           .then((res) => res.json())
           .then((json: AlgorithmsMasterData) => {
             setData(json);

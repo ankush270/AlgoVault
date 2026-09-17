@@ -1,0 +1,4446 @@
+{
+  "title": "Master DSA Tricks & Pattern Recognition Dataset",
+  "description": "Complete structured dataset containing 48 DSA tricks, decision trees, code templates, and interview wording clues.",
+  "total_tricks": 48,
+  "tricks_and_techniques": [
+    {
+      "id": 1,
+      "title": "Hashing / Frequency Map",
+      "slug": "hashing-frequency-map",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Hashing",
+      "tags": [
+        "HashMap",
+        "unordered_map",
+        "unordered_set",
+        "frequency",
+        "lookup"
+      ],
+      "when_to_use": {
+        "intro": "Think HashMap / unordered_map / unordered_set when you see:",
+        "keywords": [
+          "frequency",
+          "duplicate",
+          "appears exactly K times",
+          "find pair",
+          "seen before",
+          "count occurrences",
+          "anagram",
+          "distinct elements"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "unordered_map<int,int> mp;\n\nfor (int x : nums) {\n    mp[x]++;\n}"
+      },
+      "recognition_flow": [
+        {
+          "question": "Need fast lookup?"
+        },
+        {
+          "question": "Need frequency?"
+        },
+        {
+          "question": "Need \"have I seen this?\""
+        },
+        {
+          "result": "HASHING"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Two Pointers",
+      "slug": "two-pointers",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Two Pointers",
+      "tags": [
+        "two-pointers",
+        "sorted-array",
+        "pair",
+        "triplet",
+        "left-right",
+        "remove-duplicates"
+      ],
+      "when_to_use": {
+        "intro": "Usually think Two Pointers when you see:",
+        "patterns": [
+          "sorted array",
+          "pair/triplet",
+          "left/right ends",
+          "remove duplicates",
+          "compare from both sides"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "int left = 0;\nint right = n - 1;\n\nwhile (left < right) {\n\n    if (condition)\n        left++;\n    else\n        right--;\n}"
+      },
+      "recognition_flow": [
+        {
+          "question": "Sorted?"
+        },
+        {
+          "question": "Pair?"
+        },
+        {
+          "question": "Left + Right?"
+        },
+        {
+          "result": "Two Pointers"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Sliding Window",
+      "slug": "sliding-window",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Sliding Window",
+      "tags": [
+        "sliding-window",
+        "contiguous-subarray",
+        "contiguous-substring",
+        "fixed-window",
+        "longest",
+        "minimum",
+        "count",
+        "exactly-k",
+        "at-most-k"
+      ],
+      "when_to_use": {
+        "intro": "Look for these patterns when deciding whether to use Sliding Window:",
+        "patterns": [
+          "contiguous substring",
+          "contiguous subarray",
+          "longest",
+          "minimum",
+          "exactly K",
+          "at most K",
+          "fixed size K",
+          "maximum/minimum inside window"
+        ]
+      },
+      "templates": {
+        "fixed_window": {
+          "language": "cpp",
+          "code": "int left = 0;\nlong long sum = 0;\n\nfor (int right = 0; right < n; right++) {\n\n    sum += nums[right];\n\n    if (right - left + 1 > k) {\n        sum -= nums[left];\n        left++;\n    }\n\n    if (right - left + 1 == k) {\n        // process\n    }\n}"
+        }
+      },
+      "recognition_flow": [
+        {
+          "condition": "CONTIGUOUS"
+        },
+        {
+          "condition": "SUBARRAY / SUBSTRING"
+        },
+        {
+          "condition": "LONGEST / MINIMUM / COUNT"
+        },
+        {
+          "result": "SLIDING WINDOW"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Prefix Sum",
+      "slug": "prefix-sum",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Prefix Sum",
+      "tags": [
+        "prefix-sum",
+        "range-sum",
+        "subarray-sum",
+        "range-query",
+        "target-sum",
+        "hashmap"
+      ],
+      "when_to_use": {
+        "intro": "Look for these patterns when deciding whether to use Prefix Sum:",
+        "patterns": [
+          "range sum",
+          "subarray sum",
+          "sum between L and R",
+          "many range queries",
+          "subarray with target sum"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "name": "Basic Template",
+        "code": "vector<int> pref(n + 1, 0);\n\nfor (int i = 0; i < n; i++) {\n    pref[i + 1] = pref[i] + nums[i];\n}\n\n// sum [l ... r]\nint sum = pref[r + 1] - pref[l];"
+      },
+      "important_distinction": [
+        {
+          "problem_pattern": "Range query",
+          "technique": "Prefix Sum"
+        },
+        {
+          "problem_pattern": "Number of subarrays with sum K",
+          "technique": "Prefix Sum + HashMap"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Range Addition",
+          "leetcode": "LC 370",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Corporate Flight Bookings",
+          "leetcode": "LC 1109",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Car Pooling",
+          "leetcode": "LC 1094",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Shifting Letters II",
+          "leetcode": "LC 2381",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Check if Grid Satisfies Conditions",
+          "leetcode": "LC 3142",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Range Increment Operations",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Range Update Queries",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Maximum Population Year",
+          "leetcode": "LC 1854",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Booking Concert Tickets",
+          "leetcode": "LC 2286",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Meeting Rooms / Range Overlap",
+          "leetcode": null,
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Kadane's Algorithm",
+      "slug": "kadanes-algorithm",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Dynamic Programming / Array",
+      "tags": [
+        "kadane",
+        "maximum-subarray",
+        "minimum-subarray",
+        "contiguous-sum",
+        "maximum-sum"
+      ],
+      "when_to_use": {
+        "intro": "Strong clues for using Kadane's Algorithm:",
+        "patterns": [
+          "maximum subarray sum",
+          "minimum subarray sum",
+          "maximum contiguous sum"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "long long curr = nums[0];\nlong long ans = nums[0];\n\nfor (int i = 1; i < n; i++) {\n\n    curr = max((long long)nums[i],\n               curr + nums[i]);\n\n    ans = max(ans, curr);\n}"
+      },
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Maximum Subarray",
+          "leetcode": "LC 53",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Maximum Subarray Sum",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Maximum Product Subarray",
+          "leetcode": "LC 152",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Best Time to Buy and Sell Stock",
+          "leetcode": "LC 121",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Maximum Sum Circular Subarray",
+          "leetcode": "LC 918",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Maximum Absolute Sum of Any Subarray",
+          "leetcode": "LC 1749",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Maximum Subarray Sum With One Deletion",
+          "leetcode": "LC 1186",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Maximum Alternating Subsequence Sum",
+          "leetcode": "LC 1911",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Maximum Subarray Sum After One Operation",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Maximum Sum Rectangle",
+          "leetcode": "LC 85",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Binary Search",
+      "slug": "binary-search",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Binary Search",
+      "tags": [
+        "binary-search",
+        "sorted-array",
+        "target",
+        "lower-bound",
+        "upper-bound",
+        "log-n"
+      ],
+      "when_to_use": {
+        "intro": "Look for these patterns:",
+        "patterns": [
+          "sorted array",
+          "find target",
+          "first/last occurrence",
+          "lower bound",
+          "upper bound",
+          "search in O(log n)"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "int left = 0, right = n - 1;\n\nwhile (left <= right) {\n\n    int mid = left + (right - left) / 2;\n\n    if (nums[mid] == target)\n        return mid;\n\n    if (nums[mid] < target)\n        left = mid + 1;\n    else\n        right = mid - 1;\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "SORTED?"
+        },
+        {
+          "condition": "Can eliminate half?"
+        },
+        {
+          "result": "BINARY SEARCH"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Binary Search",
+          "leetcode": "LC 704",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Search Insert Position",
+          "leetcode": "LC 35",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "First Bad Version",
+          "leetcode": "LC 278",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Find First and Last Position",
+          "leetcode": "LC 34",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Search in Rotated Sorted Array",
+          "leetcode": "LC 33",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Find Minimum in Rotated Sorted Array",
+          "leetcode": "LC 153",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Search in Rotated Sorted Array II",
+          "leetcode": "LC 81",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Find Peak Element",
+          "leetcode": "LC 162",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Single Element in a Sorted Array",
+          "leetcode": "LC 540",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Median of Two Sorted Arrays",
+          "leetcode": "LC 4",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Binary Search on Answer",
+      "slug": "binary-search-on-answer",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Binary Search",
+      "tags": [
+        "binary-search",
+        "answer-space",
+        "optimization",
+        "minimum",
+        "maximum",
+        "possible"
+      ],
+      "description": "This is different from normal binary search. There may be no sorted array. Instead, the answer itself is searchable.",
+      "when_to_use": {
+        "intro": "Typical wording:",
+        "patterns": [
+          "minimum possible X",
+          "maximum possible X",
+          "smallest capacity",
+          "minimum speed",
+          "maximum distance",
+          "can we finish within K days?"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "long long left = low;\nlong long right = high;\n\nwhile (left < right) {\n\n    long long mid = left + (right - left) / 2;\n\n    if (possible(mid))\n        right = mid;\n    else\n        left = mid + 1;\n}\n\nreturn left;"
+      },
+      "recognition_flow": [
+        {
+          "condition": "Answer lies between LOW and HIGH"
+        },
+        {
+          "condition": "Can check \"is X possible?\""
+        },
+        {
+          "result": "Binary Search on Answer"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Sqrt(x)",
+          "leetcode": "LC 69",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Koko Eating Bananas",
+          "leetcode": "LC 875",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Capacity To Ship Packages",
+          "leetcode": "LC 1011",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Minimum Days to Make Bouquets",
+          "leetcode": "LC 1482",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Split Array Largest Sum",
+          "leetcode": "LC 410",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Aggressive Cows",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Allocate Minimum Pages",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Minimize Max Distance to Gas Station",
+          "leetcode": "LC 774",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Magnetic Force Between Two Balls",
+          "leetcode": "LC 1552",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Minimum Time to Complete Trips",
+          "leetcode": "LC 2187",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Sorting + Greedy",
+      "slug": "sorting-greedy",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Greedy",
+      "tags": [
+        "sorting",
+        "greedy",
+        "optimization",
+        "scheduling",
+        "intervals",
+        "assignment"
+      ],
+      "when_to_use": {
+        "intro": "Usually think Sorting + Greedy when you see:",
+        "patterns": [
+          "Sort first",
+          "make locally best choice",
+          "never undo choice",
+          "minimum number",
+          "maximum number",
+          "scheduling",
+          "assign",
+          "pair smallest/largest",
+          "minimize cost"
+        ]
+      },
+      "recognition_flow": [
+        {
+          "question": "Can sorting reveal an optimal order?"
+        },
+        {
+          "result": "SORT + GREEDY"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Assign Cookies",
+          "leetcode": "LC 455",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Lemonade Change",
+          "leetcode": "LC 860",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Best Time to Buy and Sell Stock II",
+          "leetcode": "LC 122",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Jump Game",
+          "leetcode": "LC 55",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Jump Game II",
+          "leetcode": "LC 45",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Gas Station",
+          "leetcode": "LC 134",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Partition Labels",
+          "leetcode": "LC 763",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Non-overlapping Intervals",
+          "leetcode": "LC 435",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Minimum Number of Arrows",
+          "leetcode": "LC 452",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Hand of Straights",
+          "leetcode": "LC 846",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Fast & Slow Pointers",
+      "slug": "fast-slow-pointers",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Two Pointers",
+      "tags": [
+        "fast-slow-pointers",
+        "linked-list",
+        "cycle",
+        "middle-node",
+        "cycle-entry",
+        "duplicate-number"
+      ],
+      "when_to_use": {
+        "intro": "Most common use cases:",
+        "patterns": [
+          "Linked List cycle",
+          "middle node",
+          "cycle entry",
+          "duplicate number"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "slow = slow->next;\nfast = fast->next->next;"
+      },
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Middle of Linked List",
+          "leetcode": "LC 876",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Linked List Cycle",
+          "leetcode": "LC 141",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Linked List Cycle II",
+          "leetcode": "LC 142",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Happy Number",
+          "leetcode": "LC 202",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Find the Duplicate Number",
+          "leetcode": "LC 287",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Palindrome Linked List",
+          "leetcode": "LC 234",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Remove Nth Node From End",
+          "leetcode": "LC 19",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Intersection of Two Linked Lists",
+          "leetcode": "LC 160",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Circular Array Loop",
+          "leetcode": "LC 457",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Reorder List",
+          "leetcode": "LC 143",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Stack",
+      "slug": "stack",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Stack",
+      "tags": [
+        "stack",
+        "lifo",
+        "brackets",
+        "undo",
+        "expression-evaluation",
+        "adjacent-elements"
+      ],
+      "when_to_use": {
+        "intro": "Think Stack when you need:",
+        "patterns": [
+          "Last-In-First-Out (LIFO)",
+          "matching brackets",
+          "undo operations",
+          "remove adjacent elements",
+          "evaluate expressions",
+          "process something in reverse order"
+        ]
+      },
+      "recognition_flow": [
+        {
+          "condition": "nearest previous"
+        },
+        {
+          "condition": "matching brackets"
+        },
+        {
+          "condition": "undo"
+        },
+        {
+          "condition": "remove adjacent"
+        },
+        {
+          "condition": "expression evaluation"
+        },
+        {
+          "result": "STACK"
+        }
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "stack<int> st;\n\nfor (int x : nums) {\n\n    while (!st.empty() && condition) {\n        st.pop();\n    }\n\n    st.push(x);\n}"
+      },
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Valid Parentheses",
+          "leetcode": "LC 20",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Min Stack",
+          "leetcode": "LC 155",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Evaluate Reverse Polish Notation",
+          "leetcode": "LC 150",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Backspace String Compare",
+          "leetcode": "LC 844",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Simplify Path",
+          "leetcode": "LC 71",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Remove All Adjacent Duplicates",
+          "leetcode": "LC 1047",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Decode String",
+          "leetcode": "LC 394",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Asteroid Collision",
+          "leetcode": "LC 735",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Basic Calculator II",
+          "leetcode": "LC 227",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Maximum Frequency Stack",
+          "leetcode": "LC 895",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Monotonic Stack",
+      "slug": "monotonic-stack",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Stack",
+      "tags": [
+        "monotonic-stack",
+        "next-greater",
+        "next-smaller",
+        "previous-greater",
+        "previous-smaller",
+        "nearest-element",
+        "histogram",
+        "stock-span"
+      ],
+      "description": "One of the most important interview patterns for efficiently finding nearest elements satisfying a greater/smaller condition.",
+      "when_to_use": {
+        "intro": "Look for:",
+        "patterns": [
+          "Next greater element",
+          "Next smaller element",
+          "Previous greater/smaller",
+          "nearest element satisfying condition",
+          "histogram",
+          "temperature",
+          "stock span"
+        ]
+      },
+      "recognition_flow": [
+        {
+          "condition": "NEXT"
+        },
+        {
+          "condition": "PREVIOUS"
+        },
+        {
+          "condition": "NEAREST"
+        },
+        {
+          "condition": "GREATER"
+        },
+        {
+          "condition": "SMALLER"
+        },
+        {
+          "result": "MONOTONIC STACK"
+        }
+      ],
+      "template": {
+        "language": "cpp",
+        "name": "Increasing Stack",
+        "code": "stack<int> st;\n\nfor (int i = 0; i < n; i++) {\n\n    while (!st.empty() && nums[st.top()] > nums[i]) {\n        st.pop();\n    }\n\n    st.push(i);\n}"
+      },
+      "must_master": [
+        "Next Greater",
+        "Daily Temperatures",
+        "Stock Span",
+        "Histogram",
+        "Subarray Minimums"
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Next Greater Element I",
+          "leetcode": "LC 496",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Next Greater Element II",
+          "leetcode": "LC 503",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Daily Temperatures",
+          "leetcode": "LC 739",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Online Stock Span",
+          "leetcode": "LC 901",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Previous Smaller Element",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Largest Rectangle in Histogram",
+          "leetcode": "LC 84",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Maximal Rectangle",
+          "leetcode": "LC 85",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Sum of Subarray Minimums",
+          "leetcode": "LC 907",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Remove K Digits",
+          "leetcode": "LC 402",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Trapping Rain Water",
+          "leetcode": "LC 42",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Monotonic Queue / Deque",
+      "slug": "monotonic-queue-deque",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Deque",
+      "tags": [
+        "monotonic-queue",
+        "deque",
+        "sliding-window",
+        "maximum",
+        "minimum",
+        "window"
+      ],
+      "when_to_use": {
+        "intro": "Strong clues:",
+        "patterns": [
+          "sliding window",
+          "maximum/minimum",
+          "maximum of every window",
+          "minimum of every window",
+          "max-min <= K",
+          "shortest subarray with sum >= K"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "deque<int> dq;\n\nfor (int right = 0; right < n; right++) {\n\n    while (!dq.empty() &&\n           nums[dq.back()] <= nums[right]) {\n        dq.pop_back();\n    }\n\n    dq.push_back(right);\n\n    while (dq.front() <= right - k) {\n        dq.pop_front();\n    }\n\n    // nums[dq.front()] = maximum\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "Sliding Window"
+        },
+        {
+          "condition": "Need MAX/MIN efficiently"
+        },
+        {
+          "result": "Deque"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Sliding Window Maximum",
+          "leetcode": "LC 239",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Sliding Window Minimum",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Shortest Subarray with Sum at Least K",
+          "leetcode": "LC 862",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Longest Continuous Subarray With Absolute Diff ≤ Limit",
+          "leetcode": "LC 1438",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Constrained Subsequence Sum",
+          "leetcode": "LC 1425",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Jump Game VI",
+          "leetcode": "LC 1696",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Sliding Window Maximum II",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Maximum of Minimum for Every Window Size",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "First negative integer in every window",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Maximum Sum Subarray of Size K",
+          "leetcode": null,
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Heap / Priority Queue",
+      "slug": "heap-priority-queue",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Heap",
+      "tags": [
+        "heap",
+        "priority-queue",
+        "min-heap",
+        "max-heap",
+        "dynamic-ordering",
+        "minimum",
+        "maximum"
+      ],
+      "when_to_use": {
+        "intro": "Use Heap when you repeatedly need:",
+        "patterns": [
+          "minimum",
+          "maximum",
+          "smallest",
+          "largest",
+          "next best",
+          "dynamic ordering"
+        ]
+      },
+      "templates": {
+        "min_heap": {
+          "language": "cpp",
+          "code": "priority_queue<int,\n               vector<int>,\n               greater<int>> pq;"
+        },
+        "max_heap": {
+          "language": "cpp",
+          "code": "priority_queue<int> pq;"
+        }
+      },
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Kth Largest Element",
+          "leetcode": "LC 215",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Kth Smallest Element",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Last Stone Weight",
+          "leetcode": "LC 1046",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Kth Largest Element in a Stream",
+          "leetcode": "LC 703",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Find Median from Data Stream",
+          "leetcode": "LC 295",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Meeting Rooms II",
+          "leetcode": "LC 253",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Task Scheduler",
+          "leetcode": "LC 621",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Reorganize String",
+          "leetcode": "LC 767",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "IPO",
+          "leetcode": "LC 502",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Smallest Range Covering Elements from K Lists",
+          "leetcode": "LC 632",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Top K Elements",
+      "slug": "top-k-elements",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Heap",
+      "tags": [
+        "top-k",
+        "k-largest",
+        "k-smallest",
+        "k-frequent",
+        "k-closest",
+        "heap"
+      ],
+      "when_to_use": {
+        "intro": "Look for:",
+        "patterns": [
+          "Top K",
+          "K largest",
+          "K smallest",
+          "K most frequent",
+          "K closest",
+          "K frequent"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "name": "For K Largest",
+        "code": "priority_queue<int,\n               vector<int>,\n               greater<int>> pq;\n\nfor (int x : nums) {\n\n    pq.push(x);\n\n    if (pq.size() > k)\n        pq.pop();\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "\"K\" + \"largest/smallest/closest/frequent\""
+        },
+        {
+          "result": "HEAP"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Kth Largest Element",
+          "leetcode": "LC 215",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Top K Frequent Elements",
+          "leetcode": "LC 347",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "K Closest Points to Origin",
+          "leetcode": "LC 973",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Kth Smallest Element in Sorted Matrix",
+          "leetcode": "LC 378",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "K Closest Elements",
+          "leetcode": "LC 658",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Find K Pairs with Smallest Sums",
+          "leetcode": "LC 373",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Kth Largest Element in a Stream",
+          "leetcode": "LC 703",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Sort Characters By Frequency",
+          "leetcode": "LC 451",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Frequency Sort",
+          "leetcode": "LC 1636",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Kth Smallest Prime Fraction",
+          "leetcode": "LC 786",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Merge Intervals",
+      "slug": "merge-intervals",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Intervals",
+      "tags": [
+        "intervals",
+        "ranges",
+        "overlap",
+        "merge",
+        "meeting",
+        "schedule",
+        "greedy"
+      ],
+      "when_to_use": {
+        "intro": "Look for:",
+        "patterns": [
+          "intervals",
+          "ranges",
+          "overlap",
+          "merge",
+          "meeting",
+          "schedule"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "sort(intervals.begin(), intervals.end());\n\nvector<vector<int>> ans;\n\nfor (auto interval : intervals) {\n\n    if (ans.empty() ||\n        ans.back()[1] < interval[0]) {\n\n        ans.push_back(interval);\n\n    } else {\n\n        ans.back()[1] =\n            max(ans.back()[1], interval[1]);\n    }\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "INTERVAL"
+        },
+        {
+          "condition": "OVERLAP"
+        },
+        {
+          "action": "SORT BY START"
+        },
+        {
+          "action": "MERGE / GREEDY"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Merge Intervals",
+          "leetcode": "LC 56",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Insert Interval",
+          "leetcode": "LC 57",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Non-overlapping Intervals",
+          "leetcode": "LC 435",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Meeting Rooms",
+          "leetcode": "LC 252",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Meeting Rooms II",
+          "leetcode": "LC 253",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Minimum Number of Arrows",
+          "leetcode": "LC 452",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Interval List Intersections",
+          "leetcode": "LC 986",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Employee Free Time",
+          "leetcode": "LC 759",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "My Calendar I",
+          "leetcode": "LC 729",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Minimum Interval to Include Each Query",
+          "leetcode": "LC 1851",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Cyclic Sort",
+      "slug": "cyclic-sort",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Cyclic Sort",
+      "tags": [
+        "cyclic-sort",
+        "missing-number",
+        "duplicate-number",
+        "1-to-n",
+        "0-to-n",
+        "array"
+      ],
+      "description": "A very specific pattern where array values naturally map to their correct indices.",
+      "when_to_use": {
+        "intro": "Usually look for:",
+        "patterns": [
+          "array contains numbers 1..N",
+          "array contains numbers 0..N",
+          "missing number",
+          "duplicate number",
+          "corrupt/missing values"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "int i = 0;\n\nwhile (i < n) {\n\n    int correct = nums[i] - 1;\n\n    if (nums[i] >= 1 &&\n        nums[i] <= n &&\n        nums[i] != nums[correct]) {\n\n        swap(nums[i], nums[correct]);\n\n    } else {\n        i++;\n    }\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "1 → N"
+        },
+        {
+          "condition": "0 → N"
+        },
+        {
+          "condition": "Missing?"
+        },
+        {
+          "condition": "Duplicate?"
+        },
+        {
+          "result": "CYCLIC SORT"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Missing Number",
+          "leetcode": "LC 268",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Find All Numbers Disappeared",
+          "leetcode": "LC 448",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Find the Duplicate Number",
+          "leetcode": "LC 287",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Set Mismatch",
+          "leetcode": "LC 645",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "First Missing Positive",
+          "leetcode": "LC 41",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Find All Duplicates",
+          "leetcode": "LC 442",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Missing and Repeating",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Smallest Missing Positive",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Find Missing Element",
+          "leetcode": null,
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Find Duplicate and Missing",
+          "leetcode": null,
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "title": "Linked List Reversal",
+      "slug": "linked-list-reversal",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Linked List",
+      "tags": [
+        "linked-list",
+        "reverse",
+        "reverse-k",
+        "reverse-groups",
+        "palindrome",
+        "reorder"
+      ],
+      "when_to_use": {
+        "intro": "Look for:",
+        "patterns": [
+          "reverse linked list",
+          "reverse first K",
+          "reverse between positions",
+          "reverse groups",
+          "palindrome",
+          "reorder list"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "name": "Basic Template",
+        "code": "ListNode* prev = nullptr;\nListNode* curr = head;\n\nwhile (curr) {\n\n    ListNode* next = curr->next;\n\n    curr->next = prev;\n\n    prev = curr;\n    curr = next;\n}\n\nreturn prev;"
+      },
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Reverse Linked List",
+          "leetcode": "LC 206",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Reverse Linked List II",
+          "leetcode": "LC 92",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Reverse Nodes in K-Group",
+          "leetcode": "LC 25",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Swap Nodes in Pairs",
+          "leetcode": "LC 24",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Reorder List",
+          "leetcode": "LC 143",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Palindrome Linked List",
+          "leetcode": "LC 234",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Rotate List",
+          "leetcode": "LC 61",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Reverse Nodes in Even Length Groups",
+          "leetcode": "LC 2074",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Add Two Numbers",
+          "leetcode": "LC 2",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Reverse Alternating K Nodes",
+          "leetcode": null,
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "title": "Tree DFS",
+      "slug": "tree-dfs",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Tree",
+      "tags": [
+        "tree",
+        "dfs",
+        "depth",
+        "path",
+        "subtree",
+        "recursion",
+        "preorder",
+        "inorder",
+        "postorder"
+      ],
+      "when_to_use": {
+        "intro": "Think DFS when:",
+        "patterns": [
+          "tree",
+          "path",
+          "depth",
+          "subtree",
+          "recursive relationship"
+        ]
+      },
+      "traversals": [
+        {
+          "name": "Preorder",
+          "order": "Root Left Right"
+        },
+        {
+          "name": "Inorder",
+          "order": "Left Root Right"
+        },
+        {
+          "name": "Postorder",
+          "order": "Left Right Root"
+        }
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "void dfs(TreeNode* root) {\n\n    if (!root)\n        return;\n\n    // process root\n\n    dfs(root->left);\n    dfs(root->right);\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "Tree"
+        },
+        {
+          "condition": "Need path/depth/subtree"
+        },
+        {
+          "result": "DFS"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Maximum Depth of Binary Tree",
+          "leetcode": "LC 104",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Same Tree",
+          "leetcode": "LC 100",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Invert Binary Tree",
+          "leetcode": "LC 226",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Diameter of Binary Tree",
+          "leetcode": "LC 543",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Balanced Binary Tree",
+          "leetcode": "LC 110",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Path Sum",
+          "leetcode": "LC 112",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Binary Tree Maximum Path Sum",
+          "leetcode": "LC 124",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Lowest Common Ancestor",
+          "leetcode": "LC 236",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Sum Root to Leaf Numbers",
+          "leetcode": "LC 129",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Count Good Nodes",
+          "leetcode": "LC 1448",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "title": "Tree BFS",
+      "slug": "tree-bfs",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Tree",
+      "tags": [
+        "tree",
+        "bfs",
+        "level-order",
+        "shortest-path",
+        "zigzag",
+        "left-view",
+        "right-view",
+        "queue"
+      ],
+      "when_to_use": {
+        "intro": "Strong clues:",
+        "patterns": [
+          "LEVEL",
+          "LEVEL ORDER",
+          "SHORTEST PATH IN TREE",
+          "ZIGZAG",
+          "LEFT/RIGHT VIEW"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "queue<TreeNode*> q;\n\nq.push(root);\n\nwhile (!q.empty()) {\n\n    int size = q.size();\n\n    while (size--) {\n\n        TreeNode* node = q.front();\n        q.pop();\n\n        if (node->left)\n            q.push(node->left);\n\n        if (node->right)\n            q.push(node->right);\n    }\n}"
+      },
+      "recognition_flow": [
+        {
+          "condition": "LEVEL"
+        },
+        {
+          "condition": "LEVEL ORDER"
+        },
+        {
+          "condition": "SHORTEST PATH IN TREE"
+        },
+        {
+          "condition": "ZIGZAG"
+        },
+        {
+          "condition": "LEFT/RIGHT VIEW"
+        },
+        {
+          "result": "BFS"
+        }
+      ],
+      "problems": [
+        {
+          "number": 1,
+          "problem": "Binary Tree Level Order Traversal",
+          "leetcode": "LC 102",
+          "gfg": "GFG"
+        },
+        {
+          "number": 2,
+          "problem": "Average of Levels",
+          "leetcode": "LC 637",
+          "gfg": "GFG"
+        },
+        {
+          "number": 3,
+          "problem": "Binary Tree Right Side View",
+          "leetcode": "LC 199",
+          "gfg": "GFG"
+        },
+        {
+          "number": 4,
+          "problem": "Binary Tree Zigzag Level Order",
+          "leetcode": "LC 103",
+          "gfg": "GFG"
+        },
+        {
+          "number": 5,
+          "problem": "Minimum Depth",
+          "leetcode": "LC 111",
+          "gfg": "GFG"
+        },
+        {
+          "number": 6,
+          "problem": "Populating Next Right Pointers",
+          "leetcode": "LC 116",
+          "gfg": "GFG"
+        },
+        {
+          "number": 7,
+          "problem": "Binary Tree Level Order Traversal II",
+          "leetcode": "LC 107",
+          "gfg": "GFG"
+        },
+        {
+          "number": 8,
+          "problem": "Even Odd Tree",
+          "leetcode": "LC 1609",
+          "gfg": "GFG"
+        },
+        {
+          "number": 9,
+          "problem": "Maximum Width of Binary Tree",
+          "leetcode": "LC 662",
+          "gfg": "GFG"
+        },
+        {
+          "number": 10,
+          "problem": "Find Bottom Left Tree Value",
+          "leetcode": "LC 513",
+          "gfg": "GFG"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "title": "Tree Construction / Recursion",
+      "slug": "tree-construction-recursion",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Tree",
+      "tags": [
+        "tree",
+        "recursion",
+        "tree-construction",
+        "preorder",
+        "inorder",
+        "postorder",
+        "binary-tree"
+      ],
+      "when_to_use": {
+        "intro": "Use this pattern when you need to construct a tree from traversal arrays or recursively process left and right subtrees.",
+        "patterns": [
+          "Construct tree from traversal arrays",
+          "Preorder + Inorder",
+          "Postorder + Inorder",
+          "Preorder + Postorder",
+          "Answer naturally breaks into smaller subtrees"
+        ]
+      },
+      "core_pattern": [
+        "Choose root",
+        "Split left/right subtree",
+        "Recursively construct left",
+        "Recursively construct right"
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "class Solution {\npublic:\n    unordered_map<int, int> pos;\n    int preIndex = 0;\n\n    TreeNode* build(vector<int>& preorder,\n                    vector<int>& inorder,\n                    int left,\n                    int right) {\n\n        if (left > right)\n            return nullptr;\n\n        int rootValue = preorder[preIndex++];\n        TreeNode* root = new TreeNode(rootValue);\n\n        int mid = pos[rootValue];\n\n        root->left = build(preorder, inorder, left, mid - 1);\n        root->right = build(preorder, inorder, mid + 1, right);\n\n        return root;\n    }\n\n    TreeNode* buildTree(vector<int>& preorder,\n                        vector<int>& inorder) {\n\n        for (int i = 0; i < inorder.size(); i++)\n            pos[inorder[i]] = i;\n\n        return build(preorder, inorder, 0, inorder.size() - 1);\n    }\n};"
+      },
+      "recognition_flow": [
+        "TREE?",
+        "Need to construct tree?",
+        "Traversal arrays given?",
+        "Can choose root and split subtrees?",
+        "→ TREE CONSTRUCTION + RECURSION"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 105 — Construct Binary Tree from Preorder and Inorder",
+          "LC 106 — Construct Binary Tree from Inorder and Postorder",
+          "LC 1008 — Construct BST from Preorder",
+          "LC 889 — Construct Binary Tree from Preorder and Postorder",
+          "LC 108 — Convert Sorted Array to BST",
+          "LC 109 — Convert Sorted List to BST",
+          "LC 654 — Maximum Binary Tree",
+          "LC 998 — Maximum Binary Tree II",
+          "LC 606 — Construct String from Binary Tree",
+          "LC 297 — Serialize and Deserialize Binary Tree"
+        ],
+        "gfg": [
+          "Construct Tree from Inorder and Preorder",
+          "Construct Tree from Inorder and Postorder",
+          "Construct BST from Preorder",
+          "Construct Tree from Preorder and Postorder",
+          "Sorted Array to Balanced BST",
+          "Construct Complete Binary Tree",
+          "Expression Tree",
+          "Binary Tree from Parent Array",
+          "Cartesian Tree",
+          "Serialize and Deserialize Binary Tree"
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "title": "BST Patterns",
+      "slug": "bst-patterns",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Binary Search Tree",
+      "tags": [
+        "bst",
+        "binary-search-tree",
+        "sorted-property",
+        "kth-smallest",
+        "predecessor",
+        "successor",
+        "range-query",
+        "validate-bst"
+      ],
+      "when_to_use": {
+        "intro": "Use BST-specific properties whenever the problem involves the sorted structure of a Binary Search Tree.",
+        "patterns": [
+          "BST",
+          "Sorted property",
+          "Left < Root < Right",
+          "Kth smallest/largest",
+          "Predecessor/successor",
+          "Range queries",
+          "Validate BST"
+        ]
+      },
+      "key_observation": "Inorder traversal of BST = sorted order",
+      "templates": [
+        {
+          "name": "BST Search",
+          "language": "cpp",
+          "code": "TreeNode* searchBST(TreeNode* root, int val) {\n\n    if (!root || root->val == val)\n        return root;\n\n    if (val < root->val)\n        return searchBST(root->left, val);\n\n    return searchBST(root->right, val);\n}"
+        },
+        {
+          "name": "Validate BST",
+          "language": "cpp",
+          "code": "bool check(TreeNode* root, long long low, long long high) {\n\n    if (!root)\n        return true;\n\n    if (root->val <= low || root->val >= high)\n        return false;\n\n    return check(root->left, low, root->val) &&\n           check(root->right, root->val, high);\n}"
+        }
+      ],
+      "recognition_flow": [
+        "BST?",
+        "Sorted property?",
+        "Need kth smallest/largest?",
+        "Need predecessor/successor?",
+        "Need range query or validation?",
+        "→ USE BST PROPERTY"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 98 — Validate BST",
+          "LC 700 — Search in BST",
+          "LC 701 — Insert into BST",
+          "LC 450 — Delete Node in BST",
+          "LC 230 — Kth Smallest Element",
+          "LC 783 — Minimum Distance Between BST Nodes",
+          "LC 938 — Range Sum of BST",
+          "LC 235 — Lowest Common Ancestor of BST",
+          "LC 653 — Two Sum IV",
+          "LC 1008 — BST from Preorder"
+        ],
+        "gfg": [
+          "Search a Node in BST",
+          "Insert Node in BST",
+          "Delete Node in BST",
+          "Check BST",
+          "Kth Smallest in BST",
+          "LCA in BST",
+          "Inorder Successor",
+          "Floor in BST",
+          "Ceil in BST",
+          "Two Sum in BST"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "title": "Graph DFS",
+      "slug": "graph-dfs",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Graph",
+      "tags": [
+        "graph",
+        "dfs",
+        "depth-first-search",
+        "connected-components",
+        "cycle-detection",
+        "islands",
+        "reachability",
+        "grid-dfs"
+      ],
+      "when_to_use": {
+        "intro": "Use DFS when you need to explore an entire connected region, determine reachability, detect cycles, or traverse a graph/grid deeply.",
+        "patterns": [
+          "Connected components",
+          "Cycle detection",
+          "Islands",
+          "Reachability",
+          "Path existence",
+          "Graph traversal",
+          "Backtracking through graph",
+          "Detecting regions"
+        ]
+      },
+      "templates": [
+        {
+          "name": "Graph DFS",
+          "language": "cpp",
+          "code": "void dfs(int node,\n         vector<vector<int>>& graph,\n         vector<int>& visited) {\n\n    visited[node] = 1;\n\n    for (int next : graph[node]) {\n\n        if (!visited[next])\n            dfs(next, graph, visited);\n    }\n}"
+        },
+        {
+          "name": "Grid DFS",
+          "language": "cpp",
+          "code": "void dfs(int r, int c,\n         vector<vector<int>>& grid) {\n\n    if (r < 0 || c < 0 ||\n        r >= grid.size() ||\n        c >= grid[0].size() ||\n        grid[r][c] == 0)\n        return;\n\n    grid[r][c] = 0;\n\n    dfs(r + 1, c, grid);\n    dfs(r - 1, c, grid);\n    dfs(r, c + 1, grid);\n    dfs(r, c - 1, grid);\n}"
+        }
+      ],
+      "recognition_flow": [
+        "GRAPH or GRID?",
+        "Need to explore connected region?",
+        "Need reachability/path existence?",
+        "Need connected components or cycle detection?",
+        "→ GRAPH DFS"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 200 — Number of Islands",
+          "LC 695 — Max Area of Island",
+          "LC 733 — Flood Fill",
+          "LC 547 — Number of Provinces",
+          "LC 841 — Keys and Rooms",
+          "LC 1971 — Find if Path Exists",
+          "LC 463 — Island Perimeter",
+          "LC 130 — Surrounded Regions",
+          "LC 417 — Pacific Atlantic Water Flow",
+          "LC 785 — Is Graph Bipartite?"
+        ],
+        "gfg": [
+          "DFS of Graph",
+          "Connected Components",
+          "Number of Islands",
+          "Detect Cycle Undirected",
+          "Detect Cycle Directed",
+          "Flood Fill",
+          "Rat in a Maze",
+          "Graph Coloring",
+          "Path in Matrix",
+          "Mother Vertex"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "title": "Graph BFS",
+      "slug": "graph-bfs",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Graph",
+      "tags": [
+        "graph",
+        "bfs",
+        "breadth-first-search",
+        "shortest-path",
+        "unweighted-graph",
+        "level-order",
+        "distance"
+      ],
+      "when_to_use": {
+        "intro": "Use BFS when the problem involves shortest distance or minimum number of steps in an unweighted graph, or level-by-level traversal.",
+        "patterns": [
+          "Shortest path in an unweighted graph",
+          "Level-by-level traversal",
+          "Minimum number of moves",
+          "Minimum steps",
+          "Distance from source"
+        ]
+      },
+      "templates": [
+        {
+          "name": "Basic BFS",
+          "language": "cpp",
+          "code": "void bfs(int src,\n         vector<vector<int>>& graph) {\n\n    int n = graph.size();\n\n    vector<int> visited(n, 0);\n    queue<int> q;\n\n    q.push(src);\n    visited[src] = 1;\n\n    while (!q.empty()) {\n\n        int node = q.front();\n        q.pop();\n\n        for (int next : graph[node]) {\n\n            if (!visited[next]) {\n                visited[next] = 1;\n                q.push(next);\n            }\n        }\n    }\n}"
+        },
+        {
+          "name": "Shortest Distance",
+          "language": "cpp",
+          "code": "queue<int> q;\nvector<int> dist(n, -1);\n\nq.push(src);\ndist[src] = 0;\n\nwhile (!q.empty()) {\n\n    int node = q.front();\n    q.pop();\n\n    for (int next : graph[node]) {\n\n        if (dist[next] == -1) {\n\n            dist[next] = dist[node] + 1;\n            q.push(next);\n        }\n    }\n}"
+        }
+      ],
+      "recognition_flow": [
+        "GRAPH?",
+        "Unweighted edges?",
+        "Need shortest path/minimum steps?",
+        "Need level-by-level exploration?",
+        "→ GRAPH BFS"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 102 — Binary Tree Level Order",
+          "LC 994 — Rotting Oranges",
+          "LC 752 — Open the Lock",
+          "LC 127 — Word Ladder",
+          "LC 1091 — Shortest Path in Binary Matrix",
+          "LC 909 — Snakes and Ladders",
+          "LC 433 — Minimum Genetic Mutation",
+          "LC 542 — 01 Matrix",
+          "LC 863 — All Nodes Distance K",
+          "LC 1926 — Nearest Exit"
+        ],
+        "gfg": [
+          "BFS of Graph",
+          "Shortest Path in Unweighted Graph",
+          "Word Ladder",
+          "Rotten Oranges",
+          "Knight Minimum Moves",
+          "Snake and Ladder",
+          "Shortest Path in Binary Maze",
+          "Level Order Traversal",
+          "Minimum Multiplications",
+          "Distance of Nearest Cell"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "title": "Multi-Source BFS",
+      "slug": "multi-source-bfs",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Graph",
+      "tags": [
+        "graph",
+        "bfs",
+        "multi-source-bfs",
+        "grid",
+        "shortest-distance",
+        "nearest-source",
+        "distance"
+      ],
+      "when_to_use": {
+        "intro": "Use Multi-Source BFS when there are multiple starting points that spread or expand simultaneously and you need the minimum distance from the nearest source.",
+        "patterns": [
+          "Nearest 1",
+          "Nearest hospital",
+          "Nearest rotten orange",
+          "Nearest gate",
+          "Nearest source",
+          "Minimum distance from multiple starting points"
+        ]
+      },
+      "core_pattern": [
+        "Put all sources into the queue initially",
+        "Set distance of every source to 0",
+        "Run normal BFS",
+        "First visit to a cell gives its minimum distance from any source"
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "queue<pair<int,int>> q;\nvector<vector<int>> dist(n, vector<int>(m, -1));\n\nfor (int i = 0; i < n; i++) {\n    for (int j = 0; j < m; j++) {\n\n        if (grid[i][j] == SOURCE) {\n            q.push({i, j});\n            dist[i][j] = 0;\n        }\n    }\n}\n\nint dr[] = {1,-1,0,0};\nint dc[] = {0,0,1,-1};\n\nwhile (!q.empty()) {\n\n    auto [r,c] = q.front();\n    q.pop();\n\n    for (int k = 0; k < 4; k++) {\n\n        int nr = r + dr[k];\n        int nc = c + dc[k];\n\n        if (nr >= 0 && nr < n &&\n            nc >= 0 && nc < m &&\n            dist[nr][nc] == -1) {\n\n            dist[nr][nc] = dist[r][c] + 1;\n            q.push({nr,nc});\n        }\n    }\n}"
+      },
+      "recognition_flow": [
+        "Multiple starting points?",
+        "Need minimum distance from nearest X?",
+        "Sources spread simultaneously?",
+        "Need distance/time for every cell?",
+        "→ MULTI-SOURCE BFS"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 994 — Rotting Oranges",
+          "LC 542 — 01 Matrix",
+          "LC 286 — Walls and Gates",
+          "LC 1162 — As Far from Land as Possible",
+          "LC 934 — Shortest Bridge",
+          "LC 1765 — Map of Highest Peak",
+          "LC 317 — Shortest Distance from All Buildings",
+          "LC 863 — All Nodes Distance K",
+          "LC 2812 — Find Safest Path",
+          "LC 2258 — Escape the Spreading Fire"
+        ],
+        "gfg": [
+          "Rotten Oranges",
+          "Distance of Nearest Cell",
+          "Walls and Gates",
+          "Nearest 1 in Binary Matrix",
+          "Shortest Bridge",
+          "Fire Spread",
+          "Minimum Time to Reach",
+          "Knight Minimum Steps",
+          "BFS Grid Problems",
+          "Nearest Hospital / Source Distance"
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "title": "Topological Sort",
+      "slug": "topological-sort",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Graph",
+      "tags": [
+        "topological-sort",
+        "dag",
+        "directed-graph",
+        "dependencies",
+        "course-schedule",
+        "scheduling",
+        "cycle-detection",
+        "kahn-algorithm"
+      ],
+      "when_to_use": {
+        "intro": "Use Topological Sort when tasks or nodes have directed dependencies and you need a valid ordering.",
+        "patterns": [
+          "Course prerequisites",
+          "Task dependencies",
+          "Build systems",
+          "Scheduling",
+          "Dependency ordering",
+          "Directed graph",
+          "Detect cycle in directed graph"
+        ]
+      },
+      "key_condition": "A Topological Sort exists for a Directed Acyclic Graph (DAG).",
+      "algorithm": "Kahn's Algorithm",
+      "template": {
+        "language": "cpp",
+        "code": "vector<int> topoSort(int n,\n                     vector<vector<int>>& graph) {\n\n    vector<int> indegree(n, 0);\n\n    for (int u = 0; u < n; u++)\n        for (int v : graph[u])\n            indegree[v]++;\n\n    queue<int> q;\n\n    for (int i = 0; i < n; i++)\n        if (indegree[i] == 0)\n            q.push(i);\n\n    vector<int> ans;\n\n    while (!q.empty()) {\n\n        int node = q.front();\n        q.pop();\n\n        ans.push_back(node);\n\n        for (int next : graph[node]) {\n\n            indegree[next]--;\n\n            if (indegree[next] == 0)\n                q.push(next);\n        }\n    }\n\n    if (ans.size() != n)\n        return {};\n\n    return ans;\n}"
+      },
+      "recognition_flow": [
+        "DIRECTED GRAPH?",
+        "Dependencies or prerequisites?",
+        "Need a valid ordering?",
+        "Need to detect a directed cycle?",
+        "→ TOPOLOGICAL SORT"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 207 — Course Schedule",
+          "LC 210 — Course Schedule II",
+          "LC 269 — Alien Dictionary",
+          "LC 310 — Minimum Height Trees",
+          "LC 802 — Find Eventual Safe States",
+          "LC 444 — Sequence Reconstruction",
+          "LC 1203 — Sort Items by Groups",
+          "LC 2115 — Find All Possible Recipes",
+          "LC 1857 — Largest Color Value",
+          "LC 2392 — Build a Matrix"
+        ],
+        "gfg": [
+          "Topological Sort",
+          "Course Schedule",
+          "Detect Cycle Directed Graph",
+          "Alien Dictionary",
+          "Prerequisite Tasks",
+          "Kahn's Algorithm",
+          "Shortest Path DAG",
+          "Eventual Safe States",
+          "Find Whether Cycle Exists",
+          "Parallel Courses"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "title": "Union Find / DSU",
+      "slug": "union-find-dsu",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Graph",
+      "tags": [
+        "dsu",
+        "union-find",
+        "connectivity",
+        "connected-components",
+        "cycle-detection",
+        "kruskal",
+        "mst"
+      ],
+      "when_to_use": {
+        "intro": "Use DSU when components dynamically merge and you need to efficiently query connectivity.",
+        "patterns": [
+          "Dynamic connections",
+          "Components merging",
+          "Connectivity",
+          "Detect cycle in undirected graph",
+          "Kruskal MST",
+          "Are these two nodes connected?",
+          "Number of connected components"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "class DSU {\n\n    vector<int> parent, size;\n\npublic:\n\n    DSU(int n) {\n\n        parent.resize(n);\n        size.resize(n, 1);\n\n        iota(parent.begin(), parent.end(), 0);\n    }\n\n    int find(int x) {\n\n        if (parent[x] == x)\n            return x;\n\n        return parent[x] = find(parent[x]);\n    }\n\n    void unite(int a, int b) {\n\n        a = find(a);\n        b = find(b);\n\n        if (a == b)\n            return;\n\n        if (size[a] < size[b])\n            swap(a, b);\n\n        parent[b] = a;\n        size[a] += size[b];\n    }\n};"
+      },
+      "key_ideas": [
+        "Path compression",
+        "Union by size",
+        "Find representative/root",
+        "Merge two components"
+      ],
+      "recognition_flow": [
+        "Components merging?",
+        "Need connectivity queries?",
+        "Undirected cycle detection?",
+        "Kruskal / MST?",
+        "→ UNION FIND / DSU"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 547 — Number of Provinces",
+          "LC 684 — Redundant Connection",
+          "LC 721 — Accounts Merge",
+          "LC 947 — Most Stones Removed",
+          "LC 990 — Satisfiability of Equality Equations",
+          "LC 1319 — Network Connected",
+          "LC 1579 — Remove Max Edges",
+          "LC 1584 — Min Cost to Connect Points",
+          "LC 1697 — Distance Limited Paths",
+          "LC 2316 — Count Unreachable Pairs"
+        ],
+        "gfg": [
+          "DSU",
+          "Union Find",
+          "Detect Cycle",
+          "Kruskal MST",
+          "Number of Islands II",
+          "Accounts Merge",
+          "Connected Components",
+          "Minimum Spanning Tree",
+          "Redundant Connection",
+          "Water Supply Problem"
+        ]
+      }
+    },
+    {
+      "id": 27,
+      "title": "Shortest Path",
+      "slug": "shortest-path",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Graph",
+      "tags": [
+        "shortest-path",
+        "bfs",
+        "dijkstra",
+        "bellman-ford",
+        "floyd-warshall",
+        "0-1-bfs",
+        "dag",
+        "weighted-graph"
+      ],
+      "when_to_use": {
+        "intro": "Use the shortest-path family when the problem asks for minimum distance, minimum cost, or minimum effort between graph nodes.",
+        "patterns": [
+          "Shortest distance",
+          "Minimum cost",
+          "Minimum effort",
+          "Minimum time",
+          "Reach a destination with minimum weight",
+          "Single-source shortest path",
+          "All-pairs shortest path"
+        ]
+      },
+      "algorithm_selection": [
+        {
+          "graph_type": "Unweighted",
+          "algorithm": "BFS"
+        },
+        {
+          "graph_type": "0/1 weights",
+          "algorithm": "0-1 BFS"
+        },
+        {
+          "graph_type": "Positive weights",
+          "algorithm": "Dijkstra"
+        },
+        {
+          "graph_type": "Negative weights",
+          "algorithm": "Bellman-Ford"
+        },
+        {
+          "graph_type": "All-pairs",
+          "algorithm": "Floyd-Warshall"
+        },
+        {
+          "graph_type": "DAG",
+          "algorithm": "Topological Sort + DP"
+        }
+      ],
+      "template": {
+        "name": "Dijkstra",
+        "language": "cpp",
+        "code": "vector<int> dijkstra(\n    int src,\n    vector<vector<pair<int,int>>>& graph) {\n\n    int n = graph.size();\n\n    vector<int> dist(n, INT_MAX);\n\n    priority_queue<\n        pair<int,int>,\n        vector<pair<int,int>>,\n        greater<pair<int,int>>\n    > pq;\n\n    dist[src] = 0;\n    pq.push({0, src});\n\n    while (!pq.empty()) {\n\n        auto [d, node] = pq.top();\n        pq.pop();\n\n        if (d != dist[node])\n            continue;\n\n        for (auto [next, weight] : graph[node]) {\n\n            if (dist[next] > d + weight) {\n\n                dist[next] = d + weight;\n\n                pq.push({dist[next], next});\n            }\n        }\n    }\n\n    return dist;\n}"
+      },
+      "recognition_flow": [
+        "SHORTEST PATH?",
+        "Unweighted → BFS",
+        "Weights only 0/1 → 0-1 BFS",
+        "Positive weights → Dijkstra",
+        "Negative weights → Bellman-Ford",
+        "All pairs → Floyd-Warshall",
+        "DAG → Topological Sort + DP"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 743 — Network Delay Time",
+          "LC 787 — Cheapest Flights",
+          "LC 1514 — Probability Path",
+          "LC 1631 — Path With Minimum Effort",
+          "LC 1976 — Number of Ways",
+          "LC 2045 — Second Minimum Time",
+          "LC 2290 — Minimum Obstacles",
+          "LC 1368 — Minimum Cost Grid",
+          "LC 505 — The Maze II",
+          "LC 882 — Reachable Nodes"
+        ],
+        "gfg": [
+          "Dijkstra Algorithm",
+          "Bellman Ford",
+          "Floyd Warshall",
+          "Shortest Path DAG",
+          "Shortest Path Undirected",
+          "0-1 BFS",
+          "Cheapest Flights",
+          "Shortest Distance",
+          "Minimum Effort Path",
+          "Shortest Path in Binary Maze"
+        ]
+      }
+    },
+    {
+      "id": 28,
+      "title": "Backtracking",
+      "slug": "backtracking",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Recursion / Backtracking",
+      "tags": [
+        "backtracking",
+        "recursion",
+        "subsets",
+        "permutations",
+        "combinations",
+        "partition",
+        "n-queens",
+        "choose-explore-undo"
+      ],
+      "when_to_use": {
+        "intro": "Use Backtracking when you need to explore many possible choices and undo a choice before trying another.",
+        "patterns": [
+          "All possible",
+          "Generate",
+          "Combinations",
+          "Permutations",
+          "Subsets",
+          "Arrangements",
+          "Partition",
+          "Choose / Don't choose"
+        ]
+      },
+      "core_pattern": [
+        "Choose",
+        "Explore",
+        "Undo"
+      ],
+      "templates": [
+        {
+          "name": "Universal Backtracking",
+          "language": "cpp",
+          "code": "void backtrack(vector<int>& nums,\n               vector<int>& path,\n               vector<vector<int>>& ans) {\n\n    // Base case\n    if (path.size() == nums.size()) {\n        ans.push_back(path);\n        return;\n    }\n\n    for (int i = 0; i < nums.size(); i++) {\n\n        // choose\n        path.push_back(nums[i]);\n\n        // explore\n        backtrack(nums, path, ans);\n\n        // undo\n        path.pop_back();\n    }\n}"
+        },
+        {
+          "name": "Subset",
+          "language": "cpp",
+          "code": "void solve(int index) {\n\n    ans.push_back(path);\n\n    for (int i = index; i < n; i++) {\n\n        path.push_back(nums[i]);\n\n        solve(i + 1);\n\n        path.pop_back();\n    }\n}"
+        }
+      ],
+      "recognition_flow": [
+        "Need ALL POSSIBLE solutions?",
+        "Choices at every step?",
+        "Combinations / permutations / subsets?",
+        "Can choose → explore → undo?",
+        "→ BACKTRACKING"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 78 — Subsets",
+          "LC 90 — Subsets II",
+          "LC 46 — Permutations",
+          "LC 47 — Permutations II",
+          "LC 39 — Combination Sum",
+          "LC 40 — Combination Sum II",
+          "LC 77 — Combinations",
+          "LC 22 — Generate Parentheses",
+          "LC 51 — N-Queens",
+          "LC 131 — Palindrome Partitioning"
+        ],
+        "gfg": [
+          "Rat in a Maze",
+          "N-Queens",
+          "Permutations",
+          "Subsets",
+          "Combination Sum",
+          "Sudoku Solver",
+          "Word Search",
+          "M-Coloring",
+          "Palindrome Partitioning",
+          "Generate Parentheses"
+        ]
+      }
+    },
+    {
+      "id": 29,
+      "title": "1D Dynamic Programming",
+      "slug": "1d-dynamic-programming",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Dynamic Programming",
+      "tags": [
+        "dynamic-programming",
+        "1d-dp",
+        "memoization",
+        "tabulation",
+        "overlapping-subproblems",
+        "optimal-substructure",
+        "take-skip"
+      ],
+      "when_to_use": {
+        "intro": "Use 1D DP when a problem has overlapping subproblems and optimal substructure, and the state can usually be represented using one index.",
+        "patterns": [
+          "Maximum",
+          "Minimum",
+          "Number of ways",
+          "Can you reach",
+          "Best possible",
+          "Maximum profit",
+          "Minimum cost"
+        ]
+      },
+      "key_observation": "For 1D DP, dp[i] usually represents the answer related to the first i elements or the state at index i.",
+      "templates": [
+        {
+          "name": "Fibonacci / Climbing Stairs",
+          "language": "cpp",
+          "code": "vector<int> dp(n + 1);\n\ndp[0] = 0;\ndp[1] = 1;\n\nfor (int i = 2; i <= n; i++)\n    dp[i] = dp[i-1] + dp[i-2];"
+        },
+        {
+          "name": "Space Optimized Fibonacci",
+          "language": "cpp",
+          "code": "int prev2 = 0;\nint prev1 = 1;\n\nfor (int i = 2; i <= n; i++) {\n\n    int cur = prev1 + prev2;\n\n    prev2 = prev1;\n    prev1 = cur;\n}\n\nreturn prev1;"
+        },
+        {
+          "name": "Take / Skip",
+          "language": "cpp",
+          "code": "dp[i] = max(\n    dp[i-1],\n    nums[i] + dp[i-2]\n);"
+        },
+        {
+          "name": "DP on Index",
+          "language": "cpp",
+          "code": "vector<int> dp(n, -1);\n\nfunction<int(int)> solve = [&](int i) {\n\n    if (i >= n)\n        return 0;\n\n    if (dp[i] != -1)\n        return dp[i];\n\n    return dp[i] = max(\n        solve(i + 1),\n        nums[i] + solve(i + 2)\n    );\n};"
+        }
+      ],
+      "recognition_flow": [
+        "Overlapping subproblems?",
+        "Optimal substructure?",
+        "Need MAX / MIN / COUNT / CAN REACH?",
+        "Can state be represented using one index?",
+        "→ 1D DYNAMIC PROGRAMMING"
+      ],
+      "must_master": [
+        "Fibonacci / Climbing Stairs",
+        "Take / Skip",
+        "Memoization",
+        "Tabulation",
+        "Space optimization",
+        "DP on index"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 70 — Climbing Stairs",
+          "LC 198 — House Robber",
+          "LC 213 — House Robber II",
+          "LC 746 — Min Cost Climbing Stairs",
+          "LC 91 — Decode Ways",
+          "LC 139 — Word Break",
+          "LC 322 — Coin Change",
+          "LC 518 — Coin Change II",
+          "LC 300 — Longest Increasing Subsequence",
+          "LC 152 — Maximum Product Subarray"
+        ],
+        "gfg": [
+          "Nth Fibonacci",
+          "Climbing Stairs",
+          "Minimum Cost Climbing Stairs",
+          "House Robber",
+          "Coin Change",
+          "Longest Increasing Subsequence",
+          "Maximum Sum Increasing Subsequence",
+          "Decode Ways",
+          "Word Break",
+          "Friends Pairing"
+        ]
+      }
+    },
+    {
+      "id": 30,
+      "title": "2D Dynamic Programming",
+      "slug": "2d-dynamic-programming",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Dynamic Programming",
+      "tags": [
+        "dynamic-programming",
+        "2d-dp",
+        "grid-dp",
+        "string-dp",
+        "memoization",
+        "tabulation",
+        "path"
+      ],
+      "when_to_use": {
+        "intro": "Use 2D DP when the state depends on two changing variables, commonly represented as dp[i][j].",
+        "patterns": [
+          "Grid → row + column",
+          "Two strings → index of string 1 + index of string 2",
+          "Two choices/states",
+          "Minimum/maximum path",
+          "Number of ways"
+        ]
+      },
+      "key_observation": "State usually depends on two variables: dp[i][j].",
+      "templates": [
+        {
+          "name": "Grid DP",
+          "language": "cpp",
+          "code": "vector<vector<int>> dp(n, vector<int>(m));\n\ndp[0][0] = grid[0][0];\n\nfor (int i = 0; i < n; i++) {\n    for (int j = 0; j < m; j++) {\n\n        if (i == 0 && j == 0)\n            continue;\n\n        int up = (i > 0) ? dp[i-1][j] : INT_MAX;\n        int left = (j > 0) ? dp[i][j-1] : INT_MAX;\n\n        dp[i][j] = grid[i][j] + min(up, left);\n    }\n}"
+        },
+        {
+          "name": "2D Memoization",
+          "language": "cpp",
+          "code": "int solve(int i, int j) {\n\n    if (i == n-1 && j == m-1)\n        return grid[i][j];\n\n    if (dp[i][j] != -1)\n        return dp[i][j];\n\n    int ans = INT_MAX;\n\n    if (i + 1 < n)\n        ans = min(ans, solve(i+1, j));\n\n    if (j + 1 < m)\n        ans = min(ans, solve(i, j+1));\n\n    return dp[i][j] = grid[i][j] + ans;\n}"
+        }
+      ],
+      "recognition_flow": [
+        "Need DP?",
+        "Does state depend on TWO variables?",
+        "Grid row + column?",
+        "Two strings / two indices?",
+        "→ 2D DYNAMIC PROGRAMMING"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 62 — Unique Paths",
+          "LC 63 — Unique Paths II",
+          "LC 64 — Minimum Path Sum",
+          "LC 120 — Triangle",
+          "LC 931 — Minimum Falling Path Sum",
+          "LC 221 — Maximal Square",
+          "LC 1277 — Count Square Submatrices",
+          "LC 174 — Dungeon Game",
+          "LC 688 — Knight Probability",
+          "LC 329 — Longest Increasing Path"
+        ],
+        "gfg": [
+          "Unique Paths",
+          "Minimum Cost Path",
+          "Minimum Path Sum",
+          "Gold Mine Problem",
+          "Maximum Path Sum",
+          "Longest Increasing Path",
+          "Maximum Square Submatrix",
+          "Count Square Submatrices",
+          "Dungeon Game",
+          "Edit Distance"
+        ]
+      }
+    },
+    {
+      "id": 31,
+      "title": "Knapsack DP",
+      "slug": "knapsack-dp",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Dynamic Programming",
+      "tags": [
+        "knapsack",
+        "0-1-knapsack",
+        "unbounded-knapsack",
+        "subset-sum",
+        "target-sum",
+        "capacity",
+        "take-skip"
+      ],
+      "when_to_use": {
+        "intro": "Use Knapsack DP when you choose items under a capacity, weight, target, or value constraint.",
+        "patterns": [
+          "Capacity",
+          "Weight",
+          "Profit",
+          "Value",
+          "Choose items",
+          "Maximum value",
+          "Target sum",
+          "Subset sum"
+        ]
+      },
+      "key_question": "Take or don't take?",
+      "template": {
+        "name": "0/1 Knapsack",
+        "language": "cpp",
+        "code": "int knapsack(int W, vector<int>& wt,\n             vector<int>& val) {\n\n    int n = wt.size();\n\n    vector<vector<int>> dp(\n        n + 1,\n        vector<int>(W + 1, 0)\n    );\n\n    for (int i = 1; i <= n; i++) {\n\n        for (int w = 0; w <= W; w++) {\n\n            dp[i][w] = dp[i-1][w];\n\n            if (wt[i-1] <= w) {\n\n                dp[i][w] = max(\n                    dp[i][w],\n                    val[i-1] +\n                    dp[i-1][w-wt[i-1]]\n                );\n            }\n        }\n    }\n\n    return dp[n][W];\n}"
+      },
+      "optimized_template": {
+        "language": "cpp",
+        "code": "vector<int> dp(W + 1, 0);\n\nfor (int i = 0; i < n; i++) {\n\n    for (int w = W; w >= wt[i]; w--) {\n\n        dp[w] = max(\n            dp[w],\n            val[i] + dp[w - wt[i]]\n        );\n    }\n}"
+      },
+      "important_rules": [
+        "Reverse loop → 0/1 Knapsack",
+        "Forward loop → commonly Unbounded Knapsack"
+      ],
+      "recognition_flow": [
+        "Capacity / target / weight?",
+        "Choose items?",
+        "Take or don't take?",
+        "Need maximum value, subset sum, or number of ways?",
+        "→ KNAPSACK DP"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 416 — Partition Equal Subset Sum",
+          "LC 494 — Target Sum",
+          "LC 474 — Ones and Zeroes",
+          "LC 1049 — Last Stone Weight II",
+          "LC 322 — Coin Change",
+          "LC 518 — Coin Change II",
+          "LC 279 — Perfect Squares",
+          "LC 377 — Combination Sum IV",
+          "LC 1155 — Dice Rolls With Target Sum",
+          "LC 1449 — Largest Number"
+        ],
+        "gfg": [
+          "0/1 Knapsack",
+          "Subset Sum",
+          "Partition Equal Subset",
+          "Unbounded Knapsack",
+          "Coin Change",
+          "Minimum Coins",
+          "Rod Cutting",
+          "Count Subsets",
+          "Target Sum",
+          "Equal Sum Partition"
+        ]
+      }
+    },
+    {
+      "id": 32,
+      "title": "LCS / String DP",
+      "slug": "lcs-string-dp",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Dynamic Programming",
+      "tags": [
+        "lcs",
+        "string-dp",
+        "dynamic-programming",
+        "subsequence",
+        "edit-distance",
+        "strings",
+        "common-subsequence"
+      ],
+      "when_to_use": {
+        "intro": "Use LCS/String DP when relationships between two strings determine the state.",
+        "patterns": [
+          "Two strings",
+          "Common",
+          "Subsequence",
+          "Edit",
+          "Insert/delete/replace",
+          "Minimum operations"
+        ]
+      },
+      "key_observation": "For two strings, the state commonly depends on the current index of each string: dp[i][j].",
+      "template": {
+        "name": "LCS",
+        "language": "cpp",
+        "code": "int n = a.size();\nint m = b.size();\n\nvector<vector<int>> dp(\n    n + 1,\n    vector<int>(m + 1, 0)\n);\n\nfor (int i = 1; i <= n; i++) {\n\n    for (int j = 1; j <= m; j++) {\n\n        if (a[i-1] == b[j-1]) {\n\n            dp[i][j] =\n                1 + dp[i-1][j-1];\n\n        } else {\n\n            dp[i][j] =\n                max(dp[i-1][j],\n                    dp[i][j-1]);\n        }\n    }\n}\n\nreturn dp[n][m];"
+      },
+      "recognition_flow": [
+        "TWO STRINGS?",
+        "Common subsequence / edit operations?",
+        "Insert / delete / replace?",
+        "Need minimum operations or maximum common sequence?",
+        "→ LCS / STRING DP"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 1143 — Longest Common Subsequence",
+          "LC 72 — Edit Distance",
+          "LC 583 — Delete Operation for Two Strings",
+          "LC 712 — Minimum ASCII Delete Sum",
+          "LC 1092 — Shortest Common Supersequence",
+          "LC 516 — Longest Palindromic Subsequence",
+          "LC 115 — Distinct Subsequences",
+          "LC 97 — Interleaving String",
+          "LC 1312 — Minimum Insertions",
+          "LC 10 — Regular Expression Matching"
+        ],
+        "gfg": [
+          "LCS",
+          "Longest Common Substring",
+          "Edit Distance",
+          "Longest Palindromic Subsequence",
+          "Shortest Common Supersequence",
+          "Distinct Subsequences",
+          "Minimum Insertions Palindrome",
+          "Sequence Pattern Matching",
+          "Wildcard Matching",
+          "Interleaving Strings"
+        ]
+      }
+    },
+    {
+      "id": 33,
+      "title": "LIS / Subsequence DP",
+      "slug": "lis-subsequence-dp",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Dynamic Programming",
+      "tags": [
+        "lis",
+        "subsequence-dp",
+        "increasing-subsequence",
+        "decreasing-subsequence",
+        "sequence",
+        "binary-search"
+      ],
+      "when_to_use": {
+        "intro": "Use LIS/Subsequence DP when you choose elements while preserving their relative order and need the longest or maximum-value valid subsequence.",
+        "patterns": [
+          "Subsequence",
+          "Increasing",
+          "Decreasing",
+          "Maximum length",
+          "Maximum sum",
+          "Choose elements while preserving order"
+        ]
+      },
+      "templates": [
+        {
+          "name": "O(n²) LIS",
+          "language": "cpp",
+          "code": "vector<int> dp(n, 1);\n\nint ans = 1;\n\nfor (int i = 0; i < n; i++) {\n\n    for (int j = 0; j < i; j++) {\n\n        if (nums[j] < nums[i]) {\n\n            dp[i] = max(\n                dp[i],\n                dp[j] + 1\n            );\n        }\n    }\n\n    ans = max(ans, dp[i]);\n}\n\nreturn ans;"
+        },
+        {
+          "name": "O(n log n) LIS",
+          "language": "cpp",
+          "code": "vector<int> temp;\n\nfor (int x : nums) {\n\n    auto it = lower_bound(\n        temp.begin(),\n        temp.end(),\n        x\n    );\n\n    if (it == temp.end())\n        temp.push_back(x);\n    else\n        *it = x;\n}\n\nreturn temp.size();"
+        }
+      ],
+      "recognition_flow": [
+        "SUBSEQUENCE?",
+        "Must preserve order?",
+        "Increasing / decreasing / arithmetic / chain?",
+        "Need maximum length or sum?",
+        "→ LIS / SUBSEQUENCE DP"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 300 — Longest Increasing Subsequence",
+          "LC 673 — Number of LIS",
+          "LC 354 — Russian Doll Envelopes",
+          "LC 646 — Maximum Length of Pair Chain",
+          "LC 368 — Largest Divisible Subset",
+          "LC 1048 — Longest String Chain",
+          "LC 1027 — Longest Arithmetic Subsequence",
+          "LC 1218 — Longest Arithmetic Subsequence of Given Difference",
+          "LC 516 — Longest Palindromic Subsequence",
+          "LC 334 — Increasing Triplet"
+        ],
+        "gfg": [
+          "LIS",
+          "Maximum Sum Increasing Subsequence",
+          "Longest Bitonic Subsequence",
+          "Longest Decreasing Subsequence",
+          "Number of LIS",
+          "Russian Doll Envelopes",
+          "Longest Chain of Pairs",
+          "Longest Arithmetic Progression",
+          "Longest Geometric Progression",
+          "Largest Divisible Subset"
+        ]
+      }
+    },
+    {
+      "id": 34,
+      "title": "Interval DP",
+      "slug": "interval-dp",
+      "icon": "⭐",
+      "rating": 3,
+      "category": "Dynamic Programming",
+      "tags": [
+        "interval-dp",
+        "dynamic-programming",
+        "subarray",
+        "substring",
+        "partition",
+        "matrix-chain",
+        "palindrome"
+      ],
+      "when_to_use": {
+        "intro": "Use Interval DP when the state represents an answer for a continuous interval [l, r] and the interval can be split at some position k.",
+        "patterns": [
+          "Subarray / substring interval",
+          "Left ... right",
+          "Burst",
+          "Merge",
+          "Partition interval",
+          "Matrix multiplication",
+          "Palindrome"
+        ]
+      },
+      "key_state": "dp[l][r] = answer for interval [l, r].",
+      "template": {
+        "language": "cpp",
+        "code": "for (int len = 2; len <= n; len++) {\n\n    for (int l = 0; l + len - 1 < n; l++) {\n\n        int r = l + len - 1;\n\n        dp[l][r] = INF;\n\n        for (int k = l; k < r; k++) {\n\n            dp[l][r] = min(\n                dp[l][r],\n                dp[l][k] +\n                dp[k+1][r] +\n                cost(l, k, r)\n            );\n        }\n    }\n}"
+      },
+      "recognition_flow": [
+        "Continuous interval?",
+        "State represented by LEFT and RIGHT?",
+        "Can split interval at K?",
+        "Burst / merge / partition / matrix chain / palindrome?",
+        "→ INTERVAL DP"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 312 — Burst Balloons",
+          "LC 1039 — Minimum Score Triangulation",
+          "LC 1000 — Merge Stones",
+          "LC 516 — Longest Palindromic Subsequence",
+          "LC 1312 — Minimum Insertions",
+          "LC 664 — Strange Printer",
+          "LC 730 — Count Different Palindromic Subsequences",
+          "LC 1547 — Minimum Cost to Cut a Stick",
+          "LC 375 — Guess Number Higher or Lower II",
+          "LC 87 — Scramble String"
+        ],
+        "gfg": [
+          "Matrix Chain Multiplication",
+          "Palindrome Partitioning",
+          "Optimal BST",
+          "Burst Balloons",
+          "Boolean Parenthesization",
+          "Minimum Cost to Cut",
+          "Egg Dropping",
+          "Optimal Merge Pattern",
+          "Minimum Cost Polygon Triangulation",
+          "Partition Problem"
+        ]
+      }
+    },
+    {
+      "id": 35,
+      "title": "Greedy",
+      "slug": "greedy",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Greedy",
+      "tags": [
+        "greedy",
+        "local-optimum",
+        "global-optimum",
+        "interval-scheduling",
+        "activity-selection",
+        "jump-game",
+        "deadline"
+      ],
+      "when_to_use": {
+        "intro": "Think Greedy when making the best local choice can lead to the global optimum.",
+        "patterns": [
+          "Maximum number",
+          "Minimum number",
+          "Activity selection",
+          "Interval scheduling",
+          "Jump",
+          "Gas station",
+          "Fractional",
+          "Deadline"
+        ]
+      },
+      "core_pattern": [
+        "Identify the greedy choice",
+        "Sort if necessary",
+        "Choose the best valid option",
+        "Continue without undoing previous choices"
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "sort(items.begin(), items.end(),\n     [](auto& a, auto& b) {\n\n         return /* greedy condition */;\n     });\n\nfor (auto& item : items) {\n\n    if (/* can choose */) {\n        // choose item\n    }\n}"
+      },
+      "recognition_flow": [
+        "Need MAXIMUM / MINIMUM?",
+        "Can a local choice be proven optimal?",
+        "Sorting reveals the correct order?",
+        "Can choices be made without backtracking?",
+        "→ GREEDY"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 55 — Jump Game",
+          "LC 45 — Jump Game II",
+          "LC 134 — Gas Station",
+          "LC 435 — Non-overlapping Intervals",
+          "LC 452 — Minimum Arrows",
+          "LC 763 — Partition Labels",
+          "LC 406 — Queue Reconstruction",
+          "LC 455 — Assign Cookies",
+          "LC 621 — Task Scheduler",
+          "LC 135 — Candy"
+        ],
+        "gfg": [
+          "Activity Selection",
+          "Fractional Knapsack",
+          "Job Sequencing",
+          "Minimum Platforms",
+          "N Meetings in One Room",
+          "Assign Cookies",
+          "Minimum Coins",
+          "Gas Station",
+          "Maximum Meetings",
+          "Huffman Coding"
+        ]
+      }
+    },
+    {
+      "id": 36,
+      "title": "Trie",
+      "slug": "trie",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Trie",
+      "tags": [
+        "trie",
+        "prefix",
+        "dictionary",
+        "autocomplete",
+        "startsWith",
+        "word-search",
+        "xor",
+        "strings"
+      ],
+      "when_to_use": {
+        "intro": "Use a Trie when strings need to be organized or queried efficiently by prefixes.",
+        "patterns": [
+          "Prefix",
+          "Dictionary",
+          "Autocomplete",
+          "startsWith",
+          "Word search",
+          "Maximum XOR",
+          "Strings by prefix"
+        ]
+      },
+      "template": {
+        "language": "cpp",
+        "code": "struct TrieNode {\n\n    TrieNode* child[26];\n    bool end;\n\n    TrieNode() {\n\n        end = false;\n\n        for (int i = 0; i < 26; i++)\n            child[i] = nullptr;\n    }\n};\n\nclass Trie {\n\n    TrieNode* root;\n\npublic:\n\n    Trie() {\n        root = new TrieNode();\n    }\n\n    void insert(string word) {\n\n        TrieNode* cur = root;\n\n        for (char c : word) {\n\n            int x = c - 'a';\n\n            if (!cur->child[x])\n                cur->child[x] = new TrieNode();\n\n            cur = cur->child[x];\n        }\n\n        cur->end = true;\n    }\n\n    bool search(string word) {\n\n        TrieNode* cur = root;\n\n        for (char c : word) {\n\n            int x = c - 'a';\n\n            if (!cur->child[x])\n                return false;\n\n            cur = cur->child[x];\n        }\n\n        return cur->end;\n    }\n\n    bool startsWith(string prefix) {\n\n        TrieNode* cur = root;\n\n        for (char c : prefix) {\n\n            int x = c - 'a';\n\n            if (!cur->child[x])\n                return false;\n\n            cur = cur->child[x];\n        }\n\n        return true;\n    }\n};"
+      },
+      "recognition_flow": [
+        "STRING problem?",
+        "Need PREFIX queries?",
+        "Need dictionary / autocomplete / startsWith?",
+        "Need efficient character-by-character search?",
+        "→ TRIE"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 208 — Implement Trie",
+          "LC 211 — Design Add and Search Words",
+          "LC 212 — Word Search II",
+          "LC 648 — Replace Words",
+          "LC 677 — Map Sum Pairs",
+          "LC 720 — Longest Word in Dictionary",
+          "LC 745 — Prefix and Suffix Search",
+          "LC 421 — Maximum XOR",
+          "LC 1707 — Maximum XOR With Element",
+          "LC 1803 — Count Pairs With XOR"
+        ],
+        "gfg": [
+          "Trie Insert/Search",
+          "Trie Prefix",
+          "Longest Prefix",
+          "Word Boggle",
+          "Word Break",
+          "Auto Complete",
+          "Maximum XOR",
+          "Unique Rows",
+          "Phone Directory",
+          "Count Distinct Rows"
+        ]
+      }
+    },
+    {
+      "id": 37,
+      "title": "Bit Manipulation",
+      "slug": "bit-manipulation",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Bit Manipulation",
+      "tags": [
+        "bit-manipulation",
+        "bitwise",
+        "xor",
+        "binary",
+        "set-bits",
+        "bitmask",
+        "power-of-two"
+      ],
+      "when_to_use": {
+        "intro": "Use Bit Manipulation when the problem involves binary representation, XOR properties, individual bits, masks, or powers of two.",
+        "patterns": [
+          "XOR",
+          "Odd/even",
+          "Power of 2",
+          "Single number",
+          "Set bits",
+          "Binary",
+          "Mask",
+          "Subsets using bits"
+        ]
+      },
+      "essential_operations": [
+        {
+          "operation": "Check bit",
+          "code": "if (n & (1 << i))"
+        },
+        {
+          "operation": "Set bit",
+          "code": "n |= (1 << i);"
+        },
+        {
+          "operation": "Clear bit",
+          "code": "n &= ~(1 << i);"
+        },
+        {
+          "operation": "Toggle bit",
+          "code": "n ^= (1 << i);"
+        },
+        {
+          "operation": "Check odd",
+          "code": "if (n & 1)"
+        },
+        {
+          "operation": "Remove lowest set bit",
+          "code": "n &= (n - 1);"
+        },
+        {
+          "operation": "Count set bits",
+          "code": "__builtin_popcount(n);"
+        },
+        {
+          "operation": "XOR",
+          "code": "a ^ b;"
+        }
+      ],
+      "template": {
+        "name": "Single Number",
+        "language": "cpp",
+        "code": "int ans = 0;\n\nfor (int x : nums)\n    ans ^= x;\n\nreturn ans;"
+      },
+      "recognition_flow": [
+        "XOR / binary / bits mentioned?",
+        "Single number or odd-occurring element?",
+        "Power of 2?",
+        "Need set/clear/toggle/check bits?",
+        "→ BIT MANIPULATION"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 136 — Single Number",
+          "LC 137 — Single Number II",
+          "LC 190 — Reverse Bits",
+          "LC 191 — Number of 1 Bits",
+          "LC 231 — Power of Two",
+          "LC 338 — Counting Bits",
+          "LC 371 — Sum of Two Integers",
+          "LC 476 — Number Complement",
+          "LC 693 — Binary Number with Alternating Bits",
+          "LC 201 — Bitwise AND of Numbers Range"
+        ],
+        "gfg": [
+          "Set Bits",
+          "Power of Two",
+          "Single Number",
+          "Missing Number",
+          "Two Odd Occurring",
+          "Count Set Bits",
+          "Reverse Bits",
+          "XOR from L to R",
+          "Find Missing and Repeating",
+          "Maximum XOR Pair"
+        ]
+      }
+    },
+    {
+      "id": 38,
+      "title": "Matrix / Grid",
+      "slug": "matrix-grid",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Matrix / Grid",
+      "tags": [
+        "matrix",
+        "grid",
+        "island",
+        "neighbors",
+        "4-directions",
+        "8-directions",
+        "spiral",
+        "rotate",
+        "flood-fill"
+      ],
+      "when_to_use": {
+        "intro": "Use this pattern whenever the problem is based on a matrix/grid and requires neighbor traversal, transformations, or systematic row/column movement.",
+        "patterns": [
+          "Grid",
+          "Matrix",
+          "Island",
+          "Neighbor",
+          "4 directions",
+          "8 directions",
+          "Rows/columns",
+          "Spiral",
+          "Rotate",
+          "Flood fill"
+        ]
+      },
+      "templates": [
+        {
+          "name": "Direction Traversal",
+          "language": "cpp",
+          "code": "int dr[] = {1, -1, 0, 0};\nint dc[] = {0, 0, 1, -1};\n\nfor (int k = 0; k < 4; k++) {\n\n    int nr = r + dr[k];\n    int nc = c + dc[k];\n\n    if (nr >= 0 && nr < n &&\n        nc >= 0 && nc < m) {\n\n        // process\n    }\n}"
+        },
+        {
+          "name": "Spiral Traversal",
+          "language": "cpp",
+          "code": "int top = 0;\nint bottom = n - 1;\nint left = 0;\nint right = m - 1;\n\nwhile (top <= bottom &&\n       left <= right) {\n\n    for (int j = left; j <= right; j++)\n        ans.push_back(matrix[top][j]);\n\n    top++;\n\n    for (int i = top; i <= bottom; i++)\n        ans.push_back(matrix[i][right]);\n\n    right--;\n\n    if (top <= bottom) {\n\n        for (int j = right; j >= left; j--)\n            ans.push_back(matrix[bottom][j]);\n\n        bottom--;\n    }\n\n    if (left <= right) {\n\n        for (int i = bottom; i >= top; i--)\n            ans.push_back(matrix[i][left]);\n\n        left++;\n    }\n}"
+        }
+      ],
+      "recognition_flow": [
+        "MATRIX / GRID?",
+        "Need neighbor traversal?",
+        "4 or 8 directions?",
+        "Spiral / rotate / flood fill / island?",
+        "→ MATRIX / GRID PATTERN"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 54 — Spiral Matrix",
+          "LC 48 — Rotate Image",
+          "LC 73 — Set Matrix Zeroes",
+          "LC 200 — Number of Islands",
+          "LC 695 — Max Area of Island",
+          "LC 733 — Flood Fill",
+          "LC 994 — Rotting Oranges",
+          "LC 79 — Word Search",
+          "LC 289 — Game of Life",
+          "LC 498 — Diagonal Traverse"
+        ],
+        "gfg": [
+          "Spiral Matrix",
+          "Rotate Matrix",
+          "Set Matrix Zeroes",
+          "Search in Matrix",
+          "Number of Islands",
+          "Flood Fill",
+          "Boundary Traversal",
+          "Transpose Matrix",
+          "Median in Row Sorted Matrix",
+          "Maximum Rectangle"
+        ]
+      }
+    },
+    {
+      "id": 39,
+      "title": "Divide & Conquer",
+      "slug": "divide-and-conquer",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Divide & Conquer",
+      "tags": [
+        "divide-and-conquer",
+        "recursion",
+        "merge-sort",
+        "quick-sort",
+        "binary-search",
+        "inversions",
+        "combine"
+      ],
+      "when_to_use": {
+        "intro": "Use Divide & Conquer when a problem can be divided into smaller independent parts, solved recursively, and then combined.",
+        "patterns": [
+          "Merge Sort",
+          "Quick Sort",
+          "Binary Search",
+          "Count inversions",
+          "Maximum subarray",
+          "Closest pair",
+          "Divide array into independent pieces"
+        ]
+      },
+      "core_pattern": [
+        "Divide",
+        "Solve left",
+        "Solve right",
+        "Combine"
+      ],
+      "templates": [
+        {
+          "name": "Generic Divide & Conquer",
+          "language": "cpp",
+          "code": "void solve(int l, int r) {\n\n    if (l >= r)\n        return;\n\n    int mid = l + (r - l) / 2;\n\n    solve(l, mid);\n\n    solve(mid + 1, r);\n\n    combine(l, mid, r);\n}"
+        },
+        {
+          "name": "Merge Sort",
+          "language": "cpp",
+          "code": "void mergeSort(vector<int>& a,\n               int l,\n               int r) {\n\n    if (l >= r)\n        return;\n\n    int mid = l + (r - l) / 2;\n\n    mergeSort(a, l, mid);\n    mergeSort(a, mid + 1, r);\n\n    merge(a, l, mid, r);\n}"
+        }
+      ],
+      "recognition_flow": [
+        "Can the problem be split into smaller parts?",
+        "Can left and right be solved independently?",
+        "Is there a meaningful combine step?",
+        "→ DIVIDE & CONQUER"
+      ],
+      "problems": {
+        "leetcode": [
+          "LC 912 — Sort an Array",
+          "LC 53 — Maximum Subarray",
+          "LC 215 — Kth Largest Element",
+          "LC 315 — Count Smaller Numbers After Self",
+          "LC 327 — Count of Range Sum",
+          "LC 493 — Reverse Pairs",
+          "LC 148 — Sort List",
+          "LC 23 — Merge K Sorted Lists",
+          "LC 4 — Median of Two Sorted Arrays",
+          "LC 169 — Majority Element"
+        ],
+        "gfg": [
+          "Merge Sort",
+          "Quick Sort",
+          "Binary Search",
+          "Count Inversions",
+          "Maximum Subarray",
+          "Kth Smallest",
+          "Majority Element",
+          "Merge K Sorted Arrays",
+          "Closest Pair of Points",
+          "Median of Two Sorted Arrays"
+        ]
+      }
+    },
+    {
+      "id": 40,
+      "title": "Difference Array",
+      "slug": "difference-array",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Array",
+      "tags": [
+        "difference-array",
+        "range-update",
+        "range-increment",
+        "range-query",
+        "prefix-sum",
+        "interval-update"
+      ],
+      "when_to_use": {
+        "intro": "Use a Difference Array when you have many range updates and need to efficiently add a value to every element in a range.",
+        "patterns": [
+          "Many range updates",
+          "Add X to [L, R]",
+          "Increment a range",
+          "Apply repeated interval updates",
+          "Need to reconstruct final array after range modifications"
+        ]
+      },
+      "key_observation": "Instead of updating every element from L to R, mark only where the change starts and ends. A prefix sum reconstructs the actual values.",
+      "core_pattern": [
+        "diff[L] += value",
+        "diff[R + 1] -= value",
+        "Take prefix sum over diff",
+        "The running sum gives the actual value at each index"
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "vector<int> diff(n + 1, 0);\n\ndiff[l] += val;\ndiff[r + 1] -= val;\n\nint curr = 0;\n\nfor (int i = 0; i < n; i++) {\n\n    curr += diff[i];\n\n    // actual value = curr\n}"
+      },
+      "recognition_flow": [
+        "Many updates?",
+        "Each update affects a RANGE [L, R]?",
+        "Need to add/increment by X?",
+        "Updating every element individually would be expensive?",
+        "→ DIFFERENCE ARRAY"
+      ],
+      "complexity": {
+        "range_update": "O(1)",
+        "reconstruct_array": "O(n)",
+        "m_updates": "O(m + n)"
+      },
+      "problems": {
+        "leetcode": [
+          "LC 1109 — Corporate Flight Bookings",
+          "LC 1094 — Car Pooling"
+        ],
+        "gfg": []
+      }
+    },
+    {
+      "id": 41,
+      "title": "Count Subarray Decision Tree",
+      "slug": "count-subarray-decision-tree",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Subarray / Sliding Window",
+      "tags": [
+        "subarray",
+        "count-subarrays",
+        "sliding-window",
+        "prefix-sum",
+        "hashmap",
+        "at-most",
+        "exactly-k",
+        "remainder",
+        "monotonic-deque"
+      ],
+      "when_to_use": {
+        "intro": "When a problem asks to count subarrays, first identify the constraint on size, sum, divisibility, frequency, or uniqueness. The constraint determines the pattern.",
+        "patterns": [
+          "Fixed-size subarray",
+          "Sum equals K",
+          "Sum divisible by K",
+          "Exactly K",
+          "At most K",
+          "Longest or maximum length",
+          "Shortest or minimum length",
+          "Character frequencies",
+          "Unique characters",
+          "Window maximum/minimum",
+          "Negative numbers",
+          "Binary array",
+          "Bitwise constraints"
+        ]
+      },
+      "decision_tree": [
+        {
+          "question": "Is it fixed-size?",
+          "condition": "Size exactly K",
+          "pattern": "Fixed Sliding Window",
+          "example": "Count subarrays of size K whose sum is greater than X."
+        },
+        {
+          "question": "Is it sum = K?",
+          "condition": "Subarray sum exactly equals K",
+          "pattern": "Prefix Sum + HashMap",
+          "example": "LC 560 — Subarray Sum Equals K"
+        },
+        {
+          "question": "Is it sum divisible by K?",
+          "condition": "Subarray sum is divisible by K",
+          "pattern": "Prefix Remainder + HashMap",
+          "example": "LC 974 — Subarray Sums Divisible by K"
+        },
+        {
+          "question": "Is it exactly K?",
+          "condition": "Exactly K distinct / odd numbers / binary sum etc.",
+          "pattern": "AtMost(K) - AtMost(K-1)",
+          "examples": [
+            "K distinct",
+            "K odd numbers",
+            "Binary sum K"
+          ]
+        },
+        {
+          "question": "Is it at most K?",
+          "condition": "At most K distinct / odd numbers / other window-compatible constraint",
+          "pattern": "Variable Sliding Window",
+          "formula": "ans += right - left + 1"
+        }
+      ],
+      "pattern_table": [
+        {
+          "question": "Window size = K",
+          "pattern": "Fixed Window"
+        },
+        {
+          "question": "Longest / Maximum Length",
+          "pattern": "Variable Window — Expand, shrink when invalid"
+        },
+        {
+          "question": "Shortest / Minimum Length",
+          "pattern": "Variable Window — Shrink while valid"
+        },
+        {
+          "question": "At Most K",
+          "pattern": "Standard Variable Window"
+        },
+        {
+          "question": "Exactly K",
+          "pattern": "AtMost(K) - AtMost(K-1)"
+        },
+        {
+          "question": "Characters / Frequencies",
+          "pattern": "HashMap"
+        },
+        {
+          "question": "Unique Characters",
+          "pattern": "HashSet / HashMap"
+        },
+        {
+          "question": "Window Maximum / Minimum",
+          "pattern": "Monotonic Deque"
+        },
+        {
+          "question": "Negative Numbers",
+          "pattern": "Prefix Sum + HashMap"
+        },
+        {
+          "question": "Binary (0/1)",
+          "pattern": "Sliding Window"
+        },
+        {
+          "question": "Bitwise Constraints",
+          "pattern": "Sliding Window + Bitmask"
+        }
+      ],
+      "templates": [
+        {
+          "name": "Count At Most K",
+          "language": "cpp",
+          "code": "int left = 0;\nint ans = 0;\n\nfor (int right = 0; right < n; right++) {\n\n    // add nums[right]\n\n    while (/* window invalid */) {\n        // remove nums[left]\n        left++;\n    }\n\n    ans += right - left + 1;\n}\n\nreturn ans;"
+        },
+        {
+          "name": "Exactly K",
+          "language": "cpp",
+          "code": "return atMost(K) - atMost(K - 1);"
+        },
+        {
+          "name": "Longest Valid Window",
+          "language": "cpp",
+          "code": "int left = 0;\nint ans = 0;\n\nfor (int right = 0; right < n; right++) {\n\n    // add nums[right]\n\n    while (/* window invalid */) {\n        // remove nums[left]\n        left++;\n    }\n\n    ans = max(ans, right - left + 1);\n}\n\nreturn ans;"
+        },
+        {
+          "name": "Minimum Valid Window",
+          "language": "cpp",
+          "code": "int left = 0;\nint ans = INT_MAX;\n\nfor (int right = 0; right < n; right++) {\n\n    // add nums[right]\n\n    while (/* window valid */) {\n\n        ans = min(ans, right - left + 1);\n\n        // remove nums[left]\n        left++;\n    }\n}\n\nreturn ans == INT_MAX ? 0 : ans;"
+        }
+      ],
+      "recognition_flow": [
+        "COUNT SUBARRAYS?",
+        "Fixed size K? → FIXED SLIDING WINDOW",
+        "Sum = K? → PREFIX SUM + HASHMAP",
+        "Sum divisible by K? → PREFIX REMAINDER + HASHMAP",
+        "Exactly K? → AtMost(K) - AtMost(K-1)",
+        "At Most K? → VARIABLE SLIDING WINDOW",
+        "Need longest? → max(right - left + 1)",
+        "Need shortest? → shrink while valid",
+        "Need frequencies/unique characters? → HASHMAP / HASHSET",
+        "Need window max/min? → MONOTONIC DEQUE",
+        "Negative numbers with sum constraint? → PREFIX SUM + HASHMAP",
+        "Binary 0/1 with sum constraint? → SLIDING WINDOW",
+        "Bitwise constraint? → SLIDING WINDOW + BITMASK"
+      ],
+      "count_vs_longest": {
+        "count": {
+          "key_question": "How many valid subarrays?",
+          "formula": "ans += right - left + 1",
+          "thinking": "For each right, count all valid starting positions from left through right."
+        },
+        "longest": {
+          "key_question": "What is the maximum valid length?",
+          "formula": "ans = max(ans, right - left + 1)",
+          "keywords": [
+            "longest",
+            "maximum length",
+            "largest"
+          ]
+        }
+      },
+      "key_ideas": [
+        "The word 'subarray' means the elements must be contiguous.",
+        "For counting with an AtMost constraint, every start between left and right forms a valid subarray ending at right.",
+        "Exactly K can often be transformed into AtMost(K) - AtMost(K-1).",
+        "Negative numbers can break the usual sum-based sliding-window monotonicity, so Prefix Sum + HashMap is often required.",
+        "Always distinguish COUNT from LONGEST: counting uses addition, while longest uses max."
+      ]
+    },
+    {
+      "id": 42,
+      "title": "Custom Sorting / Comparator",
+      "slug": "custom-sorting-comparator",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Sorting",
+      "tags": [
+        "sorting",
+        "custom-comparator",
+        "lambda",
+        "auto",
+        "pairs",
+        "strings",
+        "frequency",
+        "largest-number"
+      ],
+      "when_to_use": {
+        "intro": "Use a custom comparator when the default ascending/lexicographical sorting order is not the order required by the problem.",
+        "patterns": [
+          "Sort by a custom condition",
+          "Sort pairs by first or second value",
+          "Sort using multiple conditions",
+          "Sort strings by length",
+          "Sort by frequency",
+          "Largest number arrangement",
+          "Greedy problems requiring a specific ordering"
+        ]
+      },
+      "core_pattern": "Comparator returns true when a should appear before b.",
+      "templates": [
+        {
+          "name": "Short Comparator",
+          "language": "cpp",
+          "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    return a < b;\n});"
+        },
+        {
+          "name": "Pair",
+          "language": "cpp",
+          "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    return a.first < b.first;\n});"
+        },
+        {
+          "name": "Two Conditions",
+          "language": "cpp",
+          "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    if (a.first != b.first)\n        return a.first < b.first;\n\n    return a.second > b.second;\n});"
+        },
+        {
+          "name": "String",
+          "language": "cpp",
+          "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    return a.length() < b.length();\n});"
+        },
+        {
+          "name": "Frequency",
+          "language": "cpp",
+          "code": "sort(s.begin(), s.end(), [&](auto a, auto b) {\n    if (freq[a] != freq[b])\n        return freq[a] > freq[b];\n\n    return a < b;\n});"
+        },
+        {
+          "name": "Largest Number",
+          "language": "cpp",
+          "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    return a + b > b + a;\n});"
+        }
+      ],
+      "main_template": {
+        "language": "cpp",
+        "code": "sort(v.begin(), v.end(), [](auto& a, auto& b) {\n    if (condition1)\n        return order1;\n\n    return order2;\n});"
+      },
+      "key_idea": "`auto` allows the compiler to infer the type of the comparator arguments, so you can avoid explicitly writing types such as `const pair<int,int>&` or `const string&`.",
+      "example": {
+        "name": "Sort Vowels",
+        "language": "cpp",
+        "code": "class Solution {\n    bool isvowel(char ch) {\n        return ch == 'a' || ch == 'e' || ch == 'i' ||\n               ch == 'o' || ch == 'u' ||\n               ch == 'A' || ch == 'E' || ch == 'I' ||\n               ch == 'O' || ch == 'U';\n    }\n\npublic:\n    string sortVowels(string s) {\n\n        vector<pair<char, int>> count;\n\n        for (auto& ch : s) {\n            if (isvowel(ch)) {\n                count.push_back({ch, int(ch)});\n            }\n        }\n\n        sort(count.begin(), count.end(), [](auto& a, auto& b) {\n            return a.second < b.second;\n        });\n\n        int idx = 0;\n\n        for (auto& ch : s) {\n            if (isvowel(ch)) {\n                ch = count[idx].first;\n                idx++;\n            }\n        }\n\n        return s;\n    }\n};"
+      },
+      "important_comparator": {
+        "language": "cpp",
+        "code": "sort(count.begin(), count.end(), [](auto& a, auto& b) {\n    return a.second < b.second;\n});",
+        "explanation": "Here a.second and b.second contain the ASCII values. vector<pair<char,int>> preserves every vowel occurrence while allowing the second value to be used for sorting."
+      },
+      "recognition_flow": [
+        "Default sort order is not enough?",
+        "Need custom ordering?",
+        "Sort by first / second / length / frequency?",
+        "Need multiple tie-breaking conditions?",
+        "Need special ordering such as a+b > b+a?",
+        "→ CUSTOM SORTING / COMPARATOR"
+      ]
+    },
+    {
+      "id": 43,
+      "title": "Circular Traversal",
+      "slug": "circular-traversal",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Array / Circular Array",
+      "tags": [
+        "circular-array",
+        "modulo",
+        "circular-traversal",
+        "circular-window",
+        "circular-sliding-window",
+        "two-pointers",
+        "next-index",
+        "previous-index"
+      ],
+      "when_to_use": {
+        "intro": "Use Circular Traversal when the array wraps around from the last index back to the first index.",
+        "patterns": [
+          "Circular array",
+          "Circular subarray",
+          "Circular sliding window",
+          "Maximum circular subarray",
+          "Next greater element",
+          "Move to next index",
+          "Move to previous index",
+          "Traverse more than n elements"
+        ]
+      },
+      "key_observation": "Modulo converts an unrestricted traversal index into a valid circular array index.",
+      "templates": [
+        {
+          "name": "Circular Traversal n Times",
+          "language": "cpp",
+          "code": "for (int i = 0; i < n; i++) {\n    int idx = i % n;\n    cout << a[idx] << \" \";\n}"
+        },
+        {
+          "name": "Circular Traversal 2n Times",
+          "language": "cpp",
+          "code": "for (int i = 0; i < 2 * n; i++) {\n    int idx = i % n;\n    cout << a[idx] << \" \";\n}"
+        },
+        {
+          "name": "Start From Any Index",
+          "language": "cpp",
+          "code": "int start = 2;\n\nfor (int i = 0; i < n; i++) {\n    int curr = (start + i) % n;\n    cout << a[curr] << \" \";\n}"
+        },
+        {
+          "name": "Start From Index and Traverse 2n",
+          "language": "cpp",
+          "code": "int start = 2;\n\nfor (int i = 0; i < 2 * n; i++) {\n    int curr = (start + i) % n;\n    cout << a[curr] << \" \";\n}"
+        },
+        {
+          "name": "Circular Traversal Backward",
+          "language": "cpp",
+          "code": "int start = 2;\n\nfor (int i = 0; i < n; i++) {\n    int curr = (start - i + n) % n;\n    cout << a[curr] << \" \";\n}"
+        },
+        {
+          "name": "Move to Next Index",
+          "language": "cpp",
+          "code": "idx = (idx + 1) % n;"
+        },
+        {
+          "name": "Move to Previous Index",
+          "language": "cpp",
+          "code": "idx = (idx - 1 + n) % n;"
+        },
+        {
+          "name": "Circular Window",
+          "language": "cpp",
+          "code": "int k = 3;\n\nfor (int i = 0; i < n; i++) {\n\n    for (int j = 0; j < k; j++) {\n        int idx = (i + j) % n;\n        cout << a[idx] << \" \";\n    }\n\n    cout << endl;\n}"
+        },
+        {
+          "name": "Circular Window Sum",
+          "language": "cpp",
+          "code": "int k = 3;\n\nfor (int i = 0; i < n; i++) {\n\n    int sum = 0;\n\n    for (int j = 0; j < k; j++) {\n        int idx = (i + j) % n;\n        sum += a[idx];\n    }\n\n    cout << sum << endl;\n}"
+        },
+        {
+          "name": "Circular Array + Two Pointers",
+          "language": "cpp",
+          "code": "int left = 0;\n\nfor (int right = 0; right < 2 * n; right++) {\n\n    int idx = right % n;\n\n    cout << a[idx] << \" \";\n}"
+        }
+      ],
+      "key_patterns": [
+        {
+          "pattern": "Forward circular index",
+          "formula": "(start + i) % n"
+        },
+        {
+          "pattern": "Backward circular index",
+          "formula": "(start - i + n) % n"
+        },
+        {
+          "pattern": "Next index",
+          "formula": "(idx + 1) % n"
+        },
+        {
+          "pattern": "Previous index",
+          "formula": "(idx - 1 + n) % n"
+        },
+        {
+          "pattern": "Any traversal beyond array length",
+          "formula": "i % n"
+        }
+      ],
+      "recognition_flow": [
+        "Array wraps from last index to first?",
+        "Need to traverse beyond n elements?",
+        "Need next/previous circular index?",
+        "Need a circular window?",
+        "Circular sliding window / subarray?",
+        "Next greater element in a circular array?",
+        "→ CIRCULAR TRAVERSAL"
+      ],
+      "common_applications": [
+        "Circular Sliding Window",
+        "Circular Subarray",
+        "Maximum Circular Subarray",
+        "Next Greater Element II",
+        "Circular Scheduling",
+        "Repeated traversal of an array"
+      ]
+    },
+    {
+      "id": 44,
+      "title": "Circular Next / Previous Element",
+      "slug": "circular-next-previous-element",
+      "icon": "⭐",
+      "rating": 4,
+      "category": "Array / Circular Array",
+      "tags": [
+        "circular-array",
+        "modulo",
+        "next-element",
+        "previous-element",
+        "wrap-around",
+        "index-manipulation"
+      ],
+      "when_to_use": {
+        "intro": "Use this pattern when you need to access the next or previous element while treating the array as circular.",
+        "patterns": [
+          "Next element circularly",
+          "Previous element circularly",
+          "Wrap from last index to first",
+          "Wrap from first index to last",
+          "Circular neighbor access",
+          "Circular array problems"
+        ]
+      },
+      "templates": [
+        {
+          "name": "Next Element Circularly",
+          "language": "cpp",
+          "code": "for (int i = 0; i < n; i++) {\n\n    int next = (i + 1) % n;\n\n    cout << a[next] << \" \";\n}"
+        },
+        {
+          "name": "Previous Element Circularly",
+          "language": "cpp",
+          "code": "for (int i = 0; i < n; i++) {\n\n    int prev = (i - 1 + n) % n;\n\n    cout << a[prev] << \" \";\n}"
+        }
+      ],
+      "key_patterns": [
+        {
+          "operation": "Next element",
+          "formula": "(i + 1) % n"
+        },
+        {
+          "operation": "Previous element",
+          "formula": "(i - 1 + n) % n"
+        }
+      ],
+      "example": {
+        "array": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_output": [
+          2,
+          3,
+          4,
+          5,
+          1
+        ],
+        "previous_output": [
+          5,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "important_note": "The +n in (i - 1 + n) % n prevents a negative index when i = 0.",
+      "recognition_flow": [
+        "Need the NEXT element?",
+        "→ (i + 1) % n",
+        "Need the PREVIOUS element?",
+        "→ (i - 1 + n) % n",
+        "Does traversal wrap around?",
+        "→ CIRCULAR INDEXING"
+      ]
+    },
+    {
+      "id": 45,
+      "title": "GCD & LCM",
+      "slug": "gcd-lcm",
+      "icon": "⭐",
+      "rating": 5,
+      "category": "Math / Number Theory",
+      "tags": [
+        "gcd",
+        "lcm",
+        "greatest-common-divisor",
+        "least-common-multiple",
+        "euclidean-algorithm",
+        "number-theory"
+      ],
+      "when_to_use": {
+        "intro": "Use GCD and LCM when a problem involves divisibility, common factors, common multiples, repeating cycles, or numbers that must be synchronized.",
+        "patterns": [
+          "Largest number dividing both numbers",
+          "Smallest number divisible by both numbers",
+          "Common divisors",
+          "Common multiples",
+          "Divisibility",
+          "Repeating cycles",
+          "Fraction simplification",
+          "Number theory problems"
+        ]
+      },
+      "gcd": {
+        "meaning": "GCD is the largest number that divides both numbers exactly.",
+        "example": {
+          "a": 12,
+          "b": 18,
+          "common_divisors": [
+            1,
+            2,
+            3,
+            6
+          ],
+          "answer": 6
+        },
+        "algorithm": "Euclidean Algorithm",
+        "template": {
+          "language": "cpp",
+          "code": "int gcd(int a, int b) {\n    while (b != 0) {\n        int temp = b;\n        b = a % b;\n        a = temp;\n    }\n    return a;\n}"
+        },
+        "builtin": {
+          "language": "cpp",
+          "code": "#include <numeric>\n\nint ans = gcd(12, 18);   // 6"
+        }
+      },
+      "lcm": {
+        "meaning": "LCM is the smallest positive number that is divisible by both numbers.",
+        "example": {
+          "a": 12,
+          "b": 18,
+          "answer": 36
+        },
+        "formula": "LCM(a, b) = (a / GCD(a, b)) × b",
+        "template": {
+          "language": "cpp",
+          "code": "long long lcm(int a, int b) {\n    return (long long)a / gcd(a, b) * b;\n}"
+        },
+        "builtin": {
+          "language": "cpp",
+          "code": "#include <numeric>\n\nint g = gcd(12, 18);   // 6\nint l = lcm(12, 18);   // 36"
+        }
+      },
+      "key_formulas": [
+        "GCD(a, b) × LCM(a, b) = a × b",
+        "LCM(a, b) = (a / GCD(a, b)) × b"
+      ],
+      "easy_memory": [
+        "GCD → Biggest number that DIVIDES both",
+        "LCM → Smallest number both DIVIDE INTO"
+      ],
+      "recognition_flow": [
+        "Need a common divisor?",
+        "→ GCD",
+        "Need a common multiple?",
+        "→ LCM",
+        "Need fastest GCD?",
+        "→ Euclidean Algorithm",
+        "Need LCM?",
+        "→ (a / GCD) × b",
+        "Need to avoid overflow?",
+        "→ Divide before multiplying"
+      ],
+      "complexity": {
+        "gcd": "O(log(min(a, b)))",
+        "lcm": "O(log(min(a, b))) because it uses GCD"
+      },
+      "important_note": "For LCM, use (a / gcd(a, b)) * b instead of a * b / gcd(a, b) to reduce intermediate overflow risk.",
+      "practice_problems": {
+        "difficulty": "Easy → Medium",
+        "count": 5,
+        "topics": [
+          "Basic GCD",
+          "Basic LCM",
+          "GCD of an array",
+          "LCM of an array",
+          "GCD/LCM based number theory"
+        ]
+      }
+    },
+    {
+      "id": 46,
+      "title": "Character ASCII Mapping",
+      "slug": "character-ascii-mapping",
+      "icon": "🔤",
+      "rating": 4,
+      "category": "Strings / Character",
+      "tags": [
+        "ascii",
+        "characters",
+        "strings",
+        "character-index",
+        "lowercase",
+        "uppercase",
+        "alphabet"
+      ],
+      "when_to_use": {
+        "intro": "Use this pattern whenever a problem requires converting characters to 0-based alphabet indices, converting indices back to characters, or switching between uppercase and lowercase using ASCII arithmetic.",
+        "patterns": [
+          "Convert 'a' → 0, 'b' → 1, ..., 'z' → 25",
+          "Convert 0 → 'a', 1 → 'b', ..., 25 → 'z'",
+          "Convert lowercase to uppercase",
+          "Convert uppercase to lowercase",
+          "Character frequency using an array of size 26",
+          "Alphabet indexing and hashing",
+          "String problems involving character positions"
+        ]
+      },
+      "key_formulas": [
+        "index = ch - 'a'",
+        "ch = index + 'a'",
+        "uppercase = lowercase - 32",
+        "lowercase = uppercase + 32"
+      ],
+      "template": {
+        "language": "cpp",
+        "code": "char ch = 'b';\nint index = ch - 'a';\n\nint index2 = 1;\nchar ch2 = index2 + 'a';\n\nchar lower = 'a';\nchar upper = lower - 32;"
+      },
+      "recognition_flow": [
+        "Alphabet character?",
+        "Need 0-based index from 'a' to 'z'?",
+        "Need character from alphabet index?",
+        "Need uppercase/lowercase conversion?",
+        "→ USE ASCII CHARACTER MAPPING"
+      ],
+      "important_note": "For general C++ code, prefer standard functions such as tolower() and toupper() when appropriate. The ASCII difference of 32 is useful for DSA-style lowercase English alphabet problems.",
+      "complexity": {
+        "time": "O(1)",
+        "space": "O(1)"
+      }
+    },
+    {
+      "id": 47,
+      "title": "Prime Numbers & Factorization",
+      "slug": "prime-numbers-factorization",
+      "icon": "🔢",
+      "rating": 5,
+      "category": "Math / Number Theory",
+      "tags": [
+        "prime",
+        "primes",
+        "sieve",
+        "prime-factors",
+        "prime-factorization",
+        "factors",
+        "divisors",
+        "number-theory"
+      ],
+      "when_to_use": {
+        "intro": "Use these patterns when a problem asks whether a number is prime, finds all primes up to N, finds divisors, calculates prime factors, or needs factor counts/sums.",
+        "patterns": [
+          "Check whether one number is prime",
+          "Find all primes from 2 to N",
+          "Find distinct prime factors",
+          "Find prime factorization with duplicates",
+          "Find all divisors/factors",
+          "Count factors",
+          "Sum factors",
+          "Find proper factors"
+        ]
+      },
+      "algorithm_selection": [
+        {
+          "problem": "Check one number",
+          "method": "isPrime()",
+          "complexity": "O(√n)"
+        },
+        {
+          "problem": "Find all primes up to N",
+          "method": "Sieve of Eratosthenes",
+          "complexity": "O(n log log n)"
+        },
+        {
+          "problem": "Find distinct prime factors",
+          "method": "Trial division + set",
+          "complexity": "O(√n)"
+        },
+        {
+          "problem": "Find prime factorization",
+          "method": "Trial division",
+          "complexity": "O(√n)"
+        },
+        {
+          "problem": "Find all factors",
+          "method": "Check divisors up to √n",
+          "complexity": "O(√n)"
+        }
+      ],
+      "templates": {
+        "is_prime": {
+          "language": "cpp",
+          "code": "bool isPrime(int n) {\n    if (n < 2) return false;\n\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0)\n            return false;\n    }\n\n    return true;\n}"
+        },
+        "sieve": {
+          "language": "cpp",
+          "code": "vector<bool> sieve(int n) {\n    vector<bool> prime(n + 1, true);\n\n    if (n >= 0) prime[0] = false;\n    if (n >= 1) prime[1] = false;\n\n    for (int i = 2; i * i <= n; i++) {\n        if (prime[i]) {\n            for (int j = i * i; j <= n; j += i) {\n                prime[j] = false;\n            }\n        }\n    }\n\n    return prime;\n}"
+        },
+        "distinct_prime_factors": {
+          "language": "cpp",
+          "code": "set<int> primeFactors(int n) {\n    set<int> factors;\n\n    for (int p = 2; p * p <= n; p++) {\n        while (n % p == 0) {\n            factors.insert(p);\n            n /= p;\n        }\n    }\n\n    if (n > 1)\n        factors.insert(n);\n\n    return factors;\n}"
+        },
+        "prime_factorization": {
+          "language": "cpp",
+          "code": "vector<int> primeFactorization(int n) {\n    vector<int> factors;\n\n    for (int p = 2; p * p <= n; p++) {\n        while (n % p == 0) {\n            factors.push_back(p);\n            n /= p;\n        }\n    }\n\n    if (n > 1)\n        factors.push_back(n);\n\n    return factors;\n}"
+        },
+        "all_factors": {
+          "language": "cpp",
+          "code": "vector<int> factors(int n) {\n    vector<int> ans;\n\n    for (int i = 1; i * i <= n; i++) {\n        if (n % i == 0) {\n            ans.push_back(i);\n\n            if (i != n / i)\n                ans.push_back(n / i);\n        }\n    }\n\n    sort(ans.begin(), ans.end());\n    return ans;\n}"
+        },
+        "count_factors": {
+          "language": "cpp",
+          "code": "int countFactors(int n) {\n    int cnt = 0;\n\n    for (int i = 1; i * i <= n; i++) {\n        if (n % i == 0) {\n            cnt++;\n\n            if (i != n / i)\n                cnt++;\n        }\n    }\n\n    return cnt;\n}"
+        },
+        "sum_factors": {
+          "language": "cpp",
+          "code": "int sumFactors(int n) {\n    int sum = 0;\n\n    for (int i = 1; i * i <= n; i++) {\n        if (n % i == 0) {\n            sum += i;\n\n            if (i != n / i)\n                sum += n / i;\n        }\n    }\n\n    return sum;\n}"
+        },
+        "proper_factors": {
+          "language": "cpp",
+          "code": "vector<int> properFactors(int n) {\n    vector<int> ans;\n\n    for (int i = 1; i * i <= n; i++) {\n        if (n % i == 0) {\n            if (i != n)\n                ans.push_back(i);\n\n            int other = n / i;\n\n            if (other != i && other != n)\n                ans.push_back(other);\n        }\n    }\n\n    sort(ans.begin(), ans.end());\n    return ans;\n}"
+        }
+      },
+      "recognition_flow": [
+        "Need to check one number for primality? → isPrime()",
+        "Need all primes up to N? → Sieve of Eratosthenes",
+        "Need prime factors? → Trial Division",
+        "Need distinct prime factors? → Trial Division + set",
+        "Need repeated prime factors? → Prime Factorization",
+        "Need all divisors? → Check up to √n and add paired divisor",
+        "Need number/sum of divisors? → √n factor-pair technique"
+      ],
+      "factor_types": {
+        "all_factors": {
+          "example": "12 → {1, 2, 3, 4, 6, 12}"
+        },
+        "prime_factors": {
+          "example": "12 → {2, 3}",
+          "note": "Distinct prime factors; duplicates are removed."
+        },
+        "prime_factorization": {
+          "example": "12 → {2, 2, 3}",
+          "note": "Repeated prime factors are preserved."
+        },
+        "number_of_factors": {
+          "example": "12 → 6"
+        },
+        "sum_of_factors": {
+          "example": "12 → 28"
+        },
+        "proper_factors": {
+          "example": "12 → {1, 2, 3, 4, 6}"
+        }
+      },
+      "key_observation": "When checking factors, every divisor i has a paired divisor n/i. Therefore, checking only up to √n is enough.",
+      "important_problem_pattern": {
+        "title": "Distinct Prime Factors + Set Union",
+        "example": "[6, 10]",
+        "steps": [
+          "6 → {2, 3}",
+          "10 → {2, 5}",
+          "Union → {2, 3, 5}"
+        ],
+        "cpp": "set<int> all;\nfor (int x : nums) {\n    set<int> factors = primeFactors(x);\n    all.insert(factors.begin(), factors.end());\n}"
+      },
+      "must_master": [
+        "isPrime()",
+        "Sieve of Eratosthenes",
+        "Trial division",
+        "Distinct prime factors using set",
+        "Prime factorization",
+        "√n factor-pair technique",
+        "Count factors",
+        "Sum factors"
+      ],
+      "complexity": {
+        "is_prime": "O(√n)",
+        "sieve": "O(n log log n)",
+        "prime_factorization": "O(√n)",
+        "all_factors": "O(√n + k log k), where k is the number of factors"
+      }
+    },
+    {
+      "id": 48,
+      "title": "Bit Manipulation Cheat Sheet",
+      "slug": "bit-manipulation-cheat-sheet",
+      "icon": "⚡",
+      "rating": 5,
+      "category": "Bit Manipulation",
+      "tags": [
+        "bit-manipulation",
+        "bitwise",
+        "binary",
+        "set-bit",
+        "bitmask",
+        "xor",
+        "subsets",
+        "submasks",
+        "bit-dp"
+      ],
+      "when_to_use": {
+        "intro": "Use bit manipulation when a problem involves binary representation, odd/even checks, powers of two, individual bit operations, XOR patterns, subsets, masks, or compact state representation.",
+        "patterns": [
+          "Check odd/even",
+          "Divide or multiply by 2",
+          "Check the kth bit",
+          "Set, clear, or toggle a bit",
+          "Remove or extract the rightmost set bit",
+          "Check power of 2",
+          "Count set bits",
+          "Find single/missing number using XOR",
+          "Generate subsets using bitmasks",
+          "Extract lowest k bits",
+          "Bitmask DP and submask enumeration"
+        ]
+      },
+      "must_memorize": {
+        "last_bit": {
+          "formula": "n & 1",
+          "use": "Check odd/even",
+          "meaning": "Returns the least significant bit."
+        },
+        "divide_by_2": {
+          "formula": "n >> 1",
+          "use": "Divide by 2 for non-negative integers"
+        },
+        "multiply_by_2": {
+          "formula": "n << 1",
+          "use": "Multiply by 2 when no overflow occurs"
+        },
+        "check_kth_bit": {
+          "formula": "(n >> k) & 1",
+          "use": "Check whether bit k is set"
+        },
+        "set_kth_bit": {
+          "formula": "n | (1 << k)",
+          "use": "Turn bit k ON"
+        },
+        "clear_kth_bit": {
+          "formula": "n & ~(1 << k)",
+          "use": "Turn bit k OFF"
+        },
+        "toggle_kth_bit": {
+          "formula": "n ^ (1 << k)",
+          "use": "Flip bit k"
+        },
+        "remove_rightmost_1": {
+          "formula": "n & (n - 1)",
+          "use": "Remove the lowest/rightmost set bit"
+        },
+        "get_rightmost_1": {
+          "formula": "n & -n",
+          "use": "Isolate the lowest/rightmost set bit"
+        },
+        "power_of_2": {
+          "formula": "n > 0 && (n & (n - 1)) == 0",
+          "use": "Check whether n is a power of 2"
+        },
+        "count_set_bits": {
+          "formula": "__builtin_popcount(n)",
+          "use": "Count the number of 1 bits"
+        },
+        "lowest_set_bit_position": {
+          "formula": "__builtin_ctz(n)",
+          "use": "Find position of the lowest set bit",
+          "important_note": "Do not call __builtin_ctz(0); zero has no set bit."
+        },
+        "highest_set_bit_position": {
+          "formula": "31 - __builtin_clz(n)",
+          "use": "Find highest set-bit position for a 32-bit unsigned/non-negative value",
+          "important_note": "Do not call __builtin_clz(0)."
+        },
+        "xor_single_number": {
+          "formula": "ans ^= x",
+          "use": "Find a unique element when other elements occur in pairs"
+        },
+        "generate_subsets": {
+          "formula": "mask & (1 << i)",
+          "use": "Check whether element i belongs to the subset represented by mask"
+        },
+        "extract_lowest_k_bits": {
+          "formula": "n & ((1 << k) - 1)",
+          "use": "Keep only the lowest k bits"
+        }
+      },
+      "template": {
+        "language": "cpp",
+        "code": "// Check odd/even\nbool odd = n & 1;\n\n// Divide by 2\nn >> 1;\n\n// Multiply by 2\nn << 1;\n\n// Check kth bit\nbool bit = (n >> k) & 1;\n\n// Set kth bit\nn = n | (1 << k);\n\n// Clear kth bit\nn = n & ~(1 << k);\n\n// Toggle kth bit\nn = n ^ (1 << k);\n\n// Remove rightmost set bit\nn = n & (n - 1);\n\n// Get rightmost set bit\nint rightmost = n & -n;\n\n// Check power of 2\nbool powerOfTwo = n > 0 && (n & (n - 1)) == 0;\n\n// Count set bits\nint bits = __builtin_popcount(n);"
+      },
+      "core_patterns": [
+        {
+          "name": "Check Bit",
+          "formula": "(n >> k) & 1",
+          "idea": "Shift bit k to position 0, then inspect it with & 1."
+        },
+        {
+          "name": "Set Bit",
+          "formula": "n | (1 << k)",
+          "idea": "Create a mask with bit k set and OR it with n."
+        },
+        {
+          "name": "Clear Bit",
+          "formula": "n & ~(1 << k)",
+          "idea": "Create a mask with bit k cleared and AND it with n."
+        },
+        {
+          "name": "Toggle Bit",
+          "formula": "n ^ (1 << k)",
+          "idea": "XOR flips bit k."
+        },
+        {
+          "name": "Remove Rightmost Set Bit",
+          "formula": "n & (n - 1)",
+          "idea": "Subtracting 1 flips the rightmost 1 and lower bits; AND removes that 1."
+        },
+        {
+          "name": "Extract Rightmost Set Bit",
+          "formula": "n & -n",
+          "idea": "Isolates only the lowest set bit."
+        }
+      ],
+      "xor_patterns": {
+        "key_properties": [
+          "x ^ x = 0",
+          "x ^ 0 = x",
+          "x ^ y = y ^ x",
+          "(x ^ y) ^ z = x ^ (y ^ z)"
+        ],
+        "common_uses": [
+          "Single number",
+          "Missing number",
+          "Find element occurring odd number of times",
+          "Cancel duplicate values",
+          "XOR-based bitmask problems"
+        ],
+        "single_number_template": {
+          "language": "cpp",
+          "code": "int ans = 0;\n\nfor (int x : nums) {\n    ans ^= x;\n}\n\nreturn ans;"
+        }
+      },
+      "subset_bitmask": {
+        "intro": "A mask of n bits can represent a subset of n elements. Bit i tells whether element i is selected.",
+        "template": {
+          "language": "cpp",
+          "code": "int n = nums.size();\n\nfor (int mask = 0; mask < (1 << n); mask++) {\n    for (int i = 0; i < n; i++) {\n        if (mask & (1 << i)) {\n            // nums[i] is included\n        }\n    }\n}"
+        },
+        "complexity": "O(n * 2^n)"
+      },
+      "learning_order": [
+        {
+          "level": 1,
+          "title": "Bit Basics",
+          "topics": [
+            "Binary ↔ Decimal",
+            "n & 1",
+            "n >> 1",
+            "n << 1"
+          ]
+        },
+        {
+          "level": 2,
+          "title": "Individual Bit Operations",
+          "topics": [
+            "Set bit",
+            "Clear bit",
+            "Toggle bit",
+            "Check kth bit"
+          ]
+        },
+        {
+          "level": 3,
+          "title": "Classic Bit Tricks",
+          "topics": [
+            "n & (n - 1)",
+            "n & -n",
+            "Power of 2",
+            "Count set bits"
+          ]
+        },
+        {
+          "level": 4,
+          "title": "XOR Patterns",
+          "topics": [
+            "XOR properties",
+            "Single number",
+            "Missing number",
+            "Odd-occurring element",
+            "XOR patterns"
+          ]
+        },
+        {
+          "level": 5,
+          "title": "Advanced Bitmasking",
+          "topics": [
+            "Subsets",
+            "Submasks",
+            "Bitmask DP",
+            "Advanced bit tricks"
+          ]
+        }
+      ],
+      "recognition_flow": [
+        "Binary representation mentioned?",
+        "Odd/even or divide/multiply by 2?",
+        "Need to inspect or modify one bit?",
+        "Need set/clear/toggle kth bit?",
+        "Need power of 2 or set-bit count?",
+        "Duplicates cancel or one value is unique?",
+        "Need subsets represented compactly?",
+        "Need subset/submask states?",
+        "→ USE BIT MANIPULATION"
+      ],
+      "important_notes": [
+        "Bit positions are normally 0-based from the right.",
+        "Use 1LL << k when k may approach 31 or when working with long long values.",
+        "Be careful with signed shifts and overflow.",
+        "__builtin_ctz(0) and __builtin_clz(0) are undefined; check n != 0 first.",
+        "For long long values, use __builtin_popcountll(), __builtin_ctzll(), and __builtin_clzll() as appropriate.",
+        "The highest-bit formula 31 - __builtin_clz(n) is specifically for 32-bit integers."
+      ],
+      "practice_focus": [
+        "Check odd/even",
+        "Set/clear/toggle kth bit",
+        "Power of 2",
+        "Count set bits",
+        "Remove rightmost set bit",
+        "Single Number",
+        "Missing Number",
+        "Generate all subsets",
+        "Submask enumeration",
+        "Bitmask DP"
+      ]
+    }
+  ]
+}

@@ -1,51 +1,75 @@
 {
   "metadata": {
-    "total_experiences": 627,
-    "total_companies": 365,
+    "total_experiences": 1341,
+    "total_companies": 591,
     "total_chunk_files": 4,
-    "generated_at": "2026-09-16T22:27:53.633487"
+    "generated_at": "2026-09-17T15:09:16.591Z"
   },
   "dataset_files": [
     {
       "file": "interview_dataset_part1_A_to_D.json",
       "group": "part1_A_to_D",
-      "companies_count": 97,
-      "experiences_count": 205,
-      "size_mb": 0.76
+      "companies_count": 161,
+      "experiences_count": 366,
+      "size_mb": 1.1
     },
     {
       "file": "interview_dataset_part2_E_to_L.json",
       "group": "part2_E_to_L",
-      "companies_count": 87,
-      "experiences_count": 148,
-      "size_mb": 0.49
+      "companies_count": 145,
+      "experiences_count": 392,
+      "size_mb": 1.12
     },
     {
       "file": "interview_dataset_part3_M_to_R.json",
       "group": "part3_M_to_R",
-      "companies_count": 82,
-      "experiences_count": 131,
-      "size_mb": 0.45
+      "companies_count": 134,
+      "experiences_count": 307,
+      "size_mb": 0.74
     },
     {
       "file": "interview_dataset_part4_S_to_Z.json",
       "group": "part4_S_to_Z",
-      "companies_count": 99,
-      "experiences_count": 143,
-      "size_mb": 0.5
+      "companies_count": 151,
+      "experiences_count": 276,
+      "size_mb": 0.75
     }
   ],
   "companies_summary": [
+    {
+      "company": "Google",
+      "total_experiences": 94
+    },
+    {
+      "company": "Meta",
+      "total_experiences": 67
+    },
+    {
+      "company": "General",
+      "total_experiences": 40
+    },
     {
       "company": "Accenture",
       "total_experiences": 39
     },
     {
       "company": "Amazon",
-      "total_experiences": 22
+      "total_experiences": 33
+    },
+    {
+      "company": "Interview Experience",
+      "total_experiences": 23
     },
     {
       "company": "Oracle",
+      "total_experiences": 20
+    },
+    {
+      "company": "System Design",
+      "total_experiences": 20
+    },
+    {
+      "company": "Microsoft",
       "total_experiences": 18
     },
     {
@@ -53,27 +77,67 @@
       "total_experiences": 15
     },
     {
-      "company": "Google",
+      "company": "Amazon Sde2",
+      "total_experiences": 15
+    },
+    {
+      "company": "Salesforce",
       "total_experiences": 14
     },
     {
-      "company": "General",
+      "company": "Cognizant",
       "total_experiences": 13
     },
     {
-      "company": "Cognizant",
-      "total_experiences": 11
+      "company": "Amazon Online Assesment",
+      "total_experiences": 13
+    },
+    {
+      "company": "Amazon Interview",
+      "total_experiences": 12
+    },
+    {
+      "company": "Onsite",
+      "total_experiences": 12
+    },
+    {
+      "company": "Sde",
+      "total_experiences": 10
     },
     {
       "company": "Cisco",
+      "total_experiences": 9
+    },
+    {
+      "company": "Java",
+      "total_experiences": 9
+    },
+    {
+      "company": "Goldmansachs",
+      "total_experiences": 9
+    },
+    {
+      "company": "Graph",
+      "total_experiences": 9
+    },
+    {
+      "company": "Sde1",
+      "total_experiences": 9
+    },
+    {
+      "company": "Walmart",
       "total_experiences": 8
     },
     {
-      "company": "Microsoft",
+      "company": "Dynamic Programming",
       "total_experiences": 7
     },
     {
       "company": "Paltech",
+      "total_experiences": 7
+    },
+    {
+      "company": "Oa",
       "total_experiences": 7
     },
     {
@@ -85,15 +149,47 @@
       "total_experiences": 7
     },
     {
-      "company": "Zoho",
+      "company": "Design",
       "total_experiences": 6
     },
     {
       "company": "Goldman Sachs",
-      "total_experiences": 5
+      "total_experiences": 6
     },
     {
       "company": "Ibm",
+      "total_experiences": 6
+    },
+    {
+      "company": "Facebook",
+      "total_experiences": 6
+    },
+    {
+      "company": "Linkedin",
+      "total_experiences": 6
+    },
+    {
+      "company": "Zoho",
+      "total_experiences": 6
+    },
+    {
+      "company": "Software Engineer",
+      "total_experiences": 6
+    },
+    {
+      "company": "Atlassian",
+      "total_experiences": 5
+    },
+    {
+      "company": "Array",
+      "total_experiences": 5
+    },
+    {
+      "company": "Meesho",
+      "total_experiences": 5
+    },
+    {
+      "company": "Onsite Interview",
       "total_experiences": 5
     },
     {
@@ -105,11 +201,11 @@
       "total_experiences": 5
     },
     {
-      "company": "Walmart",
+      "company": "Sde2",
       "total_experiences": 5
     },
     {
-      "company": "Atlassian",
+      "company": "Adobe",
       "total_experiences": 4
     },
     {
@@ -117,11 +213,19 @@
       "total_experiences": 4
     },
     {
+      "company": "Flipkart",
+      "total_experiences": 4
+    },
+    {
       "company": "Global Logic",
       "total_experiences": 4
     },
     {
-      "company": "Meesho",
+      "company": "Josh Technology",
+      "total_experiences": 4
+    },
+    {
+      "company": "Hashmap",
       "total_experiences": 4
     },
     {
@@ -133,6 +237,18 @@
       "total_experiences": 4
     },
     {
+      "company": "Microsoft India",
+      "total_experiences": 4
+    },
+    {
+      "company": "Phone Screen",
+      "total_experiences": 4
+    },
+    {
+      "company": "Ukg",
+      "total_experiences": 4
+    },
+    {
       "company": "Wells Fargo",
       "total_experiences": 4
     },
@@ -141,7 +257,15 @@
       "total_experiences": 4
     },
     {
-      "company": "Adobe",
+      "company": "Zeta",
+      "total_experiences": 4
+    },
+    {
+      "company": "String",
+      "total_experiences": 4
+    },
+    {
+      "company": "American Express",
       "total_experiences": 3
     },
     {
@@ -149,11 +273,43 @@
       "total_experiences": 3
     },
     {
-      "company": "Ey Gds",
+      "company": "Backtracking",
       "total_experiences": 3
     },
     {
-      "company": "Flipkart",
+      "company": "Databricks",
+      "total_experiences": 3
+    },
+    {
+      "company": "Booking.Com",
+      "total_experiences": 3
+    },
+    {
+      "company": "Dfs",
+      "total_experiences": 3
+    },
+    {
+      "company": "Bit Manipulation",
+      "total_experiences": 3
+    },
+    {
+      "company": "Doordash",
+      "total_experiences": 3
+    },
+    {
+      "company": "Airbnb",
+      "total_experiences": 3
+    },
+    {
+      "company": "Binary Tree",
+      "total_experiences": 3
+    },
+    {
+      "company": "Datadog",
+      "total_experiences": 3
+    },
+    {
+      "company": "Ey Gds",
       "total_experiences": 3
     },
     {
@@ -165,15 +321,23 @@
       "total_experiences": 3
     },
     {
-      "company": "Josh Technology",
-      "total_experiences": 3
-    },
-    {
       "company": "London Stock Exchange Group Lseg",
       "total_experiences": 3
     },
     {
       "company": "Ltimindtree",
+      "total_experiences": 3
+    },
+    {
+      "company": "Google Coding Challenge",
+      "total_experiences": 3
+    },
+    {
+      "company": "London",
+      "total_experiences": 3
+    },
+    {
+      "company": "Java Solution",
       "total_experiences": 3
     },
     {
@@ -185,6 +349,18 @@
       "total_experiences": 3
     },
     {
+      "company": "New Grad",
+      "total_experiences": 3
+    },
+    {
+      "company": "Phone Interview",
+      "total_experiences": 3
+    },
+    {
+      "company": "Question",
+      "total_experiences": 3
+    },
+    {
       "company": "Aci Worldwide",
       "total_experiences": 2
     },
@@ -193,15 +369,15 @@
       "total_experiences": 2
     },
     {
-      "company": "American Express",
-      "total_experiences": 2
-    },
-    {
       "company": "Aptiv",
       "total_experiences": 2
     },
     {
       "company": "Argusoft",
+      "total_experiences": 2
+    },
+    {
+      "company": "Avalara",
       "total_experiences": 2
     },
     {
@@ -214,6 +390,42 @@
     },
     {
       "company": "Codingmart Technologies",
+      "total_experiences": 2
+    },
+    {
+      "company": "Capital One",
+      "total_experiences": 2
+    },
+    {
+      "company": "Bfs",
+      "total_experiences": 2
+    },
+    {
+      "company": "Bytedance",
+      "total_experiences": 2
+    },
+    {
+      "company": "Brex",
+      "total_experiences": 2
+    },
+    {
+      "company": "Bloomberg Nyc",
+      "total_experiences": 2
+    },
+    {
+      "company": "Agoda",
+      "total_experiences": 2
+    },
+    {
+      "company": "Arrays",
+      "total_experiences": 2
+    },
+    {
+      "company": "Amazon Phone Interview",
+      "total_experiences": 2
+    },
+    {
+      "company": "Apple Interview",
       "total_experiences": 2
     },
     {
@@ -245,11 +457,19 @@
       "total_experiences": 2
     },
     {
+      "company": "Hsbc",
+      "total_experiences": 2
+    },
+    {
       "company": "Indmoney",
       "total_experiences": 2
     },
     {
       "company": "JPMorgan Chase",
+      "total_experiences": 2
+    },
+    {
+      "company": "Juspay",
       "total_experiences": 2
     },
     {
@@ -261,6 +481,38 @@
       "total_experiences": 2
     },
     {
+      "company": "Javascript",
+      "total_experiences": 2
+    },
+    {
+      "company": "Interview Tips",
+      "total_experiences": 2
+    },
+    {
+      "company": "India",
+      "total_experiences": 2
+    },
+    {
+      "company": "Lld",
+      "total_experiences": 2
+    },
+    {
+      "company": "Leetcode",
+      "total_experiences": 2
+    },
+    {
+      "company": "Interview Question",
+      "total_experiences": 2
+    },
+    {
+      "company": "Frontend",
+      "total_experiences": 2
+    },
+    {
+      "company": "Linkedin Interview",
+      "total_experiences": 2
+    },
+    {
       "company": "Mathco",
       "total_experiences": 2
     },
@@ -269,11 +521,19 @@
       "total_experiences": 2
     },
     {
+      "company": "Morgan Stanley",
+      "total_experiences": 2
+    },
+    {
       "company": "Nice Systems",
       "total_experiences": 2
     },
     {
       "company": "Okta",
+      "total_experiences": 2
+    },
+    {
+      "company": "Paypal",
       "total_experiences": 2
     },
     {
@@ -289,6 +549,42 @@
       "total_experiences": 2
     },
     {
+      "company": "Rubrik",
+      "total_experiences": 2
+    },
+    {
+      "company": "Math",
+      "total_experiences": 2
+    },
+    {
+      "company": "Phone Screening",
+      "total_experiences": 2
+    },
+    {
+      "company": "Phone",
+      "total_experiences": 2
+    },
+    {
+      "company": "Microsoft Hyderabad",
+      "total_experiences": 2
+    },
+    {
+      "company": "Online Assessment",
+      "total_experiences": 2
+    },
+    {
+      "company": "Microsoft Idc",
+      "total_experiences": 2
+    },
+    {
+      "company": "Meta |",
+      "total_experiences": 2
+    },
+    {
+      "company": "Mathworks",
+      "total_experiences": 2
+    },
+    {
       "company": "Sharechat",
       "total_experiences": 2
     },
@@ -301,15 +597,23 @@
       "total_experiences": 2
     },
     {
+      "company": "Turing",
+      "total_experiences": 2
+    },
+    {
+      "company": "Uber",
+      "total_experiences": 2
+    },
+    {
       "company": "Ubs",
       "total_experiences": 2
     },
     {
-      "company": "Ukg",
+      "company": "Unthinkable Solutions",
       "total_experiences": 2
     },
     {
-      "company": "Unthinkable Solutions",
+      "company": "Visa",
       "total_experiences": 2
     },
     {
@@ -322,6 +626,42 @@
     },
     {
       "company": "Zs Associates",
+      "total_experiences": 2
+    },
+    {
+      "company": "Zscaler",
+      "total_experiences": 2
+    },
+    {
+      "company": "Switch",
+      "total_experiences": 2
+    },
+    {
+      "company": "University Grad",
+      "total_experiences": 2
+    },
+    {
+      "company": "Tiktok",
+      "total_experiences": 2
+    },
+    {
+      "company": "#Amazon",
+      "total_experiences": 2
+    },
+    {
+      "company": "#Frontend #Systemdesign",
+      "total_experiences": 2
+    },
+    {
+      "company": "Tech Screen",
+      "total_experiences": 2
+    },
+    {
+      "company": "Sde Intern",
+      "total_experiences": 2
+    },
+    {
+      "company": "Sde 1",
       "total_experiences": 2
     },
     {
@@ -414,10 +754,6 @@
     },
     {
       "company": "Autodesk",
-      "total_experiences": 1
-    },
-    {
-      "company": "Avalara",
       "total_experiences": 1
     },
     {
@@ -593,11 +929,11 @@
       "total_experiences": 1
     },
     {
-      "company": "D.E.Shaw Ascend Educare Program For Women",
+      "company": "D E Shaw",
       "total_experiences": 1
     },
     {
-      "company": "D E Shaw",
+      "company": "D.E.Shaw Ascend Educare Program For Women",
       "total_experiences": 1
     },
     {
@@ -642,6 +978,166 @@
     },
     {
       "company": "Dish Network Technologies On Campus",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cloudeagle",
+      "total_experiences": 1
+    },
+    {
+      "company": "Betopia",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ciena",
+      "total_experiences": 1
+    },
+    {
+      "company": "Caelius",
+      "total_experiences": 1
+    },
+    {
+      "company": "Aaj Supply Chain Management",
+      "total_experiences": 1
+    },
+    {
+      "company": "Anthropic",
+      "total_experiences": 1
+    },
+    {
+      "company": "Dp",
+      "total_experiences": 1
+    },
+    {
+      "company": "Booking Holdings",
+      "total_experiences": 1
+    },
+    {
+      "company": "Apple India",
+      "total_experiences": 1
+    },
+    {
+      "company": "Application Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Atlasian",
+      "total_experiences": 1
+    },
+    {
+      "company": "Career",
+      "total_experiences": 1
+    },
+    {
+      "company": "Apollo.Io",
+      "total_experiences": 1
+    },
+    {
+      "company": "Amazon Interview Round",
+      "total_experiences": 1
+    },
+    {
+      "company": "Any Asic Enginer,Infra Silicon E4",
+      "total_experiences": 1
+    },
+    {
+      "company": "Aws",
+      "total_experiences": 1
+    },
+    {
+      "company": "Data",
+      "total_experiences": 1
+    },
+    {
+      "company": "Base",
+      "total_experiences": 1
+    },
+    {
+      "company": "Contest",
+      "total_experiences": 1
+    },
+    {
+      "company": "Amazon Front End",
+      "total_experiences": 1
+    },
+    {
+      "company": "Dolby Laboratories: Senior Applied",
+      "total_experiences": 1
+    },
+    {
+      "company": "Apple Sde",
+      "total_experiences": 1
+    },
+    {
+      "company": "Amazon Sde 2 Amazon Oa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Activision",
+      "total_experiences": 1
+    },
+    {
+      "company": "Decision",
+      "total_experiences": 1
+    },
+    {
+      "company": "Can You Help Determine Its Time Complexity?",
+      "total_experiences": 1
+    },
+    {
+      "company": "Database",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ban",
+      "total_experiences": 1
+    },
+    {
+      "company": "Code Signal",
+      "total_experiences": 1
+    },
+    {
+      "company": "Codevita",
+      "total_experiences": 1
+    },
+    {
+      "company": "Aws |",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cloudflare",
+      "total_experiences": 1
+    },
+    {
+      "company": "Applied Intuition",
+      "total_experiences": 1
+    },
+    {
+      "company": "Data Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ask",
+      "total_experiences": 1
+    },
+    {
+      "company": "Companies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Bug",
+      "total_experiences": 1
+    },
+    {
+      "company": "Cpp",
+      "total_experiences": 1
+    },
+    {
+      "company": "Amazon Sde 1",
+      "total_experiences": 1
+    },
+    {
+      "company": "Binary Search",
       "total_experiences": 1
     },
     {
@@ -777,10 +1273,6 @@
       "total_experiences": 1
     },
     {
-      "company": "Hsbc",
-      "total_experiences": 1
-    },
-    {
       "company": "Ibm Ciocampus",
       "total_experiences": 1
     },
@@ -861,10 +1353,6 @@
       "total_experiences": 1
     },
     {
-      "company": "Juspay",
-      "total_experiences": 1
-    },
-    {
       "company": "Kotak Mahindra",
       "total_experiences": 1
     },
@@ -901,6 +1389,166 @@
       "total_experiences": 1
     },
     {
+      "company": "Interview Experience At Creatr",
+      "total_experiences": 1
+    },
+    {
+      "company": "Gridcrest Technologies",
+      "total_experiences": 1
+    },
+    {
+      "company": "Life",
+      "total_experiences": 1
+    },
+    {
+      "company": "Earnin",
+      "total_experiences": 1
+    },
+    {
+      "company": "Full Stack Developer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Follow Up",
+      "total_experiences": 1
+    },
+    {
+      "company": "Google Interview Question",
+      "total_experiences": 1
+    },
+    {
+      "company": "Holiday Package",
+      "total_experiences": 1
+    },
+    {
+      "company": "Greedy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Intern",
+      "total_experiences": 1
+    },
+    {
+      "company": "Intel",
+      "total_experiences": 1
+    },
+    {
+      "company": "Google Interview",
+      "total_experiences": 1
+    },
+    {
+      "company": "List",
+      "total_experiences": 1
+    },
+    {
+      "company": "Glean",
+      "total_experiences": 1
+    },
+    {
+      "company": "Linux",
+      "total_experiences": 1
+    },
+    {
+      "company": "Full Time",
+      "total_experiences": 1
+    },
+    {
+      "company": "Job",
+      "total_experiences": 1
+    },
+    {
+      "company": "Interview Prep",
+      "total_experiences": 1
+    },
+    {
+      "company": "Interviews",
+      "total_experiences": 1
+    },
+    {
+      "company": "Expedia",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ios",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hashing",
+      "total_experiences": 1
+    },
+    {
+      "company": "Low Level Design",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hiring",
+      "total_experiences": 1
+    },
+    {
+      "company": "Hackerrank Test",
+      "total_experiences": 1
+    },
+    {
+      "company": "Flexport",
+      "total_experiences": 1
+    },
+    {
+      "company": "Goldman",
+      "total_experiences": 1
+    },
+    {
+      "company": "Facebook Intern",
+      "total_experiences": 1
+    },
+    {
+      "company": "Giveup",
+      "total_experiences": 1
+    },
+    {
+      "company": "Lyft",
+      "total_experiences": 1
+    },
+    {
+      "company": "Fintech",
+      "total_experiences": 1
+    },
+    {
+      "company": "Indeed",
+      "total_experiences": 1
+    },
+    {
+      "company": "From Internal Tools To Migration Work",
+      "total_experiences": 1
+    },
+    {
+      "company": "Knapsack Problem",
+      "total_experiences": 1
+    },
+    {
+      "company": "First",
+      "total_experiences": 1
+    },
+    {
+      "company": "Ic3",
+      "total_experiences": 1
+    },
+    {
+      "company": "Faang",
+      "total_experiences": 1
+    },
+    {
+      "company": "Intuit",
+      "total_experiences": 1
+    },
+    {
+      "company": "Embedded",
+      "total_experiences": 1
+    },
+    {
+      "company": "Google Onsite Round L5",
+      "total_experiences": 1
+    },
+    {
       "company": "Mahindra Comviva",
       "total_experiences": 1
     },
@@ -933,10 +1581,6 @@
       "total_experiences": 1
     },
     {
-      "company": "Meta",
-      "total_experiences": 1
-    },
-    {
       "company": "Meti Internship Application Process And",
       "total_experiences": 1
     },
@@ -962,10 +1606,6 @@
     },
     {
       "company": "Monocept",
-      "total_experiences": 1
-    },
-    {
-      "company": "Morgan Stanley",
       "total_experiences": 1
     },
     {
@@ -1085,10 +1725,6 @@
       "total_experiences": 1
     },
     {
-      "company": "Paypal",
-      "total_experiences": 1
-    },
-    {
       "company": "Paypal India",
       "total_experiences": 1
     },
@@ -1165,11 +1801,147 @@
       "total_experiences": 1
     },
     {
-      "company": "Rubrik",
+      "company": "Perfectcsr",
       "total_experiences": 1
     },
     {
-      "company": "Salesforce",
+      "company": "Recursion",
+      "total_experiences": 1
+    },
+    {
+      "company": "Offers",
+      "total_experiences": 1
+    },
+    {
+      "company": "Need Advice",
+      "total_experiences": 1
+    },
+    {
+      "company": "Micrsoft",
+      "total_experiences": 1
+    },
+    {
+      "company": "Quesiton",
+      "total_experiences": 1
+    },
+    {
+      "company": "Queue Implementation",
+      "total_experiences": 1
+    },
+    {
+      "company": "Pinterest Coding 2024, Can'T Solve Using",
+      "total_experiences": 1
+    },
+    {
+      "company": "Optiver Oa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Python",
+      "total_experiences": 1
+    },
+    {
+      "company": "Notice Period",
+      "total_experiences": 1
+    },
+    {
+      "company": "Production Engineer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Makemytrip",
+      "total_experiences": 1
+    },
+    {
+      "company": "Microsoft Oa |",
+      "total_experiences": 1
+    },
+    {
+      "company": "Oa Microsoft",
+      "total_experiences": 1
+    },
+    {
+      "company": "Meta E5",
+      "total_experiences": 1
+    },
+    {
+      "company": "Mindbody + Classpass",
+      "total_experiences": 1
+    },
+    {
+      "company": "Machine Learning",
+      "total_experiences": 1
+    },
+    {
+      "company": "Phonescreen",
+      "total_experiences": 1
+    },
+    {
+      "company": "Operating Systems",
+      "total_experiences": 1
+    },
+    {
+      "company": "Operating System",
+      "total_experiences": 1
+    },
+    {
+      "company": "Product Sense",
+      "total_experiences": 1
+    },
+    {
+      "company": "Offer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Paypal Oa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Phd",
+      "total_experiences": 1
+    },
+    {
+      "company": "Nyc",
+      "total_experiences": 1
+    },
+    {
+      "company": "Object Oriented",
+      "total_experiences": 1
+    },
+    {
+      "company": "Oracle Financial",
+      "total_experiences": 1
+    },
+    {
+      "company": "Preparation Strategy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Offer Evaluation",
+      "total_experiences": 1
+    },
+    {
+      "company": "Matrix Chain Mul",
+      "total_experiences": 1
+    },
+    {
+      "company": "Roku",
+      "total_experiences": 1
+    },
+    {
+      "company": "Need Help | Linkedin |",
+      "total_experiences": 1
+    },
+    {
+      "company": "Rippling",
+      "total_experiences": 1
+    },
+    {
+      "company": "Razorpay",
+      "total_experiences": 1
+    },
+    {
+      "company": "Problem",
       "total_experiences": 1
     },
     {
@@ -1345,15 +2117,7 @@
       "total_experiences": 1
     },
     {
-      "company": "Turing",
-      "total_experiences": 1
-    },
-    {
       "company": "Twenty Point Nine Five Ventures",
-      "total_experiences": 1
-    },
-    {
-      "company": "Uber",
       "total_experiences": 1
     },
     {
@@ -1390,10 +2154,6 @@
     },
     {
       "company": "Verizon",
-      "total_experiences": 1
-    },
-    {
-      "company": "Visa",
       "total_experiences": 1
     },
     {
@@ -1465,10 +2225,6 @@
       "total_experiences": 1
     },
     {
-      "company": "Zeta",
-      "total_experiences": 1
-    },
-    {
       "company": "Zeus Learning",
       "total_experiences": 1
     },
@@ -1489,11 +2245,159 @@
       "total_experiences": 1
     },
     {
-      "company": "Zscaler",
+      "company": "Zupee",
       "total_experiences": 1
     },
     {
-      "company": "Zupee",
+      "company": "Tranzita Systems –",
+      "total_experiences": 1
+    },
+    {
+      "company": "Wingify",
+      "total_experiences": 1
+    },
+    {
+      "company": "Shuklexa",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Apple",
+      "total_experiences": 1
+    },
+    {
+      "company": "Yahoo |",
+      "total_experiences": 1
+    },
+    {
+      "company": "Stripe Phone Screen | Usa | March 2025 |",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sde3",
+      "total_experiences": 1
+    },
+    {
+      "company": "Swe",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Intern",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sdet",
+      "total_experiences": 1
+    },
+    {
+      "company": "String Operation",
+      "total_experiences": 1
+    },
+    {
+      "company": "Stripe Onsite",
+      "total_experiences": 1
+    },
+    {
+      "company": "Screen Round",
+      "total_experiences": 1
+    },
+    {
+      "company": "Stripe",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tcs Prime",
+      "total_experiences": 1
+    },
+    {
+      "company": "Wysa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Startups",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sliding Window",
+      "total_experiences": 1
+    },
+    {
+      "company": "Spring Boot",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Recursion",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Google Interview",
+      "total_experiences": 1
+    },
+    {
+      "company": "Solution",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sde 2",
+      "total_experiences": 1
+    },
+    {
+      "company": "United States",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Amazonintern",
+      "total_experiences": 1
+    },
+    {
+      "company": "Uber Onsite",
+      "total_experiences": 1
+    },
+    {
+      "company": "#Google",
+      "total_experiences": 1
+    },
+    {
+      "company": "Senior Software Developer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Time Complextiy",
+      "total_experiences": 1
+    },
+    {
+      "company": "Snap",
+      "total_experiences": 1
+    },
+    {
+      "company": "Stack",
+      "total_experiences": 1
+    },
+    {
+      "company": "Servicenow Sdet",
+      "total_experiences": 1
+    },
+    {
+      "company": "Tree Search",
+      "total_experiences": 1
+    },
+    {
+      "company": "Sig",
+      "total_experiences": 1
+    },
+    {
+      "company": "Software Developer",
+      "total_experiences": 1
+    },
+    {
+      "company": "Usa",
+      "total_experiences": 1
+    },
+    {
+      "company": "Style",
+      "total_experiences": 1
+    },
+    {
+      "company": "Uber Sde",
       "total_experiences": 1
     }
   ]

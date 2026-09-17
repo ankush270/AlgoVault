@@ -1,0 +1,1410 @@
+{
+  "topic": {
+    "id": "bit-manipulation",
+    "title": "Bit Manipulation",
+    "description": "A structured study guide covering binary representation, bitwise operators, common bit tricks, bitmasking, XOR patterns, subset DP, submasks, Gray code, and advanced bit techniques.",
+    "difficulty": "intermediate",
+    "tags": [
+      "bits",
+      "bitwise",
+      "bitmask",
+      "xor",
+      "binary",
+      "dp",
+      "subsets",
+      "leetcode"
+    ]
+  },
+
+  "learning_path": [
+    "binary-basics",
+    "bitwise-operators",
+    "basic-bit-patterns",
+    "rightmost-set-bit",
+    "xor-patterns",
+    "bitmasking",
+    "submask-enumeration",
+    "subset-dp",
+    "gray-code",
+    "advanced-patterns"
+  ],
+
+  "sections": [
+
+    {
+      "id": "binary-basics",
+      "title": "1. Binary Basics",
+      "type": "concept",
+      "description": "Understand how binary numbers represent powers of two.",
+
+      "concepts": [
+
+        {
+          "id": "decimal-vs-binary",
+          "title": "Decimal vs Binary",
+          "type": "comparison",
+
+          "comparison": {
+            "decimal": {
+              "base": 10,
+              "digits": ["0","1","2","3","4","5","6","7","8","9"],
+              "place_values": "powers of 10",
+              "example": {
+                "number": 1234,
+                "expansion": "1×10³ + 2×10² + 3×10¹ + 4×10⁰"
+              }
+            },
+
+            "binary": {
+              "base": 2,
+              "digits": ["0","1"],
+              "place_values": "powers of 2",
+              "example": {
+                "decimal": 14,
+                "binary": "1110",
+                "expansion": "1×2³ + 1×2² + 1×2¹ + 0×2⁰"
+              }
+            }
+          }
+        },
+
+        {
+          "id": "extract-bits",
+          "title": "Extract Bits from a Number",
+          "type": "pattern",
+
+          "rules": [
+            {
+              "bit_position": 0,
+              "operation": "n % 2",
+              "meaning": "Least significant bit"
+            },
+            {
+              "bit_position": "i",
+              "operation": "(n >> i) & 1",
+              "meaning": "Bit at position i"
+            }
+          ],
+
+          "example": {
+            "number": 15,
+            "binary": "1111",
+            "bits": [
+              {
+                "position": 0,
+                "operation": "15 % 2",
+                "value": 1
+              },
+              {
+                "position": 1,
+                "operation": "7 % 2",
+                "value": 1
+              },
+              {
+                "position": 2,
+                "operation": "3 % 2",
+                "value": 1
+              },
+              {
+                "position": 3,
+                "operation": "1 % 2",
+                "value": 1
+              }
+            ]
+          },
+
+          "preferred_formula": "(n >> i) & 1"
+        }
+      ]
+    },
+
+    {
+      "id": "bitwise-operators",
+      "title": "2. Bitwise Operators",
+      "type": "reference",
+
+      "operators": [
+
+        {
+          "operator": "~",
+          "name": "NOT",
+          "symbol": "~",
+          "operation": "Flip every bit",
+          "truth_table": [
+            {
+              "input": 0,
+              "output": 1
+            },
+            {
+              "input": 1,
+              "output": 0
+            }
+          ],
+          "common_use": [
+            "invert bits",
+            "create clearing masks"
+          ]
+        },
+
+        {
+          "operator": "&",
+          "name": "AND",
+          "symbol": "&",
+          "operation": "1 only when both bits are 1",
+          "truth_table": [
+            {
+              "a": 0,
+              "b": 0,
+              "result": 0
+            },
+            {
+              "a": 0,
+              "b": 1,
+              "result": 0
+            },
+            {
+              "a": 1,
+              "b": 0,
+              "result": 0
+            },
+            {
+              "a": 1,
+              "b": 1,
+              "result": 1
+            }
+          ],
+          "common_use": [
+            "test a bit",
+            "mask bits",
+            "intersection"
+          ]
+        },
+
+        {
+          "operator": "|",
+          "name": "OR",
+          "symbol": "|",
+          "operation": "1 when either bit is 1",
+          "common_use": [
+            "set a bit",
+            "combine masks",
+            "set union"
+          ]
+        },
+
+        {
+          "operator": "^",
+          "name": "XOR",
+          "symbol": "^",
+          "operation": "1 when the two bits are different",
+          "truth_table": [
+            {
+              "a": 0,
+              "b": 0,
+              "result": 0
+            },
+            {
+              "a": 0,
+              "b": 1,
+              "result": 1
+            },
+            {
+              "a": 1,
+              "b": 0,
+              "result": 1
+            },
+            {
+              "a": 1,
+              "b": 1,
+              "result": 0
+            }
+          ],
+          "common_use": [
+            "toggle bits",
+            "find unique values",
+            "XOR cancellation"
+          ]
+        },
+
+        {
+          "operator": "<<",
+          "name": "Left Shift",
+          "symbol": "<<",
+          "operation": "Shift bits to the left",
+          "typical_effect": "x << k ≈ x × 2^k",
+          "common_use": [
+            "create bit masks",
+            "multiply by powers of two"
+          ]
+        },
+
+        {
+          "operator": ">>",
+          "name": "Right Shift",
+          "symbol": ">>",
+          "operation": "Shift bits to the right",
+          "typical_effect": "x >> k ≈ floor(x / 2^k) for non-negative integers",
+          "common_use": [
+            "extract bits",
+            "divide by powers of two"
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "basic-bit-patterns",
+      "title": "3. Basic Bit Manipulation Patterns",
+      "type": "pattern_collection",
+
+      "patterns": [
+
+        {
+          "id": "print-binary",
+          "title": "Print Binary Representation",
+          "difficulty": "easy",
+
+          "idea": "Inspect every bit from the most significant position to the least significant position.",
+
+          "formula": "(n >> i) & 1",
+
+          "code": {
+            "language": "cpp",
+            "value": "void printBinary(int n) {\n    for (int i = 31; i >= 0; --i) {\n        cout << ((n >> i) & 1);\n    }\n}"
+          },
+
+          "complexity": {
+            "time": "O(B)",
+            "space": "O(1)",
+            "B": "number of bits"
+          }
+        },
+
+        {
+          "id": "check-ith-bit",
+          "title": "Check if i-th Bit is Set",
+          "difficulty": "easy",
+
+          "idea": "Create a mask with only bit i set and AND it with n.",
+
+          "formula": "(n & (1 << i)) != 0",
+
+          "code": {
+            "language": "cpp",
+            "value": "bool isSet(int n, int i) {\n    return (n & (1 << i)) != 0;\n}"
+          }
+        },
+
+        {
+          "id": "set-bit",
+          "title": "Set i-th Bit",
+          "formula": "n |= (1 << i)",
+
+          "code": {
+            "language": "cpp",
+            "value": "n |= (1 << i);"
+          }
+        },
+
+        {
+          "id": "clear-bit",
+          "title": "Clear i-th Bit",
+          "formula": "n &= ~(1 << i)",
+
+          "code": {
+            "language": "cpp",
+            "value": "n &= ~(1 << i);"
+          }
+        },
+
+        {
+          "id": "toggle-bit",
+          "title": "Toggle i-th Bit",
+          "formula": "n ^= (1 << i)",
+
+          "code": {
+            "language": "cpp",
+            "value": "n ^= (1 << i);"
+          }
+        },
+
+        {
+          "id": "count-set-bits",
+          "title": "Count Set Bits",
+          "difficulty": "easy",
+
+          "methods": [
+
+            {
+              "name": "bit-by-bit",
+              "formula": "count += (n >> i) & 1",
+              "complexity": "O(B)"
+            },
+
+            {
+              "name": "brian-kernighan",
+              "formula": "n = n & (n - 1)",
+              "idea": "Every iteration removes the lowest set bit.",
+              "complexity": "O(K)",
+              "where": "K = number of set bits"
+            }
+          ],
+
+          "code": {
+            "language": "cpp",
+            "value": "int countSetBits(int n) {\n    int count = 0;\n    while (n) {\n        n &= (n - 1);\n        count++;\n    }\n    return count;\n}"
+          }
+        },
+
+        {
+          "id": "power-of-two",
+          "title": "Check Power of Two",
+          "difficulty": "easy",
+
+          "idea": "A positive power of two contains exactly one set bit.",
+
+          "formula": "n > 0 && (n & (n - 1)) == 0",
+
+          "examples": [
+            {
+              "number": 16,
+              "binary": "10000",
+              "n_minus_1": "01111",
+              "and_result": "00000"
+            },
+            {
+              "number": 12,
+              "binary": "01100",
+              "n_minus_1": "01011",
+              "and_result": "01000"
+            }
+          ],
+
+          "code": {
+            "language": "cpp",
+            "value": "bool isPowerOfTwo(int n) {\n    return n > 0 && (n & (n - 1)) == 0;\n}"
+          },
+
+          "problems": [
+            {
+              "title": "Power of Two",
+              "url": "https://leetcode.com/problems/power-of-two/"
+            }
+          ]
+        },
+
+        {
+          "id": "multiply-divide-two",
+          "title": "Multiply / Divide by Two",
+
+          "operations": [
+            {
+              "operation": "multiply",
+              "formula": "n << 1"
+            },
+            {
+              "operation": "divide",
+              "formula": "n >> 1",
+              "condition": "For non-negative integers"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": "character-bit-tricks",
+      "title": "4. Character Bit Tricks",
+      "type": "pattern",
+
+      "concepts": [
+
+        {
+          "id": "ascii-case",
+          "title": "ASCII Case Conversion",
+
+          "idea": "ASCII lowercase letters differ from uppercase letters by bit 5 (value 32).",
+
+          "operations": [
+            {
+              "operation": "uppercase-to-lowercase",
+              "formula": "c | ' '",
+              "example": "'C' | ' ' → 'c'"
+            },
+            {
+              "operation": "lowercase-to-uppercase",
+              "formula": "c & '_'",
+              "example": "'c' & '_' → 'C'"
+            },
+            {
+              "operation": "toggle-case",
+              "formula": "c ^ ' '",
+              "example": "'C' ^ ' ' → 'c'"
+            }
+          ],
+
+          "note": "These tricks rely on ASCII encoding and should not be treated as universal Unicode case-conversion methods."
+        },
+
+        {
+          "id": "alphabet-position",
+          "title": "Find Alphabet Position",
+
+          "formula": "c & 31",
+
+          "examples": [
+            {
+              "input": "A",
+              "result": 1
+            },
+            {
+              "input": "c",
+              "result": 3
+            },
+            {
+              "input": "Z",
+              "result": 26
+            }
+          ],
+
+          "note": "This relies on ASCII letters."
+        }
+      ]
+    },
+
+    {
+      "id": "rightmost-set-bit",
+      "title": "5. Rightmost Set Bit",
+      "type": "pattern_collection",
+
+      "patterns": [
+
+        {
+          "id": "remove-rightmost-set-bit",
+          "title": "Remove Lowest Set Bit",
+
+          "formula": "n & (n - 1)",
+
+          "example": {
+            "before": "101100",
+            "after": "101000"
+          },
+
+          "uses": [
+            "count set bits",
+            "check power of two",
+            "iterate through set bits",
+            "generate submasks"
+          ]
+        },
+
+        {
+          "id": "extract-rightmost-set-bit",
+          "title": "Extract Lowest Set Bit",
+
+          "formula": "n & -n",
+
+          "equivalent_forms": [
+            "n & ~(n - 1)",
+            "n ^ (n & (n - 1))"
+          ],
+
+          "example": {
+            "input": "101100",
+            "result": "000100"
+          }
+        },
+
+        {
+          "id": "rightmost-set-bit-position",
+          "title": "Find Position of Lowest Set Bit",
+
+          "idea": "Extract the lowest set bit and find its position.",
+
+          "formula": "log2(n & -n) + 1",
+
+          "condition": "n must be positive"
+        }
+      ]
+    },
+
+    {
+      "id": "xor-patterns",
+      "title": "6. XOR Patterns",
+      "type": "pattern_collection",
+
+      "properties": [
+        {
+          "formula": "x ^ x = 0",
+          "meaning": "A value cancels itself."
+        },
+        {
+          "formula": "x ^ 0 = x",
+          "meaning": "XOR with zero preserves the value."
+        },
+        {
+          "formula": "a ^ b = b ^ a",
+          "meaning": "XOR is commutative."
+        },
+        {
+          "formula": "(a ^ b) ^ c = a ^ (b ^ c)",
+          "meaning": "XOR is associative."
+        },
+        {
+          "formula": "a ^ b = c  =>  a = b ^ c",
+          "meaning": "XOR can recover an unknown operand."
+        }
+      ],
+
+      "patterns": [
+
+        {
+          "id": "single-number",
+          "title": "Find Unique Number",
+
+          "idea": "If every number occurs twice except one, XOR cancels all pairs.",
+
+          "formula": "a ^ a = 0",
+
+          "code": {
+            "language": "cpp",
+            "value": "int ans = 0;\nfor (int x : nums) {\n    ans ^= x;\n}\nreturn ans;"
+          },
+
+          "problems": [
+            {
+              "title": "Single Number",
+              "url": "https://leetcode.com/problems/single-number/"
+            },
+            {
+              "title": "Single Number II",
+              "url": "https://leetcode.com/problems/single-number-ii/"
+            },
+            {
+              "title": "Single Number III",
+              "url": "https://leetcode.com/problems/single-number-iii/"
+            }
+          ]
+        },
+
+        {
+          "id": "xor-prefix",
+          "title": "Prefix XOR",
+
+          "idea": "XOR prefix values allow range XOR queries and reconstruction.",
+
+          "formula": "prefix[i] = prefix[i-1] ^ nums[i]",
+
+          "range_formula": "xor(l..r) = prefix[r] ^ prefix[l-1]",
+
+          "problems": [
+            {
+              "title": "XOR Queries of a Subarray",
+              "url": "https://leetcode.com/problems/xor-queries-of-a-subarray/"
+            },
+            {
+              "title": "Find the Original Array of Prefix XOR",
+              "url": "https://leetcode.com/problems/find-the-original-array-of-prefix-xor/"
+            }
+          ]
+        },
+
+        {
+          "id": "xor-swap",
+          "title": "Swap Using XOR",
+
+          "code": {
+            "language": "cpp",
+            "value": "a ^= b;\nb ^= a;\na ^= b;"
+          },
+
+          "warning": "Usually prefer std::swap(a, b) in production code. XOR swap is mainly a bit-manipulation technique."
+        }
+      ]
+    },
+
+    {
+      "id": "power-patterns",
+      "title": "7. Power of X Patterns",
+      "type": "pattern_collection",
+
+      "patterns": [
+
+        {
+          "id": "power-of-two",
+          "title": "Power of Two",
+
+          "formula": "n > 0 && (n & (n - 1)) == 0"
+        },
+
+        {
+          "id": "power-of-four",
+          "title": "Power of Four",
+
+          "idea": "A power of four is also a power of two, and its exponent is even.",
+
+          "formula": "n > 0 && (n & (n - 1)) == 0 && n % 3 == 1",
+
+          "problems": [
+            {
+              "title": "Power of Four",
+              "url": "https://leetcode.com/problems/power-of-four/"
+            }
+          ]
+        },
+
+        {
+          "id": "power-of-three",
+          "title": "Power of Three",
+
+          "note": "This does not have the same simple x & (x-1) trick because 3 is not a power of two.",
+
+          "problem": {
+            "title": "Power of Three",
+            "url": "https://leetcode.com/problems/power-of-three/"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "bitmasking",
+      "title": "8. Bitmasking",
+      "type": "concept",
+
+      "definition": "A bitmask represents a collection of boolean states using bits of an integer.",
+
+      "example": {
+        "mask": "010101",
+        "meaning": "Elements corresponding to set bits are selected."
+      },
+
+      "operations": [
+
+        {
+          "name": "set",
+          "formula": "mask |= (1 << i)"
+        },
+        {
+          "name": "clear",
+          "formula": "mask &= ~(1 << i)"
+        },
+        {
+          "name": "toggle",
+          "formula": "mask ^= (1 << i)"
+        },
+        {
+          "name": "test",
+          "formula": "(mask & (1 << i)) != 0"
+        }
+      ],
+
+      "set_operations": [
+        {
+          "name": "union",
+          "formula": "A | B"
+        },
+        {
+          "name": "intersection",
+          "formula": "A & B"
+        },
+        {
+          "name": "A minus B",
+          "formula": "A & ~B"
+        },
+        {
+          "name": "complement",
+          "formula": "~A"
+        }
+      ]
+    },
+
+    {
+      "id": "string-to-bitmask",
+      "title": "9. Hash a String into a Bitmask",
+      "type": "pattern",
+
+      "idea": "For lowercase English letters, use 26 bits to represent which letters occur.",
+
+      "formula": "mask |= 1 << (c - 'a')",
+
+      "code": {
+        "language": "cpp",
+        "value": "int getMask(const string& s) {\n    int mask = 0;\n    for (char c : s) {\n        mask |= 1 << (c - 'a');\n    }\n    return mask;\n}"
+      },
+
+      "compare": {
+        "without_bitmask": "Compare 26 possible characters.",
+        "with_bitmask": "Check overlap using one AND operation."
+      },
+
+      "key_check": {
+        "formula": "(maskA & maskB) == 0",
+        "meaning": "The two strings have no common character."
+      },
+
+      "problem": {
+        "title": "Maximum Product of Word Lengths",
+        "url": "https://leetcode.com/problems/maximum-product-of-word-lengths/"
+      }
+    },
+
+    {
+      "id": "gray-code",
+      "title": "10. Gray Code",
+      "type": "pattern",
+
+      "definition": "Gray code is an ordering where consecutive values differ in exactly one bit.",
+
+      "binary_to_gray": {
+        "formula": "gray = n ^ (n >> 1)",
+
+        "code": {
+          "language": "cpp",
+          "value": "vector<int> grayCode(int n) {\n    vector<int> ans;\n    for (int i = 0; i < (1 << n); ++i) {\n        ans.push_back(i ^ (i >> 1));\n    }\n    return ans;\n}"
+        }
+      },
+
+      "gray_to_binary": {
+        "formula": "binary = cumulative XOR of Gray bits",
+
+        "code": {
+          "language": "cpp",
+          "value": "int grayToBinary(int g) {\n    int n = 0;\n    while (g) {\n        n ^= g;\n        g >>= 1;\n    }\n    return n;\n}"
+        }
+      },
+
+      "problems": [
+        {
+          "title": "Gray Code",
+          "url": "https://leetcode.com/problems/gray-code/"
+        },
+        {
+          "title": "Circular Permutation in Binary Representation",
+          "url": "https://leetcode.com/problems/circular-permutation-in-binary-representation/"
+        }
+      ]
+    },
+
+    {
+      "id": "submask-enumeration",
+      "title": "11. Generate All Submasks",
+      "type": "pattern",
+
+      "definition": "A submask contains only set bits that are also set in the original mask.",
+
+      "example": {
+        "mask": "1011",
+        "valid_submasks": [
+          "1011",
+          "1010",
+          "1001",
+          "1000",
+          "0011",
+          "0010",
+          "0001",
+          "0000"
+        ]
+      },
+
+      "core_formula": "submask = mask & (submask - 1)",
+
+      "code": {
+        "language": "cpp",
+        "value": "void generateSubmasks(int mask) {\n    for (int sub = mask; ; sub = (sub - 1) & mask) {\n        cout << sub << endl;\n        if (sub == 0) break;\n    }\n}"
+      },
+
+      "complexity": {
+        "time": "O(2^k)",
+        "where": "k = number of set bits in mask"
+      },
+
+      "why_it_works": "Subtracting one removes the lowest set bit and changes lower bits; ANDing with the original mask keeps only bits allowed by the original mask.",
+
+      "problems": [
+        {
+          "title": "Number of Valid Words for Each Puzzle",
+          "url": "https://leetcode.com/problems/number-of-valid-words-for-each-puzzle/"
+        },
+        {
+          "title": "Fair Distribution of Cookies",
+          "url": "https://leetcode.com/problems/fair-distribution-of-cookies/"
+        },
+        {
+          "title": "Minimum Incompatibility",
+          "url": "https://leetcode.com/problems/minimum-incompatibility/"
+        },
+        {
+          "title": "Parallel Courses II",
+          "url": "https://leetcode.com/problems/parallel-courses-ii/"
+        }
+      ]
+    },
+
+    {
+      "id": "subset-dp",
+      "title": "12. DP + Bitmask",
+      "type": "advanced_pattern",
+
+      "definition": "Represent a subset of n elements as an integer from 0 to 2^n - 1.",
+
+      "state": {
+        "mask": "Which elements have already been selected.",
+        "bit_i": "1 means element i is selected.",
+        "bit_i_zero": "0 means element i is not selected."
+      },
+
+      "example": {
+        "array": ["A","B","C","D"],
+        "mask": "0101",
+        "selected": ["A","C"]
+      },
+
+      "state_count": "2^n",
+
+      "template": {
+        "language": "cpp",
+        "code": "int dfs(int idx, int mask) {\n    if (idx == n) return 0;\n\n    if (dp[idx][mask] != -1)\n        return dp[idx][mask];\n\n    int ans = INF;\n\n    for (int i = 0; i < n; ++i) {\n        if (mask & (1 << i))\n            continue;\n\n        int newMask = mask | (1 << i);\n\n        ans = min(ans,\n            cost(idx, i) + dfs(idx + 1, newMask));\n    }\n\n    return dp[idx][mask] = ans;\n}"
+      },
+
+      "complexity": {
+        "states": "O(n × 2^n)",
+        "transitions_per_state": "O(n)",
+        "typical_total": "O(n² × 2^n)"
+      },
+
+      "when_to_use": [
+        "n is small",
+        "problem asks about subsets",
+        "used/unused state matters",
+        "permutations are too expensive",
+        "constraints are around n <= 20 or similar"
+      ],
+
+      "problems": [
+        {
+          "title": "Beautiful Arrangement",
+          "url": "https://leetcode.com/problems/beautiful-arrangement/"
+        },
+        {
+          "title": "Partition to K Equal Sum Subsets",
+          "url": "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/"
+        },
+        {
+          "title": "Matchsticks to Square",
+          "url": "https://leetcode.com/problems/matchsticks-to-square/"
+        },
+        {
+          "title": "Shortest Path Visiting All Nodes",
+          "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/"
+        },
+        {
+          "title": "Minimum XOR Sum of Two Arrays",
+          "url": "https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/"
+        },
+        {
+          "title": "Maximum Students Taking Exam",
+          "url": "https://leetcode.com/problems/maximum-students-taking-exam/"
+        },
+        {
+          "title": "Smallest Sufficient Team",
+          "url": "https://leetcode.com/problems/smallest-sufficient-team/"
+        }
+      ]
+    },
+
+    {
+      "id": "meet-in-the-middle",
+      "title": "13. Meet in the Middle + Bitmask",
+      "type": "advanced_pattern",
+
+      "idea": "Split an array into two halves, enumerate subsets independently, then combine compatible results.",
+
+      "why": "It reduces 2^N enumeration into roughly 2^(N/2) on each side.",
+
+      "steps": [
+        "Split array into left and right halves.",
+        "Generate all subsets of the left half.",
+        "Generate all subsets of the right half.",
+        "Group subsets by selected-element count when required.",
+        "Sort candidate sums.",
+        "For each left sum, binary-search the best compatible right sum."
+      ],
+
+      "complexity": {
+        "subset_generation": "O(2^(N/2))",
+        "memory": "O(2^(N/2))"
+      },
+
+      "problem": {
+        "title": "Partition Array Into Two Arrays to Minimize Sum Difference",
+        "url": "https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/"
+      },
+
+      "template": {
+        "language": "cpp",
+        "code": "vector<vector<int>> generate(\n    vector<int>& nums,\n    int l,\n    int r\n) {\n    int n = r - l + 1;\n    vector<vector<int>> res(n + 1);\n\n    for (int mask = 0; mask < (1 << n); ++mask) {\n        int sum = 0;\n        int cnt = 0;\n\n        for (int i = 0; i < n; ++i) {\n            if (mask & (1 << i)) {\n                sum += nums[l + i];\n                cnt++;\n            }\n        }\n\n        res[cnt].push_back(sum);\n    }\n\n    return res;\n}"
+      }
+    },
+
+    {
+      "id": "kth-bit-patterns",
+      "title": "14. K-th Bit Patterns",
+      "type": "pattern_collection",
+
+      "patterns": [
+
+        {
+          "id": "kth-grammar",
+          "title": "K-th Symbol in Grammar",
+
+          "key_observation": "After converting K to zero-based indexing, the answer equals the parity of the number of set bits in K - 1.",
+
+          "formula": "answer = popcount(K - 1) mod 2",
+
+          "code": {
+            "language": "cpp",
+            "value": "int kthGrammar(int N, int K) {\n    K--;\n    return __builtin_popcount(K) & 1;\n}"
+          },
+
+          "problem": {
+            "title": "K-th Symbol in Grammar",
+            "url": "https://leetcode.com/problems/k-th-symbol-in-grammar/"
+          }
+        },
+
+        {
+          "id": "kth-bit-string",
+          "title": "Find K-th Bit in N-th Binary String",
+
+          "problem": {
+            "title": "Find K-th Bit in N-th Binary String",
+            "url": "https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/"
+          }
+        }
+      ]
+    },
+
+    {
+      "id": "bit-range-clearing",
+      "title": "15. Clear Bits in a Range",
+      "type": "pattern",
+
+      "patterns": [
+
+        {
+          "id": "clear-lsb-through-i",
+          "title": "Clear Bits 0 Through i",
+
+          "formula": "n & ~((1 << (i + 1)) - 1)",
+
+          "meaning": "Keeps bits above i and clears bits 0..i."
+        },
+
+        {
+          "id": "keep-lsb-through-i",
+          "title": "Keep Bits 0 Through i",
+
+          "formula": "n & ((1 << (i + 1)) - 1)",
+
+          "meaning": "Clears all bits above i."
+        }
+      ]
+    },
+
+    {
+      "id": "two-complement",
+      "title": "16. Two's Complement",
+      "type": "concept",
+
+      "definition": "The standard representation used for signed integers in most modern systems.",
+
+      "rules": [
+        "Positive values are represented normally.",
+        "For a fixed width, negative x can be represented as ~x + 1.",
+        "The most significant bit is interpreted as the sign bit."
+      ],
+
+      "examples": [
+        {
+          "decimal": 1,
+          "8_bit": "00000001"
+        },
+        {
+          "decimal": -1,
+          "8_bit": "11111111"
+        },
+        {
+          "decimal": -12,
+          "process": [
+            "12 = 00001100",
+            "~12 = 11110011",
+            "~12 + 1 = 11110100"
+          ]
+        }
+      ],
+
+      "subtraction": {
+        "idea": "Subtraction can be expressed through addition of the two's complement.",
+        "formula": "a - b = a + (~b + 1)"
+      },
+
+      "important": "The exact behavior of signed overflow and some bit operations on signed values is language-dependent; use fixed-width unsigned integers when reasoning about raw bit patterns."
+    },
+
+    {
+      "id": "bit-arithmetic",
+      "title": "17. Arithmetic Through Bits",
+      "type": "advanced_pattern",
+
+      "identities": [
+
+        {
+          "formula": "a + b = (a ^ b) + 2 × (a & b)",
+          "meaning": "XOR gives addition without carry; AND identifies carry positions."
+        },
+
+        {
+          "formula": "a | b = (a ^ b) + (a & b)",
+          "meaning": "Useful because XOR and AND partition the set bits."
+        },
+
+        {
+          "formula": "a ^ b = (a | b) - (a & b)",
+          "meaning": "Equivalent relationship among OR, XOR and AND."
+        }
+      ],
+
+      "note": "These identities describe ordinary integer arithmetic and assume the expressions are interpreted without unintended fixed-width overflow."
+    },
+
+    {
+      "id": "branchless-min-max",
+      "title": "18. Branchless Min / Max",
+      "type": "advanced_pattern",
+
+      "patterns": [
+
+        {
+          "id": "min",
+          "title": "Minimum of Two Values",
+
+          "formula": "y ^ ((x ^ y) & -(x < y))",
+
+          "code": {
+            "language": "cpp",
+            "value": "int minValue(int x, int y) {\n    return y ^ ((x ^ y) & -(x < y));\n}"
+          },
+
+          "note": "For modern application code, std::min is usually clearer. Such branchless tricks can have language-specific assumptions."
+        },
+
+        {
+          "id": "max",
+          "title": "Maximum of Two Values",
+
+          "formula": "x ^ ((x ^ y) & -(x < y))"
+        }
+      ]
+    },
+
+    {
+      "id": "overflow",
+      "title": "19. Understanding Overflow",
+      "type": "concept",
+
+      "example": {
+        "bits": 3,
+        "representable_unsigned_range": "0..7",
+
+        "addition": {
+          "a": 7,
+          "a_binary": "111",
+          "b": 2,
+          "b_binary": "010",
+          "full_result": "1001",
+          "stored_3_bit_result": "001"
+        }
+      },
+
+      "key_point": "A fixed-width representation cannot retain bits beyond its width.",
+
+      "warning": "Signed overflow is language-specific; in C and C++, signed integer overflow is undefined behavior, while unsigned arithmetic wraps modulo 2^B."
+    },
+
+    {
+      "id": "restricted-operations",
+      "title": "20. Problems with Restricted Operations",
+      "type": "problem_pattern",
+
+      "idea": "The problem removes convenient arithmetic operators, so derive equivalent operations using shifts, addition, subtraction, or logarithmic/exponential identities where appropriate.",
+
+      "problems": [
+        {
+          "title": "Divide Two Integers",
+          "url": "https://leetcode.com/problems/divide-two-integers/"
+        },
+        {
+          "title": "Product of Array Except Self",
+          "url": "https://leetcode.com/problems/product-of-array-except-self/"
+        }
+      ],
+
+      "techniques": [
+        "Repeated subtraction",
+        "Bit shifting",
+        "Doubling",
+        "Binary decomposition",
+        "Prefix/suffix products"
+      ]
+    },
+
+    {
+      "id": "maximum-xor",
+      "title": "21. Maximum XOR",
+      "type": "advanced_pattern",
+
+      "idea": "For maximizing XOR, higher-order bits have greater numerical impact, so process bits from the most significant bit toward the least significant bit.",
+
+      "greedy_rule": "Try to make the highest currently undecided XOR bit equal to 1.",
+
+      "common_techniques": [
+        "Binary trie",
+        "Prefix-set / greedy bitmask approach"
+      ],
+
+      "problem": {
+        "title": "Maximum XOR of Two Numbers in an Array",
+        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/"
+      }
+    },
+
+    {
+      "id": "bfs-bitmask",
+      "title": "22. BFS + Bitmask",
+      "type": "advanced_pattern",
+
+      "idea": "When a graph problem requires remembering which nodes have been visited, combine the current node with a visited-set bitmask.",
+
+      "state": {
+        "node": "Current graph node",
+        "mask": "Set of visited nodes"
+      },
+
+      "state_representation": "(node, mask)",
+
+      "example_transition": {
+        "formula": "newMask = mask | (1 << nextNode)"
+      },
+
+      "problem": {
+        "title": "Shortest Path Visiting All Nodes",
+        "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/"
+      },
+
+      "complexity": {
+        "states": "O(N × 2^N)"
+      }
+    }
+  ],
+
+  "quick_reference": {
+
+    "bit_operations": [
+      {
+        "operation": "Check bit",
+        "formula": "(n >> i) & 1"
+      },
+      {
+        "operation": "Set bit",
+        "formula": "n | (1 << i)"
+      },
+      {
+        "operation": "Clear bit",
+        "formula": "n & ~(1 << i)"
+      },
+      {
+        "operation": "Toggle bit",
+        "formula": "n ^ (1 << i)"
+      },
+      {
+        "operation": "Lowest bit",
+        "formula": "n & -n"
+      },
+      {
+        "operation": "Remove lowest set bit",
+        "formula": "n & (n - 1)"
+      },
+      {
+        "operation": "Check power of two",
+        "formula": "n > 0 && (n & (n - 1)) == 0"
+      },
+      {
+        "operation": "Parity",
+        "formula": "n & 1"
+      },
+      {
+        "operation": "Multiply by 2",
+        "formula": "n << 1"
+      },
+      {
+        "operation": "Divide by 2",
+        "formula": "n >> 1"
+      },
+      {
+        "operation": "Gray code",
+        "formula": "n ^ (n >> 1)"
+      }
+    ],
+
+    "xor_properties": [
+      "x ^ x = 0",
+      "x ^ 0 = x",
+      "a ^ b = b ^ a",
+      "(a ^ b) ^ c = a ^ (b ^ c)",
+      "a ^ b = c => a = b ^ c"
+    ],
+
+    "mask_operations": [
+      "set: mask | (1 << i)",
+      "clear: mask & ~(1 << i)",
+      "toggle: mask ^ (1 << i)",
+      "test: mask & (1 << i)",
+      "union: A | B",
+      "intersection: A & B",
+      "difference: A & ~B"
+    ]
+  },
+
+  "pattern_recognition": [
+
+    {
+      "signal": "Every element appears twice except one",
+      "think": "XOR"
+    },
+
+    {
+      "signal": "Need to represent selected / unselected items",
+      "think": "Bitmask"
+    },
+
+    {
+      "signal": "n is small and subset state matters",
+      "think": "Subset DP"
+    },
+
+    {
+      "signal": "Need all subsets of a mask",
+      "think": "Submask enumeration"
+    },
+
+    {
+      "signal": "Need all subsets but n is around 40",
+      "think": "Meet in the Middle"
+    },
+
+    {
+      "signal": "Need maximum XOR",
+      "think": "Binary Trie or greedy bitmask"
+    },
+
+    {
+      "signal": "Need minimum XOR pair",
+      "think": "Sort + neighboring XOR"
+    },
+
+    {
+      "signal": "Number has exactly one set bit",
+      "think": "Power of two"
+    },
+
+    {
+      "signal": "Need lowest set bit",
+      "think": "n & -n"
+    },
+
+    {
+      "signal": "Need remove lowest set bit",
+      "think": "n & (n - 1)"
+    },
+
+    {
+      "signal": "Graph + visited subset",
+      "think": "BFS/DP + bitmask"
+    },
+
+    {
+      "signal": "String contains only a small fixed alphabet",
+      "think": "Character bitmask"
+    },
+
+    {
+      "signal": "Consecutive binary states differ by one bit",
+      "think": "Gray code"
+    }
+  ],
+
+  "practice_problems": {
+
+    "easy": [
+      {
+        "title": "Single Number",
+        "url": "https://leetcode.com/problems/single-number/"
+      },
+      {
+        "title": "Power of Two",
+        "url": "https://leetcode.com/problems/power-of-two/"
+      },
+      {
+        "title": "Power of Four",
+        "url": "https://leetcode.com/problems/power-of-four/"
+      },
+      {
+        "title": "Subsets",
+        "url": "https://leetcode.com/problems/subsets/"
+      }
+    ],
+
+    "medium": [
+      {
+        "title": "Gray Code",
+        "url": "https://leetcode.com/problems/gray-code/"
+      },
+      {
+        "title": "Single Number II",
+        "url": "https://leetcode.com/problems/single-number-ii/"
+      },
+      {
+        "title": "Maximum Product of Word Lengths",
+        "url": "https://leetcode.com/problems/maximum-product-of-word-lengths/"
+      },
+      {
+        "title": "Partition to K Equal Sum Subsets",
+        "url": "https://leetcode.com/problems/partition-to-k-equal-sum-subsets/"
+      },
+      {
+        "title": "Beautiful Arrangement",
+        "url": "https://leetcode.com/problems/beautiful-arrangement/"
+      }
+    ],
+
+    "hard": [
+      {
+        "title": "Maximum XOR of Two Numbers in an Array",
+        "url": "https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/"
+      },
+      {
+        "title": "Shortest Path Visiting All Nodes",
+        "url": "https://leetcode.com/problems/shortest-path-visiting-all-nodes/"
+      },
+      {
+        "title": "Minimum XOR Sum of Two Arrays",
+        "url": "https://leetcode.com/problems/minimum-xor-sum-of-two-arrays/"
+      },
+      {
+        "title": "Partition Array Into Two Arrays to Minimize Sum Difference",
+        "url": "https://leetcode.com/problems/partition-array-into-two-arrays-to-minimize-sum-difference/"
+      }
+    ]
+  }
+}

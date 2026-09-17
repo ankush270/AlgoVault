@@ -30,7 +30,8 @@ import {
   Maximize2,
   Minimize2,
   BrainCircuit,
-  BarChart3
+  BarChart3,
+  Trash2
 } from 'lucide-react';
 import { CustomDropdown } from './common/CustomDropdown';
 
@@ -339,17 +340,77 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     }
   });
 
+  // Deleted items state with localStorage persistence
+  const [deletedExperienceIds, setDeletedExperienceIds] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('deleted_interview_experience_ids') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const [deletedQuestionTexts, setDeletedQuestionTexts] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('deleted_interview_question_texts') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+  const handleDeleteExperience = async (expId: string, _title?: string) => {
+    const updated = [...deletedExperienceIds, expId];
+    setDeletedExperienceIds(updated);
+    try {
+      localStorage.setItem('deleted_interview_experience_ids', JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+    if (activeModalExperience?.id === expId) {
+      setActiveModalExperience(null);
+    }
+
+    try {
+      await fetch(`${API_BASE}/api/dataset/experience/${expId}`, {
+        method: 'DELETE',
+      });
+    } catch (err) {
+      console.error('Failed to delete experience from backend JSON files:', err);
+    }
+  };
+
+  const handleDeleteQuestion = async (qText: string) => {
+    const updated = [...deletedQuestionTexts, qText];
+    setDeletedQuestionTexts(updated);
+    try {
+      localStorage.setItem('deleted_interview_question_texts', JSON.stringify(updated));
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      await fetch(`${API_BASE}/api/dataset/question`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionText: qText }),
+      });
+    } catch (err) {
+      console.error('Failed to delete question from backend JSON files:', err);
+    }
+  };
+
   // Load Master Index, 4 Dataset Chunks, and Analytics JSONs on Mount
   useEffect(() => {
     setLoading(true);
     Promise.all([
-      fetch('/data/interview_dataset_master_index.json').then((res) => res.json()),
-      fetch('/data/interview_dataset_part1_A_to_D.json').then((res) => res.json()),
-      fetch('/data/interview_dataset_part2_E_to_L.json').then((res) => res.json()),
-      fetch('/data/interview_dataset_part3_M_to_R.json').then((res) => res.json()),
-      fetch('/data/interview_dataset_part4_S_to_Z.json').then((res) => res.json()),
-      fetch('/data/subject_wise_questions_index.json').then((res) => res.json()).catch(() => null),
-      fetch('/data/company_subject_matrix.json').then((res) => res.json()).catch(() => null),
+      fetch('/data/interview-experiences/interview_dataset_master_index.json').then((res) => res.json()),
+      fetch('/data/interview-experiences/interview_dataset_part1_A_to_D.json').then((res) => res.json()),
+      fetch('/data/interview-experiences/interview_dataset_part2_E_to_L.json').then((res) => res.json()),
+      fetch('/data/interview-experiences/interview_dataset_part3_M_to_R.json').then((res) => res.json()),
+      fetch('/data/interview-experiences/interview_dataset_part4_S_to_Z.json').then((res) => res.json()),
+      fetch('/data/interview-experiences/subject_wise_questions_index.json').then((res) => res.json()).catch(() => null),
+      fetch('/data/interview-experiences/company_subject_matrix.json').then((res) => res.json()).catch(() => null),
     ])
       .then(([master, p1, p2, p3, p4, subIndex, matrixData]) => {
         setMasterIndex(master);
@@ -416,13 +477,14 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
   // Filtered & Sorted Experiences List
   const companyExperiences = useMemo(() => {
+    let list = allExperiences;
     if (viewMode === 'company_vault' && selectedCompany) {
-      return allExperiences.filter(
+      list = allExperiences.filter(
         (item) => item.company.toLowerCase() === selectedCompany.toLowerCase()
       );
     }
-    return allExperiences;
-  }, [allExperiences, viewMode, selectedCompany]);
+    return list.filter((item) => !deletedExperienceIds.includes(item.id));
+  }, [allExperiences, viewMode, selectedCompany, deletedExperienceIds]);
 
   const sortedExperiences = useMemo(() => {
     const filtered = companyExperiences.filter((item) => {
@@ -475,7 +537,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     companyExperiences.forEach((exp) => {
       exp.extracted_questions.forEach((q) => {
         const trimmed = q.trim();
-        if (trimmed && !seen.has(trimmed.toLowerCase())) {
+        const cleaned = cleanQuestionText(trimmed);
+        if (
+          trimmed &&
+          !seen.has(trimmed.toLowerCase()) &&
+          !deletedQuestionTexts.includes(trimmed) &&
+          !deletedQuestionTexts.includes(cleaned)
+        ) {
           seen.add(trimmed.toLowerCase());
           list.push({
             question: trimmed,
@@ -491,7 +559,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     if (!questionSearchQuery.trim()) return list;
     const q = questionSearchQuery.toLowerCase();
     return list.filter((item) => item.question.toLowerCase().includes(q) || item.role.toLowerCase().includes(q));
-  }, [companyExperiences, questionSearchQuery]);
+  }, [companyExperiences, questionSearchQuery, deletedQuestionTexts]);
 
   // Rounds Stats for Company
   const companyRoundsStats = useMemo(() => {
@@ -507,14 +575,19 @@ export const InterviewExperiencesExplorer: React.FC = () => {
   // Subject Questions list for Active Subject Tab
   const activeSubjectQuestions = useMemo(() => {
     if (!subjectQuestionsIndex) return [];
-    const list = subjectQuestionsIndex[activeSubjectTab] || [];
+    const rawList = subjectQuestionsIndex[activeSubjectTab] || [];
+    const list = rawList.filter((item) => {
+      const trimmed = item.question.trim();
+      const cleaned = cleanQuestionText(trimmed);
+      return !deletedQuestionTexts.includes(trimmed) && !deletedQuestionTexts.includes(cleaned);
+    });
     if (!globalQuestionSearch.trim()) return list;
     const q = globalQuestionSearch.toLowerCase();
     return list.filter((item) =>
       item.question.toLowerCase().includes(q) ||
       item.asked_in_companies.some((c) => c.toLowerCase().includes(q))
     );
-  }, [subjectQuestionsIndex, activeSubjectTab, globalQuestionSearch]);
+  }, [subjectQuestionsIndex, activeSubjectTab, globalQuestionSearch, deletedQuestionTexts]);
 
   // Filtered Subject Matrix
   const filteredSubjectMatrix = useMemo(() => {
@@ -916,9 +989,18 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                       <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
                         {activeSubjectTab}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-300">
-                        Asked in {qItem.total_companies_asked} {qItem.total_companies_asked === 1 ? 'Company' : 'Companies'}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-300">
+                          Asked in {qItem.total_companies_asked} {qItem.total_companies_asked === 1 ? 'Company' : 'Companies'}
+                        </span>
+                        <button
+                          onClick={() => handleDeleteQuestion(qItem.question)}
+                          className="p-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                          title="Delete Question"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
 
                     <h3 className="text-xs font-bold text-white leading-relaxed">
@@ -1282,17 +1364,26 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                               </div>
                             </div>
 
-                            <button
-                              onClick={() => toggleSaveExperience(exp.id)}
-                              className={`p-1.5 rounded-lg border transition-colors ${
-                                isSaved
-                                  ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-                                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-white'
-                              }`}
-                              title={isSaved ? 'Remove from Saved' : 'Save Experience'}
-                            >
-                              <Bookmark className="w-4 h-4 fill-current" />
-                            </button>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                onClick={() => toggleSaveExperience(exp.id)}
+                                className={`p-1.5 rounded-lg border transition-colors ${
+                                  isSaved
+                                    ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
+                                    : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-white'
+                                }`}
+                                title={isSaved ? 'Remove from Saved' : 'Save Experience'}
+                              >
+                                <Bookmark className="w-4 h-4 fill-current" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteExperience(exp.id, exp.title)}
+                                className="p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                                title="Delete Experience"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
 
                           {/* Title */}
@@ -1477,9 +1568,18 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                           <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-[11px] flex items-center justify-center shrink-0">
                             {globalIdx}
                           </span>
-                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${tag.color}`}>
-                            {tag.name}
-                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold border ${tag.color}`}>
+                              {tag.name}
+                            </span>
+                            <button
+                              onClick={() => handleDeleteQuestion(item.question)}
+                              className="p-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                              title="Delete Question"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </div>
                         <p className="text-xs font-semibold text-slate-100 leading-relaxed">
                           {cleanQuestionText(item.question)}
@@ -1579,6 +1679,14 @@ export const InterviewExperiencesExplorer: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => handleDeleteExperience(activeModalExperience.id, activeModalExperience.title)}
+                  className="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-colors flex items-center gap-1 text-xs font-medium"
+                  title="Delete Experience"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Delete</span>
+                </button>
                 <a
                   href={activeModalExperience.url}
                   target="_blank"

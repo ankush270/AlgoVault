@@ -229,7 +229,7 @@ export const SqlPlayground: React.FC = () => {
 
   // Load SQL Master Sheet JSON on Mount
   useEffect(() => {
-    fetch('/data/sql_master_sheet.json')
+    fetch('/data/sql/sql_master_sheet.json')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error ${res.status}`);
         return res.json();

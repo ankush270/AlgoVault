@@ -7,11 +7,27 @@ interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccessSync?: (userEmail: string) => void;
+  initialTab?: 'login' | 'signup';
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessSync }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessSync, initialTab = 'login' }) => {
   const { login } = useAuth();
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+  const [activeTab, setActiveTab] = useState<'login' | 'signup'>(initialTab);
+
+  React.useEffect(() => {
+    if (isOpen && initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
+
+  const handleTabChange = (tab: 'login' | 'signup') => {
+    setActiveTab(tab);
+    setErrorMessage('');
+    setSuccessMessage('');
+    if (window.location.pathname.toLowerCase() === '/login' || window.location.pathname.toLowerCase() === '/signup') {
+      window.history.replaceState(null, '', `/${tab}`);
+    }
+  };
 
   // Form fields
   const [name, setName] = useState('');
@@ -135,11 +151,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           <div className="flex p-1 bg-slate-950 border border-slate-800/80 rounded-2xl text-xs font-bold">
             <button
               type="button"
-              onClick={() => {
-                setActiveTab('login');
-                setErrorMessage('');
-                setSuccessMessage('');
-              }}
+              onClick={() => handleTabChange('login')}
               className={`flex-1 py-2.5 rounded-xl transition-all ${
                 activeTab === 'login'
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-600/25'
@@ -150,11 +162,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             </button>
             <button
               type="button"
-              onClick={() => {
-                setActiveTab('signup');
-                setErrorMessage('');
-                setSuccessMessage('');
-              }}
+              onClick={() => handleTabChange('signup')}
               className={`flex-1 py-2.5 rounded-xl transition-all ${
                 activeTab === 'signup'
                   ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-600/25'

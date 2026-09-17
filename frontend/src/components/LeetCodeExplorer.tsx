@@ -188,8 +188,8 @@ export const LeetCodeExplorer: React.FC = () => {
   useEffect(() => {
     let isMounted = true;
     Promise.all([
-      fetch('/data/leetcode_questions_part1.json').then((res) => res.json()),
-      fetch('/data/leetcode_questions_part2.json').then((res) => res.json())
+      fetch('/data/leetcode/leetcode_questions_part1.json').then((res) => res.json()),
+      fetch('/data/leetcode/leetcode_questions_part2.json').then((res) => res.json())
     ])
       .then(([p1, p2]) => {
         if (isMounted) {

@@ -14,17 +14,167 @@ import { LeetCodeExplorer } from './components/LeetCodeExplorer';
 import { StriverSheetView } from './components/StriverSheetView';
 import { AlgorithmHub } from './components/AlgorithmHub';
 import { InterviewExperiencesExplorer } from './components/InterviewExperiencesExplorer';
+import { TricksExplorer } from './components/TricksExplorer';
+import { AuthModal } from './components/AuthModal';
 import { AIChatbot } from './components/common/AIChatbot';
 import { DomainType, TopicItem } from './types';
 
+const domainRoutes: Record<string, DomainType> = {
+  '/os': 'os',
+  '/oops': 'oops',
+  '/dbms': 'dbms-sql',
+  '/dbms-sql': 'dbms-sql',
+  '/networks': 'computer-networks',
+  '/computer-networks': 'computer-networks',
+  '/dsa': 'dsa',
+  '/system-design': 'system-design',
+  '/javascript': 'javascript',
+  '/react': 'react',
+  '/nodejs': 'nodejs',
+  '/genai': 'genai-ml',
+  '/genai-ml': 'genai-ml',
+};
+
+const tabRoutes: Record<string, string> = {
+  '/': 'dashboard',
+  '/dashboard': 'dashboard',
+  '/knowledge': 'knowledge',
+  '/modules': 'knowledge',
+  '/dsa-tricks': 'dsa-tricks',
+  '/tricks': 'dsa-tricks',
+  '/interview-experiences': 'interview-experiences',
+  '/interviews': 'interview-experiences',
+  '/striver-a2z': 'striver-a2z',
+  '/striver': 'striver-a2z',
+  '/leetcode-explorer': 'leetcode-explorer',
+  '/leetcode': 'leetcode-explorer',
+  '/algorithms': 'algorithms',
+  '/sql-sandbox': 'sql-sandbox',
+  '/sql': 'sql-sandbox',
+  '/flashcards': 'flashcards',
+  '/revision': 'revision',
+  '/analytics': 'analytics',
+  '/notes': 'notes',
+};
+
+function parseCurrentRoute(): {
+  tab: string;
+  domain: DomainType | 'all';
+  isAuthModalOpen: boolean;
+  authTab: 'login' | 'signup';
+} {
+  const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+
+  if (path === '/login') {
+    return { tab: 'dashboard', domain: 'all', isAuthModalOpen: true, authTab: 'login' };
+  }
+  if (path === '/signup') {
+    return { tab: 'dashboard', domain: 'all', isAuthModalOpen: true, authTab: 'signup' };
+  }
+
+  if (domainRoutes[path]) {
+    return { tab: 'knowledge', domain: domainRoutes[path], isAuthModalOpen: false, authTab: 'login' };
+  }
+
+  if (tabRoutes[path]) {
+    return { tab: tabRoutes[path], domain: 'all', isAuthModalOpen: false, authTab: 'login' };
+  }
+
+  return { tab: 'dashboard', domain: 'all', isAuthModalOpen: false, authTab: 'login' };
+}
+
+function getPathForState(tab: string, domain?: DomainType | 'all'): string {
+  if (tab === 'knowledge' && domain && domain !== 'all') {
+    return `/${domain}`;
+  }
+  switch (tab) {
+    case 'dashboard': return '/';
+    case 'knowledge': return '/knowledge';
+    case 'dsa-tricks': return '/tricks';
+    case 'interview-experiences': return '/interview-experiences';
+    case 'striver-a2z': return '/striver-a2z';
+    case 'leetcode-explorer': return '/leetcode';
+    case 'algorithms': return '/algorithms';
+    case 'sql-sandbox': return '/sql-sandbox';
+    case 'flashcards': return '/flashcards';
+    case 'revision': return '/revision';
+    case 'analytics': return '/analytics';
+    case 'notes': return '/notes';
+    default: return '/';
+  }
+}
+
 export const AppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
-  const [selectedDomain, setSelectedDomain] = useState<DomainType | 'all'>('all');
+  const [routeState, setRouteState] = useState(() => parseCurrentRoute());
+  const activeTab = routeState.tab;
+  const selectedDomain = routeState.domain;
+  const authModalOpen = routeState.isAuthModalOpen;
+  const authInitialTab = routeState.authTab;
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const [selectedTopicModal, setSelectedTopicModal] = useState<TopicItem | null>(null);
   const [noteModalTarget, setNoteModalTarget] = useState<{ topicId: string; title: string } | null>(null);
+
+  const setActiveTab = (newTab: string) => {
+    const targetPath = getPathForState(newTab, selectedDomain);
+    if (window.location.pathname.toLowerCase() !== targetPath.toLowerCase()) {
+      window.history.pushState(null, '', targetPath);
+    }
+    setRouteState((prev) => ({
+      ...prev,
+      tab: newTab,
+      isAuthModalOpen: false,
+    }));
+  };
+
+  const setSelectedDomain = (newDomain: DomainType | 'all') => {
+    const targetTab = activeTab === 'dashboard' ? 'knowledge' : activeTab;
+    const targetPath = getPathForState(targetTab, newDomain);
+    if (window.location.pathname.toLowerCase() !== targetPath.toLowerCase()) {
+      window.history.pushState(null, '', targetPath);
+    }
+    setRouteState((prev) => ({
+      ...prev,
+      tab: targetTab,
+      domain: newDomain,
+      isAuthModalOpen: false,
+    }));
+  };
+
+  React.useEffect(() => {
+    const handlePopState = () => {
+      const parsed = parseCurrentRoute();
+      setRouteState(parsed);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleOpenAuth = (tab: 'login' | 'signup' = 'login') => {
+    if (window.location.pathname.toLowerCase() !== `/${tab}`) {
+      window.history.pushState(null, '', `/${tab}`);
+    }
+    setRouteState((prev) => ({
+      ...prev,
+      isAuthModalOpen: true,
+      authTab: tab,
+    }));
+  };
+
+  const handleCloseAuth = () => {
+    const currentPath = window.location.pathname.toLowerCase();
+    if (currentPath === '/login' || currentPath === '/signup') {
+      const cleanPath = getPathForState(activeTab, selectedDomain);
+      window.history.replaceState(null, '', cleanPath);
+    }
+    setRouteState((prev) => ({
+      ...prev,
+      isAuthModalOpen: false,
+    }));
+  };
 
   const handleSelectTopic = (topic: TopicItem) => {
     setSelectedTopicModal(topic);
@@ -44,6 +194,7 @@ export const AppContent: React.FC = () => {
         setMobileMenuOpen={setMobileMenuOpen}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        onOpenAuth={handleOpenAuth}
       />
 
       {/* Main Body */}
@@ -59,7 +210,7 @@ export const AppContent: React.FC = () => {
         />
 
         {/* Main Content View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 max-w-7xl mx-auto w-full">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 max-w-[1720px] mx-auto w-full">
           {activeTab === 'dashboard' && (
             <Dashboard
               setActiveTab={setActiveTab}
@@ -80,6 +231,8 @@ export const AppContent: React.FC = () => {
               onOpenNote={handleOpenNote}
             />
           )}
+
+          {activeTab === 'dsa-tricks' && <TricksExplorer />}
 
           {activeTab === 'interview-experiences' && <InterviewExperiencesExplorer />}
 
@@ -123,6 +276,13 @@ export const AppContent: React.FC = () => {
           onClose={() => setNoteModalTarget(null)}
         />
       )}
+
+      {/* Auth Modal (Login / Signup) */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={handleCloseAuth}
+        initialTab={authInitialTab}
+      />
 
       {/* Sarvam AI Chatbot */}
       <AIChatbot />

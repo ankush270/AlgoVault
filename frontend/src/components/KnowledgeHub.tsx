@@ -547,7 +547,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
 
                 {/* Accordion Body: Grid of Topic Cards */}
                 {isExpanded && (
-                  <div className="p-4 bg-slate-950/40 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fadeIn">
+                  <div className="p-5 sm:p-6 bg-slate-950/60 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 animate-fadeIn">
                     {topics.map((topic) => {
                       const isStarred = !!progress.starred[topic.id];
                       const hasNote = !!progress.notes[topic.id];
@@ -555,12 +555,12 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                       return (
                         <div
                           key={topic.id}
-                          className="glass-panel glass-panel-hover p-4 rounded-xl border border-slate-800/80 flex flex-col justify-between space-y-3 group transition-all duration-200 bg-slate-900/40"
+                          className="glass-panel glass-panel-hover p-5 sm:p-6 rounded-2xl border border-slate-800/90 flex flex-col justify-between space-y-4 group transition-all duration-200 bg-slate-900/50 hover:bg-slate-900/90 shadow-xl"
                         >
-                          <div className="space-y-2.5">
+                          <div className="space-y-3.5">
                             {/* Top Bar: Difficulty & Star Button */}
                             <div className="flex items-center justify-between gap-2">
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getDifficultyColor(topic.difficulty)}`}>
+                              <span className={`text-xs font-extrabold uppercase px-2.5 py-1 rounded-md tracking-wider border ${getDifficultyColor(topic.difficulty)}`}>
                                 {topic.difficulty}
                               </span>
                               <button
@@ -568,34 +568,37 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                                   e.stopPropagation();
                                   toggleStar(topic.id);
                                 }}
-                                className="text-slate-500 hover:text-amber-400 transition-colors p-1"
+                                className="text-slate-400 hover:text-amber-400 transition-colors p-1.5 rounded-lg hover:bg-slate-800/80"
                                 title={isStarred ? 'Unstar Topic' : 'Star Topic'}
                               >
-                                <Star size={15} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
+                                <Star size={16} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
                               </button>
                             </div>
 
                             {/* Title & Summary */}
                             <div 
                               onClick={() => onSelectTopic(topic)}
-                              className="cursor-pointer space-y-1"
+                              className="cursor-pointer space-y-1.5"
                             >
-                              <h4 className="font-bold text-white text-sm group-hover:text-blue-400 transition-colors leading-snug">
+                              <h4 className="font-extrabold text-white text-base sm:text-lg group-hover:text-blue-400 transition-colors leading-snug">
                                 {topic.title}
                               </h4>
-                              <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                              <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed font-normal">
                                 {topic.summary}
                               </p>
                             </div>
 
                             {/* Key Concepts Preview */}
                             {topic.keyConcepts && topic.keyConcepts.length > 0 && (
-                              <div className="space-y-0.5 pt-1.5 border-t border-slate-800/60">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Core Takeaways:</span>
-                                <ul className="text-[11px] text-slate-300 space-y-0.5">
+                              <div className="space-y-1.5 pt-2.5 border-t border-slate-800/80">
+                                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                                  CORE TAKEAWAYS:
+                                </span>
+                                <ul className="text-xs sm:text-sm text-slate-200 space-y-1 font-medium">
                                   {topic.keyConcepts.slice(0, 2).map((kc, idx) => (
-                                    <li key={idx} className="line-clamp-1 flex items-start gap-1">
-                                      <span className="text-blue-400 font-bold">•</span> {kc}
+                                    <li key={idx} className="line-clamp-2 flex items-start gap-1.5">
+                                      <span className="text-blue-400 font-bold text-sm shrink-0">•</span>
+                                      <span className="leading-snug text-slate-200">{kc}</span>
                                     </li>
                                   ))}
                                 </ul>
@@ -603,11 +606,11 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                             )}
 
                             {/* Company Tags */}
-                            <div className="flex flex-wrap items-center gap-1 pt-1">
+                            <div className="flex flex-wrap items-center gap-1.5 pt-1">
                               {topic.companyTags.map((c, idx) => (
                                 <span
                                   key={idx}
-                                  className="text-[9px] font-medium text-slate-400 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800"
+                                  className="text-xs font-semibold text-slate-300 bg-slate-950 px-2.5 py-0.5 rounded-md border border-slate-800"
                                 >
                                   {c}
                                 </span>
@@ -616,35 +619,35 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                           </div>
 
                           {/* Bottom Bar: Status Selector & Actions */}
-                          <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
-                            <div className="flex items-center gap-1.5">
+                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2">
                               {getStatusBadge(topic.id)}
                             </div>
 
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-2">
                               {/* Personal Notes Trigger */}
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   onOpenNote(topic.id, topic.title);
                                 }}
-                                className={`p-1.5 rounded-lg border transition-all ${
+                                className={`p-2 rounded-xl border transition-all ${
                                   hasNote
                                     ? 'bg-purple-600/20 text-purple-300 border-purple-500/30'
-                                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:bg-slate-800'
                                 }`}
                                 title="Personal Note"
                               >
-                                <FileText size={13} />
+                                <FileText size={15} />
                               </button>
 
                               {/* Open Full Topic Details */}
                               <button
                                 onClick={() => onSelectTopic(topic)}
-                                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white border border-blue-500/20 transition-all text-xs font-semibold"
+                                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/20 transition-all text-xs sm:text-sm font-bold shrink-0"
                               >
                                 <span>Study</span>
-                                <ChevronRight size={13} />
+                                <ChevronRight size={15} />
                               </button>
                             </div>
                           </div>

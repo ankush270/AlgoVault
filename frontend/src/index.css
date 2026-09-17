@@ -3,9 +3,43 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-[#0B0F19] text-slate-100 font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200;
+  html {
+    font-size: 15px;
   }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    @apply bg-[#0B0F19] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Global Typography & Micro-Font Scaling Overrides */
+.text-\[10px\] {
+  font-size: 0.75rem !important; /* 12px minimum */
+  line-height: 1.25rem !important;
+}
+
+.text-\[11px\] {
+  font-size: 0.8125rem !important; /* 13px minimum */
+  line-height: 1.25rem !important;
+}
+
+.text-xs {
+  font-size: 0.8125rem !important; /* 13px baseline for xs text */
+  line-height: 1.25rem !important;
+}
+
+.text-slate-400 {
+  color: #cbd5e1 !important; /* Elevated high-contrast slate (slate-300 tone) */
+}
+
+.text-slate-500 {
+  color: #94a3b8 !important; /* High contrast slate (slate-400 tone) */
 }
 
 /* Custom Scrollbars */

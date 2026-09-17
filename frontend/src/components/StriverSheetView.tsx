@@ -29,9 +29,9 @@ export const StriverSheetView: React.FC = () => {
   const [activeSheetTab, setActiveSheetTab] = useState<string>('all');
 
   useEffect(() => {
-    fetch('/data/striver_a2z_dsa.json')
+    fetch('/data/dsa/striver_a2z_dsa.json')
       .then((res) => {
-        if (!res.ok) return fetch('/data/dsa_master_sheet.json').then((r) => r.json());
+        if (!res.ok) return fetch('/data/dsa/dsa_master_sheet.json').then((r) => r.json());
         return res.json();
       })
       .then((data) => {

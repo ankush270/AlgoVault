@@ -7,6 +7,8 @@ import { networksTopics } from './networksTopics';
 import { aiMlTopics } from './aiMlTopics';
 import { oopsTopics } from './oopsTopics';
 import { javascriptTopics } from './javascriptTopics';
+import { reactTopics } from './reactTopics';
+import { nodeTopics } from './nodeTopics';
 
 export const allTopics: TopicItem[] = [
   ...dsaTopics,
@@ -16,7 +18,9 @@ export const allTopics: TopicItem[] = [
   ...networksTopics,
   ...aiMlTopics,
   ...oopsTopics,
-  ...javascriptTopics
+  ...javascriptTopics,
+  ...reactTopics,
+  ...nodeTopics
 ];
 
 // Helper to extract flashcards from topic interview questions
