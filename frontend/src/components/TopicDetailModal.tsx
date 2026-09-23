@@ -280,7 +280,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   const { progress, updateStatus, toggleStar, getRevisionRecord } = useProgress();
 
   const [currentTopic, setCurrentTopic] = useState<TopicItem | null>(initialTopic);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 768);
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'code' | 'qa'>('content');
   const [selectedLang, setSelectedLang] = useState<string>('cpp');
   const [copiedCode, setCopiedCode] = useState(false);
@@ -330,23 +330,23 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-[#0B0F19] text-slate-100 flex flex-col overflow-hidden animate-fadeIn">
       {/* Top sticky navbar */}
-      <header className="h-16 bg-[#0F172A] border-b border-slate-800 px-4 sm:px-6 flex items-center justify-between shrink-0 z-20">
-        <div className="flex items-center gap-3 min-w-0">
+      <header className="h-auto min-h-16 py-2.5 bg-[#0F172A] border-b border-slate-800 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 shrink-0 z-20">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-wrap">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all shrink-0"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all shrink-0"
           >
-            <ArrowLeft size={16} />
-            <span className="hidden sm:inline">Back to Topics</span>
+            <ArrowLeft size={15} />
+            <span className="inline sm:inline">Back</span>
           </button>
 
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 sm:flex items-center gap-1.5 text-xs font-semibold"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 text-xs font-semibold"
             title="Toggle Curriculum Sidebar"
           >
-            <List size={16} />
-            <span className="hidden md:inline">Topics List</span>
+            <List size={15} />
+            <span className="inline text-[11px] sm:text-xs">Index ({categoryTopics.length})</span>
           </button>
 
           {/* Breadcrumb */}
@@ -358,40 +358,40 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         </div>
 
         {/* Header Actions */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <button
             onClick={() => toggleStar(topic.id)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 border border-slate-700 transition-all"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 border border-slate-700 transition-all"
             title="Star Topic"
           >
-            <Star size={18} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
+            <Star size={16} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
           </button>
 
           <button
             onClick={() => onOpenNote(topic.id, topic.title)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
               hasNote
                 ? 'bg-purple-600/20 text-purple-300 border-purple-500/40'
                 : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
             }`}
           >
-            <FileText size={15} />
+            <FileText size={14} />
             <span className="hidden sm:inline">{hasNote ? 'Edit Note' : 'Add Note'}</span>
           </button>
 
           <button
             onClick={() => setShowRatingModal(true)}
-            className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
+            className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
           >
-            <Sparkles size={15} />
+            <Sparkles size={14} />
             <span className="hidden sm:inline">Rate Understanding</span>
           </button>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-all ml-1"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-all ml-0.5"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
       </header>
@@ -402,17 +402,25 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         {!sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(true)}
-            className="absolute top-4 left-4 z-30 px-3 py-2 rounded-xl bg-slate-900/90 hover:bg-blue-600 text-slate-300 hover:text-white shadow-xl border border-slate-700/80 transition-all flex items-center gap-2 text-xs font-bold animate-fadeIn group"
+            className="absolute top-4 left-4 z-30 px-3 py-2 rounded-xl bg-slate-900/95 hover:bg-blue-600 text-slate-300 hover:text-white shadow-xl border border-slate-700/80 transition-all flex items-center gap-2 text-xs font-bold animate-fadeIn group"
             title="Expand Module Index Sidebar"
           >
             <ChevronRight size={16} className="text-blue-400 group-hover:text-white" />
-            <span>Show Module Index ({categoryTopics.length})</span>
+            <span>Show Index ({categoryTopics.length})</span>
           </button>
+        )}
+
+        {/* Backdrop on mobile when sidebar is open */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 bg-black/60 z-30 md:hidden backdrop-blur-sm transition-opacity"
+          />
         )}
 
         {/* Left Sidebar: Topics Navigation Panel */}
         {sidebarOpen && (
-          <aside className="w-80 bg-[#0F172A]/95 border-r border-slate-800 flex flex-col shrink-0 z-10 animate-slideRight">
+          <aside className="fixed md:relative inset-y-0 left-0 w-80 max-w-[85vw] h-full bg-[#0F172A] border-r border-slate-800 flex flex-col shrink-0 z-40 md:z-10 animate-slideRight shadow-2xl">
             <div className="p-4 border-b border-slate-800/80 bg-slate-900/60 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BookMarked size={16} className="text-blue-400" />
@@ -432,7 +440,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
+            <div className="flex-1 overflow-y-auto p-3 space-y-1.5 custom-scrollbar">
               {categoryTopics.map((t, idx) => {
                 const active = t.id === topic.id;
                 const status = progress.statuses[t.id] || 'todo';
@@ -442,6 +450,9 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     onClick={() => {
                       setCurrentTopic(t);
                       setSelectedLang(t.codeTemplates && t.codeTemplates.length > 0 ? t.codeTemplates[0].language : 'cpp');
+                      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                        setSidebarOpen(false);
+                      }
                     }}
                     className={`w-full text-left p-3 rounded-xl border transition-all flex items-start gap-3 group ${
                       active

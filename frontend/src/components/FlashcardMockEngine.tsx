@@ -90,8 +90,8 @@ export const FlashcardMockEngine: React.FC = () => {
         </div>
       </div>
 
-      {/* Domain Filters */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      {/* Domain Filters - Clean Flex Wrap (No Horizontal Scroll) */}
+      <div className="flex flex-wrap items-center gap-2 pb-1">
         {(['all', 'dsa', 'system-design', 'oops', 'os', 'dbms-sql', 'computer-networks', 'genai-ml'] as const).map(d => (
           <button
             key={d}

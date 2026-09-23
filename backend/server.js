@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes.js';
 import syncRoutes from './routes/syncRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import datasetRoutes from './routes/datasetRoutes.js';
+import jobRoutes, { startAutomaticJobScheduler } from './routes/jobRoutes.js';
 
 dotenv.config();
 
@@ -66,7 +67,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sync', syncRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/dataset', datasetRoutes);
+app.use('/api/jobs', jobRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 TechSwitch Pro Auth & Sync Server running on http://localhost:${PORT}`);
+  // Start Automatic Job Scraping Scheduler
+  startAutomaticJobScheduler();
 });
+

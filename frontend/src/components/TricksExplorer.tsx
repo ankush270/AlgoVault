@@ -174,8 +174,8 @@ export const TricksExplorer: React.FC = () => {
           </div>
         </div>
 
-        {/* Category Chips Scroll */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 scrollbar-none">
+        {/* Category Chips - Clean Flex Wrap (No Horizontal Scroll) */}
+        <div className="flex flex-wrap items-center gap-1.5 pb-1 pt-1">
           <Filter className="w-3.5 h-3.5 text-amber-400 shrink-0 mr-1" />
           {categories.map((cat) => (
             <button

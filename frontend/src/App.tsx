@@ -15,6 +15,7 @@ import { StriverSheetView } from './components/StriverSheetView';
 import { AlgorithmHub } from './components/AlgorithmHub';
 import { InterviewExperiencesExplorer } from './components/InterviewExperiencesExplorer';
 import { TricksExplorer } from './components/TricksExplorer';
+import { JobExplorer } from './components/JobExplorer';
 import { AuthModal } from './components/AuthModal';
 import { AIChatbot } from './components/common/AIChatbot';
 import { DomainType, TopicItem } from './types';
@@ -55,6 +56,7 @@ const tabRoutes: Record<string, string> = {
   '/revision': 'revision',
   '/analytics': 'analytics',
   '/notes': 'notes',
+  '/jobs': 'jobs',
 };
 
 function parseCurrentRoute(): {
@@ -100,6 +102,7 @@ function getPathForState(tab: string, domain?: DomainType | 'all'): string {
     case 'revision': return '/revision';
     case 'analytics': return '/analytics';
     case 'notes': return '/notes';
+    case 'jobs': return '/jobs';
     default: return '/';
   }
 }
@@ -185,7 +188,7 @@ export const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-['Inter',sans-serif]">
+    <div className="h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-['Inter',sans-serif] overflow-hidden">
       {/* Top Sticky Navbar */}
       <Navbar
         searchQuery={searchQuery}
@@ -198,7 +201,7 @@ export const AppContent: React.FC = () => {
       />
 
       {/* Main Body */}
-      <div className="flex-1 flex w-full">
+      <div className="flex-1 flex w-full overflow-hidden min-h-0">
         {/* Left Sidebar */}
         <Sidebar
           activeTab={activeTab}
@@ -209,8 +212,8 @@ export const AppContent: React.FC = () => {
           setMobileMenuOpen={setMobileMenuOpen}
         />
 
-        {/* Main Content View */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 max-w-[1720px] mx-auto w-full">
+        {/* Main Content View (Independently Scrollable) */}
+        <main className="flex-1 overflow-y-auto px-3 sm:px-5 lg:px-6 py-3 sm:py-4 lg:py-5 min-w-0 max-w-[1720px] mx-auto w-full h-full">
           {activeTab === 'dashboard' && (
             <Dashboard
               setActiveTab={setActiveTab}
@@ -231,6 +234,8 @@ export const AppContent: React.FC = () => {
               onOpenNote={handleOpenNote}
             />
           )}
+
+          {activeTab === 'jobs' && <JobExplorer />}
 
           {activeTab === 'dsa-tricks' && <TricksExplorer />}
 

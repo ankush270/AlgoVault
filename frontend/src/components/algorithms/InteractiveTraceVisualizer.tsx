@@ -193,7 +193,7 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 pt-0.5 custom-scrollbar text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 pb-1.5 pt-0.5 text-xs">
               {exampleTrace.traceSteps.map((_, idx) => {
                 const isCurrent = idx === currentStepIdx;
                 const isPassed = idx < currentStepIdx;

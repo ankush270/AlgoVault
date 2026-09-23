@@ -213,7 +213,7 @@ export const RevisionPlanner: React.FC<RevisionPlannerProps> = ({ onSelectTopic 
                     <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">
                       Calculated Revision Schedule:
                     </span>
-                    <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold text-slate-200 pt-0.5">
+                    <div className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-slate-200 pt-0.5">
                       {scheduledDates.map((dStr, idx) => (
                         <span
                           key={idx}

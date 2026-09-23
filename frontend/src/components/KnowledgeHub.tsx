@@ -249,44 +249,44 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner & Header */}
-      <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-4 relative z-30">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="glass-panel p-5 sm:p-7 rounded-3xl border border-slate-800 space-y-5 relative z-30 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div>
-            <h1 className="text-xl font-extrabold text-white flex items-center gap-2">
-              <BookOpen className="w-6 h-6 text-blue-400" />
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex flex-wrap items-center gap-2.5">
+              <BookOpen className="w-7 h-7 text-blue-400 shrink-0" />
               <span>Curriculum & Knowledge Modules</span>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
+              <span className="text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
                 {selectedDomain === 'all' ? 'All Engineering Domains' : domainConfigs.find(d => d.id === selectedDomain)?.label}
               </span>
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Showing <strong className="text-blue-400">{filteredTopics.length}</strong> topics across <strong className="text-purple-400">{groupedModules.length}</strong> module accordions.
+            <p className="text-base sm:text-lg text-slate-200 mt-2 font-semibold leading-relaxed">
+              Showing <strong className="text-blue-400 font-extrabold text-lg sm:text-xl">{filteredTopics.length}</strong> topics across <strong className="text-purple-400 font-extrabold text-lg sm:text-xl">{groupedModules.length}</strong> module accordions.
             </p>
           </div>
 
           {/* Search Input Bar */}
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-2.5 text-slate-400 w-4 h-4" />
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search topics, concepts, companies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-10 pr-9 py-3 text-sm sm:text-base text-white placeholder-slate-400 outline-none focus:border-blue-500 transition-colors shadow-inner"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-white"
+                className="absolute right-3 top-3.5 text-slate-400 hover:text-white"
               >
-                <X size={14} />
+                <X size={15} />
               </button>
             )}
           </div>
         </div>
 
         {/* Domain Filter Pills - Strict Single Domain Switching */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80">
+        <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-slate-800/80">
           {domainConfigs.map((d) => {
             const Icon = d.icon;
             const isActive = selectedDomain === d.id;
@@ -294,13 +294,13 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
               <button
                 key={d.id}
                 onClick={() => setSelectedDomain(d.id)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold border transition-all ${
                   isActive
                     ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/20'
-                    : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
+                    : 'bg-slate-900/80 text-slate-200 border-slate-800 hover:text-white hover:border-slate-700'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : d.color}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : d.color}`} />
                 <span>{d.label}</span>
               </button>
             );
@@ -308,11 +308,11 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
         </div>
 
         {/* Multi-Filter Bar: Categories, Topic Names, Difficulty, Status, Starred using CustomDropdown */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3">
           {/* Module / Category Filter */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <Layers size={12} className="text-blue-400" /> Module / Category
+          <div className="space-y-1.5">
+            <label className="text-xs sm:text-sm font-extrabold text-slate-200 flex items-center gap-1.5">
+              <Layers size={14} className="text-blue-400" /> Module / Category
             </label>
             <CustomDropdown
               options={[
@@ -331,9 +331,9 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
           </div>
 
           {/* Topic Name Selector */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <ListFilter size={12} className="text-blue-400" /> Specific Topic Name
+          <div className="space-y-1.5">
+            <label className="text-xs sm:text-sm font-extrabold text-slate-200 flex items-center gap-1.5">
+              <ListFilter size={14} className="text-blue-400" /> Specific Topic Name
             </label>
             <CustomDropdown
               options={[
@@ -349,9 +349,9 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
           </div>
 
           {/* Difficulty Dropdown */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <Sparkles size={12} className="text-amber-400" /> Difficulty Level
+          <div className="space-y-1.5">
+            <label className="text-xs sm:text-sm font-extrabold text-slate-200 flex items-center gap-1.5">
+              <Sparkles size={14} className="text-amber-400" /> Difficulty Level
             </label>
             <CustomDropdown
               options={[
@@ -367,9 +367,9 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
           </div>
 
           {/* Status Dropdown */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-              <Brain size={12} className="text-emerald-400" /> Learning Status
+          <div className="space-y-1.5">
+            <label className="text-xs sm:text-sm font-extrabold text-slate-200 flex items-center gap-1.5">
+              <Brain size={14} className="text-emerald-400" /> Learning Status
             </label>
             <CustomDropdown
               options={[
@@ -386,98 +386,98 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
           </div>
 
           {/* Starred Toggle */}
-          <div className="space-y-1 flex flex-col justify-end">
+          <div className="space-y-1.5 flex flex-col justify-end">
             <button
               onClick={() => setOnlyStarred(!onlyStarred)}
-              className={`w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
+              className={`w-full flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-extrabold border transition-all ${
                 onlyStarred
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-lg shadow-amber-500/10'
-                  : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-white hover:border-slate-600'
+                  : 'bg-slate-900 text-slate-200 border-slate-700 hover:text-white hover:border-slate-600'
               }`}
             >
-              <Star size={14} className={onlyStarred ? 'fill-amber-400 text-amber-400' : ''} />
+              <Star size={16} className={onlyStarred ? 'fill-amber-400 text-amber-400' : ''} />
               <span>{onlyStarred ? 'Starred Topics Only' : 'Filter Starred'}</span>
             </button>
           </div>
         </div>
 
         {/* Global Expand / Collapse Accordion Controls & Active Filter Badges */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800/80">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3.5 border-t border-slate-800/80">
+          <div className="flex items-center gap-2.5">
             <button
               onClick={expandAll}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition-all"
             >
-              <Maximize2 size={13} className="text-blue-400" />
+              <Maximize2 size={14} className="text-blue-400" />
               <span>Expand All Modules</span>
             </button>
             <button
               onClick={collapseAll}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs font-semibold transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-bold transition-all"
             >
-              <Minimize2 size={13} className="text-purple-400" />
+              <Minimize2 size={14} className="text-purple-400" />
               <span>Collapse All</span>
             </button>
           </div>
 
           {activeFilterCount > 0 && (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold text-slate-400">
+              <span className="text-xs font-bold text-slate-300">
                 Active Filters ({activeFilterCount}):
               </span>
 
               {selectedDomain !== 'all' && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-300 border border-blue-500/30">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/30">
                   Domain: {domainConfigs.find(d => d.id === selectedDomain)?.label}
-                  <button onClick={() => setSelectedDomain('all')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSelectedDomain('all')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {selectedCategory !== 'all' && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-purple-500/10 text-purple-300 border border-purple-500/30 max-w-[180px] truncate">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/30 max-w-[200px] truncate">
                   Module: {selectedCategory}
-                  <button onClick={() => setSelectedCategory('all')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSelectedCategory('all')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {selectedTopicId !== 'all' && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 max-w-[200px] truncate">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 max-w-[220px] truncate">
                   Topic: {allTopics.find(t => t.id === selectedTopicId)?.title || selectedTopicId}
-                  <button onClick={() => setSelectedTopicId('all')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSelectedTopicId('all')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {selectedDifficulty !== 'all' && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30">
                   Difficulty: {selectedDifficulty}
-                  <button onClick={() => setSelectedDifficulty('all')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSelectedDifficulty('all')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {selectedStatus !== 'all' && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
                   Status: {selectedStatus}
-                  <button onClick={() => setSelectedStatus('all')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSelectedStatus('all')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {onlyStarred && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40">
                   Starred Only
-                  <button onClick={() => setOnlyStarred(false)} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setOnlyStarred(false)} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               {searchQuery.trim() && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-slate-800 text-slate-200 border border-slate-700">
                   Search: "{searchQuery}"
-                  <button onClick={() => setSearchQuery('')} className="hover:text-white"><X size={12} /></button>
+                  <button onClick={() => setSearchQuery('')} className="hover:text-white"><X size={13} /></button>
                 </span>
               )}
 
               <button
                 onClick={resetAllFilters}
-                className="text-xs font-bold text-rose-400 hover:text-rose-300 hover:underline ml-2"
+                className="text-xs sm:text-sm font-extrabold text-rose-400 hover:text-rose-300 hover:underline ml-2"
               >
                 Clear All Filters
               </button>
@@ -486,17 +486,17 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
         </div>
       </div>
 
-      {/* Module Accordions Section (Replaces Infinite Page Scrollbar) */}
+      {/* Module Accordions Section */}
       {groupedModules.length === 0 ? (
         <div className="glass-panel p-12 rounded-3xl border border-slate-800 text-center space-y-4">
           <Filter className="w-12 h-12 text-slate-500 mx-auto" />
-          <h3 className="text-lg font-bold text-white">No Matching Topics Found</h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto">
+          <h3 className="text-xl font-bold text-white">No Matching Topics Found</h3>
+          <p className="text-sm text-slate-300 max-w-md mx-auto">
             No technical interview topics match your active filter combination for {selectedDomain === 'all' ? 'the selected filters' : domainConfigs.find(d => d.id === selectedDomain)?.label}.
           </p>
           <button
             onClick={resetAllFilters}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-lg shadow-blue-500/20"
+            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-extrabold shadow-lg shadow-blue-500/20"
           >
             Reset All Filters
           </button>
@@ -517,30 +517,30 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                 {/* Accordion Header */}
                 <button
                   onClick={() => toggleCategory(category)}
-                  className="w-full flex items-center justify-between p-4 bg-slate-900/60 hover:bg-slate-900/90 text-left border-b border-slate-800/60 transition-colors"
+                  className="w-full flex items-center justify-between p-4 sm:p-5 bg-slate-900/60 hover:bg-slate-900/90 text-left border-b border-slate-800/60 transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0 pr-4">
-                    <div className={`p-2 rounded-xl transition-colors ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-800 text-blue-400'}`}>
-                      <Layers size={18} />
+                    <div className={`p-2.5 rounded-xl transition-colors ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-800 text-blue-400'}`}>
+                      <Layers size={20} />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="font-bold text-white text-base truncate">
+                      <h3 className="font-extrabold text-white text-base sm:text-xl truncate">
                         {category}
                       </h3>
-                      <p className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                      <p className="text-xs sm:text-sm text-slate-300 font-semibold flex items-center gap-2 mt-0.5">
                         <span>{topics.length} Technical {topics.length === 1 ? 'Topic' : 'Topics'}</span>
                         <span>•</span>
-                        <span className="text-emerald-400 font-semibold">{masteredCount} / {topics.length} Mastered</span>
+                        <span className="text-emerald-400 font-extrabold">{masteredCount} / {topics.length} Mastered</span>
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
-                    <span className="text-xs font-semibold text-slate-400 bg-slate-800 px-3 py-1 rounded-full border border-slate-700/80">
+                    <span className="text-xs sm:text-sm font-extrabold text-slate-300 bg-slate-800 px-3.5 py-1 rounded-full border border-slate-700/80">
                       {isExpanded ? 'Expanded' : 'Collapsed'}
                     </span>
                     <div className={`p-1.5 rounded-lg bg-slate-800 text-slate-300 transition-transform duration-200 ${isExpanded ? 'rotate-180 bg-blue-500/20 text-blue-400' : ''}`}>
-                      <ChevronDown size={18} />
+                      <ChevronDown size={20} />
                     </div>
                   </div>
                 </button>
@@ -557,10 +557,10 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                           key={topic.id}
                           className="glass-panel glass-panel-hover p-5 sm:p-6 rounded-2xl border border-slate-800/90 flex flex-col justify-between space-y-4 group transition-all duration-200 bg-slate-900/50 hover:bg-slate-900/90 shadow-xl"
                         >
-                          <div className="space-y-3.5">
+                          <div className="space-y-4">
                             {/* Top Bar: Difficulty & Star Button */}
                             <div className="flex items-center justify-between gap-2">
-                              <span className={`text-xs font-extrabold uppercase px-2.5 py-1 rounded-md tracking-wider border ${getDifficultyColor(topic.difficulty)}`}>
+                              <span className={`text-xs sm:text-sm font-extrabold uppercase px-3 py-1 rounded-md tracking-wider border ${getDifficultyColor(topic.difficulty)}`}>
                                 {topic.difficulty}
                               </span>
                               <button
@@ -571,34 +571,34 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                                 className="text-slate-400 hover:text-amber-400 transition-colors p-1.5 rounded-lg hover:bg-slate-800/80"
                                 title={isStarred ? 'Unstar Topic' : 'Star Topic'}
                               >
-                                <Star size={16} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
+                                <Star size={18} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
                               </button>
                             </div>
 
                             {/* Title & Summary */}
                             <div 
                               onClick={() => onSelectTopic(topic)}
-                              className="cursor-pointer space-y-1.5"
+                              className="cursor-pointer space-y-2"
                             >
-                              <h4 className="font-extrabold text-white text-base sm:text-lg group-hover:text-blue-400 transition-colors leading-snug">
+                              <h4 className="font-extrabold text-white text-lg sm:text-xl group-hover:text-blue-400 transition-colors leading-snug">
                                 {topic.title}
                               </h4>
-                              <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed font-normal">
+                              <p className="text-sm sm:text-base text-slate-200 line-clamp-3 leading-relaxed font-normal">
                                 {topic.summary}
                               </p>
                             </div>
 
                             {/* Key Concepts Preview */}
                             {topic.keyConcepts && topic.keyConcepts.length > 0 && (
-                              <div className="space-y-1.5 pt-2.5 border-t border-slate-800/80">
-                                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                              <div className="space-y-2 pt-3 border-t border-slate-800/80">
+                                <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-300 flex items-center gap-1">
                                   CORE TAKEAWAYS:
                                 </span>
-                                <ul className="text-xs sm:text-sm text-slate-200 space-y-1 font-medium">
+                                <ul className="text-xs sm:text-sm text-slate-100 space-y-1.5 font-medium">
                                   {topic.keyConcepts.slice(0, 2).map((kc, idx) => (
-                                    <li key={idx} className="line-clamp-2 flex items-start gap-1.5">
-                                      <span className="text-blue-400 font-bold text-sm shrink-0">•</span>
-                                      <span className="leading-snug text-slate-200">{kc}</span>
+                                    <li key={idx} className="line-clamp-2 flex items-start gap-2">
+                                      <span className="text-blue-400 font-bold text-base shrink-0">•</span>
+                                      <span className="leading-relaxed text-slate-100">{kc}</span>
                                     </li>
                                   ))}
                                 </ul>
@@ -606,11 +606,11 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                             )}
 
                             {/* Company Tags */}
-                            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
                               {topic.companyTags.map((c, idx) => (
                                 <span
                                   key={idx}
-                                  className="text-xs font-semibold text-slate-300 bg-slate-950 px-2.5 py-0.5 rounded-md border border-slate-800"
+                                  className="text-xs sm:text-sm font-bold text-slate-200 bg-slate-900 px-3 py-1 rounded-lg border border-slate-700/80"
                                 >
                                   {c}
                                 </span>
@@ -619,7 +619,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                           </div>
 
                           {/* Bottom Bar: Status Selector & Actions */}
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                          <div className="pt-3.5 border-t border-slate-800/80 flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
                               {getStatusBadge(topic.id)}
                             </div>
@@ -631,23 +631,23 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                                   e.stopPropagation();
                                   onOpenNote(topic.id, topic.title);
                                 }}
-                                className={`p-2 rounded-xl border transition-all ${
+                                className={`p-2.5 rounded-xl border transition-all ${
                                   hasNote
                                     ? 'bg-purple-600/20 text-purple-300 border-purple-500/30'
-                                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:bg-slate-800'
+                                    : 'bg-slate-900 text-slate-300 border-slate-800 hover:text-white hover:bg-slate-800'
                                 }`}
                                 title="Personal Note"
                               >
-                                <FileText size={15} />
+                                <FileText size={16} />
                               </button>
 
                               {/* Open Full Topic Details */}
                               <button
                                 onClick={() => onSelectTopic(topic)}
-                                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/20 transition-all text-xs sm:text-sm font-bold shrink-0"
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/20 transition-all text-xs sm:text-sm font-extrabold shrink-0"
                               >
                                 <span>Study</span>
-                                <ChevronRight size={15} />
+                                <ChevronRight size={16} />
                               </button>
                             </div>
                           </div>

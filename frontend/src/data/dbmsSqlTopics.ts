@@ -1,4 +1,4 @@
-import dbmsRoadmapData from '../../public/data/core-cs/dbmsRoadmap.json';
+import dbmsRoadmapData from './core-cs/dbmsRoadmap.json';
 import { TopicItem } from '../types';
 
 /**

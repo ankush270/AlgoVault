@@ -25,6 +25,7 @@ import {
   Filter,
   Terminal,
   ArrowRight,
+  ArrowLeft,
   Play,
   Pause,
   RotateCcw,
@@ -301,7 +302,7 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 pt-0.5 custom-scrollbar text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 pb-1.5 pt-0.5 text-xs">
               {exampleTrace.traceSteps.map((_, idx) => {
                 const isCurrent = idx === currentStepIdx;
                 const isPassed = idx < currentStepIdx;
@@ -435,6 +436,9 @@ export const AlgorithmHub: React.FC = () => {
   
   // Currently selected algorithm for Split Master-Detail View
   const [selectedAlgoId, setSelectedAlgoId] = useState<string>('kadanes-algorithm');
+  
+  // Mobile detail view toggle state (for < lg screens)
+  const [mobileShowDetail, setMobileShowDetail] = useState<boolean>(false);
 
   // Expanded Topic Categories state for Accordion mode (topic ID -> boolean)
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
@@ -790,7 +794,7 @@ export const AlgorithmHub: React.FC = () => {
       {viewMode === 'split' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Algorithm Selector Navigation Menu (Width: 5/12 on lg, 4/12 on xl) */}
-          <div className="lg:col-span-5 xl:col-span-4 bg-[#0D1322]/90 border border-slate-800/90 rounded-2xl p-4 sm:p-4.5 space-y-3.5 shadow-xl sticky top-20 max-h-[82vh] flex flex-col overflow-hidden">
+          <div className={`lg:col-span-5 xl:col-span-4 bg-[#0D1322]/90 border border-slate-800/90 rounded-2xl p-4 sm:p-4.5 space-y-3.5 shadow-xl sticky top-20 max-h-[82vh] flex-col overflow-hidden ${mobileShowDetail ? 'hidden lg:flex' : 'flex'}`}>
             {/* Search & Difficulty Filter Header */}
             <div className="space-y-2 pb-2.5 border-b border-slate-800 shrink-0">
               <div className="relative">
@@ -871,7 +875,10 @@ export const AlgorithmHub: React.FC = () => {
                   return (
                     <button
                       key={algo.id}
-                      onClick={() => setSelectedAlgoId(algo.id)}
+                      onClick={() => {
+                        setSelectedAlgoId(algo.id);
+                        setMobileShowDetail(true);
+                      }}
                       className={`w-full p-3 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 group box-border ${
                         isSelected
                           ? 'bg-gradient-to-r from-[#0F1D38] via-[#102447] to-[#0F1D38] border-2 border-cyan-400/90 text-white shadow-md shadow-cyan-500/20'
@@ -915,18 +922,29 @@ export const AlgorithmHub: React.FC = () => {
           </div>
 
           {/* Right Column: Main Interactive Algorithm Workbench (Width: 7/12 on lg, 8/12 on xl) */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+          <div className={`lg:col-span-7 xl:col-span-8 space-y-6 ${mobileShowDetail ? 'block' : 'hidden lg:block'}`}>
+            {/* Mobile Top Navigation Back Bar */}
+            <div className="lg:hidden mb-1">
+              <button
+                onClick={() => setMobileShowDetail(false)}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 font-bold text-xs border border-slate-800 shadow-md transition-all active:scale-95"
+              >
+                <ArrowLeft size={16} />
+                <span>← Back to Algorithms List</span>
+              </button>
+            </div>
+
             {activeAlgorithm ? (
-              <div className="bg-[#0D1322]/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl space-y-6 p-6 sm:p-8 animate-fadeIn">
+              <div className="bg-[#0D1322]/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl space-y-6 p-4 sm:p-6 md:p-8 animate-fadeIn">
                 {/* Algorithm Stage Header */}
                 <div className="pb-5 border-b border-slate-800/90 space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 shrink-0">
                       {renderCategoryIcon(data.categories.find((c) => c.id === activeAlgorithm.categoryId)?.icon, 14)}
                       <span>{activeAlgorithm.categoryTitle}</span>
                     </span>
 
-                    <div className="flex items-center gap-2 text-xs font-mono">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-xs font-mono flex-wrap">
                       <span
                         className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${
                           activeAlgorithm.difficulty === 'Easy'
@@ -947,9 +965,9 @@ export const AlgorithmHub: React.FC = () => {
                     </div>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
-                    <Code2 className="text-cyan-400" size={28} />
-                    <span>{activeAlgorithm.title}</span>
+                  <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-2.5 break-words">
+                    <Code2 className="text-cyan-400 shrink-0" size={24} />
+                    <span className="break-words min-w-0">{activeAlgorithm.title}</span>
                   </h2>
                 </div>
 

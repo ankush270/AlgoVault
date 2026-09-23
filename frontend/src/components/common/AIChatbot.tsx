@@ -312,9 +312,9 @@ export const AIChatbot: React.FC = () => {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Quick Suggestion Chips */}
+              {/* Quick Suggestion Chips - Clean Flex Wrap (No Horizontal Scroll) */}
               {messages.length <= 3 && !loading && (
-                <div className="px-3 py-2 bg-slate-900/60 border-t border-slate-800/80 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-1.5">
+                <div className="px-3 py-2 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap gap-1.5">
                   {SUGGESTIONS.map((chip, i) => (
                     <button
                       key={i}

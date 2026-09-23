@@ -132,7 +132,7 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
         <div className="p-4 sm:p-5 border-t border-slate-800/80 bg-[#0A0E1A] space-y-4 animate-fadeIn">
           {/* Internal Topic Filter Pills */}
           <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-slate-800/60 text-xs">
-            <div className="flex items-center gap-2 overflow-x-auto py-1">
+            <div className="flex flex-wrap items-center gap-2 py-1">
               <button
                 onClick={() => setInternalDiffFilter('all')}
                 className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all ${

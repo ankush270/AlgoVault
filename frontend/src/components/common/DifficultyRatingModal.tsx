@@ -176,7 +176,7 @@ export const DifficultyRatingModal: React.FC<DifficultyRatingModalProps> = ({
                 <span>Calculated Revision Schedule:</span>
                 <span className="text-purple-400 text-[11px]">Last Attempt: {ratedRecord.lastAttemptedFormatted}</span>
               </div>
-              <div className="flex items-center gap-1.5 overflow-x-auto pt-1 pb-1">
+              <div className="flex flex-wrap items-center gap-1.5 pt-1 pb-1">
                 {ratedRecord.scheduledDates.map((dateStr, idx) => (
                   <div
                     key={idx}

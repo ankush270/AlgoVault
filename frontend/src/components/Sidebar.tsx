@@ -63,16 +63,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const tools = [
-    { id: 'dsa-tricks', label: 'DSA Tricks & Patterns', icon: Sparkles, badge: '48 HOT' },
-    { id: 'interview-experiences', label: 'Interview Experiences', icon: Briefcase, badge: '920+ Qs' },
-    { id: 'striver-a2z', label: "DSA Sheet", icon: Flame, badge: 'A2Z' },
-    { id: 'leetcode-explorer', label: 'LeetCode Company Explorer', icon: Building2, badge: '3.4k Qs' },
-    { id: 'algorithms', label: 'Algorithms Encyclopedia', icon: BookOpen, badge: 'NEW' },
-    { id: 'sql-sandbox', label: 'Interactive SQL Sandbox', icon: Terminal, badge: 'LIVE' },
-    { id: 'flashcards', label: 'Mock Flashcard Timer', icon: Dices, badge: 'PRACTICE' },
-    { id: 'revision', label: 'Spaced Revision List', icon: BookmarkCheck },
+    { id: 'jobs', label: 'Live Remote & Tech Jobs', icon: Briefcase, badge: 'LIVE' },
+    { id: 'dsa-tricks', label: 'DSA Tricks & Patterns', icon: Sparkles },
+    { id: 'interview-experiences', label: 'Interview Experiences', icon: Briefcase },
+    { id: 'striver-a2z', label: "DSA Sheet", icon: Flame },
+    { id: 'leetcode-explorer', label: 'LeetCode Explorer', icon: Building2 },
+    { id: 'algorithms', label: 'Algorithms Encyclopedia', icon: BookOpen },
+    { id: 'sql-sandbox', label: 'SQL Sandbox', icon: Terminal },
+    { id: 'flashcards', label: 'Flashcard Timer', icon: Dices },
+    { id: 'revision', label: 'Spaced Revision', icon: BookmarkCheck },
     { id: 'analytics', label: 'Mastery Analytics', icon: PieChart },
-    { id: 'notes', label: 'My Saved Notes', icon: FileText },
+    { id: 'notes', label: 'My Notes', icon: FileText },
   ];
 
   const handleDomainClick = (domainId: DomainType | 'all') => {
@@ -87,12 +88,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside
-      className={`fixed lg:sticky top-16 left-0 z-20 w-64 h-[calc(100vh-4rem)] bg-[#0D1322] border-r border-slate-800/80 flex flex-col justify-between p-4 overflow-y-auto transition-transform duration-300 ${
-        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-      }`}
-    >
-      <div className="space-y-4">
+    <>
+      {/* Mobile Backdrop Mask */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 bg-black/60 z-10 lg:hidden backdrop-blur-sm transition-opacity"
+        />
+      )}
+
+      <aside
+        className={`fixed lg:relative top-[52px] sm:top-16 lg:top-0 left-0 z-40 lg:z-auto w-64 h-[calc(100vh-52px)] sm:h-[calc(100vh-4rem)] lg:h-full shrink-0 bg-[#0D1322] border-r border-slate-800/80 flex flex-col p-3 sm:p-4 gap-3 overflow-y-auto transition-transform duration-300 ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
+      <div className="space-y-3">
         {/* Navigation & All Modules */}
         <ul className="space-y-1">
           <li>
@@ -266,7 +276,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer Info Card */}
-      <div className="pt-4 border-t border-slate-800/80">
+      <div className="pt-3 border-t border-slate-800/80">
         <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs space-y-1">
           <div className="flex items-center justify-between text-slate-300">
             <span className="font-semibold text-white">Target Switch</span>
@@ -276,5 +286,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
     </aside>
+  </>
   );
 };
