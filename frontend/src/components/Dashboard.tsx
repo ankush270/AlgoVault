@@ -18,6 +18,17 @@ import {
   Dices,
   BookOpen
 } from 'lucide-react';
+import dashboardConfig from '../../public/data/config/dashboard_config.json';
+
+const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
+  Code2,
+  Layers,
+  Boxes,
+  Cpu,
+  Database,
+  Globe2,
+  Bot
+};
 import { useProgress } from '../context/ProgressContext';
 import { allTopics } from '../data/allData';
 import { DomainType } from '../types';
@@ -44,15 +55,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
   const totalTopics = allTopics.length;
   const overallPercentage = Math.round((masteredCount / totalTopics) * 100);
 
-  const domainStats: { id: DomainType; label: string; icon: React.FC<{ className?: string }>; color: string; bg: string }[] = [
-    { id: 'dsa', label: 'DSA & Algorithms', icon: Code2, color: 'text-amber-400', bg: 'border-amber-500/30 bg-amber-500/5' },
-    { id: 'system-design', label: 'System Design (HLD)', icon: Layers, color: 'text-purple-400', bg: 'border-purple-500/30 bg-purple-500/5' },
-    { id: 'oops', label: 'OOPs & LLD', icon: Boxes, color: 'text-orange-400', bg: 'border-orange-500/30 bg-orange-500/5' },
-    { id: 'os', label: 'Operating Systems', icon: Cpu, color: 'text-emerald-400', bg: 'border-emerald-500/30 bg-emerald-500/5' },
-    { id: 'dbms-sql', label: 'DBMS & SQL', icon: Database, color: 'text-cyan-400', bg: 'border-cyan-500/30 bg-cyan-500/5' },
-    { id: 'computer-networks', label: 'Computer Networks', icon: Globe2, color: 'text-rose-400', bg: 'border-rose-500/30 bg-rose-500/5' },
-    { id: 'genai-ml', label: 'Gen AI & AI/ML', icon: Bot, color: 'text-indigo-400', bg: 'border-indigo-500/30 bg-indigo-500/5' },
-  ];
+  const domainStats = dashboardConfig.domains.map((d) => ({
+    id: d.id as DomainType,
+    label: d.label,
+    icon: ICON_MAP[d.iconName] || Code2,
+    color: d.color,
+    bg: d.bg,
+  }));
 
   const getDomainProgress = (domainId: DomainType) => {
     const domainTopics = allTopics.filter(t => t.domain === domainId);

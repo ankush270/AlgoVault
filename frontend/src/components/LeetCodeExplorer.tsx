@@ -30,8 +30,10 @@ import {
   Award,
   BarChart3,
   Globe,
-  Compass
+  Compass,
+  Code2
 } from 'lucide-react';
+import { CodeRunnerModal } from './common/CodeRunnerModal';
 
 export interface LeetCodeCompany {
   name: string;
@@ -184,6 +186,7 @@ function CustomDropdown<T extends string = string>({
 export const LeetCodeExplorer: React.FC = () => {
   const [allQuestions, setAllQuestions] = useState<LeetCodeQuestion[]>([]);
   const [isLoadingDataset, setIsLoadingDataset] = useState<boolean>(true);
+  const [codeModalProblem, setCodeModalProblem] = useState<{ title: string; description: string } | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -975,7 +978,7 @@ export const LeetCodeExplorer: React.FC = () => {
                         <div>
                           <button
                             onClick={() => setExpandedHintId(isHintExpanded ? null : q.id)}
-                            className="w-full flex items-center justify-between text-xs font-semibold text-amber-400 hover:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-xl transition-colors"
+                            className="w-full flex items-center justify-between text-xs font-semibold text-amber-400 hover:text-amber-300 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-xl transition-colors mb-2"
                           >
                             <span className="flex items-center gap-1.5">
                               <Lightbulb className="w-3.5 h-3.5" />
@@ -985,12 +988,23 @@ export const LeetCodeExplorer: React.FC = () => {
                           </button>
 
                           {isHintExpanded && (
-                            <div className="mt-2 p-3 rounded-xl bg-slate-950/90 border border-amber-500/30 text-xs text-amber-200/90 leading-relaxed">
+                            <div className="mt-2 mb-2 p-3 rounded-xl bg-slate-950/90 border border-amber-500/30 text-xs text-amber-200/90 leading-relaxed">
                               {q.hint}
                             </div>
                           )}
                         </div>
                       )}
+
+                      <button
+                        onClick={() => setCodeModalProblem({
+                          title: q.title,
+                          description: `Difficulty: ${q.difficulty} | Category: ${q.category || 'DSA'} | Pattern: ${q.pattern || 'Standard'}`
+                        })}
+                        className="w-full flex items-center justify-center gap-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 active:scale-95 px-3 py-2 rounded-xl transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
+                      >
+                        <Code2 className="w-4 h-4" />
+                        Solve in Code Workspace
+                      </button>
                     </div>
                   </div>
                 );
@@ -1378,6 +1392,13 @@ export const LeetCodeExplorer: React.FC = () => {
           </div>
         </div>
       )}
+
+      <CodeRunnerModal
+        isOpen={!!codeModalProblem}
+        onClose={() => setCodeModalProblem(null)}
+        problemTitle={codeModalProblem?.title}
+        problemDescription={codeModalProblem?.description}
+      />
     </div>
   );
 };

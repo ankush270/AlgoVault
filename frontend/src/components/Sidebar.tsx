@@ -21,7 +21,8 @@ import {
   ChevronRight,
   Sparkles,
   Atom,
-  Server
+  Server,
+  Swords
 } from 'lucide-react';
 import { DomainType } from '../types';
 
@@ -66,13 +67,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'jobs', label: 'Live Remote & Tech Jobs', icon: Briefcase, badge: 'LIVE' },
     { id: 'dsa-tricks', label: 'DSA Tricks & Patterns', icon: Sparkles },
     { id: 'interview-experiences', label: 'Interview Experiences', icon: Briefcase },
+    { id: 'live-arena', label: '1v1 Speed Arena', icon: Swords, badge: 'HOT' },
     { id: 'striver-a2z', label: "DSA Sheet", icon: Flame },
+    { id: 'system-design-canvas', label: 'System Design Studio', icon: Layers, badge: 'NEW' },
     { id: 'leetcode-explorer', label: 'LeetCode Explorer', icon: Building2 },
     { id: 'algorithms', label: 'Algorithms Encyclopedia', icon: BookOpen },
     { id: 'sql-sandbox', label: 'SQL Sandbox', icon: Terminal },
     { id: 'flashcards', label: 'Flashcard Timer', icon: Dices },
     { id: 'revision', label: 'Spaced Revision', icon: BookmarkCheck },
     { id: 'analytics', label: 'Mastery Analytics', icon: PieChart },
+    { id: 'pdf-readiness', label: 'PDF & Company Readiness', icon: FileText, badge: 'PDF' },
     { id: 'notes', label: 'My Notes', icon: FileText },
   ];
 

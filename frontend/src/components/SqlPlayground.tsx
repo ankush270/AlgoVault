@@ -101,87 +101,30 @@ export const SqlPlayground: React.FC = () => {
   // Schema Explorer Active Table State
   const [activeSchemaTab, setActiveSchemaTab] = useState<string>('employees');
 
+  const [sqlInitScript, setSqlInitScript] = useState<string>('');
+
+  useEffect(() => {
+    fetch('/data/sql/sql_playground_tables.json')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.sql_init_script) {
+          setSqlInitScript(data.sql_init_script);
+          try {
+            alasql(data.sql_init_script);
+          } catch (e) {
+            console.error('Failed to init alaSQL tables from JSON:', e);
+          }
+        }
+      })
+      .catch((err) => console.error('Error fetching sql_playground_tables.json:', err));
+  }, []);
+
   // Initialize AlaSQL Default General Database Schema & Seed Data
   const initDefaultTables = () => {
     try {
-      alasql(`
-        -- 1. Departments & Employees & Orders
-        CREATE TABLE IF NOT EXISTS departments (dept_id INT PRIMARY KEY, dept_name STRING, location STRING);
-        INSERT INTO departments VALUES (101, 'Engineering', 'San Francisco'), (102, 'Product', 'New York'), (103, 'Data Science', 'Seattle'), (104, 'HR', 'Austin');
-
-        CREATE TABLE IF NOT EXISTS employees (emp_id INT PRIMARY KEY, name STRING, dept_id INT, salary INT, join_date STRING);
-        INSERT INTO employees VALUES 
-          (1, 'Aarav Sharma', 101, 140000, '2022-01-15'),
-          (2, 'Priya Patel', 101, 155000, '2021-06-10'),
-          (3, 'Rohan Verma', 102, 95000, '2023-03-01'),
-          (4, 'Ananya Sen', 103, 130000, '2022-11-20'),
-          (5, 'Vikram Malhotra', 104, 75000, '2024-01-05');
-
-        CREATE TABLE IF NOT EXISTS orders (order_id INT PRIMARY KEY, emp_id INT, order_amount INT, order_date STRING);
-        INSERT INTO orders VALUES (501, 1, 1200, '2024-08-01'), (502, 2, 3400, '2024-08-03'), (503, 1, 900, '2024-08-05'), (504, 3, 2100, '2024-08-10');
-
-        -- 2. Facebook Pages & Page Likes
-        CREATE TABLE IF NOT EXISTS pages (page_id INT PRIMARY KEY, page_name STRING);
-        INSERT INTO pages VALUES (20001, 'SQL Solutions'), (20045, 'Brain Teasers'), (20701, 'Tips for interviews');
-
-        CREATE TABLE IF NOT EXISTS page_likes (user_id INT, page_id INT, liked_date STRING);
-        INSERT INTO page_likes VALUES (111, 20001, '2022-04-08'), (121, 20045, '2022-03-12');
-
-        -- 3. Tesla Parts Assembly
-        CREATE TABLE IF NOT EXISTS parts_assembly (part STRING, finish_date STRING, assembly_step INT);
-        INSERT INTO parts_assembly VALUES ('battery', '2022-01-22', 1), ('battery', NULL, 2), ('engine', '2022-01-01', 1), ('door', NULL, 1);
-
-        -- 4. Viewership (Laptops & Mobile)
-        CREATE TABLE IF NOT EXISTS viewership (user_id INT, device_type STRING, view_time STRING);
-        INSERT INTO viewership VALUES (1, 'laptop', '2022-01-15'), (2, 'tablet', '2022-01-16'), (3, 'phone', '2022-01-17'), (4, 'laptop', '2022-01-18');
-
-        -- 5. LeetCode Products
-        CREATE TABLE IF NOT EXISTS Products (product_id INT PRIMARY KEY, low_fats STRING, recyclable STRING);
-        INSERT INTO Products VALUES (0, 'Y', 'N'), (1, 'Y', 'Y'), (2, 'N', 'Y'), (3, 'Y', 'Y'), (4, 'N', 'N');
-
-        -- 6. Customer & Referee
-        CREATE TABLE IF NOT EXISTS Customer (id INT PRIMARY KEY, name STRING, referee_id INT);
-        INSERT INTO Customer VALUES (1, 'Will', NULL), (2, 'Jane', NULL), (3, 'Alex', 2), (4, 'Bill', NULL), (5, 'Zack', 1), (6, 'Mark', 2);
-
-        -- 7. World Countries
-        CREATE TABLE IF NOT EXISTS World (name STRING PRIMARY KEY, continent STRING, area INT, population INT, gdp INT);
-        INSERT INTO World VALUES ('Afghanistan', 'Asia', 652230, 25500100, 2036400000), ('Albania', 'Europe', 28748, 2873197, 1296000000), ('Algeria', 'Africa', 2381741, 37100000, 1886000000);
-
-        -- 8. Views
-        CREATE TABLE IF NOT EXISTS Views (article_id INT, author_id INT, viewer_id INT, view_date STRING);
-        INSERT INTO Views VALUES (1, 3, 5, '2019-08-01'), (1, 3, 6, '2019-08-02'), (2, 7, 7, '2019-08-01'), (4, 7, 1, '2019-07-22');
-
-        -- 9. Tweets
-        CREATE TABLE IF NOT EXISTS Tweets (tweet_id INT PRIMARY KEY, content STRING);
-        INSERT INTO Tweets VALUES (1, 'Vote for code'), (2, 'Let us make LeetCode great again');
-
-        -- 10. HackerRank CITY & TRIANGLES & STATION
-        CREATE TABLE IF NOT EXISTS CITY (ID INT, NAME STRING, COUNTRYCODE STRING, DISTRICT STRING, POPULATION INT);
-        INSERT INTO CITY VALUES (6, 'Rotterdam', 'NLD', 'Zuid-Holland', 593321), (3878, 'Scottsdale', 'USA', 'Arizona', 202705), (3965, 'Corona', 'USA', 'California', 124990);
-
-        CREATE TABLE IF NOT EXISTS TRIANGLES (A INT, B INT, C INT);
-        INSERT INTO TRIANGLES VALUES (20, 20, 20), (20, 20, 30), (20, 30, 40), (10, 10, 30);
-
-        CREATE TABLE IF NOT EXISTS STATION (ID INT, CITY STRING, STATE STRING, LAT_N INT, LONG_W INT);
-        INSERT INTO STATION VALUES (794, 'Kissee Mills', 'MO', 139, 73), (824, 'Loma Mar', 'CA', 48, 130);
-
-        -- 11. StrataScratch Salaries & Departments
-        CREATE TABLE IF NOT EXISTS ms_employee_salary (id INT, first_name STRING, last_name STRING, salary INT, department_id INT);
-        INSERT INTO ms_employee_salary VALUES (1, 'Todd', 'Wilson', 110000, 1006), (1, 'Todd', 'Wilson', 106119, 1006), (2, 'Justin', 'Simon', 128000, 1005);
-
-        CREATE TABLE IF NOT EXISTS db_employee (id INT, first_name STRING, department_id INT, salary INT);
-        INSERT INTO db_employee VALUES (1, 'Shandler', 1, 114870), (2, 'Katleen', 4, 118428);
-
-        CREATE TABLE IF NOT EXISTS db_dept (id INT, department STRING);
-        INSERT INTO db_dept VALUES (1, 'engineering'), (4, 'marketing');
-
-        -- 12. SQLBolt Movies & Boxoffice
-        CREATE TABLE IF NOT EXISTS Movies (Id INT PRIMARY KEY, Title STRING, Director STRING, Year INT, Length_minutes INT);
-        INSERT INTO Movies VALUES (1, 'Toy Story', 'John Lasseter', 1995, 81), (2, 'A Bug''s Life', 'John Lasseter', 1998, 95), (3, 'Toy Story 2', 'John Lasseter', 1999, 93), (4, 'Monsters, Inc.', 'Pete Docter', 2001, 92);
-
-        CREATE TABLE IF NOT EXISTS Boxoffice (Movie_id INT, Domestic_sales INT, International_sales INT);
-        INSERT INTO Boxoffice VALUES (1, 524844632, 558900000), (2, 162798565, 200600000), (3, 245852179, 249000000);
-      `);
+      if (sqlInitScript) {
+        alasql(sqlInitScript);
+      }
     } catch (e) {
       console.error('Failed to initialize AlaSQL default tables', e);
     }

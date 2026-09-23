@@ -34,6 +34,7 @@ import {
   LayoutGrid
 } from 'lucide-react';
 import { BigOComplexityChart } from './common/BigOComplexityChart';
+import { CodeRunnerModal } from './common/CodeRunnerModal';
 
 export interface CodeTemplate {
   language: 'python' | 'cpp' | 'java' | 'javascript';
@@ -461,6 +462,7 @@ export const AlgorithmHub: React.FC = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [activeCodeLang, setActiveCodeLang] = useState<Record<string, 'python' | 'cpp' | 'java' | 'javascript'>>({});
   const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
+  const [codeModalProblem, setCodeModalProblem] = useState<{ title: string; description: string; initialCode?: string; initialLanguage?: string } | null>(null);
 
   // Primary fetch: Load directly from modular category files in /data/algorithms/
   useEffect(() => {
@@ -1100,22 +1102,37 @@ export const AlgorithmHub: React.FC = () => {
                             </span>
                           </div>
 
-                          <button
-                            onClick={() => handleCopyCode(activeAlgorithm.id, activeCodeObj.code)}
-                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-all border border-slate-800 text-xs font-sans font-bold"
-                          >
-                            {copiedCodeId === activeAlgorithm.id ? (
-                              <>
-                                <Check size={13} className="text-emerald-400" />
-                                <span className="text-emerald-400 font-bold">Copied!</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy size={13} />
-                                <span>Copy Code</span>
-                              </>
-                            )}
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => setCodeModalProblem({
+                                title: activeAlgorithm.title,
+                                description: activeAlgorithm.summary,
+                                initialCode: activeCodeObj.code,
+                                initialLanguage: activeCodeObj.language
+                              })}
+                              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs transition shadow-md cursor-pointer"
+                            >
+                              <Code2 size={13} />
+                              <span>Run in Workspace</span>
+                            </button>
+
+                            <button
+                              onClick={() => handleCopyCode(activeAlgorithm.id, activeCodeObj.code)}
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-all border border-slate-800 text-xs font-sans font-bold"
+                            >
+                              {copiedCodeId === activeAlgorithm.id ? (
+                                <>
+                                  <Check size={13} className="text-emerald-400" />
+                                  <span className="text-emerald-400 font-bold">Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy size={13} />
+                                  <span>Copy Code</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
 
                         {/* Code Gutter & Block */}
@@ -1380,6 +1397,15 @@ export const AlgorithmHub: React.FC = () => {
           )}
         </div>
       )}
+
+      <CodeRunnerModal
+        isOpen={!!codeModalProblem}
+        onClose={() => setCodeModalProblem(null)}
+        problemTitle={codeModalProblem?.title}
+        problemDescription={codeModalProblem?.description}
+        initialCode={codeModalProblem?.initialCode}
+        initialLanguage={codeModalProblem?.initialLanguage}
+      />
     </div>
   );
 };

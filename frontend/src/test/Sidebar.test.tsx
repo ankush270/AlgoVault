@@ -65,7 +65,7 @@ describe('Sidebar Component UI Unit Tests', () => {
     fireEvent.click(dsaSheetBtn);
     expect(setActiveTab).toHaveBeenCalledWith('striver-a2z');
 
-    const revisionListBtn = screen.getByText('Spaced Revision List');
+    const revisionListBtn = screen.getByText('Spaced Revision');
     fireEvent.click(revisionListBtn);
     expect(setActiveTab).toHaveBeenCalledWith('revision');
   });

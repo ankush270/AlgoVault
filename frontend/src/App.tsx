@@ -16,6 +16,9 @@ import { AlgorithmHub } from './components/AlgorithmHub';
 import { InterviewExperiencesExplorer } from './components/InterviewExperiencesExplorer';
 import { TricksExplorer } from './components/TricksExplorer';
 import { JobExplorer } from './components/JobExplorer';
+import { SystemDesignCanvas } from './components/SystemDesignCanvas';
+import { LiveCodingArena } from './components/LiveCodingArena';
+import { CheatSheetReadinessHub } from './components/CheatSheetReadinessHub';
 import { AuthModal } from './components/AuthModal';
 import { AIChatbot } from './components/common/AIChatbot';
 import { DomainType, TopicItem } from './types';
@@ -55,6 +58,7 @@ const tabRoutes: Record<string, string> = {
   '/flashcards': 'flashcards',
   '/revision': 'revision',
   '/analytics': 'analytics',
+  '/pdf-readiness': 'pdf-readiness',
   '/notes': 'notes',
   '/jobs': 'jobs',
 };
@@ -241,7 +245,11 @@ export const AppContent: React.FC = () => {
 
           {activeTab === 'interview-experiences' && <InterviewExperiencesExplorer />}
 
+          {activeTab === 'live-arena' && <LiveCodingArena />}
+
           {activeTab === 'striver-a2z' && <StriverSheetView />}
+
+          {activeTab === 'system-design-canvas' && <SystemDesignCanvas />}
 
           {activeTab === 'leetcode-explorer' && <LeetCodeExplorer />}
 
@@ -256,6 +264,8 @@ export const AppContent: React.FC = () => {
           )}
 
           {activeTab === 'analytics' && <AnalyticsCharts />}
+
+          {activeTab === 'pdf-readiness' && <CheatSheetReadinessHub />}
 
           {activeTab === 'notes' && (
             <NotesModal

@@ -21,28 +21,32 @@ interface Message {
   timestamp: string;
 }
 
-const SUGGESTIONS = [
-  '⚡ Explain Closures & Scope Chain in JS',
-  '🛡️ What are ACID Properties in DBMS?',
-  '🧠 How does QuickSort work under the hood?',
-  '🌐 Explain TCP 3-Way Handshake vs UDP',
-  '💻 Difference between Process and Thread in OS',
-];
-
 export const AIChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'welcome-1',
-      role: 'assistant',
-      content:
-        "👋 Hi! I'm **AlgoVault AI Assistant**, powered by **Sarvam AI (105B)**.\n\nAsk me anything about **DSA, Operating Systems, DBMS/SQL, Computer Networks, System Design, or JavaScript**!",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    },
-  ]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    fetch('/data/chatbot/chatbot_config.json')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.suggestions) setSuggestions(data.suggestions);
+        if (data.welcomeMessage) {
+          setMessages([
+            {
+              id: 'welcome-1',
+              role: 'assistant',
+              content: data.welcomeMessage,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+        }
+      })
+      .catch((err) => console.error('Error loading chatbot_config.json:', err));
+  }, []);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -315,7 +319,7 @@ export const AIChatbot: React.FC = () => {
               {/* Quick Suggestion Chips - Clean Flex Wrap (No Horizontal Scroll) */}
               {messages.length <= 3 && !loading && (
                 <div className="px-3 py-2 bg-slate-900/60 border-t border-slate-800/80 flex flex-wrap gap-1.5">
-                  {SUGGESTIONS.map((chip, i) => (
+                  {suggestions.map((chip, i) => (
                     <button
                       key={i}
                       onClick={() => handleSend(chip.replace(/^[^\s]+\s*/, ''))}

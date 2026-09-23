@@ -24,6 +24,7 @@ import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus, CodeTemplate } from '../types';
 import { allTopics } from '../data/allData';
 import { DifficultyRatingModal } from './common/DifficultyRatingModal';
+import { CodeRunnerModal } from './common/CodeRunnerModal';
 
 interface TopicDetailModalProps {
   topic: TopicItem | null;
@@ -285,6 +286,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   const [selectedLang, setSelectedLang] = useState<string>('cpp');
   const [copiedCode, setCopiedCode] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showCodeWorkspace, setShowCodeWorkspace] = useState(false);
 
   useEffect(() => {
     setCurrentTopic(initialTopic);
@@ -660,13 +662,23 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                       ))}
                     </div>
                     {getActiveCodeTemplate() && (
-                      <button
-                        onClick={() => handleCopyCode(getActiveCodeTemplate()!.code)}
-                        className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all"
-                      >
-                        {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                        <span>{copiedCode ? 'Copied Code!' : 'Copy Snippet'}</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setShowCodeWorkspace(true)}
+                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+                        >
+                          <Code2 size={14} />
+                          <span>Run in Workspace</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleCopyCode(getActiveCodeTemplate()!.code)}
+                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all cursor-pointer"
+                        >
+                          {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                          <span>{copiedCode ? 'Copied Code!' : 'Copy Snippet'}</span>
+                        </button>
+                      </div>
                     )}
                   </div>
 
@@ -750,6 +762,17 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           topic={topic}
           isOpen={showRatingModal}
           onClose={() => setShowRatingModal(false)}
+        />
+      )}
+
+      {showCodeWorkspace && topic && (
+        <CodeRunnerModal
+          isOpen={showCodeWorkspace}
+          onClose={() => setShowCodeWorkspace(false)}
+          problemTitle={topic.title}
+          problemDescription={topic.summary}
+          initialCode={getActiveCodeTemplate()?.code}
+          initialLanguage={selectedLang}
         />
       )}
     </div>

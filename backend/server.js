@@ -1,4 +1,5 @@
 import express from 'express';
+import http from 'http';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -8,11 +9,16 @@ import syncRoutes from './routes/syncRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import datasetRoutes from './routes/datasetRoutes.js';
 import jobRoutes, { startAutomaticJobScheduler } from './routes/jobRoutes.js';
+import setupSocketServer from './socketServer.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const httpServer = http.createServer(app);
+
+// Attach Socket.io Engine
+setupSocketServer(httpServer);
 
 // Middleware
 const corsOptions = {
@@ -69,8 +75,8 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/dataset', datasetRoutes);
 app.use('/api/jobs', jobRoutes);
 
-app.listen(PORT, () => {
-  console.log(`🚀 TechSwitch Pro Auth & Sync Server running on http://localhost:${PORT}`);
+httpServer.listen(PORT, () => {
+  console.log(`🚀 AlgoVault API & Socket.io Server running on http://localhost:${PORT}`);
   // Start Automatic Job Scraping Scheduler
   startAutomaticJobScheduler();
 });

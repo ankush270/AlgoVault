@@ -4,20 +4,22 @@ import path from 'path';
 import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 
+import { runNodeJobScraper } from '../scrapers/node_job_scraper.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 const JOBS_FILE_PATH = path.join(__dirname, '../../frontend/public/data/jobs.json');
-const COMPANY_SCRAPER_PATH = path.join(__dirname, '../../scratch/company_scraper.py');
-const GENERAL_SCRAPER_PATH = path.join(__dirname, '../../scratch/job_scraper.py');
+const COMPANY_SCRAPER_PATH = path.join(__dirname, '../scrapers/company_scraper.py');
+const GENERAL_SCRAPER_PATH = path.join(__dirname, '../scrapers/job_scraper.py');
 
 let isSyncing = false;
 let lastSyncTime = new Date().toISOString();
 let lastSyncResult = 'Initialized';
 
 // Helper function to run scraping
-export const runJobScraper = () => {
+export const runJobScraper = async () => {
   if (isSyncing) {
     console.log('⚡ Job sync already in progress. Skipping...');
     return Promise.resolve({ status: 'already_running' });
@@ -26,40 +28,44 @@ export const runJobScraper = () => {
   isSyncing = true;
   console.log('🤖 [AUTO-SCHEDULER] Starting automatic background job scraping across 600+ companies...');
 
-  return new Promise((resolve) => {
-    // Run company scraper
-    exec(`python "${COMPANY_SCRAPER_PATH}"`, (err1, stdout1, stderr1) => {
-      if (err1) {
-        console.error('Company scraper error:', stderr1);
-      }
+  try {
+    // 1. First run Node.js scraper directly for instant reliable fetching
+    await runNodeJobScraper();
 
-      // Run general scraper (RemoteOK, Himalayas, Remotive)
-      exec(`python "${GENERAL_SCRAPER_PATH}"`, (err2, stdout2, stderr2) => {
-        isSyncing = false;
-        lastSyncTime = new Date().toISOString();
-        lastSyncResult = 'Success';
-        console.log('✅ [AUTO-SCHEDULER] Background job sync completed at', lastSyncTime);
-        resolve({ status: 'success', time: lastSyncTime });
+    // 2. Also try running Python scrapers if Python runtime is available
+    return new Promise((resolve) => {
+      exec(`python "${COMPANY_SCRAPER_PATH}"`, (err1, stdout1, stderr1) => {
+        exec(`python "${GENERAL_SCRAPER_PATH}"`, (err2, stdout2, stderr2) => {
+          isSyncing = false;
+          lastSyncTime = new Date().toISOString();
+          lastSyncResult = 'Success';
+          console.log('✅ [AUTO-SCHEDULER] Background job sync completed at', lastSyncTime);
+          resolve({ status: 'success', time: lastSyncTime });
+        });
       });
     });
-  });
+  } catch (err) {
+    isSyncing = false;
+    console.error('Job scraper error:', err.message);
+    return { status: 'error', message: err.message };
+  }
 };
 
 // Start Automatic Scheduler: Scrapes every 6 hours automatically (Zero manual effort needed!)
 export const startAutomaticJobScheduler = () => {
   const SIX_HOURS_MS = 6 * 60 * 60 * 1000;
   
-  // Initial background run 30 seconds after server starts
+  // Initial background run 5 seconds after server starts
   setTimeout(() => {
     runJobScraper();
-  }, 30000);
+  }, 5000);
 
   // Recurring background interval
   setInterval(() => {
     runJobScraper();
   }, SIX_HOURS_MS);
 
-  console.log('⏰ [AUTO-SCHEDULER] Automatic 6-hour job synchronization scheduler enabled.');
+  console.log('⏰ [AUTO-SCHEDULER] Automatic job synchronization scheduler enabled (runs on backend start & every 6 hours).');
 };
 
 // GET /api/jobs - Return all scraped jobs

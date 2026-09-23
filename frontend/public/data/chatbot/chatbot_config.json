@@ -1,0 +1,10 @@
+{
+  "welcomeMessage": "👋 Hi! I'm **AlgoVault AI Assistant**, powered by **Sarvam AI (105B)**.\n\nAsk me anything about **DSA, Operating Systems, DBMS/SQL, Computer Networks, System Design, or JavaScript**!",
+  "suggestions": [
+    "⚡ Explain Closures & Scope Chain in JS",
+    "🛡️ What are ACID Properties in DBMS?",
+    "🧠 How does QuickSort work under the hood?",
+    "🌐 Explain TCP 3-Way Handshake vs UDP",
+    "💻 Difference between Process and Thread in OS"
+  ]
+}

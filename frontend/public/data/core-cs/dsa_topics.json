@@ -1,0 +1,510 @@
+[
+  {
+    "id": "dsa-bit-01-binary-basics",
+    "title": "1. Binary Representation & Bit Extraction",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Easy",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Apple",
+      "Nvidia"
+    ],
+    "importanceRating": 5,
+    "summary": "Master binary base-2 representation, place values, decimal-to-binary conversion, and formula for extracting the i-th bit from any integer.",
+    "keyConcepts": [
+      "Decimal (Base 10) vs Binary (Base 2) place values (2⁰, 2¹, 2², 2³, ...)",
+      "Extracting least significant bit via n % 2",
+      "Extracting bit at position i using (n >> i) & 1",
+      "Bit positions indexing from 0 at LSB to 31/63 at MSB"
+    ],
+    "detailedContent": "\n### 📌 1. Binary Basics & Place Values\n\nComputers store integers in **binary format (base-2)** using powers of 2.\n\n#### Decimal vs Binary Comparison\n\n| System | Base | Digits | Place Values | Example (Decimal 14) |\n| :--- | :--- | :--- | :--- | :--- |\n| **Decimal** | 10 | 0–9 | Powers of 10 | 1 × 10³ + 2 × 10² + 3 × 10¹ + 4 × 10⁰ = 1234 |\n| **Binary** | 2 | 0, 1 | Powers of 2 | 1 × 2³ + 1 × 2² + 1 × 2¹ + 0 × 2⁰ = (1110)₂ = 14 |\n\n---\n\n### 🔑 Bit Extraction Formula\n\nTo extract the bit at 0-indexed position **i** from an integer **n**:\n\nBit at position i = (n >> i) & 1\n\n#### Step-by-Step Example: Extracting bits of 15 = (1111)₂\n- Bit at position 0: (15 >> 0) & 1 = 15 & 1 = 1\n- Bit at position 1: (15 >> 1) & 1 = 7 & 1 = 1\n- Bit at position 2: (15 >> 2) & 1 = 3 & 1 = 1\n- Bit at position 3: (15 >> 3) & 1 = 1 & 1 = 1\n\n> 💡 **Key Takeaway**: Right-shifting by i moves the target bit to position 0. Bitwise AND with 1 isolates its value (0 or 1).\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "// C++: Extract i-th bit from integer n\nint getBit(int n, int i) {\n    return (n >> i) & 1;\n}\n\nvoid printAllBits(int n) {\n    for (int i = 31; i >= 0; --i) {\n        cout << ((n >> i) & 1);\n    }\n    cout << endl;\n}"
+      },
+      {
+        "language": "python",
+        "code": "# Python: Extract i-th bit from integer n\ndef get_bit(n: int, i: int) -> int:\n    return (n >> i) & 1\n\ndef print_binary_32(n: int):\n    bits = [(n >> i) & 1 for i in range(31, -1, -1)]\n    print(\"\".join(map(str, bits)))"
+      }
+    ],
+    "interviewQuestions": [
+      {
+        "question": "Why do we use (n >> i) & 1 instead of n % 2 to extract the i-th bit?",
+        "answer": "n % 2 only gets the least significant bit (position 0). (n >> i) shifts the i-th bit into position 0 first, making it work for any bit index i in O(1) time."
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-02-bitwise-operators",
+    "title": "2. Bitwise Operators & Truth Tables (~, &, |, ^, <<, >>)",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Easy",
+    "companyTags": [
+      "Google",
+      "Amazon",
+      "Meta",
+      "Microsoft",
+      "Netflix",
+      "Uber"
+    ],
+    "importanceRating": 5,
+    "summary": "Complete guide to the 6 core bitwise operators: NOT (~), AND (&), OR (|), XOR (^), Left Shift (<<), and Right Shift (>>).",
+    "keyConcepts": [
+      "NOT (~) flips every 0 to 1 and 1 to 0 (unary operation)",
+      "AND (&) yields 1 only when both inputs are 1 (masking & testing)",
+      "OR (|) yields 1 when either input is 1 (setting bits)",
+      "XOR (^) yields 1 when inputs differ (toggling & unique finding)",
+      "Left Shift (x << k) multiplies by 2ᵏ",
+      "Right Shift (x >> k) divides by 2ᵏ"
+    ],
+    "detailedContent": "\n### 🛠️ The 6 Bitwise Operators\n\n#### 1. NOT (~) – Bit Inversion\nFlips every bit of the operand: 0 → 1, 1 → 0.\n\n#### 2. AND (&) – Bitwise Conjunction\nReturns 1 only if **both** corresponding bits are 1.\n\n#### 3. OR (|) – Bitwise Disjunction\nReturns 1 if **either** corresponding bit is 1.\n\n#### 4. XOR (^) – Exclusive OR\nReturns 1 if the corresponding bits are **different**.\n\n#### 5. Left Shift (<<) & Right Shift (>>)\n- Left Shift: x << k = x × 2ᵏ\n- Right Shift: x >> k = ⌊x / 2ᵏ⌋\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "void demonstrateBitwiseOperators() {\n    int a = 12; // (1100)_2\n    int b = 10; // (1010)_2\n    int andRes = a & b;  // 8\n    int orRes = a | b;   // 14\n    int xorRes = a ^ b;  // 6\n}"
+      }
+    ],
+    "interviewQuestions": [
+      {
+        "question": "What is the difference between logical right shift (>>>) and arithmetic right shift (>>)?",
+        "answer": "Arithmetic right shift (>>) preserves the sign bit. Logical right shift (>>>) always zero-fills left positions regardless of sign."
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-03-core-operations",
+    "title": "3. Core Bit Operations & Character Bit Tricks",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Easy",
+    "companyTags": [
+      "Amazon",
+      "Microsoft",
+      "Google",
+      "Flipkart",
+      "Adobe"
+    ],
+    "importanceRating": 5,
+    "summary": "Standard bit operations (Check, Set, Clear, Toggle, Count, Power of 2) alongside ASCII character manipulation tricks.",
+    "keyConcepts": [
+      "Check i-th bit: (n & (1 << i)) != 0",
+      "Set i-th bit: n |= (1 << i)",
+      "Clear i-th bit: n &= ~(1 << i)",
+      "Toggle i-th bit: n ^= (1 << i)",
+      "Brian Kernighan set bit counting: n &= (n - 1)",
+      "Power of 2 test: n > 0 && (n & (n - 1)) == 0"
+    ],
+    "detailedContent": "\n### ⚡ Core Bit Manipulation Cheat Sheet\n\n| Operation | Formula | Example / Notes |\n| :--- | :--- | :--- |\n| **Check i-th bit** | (n & (1 << i)) != 0 | Returns true if bit i is 1 |\n| **Set i-th bit** | n |= (1 << i) | Forces bit i to 1 |\n| **Clear i-th bit** | n &= ~(1 << i) | Forces bit i to 0 |\n| **Toggle i-th bit** | n ^= (1 << i) | Flips bit i (0 → 1) |\n| **Count Set Bits** | Brian Kernighan: n &= (n - 1) | Runs in O(K) time |\n| **Power of Two** | n > 0 && (n & (n - 1)) == 0 | Exactly one set bit |\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "int countSetBits(int n) {\n    int count = 0;\n    while (n > 0) {\n        n &= (n - 1);\n        count++;\n    }\n    return count;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-04-rightmost-set-bit",
+    "title": "4. Rightmost Set Bit Patterns (n & -n, n & (n - 1))",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Apple",
+      "Goldman Sachs"
+    ],
+    "importanceRating": 5,
+    "summary": "Techniques for isolating lowest set bit (n & -n), clearing lowest set bit (n & (n - 1)), and Fenwick tree Applications.",
+    "keyConcepts": [
+      "Extract Lowest Set Bit: n & -n",
+      "Clear Lowest Set Bit: n & (n - 1)",
+      "Position of Lowest Set Bit: log2(n & -n) + 1",
+      "Binary Indexed Trees (Fenwick Trees)"
+    ],
+    "detailedContent": "\n### 🎯 Isolating the Lowest Set Bit (n & -n)\n\nIn Two's Complement arithmetic, -n = ~n + 1.\nPerforming n & -n isolates the rightmost set 1-bit.\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "int getLowestSetBitValue(int n) {\n    return n & -n;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-05-xor-mastery",
+    "title": "5. XOR Properties & Single Number Variations (I, II, III)",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Meta",
+      "Google",
+      "Amazon",
+      "Microsoft",
+      "Bloomberg"
+    ],
+    "importanceRating": 5,
+    "summary": "Master XOR cancellation (x ⊕ x = 0, x ⊕ 0 = x) and solve Single Number I, II, and III.",
+    "keyConcepts": [
+      "Self-cancellation: x ⊕ x = 0",
+      "Single Number I: XOR all elements in O(N) time",
+      "Single Number II: 2-bit counter state machine",
+      "Single Number III: Partitioning by xor_sum & -xor_sum"
+    ],
+    "detailedContent": "\n### 🧮 XOR Algebraic Properties\n\n1. **Self-Cancellation**: x ⊕ x = 0\n2. **Identity**: x ⊕ 0 = x\n3. **Reversibility**: If a ⊕ b = c, then a = b ⊕ c.\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "vector<int> singleNumberIII(vector<int>& nums) {\n    long long xor_sum = 0;\n    for (int n : nums) xor_sum ^= n;\n    long long diff = xor_sum & -xor_sum;\n    int a = 0, b = 0;\n    for (int n : nums) {\n        if (n & diff) a ^= n;\n        else b ^= n;\n    }\n    return {a, b};\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-06-bitmasking-subsets",
+    "title": "6. Bitmasking, Submask Enumeration & Gray Code",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Meta",
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Uber"
+    ],
+    "importanceRating": 5,
+    "summary": "Represent sets as bitmask integers, iterate all submasks of a mask in O(3^N) time, and generate Gray Code sequences.",
+    "keyConcepts": [
+      "Representing subsets of N items as integer bitmask",
+      "Submask Enumeration: for (int s = mask; s > 0; s = (s - 1) & mask)",
+      "Gray Code: G(n) = n ^ (n >> 1)"
+    ],
+    "detailedContent": "\n### 🎭 Bitmask Set Operations\n\n- **Set Union**: maskA | maskB\n- **Set Intersection**: maskA & maskB\n- **Set Difference**: maskA & ~maskB\n    ",
+    "codeTemplates": [
+      {
+        "language": "python",
+        "code": "def get_gray_code(n: int) -> list[int]:\n    return [i ^ (i >> 1) for i in range(1 << n)]"
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-07-subset-dp",
+    "title": "7. Subset DP with Bitmasks & Built-in Intrinsics",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Hard",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Atlassian"
+    ],
+    "importanceRating": 5,
+    "summary": "Dynamic Programming over Bitmasks for NP-hard optimization problems (TSP, Matching) and GCC/Clang built-in intrinsics.",
+    "keyConcepts": [
+      "Travelling Salesperson Problem (TSP) in O(N² 2ᴺ) time",
+      "Compiler Intrinsics: __builtin_popcount(), __builtin_clz(), __builtin_ctz()"
+    ],
+    "detailedContent": "\n### 🧩 Subset Dynamic Programming (Bitmask DP)\n\nWhen N <= 20, NP-hard search problems can be optimized using Bitmask DP.\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "int popcount(unsigned int n) {\n    return __builtin_popcount(n);\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-bit-08-cheatsheet-recognition",
+    "title": "8. Bit Manipulation Signal Recognition & Cheatsheet",
+    "domain": "dsa",
+    "category": "Bit Manipulation",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Uber",
+      "Apple"
+    ],
+    "importanceRating": 5,
+    "summary": "Comprehensive pattern recognition guide (13 key signals -> optimal technique) and curated LeetCode practice problem index.",
+    "keyConcepts": [
+      "Problem Signal to Bit Technique Mapping",
+      "Curated LeetCode Practice Problems"
+    ],
+    "detailedContent": "\n### 🧠 Pattern Recognition Decision Guide\n\n| Problem Clue / Signal | Optimal Bit Technique |\n| :--- | :--- |\n| Single number in duplicates | XOR Cancellation (a ^ a = 0) |\n| Subset representation | Bitmask Integer (1 << i) |\n| Power of two check | n > 0 && (n & (n - 1)) == 0 |\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "bool isPowerOfTwo(int n) { return n > 0 && (n & (n - 1)) == 0; }"
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-01-fundamentals",
+    "title": "1. Linked List Fundamentals, Node Anatomy & Types",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Easy",
+    "companyTags": [
+      "Amazon",
+      "Microsoft",
+      "Google",
+      "Meta",
+      "Apple",
+      "Uber"
+    ],
+    "importanceRating": 5,
+    "summary": "Master node structures, memory allocation, Singly vs Doubly vs Circular linked lists, and Array vs Linked List trade-offs.",
+    "keyConcepts": [
+      "Node Anatomy: Data payload + next/prev reference pointers",
+      "Singly Linked List: HEAD -> [10|next] -> [20|next] -> null",
+      "Doubly Linked List: null <- [prev|10|next] <-> [prev|20|next] -> null",
+      "Circular Linked List: Tail node points back to HEAD",
+      "Array vs Linked List: O(1) random access vs O(1) insertion/deletion at known nodes"
+    ],
+    "detailedContent": "\n### 📌 1. What is a Linked List?\n\nA **Linked List** is a linear data structure consisting of nodes connected via pointers/references.\n\n#### Singly vs Doubly vs Circular Node Structure\n\n```cpp\n// Singly Linked List Node\nstruct ListNode {\n    int val;\n    ListNode* next;\n    ListNode(int x) : val(x), next(nullptr) {}\n};\n\n// Doubly Linked List Node\nstruct DLNode {\n    int val;\n    DLNode* prev;\n    DLNode* next;\n    DLNode(int x) : val(x), prev(nullptr), next(nullptr) {}\n};\n```\n\n---\n\n### ⚖️ Array vs Linked List Comparison\n\n| Feature | Array | Linked List |\n| :--- | :--- | :--- |\n| **Memory Allocation** | Contiguous block | Dynamic non-contiguous nodes |\n| **Random Access (by Index)** | O(1) | O(N) traversal |\n| **Insertion / Deletion (Known Position)** | O(N) element shifting | O(1) pointer updating |\n| **Search (Unsorted)** | O(N) | O(N) |\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "// C++: Basic Singly Linked List Node Definition\nstruct ListNode {\n    int val;\n    ListNode* next;\n    ListNode(int x) : val(x), next(nullptr) {}\n};\n\nListNode* head = new ListNode(10);\nhead->next = new ListNode(20);\nhead->next->next = new ListNode(30);"
+      },
+      {
+        "language": "python",
+        "code": "# Python: Basic Singly Linked List Node Definition\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nhead = ListNode(10)\nhead.next = ListNode(20)\nhead.next.next = ListNode(30)"
+      }
+    ],
+    "interviewQuestions": [
+      {
+        "question": "When should you prefer a Linked List over a Dynamic Array (std::vector / ArrayList)?",
+        "answer": "Use a Linked List when frequent O(1) insertions and deletions are required at head or middle without shifting contiguous elements."
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-02-core-operations",
+    "title": "2. Core Pointer Operations & Dummy Node Pattern",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Easy",
+    "companyTags": [
+      "Amazon",
+      "Microsoft",
+      "Google",
+      "Meta",
+      "Flipkart"
+    ],
+    "importanceRating": 5,
+    "summary": "Master node creation, traversal, insertion, deletion, and eliminating head edge-cases using Dummy Head nodes.",
+    "keyConcepts": [
+      "Traversal template: curr = head; while (curr != nullptr) { process(curr); curr = curr.next; }",
+      "Insertion Rule: Never break curr.next until the new node points to curr.next",
+      "Deletion Rule: Connect prev.next = target.next to bypass and delete target",
+      "Dummy Head Node: Eliminates special conditional logic for head modification"
+    ],
+    "detailedContent": "\n### 🛠️ Core Linked List Operations\n\n#### 1. Traversal Pattern\n```cpp\nListNode* curr = head;\nwhile (curr != nullptr) {\n    curr = curr->next;\n}\n```\n\n#### 2. The Dummy Head Node Pattern\nWhen operations modify or remove the head node:\n\n```cpp\nListNode dummy(0);\ndummy.next = head;\nListNode* prev = &dummy;\n// ...\nreturn dummy.next;\n```\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode* removeElements(ListNode* head, int val) {\n    ListNode dummy(0);\n    dummy.next = head;\n    ListNode* curr = &dummy;\n    \n    while (curr->next != nullptr) {\n        if (curr->next->val == val) {\n            ListNode* temp = curr->next;\n            curr->next = curr->next->next;\n            delete temp;\n        } else {\n            curr = curr->next;\n        }\n    }\n    return dummy.next;\n}"
+      }
+    ],
+    "interviewQuestions": [
+      {
+        "question": "What is the golden rule of pointer manipulation during linked list insertions?",
+        "answer": "Never overwrite an existing node reference before saving the pointer to the rest of the list."
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-03-pointer-patterns",
+    "title": "3. Essential Pointer Patterns (Prev/Curr/Next, Fast/Slow, Gap, Pointer Switching)",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Meta",
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Bloomberg"
+    ],
+    "importanceRating": 5,
+    "summary": "Master the 4 fundamental pointer strategies: Three-pointer iteration, Fast & Slow pointers, Fixed Gap distance, and Cross-list switching.",
+    "keyConcepts": [
+      "Pattern 1: Previous / Current / Next (Reversal and re-linking)",
+      "Pattern 2: Fast & Slow Pointers (Floyd Tortoise & Hare for middle and cycle)",
+      "Pattern 3: Two Pointers with Fixed Gap K (Remove Nth node from end)",
+      "Pattern 4: Pointer Switching (Cross traversal for list intersection)"
+    ],
+    "detailedContent": "\n### 🧭 The 4 Essential Pointer Patterns\n\n#### 1. Previous / Current / Next\nUsed for in-place list reversal and segment re-linking.\n\n#### 2. Fast & Slow Pointers\nslow moves 1 step, fast moves 2 steps.\n\n#### 3. Pointer Switching (Intersection of Two Lists)\nPointer A travels List A then List B. Pointer B travels List B then List A.\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {\n    if (!headA || !headB) return nullptr;\n    ListNode *pA = headA, *pB = headB;\n    \n    while (pA != pB) {\n        pA = (pA == nullptr) ? headB : pA->next;\n        pB = (pB == nullptr) ? headA : pB->next;\n    }\n    return pA;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-04-reversal-patterns",
+    "title": "4. Reversal Patterns & K-Group Reversals",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Meta",
+      "Amazon",
+      "Google",
+      "Microsoft",
+      "Uber",
+      "Apple"
+    ],
+    "importanceRating": 5,
+    "summary": "Reversing entire lists, sub-segments (Reverse Linked List II), and group reversals (Reverse Nodes in K-Group).",
+    "keyConcepts": [
+      "Full Reversal: Iterative 3-pointer in O(N) time & O(1) space",
+      "Partial Reversal: Unlinking and inserting nodes at sub-segment start",
+      "K-Group Reversal: Check if K nodes exist, reverse sub-group, recursively connect next groups"
+    ],
+    "detailedContent": "\n### 🔄 Reversal Variations Breakdown\n\n1. **Full Reverse** (LeetCode 206)\n2. **Reverse Portion from left to right** (LeetCode 92)\n3. **Reverse Nodes in K-Group** (LeetCode 25 - Hard)\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode* reverseKGroup(ListNode* head, int k) {\n    ListNode* curr = head;\n    int count = 0;\n    while (curr && count < k) {\n        curr = curr->next;\n        count++;\n    }\n    if (count < k) return head;\n    \n    ListNode* prev = nullptr;\n    ListNode* node = head;\n    for (int i = 0; i < k; ++i) {\n        ListNode* nextTemp = node->next;\n        node->next = prev;\n        prev = node;\n        node = nextTemp;\n    }\n    \n    head->next = reverseKGroup(node, k);\n    return prev;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-05-fast-slow-cycles",
+    "title": "5. Fast & Slow Pointer Patterns (Cycle Detection, Entry & Middle)",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Amazon",
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Goldman Sachs"
+    ],
+    "importanceRating": 5,
+    "summary": "Floyd Tortoise and Hare algorithm for cycle detection, finding cycle entrance, middle element retrieval, and Palindrome checks.",
+    "keyConcepts": [
+      "Finding Middle: slow moves 1 step, fast moves 2 steps",
+      "Cycle Detection: If fast == slow, cycle exists",
+      "Cycle Entry Point: Reset slow = head. Move both 1 step until meeting at entrance",
+      "Palindrome Linked List: Find middle, reverse second half, compare halves"
+    ],
+    "detailedContent": "\n### 🐢 Floyd Tortoise & Hare Proof\n\nResetting one pointer to head and moving both 1 step per iteration guarantees they will meet at the cycle entrance!\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode *detectCycle(ListNode *head) {\n    if (!head || !head->next) return nullptr;\n    ListNode *slow = head, *fast = head;\n    \n    while (fast && fast->next) {\n        slow = slow->next;\n        fast = fast->next->next;\n        if (slow == fast) {\n            ListNode* ptr = head;\n            while (ptr != slow) {\n                ptr = ptr->next;\n                slow = slow->next;\n            }\n            return ptr;\n        }\n    }\n    return nullptr;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-06-merge-reorder",
+    "title": "6. Merging, In-Place Reordering & Partitioning",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Adobe"
+    ],
+    "importanceRating": 5,
+    "summary": "Merge Two Sorted Lists, Merge K Sorted Lists (Min-Heap / Divide & Conquer), Odd-Even partitioning, and List Merge Sort.",
+    "keyConcepts": [
+      "Merge 2 Sorted Lists: Single pass with dummy head attaching smaller node",
+      "Merge K Sorted Lists: Use Min-Heap in O(N log K) time",
+      "Linked List Merge Sort: O(N log N) time, ideal for linked lists"
+    ],
+    "detailedContent": "\n### 🔀 Merging & Sorting Linked Lists\n\n- **Merge K Sorted Lists** (LeetCode 23)\n- **List Merge Sort** (LeetCode 148)\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {\n    ListNode dummy(0);\n    ListNode* tail = &dummy;\n    while (list1 && list2) {\n        if (list1->val <= list2->val) {\n            tail->next = list1;\n            list1 = list1->next;\n        } else {\n            tail->next = list2;\n            list2 = list2->next;\n        }\n        tail = tail->next;\n    }\n    tail->next = list1 ? list1 : list2;\n    return dummy.next;\n}"
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-07-lru-lfu-cache",
+    "title": "7. Advanced Cache Design (LRU & LFU Cache)",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Hard",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Apple",
+      "Netflix",
+      "Uber"
+    ],
+    "importanceRating": 5,
+    "summary": "Designing O(1) LRU Cache (HashMap + Doubly Linked List) and O(1) LFU Cache (Frequency Map + Frequency Bucket Doubly Linked Lists).",
+    "keyConcepts": [
+      "LRU Cache: HashMap (key -> Node*) + Doubly Linked List (head = MRU, tail = LRU)",
+      "LRU get(key): Move node to head (MRU) in O(1)",
+      "LRU put(key, val): If full, remove tail node (LRU) & insert at head in O(1)"
+    ],
+    "detailedContent": "\n### 🏎️ LRU Cache Architecture (O(1) Operations)\n\nCombines HashMap for O(1) lookup and Doubly Linked List for recency ordering.\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "class LRUCache {\n    struct Node {\n        int key, val;\n        Node *prev, *next;\n        Node(int k, int v) : key(k), val(v), prev(nullptr), next(nullptr) {}\n    };\n    int capacity;\n    unordered_map<int, Node*> cache;\n    Node *head, *tail;\n\n    void addNode(Node* node) {\n        node->next = head->next;\n        node->prev = head;\n        head->next->prev = node;\n        head->next = node;\n    }\n\n    void removeNode(Node* node) {\n        Node* p = node->prev;\n        Node* n = node->next;\n        p->next = n;\n        n->prev = p;\n    }\n\npublic:\n    LRUCache(int cap) : capacity(cap) {\n        head = new Node(0, 0);\n        tail = new Node(0, 0);\n        head->next = tail;\n        tail->prev = head;\n    }\n};"
+      }
+    ],
+    "interviewQuestions": [
+      {
+        "question": "Why do we need a Doubly Linked List instead of a Singly Linked List for LRU Cache?",
+        "answer": "Removing a node from a Singly Linked List requires finding its previous node in O(N) time. A Doubly Linked List stores node.prev, allowing O(1) removal of any node."
+      }
+    ]
+  },
+  {
+    "id": "dsa-ll-08-cheatsheet-roadmap",
+    "title": "8. Linked List Master Rules, Mistakes & LeetCode Roadmap",
+    "domain": "dsa",
+    "category": "Linked List",
+    "difficulty": "Medium",
+    "companyTags": [
+      "Google",
+      "Meta",
+      "Amazon",
+      "Microsoft",
+      "Apple",
+      "Uber",
+      "Netflix"
+    ],
+    "importanceRating": 5,
+    "summary": "Master decision framework (5 rules, 6 common pitfalls) and 26 curated LeetCode problem roadmap.",
+    "keyConcepts": [
+      "Rule 1: Never lose reference before re-linking",
+      "Rule 2: Draw node pointers & arrows before coding",
+      "Rule 3: Use Sentinel Dummy Head nodes",
+      "26 Curated LeetCode Problems Index"
+    ],
+    "detailedContent": "\n### 🧠 The 5 Master Rules of Linked Lists\n\n1. **Never Lose Your Reference**: Save next = curr.next before modifying curr.next.\n2. **Draw the Pointers**: Draw nodes and arrows on paper.\n3. **Use Sentinel Dummy Nodes**: Simplifies operations involving head.\n4. **Protect Remaining List**: Ensure non-deleted nodes remain reachable.\n5. **Verify Null Checks**: Check curr and curr.next before accessing .val.\n\n---\n\n### 📚 Complete LeetCode Problem Roadmap\n\n- [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/) (LC 206)\n- [Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/) (LC 876)\n- [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) (LC 21)\n- [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/) (LC 141)\n- [Remove Nth Node From End](https://leetcode.com/problems/remove-nth-node-from-end-of-list/) (LC 19)\n- [LRU Cache](https://leetcode.com/problems/lru-cache/) (LC 146)\n- [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) (LC 23)\n    ",
+    "codeTemplates": [
+      {
+        "language": "cpp",
+        "code": "ListNode* processList(ListNode* head) {\n    ListNode dummy(0);\n    dummy.next = head;\n    return dummy.next;\n}"
+      }
+    ]
+  }
+]

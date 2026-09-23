@@ -24,6 +24,9 @@ const mockTopic: TopicItem = {
   difficulty: 'Medium',
   summary: 'Deep-dive into FCFS, SJF, Round Robin, and Multi-level Queue scheduling.',
   detailedContent: '# CPU Scheduling\nProcess scheduling algorithms.',
+  companyTags: ['Google', 'Meta'],
+  keyConcepts: ['Preemptive', 'Non-preemptive'],
+  importanceRating: 5,
   codeTemplates: [
     { language: 'cpp', code: '// C++ Implementation of Round Robin' },
     { language: 'python', code: '# Python Implementation of Round Robin' },

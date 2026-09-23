@@ -1,0 +1,11 @@
+{
+  "domains": [
+    { "id": "dsa", "label": "DSA & Algorithms", "iconName": "Code2", "color": "text-amber-400", "bg": "border-amber-500/30 bg-amber-500/5", "badgeColor": "bg-amber-400" },
+    { "id": "system-design", "label": "System Design (HLD)", "iconName": "Layers", "color": "text-purple-400", "bg": "border-purple-500/30 bg-purple-500/5", "badgeColor": "bg-purple-400" },
+    { "id": "oops", "label": "OOPs & LLD", "iconName": "Boxes", "color": "text-orange-400", "bg": "border-orange-500/30 bg-orange-500/5", "badgeColor": "bg-orange-400" },
+    { "id": "os", "label": "Operating Systems", "iconName": "Cpu", "color": "text-emerald-400", "bg": "border-emerald-500/30 bg-emerald-500/5", "badgeColor": "bg-emerald-400" },
+    { "id": "dbms-sql", "label": "DBMS & SQL", "iconName": "Database", "color": "text-cyan-400", "bg": "border-cyan-500/30 bg-cyan-500/5", "badgeColor": "bg-cyan-400" },
+    { "id": "computer-networks", "label": "Computer Networks", "iconName": "Globe2", "color": "text-rose-400", "bg": "border-rose-500/30 bg-rose-500/5", "badgeColor": "bg-rose-400" },
+    { "id": "genai-ml", "label": "Gen AI & AI/ML", "iconName": "Bot", "color": "text-indigo-400", "bg": "border-indigo-500/30 bg-indigo-500/5", "badgeColor": "bg-indigo-400" }
+  ]
+}
