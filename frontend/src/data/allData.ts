@@ -1,6 +1,9 @@
 import { TopicItem, Flashcard } from '../types';
 import { dsaTopics } from './dsaTopics';
 import { systemDesignTopics } from './systemDesignTopics';
+import { systemDesignConceptTopics } from './systemDesignConceptsLoader';
+import { systemDesignExampleTopics } from './systemDesignExamplesLoader';
+import { lldTopics } from './lldLoader';
 import { osTopics } from './osTopics';
 import { dbmsSqlTopics } from './dbmsSqlTopics';
 import { networksTopics } from './networksTopics';
@@ -13,6 +16,9 @@ import { nodeTopics } from './nodeTopics';
 export const allTopics: TopicItem[] = [
   ...dsaTopics,
   ...systemDesignTopics,
+  ...systemDesignConceptTopics,
+  ...systemDesignExampleTopics,
+  ...lldTopics,
   ...osTopics,
   ...dbmsSqlTopics,
   ...networksTopics,
