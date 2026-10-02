@@ -18,6 +18,7 @@ import { InterviewExperiencesExplorer } from './components/InterviewExperiencesE
 import { TricksExplorer } from './components/TricksExplorer';
 import { JobExplorer } from './components/JobExplorer';
 import { SystemDesignCanvas } from './components/SystemDesignCanvas';
+import { SystemDesignHub } from './components/SystemDesignHub';
 import { LiveCodingArena } from './components/LiveCodingArena';
 import { CheatSheetReadinessHub } from './components/CheatSheetReadinessHub';
 import { AuthModal } from './components/AuthModal';
@@ -251,6 +252,13 @@ export const AppContent: React.FC = () => {
           {activeTab === 'striver-a2z' && <StriverSheetView />}
 
           {activeTab === 'system-design-canvas' && <SystemDesignCanvas />}
+
+          {activeTab === 'system-design-hub' && (
+            <SystemDesignHub
+              onSelectTopic={handleSelectTopic}
+              onOpenNote={handleOpenNote}
+            />
+          )}
 
           {activeTab === 'leetcode-explorer' && <LeetCodeExplorer />}
 

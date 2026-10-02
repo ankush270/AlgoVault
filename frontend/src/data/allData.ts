@@ -3,6 +3,7 @@ import { dsaTopics } from './dsaTopics';
 import { systemDesignTopics } from './systemDesignTopics';
 import { systemDesignConceptTopics } from './systemDesignConceptsLoader';
 import { systemDesignExampleTopics } from './systemDesignExamplesLoader';
+import { systemDesignQuestionTopics } from './systemDesignQuestionsLoader';
 import { lldTopics } from './lldLoader';
 import { osTopics } from './osTopics';
 import { dbmsSqlTopics } from './dbmsSqlTopics';
@@ -18,6 +19,7 @@ export const allTopics: TopicItem[] = [
   ...systemDesignTopics,
   ...systemDesignConceptTopics,
   ...systemDesignExampleTopics,
+  ...systemDesignQuestionTopics,
   ...lldTopics,
   ...osTopics,
   ...dbmsSqlTopics,
