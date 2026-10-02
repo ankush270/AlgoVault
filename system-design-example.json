@@ -176,16 +176,19 @@
     "loggingMonitoringAndAlerting": {
       "telemetry": "Export P99 read/write latency, Cache Hit Ratio, and 4xx/5xx HTTP error rate metrics into Prometheus and visualize via Grafana.",
       "alerting": "Trigger automated PagerDuty / SMTP alerts if Redis cache hit ratio drops below 70% or 5xx server errors exceed 1% over a 5-minute rolling window."
-    }
-  }
-}
-
+    },
     {
         "image link":"https://miro.medium.com/v2/resize:fit:1100/format:webp/1*7dFPsnGcWR0HwEi6-i4WIA.png",
         "zookeeper_img":"https://miro.medium.com/v2/resize:fit:786/format:webp/0*5TH7Z6AYa1npDJIC",
         "kafka_img":"https://miro.medium.com/v2/resize:fit:1200/format:webp/1*uO7v800o-H4RjT3mQ_9NRA.png",
-        "redis_img":"https://i.stack.imgur.com/lKCQ8.png"
+        "redis_img":"https://i.stack.imgur.com/lKCQ8.png",
+        "md5_img":"https://miro.medium.com/v2/resize:fit:640/format:webp/0*kH6cQKdiGxc_ndaL.jpg",
+        "explanation_img":"https://miro.medium.com/v2/resize:fit:1100/format:webp/1*3z7PyRJccNaorA0c79crmg.png"
     }
+  }
+}
+
+   
 
 
 
