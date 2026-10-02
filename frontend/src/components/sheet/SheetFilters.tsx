@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Search, FolderTree, SlidersHorizontal, Maximize2, Minimize2 } from 'lucide-react';
+import { Search, FolderTree, SlidersHorizontal, Maximize2, Minimize2, Star, FileText } from 'lucide-react';
 import { CustomDropdown } from './CustomDropdown';
 import { TOPIC_CATEGORIES } from './types';
 
@@ -16,6 +16,8 @@ interface SheetFiltersProps {
   totalTopicsCount: number;
   expandAllTopics: () => void;
   collapseAllTopics: () => void;
+  starredCount?: number;
+  notesCount?: number;
 }
 
 export const SheetFilters: React.FC<SheetFiltersProps> = ({
@@ -31,6 +33,8 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
   totalTopicsCount,
   expandAllTopics,
   collapseAllTopics,
+  starredCount = 0,
+  notesCount = 0,
 }) => {
   const [openDropdown, setOpenDropdown] = React.useState<'topic' | 'diff' | 'status' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,13 +69,12 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
     { value: 'all', label: 'All Status' },
     { value: 'solved', label: 'Solved Only', icon: '✅' },
     { value: 'unsolved', label: 'Unsolved Only', icon: '⏳' },
+    { value: 'starred', label: `Starred Only (${starredCount})`, icon: '⭐' },
+    { value: 'notes', label: `With Notes (${notesCount})`, icon: '📝' },
   ];
 
   return (
-    <div
-      ref={containerRef}
-      className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-white/90 border border-slate-200/90 backdrop-blur-xl relative shadow-md"
-    >
+    <div ref={containerRef} className="space-y-3">
       {/* Search & Action Row */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-white/90 border border-slate-200/90 backdrop-blur-xl relative shadow-md">
         {/* Search Input */}
@@ -96,20 +99,48 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
 
         {/* Controls Group */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Starred Quick Filter Button */}
+          <button
+            onClick={() => setFilterStatus(filterStatus === 'starred' ? 'all' : 'starred')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
+              filterStatus === 'starred'
+                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-200'
+                : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-amber-300 hover:text-amber-600'
+            }`}
+            title="Show only starred questions for revision"
+          >
+            <Star size={14} className={filterStatus === 'starred' ? 'fill-slate-950 text-slate-950' : 'fill-amber-400 text-amber-500'} />
+            <span>Starred {starredCount > 0 ? `(${starredCount})` : ''}</span>
+          </button>
+
+          {/* Notes Quick Filter Button */}
+          <button
+            onClick={() => setFilterStatus(filterStatus === 'notes' ? 'all' : 'notes')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
+              filterStatus === 'notes'
+                ? 'bg-purple-600 text-white border-purple-500 shadow-md shadow-purple-200'
+                : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-600'
+            }`}
+            title="Show only questions with personal revision notes"
+          >
+            <FileText size={14} className={filterStatus === 'notes' ? 'text-white' : 'text-purple-600'} />
+            <span>Notes {notesCount > 0 ? `(${notesCount})` : ''}</span>
+          </button>
+
           {/* Expand / Collapse All Topics Button */}
           <div className="flex items-center border border-slate-200 bg-slate-50 rounded-xl overflow-hidden p-0.5">
             <button
               onClick={expandAllTopics}
-              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-cyan-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[11px] font-bold text-slate-500 hover:text-cyan-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
               title="Expand All Topic Categories"
             >
               <Maximize2 size={13} />
               <span>Expand</span>
             </button>
-            <div className="w-[1px] h-4 bg-slate-100" />
+            <div className="w-[1px] h-4 bg-slate-200" />
             <button
               onClick={collapseAllTopics}
-              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-amber-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[11px] font-bold text-slate-500 hover:text-amber-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
               title="Collapse All Topic Categories"
             >
               <Minimize2 size={13} />
@@ -153,13 +184,13 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
             }}
             isOpen={openDropdown === 'status'}
             onToggle={() => setOpenDropdown(openDropdown === 'status' ? null : 'status')}
-            dropdownWidth="w-44"
+            dropdownWidth="w-48"
           />
         </div>
       </div>
 
       {/* Topic Category Quick-Filter Buttons (Array, String, Graph, DP, etc.) */}
-      <div className="p-3.5 rounded-2xl bg-white/80 border border-slate-200/90 backdrop-blur-xl shadow-lg space-y-2.5">
+      <div className="p-3.5 rounded-2xl bg-white/80 border border-slate-200/90 backdrop-blur-xl shadow-sm space-y-2.5">
         <div className="flex items-center justify-between px-1 text-xs font-bold text-slate-500">
           <span className="flex items-center gap-1.5 text-cyan-600">
             <FolderTree size={14} />
@@ -181,7 +212,7 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               selectedTopicFilter === 'all'
                 ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-200 scale-[1.02]'
-                : 'bg-slate-50 text-slate-400 hover:text-slate-900 border border-slate-200'
+                : 'bg-slate-50 text-slate-500 hover:text-slate-900 border border-slate-200 hover:bg-white'
             }`}
           >
             📂 All Topics

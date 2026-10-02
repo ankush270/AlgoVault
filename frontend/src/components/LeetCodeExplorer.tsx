@@ -463,44 +463,44 @@ export const LeetCodeExplorer: React.FC = () => {
               <span>LeetCode Companywise Interview Vault (2026 Edition)</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Interview Questions <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-300 to-purple-400">Explorer</span>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              Interview Questions <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600">Explorer</span>
             </h1>
 
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Target top tech interviews with <strong className="text-slate-900 font-semibold">3,399+ LeetCode problems</strong> categorized across <strong className="text-cyan-600 font-semibold">659 companies</strong> with AI-powered solving intuition, algorithmic patterns, and complexity tags.
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Target top tech interviews with <strong className="text-slate-900 font-semibold">3,399+ LeetCode problems</strong> categorized across <strong className="text-cyan-700 font-semibold">659 companies</strong> with AI-powered solving intuition, algorithmic patterns, and complexity tags.
             </p>
           </div>
 
           {/* Quick Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 shrink-0">
-            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
-              <div className="p-2.5 rounded-xl bg-cyan-50 text-cyan-600 border border-cyan-500/20">
+            <div className="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
+              <div className="p-2.5 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Questions</p>
-                <p className="text-lg font-black text-white">3,399</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Questions</p>
+                <p className="text-lg font-black text-slate-900">3,399</p>
               </div>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
-              <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600 border border-purple-500/20">
+            <div className="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
+              <div className="p-2.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200">
                 <Building2 className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Companies</p>
-                <p className="text-lg font-black text-white">659</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Companies</p>
+                <p className="text-lg font-black text-slate-900">659</p>
               </div>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
-              <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-500/20">
+            <div className="bg-white border border-slate-200 rounded-2xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm">
+              <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Solved</p>
-                <p className="text-lg font-black text-emerald-600">{solvedCount}</p>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Solved</p>
+                <p className="text-lg font-black text-emerald-700">{solvedCount}</p>
               </div>
             </div>
 
@@ -595,8 +595,8 @@ export const LeetCodeExplorer: React.FC = () => {
                 <BarChart3 size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">Top Tech Companies Question Frequency</h3>
-                <p className="text-[11px] text-slate-400">Question count distribution across FAANG & Tier-1 tech giants</p>
+                <h3 className="text-sm font-bold text-slate-900">Top Tech Companies Question Frequency</h3>
+                <p className="text-[11px] text-slate-500">Question count distribution across FAANG & Tier-1 tech giants</p>
               </div>
             </div>
           </div>
@@ -616,17 +616,17 @@ export const LeetCodeExplorer: React.FC = () => {
                   className="space-y-1 cursor-pointer group"
                 >
                   <div className="flex items-center justify-between text-xs font-semibold">
-                    <span className="text-slate-600 group-hover:text-cyan-600 transition-colors flex items-center gap-1.5">
+                    <span className="text-slate-700 group-hover:text-cyan-700 transition-colors flex items-center gap-1.5">
                       <Building2 size={13} className="text-slate-400" />
                       <span>{comp.name}</span>
                     </span>
-                    <span className="text-slate-400 font-mono text-[11px]">
+                    <span className="text-slate-500 font-mono text-[11px]">
                       {comp.total} questions ({comp.easy}E / {comp.medium}M / {comp.hard}H)
                     </span>
                   </div>
-                  <div className="w-full bg-white rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-200">
+                  <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-200">
                     <div
-                      className="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full rounded-full transition-all duration-500 group-hover:from-cyan-400 group-hover:to-emerald-400"
+                      className="bg-gradient-to-r from-indigo-500 to-cyan-500 h-full rounded-full transition-all duration-500 group-hover:from-cyan-500 group-hover:to-emerald-500"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -637,14 +637,14 @@ export const LeetCodeExplorer: React.FC = () => {
         </div>
 
         {/* Difficulty Donut Breakdown Widget */}
-        <div className="card-surface p-5 rounded-3xl border border-slate-200 space-y-4 flex flex-col justify-between">
+        <div className="card-surface p-5 rounded-3xl border border-slate-200 space-y-4 flex flex-col justify-between bg-white">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-cyan-50 border border-cyan-500/20 text-cyan-600">
               <PieChart size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white">Difficulty Breakdown</h3>
-              <p className="text-[11px] text-slate-400">Easy, Medium & Hard distribution</p>
+              <h3 className="text-sm font-bold text-slate-900">Difficulty Breakdown</h3>
+              <p className="text-[11px] text-slate-500">Easy, Medium & Hard distribution</p>
             </div>
           </div>
 
@@ -874,7 +874,7 @@ export const LeetCodeExplorer: React.FC = () => {
                             className={`p-1.5 rounded-lg border transition-all ${
                               isSolved
                                 ? 'bg-emerald-50 text-emerald-600 border-emerald-500/40'
-                                : 'text-slate-400 border-slate-200 hover:bg-slate-100 hover:text-white'
+                                : 'text-slate-400 border-slate-200 hover:bg-slate-100 hover:text-slate-700'
                             }`}
                           >
                             <CheckCircle2 className="w-4 h-4" />
@@ -886,7 +886,7 @@ export const LeetCodeExplorer: React.FC = () => {
                             className={`p-1.5 rounded-lg border transition-all ${
                               isReview
                                 ? 'bg-amber-50 text-amber-600 border-amber-200'
-                                : 'text-slate-400 border-slate-200 hover:bg-slate-100 hover:text-white'
+                                : 'text-slate-400 border-slate-200 hover:bg-slate-100 hover:text-slate-700'
                             }`}
                           >
                             <Bookmark className="w-4 h-4" />
@@ -902,7 +902,7 @@ export const LeetCodeExplorer: React.FC = () => {
                         className="group flex items-start justify-between gap-2 text-base font-bold text-slate-900 hover:text-cyan-600 transition-colors"
                       >
                         <span className="line-clamp-2 leading-snug">{q.title}</span>
-                        <ExternalLink className="w-4 h-4 shrink-0 text-slate-500 group-hover:text-cyan-600 transition-colors mt-0.5" />
+                        <ExternalLink className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-cyan-600 transition-colors mt-0.5" />
                       </a>
 
                       {/* Tag Badges */}
@@ -913,7 +913,7 @@ export const LeetCodeExplorer: React.FC = () => {
                           </span>
                         )}
                         {q.pattern && q.pattern !== 'N/A' && (
-                          <span className="text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-500/20 px-2 py-0.5 rounded-md flex items-center gap-1">
+                          <span className="text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-md flex items-center gap-1">
                             <BrainCircuit className="w-3 h-3 text-purple-600" />
                             {q.pattern}
                           </span>
@@ -927,17 +927,17 @@ export const LeetCodeExplorer: React.FC = () => {
 
                       {/* Time & Space Complexity */}
                       {(q.time_complexity || q.space_complexity) && (
-                        <div className="flex items-center gap-3 text-[11px] text-slate-400 font-mono">
+                        <div className="flex items-center gap-3 text-[11px] text-slate-500 font-mono">
                           {q.time_complexity && (
                             <span className="flex items-center gap-1">
                               <Clock className="w-3 h-3 text-emerald-600" />
-                              Time: <strong className="text-slate-600">{q.time_complexity}</strong>
+                              Time: <strong className="text-slate-700">{q.time_complexity}</strong>
                             </span>
                           )}
                           {q.space_complexity && (
                             <span className="flex items-center gap-1">
                               <Cpu className="w-3 h-3 text-cyan-600" />
-                              Space: <strong className="text-slate-600">{q.space_complexity}</strong>
+                              Space: <strong className="text-slate-700">{q.space_complexity}</strong>
                             </span>
                           )}
                         </div>
@@ -948,7 +948,7 @@ export const LeetCodeExplorer: React.FC = () => {
                     <div className="pt-3 border-t border-slate-200 space-y-3">
                       {/* Asked Companies */}
                       <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5 flex items-center gap-1">
                           <Building2 className="w-3 h-3 text-amber-600" />
                           Top Tagged Companies:
                         </p>
@@ -957,7 +957,7 @@ export const LeetCodeExplorer: React.FC = () => {
                             <button
                               key={c.name}
                               onClick={() => setSelectedCompanyDetail(c.name)}
-                              className="text-[10px] font-medium bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-white border border-slate-200 px-2 py-0.5 rounded-md transition-colors"
+                              className="text-[10px] font-medium bg-slate-50 hover:bg-slate-200 text-slate-600 hover:text-slate-900 border border-slate-200 px-2 py-0.5 rounded-md transition-colors"
                             >
                               {c.name} {c.frequency ? `(${Math.round(c.frequency)}%)` : ''}
                             </button>

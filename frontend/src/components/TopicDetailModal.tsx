@@ -798,9 +798,9 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                         <span className="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold shrink-0">
                           Q{idx + 1}
                         </span>
-                        <h4 className="font-bold text-white text-sm sm:text-base leading-snug">{q.question}</h4>
+                        <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">{q.question}</h4>
                       </div>
-                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-500 leading-relaxed">
+                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
                         {cleanMathAndFormatting(q.answer)}
                       </div>
                     </div>

@@ -161,10 +161,10 @@ export const SystemDesignCanvas: React.FC = () => {
               <Layers className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-black text-white flex items-center gap-2">
+              <h1 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-2">
                 System Design Studio & Estimator
               </h1>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500">
                 Visual architecture canvas and back-of-the-envelope capacity estimator for HLD interviews.
               </p>
             </div>
@@ -172,13 +172,13 @@ export const SystemDesignCanvas: React.FC = () => {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-slate-50 p-1.5 rounded-2xl border border-slate-200">
+        <div className="flex items-center bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm">
           <button
             onClick={() => setActiveTab('canvas')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
               activeTab === 'canvas'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-200'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-purple-600 text-white shadow-md shadow-purple-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -189,8 +189,8 @@ export const SystemDesignCanvas: React.FC = () => {
             onClick={() => setActiveTab('calculator')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
               activeTab === 'calculator'
-                ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-200'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-cyan-600 text-white shadow-md shadow-cyan-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
             <Calculator className="w-4 h-4" />
@@ -203,17 +203,17 @@ export const SystemDesignCanvas: React.FC = () => {
       {activeTab === 'canvas' && (
         <div className="space-y-4">
           {/* Blueprint Selector & Tools Bar */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-bold text-slate-400">Architecture Blueprint:</span>
+              <span className="text-xs font-bold text-slate-600">Architecture Blueprint:</span>
               {Object.keys(PRESET_BLUEPRINTS).map((key) => (
                 <button
                   key={key}
                   onClick={() => handleSelectBlueprint(key)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                     selectedBlueprint === key
-                      ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                      : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-white'
+                      ? 'bg-purple-50 text-purple-700 border border-purple-200 shadow-sm'
+                      : 'bg-slate-50 text-slate-600 border border-slate-200 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                 >
                   {PRESET_BLUEPRINTS[key].title}

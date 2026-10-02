@@ -110,26 +110,26 @@ export const TricksExplorer: React.FC = () => {
             <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
               DSA Pattern Recognition Vault
             </h1>
-            <p className="text-slate-500 text-xs md:text-sm leading-relaxed">
+            <p className="text-slate-200 text-xs md:text-sm leading-relaxed">
               Instant interview wording clues, decision flowcharts, C++ code templates, and standard practice problems to solve any coding question faster.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-center min-w-[100px]">
-              <div className="text-xl font-bold text-amber-600">{tricks.length}</div>
-              <div className="text-[10px] text-slate-400 uppercase font-semibold">Total Tricks</div>
+            <div className="bg-white/10 border border-white/20 backdrop-blur-sm rounded-xl p-3.5 text-center min-w-[100px]">
+              <div className="text-xl font-bold text-amber-400">{tricks.length}</div>
+              <div className="text-[10px] text-slate-300 uppercase font-semibold">Total Tricks</div>
             </div>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-center min-w-[100px]">
-              <div className="text-xl font-bold text-purple-600">{categories.length - 1}</div>
-              <div className="text-[10px] text-slate-400 uppercase font-semibold">Categories</div>
+            <div className="bg-white/10 border border-white/20 backdrop-blur-sm rounded-xl p-3.5 text-center min-w-[100px]">
+              <div className="text-xl font-bold text-purple-400">{categories.length - 1}</div>
+              <div className="text-[10px] text-slate-300 uppercase font-semibold">Categories</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Search & Filters */}
-      <div className="card-surface p-4 rounded-xl space-y-3">
+      <div className="card-surface p-4 rounded-xl space-y-3 bg-white">
         <div className="flex flex-col md:flex-row items-center gap-3">
           {/* Search Input */}
           <div className="relative flex-1 w-full">
@@ -139,7 +139,7 @@ export const TricksExplorer: React.FC = () => {
               placeholder="Search tricks by pattern name, keyword (e.g. 'subarray', 'frequency'), or tag..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400 transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-400 transition-all"
             />
             {searchQuery && (
               <button
@@ -153,10 +153,10 @@ export const TricksExplorer: React.FC = () => {
 
           {/* Rating Filter */}
           <div className="flex items-center gap-2 self-start md:self-auto">
-            <span className="text-xs text-slate-400 font-medium whitespace-nowrap flex items-center gap-1">
+            <span className="text-xs text-slate-500 font-medium whitespace-nowrap flex items-center gap-1">
               <Star className="w-3.5 h-3.5 text-amber-600 fill-amber-500" /> Rating:
             </span>
-            <div className="flex bg-white border border-slate-200 rounded-lg p-1">
+            <div className="flex bg-slate-50 border border-slate-200 rounded-lg p-1">
               {['All', 5, 4].map((r) => (
                 <button
                   key={r}
@@ -164,7 +164,7 @@ export const TricksExplorer: React.FC = () => {
                   className={`px-2.5 py-1 text-xs rounded-md font-medium transition-all ${
                     selectedRating === r
                       ? 'bg-amber-500 text-slate-950 font-bold'
-                      : 'text-slate-400 hover:text-white'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
                   }`}
                 >
                   {r === 'All' ? 'All' : `${r}★`}
@@ -229,9 +229,9 @@ export const TricksExplorer: React.FC = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-sm font-bold text-white group-hover:text-amber-700 transition-colors flex items-center justify-between">
+                <h3 className="text-sm font-bold text-slate-900 group-hover:text-amber-700 transition-colors flex items-center justify-between">
                   <span>{trick.id}. {trick.title}</span>
-                  <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all" />
                 </h3>
 
                 {/* Keywords Preview */}
@@ -290,7 +290,7 @@ export const TricksExplorer: React.FC = () => {
                     <Star className="w-3.5 h-3.5 fill-amber-500" />
                   </div>
                 </div>
-                <h2 className="text-xl md:text-2xl font-extrabold text-white flex items-center gap-2">
+                <h2 className="text-xl md:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
                   <span>{activeTrick.id}. {activeTrick.title}</span>
                 </h2>
                 <div className="flex flex-wrap gap-1.5 pt-1">

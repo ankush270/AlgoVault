@@ -1214,7 +1214,7 @@ export const AlgorithmHub: React.FC = () => {
                 >
                   <button
                     onClick={() => toggleCategoryExpand(cat.id)}
-                    className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-[#0D1322] via-[#0F172A] to-[#0D1322] hover:bg-slate-50 transition-all text-left group"
+                    className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white hover:bg-slate-50/90 transition-all text-left group"
                   >
                     <div className="flex items-center gap-3.5">
                       <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-200 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-all shadow-md">
@@ -1223,16 +1223,16 @@ export const AlgorithmHub: React.FC = () => {
                       <div>
                         <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
                           <span>{cat.title}</span>
-                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-50 text-cyan-700 border border-slate-200">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-cyan-50 text-cyan-700 border border-cyan-200">
                             {algorithms.length} Algorithms
                           </span>
                         </h3>
-                        <p className="text-xs text-slate-400 mt-0.5">{cat.description}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{cat.description}</p>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0">
-                      <div className="w-9 h-9 rounded-xl bg-slate-50/80 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-cyan-700">
+                      <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 group-hover:text-cyan-700 group-hover:bg-cyan-50 transition-all">
                         {isCatExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                       </div>
                     </div>

@@ -50,49 +50,49 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
               </span>
             </h1>
             
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               Zero duplicates. Master Arrays, Dynamic Programming, Trees & Graphs across Striver, Love Babbar, Fraz & NeetCode 150!
             </p>
 
             {/* Quick Stats Badges */}
-            <div className="flex items-center gap-3 pt-1 flex-wrap text-xs text-slate-500">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50/80 border border-slate-200 font-medium">
-                <Layers size={14} className="text-cyan-600" />
-                <span className="font-bold text-slate-900">{totalProblemsCount}</span> Total Problems
+            <div className="flex items-center gap-3 pt-1 flex-wrap text-xs text-slate-300">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
+                <Layers size={14} className="text-cyan-400" />
+                <span className="font-bold text-white">{totalProblemsCount}</span> Total Problems
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50/80 border border-slate-200 font-medium">
-                <Award size={14} className="text-emerald-600" />
-                <span className="font-bold text-slate-900">14</span> Core Categories
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
+                <Award size={14} className="text-emerald-400" />
+                <span className="font-bold text-white">14</span> Core Categories
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50/80 border border-slate-200 font-medium">
-                <BarChart2 size={14} className="text-purple-600" />
-                <span className="font-bold text-slate-900">0</span> Duplicates
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
+                <BarChart2 size={14} className="text-purple-400" />
+                <span className="font-bold text-white">0</span> Duplicates
               </span>
             </div>
           </div>
 
           {/* Progress Card */}
-          <div className="w-full lg:w-auto min-w-[270px] p-5 rounded-2xl bg-slate-50/90 border border-slate-200/90 space-y-3.5 shrink-0 shadow-lg backdrop-blur-xl">
+          <div className="w-full lg:w-auto min-w-[270px] p-5 rounded-2xl bg-white/95 border border-white/20 space-y-3.5 shrink-0 shadow-lg backdrop-blur-xl">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-500 flex items-center gap-1.5">
+              <span className="font-bold text-slate-700 flex items-center gap-1.5">
                 <Flame size={15} className="text-amber-600" />
                 <span>Completion Status</span>
               </span>
               <span className="font-black text-cyan-700 font-mono text-sm">{solvedCount} / {totalProblemsCount} ({progressPercentage}%)</span>
             </div>
             
-            <div className="w-full h-3 bg-white rounded-full overflow-hidden p-0.5 border border-slate-200 shadow-sm">
+            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200 shadow-sm">
               <div 
                 className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
             
-            <div className="flex items-center justify-between text-[11px] text-slate-400 pt-0.5 font-medium">
-              <span className="flex items-center gap-1 text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-500/20">
+            <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5 font-medium">
+              <span className="flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
                 <CheckCircle2 size={13} /> {solvedCount} Solved
               </span>
-              <span className="flex items-center gap-1 text-amber-600 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-500/20">
+              <span className="flex items-center gap-1 text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
                 <Flame size={13} /> {totalProblemsCount - solvedCount} Left
               </span>
             </div>
@@ -106,14 +106,14 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
         <div className="p-4.5 rounded-2xl bg-white/90 border border-emerald-500/25 hover:border-emerald-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-              <span className="text-xs font-black text-emerald-600 uppercase tracking-wider">Easy Problems</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+              <span className="text-xs font-black text-emerald-700 uppercase tracking-wider">Easy Problems</span>
             </div>
-            <div className="text-xl font-black text-white font-mono">
-              {difficultyStats.easySolved} <span className="text-xs font-normal text-slate-400">/ {difficultyStats.easy}</span>
+            <div className="text-xl font-black text-slate-900 font-mono">
+              {difficultyStats.easySolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.easy}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center font-black text-emerald-600 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center font-black text-emerald-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
             {difficultyStats.easy > 0 ? Math.round((difficultyStats.easySolved / difficultyStats.easy) * 100) : 0}%
           </div>
         </div>
@@ -122,14 +122,14 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
         <div className="p-4.5 rounded-2xl bg-white/90 border border-amber-500/25 hover:border-amber-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
-              <span className="text-xs font-black text-amber-600 uppercase tracking-wider">Medium Problems</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+              <span className="text-xs font-black text-amber-700 uppercase tracking-wider">Medium Problems</span>
             </div>
-            <div className="text-xl font-black text-white font-mono">
-              {difficultyStats.mediumSolved} <span className="text-xs font-normal text-slate-400">/ {difficultyStats.medium}</span>
+            <div className="text-xl font-black text-slate-900 font-mono">
+              {difficultyStats.mediumSolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.medium}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center font-black text-amber-600 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center font-black text-amber-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
             {difficultyStats.medium > 0 ? Math.round((difficultyStats.mediumSolved / difficultyStats.medium) * 100) : 0}%
           </div>
         </div>
@@ -138,14 +138,14 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
         <div className="p-4.5 rounded-2xl bg-white/90 border border-rose-500/25 hover:border-rose-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)]" />
-              <span className="text-xs font-black text-rose-600 uppercase tracking-wider">Hard Problems</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(251,113,133,0.8)]" />
+              <span className="text-xs font-black text-rose-700 uppercase tracking-wider">Hard Problems</span>
             </div>
-            <div className="text-xl font-black text-white font-mono">
-              {difficultyStats.hardSolved} <span className="text-xs font-normal text-slate-400">/ {difficultyStats.hard}</span>
+            <div className="text-xl font-black text-slate-900 font-mono">
+              {difficultyStats.hardSolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.hard}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center font-black text-rose-600 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center font-black text-rose-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
             {difficultyStats.hard > 0 ? Math.round((difficultyStats.hardSolved / difficultyStats.hard) * 100) : 0}%
           </div>
         </div>

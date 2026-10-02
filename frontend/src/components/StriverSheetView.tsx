@@ -5,6 +5,7 @@ import { SheetHeader } from './sheet/SheetHeader';
 import { SheetTabs } from './sheet/SheetTabs';
 import { SheetFilters } from './sheet/SheetFilters';
 import { TopicAccordion } from './sheet/TopicAccordion';
+import { useProgress } from '../context/ProgressContext';
 
 // Re-export types for backward compatibility
 export type { StriverProblem, StriverTopic, StriverStep, StriverSheetData } from './sheet/types';
@@ -12,6 +13,7 @@ export type { StriverProblem, StriverTopic, StriverStep, StriverSheetData } from
 const STORAGE_KEY = 'striver_a2z_solved_status_v1';
 
 export const StriverSheetView: React.FC = () => {
+  const { progress } = useProgress();
   const [sheetData, setSheetData] = useState<StriverSheetData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [solvedStatus, setSolvedStatus] = useState<Record<string, boolean>>(() => {
@@ -22,7 +24,7 @@ export const StriverSheetView: React.FC = () => {
   const [expandedTopics, setExpandedTopics] = useState<Record<string, boolean>>({ arrays: true, dp: true, trees: true });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'solved' | 'unsolved'>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'solved' | 'unsolved' | 'starred' | 'notes'>('all');
   const [selectedTopicFilter, setSelectedTopicFilter] = useState<string>('all');
 
   // Active Sheet Filter: 'all' | 'striver' | 'love_babbar' | 'fraz' | 'neetcode' | 'multi'
@@ -118,6 +120,14 @@ export const StriverSheetView: React.FC = () => {
     return activeProblemsWithMeta.filter(({ prob }) => solvedStatus[prob.id]).length;
   }, [activeProblemsWithMeta, solvedStatus]);
 
+  const starredCount = useMemo(() => {
+    return activeProblemsWithMeta.filter(({ prob }) => progress.starred[prob.id]).length;
+  }, [activeProblemsWithMeta, progress.starred]);
+
+  const notesCount = useMemo(() => {
+    return activeProblemsWithMeta.filter(({ prob }) => Boolean(progress.notes[prob.id]?.trim())).length;
+  }, [activeProblemsWithMeta, progress.notes]);
+
   const difficultyStats = useMemo(() => {
     let easy = 0, medium = 0, hard = 0;
     let easySolved = 0, mediumSolved = 0, hardSolved = 0;
@@ -193,11 +203,13 @@ export const StriverSheetView: React.FC = () => {
         selectedDifficulty={selectedDifficulty}
         setSelectedDifficulty={setSelectedDifficulty}
         filterStatus={filterStatus}
-        setFilterStatus={(val) => setFilterStatus(val as 'all' | 'solved' | 'unsolved')}
+        setFilterStatus={(val) => setFilterStatus(val as any)}
         totalProblemsCount={totalProblemsCount}
         totalTopicsCount={topicGroupedData.length}
         expandAllTopics={expandAllTopics}
         collapseAllTopics={collapseAllTopics}
+        starredCount={starredCount}
+        notesCount={notesCount}
       />
 
       {/* 4. Topic-Wise Accordions List */}
@@ -219,13 +231,15 @@ export const StriverSheetView: React.FC = () => {
             if (selectedDifficulty !== 'all' && p.difficulty !== selectedDifficulty) return false;
             if (filterStatus === 'solved' && !solvedStatus[p.id]) return false;
             if (filterStatus === 'unsolved' && solvedStatus[p.id]) return false;
+            if (filterStatus === 'starred' && !progress.starred[p.id]) return false;
+            if (filterStatus === 'notes' && !progress.notes[p.id]?.trim()) return false;
 
             return true;
           });
 
           if (filteredProblems.length === 0) return null;
 
-          const isExpanded = !!expandedTopics[cat.id] || !!searchQuery.trim() || selectedTopicFilter !== 'all';
+          const isExpanded = !!expandedTopics[cat.id] || !!searchQuery.trim() || selectedTopicFilter !== 'all' || filterStatus === 'starred' || filterStatus === 'notes';
 
           return (
             <TopicAccordion

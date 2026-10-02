@@ -703,7 +703,7 @@ export const SqlPlayground: React.FC = () => {
                           Question Schema Explorer
                         </span>
                       </div>
-                      <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 mt-1">
+                      <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2 mt-1">
                         <Table size={16} className="text-cyan-600" />
                         <span>Interactive Dummy Sample Tables & Columns</span>
                       </h3>
