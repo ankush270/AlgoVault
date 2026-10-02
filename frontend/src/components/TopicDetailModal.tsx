@@ -79,6 +79,77 @@ const cleanMathAndFormatting = (text: string): string => {
     .replace(/\\mid/g, '|');
 };
 
+// Apple / macOS Styled Code Block Component
+const AppleCodeBlock: React.FC<{ code: string; language?: string; filename?: string }> = ({ code, language = 'code', filename }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const codeLines = code.split('\n');
+
+  return (
+    <div className="my-8 rounded-2xl overflow-hidden bg-[#0d1117] border border-slate-800 shadow-2xl ring-1 ring-white/10 transition-all duration-300 hover:border-slate-700">
+      {/* Apple / macOS Window Header Bar */}
+      <div className="flex items-center justify-between px-4 py-3 bg-[#161b22] border-b border-slate-800/90 select-none">
+        {/* Left: 3 macOS Traffic Light Dots */}
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]/60 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="Close" />
+          <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]/60 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="Minimize" />
+          <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]/60 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" title="Expand" />
+        </div>
+
+        {/* Center: Language / File Badge */}
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/60 text-slate-300 text-xs font-mono font-semibold tracking-wide shadow-inner">
+          <Code2 size={13} className="text-cyan-400" />
+          <span>{filename || language.toUpperCase()}</span>
+        </div>
+
+        {/* Right: Copy Button */}
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium border border-slate-700/70 transition-all cursor-pointer shadow-sm active:scale-95"
+          title="Copy code snippet"
+        >
+          {copied ? (
+            <>
+              <Check size={13} className="text-emerald-400" />
+              <span className="text-emerald-400 font-semibold">Copied!</span>
+            </>
+          ) : (
+            <>
+              <Copy size={13} />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Code Editor Body with Line Numbers */}
+      <div className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-sm font-mono leading-relaxed custom-scrollbar max-h-[600px] overflow-y-auto bg-[#0d1117]">
+        <div className="flex min-w-full">
+          {/* Line Numbers Gutter */}
+          <div className="select-none text-slate-600 pr-4 text-right border-r border-slate-800/80 shrink-0 font-mono text-xs select-none">
+            {codeLines.map((_, i) => (
+              <div key={i} className="leading-relaxed">
+                {i + 1}
+              </div>
+            ))}
+          </div>
+
+          {/* Actual Code with Syntax Formatting */}
+          <pre className="pl-4 text-emerald-300 flex-1 whitespace-pre leading-relaxed font-mono selection:bg-cyan-500/30 selection:text-white">
+            {code}
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Formatted Markdown Renderer Component
 const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
   if (!content) return null;
@@ -87,6 +158,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
   const elements: React.ReactNode[] = [];
   let inCodeBlock = false;
   let codeBuffer: string[] = [];
+  let codeLang = 'code';
   let tableRows: string[][] = [];
   let inTable = false;
 
@@ -114,28 +186,28 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     const body = rows.slice(1).filter(r => !r.every(c => c.trim().match(/^:?-+:?$/)));
 
     return (
-      <div key={`table-${tableIdx}`} className="my-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-lg">
+      <div key={`table-${tableIdx}`} className="my-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm border-collapse">
             <thead>
-              <tr className="bg-white border-b border-slate-200 text-slate-600">
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-700">
                 {header.map((col, cIdx) => (
-                  <th key={cIdx} className="px-5 py-3.5 font-extrabold uppercase tracking-wider text-cyan-600 bg-slate-50">
+                  <th key={cIdx} className="px-5 py-4 font-extrabold uppercase tracking-wider text-cyan-700 bg-slate-100/70 border-r border-slate-200 last:border-r-0">
                     {processInlineFormatting(col)}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-medium">
+            <tbody className="divide-y divide-slate-100 font-medium">
               {body.map((row, rIdx) => (
-                <tr key={rIdx} className="hover:bg-slate-50/80 transition-colors">
+                <tr key={rIdx} className="hover:bg-slate-50/80 transition-colors even:bg-slate-50/40">
                   {row.map((cell, cIdx) => {
                     const cellText = cleanMathAndFormatting(cell);
                     const isMathEquation = cellText.includes('×') || cellText.includes('⁰') || cellText.includes('¹') || cellText.includes('²') || cellText.includes('³') || cellText.includes('⁴') || cellText.includes('→') || cellText.includes('==') || cellText.includes('!=') || cellText.includes('₂');
                     return (
-                      <td key={cIdx} className="px-5 py-3.5 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                      <td key={cIdx} className="px-5 py-3.5 text-slate-700 text-xs sm:text-sm leading-relaxed border-r border-slate-100 last:border-r-0">
                         {isMathEquation ? (
-                          <span className="font-mono text-cyan-700 bg-slate-50/90 px-2.5 py-1 rounded-lg border border-slate-200/90 inline-block font-semibold">
+                          <span className="font-mono text-cyan-800 bg-cyan-50/80 px-2.5 py-1 rounded-lg border border-cyan-200 inline-block font-semibold">
                             {processInlineFormatting(cell)}
                           </span>
                         ) : (
@@ -168,18 +240,18 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
       inTable = false;
     }
 
-    // Code block toggle
+    // Code block toggle (```lang)
     if (trimmed.startsWith('```')) {
       if (inCodeBlock) {
         elements.push(
-          <div key={`code-${index}`} className="my-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/90 font-mono text-xs sm:text-sm text-cyan-700 overflow-x-auto leading-relaxed shadow-md">
-            <pre>{codeBuffer.join('\n')}</pre>
-          </div>
+          <AppleCodeBlock key={`code-${index}`} code={codeBuffer.join('\n')} language={codeLang} />
         );
         codeBuffer = [];
+        codeLang = 'code';
         inCodeBlock = false;
       } else {
         inCodeBlock = true;
+        codeLang = trimmed.slice(3).trim() || 'code';
       }
       return;
     }
@@ -189,38 +261,67 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
       return;
     }
 
+    // Image (![alt](url))
+    const imgMatch = trimmed.match(/^!\[(.*?)\]\((https?:\/\/.*?)\)/);
+    if (imgMatch) {
+      const alt = imgMatch[1] || 'Architecture Diagram';
+      const src = imgMatch[2];
+      elements.push(
+        <div key={`img-${index}`} className="my-8 p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xl text-center">
+          <img 
+            src={src} 
+            alt={alt} 
+            className="max-h-[520px] w-auto mx-auto rounded-xl object-contain shadow-md hover:scale-[1.01] transition-transform duration-300" 
+            loading="lazy" 
+          />
+          {alt && <p className="text-xs text-slate-500 mt-3 font-semibold italic">🖼️ {alt}</p>}
+        </div>
+      );
+      return;
+    }
+
+    // Horizontal Rule (--- or ***)
+    if (trimmed === '---' || trimmed === '***') {
+      elements.push(<hr key={index} className="my-8 border-t-2 border-slate-200/80" />);
+      return;
+    }
+
     // Callout / Blockquote (> ...)
     if (trimmed.startsWith('> ')) {
       elements.push(
-        <div key={index} className="my-4 p-4 sm:p-5 rounded-2xl bg-cyan-950/30 border-l-4 border-cyan-400 text-sm sm:text-base text-cyan-200 font-medium shadow-md leading-relaxed">
+        <div key={index} className="my-7 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border-l-4 border-blue-600 text-sm sm:text-base text-slate-800 font-medium shadow-sm leading-relaxed">
           {processInlineFormatting(trimmed.slice(2))}
         </div>
       );
       return;
     }
 
-    // Headings
-    if (trimmed.startsWith('#### ')) {
+    // Major Section Heading (##)
+    if (trimmed.startsWith('## ')) {
       elements.push(
-        <h4 key={index} className="text-base sm:text-lg font-extrabold text-cyan-700 mt-6 mb-2.5">
-          {processInlineFormatting(trimmed.slice(5))}
-        </h4>
+        <h2 key={index} className="text-2xl sm:text-3xl font-black text-slate-900 mt-12 mb-6 pt-6 border-t-2 border-slate-200 tracking-tight">
+          {processInlineFormatting(trimmed.slice(3))}
+        </h2>
       );
       return;
     }
+
+    // Section / Step Heading (###)
     if (trimmed.startsWith('### ')) {
       elements.push(
-        <h3 key={index} className="text-lg sm:text-xl font-black text-slate-900 mt-7 mb-3 pb-1.5 border-b border-slate-200">
+        <h3 key={index} className="text-xl sm:text-2xl font-black text-slate-900 mt-10 mb-5 pb-2.5 border-b border-slate-200 tracking-tight">
           {processInlineFormatting(trimmed.slice(4))}
         </h3>
       );
       return;
     }
-    if (trimmed.startsWith('## ')) {
+
+    // Subheading (####)
+    if (trimmed.startsWith('#### ')) {
       elements.push(
-        <h2 key={index} className="text-xl sm:text-2xl font-black text-slate-900 mt-8 mb-4">
-          {processInlineFormatting(trimmed.slice(3))}
-        </h2>
+        <h4 key={index} className="text-base sm:text-lg font-extrabold text-blue-700 mt-8 mb-3.5 tracking-wide uppercase">
+          {processInlineFormatting(trimmed.slice(5))}
+        </h4>
       );
       return;
     }
@@ -228,9 +329,9 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     // Unordered List Items (- or *)
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       elements.push(
-        <div key={index} className="flex items-start gap-3 my-2 ml-2">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 mt-2 shrink-0 shadow-sm" />
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+        <div key={index} className="flex items-start gap-3 my-2.5 ml-2">
+          <span className="w-2 h-2 rounded-full bg-blue-600 mt-2 shrink-0 shadow-sm" />
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
             {processInlineFormatting(trimmed.slice(2))}
           </p>
         </div>
@@ -242,9 +343,9 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     const numberedMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
     if (numberedMatch) {
       elements.push(
-        <div key={index} className="flex items-start gap-3 my-2 ml-2">
-          <span className="text-sm font-extrabold text-cyan-600 shrink-0 mt-0.5 font-mono">{numberedMatch[1]}.</span>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+        <div key={index} className="flex items-start gap-3 my-2.5 ml-2">
+          <span className="text-sm font-extrabold text-blue-600 shrink-0 mt-0.5 font-mono bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">{numberedMatch[1]}.</span>
+          <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
             {processInlineFormatting(numberedMatch[2])}
           </p>
         </div>
@@ -254,13 +355,13 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
 
     // Empty lines
     if (!trimmed) {
-      elements.push(<div key={index} className="h-2" />);
+      elements.push(<div key={index} className="h-3" />);
       return;
     }
 
     // Normal Paragraph Text
     elements.push(
-      <p key={index} className="text-sm sm:text-base text-slate-600 leading-relaxed my-2.5 font-normal">
+      <p key={index} className="text-sm sm:text-base text-slate-700 leading-relaxed my-3 font-normal">
         {processInlineFormatting(line)}
       </p>
     );
@@ -270,7 +371,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     elements.push(renderTable(tableRows, 9999));
   }
 
-  return <div className="space-y-1">{elements}</div>;
+  return <div className="space-y-2">{elements}</div>;
 };
 
 export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
@@ -680,9 +781,11 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
                   {/* Code Editor Box */}
                   {getActiveCodeTemplate() && (
-                    <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 font-mono text-xs sm:text-sm overflow-x-auto text-cyan-700 leading-relaxed shadow-lg">
-                      <pre>{getActiveCodeTemplate()!.code}</pre>
-                    </div>
+                    <AppleCodeBlock 
+                      code={getActiveCodeTemplate()!.code} 
+                      language={selectedLang} 
+                      filename={`${topic.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.${selectedLang === 'cpp' ? 'cpp' : selectedLang === 'java' ? 'java' : selectedLang === 'javascript' ? 'js' : selectedLang === 'sql' ? 'sql' : 'py'}`} 
+                    />
                   )}
                 </div>
               )}
