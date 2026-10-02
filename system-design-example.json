@@ -1,0 +1,191 @@
+{
+  "title": "System Design: Scalable URL Shortener (TinyURL / Bitly)",
+  "interviewContext": {
+    "targetLevel": "SDE-2 / Senior Backend Engineer",
+    "evaluationCriteria": [
+      "Requirements clarification & Scope boundaries",
+      "Accurate back-of-the-envelope capacity estimations",
+      "Collision-free ID generation algorithms (ZooKeeper + Base-62)",
+      "Database schema & NoSQL choice justification",
+      "Low-latency caching (Redis 80/20 rule)",
+      "Deep understanding of HTTP Redirection (301 vs 302)",
+      "Asynchronous analytics processing pipeline",
+      "Resilient error handling, monitoring, and legal compliance"
+    ]
+  },
+  "step1_requirements": {
+    "functionalRequirements": [
+      "Shortening: Convert any long URL into a unique, compact short URL.",
+      "Redirection: Forward visitors from the short URL to the original long URL with minimal latency.",
+      "Custom Short Links (Vanity URLs): Allow users to define custom aliases (e.g., tiny.url/my-portfolio).",
+      "Expiration: Support an optional or default expiration date (e.g., 1 year of inactivity).",
+      "Analytics: Track engagement metrics (total clicks, referrers, device types, geolocations).",
+      "User Accounts: Enable user authentication to manage, edit, and delete their shortened links."
+    ],
+    "nonFunctionalRequirements": [
+      "High Availability: 99.99% uptime. The redirection service must remain accessible even if write servers lag.",
+      "Ultra-Low Latency: Real-time redirection with sub-10ms cache hits and sub-50ms database hits.",
+      "Strict Uniqueness: No two distinct long URLs may receive the same short alias unless explicitly intended.",
+      "Non-Predictable: Short URLs should be random and non-sequential to prevent scrapers from enumerating private URLs.",
+      "Scalability: Read-heavy system handling thousands of read requests per second smoothly."
+    ]
+  },
+  "step2_capacityEstimation": {
+    "assumptions": {
+      "newURLsPerDay": "80 Million writes/day",
+      "readToWriteRatio": "8:1 (Read-heavy architecture)",
+      "retentionPeriod": "5 years",
+      "averageURLSize": "90 bytes (Average Long URL size) + ~410 bytes metadata = ~500 bytes per record"
+    },
+    "trafficEstimations": {
+      "writeQPS": "80,000,000 / 86,400 seconds ≈ 926 requests/sec (Peak ≈ ~2,000 req/sec)",
+      "readQPS": "926 * 8 ≈ 7,408 requests/sec (Peak ≈ ~15,000 req/sec)"
+    },
+    "storageEstimations": {
+      "dailyStorage": "80 Million * 90 bytes = 7.2 GB/day (Raw URL) -> ~40 GB/day with indexes and metadata",
+      "totalRecordsIn5Years": "80 Million * 365 days * 5 years = 146 Billion records",
+      "fiveYearStorage": "146 Billion * ~450 bytes ≈ 65.7 TB (Total persistence footprint)"
+    },
+    "memoryAndCaching": {
+      "paretoPrinciple": "80-20 Rule: 20% of hot URLs generate 80% of read traffic.",
+      "totalDailyReads": "80 Million * 8 = 640 Million read requests/day",
+      "cacheMemoryNeeded": "0.20 * (640 Million * 500 bytes) = 64 GB RAM",
+      "verdict": "A standard multi-node Redis cluster with 64 GB to 128 GB memory easily holds all hot links in RAM using an LRU eviction policy."
+    }
+  },
+  "step3_coreConceptsAndAlgorithms": {
+    "base62Encoding": {
+      "definition": "A 62-character alphanumeric set consisting of [0-9] (10 digits), [a-z] (26 lowercase), and [A-Z] (26 uppercase).",
+      "whyNotBase64": "Base-64 introduces reserved URL characters like '+' and '/' which require percent-encoding (%2B, %2F) in query parameters.",
+      "lengthCapacityMath": {
+        "formula": "62^N where N is character length",
+        "length6": "62^6 = ~56.8 Billion unique URLs",
+        "length7": "62^7 = ~3.52 Trillion unique URLs (Easily exceeds our 146 Billion requirement for 5+ years)"
+      }
+    },
+    "md5HashVsBase62": {
+      "md5Approach": {
+        "howItWorks": "Hash the long URL using MD5 (128-bit hex digest) and take the first 6-7 characters.",
+        "fatalFlaw": "Hash Collisions! Different long URLs can yield identical 7-character prefixes. Resolving collisions requires database lookups, salting, and rehashing in loops, introducing unpredictable latency."
+      },
+      "counterBasedBase62Approach": {
+        "howItWorks": "Generate a globally unique 64-bit integer ID first, then convert that integer directly into Base-62.",
+        "advantage": "100% collision-free. Every unique integer maps to a unique Base-62 string with zero database collision retries."
+      }
+    },
+    "zookeeperRangeAllocation": {
+      "purpose": "Coordinates distributed unique integer range allocations across application servers without single points of failure.",
+      "howItWorks": [
+        "ZooKeeper maintains a global atomic counter in its ephemeral znode structure.",
+        "When App Server 1 boots up, it requests a range from ZooKeeper. ZooKeeper assigns [1,000,000 to 2,000,000].",
+        "When App Server 2 boots up, ZooKeeper assigns [2,000,001 to 3,000,000].",
+        "Each application server increments its local atomic counter in memory without making network calls.",
+        "When an app server exhausts its range, it queries ZooKeeper for the next unused range chunk (e.g., [3,000,001 to 4,000,000])."
+      ],
+      "faultTolerance": "If an app server crashes, only its remaining unallocated local range numbers are skipped, which is totally acceptable in a 3.5-trillion-capacity namespace."
+    },
+    "httpRedirection301vs302": {
+      "http301_PermanentRedirect": {
+        "behavior": "Browsers cache the redirection locally. Subsequent clicks go straight from browser cache to destination.",
+        "tradeOff": "Saves server load, BUT completely bypasses backend servers, making analytics and click tracking impossible."
+      },
+      "http302_TemporaryRedirect": {
+        "behavior": "Browsers always contact the URL shortener service on every click before redirecting.",
+        "tradeOff": "Slightly higher server traffic, BUT enables 100% accurate click analytics, bot inspection, and instant link revocation.",
+        "verdict": "Use HTTP 302 Found (or 307 Temporary Redirect) for tracking and monetization platforms."
+      }
+    }
+  },
+  "step4_dataModelAndDatabaseDesign": {
+    "databaseChoice": "NoSQL Distributed Key-Value / Wide-Column Store (Cassandra, DynamoDB, or MongoDB)",
+    "justification": [
+      "Access patterns are simple Key-Value lookups (no relational multi-table JOINs required).",
+      "Massive horizontal scaling across shards with multi-master replication.",
+      "Partition Key is `short_url_text`, providing O(1) single-partition lookups at multi-terabyte scale."
+    ],
+    "schemas": {
+      "urlTable": [
+        { "name": "short_url_id", "type": "BigInt (Unique internal ID)" },
+        { "name": "short_url_text", "type": "Varchar(7) (Partition Key)" },
+        { "name": "original_url", "type": "Text (Up to 2048 chars)" },
+        { "name": "user_id", "type": "BigInt (Indexed)" },
+        { "name": "created_at", "type": "Timestamp" },
+        { "name": "expires_at", "type": "Timestamp (TTL Index)" }
+      ],
+      "userTable": [
+        { "name": "user_id", "type": "BigInt (Primary Key)" },
+        { "name": "username", "type": "Varchar(50)" },
+        { "name": "email", "type": "Varchar(100) (Unique)" },
+        { "name": "password_hash", "type": "Varchar(255)" },
+        { "name": "created_at", "type": "Timestamp" }
+      ],
+      "clickAnalyticsTable": [
+        { "name": "click_id", "type": "UUID (Primary Key)" },
+        { "name": "short_url_text", "type": "Varchar(7) (Partition Key)" },
+        { "name": "clicked_at", "type": "Timestamp" },
+        { "name": "ip_address", "type": "Varchar(45)" },
+        { "name": "referring_url", "type": "Text" },
+        { "name": "country", "type": "Varchar(2)" },
+        { "name": "device_type", "type": "Varchar(20)" }
+      ]
+    }
+  },
+  "step5_systemArchitectureAndFlow": {
+    "components": [
+      "Clients: Mobile apps and Web browsers.",
+      "DNS / Anycast CDN: Terminates SSL and routes traffic to the nearest regional Point of Presence.",
+      "Load Balancer: Nginx / AWS ALB using Consistent Hashing to distribute load to healthy App Servers.",
+      "Application Servers: Stateless Flask / Go / Java services executing Base-62 conversions and redirect logic.",
+      "ZooKeeper Cluster: Manages distributed numeric ID sequence ranges.",
+      "Redis Cache: In-memory LRU cache storing the top 20% most active URLs.",
+      "Persistent Database: NoSQL cluster (Cassandra / DynamoDB) storing mapping data.",
+      "Async Analytics Pipeline: Kafka message queue + Spark/Flink consumers flushing metrics to ClickHouse / Snowflake."
+    ],
+    "writeFlow": [
+      "1. User sends POST /shorten request with the long URL (and optional custom alias / expiry).",
+      "2. Load balancer forwards request to an available application server.",
+      "3. If a custom alias is provided, the server verifies whether the alias is available and not a reserved keyword (e.g., 'admin', 'login').",
+      "4. If no custom alias is provided, the server fetches the next local sequential integer from its allocated ZooKeeper range.",
+      "5. The integer is encoded into a 7-character Base-62 short code.",
+      "6. The mapping is persisted to the database and pre-warmed in Redis cache.",
+      "7. The short URL is returned to the user."
+    ],
+    "readFlow": [
+      "1. User accesses short link (GET /{short_code}).",
+      "2. Request hits the Load Balancer and is assigned to an App Server.",
+      "3. App Server checks Redis Cache: On Cache Hit -> immediately sends HTTP 302 redirect with Location header.",
+      "4. On Cache Miss -> Server queries Database. If found, sets key in Redis with LRU policy and sends HTTP 302 redirect.",
+      "5. If link is expired or does not exist, returns HTTP 404.",
+      "6. Concurrently, an asynchronous telemetry event is emitted to Apache Kafka for analytics processing without slowing down user redirect."
+    ]
+  },
+  "step6_codeImplementations": {
+    "pythonFlaskMicroservice": "from flask import Flask, request, jsonify, redirect\nimport redis\nimport pymongo\nimport string\n\napp = Flask(__name__)\n\n# Database and Cache connections\nmongo_client = pymongo.MongoClient(\"mongodb://localhost:27017/\")\ndb = mongo_client[\"url_shortener\"]\nurls_collection = db[\"urls\"]\nredis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)\n\nBASE62_CHARS = string.digits + string.ascii_letters\n\ndef encode_base62(num):\n    if num == 0:\n        return BASE62_CHARS[0]\n    res = []\n    while num > 0:\n        num, rem = divmod(num, 62)\n        res.append(BASE62_CHARS[rem])\n    return ''.join(reversed(res))\n\n# Simulated ZooKeeper local counter\nlocal_counter = 1000000\n\n@app.route('/shorten', methods=['POST'])\ndef shorten_url():\n    global local_counter\n    data = request.get_json() or {}\n    long_url = data.get('url')\n    custom_alias = data.get('custom_alias')\n\n    if not long_url:\n        return jsonify({'error': 'URL is required'}), 400\n\n    if custom_alias:\n        if urls_collection.find_one({'_id': custom_alias}):\n            return jsonify({'error': 'Custom alias already taken'}), 409\n        short_code = custom_alias\n    else:\n        local_counter += 1\n        short_code = encode_base62(local_counter)\n\n    urls_collection.insert_one({'_id': short_code, 'long_url': long_url})\n    redis_client.set(short_code, long_url, ex=86400) # Cache for 24h\n\n    return jsonify({'short_url': request.host_url + short_code}), 201\n\n@app.route('/<string:short_code>', methods=['GET'])\ndef resolve_url(short_code):\n    # 1. Cache hit check\n    cached_url = redis_client.get(short_code)\n    if cached_url:\n        return redirect(cached_url, code=302)\n\n    # 2. Database lookup\n    record = urls_collection.find_one({'_id': short_code})\n    if record:\n        original_url = record['long_url']\n        redis_client.set(short_code, original_url, ex=86400)\n        return redirect(original_url, code=302)\n\n    return jsonify({'error': 'Short URL not found'}), 404\n\nif __name__ == '__main__':\n    app.run(port=5000, debug=True)",
+    "zookeeperKazooClient": "from kazoo.client import KazooClient\n\nclass ZooKeeperRangeAllocator:\n    def __init__(self, zk_hosts='127.0.0.1:2181', range_size=1000000):\n        self.zk = KazooClient(hosts=zk_hosts)\n        self.zk.start()\n        self.range_size = range_size\n        self.range_path = \"/url_shortener/global_counter\"\n        self._ensure_node()\n\n    def _ensure_node(self):\n        if not self.zk.exists(self.range_path):\n            self.zk.create(self.range_path, b\"1000000\", makepath=True)\n\n    def get_next_range(self):\n        # Atomic compare-and-swap loop to obtain next range window\n        while True:\n            data, stat = self.zk.get(self.range_path)\n            current_val = int(data.decode())\n            next_val = current_val + self.range_size\n            try:\n                self.zk.set(self.range_path, str(next_val).encode(), version=stat.version)\n                return current_val, next_val - 1\n            except Exception:\n                continue # Retry on concurrent collision\n\n# Example usage\n# allocator = ZooKeeperRangeAllocator()\n# start_id, end_id = allocator.get_next_range()\n# print(f\"Server assigned range: [{start_id}, {end_id}]\")",
+    "javaLowLevelDesign": "import java.util.concurrent.ConcurrentHashMap;\nimport java.util.concurrent.atomic.AtomicLong;\nimport java.util.Map;\n\npublic class URLShortenerService {\n    private static final String BASE62 = \"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";\n    private final Map<String, String> shortToLongMap = new ConcurrentHashMap<>();\n    private final Map<String, String> longToShortMap = new ConcurrentHashMap<>();\n    private final AtomicLong counter = new AtomicLong(10000000L);\n\n    public String shortenURL(String originalURL) {\n        if (longToShortMap.containsKey(originalURL)) {\n            return longToShortMap.get(originalURL);\n        }\n        long id = counter.incrementAndGet();\n        String shortCode = encodeBase62(id);\n        shortToLongMap.put(shortCode, originalURL);\n        longToShortMap.put(originalURL, shortCode);\n        return \"https://tiny.url/\" + shortCode;\n    }\n\n    public String getOriginalURL(String shortCode) {\n        return shortToLongMap.get(shortCode);\n    }\n\n    private String encodeBase62(long num) {\n        StringBuilder sb = new StringBuilder();\n        while (num > 0) {\n            sb.append(BASE62.charAt((int) (num % 62)));\n            num /= 62;\n        }\n        return sb.reverse().toString();\n    }\n}"
+  },
+  "step7_advancedOperationalConcerns": {
+    "linkExpirationHandling": {
+      "problem": "Running periodic batch scripts like `DELETE FROM urls WHERE expires_at < NOW()` locks tables and triggers heavy disk IOPS.",
+      "solution": "Combine two patterns: (1) Lazy / Passive Expiration on read (if current timestamp > expiry timestamp, return 404 and evict from cache); (2) Native Database TTL policies (Redis EXPIRE and DynamoDB TTL daemons clean up cold dead records in the background without affecting app servers)."
+    },
+    "securityAndAbusePrevention": {
+      "rateLimiting": "Enforce Token Bucket or Sliding Window rate limiting per IP / API token at the API Gateway level (e.g., 50 req/min for free users) to prevent automated link-generation spam.",
+      "malwareAndPhishingDefense": "Integrate Google Safe Browsing API or a Bloom filter blacklist on the write path to intercept known malicious domains before generating short aliases."
+    },
+    "loggingMonitoringAndAlerting": {
+      "telemetry": "Export P99 read/write latency, Cache Hit Ratio, and 4xx/5xx HTTP error rate metrics into Prometheus and visualize via Grafana.",
+      "alerting": "Trigger automated PagerDuty / SMTP alerts if Redis cache hit ratio drops below 70% or 5xx server errors exceed 1% over a 5-minute rolling window."
+    }
+  }
+}
+
+    {
+        "image link":"https://miro.medium.com/v2/resize:fit:1100/format:webp/1*7dFPsnGcWR0HwEi6-i4WIA.png",
+        "zookeeper_img":"https://miro.medium.com/v2/resize:fit:786/format:webp/0*5TH7Z6AYa1npDJIC",
+        "kafka_img":"https://miro.medium.com/v2/resize:fit:1200/format:webp/1*uO7v800o-H4RjT3mQ_9NRA.png",
+        "redis_img":"https://i.stack.imgur.com/lKCQ8.png"
+    }
+
+
+

@@ -326,7 +326,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
               }}
               searchable={true}
               searchPlaceholder="Search modules..."
-              dropdownWidth="w-full md:w-96"
+              dropdownWidth="w-[calc(100vw-32px)] sm:w-80 md:w-[380px]"
             />
           </div>
 
@@ -344,7 +344,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
               onChange={(val) => setSelectedTopicId(val)}
               searchable={true}
               searchPlaceholder="Search topic name..."
-              dropdownWidth="w-full md:w-96"
+              dropdownWidth="w-[calc(100vw-32px)] sm:w-80 md:w-[400px]"
             />
           </div>
 
@@ -362,7 +362,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
               ]}
               value={selectedDifficulty}
               onChange={(val) => setSelectedDifficulty(val as any)}
-              dropdownWidth="w-full md:w-56"
+              dropdownWidth="w-[calc(100vw-32px)] sm:w-64"
             />
           </div>
 
@@ -381,7 +381,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
               ]}
               value={selectedStatus}
               onChange={(val) => setSelectedStatus(val as any)}
-              dropdownWidth="w-full md:w-56"
+              dropdownWidth="w-[calc(100vw-32px)] sm:w-64"
             />
           </div>
 

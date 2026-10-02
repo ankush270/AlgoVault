@@ -31,9 +31,9 @@ export function CustomDropdown<T extends string = string>({
   placeholder = 'Select option',
   searchable = false,
   searchPlaceholder = 'Search options...',
-  dropdownWidth = 'w-56',
-  alignRight = true,
-  className = '',
+  dropdownWidth = 'w-full min-w-[280px] sm:min-w-[340px] max-w-[calc(100vw-24px)]',
+  alignRight = false,
+  className = 'w-full',
   buttonClassName = '',
 }: CustomDropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,11 +62,11 @@ export function CustomDropdown<T extends string = string>({
   }, [options, filterQuery, searchable]);
 
   return (
-    <div className={`relative inline-block ${isOpen ? 'z-[100]' : 'z-10'} ${className}`} ref={dropdownRef}>
+    <div className={`relative ${className} ${isOpen ? 'z-[100]' : 'z-10'}`} ref={dropdownRef}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center justify-between gap-2 border shadow-sm rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 ${
+        className={`w-full flex items-center justify-between gap-2 border shadow-sm rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 ${
           isOpen
             ? 'bg-blue-50 border-blue-400 text-blue-700 ring-2 ring-blue-100'
             : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
@@ -86,7 +86,7 @@ export function CustomDropdown<T extends string = string>({
 
       {isOpen && (
         <div
-          className={`absolute ${alignRight ? 'right-0' : 'left-0'} top-full mt-2 ${dropdownWidth} max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-2xl shadow-md z-[100] p-1.5 space-y-0.5 text-xs sm:text-sm animate-fadeIn`}
+          className={`absolute ${alignRight ? 'right-0' : 'left-0'} top-full mt-2 ${dropdownWidth} max-h-72 overflow-y-auto bg-white border border-slate-200 rounded-2xl shadow-xl z-[100] p-1.5 space-y-0.5 text-xs sm:text-sm animate-fadeIn`}
         >
           {searchable && (
             <div className="p-1 mb-1 border-b border-slate-100 sticky top-0 bg-white z-[101]">
@@ -101,7 +101,7 @@ export function CustomDropdown<T extends string = string>({
                   autoFocus
                 />
                 {filterQuery && (
-                  <button onClick={() => setFilterQuery('')} className="text-slate-400 hover:text-slate-700">
+                  <button onClick={() => setFilterQuery('')} className="text-slate-400 hover:text-slate-700 p-0.5">
                     <X size={13} />
                   </button>
                 )}
@@ -123,15 +123,15 @@ export function CustomDropdown<T extends string = string>({
                     setIsOpen(false);
                     setFilterQuery('');
                   }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left font-medium transition-all duration-150 ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-medium transition-all duration-150 ${
                     isSelected
                       ? 'bg-blue-50 text-blue-700 border border-blue-200 font-bold'
                       : `${opt.color || 'text-slate-700'} hover:bg-slate-50 hover:text-slate-900 border border-transparent`
                   }`}
                 >
-                  <span className="flex items-center gap-2 truncate pr-2">
+                  <span className="flex items-center gap-2.5 min-w-0 pr-2">
                     {opt.icon && <span className="shrink-0">{opt.icon}</span>}
-                    <span className="truncate">{opt.label}</span>
+                    <span className="leading-snug break-words">{opt.label}</span>
                   </span>
                   <span className="flex items-center gap-2 shrink-0">
                     {opt.badge && (

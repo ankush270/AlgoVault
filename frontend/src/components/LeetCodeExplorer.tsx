@@ -109,38 +109,38 @@ function CustomDropdown<T extends string = string>({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between gap-2 bg-slate-50/90 border px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+        className={`w-full flex items-center justify-between gap-2 bg-white border px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-sm ${
           isOpen
-            ? 'border-cyan-500/80 ring-1 ring-cyan-500/50 text-white shadow-[0_0_15px_-3px_rgba(6,182,212,0.25)]'
-            : 'border-slate-200 text-slate-600 hover:border-slate-200 hover:text-slate-900'
+            ? 'border-blue-500 text-blue-700 bg-blue-50 ring-2 ring-blue-100'
+            : 'border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
         }`}
       >
-        <div className="flex items-center gap-2 truncate">
+        <div className="flex items-center gap-2 truncate min-w-0">
           {icon || selectedOption?.icon}
           <span className="truncate">{selectedOption?.label}</span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-cyan-600' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-600' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-slate-200 shadow-lg rounded-2xl p-1.5 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 max-h-72 flex flex-col">
+        <div className="absolute left-0 right-0 top-full mt-2 z-50 bg-white border border-slate-200 shadow-xl rounded-2xl p-1.5 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 max-h-72 flex flex-col min-w-[260px]">
           {searchable && (
-            <div className="p-1.5 pb-2 border-b border-slate-200 relative">
+            <div className="p-1.5 pb-2 border-b border-slate-100 relative">
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
                 placeholder={searchPlaceholder}
-                className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                 autoFocus
               />
             </div>
           )}
 
-          <div className="overflow-y-auto max-h-56 space-y-0.5 pt-1 scrollbar-thin scrollbar-thumb-slate-800">
+          <div className="overflow-y-auto max-h-56 space-y-0.5 pt-1 scrollbar-thin scrollbar-thumb-slate-200">
             {filteredOptions.length === 0 ? (
-              <div className="p-3 text-xs text-slate-500 text-center">No options found</div>
+              <div className="p-3 text-xs sm:text-sm text-slate-400 text-center italic">No options found</div>
             ) : (
               filteredOptions.map((opt) => {
                 const isSelected = opt.value === value;
@@ -153,24 +153,24 @@ function CustomDropdown<T extends string = string>({
                       setIsOpen(false);
                       setFilterQuery('');
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-left transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/15 text-cyan-700 font-bold border border-cyan-200'
-                        : 'text-slate-500 hover:bg-indigo-50 hover:text-white'
+                        ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                        : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
                     }`}
                   >
-                    <div className="flex items-center gap-2 truncate">
-                      {opt.icon}
-                      <span className="truncate">{opt.label}</span>
+                    <div className="flex items-center gap-2 min-w-0 pr-2">
+                      {opt.icon && <span className="shrink-0">{opt.icon}</span>}
+                      <span className="leading-snug break-words">{opt.label}</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
                       {opt.badge && (
-                        <span className="text-[10px] text-slate-400 bg-slate-50 px-1.5 py-0.5 rounded font-mono">
+                        <span className="text-[10px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-medium border border-slate-200">
                           {opt.badge}
                         </span>
                       )}
-                      {isSelected && <Check className="w-3.5 h-3.5 text-cyan-600 shrink-0" />}
+                      {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
                     </div>
                   </button>
                 );
