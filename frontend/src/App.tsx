@@ -19,6 +19,7 @@ import { TricksExplorer } from './components/TricksExplorer';
 import { JobExplorer } from './components/JobExplorer';
 import { SystemDesignCanvas } from './components/SystemDesignCanvas';
 import { SystemDesignHub } from './components/SystemDesignHub';
+import { AzureHub } from './components/AzureHub';
 import { LiveCodingArena } from './components/LiveCodingArena';
 import { CheatSheetReadinessHub } from './components/CheatSheetReadinessHub';
 import { AuthModal } from './components/AuthModal';
@@ -63,6 +64,8 @@ const tabRoutes: Record<string, string> = {
   '/pdf-readiness': 'pdf-readiness',
   '/notes': 'notes',
   '/jobs': 'jobs',
+  '/azure': 'azure-hub',
+  '/azure-hub': 'azure-hub',
 };
 
 function parseCurrentRoute(): {
@@ -109,6 +112,7 @@ function getPathForState(tab: string, domain?: DomainType | 'all'): string {
     case 'analytics': return '/analytics';
     case 'notes': return '/notes';
     case 'jobs': return '/jobs';
+    case 'azure-hub': return '/azure';
     default: return '/';
   }
 }
@@ -255,6 +259,13 @@ export const AppContent: React.FC = () => {
 
           {activeTab === 'system-design-hub' && (
             <SystemDesignHub
+              onSelectTopic={handleSelectTopic}
+              onOpenNote={handleOpenNote}
+            />
+          )}
+
+          {activeTab === 'azure-hub' && (
+            <AzureHub
               onSelectTopic={handleSelectTopic}
               onOpenNote={handleOpenNote}
             />

@@ -13,6 +13,7 @@ import { oopsTopics } from './oopsTopics';
 import { javascriptTopics } from './javascriptTopics';
 import { reactTopics } from './reactTopics';
 import { nodeTopics } from './nodeTopics';
+import { azureTopics } from './azureLoader';
 
 export const allTopics: TopicItem[] = [
   ...dsaTopics,
@@ -21,6 +22,7 @@ export const allTopics: TopicItem[] = [
   ...systemDesignExampleTopics,
   ...systemDesignQuestionTopics,
   ...lldTopics,
+  ...azureTopics,
   ...osTopics,
   ...dbmsSqlTopics,
   ...networksTopics,

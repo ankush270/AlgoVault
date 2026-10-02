@@ -9,7 +9,8 @@ export type DomainType =
   | 'object-oriented-programming'
   | 'javascript'
   | 'react'
-  | 'nodejs';
+  | 'nodejs'
+  | 'azure';
 
 export type Difficulty = 'Easy' | 'Medium' | 'Hard';
 

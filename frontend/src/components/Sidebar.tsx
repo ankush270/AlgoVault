@@ -22,7 +22,8 @@ import {
   Sparkles,
   Atom,
   Server,
-  Swords
+  Swords,
+  Cloud
 } from 'lucide-react';
 import { DomainType } from '../types';
 
@@ -71,6 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'striver-a2z', label: "DSA Sheet", icon: Flame },
     { id: 'system-design-canvas', label: 'System Design Studio', icon: Layers, badge: 'NEW', badgeColor: 'bg-blue-100 text-blue-700' },
     { id: 'system-design-hub', label: 'System Design Hub', icon: Server, badge: 'HOT', badgeColor: 'bg-purple-100 text-purple-700' },
+    { id: 'azure-hub', label: 'Microsoft Azure', icon: Cloud, badge: 'NEW', badgeColor: 'bg-sky-100 text-sky-700' },
     { id: 'leetcode-explorer', label: 'LeetCode Explorer', icon: Building2 },
     { id: 'algorithms', label: 'Algorithms Encyclopedia', icon: BookOpen },
     { id: 'sql-sandbox', label: 'SQL Sandbox', icon: Terminal },
