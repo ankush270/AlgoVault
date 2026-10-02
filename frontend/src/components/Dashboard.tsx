@@ -240,7 +240,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-extrabold text-white tracking-tight">Interview Domains & Core Subjects</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Interview Domains & Core Subjects</h2>
             <p className="text-sm text-slate-500 mt-0.5">Select a subject to dive into structured modules and flashcards</p>
           </div>
           <button 

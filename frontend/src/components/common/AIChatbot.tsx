@@ -187,17 +187,17 @@ export const AIChatbot: React.FC = () => {
             setIsOpen(true);
             setIsMinimized(false);
           }}
-          className="fixed bottom-6 right-6 z-[9999] group flex items-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-900 px-4 py-3 rounded-full shadow-lg hover:shadow-cyan-500/25 border border-cyan-400/30 backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95 animate-bounce-subtle"
+          className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] group flex items-center gap-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-lg hover:shadow-cyan-500/25 border border-cyan-400/30 backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95 animate-bounce-subtle"
           title="Open Sarvam AI Assistant"
         >
           <div className="relative">
-            <Bot size={22} className="text-slate-900 drop-shadow" />
+            <Bot size={20} className="text-white drop-shadow" />
             <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-300"></span>
             </span>
           </div>
-          <span className="font-bold text-xs tracking-wide hidden sm:inline-block">AlgoVault AI</span>
+          <span className="font-bold text-xs tracking-wide text-white hidden sm:inline-block">AlgoVault AI</span>
           <span className="px-2 py-0.5 text-[10px] font-extrabold bg-black/30 backdrop-blur-md rounded-full text-cyan-200 border border-white/10 uppercase tracking-wider">
             Sarvam 105B
           </span>
@@ -207,48 +207,48 @@ export const AIChatbot: React.FC = () => {
       {/* Expanded Chat Window */}
       {isOpen && (
         <div
-          className={`fixed bottom-6 right-6 z-[9999] w-[92vw] sm:w-[420px] bg-slate-50/95 border border-slate-200/90 rounded-3xl shadow-lg backdrop-blur-2xl transition-all duration-300 flex flex-col overflow-hidden ${
-            isMinimized ? 'h-16' : 'h-[580px] max-h-[85vh]'
+          className={`fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[9999] w-[calc(100vw-24px)] sm:w-[420px] bg-white border border-slate-200 rounded-3xl shadow-2xl backdrop-blur-2xl transition-all duration-300 flex flex-col overflow-hidden ${
+            isMinimized ? 'h-16' : 'h-[500px] sm:h-[580px] max-h-[78vh]'
           }`}
         >
           {/* Top Bar Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-900 via-indigo-950/80 to-slate-900 border-b border-slate-200 shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-slate-800 shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="relative p-2 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-xl shadow-md border border-cyan-400/30">
-                <Sparkles size={16} className="text-slate-900 animate-pulse" />
+                <Sparkles size={16} className="text-white animate-pulse" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-bold text-sm text-slate-900 tracking-tight">AlgoVault AI</h3>
-                  <span className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.2 bg-emerald-50 text-emerald-700 border border-emerald-500/40 rounded-full">
+                  <h3 className="font-bold text-sm text-white tracking-tight">AlgoVault AI</h3>
+                  <span className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 rounded-full">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                     Sarvam 105B
                   </span>
                 </div>
-                <p className="text-[10px] text-slate-400">CS & Interview Preparation Assistant</p>
+                <p className="text-[10px] text-slate-300">CS & Interview Preparation Assistant</p>
               </div>
             </div>
 
             {/* Header Actions */}
-            <div className="flex items-center gap-1 text-slate-400">
+            <div className="flex items-center gap-1 text-slate-300">
               <button
                 onClick={clearChat}
                 title="Clear Conversation"
-                className="p-1.5 hover:text-red-400 hover:bg-slate-50 rounded-lg transition-colors"
+                className="p-1.5 hover:text-red-400 hover:bg-white/10 rounded-lg transition-colors"
               >
                 <Trash2 size={15} />
               </button>
               <button
                 onClick={() => setIsMinimized(!isMinimized)}
                 title={isMinimized ? 'Expand' : 'Minimize'}
-                className="p-1.5 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                className="p-1.5 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
               >
                 {isMinimized ? <ChevronDown size={16} /> : <Minimize2 size={15} />}
               </button>
               <button
                 onClick={() => setIsOpen(false)}
                 title="Close Chat"
-                className="p-1.5 hover:text-slate-900 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-colors"
+                className="p-1.5 hover:text-red-400 hover:bg-white/10 rounded-lg transition-colors"
               >
                 <X size={16} />
               </button>
@@ -258,7 +258,7 @@ export const AIChatbot: React.FC = () => {
           {/* Chat Body */}
           {!isMinimized && (
             <>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-800 text-xs">
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-200 text-xs bg-slate-50/50">
                 {messages.map((msg) => {
                   const isUser = msg.role === 'user';
                   return (
@@ -270,8 +270,8 @@ export const AIChatbot: React.FC = () => {
                       <div
                         className={`h-7 w-7 rounded-xl flex items-center justify-center shrink-0 text-xs shadow-md border ${
                           isUser
-                            ? 'bg-blue-600 text-white border-blue-200'
-                            : 'bg-gradient-to-br from-indigo-900 to-slate-900 text-cyan-700 border-cyan-200'
+                            ? 'bg-blue-600 text-white border-blue-500'
+                            : 'bg-gradient-to-br from-indigo-900 to-slate-900 text-cyan-300 border-indigo-700'
                         }`}
                       >
                         {isUser ? <User size={14} /> : <Bot size={15} />}
@@ -282,13 +282,13 @@ export const AIChatbot: React.FC = () => {
                         <div
                           className={`px-3.5 py-2.5 rounded-2xl shadow-sm leading-relaxed ${
                             isUser
-                              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-slate-900 rounded-tr-none font-medium'
-                              : 'bg-slate-50 border border-slate-200 text-slate-600 rounded-tl-none'
+                              ? 'bg-blue-600 text-white rounded-tr-none font-medium'
+                              : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none'
                           }`}
                         >
                           {renderFormattedMessage(msg.content)}
                         </div>
-                        <span className="text-[9px] text-slate-500 block px-1">
+                        <span className="text-[9px] text-slate-400 block px-1">
                           {msg.timestamp}
                         </span>
                       </div>
@@ -302,12 +302,12 @@ export const AIChatbot: React.FC = () => {
                     <div className="h-7 w-7 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-cyan-600 shrink-0">
                       <Loader2 size={14} className="animate-spin" />
                     </div>
-                    <div className="px-3.5 py-2 bg-white border border-slate-200 rounded-2xl rounded-tl-none flex items-center gap-1.5">
-                      <span className="text-slate-400 text-[11px]">Sarvam AI is thinking</span>
+                    <div className="px-3.5 py-2 bg-white border border-slate-200 rounded-2xl rounded-tl-none flex items-center gap-1.5 shadow-sm">
+                      <span className="text-slate-500 text-[11px]">Sarvam AI is thinking</span>
                       <span className="flex gap-1">
-                        <span className="h-1.5 w-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                        <span className="h-1.5 w-1.5 bg-cyan-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                        <span className="h-1.5 w-1.5 bg-cyan-400 rounded-full animate-bounce"></span>
+                        <span className="h-1.5 w-1.5 bg-cyan-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                        <span className="h-1.5 w-1.5 bg-cyan-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                        <span className="h-1.5 w-1.5 bg-cyan-500 rounded-full animate-bounce"></span>
                       </span>
                     </div>
                   </div>
@@ -318,14 +318,14 @@ export const AIChatbot: React.FC = () => {
 
               {/* Quick Suggestion Chips - Clean Flex Wrap (No Horizontal Scroll) */}
               {messages.length <= 3 && !loading && (
-                <div className="px-3 py-2 bg-slate-50/80 border-t border-slate-200 flex flex-wrap gap-1.5">
+                <div className="px-3 py-2 bg-slate-50 border-t border-slate-200 flex flex-wrap gap-1.5">
                   {suggestions.map((chip, i) => (
                     <button
                       key={i}
                       onClick={() => handleSend(chip.replace(/^[^\s]+\s*/, ''))}
-                      className="px-2.5 py-1 text-[10.5px] bg-slate-100/90 hover:bg-cyan-500/20 text-slate-500 hover:text-cyan-700 border border-slate-200 hover:border-cyan-500/40 rounded-xl transition-all shrink-0 flex items-center gap-1"
+                      className="px-2.5 py-1 text-[10.5px] bg-white hover:bg-blue-50 text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-300 rounded-xl transition-all shrink-0 flex items-center gap-1 shadow-sm"
                     >
-                      <Zap size={10} className="text-amber-600" />
+                      <Zap size={10} className="text-amber-500" />
                       {chip}
                     </button>
                   ))}
@@ -333,27 +333,27 @@ export const AIChatbot: React.FC = () => {
               )}
 
               {/* Input Area */}
-              <div className="p-3 bg-slate-50 border-t border-slate-200 shrink-0">
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 focus-within:border-cyan-500/60 focus-within:ring-1 focus-within:ring-cyan-500/30 rounded-2xl px-3 py-1.5 transition-all">
+              <div className="p-3 bg-white border-t border-slate-200 shrink-0">
+                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 rounded-2xl px-3 py-1.5 transition-all">
                   <input
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask Sarvam AI about DSA, OS, DBMS..."
-                    className="flex-1 bg-transparent text-xs text-white placeholder-slate-500 focus:outline-none py-1"
+                    className="flex-1 bg-transparent text-xs text-slate-800 placeholder-slate-400 focus:outline-none py-1"
                     disabled={loading}
                   />
                   <button
                     onClick={() => handleSend()}
                     disabled={!input.trim() || loading}
-                    className="p-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-slate-900 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0 shadow-md"
+                    className="p-1.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all shrink-0 shadow-sm"
                     title="Send Message"
                   >
                     {loading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                   </button>
                 </div>
-                <div className="mt-1.5 flex items-center justify-between text-[9.5px] text-slate-500 px-1">
+                <div className="mt-1.5 flex items-center justify-between text-[9.5px] text-slate-400 px-1">
                   <span>Powered by Sarvam 105B</span>
                   <span>Press Enter to send</span>
                 </div>

@@ -279,21 +279,23 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border-light);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
-  padding: 6px 8px calc(env(safe-area-inset-bottom, 4px) + 6px) 8px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  padding: 4px 8px calc(env(safe-area-inset-bottom, 4px) + 4px) 8px;
 }
 
 .bottom-nav-item {
+  min-height: unset !important;
+  height: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 6px 4px;
+  padding: 4px 4px;
   border-radius: 12px;
   font-size: 10px;
   font-weight: 600;
@@ -354,8 +356,8 @@
 
 /* ── Touch-friendly sizing for mobile ── */
 @media (max-width: 768px) {
-  button, a, [role="button"] {
-    min-height: 44px;
+  button:not(.bottom-nav-item), a, [role="button"] {
+    min-height: 40px;
   }
 
   .card-surface {
@@ -363,13 +365,13 @@
   }
 }
 
-/* ── Safe area padding for bottom nav ── */
+/* ── Safe area padding for bottom nav & floating action items ── */
 .pb-safe-nav {
-  padding-bottom: calc(72px + env(safe-area-inset-bottom, 8px));
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 16px));
 }
 
 @media (min-width: 1024px) {
   .pb-safe-nav {
-    padding-bottom: 0;
+    padding-bottom: 24px;
   }
 }
