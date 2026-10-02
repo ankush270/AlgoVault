@@ -55,10 +55,10 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
   ];
 
   const difficultyOptions = [
-    { value: 'all', label: 'All Difficulties', color: 'text-slate-300' },
-    { value: 'Easy', label: 'Easy', icon: '🟢', color: 'text-emerald-400' },
-    { value: 'Medium', label: 'Medium', icon: '🟡', color: 'text-amber-400' },
-    { value: 'Hard', label: 'Hard', icon: '🔴', color: 'text-rose-400' },
+    { value: 'all', label: 'All Difficulties', color: 'text-slate-500' },
+    { value: 'Easy', label: 'Easy', icon: '🟢', color: 'text-emerald-600' },
+    { value: 'Medium', label: 'Medium', icon: '🟡', color: 'text-amber-600' },
+    { value: 'Hard', label: 'Hard', icon: '🔴', color: 'text-rose-600' },
   ];
 
   const statusOptions = [
@@ -70,10 +70,10 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
   return (
     <div
       ref={containerRef}
-      className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-[#0D1322]/90 border border-slate-800/90 backdrop-blur-xl relative shadow-xl"
+      className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-white/90 border border-slate-200/90 backdrop-blur-xl relative shadow-md"
     >
       {/* Search & Action Row */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-[#0D1322]/90 border border-slate-800/90 backdrop-blur-xl relative shadow-xl">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 p-4 rounded-2xl bg-white/90 border border-slate-200/90 backdrop-blur-xl relative shadow-md">
         {/* Search Input */}
         <div className="relative flex-1 min-w-[240px]">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -82,12 +82,12 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={`Search ${totalProblemsCount} problems, concepts, tags...`}
-            className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/80 rounded-xl pl-10 pr-8 py-2.5 text-xs text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+            className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500/80 rounded-xl pl-10 pr-8 py-2.5 text-xs text-slate-900 placeholder-slate-400 outline-none transition-all shadow-sm"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-900"
             >
               ✕
             </button>
@@ -97,19 +97,19 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
         {/* Controls Group */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Expand / Collapse All Topics Button */}
-          <div className="flex items-center border border-slate-800 bg-slate-950 rounded-xl overflow-hidden p-0.5">
+          <div className="flex items-center border border-slate-200 bg-slate-50 rounded-xl overflow-hidden p-0.5">
             <button
               onClick={expandAllTopics}
-              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-cyan-300 hover:bg-slate-900 rounded-lg transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-cyan-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
               title="Expand All Topic Categories"
             >
               <Maximize2 size={13} />
               <span>Expand</span>
             </button>
-            <div className="w-[1px] h-4 bg-slate-800" />
+            <div className="w-[1px] h-4 bg-slate-100" />
             <button
               onClick={collapseAllTopics}
-              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-amber-300 hover:bg-slate-900 rounded-lg transition-all flex items-center gap-1.5"
+              className="px-3 py-1.5 text-[11px] font-bold text-slate-400 hover:text-amber-700 hover:bg-white rounded-lg transition-all flex items-center gap-1.5"
               title="Collapse All Topic Categories"
             >
               <Minimize2 size={13} />
@@ -127,7 +127,7 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
             }}
             isOpen={openDropdown === 'topic'}
             onToggle={() => setOpenDropdown(openDropdown === 'topic' ? null : 'topic')}
-            buttonIcon={<FolderTree size={14} className="text-cyan-400" />}
+            buttonIcon={<FolderTree size={14} className="text-cyan-600" />}
             dropdownWidth="w-64"
           />
 
@@ -159,16 +159,16 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
       </div>
 
       {/* Topic Category Quick-Filter Buttons (Array, String, Graph, DP, etc.) */}
-      <div className="p-3.5 rounded-2xl bg-[#0D1322]/80 border border-slate-800/90 backdrop-blur-xl shadow-lg space-y-2.5">
-        <div className="flex items-center justify-between px-1 text-xs font-bold text-slate-300">
-          <span className="flex items-center gap-1.5 text-cyan-400">
+      <div className="p-3.5 rounded-2xl bg-white/80 border border-slate-200/90 backdrop-blur-xl shadow-lg space-y-2.5">
+        <div className="flex items-center justify-between px-1 text-xs font-bold text-slate-500">
+          <span className="flex items-center gap-1.5 text-cyan-600">
             <FolderTree size={14} />
             <span>Click Topic Name to Show Only That Category:</span>
           </span>
           {selectedTopicFilter !== 'all' && (
             <button
               onClick={() => setSelectedTopicFilter('all')}
-              className="text-[11px] text-cyan-400 hover:underline font-semibold"
+              className="text-[11px] text-cyan-600 hover:underline font-semibold"
             >
               Reset to All Topics
             </button>
@@ -180,8 +180,8 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
             onClick={() => setSelectedTopicFilter('all')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               selectedTopicFilter === 'all'
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20 scale-[1.02]'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-200 scale-[1.02]'
+                : 'bg-slate-50 text-slate-400 hover:text-slate-900 border border-slate-200'
             }`}
           >
             📂 All Topics
@@ -196,7 +196,7 @@ export const SheetFilters: React.FC<SheetFiltersProps> = ({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
                   isSelected
                     ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-md shadow-cyan-500/25 scale-[1.02] border border-cyan-400/40'
-                    : 'bg-slate-950/90 text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800/90'
+                    : 'bg-slate-50/90 text-slate-500 hover:text-slate-900 hover:bg-white border border-slate-200/90'
                 }`}
               >
                 <span>{cat.icon}</span>

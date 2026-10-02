@@ -14,17 +14,17 @@ export const DifficultyBadge: React.FC<DifficultyBadgeProps> = ({
 }) => {
   const diffLower = (difficulty || 'medium').toLowerCase();
 
-  let colorClasses = 'bg-slate-800 text-slate-300 border-slate-700';
+  let colorClasses = 'bg-slate-100 text-slate-500 border-slate-200';
   let dotColor = 'bg-slate-400';
 
   if (diffLower === 'easy') {
-    colorClasses = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+    colorClasses = 'bg-emerald-50 text-emerald-600 border-emerald-500/20';
     dotColor = 'bg-emerald-400';
   } else if (diffLower === 'medium') {
-    colorClasses = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+    colorClasses = 'bg-amber-50 text-amber-600 border-amber-500/20';
     dotColor = 'bg-amber-400';
   } else if (diffLower === 'hard') {
-    colorClasses = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+    colorClasses = 'bg-rose-50 text-rose-600 border-rose-500/20';
     dotColor = 'bg-rose-400';
   }
 

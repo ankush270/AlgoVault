@@ -31,14 +31,14 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
 }) => {
   return (
     <div className="space-y-4">
-      <div className="p-4 rounded-2xl bg-[#0D1322] border border-slate-800 space-y-3.5 shadow-xl">
+      <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-3.5 shadow-md">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-2">
-            <BookMarked size={16} className="text-cyan-400" />
+          <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <BookMarked size={16} className="text-cyan-600" />
             <span>SQL Questions ({filteredProblemsList.length})</span>
           </h3>
           {sheetData && (
-            <span className="text-[10px] font-mono text-cyan-400 font-bold px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/30">
+            <span className="text-[10px] font-mono text-cyan-600 font-bold px-2 py-0.5 rounded-md bg-cyan-50 border border-cyan-200">
               Total {sheetData.total_problems}
             </span>
           )}
@@ -52,7 +52,7 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
             placeholder="Search by title, company, tag..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-all"
+            className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-all"
           />
         </div>
 
@@ -73,8 +73,8 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
                 onClick={() => setSelectedPlatform(plt.id)}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
                   selectedPlatform === plt.id
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-extrabold'
-                    : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800'
+                    ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40 font-extrabold'
+                    : 'bg-slate-50 text-slate-400 hover:text-slate-600 border border-slate-200'
                 }`}
               >
                 {plt.label}
@@ -92,8 +92,8 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
               onClick={() => setSelectedDifficulty(diff)}
               className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase transition-all ${
                 selectedDifficulty === diff
-                  ? 'bg-slate-800 text-cyan-300 border border-cyan-500/30'
-                  : 'text-slate-500 hover:text-slate-300'
+                  ? 'bg-slate-100 text-cyan-700 border border-cyan-200'
+                  : 'text-slate-500 hover:text-slate-500'
               }`}
             >
               {diff}
@@ -110,7 +110,7 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
             <span>Loading SQL Questions...</span>
           </div>
         ) : filteredProblemsList.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-500 bg-[#0D1322] rounded-2xl border border-slate-800">
+          <div className="p-8 text-center text-xs text-slate-500 bg-white rounded-2xl border border-slate-200">
             No SQL questions found matching your filter criteria.
           </div>
         ) : (
@@ -118,24 +118,24 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
             const isSelected = selectedProblem?.id === prob.id;
 
             let platBadge = 'LeetCode';
-            let platColor = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+            let platColor = 'bg-amber-50 text-amber-600 border-amber-200';
             if (prob.id.startsWith('dl-')) {
               platBadge = 'DataLemur';
-              platColor = 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
+              platColor = 'bg-cyan-50 text-cyan-600 border-cyan-200';
             } else if (prob.id.startsWith('hr-')) {
               platBadge = 'HackerRank';
-              platColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+              platColor = 'bg-emerald-50 text-emerald-600 border-emerald-200';
             } else if (prob.id.startsWith('ss-')) {
               platBadge = 'StrataScratch';
-              platColor = 'bg-purple-500/10 text-purple-400 border-purple-500/30';
+              platColor = 'bg-purple-50 text-purple-600 border-purple-200';
             } else if (prob.id.startsWith('sb-')) {
               platBadge = 'SQLBolt';
-              platColor = 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+              platColor = 'bg-blue-50 text-blue-600 border-blue-200';
             }
 
-            let diffColor = 'text-emerald-400';
-            if (prob.difficulty === 'Medium') diffColor = 'text-amber-400';
-            if (prob.difficulty === 'Hard') diffColor = 'text-rose-400';
+            let diffColor = 'text-emerald-600';
+            if (prob.difficulty === 'Medium') diffColor = 'text-amber-600';
+            if (prob.difficulty === 'Hard') diffColor = 'text-rose-600';
 
             return (
               <button
@@ -144,7 +144,7 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
                 className={`w-full text-left p-3.5 rounded-xl border transition-all space-y-2 ${
                   isSelected
                     ? 'bg-gradient-to-r from-cyan-950/60 to-slate-900 border-cyan-500/60 shadow-lg shadow-cyan-500/10 scale-[1.01]'
-                    : 'bg-[#0A101D] border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/60'
+                    : 'bg-slate-50 border-slate-200 hover:border-slate-200 hover:bg-slate-50/80'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -158,9 +158,9 @@ export const SqlProblemAccordion: React.FC<SqlProblemAccordionProps> = ({
                   </span>
                 </div>
 
-                <div className="text-xs font-bold text-slate-100 line-clamp-1 flex items-center justify-between">
+                <div className="text-xs font-bold text-slate-800 line-clamp-1 flex items-center justify-between">
                   <span>{prob.title}</span>
-                  {isSelected && <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />}
+                  {isSelected && <CheckCircle2 size={14} className="text-cyan-600 shrink-0" />}
                 </div>
 
                 {prob.company && (

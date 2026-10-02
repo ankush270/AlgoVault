@@ -342,15 +342,15 @@ export const LiveCodingArena: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner Header */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+          <div className="p-3 rounded-2xl bg-amber-50 border border-amber-500/20 text-amber-600">
             <Swords className="w-7 h-7" />
           </div>
           <div>
             <h1 className="text-xl md:text-2xl font-black text-white flex items-center gap-2">
               1v1 Speed Coding Arena
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200">
                 Live Multiplayer
               </span>
             </h1>
@@ -361,25 +361,25 @@ export const LiveCodingArena: React.FC = () => {
         </div>
 
         {/* Candidate Stats Pill */}
-        <div className="flex items-center gap-4 bg-slate-950 px-5 py-2.5 rounded-2xl border border-slate-800">
+        <div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-200">
           <div className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-amber-400" />
+            <Trophy className="w-5 h-5 text-amber-600" />
             <div>
               <div className="text-[10px] uppercase font-bold text-slate-400">Rank: {getRankTitle(eloRating)}</div>
-              <div className="text-base font-black text-amber-400 font-mono">{eloRating} ELO</div>
+              <div className="text-base font-black text-amber-600 font-mono">{eloRating} ELO</div>
             </div>
           </div>
 
-          <div className="h-8 w-px bg-slate-800 hidden sm:block" />
+          <div className="h-8 w-px bg-slate-100 hidden sm:block" />
 
           <div className="hidden sm:flex items-center gap-3 text-xs">
             <div>
               <span className="text-slate-400 block text-[10px] uppercase font-bold">Win Rate</span>
-              <span className="text-emerald-400 font-bold font-mono">{winRate}%</span>
+              <span className="text-emerald-600 font-bold font-mono">{winRate}%</span>
             </div>
             <div>
               <span className="text-slate-400 block text-[10px] uppercase font-bold">W/L</span>
-              <span className="text-slate-200 font-bold font-mono">{winsCount}/{lossesCount}</span>
+              <span className="text-slate-600 font-bold font-mono">{winsCount}/{lossesCount}</span>
             </div>
           </div>
         </div>
@@ -389,13 +389,13 @@ export const LiveCodingArena: React.FC = () => {
       {matchState === 'lobby' && (
         <div className="space-y-6">
           {/* Sub Navigation Tabs */}
-          <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
             <button
               onClick={() => setLobbySubTab('arena')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                 lobbySubTab === 'arena'
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
-                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-200'
+                  : 'bg-white text-slate-400 hover:text-white border border-slate-200'
               }`}
             >
               <Swords className="w-4 h-4" />
@@ -406,8 +406,8 @@ export const LiveCodingArena: React.FC = () => {
               onClick={() => setLobbySubTab('leaderboard')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                 lobbySubTab === 'leaderboard'
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
-                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-200'
+                  : 'bg-white text-slate-400 hover:text-white border border-slate-200'
               }`}
             >
               <Trophy className="w-4 h-4" />
@@ -418,8 +418,8 @@ export const LiveCodingArena: React.FC = () => {
               onClick={() => setLobbySubTab('history')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
                 lobbySubTab === 'history'
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
-                  : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-200'
+                  : 'bg-white text-slate-400 hover:text-white border border-slate-200'
               }`}
             >
               <Activity className="w-4 h-4" />
@@ -431,9 +431,9 @@ export const LiveCodingArena: React.FC = () => {
           {lobbySubTab === 'arena' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* PvP Matchmaking Card */}
-              <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col justify-between space-y-6 hover:border-purple-500/50 transition">
+              <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-lg flex flex-col justify-between space-y-6 hover:border-purple-500/50 transition">
                 <div className="space-y-4">
-                  <div className="p-3.5 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 w-fit">
+                  <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-500/20 text-purple-600 w-fit">
                     <Users className="w-7 h-7" />
                   </div>
                   <div>
@@ -443,21 +443,21 @@ export const LiveCodingArena: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 text-xs text-slate-300 space-y-1 font-mono">
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-500 space-y-1 font-mono">
                     <div className="flex justify-between">
                       <span className="text-slate-400">Rating Tier:</span>
-                      <strong className="text-purple-400">{getRankTitle(eloRating)} ({eloRating} ELO)</strong>
+                      <strong className="text-purple-600">{getRankTitle(eloRating)} ({eloRating} ELO)</strong>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Match Format:</span>
-                      <strong className="text-slate-200">1v1 Speed Duel (15m limit)</strong>
+                      <strong className="text-slate-600">1v1 Speed Duel (15m limit)</strong>
                     </div>
                   </div>
                 </div>
 
                 <button
                   onClick={handleJoinPvP}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-white text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-purple-600/20 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-95 text-slate-900 text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-purple-200 cursor-pointer"
                 >
                   <Swords className="w-4 h-4" />
                   <span>Find Online Opponent</span>
@@ -465,9 +465,9 @@ export const LiveCodingArena: React.FC = () => {
               </div>
 
               {/* AI Bot Battle Card */}
-              <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col justify-between space-y-6 hover:border-emerald-500/50 transition">
+              <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-lg flex flex-col justify-between space-y-6 hover:border-emerald-500/50 transition">
                 <div className="space-y-4">
-                  <div className="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 w-fit">
+                  <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-500/20 text-emerald-600 w-fit">
                     <Bot className="w-7 h-7" />
                   </div>
                   <div>
@@ -477,21 +477,21 @@ export const LiveCodingArena: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 text-xs text-slate-300 space-y-1 font-mono">
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-500 space-y-1 font-mono">
                     <div className="flex justify-between">
                       <span className="text-slate-400">Selected Bot Tier:</span>
-                      <strong className="text-emerald-400 capitalize">{aiDifficulty} Tier</strong>
+                      <strong className="text-emerald-600 capitalize">{aiDifficulty} Tier</strong>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Queue Time:</span>
-                      <strong className="text-emerald-400">Instant (0s)</strong>
+                      <strong className="text-emerald-600">Instant (0s)</strong>
                     </div>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setShowAiModal(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-emerald-600/20 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-slate-900 text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-emerald-200 cursor-pointer"
                 >
                   <Bot className="w-4 h-4" />
                   <span>Select AI Tier & Start Battle</span>
@@ -502,11 +502,11 @@ export const LiveCodingArena: React.FC = () => {
 
           {/* TAB 2: LEADERBOARD */}
           {lobbySubTab === 'leaderboard' && (
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-lg space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Trophy className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <Trophy className="w-5 h-5 text-amber-600" />
                     Global 1v1 Arena Leaderboard
                   </h3>
                   <p className="text-xs text-slate-400">Top ranked speed programmers in AlgoVault.</p>
@@ -516,7 +516,7 @@ export const LiveCodingArena: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400 uppercase font-mono text-[10px]">
+                    <tr className="border-b border-slate-200 text-slate-400 uppercase font-mono text-[10px]">
                       <th className="py-3 px-4">Rank</th>
                       <th className="py-3 px-4">Candidate</th>
                       <th className="py-3 px-4">Badge</th>
@@ -525,38 +525,38 @@ export const LiveCodingArena: React.FC = () => {
                       <th className="py-3 px-4">Win Rate</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-mono text-slate-200">
+                  <tbody className="divide-y divide-slate-800/60 font-mono text-slate-600">
                     {SAMPLE_LEADERBOARD.map((item) => (
-                      <tr key={item.rank} className="hover:bg-slate-800/40 transition">
-                        <td className="py-3 px-4 font-bold text-amber-400">#{item.rank}</td>
-                        <td className="py-3 px-4 font-bold text-white font-sans flex items-center gap-2">
+                      <tr key={item.rank} className="hover:bg-slate-100/40 transition">
+                        <td className="py-3 px-4 font-bold text-amber-600">#{item.rank}</td>
+                        <td className="py-3 px-4 font-bold text-slate-900 font-sans flex items-center gap-2">
                           {item.username}
                         </td>
                         <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded bg-purple-50 text-purple-600 border border-purple-500/20 text-[10px] font-bold">
                             {item.badge}
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-amber-400 font-bold">{item.elo} ELO</td>
-                        <td className="py-3 px-4 text-slate-300">{item.wins} / {item.losses}</td>
-                        <td className="py-3 px-4 text-emerald-400 font-bold">{item.winRate}%</td>
+                        <td className="py-3 px-4 text-amber-600 font-bold">{item.elo} ELO</td>
+                        <td className="py-3 px-4 text-slate-500">{item.wins} / {item.losses}</td>
+                        <td className="py-3 px-4 text-emerald-600 font-bold">{item.winRate}%</td>
                       </tr>
                     ))}
 
                     {/* Current User Row */}
-                    <tr className="bg-purple-950/30 border-t-2 border-purple-500/40 font-mono text-slate-200">
-                      <td className="py-3.5 px-4 font-bold text-purple-400">YOU</td>
+                    <tr className="bg-purple-950/30 border-t-2 border-purple-200 font-mono text-slate-600">
+                      <td className="py-3.5 px-4 font-bold text-purple-600">YOU</td>
                       <td className="py-3.5 px-4 font-bold text-white font-sans flex items-center gap-2">
                         {username} (You)
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-bold">
+                        <span className="px-2 py-0.5 rounded bg-amber-50 text-amber-600 border border-amber-500/20 text-[10px] font-bold">
                           {getRankTitle(eloRating)}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-amber-400 font-bold">{eloRating} ELO</td>
-                      <td className="py-3.5 px-4 text-slate-300">{winsCount} / {lossesCount}</td>
-                      <td className="py-3.5 px-4 text-emerald-400 font-bold">{winRate}%</td>
+                      <td className="py-3.5 px-4 text-amber-600 font-bold">{eloRating} ELO</td>
+                      <td className="py-3.5 px-4 text-slate-500">{winsCount} / {lossesCount}</td>
+                      <td className="py-3.5 px-4 text-emerald-600 font-bold">{winRate}%</td>
                     </tr>
                   </tbody>
                 </table>
@@ -566,9 +566,9 @@ export const LiveCodingArena: React.FC = () => {
 
           {/* TAB 3: MATCH HISTORY */}
           {lobbySubTab === 'history' && (
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Activity className="w-5 h-5 text-purple-400" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-lg space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-purple-600" />
                 Recent Match History
               </h3>
 
@@ -579,25 +579,25 @@ export const LiveCodingArena: React.FC = () => {
               ) : (
                 <div className="divide-y divide-slate-800/60 font-mono text-xs">
                   {matchHistory.map((item) => (
-                    <div key={item.id} className="py-3 flex items-center justify-between hover:bg-slate-800/30 px-3 rounded-xl transition">
+                    <div key={item.id} className="py-3 flex items-center justify-between hover:bg-slate-100/30 px-3 rounded-xl transition">
                       <div className="flex items-center gap-3">
                         <div
                           className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${
                             item.result === 'WIN'
-                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                              : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
+                              ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                              : 'bg-rose-50 text-rose-600 border border-rose-200'
                           }`}
                         >
                           {item.result === 'WIN' ? 'W' : 'L'}
                         </div>
                         <div>
-                          <div className="text-white font-bold font-sans">{item.problemTitle}</div>
+                          <div className="text-slate-900 font-bold font-sans">{item.problemTitle}</div>
                           <div className="text-[10px] text-slate-400">vs {item.opponentName} • {item.date}</div>
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <div className={`font-bold ${item.eloDelta > 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className={`font-bold ${item.eloDelta > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                           {item.eloDelta > 0 ? `+${item.eloDelta}` : item.eloDelta} ELO
                         </div>
                         <div className="text-[10px] text-slate-400">{item.timeTakenSeconds}s</div>
@@ -613,16 +613,16 @@ export const LiveCodingArena: React.FC = () => {
 
       {/* AI BOT DIFFICULTY MODAL */}
       {showAiModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Bot className="w-5 h-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 bg-slate-50/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 max-w-md w-full shadow-lg space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Bot className="w-5 h-5 text-emerald-600" />
                 Select AI Bot Difficulty
               </h3>
               <button
                 onClick={() => setShowAiModal(false)}
-                className="text-slate-400 hover:text-white text-xs cursor-pointer"
+                className="text-slate-400 hover:text-slate-900 text-xs cursor-pointer"
               >
                 ✕
               </button>
@@ -632,11 +632,11 @@ export const LiveCodingArena: React.FC = () => {
               {/* Apprentice */}
               <button
                 onClick={() => handleStartAiBattle('apprentice')}
-                className="w-full text-left p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-emerald-500/50 transition cursor-pointer space-y-1 group"
+                className="w-full text-left p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-500/50 transition cursor-pointer space-y-1 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-white group-hover:text-emerald-400">Apprentice Tier AI</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-bold">1200 ELO</span>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-emerald-600">Apprentice Tier AI</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">1200 ELO</span>
                 </div>
                 <p className="text-xs text-slate-400">Slower coding pace (6.5s per test step). Great for warmups.</p>
               </button>
@@ -644,11 +644,11 @@ export const LiveCodingArena: React.FC = () => {
               {/* Master */}
               <button
                 onClick={() => handleStartAiBattle('master')}
-                className="w-full text-left p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-purple-500/50 transition cursor-pointer space-y-1 group"
+                className="w-full text-left p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-500/50 transition cursor-pointer space-y-1 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-white group-hover:text-purple-400">Master Tier AI</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 font-bold">1600 ELO</span>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-purple-600">Master Tier AI</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-purple-50 text-purple-600 font-bold">1600 ELO</span>
                 </div>
                 <p className="text-xs text-slate-400">Moderate coding pace (4.2s per test step). Standard competitive duel.</p>
               </button>
@@ -656,11 +656,11 @@ export const LiveCodingArena: React.FC = () => {
               {/* Grandmaster */}
               <button
                 onClick={() => handleStartAiBattle('grandmaster')}
-                className="w-full text-left p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-amber-500/50 transition cursor-pointer space-y-1 group"
+                className="w-full text-left p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-500/50 transition cursor-pointer space-y-1 group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-white group-hover:text-amber-400">Grandmaster Tier AI</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-bold">2000 ELO</span>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-amber-600">Grandmaster Tier AI</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 text-amber-600 font-bold">2000 ELO</span>
                 </div>
                 <p className="text-xs text-slate-400">Lightning fast coding pace (2.5s per test step). Extreme challenge!</p>
               </button>
@@ -671,13 +671,13 @@ export const LiveCodingArena: React.FC = () => {
 
       {/* SEARCHING MATCH OVERLAY */}
       {matchState === 'searching' && (
-        <div className="h-96 bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center justify-center text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-          <h3 className="text-lg font-bold text-white">Searching for 1v1 Opponent...</h3>
+        <div className="h-96 bg-white border border-slate-200 rounded-3xl p-6 shadow-lg flex flex-col items-center justify-center text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-500 rounded-full animate-spin" />
+          <h3 className="text-lg font-bold text-slate-900">Searching for 1v1 Opponent...</h3>
           <p className="text-xs text-slate-400">Connecting to WebSocket Matchmaking & Initializing Room</p>
           <button
             onClick={handleSurrender}
-            className="text-xs text-slate-500 hover:text-slate-300 underline cursor-pointer"
+            className="text-xs text-slate-500 hover:text-slate-500 underline cursor-pointer"
           >
             Cancel Matchmaking
           </button>
@@ -688,9 +688,9 @@ export const LiveCodingArena: React.FC = () => {
       {matchState === 'in_battle' && currentProblem && (
         <div className="space-y-4">
           {/* Battle Header Bar */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+          <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-md">
             <div className="flex items-center gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 font-mono">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-amber-50 text-amber-600 border border-amber-200 font-mono">
                 {currentProblem.difficulty}
               </span>
               <div>
@@ -707,7 +707,7 @@ export const LiveCodingArena: React.FC = () => {
               <select
                 value={language}
                 onChange={(e) => handleLanguageChange(e.target.value as LanguageType)}
-                className="bg-slate-950 border border-slate-800 text-white font-mono text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-purple-500 cursor-pointer"
+                className="bg-slate-50 border border-slate-200 text-slate-900 font-mono text-xs rounded-xl px-3 py-1.5 focus:outline-none focus:border-purple-500 cursor-pointer"
               >
                 <option value="python">Python 3</option>
                 <option value="javascript">JavaScript (Node.js)</option>
@@ -717,21 +717,21 @@ export const LiveCodingArena: React.FC = () => {
             </div>
 
             {/* Countdown Timer */}
-            <div className="flex items-center gap-2 bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 text-slate-200 font-mono font-bold text-sm">
-              <Clock className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-mono font-bold text-sm">
+              <Clock className="w-4 h-4 text-emerald-600" />
               <span>{formatTime(timerSeconds)}</span>
             </div>
 
             <button
               onClick={handleSurrender}
-              className="text-xs font-semibold text-rose-400 hover:text-rose-300 px-3 py-1.5 rounded-lg bg-rose-950/30 border border-rose-900/40 transition cursor-pointer"
+              className="text-xs font-semibold text-rose-600 hover:text-rose-700 px-3 py-1.5 rounded-lg bg-rose-950/30 border border-rose-900/40 transition cursor-pointer"
             >
               Surrender Battle
             </button>
           </div>
 
           {disconnectedMessage && (
-            <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 text-xs font-mono flex items-center gap-2">
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-600 text-xs font-mono flex items-center gap-2">
               <AlertCircle className="w-4 h-4" />
               <span>{disconnectedMessage}</span>
             </div>
@@ -740,15 +740,15 @@ export const LiveCodingArena: React.FC = () => {
           {/* Arena Main Split Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left Panel: Problem Details & Console (5 Cols) */}
-            <div className="lg:col-span-5 flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden h-[620px]">
+            <div className="lg:col-span-5 flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden h-[620px]">
               {/* Tab Selector */}
-              <div className="flex border-b border-slate-800 bg-slate-950 text-xs font-bold">
+              <div className="flex border-b border-slate-200 bg-slate-50 text-xs font-bold">
                 <button
                   onClick={() => setActiveTabLeft('problem')}
                   className={`flex-1 py-2.5 px-4 flex items-center justify-center gap-2 transition cursor-pointer ${
                     activeTabLeft === 'problem'
-                      ? 'bg-slate-900 text-purple-400 border-b-2 border-purple-500'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-white text-purple-600 border-b-2 border-purple-500'
+                      : 'text-slate-400 hover:text-slate-900'
                   }`}
                 >
                   <BookOpen className="w-4 h-4" />
@@ -758,8 +758,8 @@ export const LiveCodingArena: React.FC = () => {
                   onClick={() => setActiveTabLeft('console')}
                   className={`flex-1 py-2.5 px-4 flex items-center justify-center gap-2 transition cursor-pointer ${
                     activeTabLeft === 'console'
-                      ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-500'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-white text-emerald-600 border-b-2 border-emerald-500'
+                      : 'text-slate-400 hover:text-slate-900'
                   }`}
                 >
                   <Terminal className="w-4 h-4" />
@@ -770,24 +770,24 @@ export const LiveCodingArena: React.FC = () => {
               {/* Tab Content */}
               <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
                 {activeTabLeft === 'problem' ? (
-                  <div className="space-y-4 text-slate-300">
+                  <div className="space-y-4 text-slate-500">
                     <p className="leading-relaxed whitespace-pre-line">{currentProblem.description}</p>
 
                     {/* Examples */}
                     {currentProblem.examples && currentProblem.examples.length > 0 && (
                       <div className="space-y-3 pt-2">
-                        <h4 className="font-bold text-white uppercase text-[10px] tracking-wider text-slate-400">
+                        <h4 className="font-bold text-slate-900 uppercase text-[10px] tracking-wider text-slate-400">
                           Example Test Cases:
                         </h4>
                         {currentProblem.examples.map((ex, idx) => (
-                          <div key={idx} className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 font-mono space-y-1">
+                          <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200 font-mono space-y-1">
                             <div>
                               <span className="text-slate-500 font-bold">Input: </span>
-                              <span className="text-slate-200">{ex.input}</span>
+                              <span className="text-slate-600">{ex.input}</span>
                             </div>
                             <div>
-                              <span className="text-emerald-400 font-bold">Output: </span>
-                              <span className="text-slate-200">{ex.expectedOutput}</span>
+                              <span className="text-emerald-600 font-bold">Output: </span>
+                              <span className="text-slate-600">{ex.expectedOutput}</span>
                             </div>
                             {ex.explanation && (
                               <div className="text-[10px] text-slate-400 font-sans pt-1">
@@ -802,7 +802,7 @@ export const LiveCodingArena: React.FC = () => {
                     {/* Constraints */}
                     {currentProblem.constraints && currentProblem.constraints.length > 0 && (
                       <div className="space-y-2 pt-2">
-                        <h4 className="font-bold text-white uppercase text-[10px] tracking-wider text-slate-400">
+                        <h4 className="font-bold text-slate-900 uppercase text-[10px] tracking-wider text-slate-400">
                           Constraints:
                         </h4>
                         <ul className="list-disc list-inside space-y-1 font-mono text-[11px] text-slate-400">
@@ -814,10 +814,10 @@ export const LiveCodingArena: React.FC = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="font-mono text-xs text-slate-300">
+                  <div className="font-mono text-xs text-slate-500">
                     <div className="text-[10px] text-slate-500 font-sans font-bold mb-2">Piston Code Execution Logs:</div>
                     {stdout ? (
-                      <pre className="whitespace-pre-wrap bg-slate-950 p-3 rounded-xl border border-slate-800 text-slate-200">
+                      <pre className="whitespace-pre-wrap bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-600">
                         {stdout}
                       </pre>
                     ) : (
@@ -831,10 +831,10 @@ export const LiveCodingArena: React.FC = () => {
             {/* Right Panel: Monaco Editor & Opponent Telemetry (7 Cols) */}
             <div className="lg:col-span-7 space-y-4">
               {/* Code Editor Container */}
-              <div className="flex flex-col bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden h-[420px] shadow-xl">
-                <div className="px-4 py-2.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-                  <span className="text-xs font-mono text-slate-300 font-semibold flex items-center gap-2">
-                    <FileCode className="w-4 h-4 text-purple-400" />
+              <div className="flex flex-col bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden h-[420px] shadow-md">
+                <div className="px-4 py-2.5 bg-white border-b border-slate-200 flex items-center justify-between">
+                  <span className="text-xs font-mono text-slate-500 font-semibold flex items-center gap-2">
+                    <FileCode className="w-4 h-4 text-purple-600" />
                     Candidate Workspace ({language})
                   </span>
                   <div className="flex items-center gap-2">
@@ -877,10 +877,10 @@ export const LiveCodingArena: React.FC = () => {
               {/* Bottom Split: Telemetry & Quick Chat (7 Cols) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Telemetry Card */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                     <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-400">
+                      <div className="p-1.5 rounded-lg bg-purple-50 text-purple-600">
                         {isAiMatch ? <Bot className="w-4 h-4" /> : <Users className="w-4 h-4" />}
                       </div>
                       <div>
@@ -892,11 +892,11 @@ export const LiveCodingArena: React.FC = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <div className="flex justify-between text-[11px] text-slate-300 font-mono font-semibold">
+                    <div className="flex justify-between text-[11px] text-slate-500 font-mono font-semibold">
                       <span>Test Progress</span>
-                      <span className="text-purple-400">{opponent.testsPassed} / {opponent.totalTests}</span>
+                      <span className="text-purple-600">{opponent.testsPassed} / {opponent.totalTests}</span>
                     </div>
-                    <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                    <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden border border-slate-200">
                       <div
                         className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 transition-all duration-300 rounded-full"
                         style={{ width: `${(opponent.testsPassed / opponent.totalTests) * 100}%` }}
@@ -904,11 +904,11 @@ export const LiveCodingArena: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-between text-[11px] text-slate-300 font-mono font-semibold pt-1">
+                  <div className="flex justify-between text-[11px] text-slate-500 font-mono font-semibold pt-1">
                     <span>Your Progress</span>
-                    <span className="text-emerald-400">{testsPassed} / 5</span>
+                    <span className="text-emerald-600">{testsPassed} / 5</span>
                   </div>
-                  <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                  <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden border border-slate-200">
                     <div
                       className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300 rounded-full"
                       style={{ width: `${(testsPassed / 5) * 100}%` }}
@@ -917,10 +917,10 @@ export const LiveCodingArena: React.FC = () => {
                 </div>
 
                 {/* Live Quick Chat & Reactions Card */}
-                <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between space-y-2 h-[180px]">
-                  <div className="text-[11px] font-bold text-white flex items-center justify-between border-b border-slate-800 pb-1.5">
+                <div className="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-2 h-[180px]">
+                  <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between border-b border-slate-200 pb-1.5">
                     <span className="flex items-center gap-1.5">
-                      <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
+                      <MessageSquare className="w-3.5 h-3.5 text-purple-600" />
                       Arena Live Chat
                     </span>
                   </div>
@@ -929,20 +929,20 @@ export const LiveCodingArena: React.FC = () => {
                   <div className="flex-1 overflow-y-auto space-y-1.5 text-[11px] font-mono pr-1">
                     {chatMessages.map((msg) => (
                       <div key={msg.id} className="leading-tight">
-                        <span className="text-purple-400 font-bold">{msg.sender}: </span>
-                        <span className="text-slate-200">{msg.text}</span>
+                        <span className="text-purple-600 font-bold">{msg.sender}: </span>
+                        <span className="text-slate-600">{msg.text}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Preset Emojis & Input */}
-                  <div className="space-y-1.5 pt-1 border-t border-slate-800">
+                  <div className="space-y-1.5 pt-1 border-t border-slate-200">
                     <div className="flex flex-wrap gap-1">
                       {PRESET_EMOJIS.map((emoji, i) => (
                         <button
                           key={i}
                           onClick={() => handleSendChat(emoji)}
-                          className="text-[9px] px-1.5 py-0.5 rounded bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 cursor-pointer"
+                          className="text-[9px] px-1.5 py-0.5 rounded bg-slate-50 hover:bg-slate-100 text-slate-500 border border-slate-200 cursor-pointer"
                         >
                           {emoji}
                         </button>
@@ -956,7 +956,7 @@ export const LiveCodingArena: React.FC = () => {
                         onChange={(e) => setChatInput(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSendChat()}
                         placeholder="Type taunt or chat..."
-                        className="flex-1 bg-slate-950 border border-slate-800 text-white text-[11px] rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500"
+                        className="flex-1 bg-slate-50 border border-slate-200 text-slate-900 text-[11px] rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500"
                       />
                       <button
                         onClick={() => handleSendChat()}
@@ -975,8 +975,8 @@ export const LiveCodingArena: React.FC = () => {
 
       {/* VICTORY / DEFEAT SCREEN */}
       {matchState === 'match_ended' && winnerInfo && (
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl flex flex-col items-center justify-center text-center space-y-5 animate-fadeIn">
-          <div className="p-4 rounded-3xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+        <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-lg flex flex-col items-center justify-center text-center space-y-5 animate-fadeIn">
+          <div className="p-4 rounded-3xl bg-amber-50 border border-amber-500/20 text-amber-600">
             <Trophy className="w-14 h-14" />
           </div>
 
@@ -985,18 +985,18 @@ export const LiveCodingArena: React.FC = () => {
               {winnerInfo.winnerUsername === username ? '🏆 Victory!' : '💔 Battle Concluded'}
             </h2>
             <p className="text-sm text-slate-400 mt-1">
-              Winner: <strong className="text-white">{winnerInfo.winnerUsername}</strong> ({winnerInfo.timeTakenSeconds}s elapsed)
+              Winner: <strong className="text-slate-900">{winnerInfo.winnerUsername}</strong> ({winnerInfo.timeTakenSeconds}s elapsed)
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-sm space-y-1">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 font-mono text-sm space-y-1">
             <div>
-              Rating Adjustment: <strong className={winnerInfo.eloDelta > 0 ? 'text-emerald-400' : 'text-rose-400'}>
+              Rating Adjustment: <strong className={winnerInfo.eloDelta > 0 ? 'text-emerald-600' : 'text-rose-600'}>
                 {winnerInfo.eloDelta > 0 ? `+${winnerInfo.eloDelta}` : winnerInfo.eloDelta} ELO
               </strong>
             </div>
             <div className="text-xs text-slate-400">
-              New ELO Rating: <strong className="text-amber-400">{eloRating} ELO</strong> ({getRankTitle(eloRating)})
+              New ELO Rating: <strong className="text-amber-600">{eloRating} ELO</strong> ({getRankTitle(eloRating)})
             </div>
           </div>
 

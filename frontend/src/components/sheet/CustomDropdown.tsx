@@ -35,8 +35,8 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
     <div className="relative">
       <button
         onClick={onToggle}
-        className={`flex items-center gap-2 bg-slate-950 border ${
-          selectedValue !== 'all' ? 'border-cyan-500/60 text-cyan-300' : 'border-slate-800 text-slate-300'
+        className={`flex items-center gap-2 bg-slate-50 border ${
+          selectedValue !== 'all' ? 'border-cyan-500/60 text-cyan-700' : 'border-slate-200 text-slate-500'
         } hover:border-cyan-500/50 rounded-xl px-3.5 py-2 text-xs font-semibold shadow-sm transition-all`}
       >
         {buttonIcon}
@@ -48,14 +48,14 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
         <ChevronDown
           size={14}
           className={`text-slate-400 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-cyan-400' : ''
+            isOpen ? 'rotate-180 text-cyan-600' : ''
           }`}
         />
       </button>
 
       {isOpen && (
         <div
-          className={`absolute right-0 top-full mt-2 ${dropdownWidth} max-h-72 overflow-y-auto bg-slate-950/95 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-2xl z-50 p-1.5 space-y-1 text-xs animate-fadeIn`}
+          className={`absolute right-0 top-full mt-2 ${dropdownWidth} max-h-72 overflow-y-auto bg-slate-50/95 border border-slate-200 rounded-2xl shadow-lg backdrop-blur-2xl z-50 p-1.5 space-y-1 text-xs animate-fadeIn`}
         >
           {options.map((opt) => (
             <button
@@ -63,15 +63,15 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
               onClick={() => onSelect(opt.value)}
               className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-semibold transition-all ${
                 selectedValue === opt.value
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
-                  : `${opt.color || 'text-slate-300'} hover:bg-slate-800/80 hover:text-white`
+                  ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-200'
+                  : `${opt.color || 'text-slate-500'} hover:bg-slate-50 hover:text-white`
               }`}
             >
               <span className="flex items-center gap-2 truncate">
                 {opt.icon && <span>{opt.icon}</span>}
                 <span className="truncate">{opt.label}</span>
               </span>
-              {selectedValue === opt.value && <Check size={14} className="text-cyan-400 shrink-0" />}
+              {selectedValue === opt.value && <Check size={14} className="text-cyan-600 shrink-0" />}
             </button>
           ))}
         </div>

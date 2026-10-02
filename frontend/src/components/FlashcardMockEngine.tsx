@@ -68,10 +68,10 @@ export const FlashcardMockEngine: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn max-w-3xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-panel p-6 rounded-3xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 card-surface p-6 rounded-3xl border border-slate-200">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">MOCK SIMULATOR</span>
+            <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">MOCK SIMULATOR</span>
             <span className="text-xs text-slate-400">Card {currentIndex + 1} of {cards.length}</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-white mt-1">
@@ -82,7 +82,7 @@ export const FlashcardMockEngine: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleShuffle}
-            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs flex items-center gap-1.5 border border-slate-700"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-100 text-slate-500 font-semibold text-xs flex items-center gap-1.5 border border-slate-200"
           >
             <Dices size={14} />
             <span>Shuffle Cards</span>
@@ -99,7 +99,7 @@ export const FlashcardMockEngine: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold uppercase shrink-0 transition-all ${
               selectedDomain === d
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+                : 'bg-white text-slate-400 border border-slate-200 hover:text-slate-900'
             }`}
           >
             {d.replace('-', ' ')}
@@ -111,41 +111,41 @@ export const FlashcardMockEngine: React.FC = () => {
       {currentCard && (
         <div className="space-y-4">
           {/* Timer & Controls Bar */}
-          <div className="flex items-center justify-between px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center justify-between px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs">
             <div className="flex items-center gap-2">
-              <Timer className={`w-4 h-4 ${isTimerRunning ? 'text-amber-400 animate-spin' : 'text-slate-400'}`} />
-              <span className="font-mono font-bold text-white text-sm">{timerSeconds}s</span>
+              <Timer className={`w-4 h-4 ${isTimerRunning ? 'text-amber-600 animate-spin' : 'text-slate-400'}`} />
+              <span className="font-mono font-bold text-slate-900 text-sm">{timerSeconds}s</span>
               <button
                 onClick={() => setIsTimerRunning(!isTimerRunning)}
-                className="text-[11px] font-semibold text-purple-400 hover:underline"
+                className="text-[11px] font-semibold text-purple-600 hover:underline"
               >
                 {isTimerRunning ? 'Pause Timer' : 'Start 60s Timer'}
               </button>
             </div>
-            <span className="text-slate-400 text-[11px]">Difficulty: <span className="text-purple-300 font-semibold">{currentCard.difficulty}</span></span>
+            <span className="text-slate-400 text-[11px]">Difficulty: <span className="text-purple-700 font-semibold">{currentCard.difficulty}</span></span>
           </div>
 
           {/* Flashcard Area */}
           <div 
             onClick={() => setIsFlipped(!isFlipped)}
-            className="min-h-[280px] p-8 rounded-3xl glass-panel border border-purple-500/30 flex flex-col justify-between cursor-pointer group shadow-2xl relative overflow-hidden transition-all hover:border-purple-500/60"
+            className="min-h-[280px] p-8 rounded-3xl card-surface border border-purple-200 flex flex-col justify-between cursor-pointer group shadow-lg relative overflow-hidden transition-all hover:border-purple-500/60"
           >
-            <div className="flex items-center justify-between text-xs text-purple-400 font-bold">
+            <div className="flex items-center justify-between text-xs text-purple-600 font-bold">
               <span className="uppercase tracking-wider">Question Card</span>
-              <span className="text-slate-400 flex items-center gap-1 group-hover:text-white">
+              <span className="text-slate-400 flex items-center gap-1 group-hover:text-slate-900">
                 <Eye size={14} /> Click to Flip Card
               </span>
             </div>
 
             <div className="py-6 space-y-4">
-              <h3 className="text-lg sm:text-xl font-extrabold text-white leading-relaxed">
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-relaxed">
                 {currentCard.question}
               </h3>
 
               {isFlipped && (
-                <div className="pt-4 border-t border-slate-800/80 animate-fadeIn space-y-3">
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Answer Explanation:</span>
-                  <p className="text-sm text-slate-200 leading-relaxed font-normal bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div className="pt-4 border-t border-slate-200 animate-fadeIn space-y-3">
+                  <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Answer Explanation:</span>
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal bg-slate-50 p-4 rounded-2xl border border-slate-200">
                     {currentCard.answer}
                   </p>
                 </div>
@@ -162,7 +162,7 @@ export const FlashcardMockEngine: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 animate-fadeIn">
               <button
                 onClick={() => handleAnswerEval('easy')}
-                className="py-3 px-2 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="py-3 px-2 rounded-2xl bg-emerald-50 hover:bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
                 <span className="text-lg">😎</span>
                 <span>Easy (Pura)</span>
@@ -170,7 +170,7 @@ export const FlashcardMockEngine: React.FC = () => {
 
               <button
                 onClick={() => handleAnswerEval('medium')}
-                className="py-3 px-2 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="py-3 px-2 rounded-2xl bg-blue-50 hover:bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
                 <span className="text-lg">🙂</span>
                 <span>Medium (Aadha)</span>
@@ -178,7 +178,7 @@ export const FlashcardMockEngine: React.FC = () => {
 
               <button
                 onClick={() => handleAnswerEval('hard')}
-                className="py-3 px-2 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="py-3 px-2 rounded-2xl bg-amber-50 hover:bg-amber-50 text-amber-700 border border-amber-200 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
                 <span className="text-lg">😵</span>
                 <span>Hard (Kam)</span>
@@ -186,7 +186,7 @@ export const FlashcardMockEngine: React.FC = () => {
 
               <button
                 onClick={() => handleAnswerEval('failed')}
-                className="py-3 px-2 rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 font-bold text-xs transition-all flex flex-col items-center gap-1"
+                className="py-3 px-2 rounded-2xl bg-rose-50 hover:bg-rose-500/20 text-rose-700 border border-rose-200 font-bold text-xs transition-all flex flex-col items-center gap-1"
               >
                 <span className="text-lg">❌</span>
                 <span>Failed (Nahi)</span>

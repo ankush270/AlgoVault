@@ -145,14 +145,14 @@ export const StriverSheetView: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-slate-400 space-y-4">
         <div className="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
-        <p className="text-sm font-semibold text-slate-300">Loading Master Topic-Wise DSA Sheet...</p>
+        <p className="text-sm font-semibold text-slate-500">Loading Master Topic-Wise DSA Sheet...</p>
       </div>
     );
   }
 
   if (!sheetData) {
     return (
-      <div className="p-8 text-center text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-2xl">
+      <div className="p-8 text-center text-rose-600 bg-rose-50 border border-rose-500/20 rounded-2xl">
         Failed to load Master DSA Sheet JSON dataset.
       </div>
     );

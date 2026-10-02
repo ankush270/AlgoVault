@@ -175,21 +175,21 @@ export const JobExplorer: React.FC = () => {
   return (
     <div className="space-y-4 sm:space-y-6 pb-12 overflow-x-hidden">
       {/* Top Hero Banner */}
-      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/20 p-4 sm:p-6 lg:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 sm:w-64 h-40 sm:h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-8 w-40 sm:w-64 h-40 sm:h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-200 p-4 sm:p-6 lg:p-8 shadow-lg">
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-40 sm:w-64 h-40 sm:h-64 bg-indigo-50 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 -mb-8 w-40 sm:w-64 h-40 sm:h-64 bg-cyan-50 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col gap-4 sm:gap-6">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
             <div className="min-w-0">
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2 sm:mb-3">
-                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-400 animate-pulse shrink-0" />
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-600 text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2 sm:mb-3">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-600 animate-pulse shrink-0" />
                 <span className="truncate">Live Python Job Scraper Hub</span>
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
                 Real-Time Remote & Tech Jobs
               </h1>
-              <p className="text-slate-300 text-xs sm:text-sm lg:text-base mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
+              <p className="text-slate-500 text-xs sm:text-sm lg:text-base mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
                 Automated Python scraper engine scanning <strong>600+ top tech companies</strong> & ATS endpoints for entry-level Software Engineer & Data Scientist openings.
               </p>
             </div>
@@ -198,15 +198,15 @@ export const JobExplorer: React.FC = () => {
             <div className="shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <button
                 onClick={() => setShowInfoBanner(!showInfoBanner)}
-                className="px-3 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white font-medium text-xs flex items-center justify-center gap-1.5 transition-all"
+                className="px-3 py-2.5 rounded-xl bg-slate-100/80 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 font-medium text-xs flex items-center justify-center gap-1.5 transition-all"
               >
-                <HelpCircle className="w-3.5 h-3.5 text-indigo-400" />
+                <HelpCircle className="w-3.5 h-3.5 text-indigo-600" />
                 <span>{showInfoBanner ? 'Hide Info' : 'How Sync Works'}</span>
               </button>
               <button
                 onClick={handleSyncJobs}
                 disabled={syncing}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all duration-200 disabled:opacity-50"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-indigo-200 hover:shadow-indigo-200 transition-all duration-200 disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 shrink-0 ${syncing ? 'animate-spin' : ''}`} />
                 {syncing ? 'Scraping Latest Jobs...' : 'Sync & Fetch New Jobs'}
@@ -218,66 +218,66 @@ export const JobExplorer: React.FC = () => {
         {/* Sync Status Toast */}
         {syncStatusMsg && (
           <div className="mt-3 sm:mt-4 p-2.5 sm:p-3 rounded-lg bg-indigo-950/80 border border-indigo-500/40 text-indigo-200 text-xs flex items-center gap-2 animate-fadeIn">
-            <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+            <Zap className="w-4 h-4 text-amber-600 shrink-0" />
             <span className="break-words min-w-0">{syncStatusMsg}</span>
           </div>
         )}
 
         {/* Live Metrics Counter Cards */}
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-4 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-800/80">
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-800">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 sm:grid-cols-4 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-200">
+          <div className="bg-slate-50/80 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-200">
             <span className="text-[11px] sm:text-xs text-slate-400 font-medium block">Total Scraped Jobs</span>
-            <span className="text-xl sm:text-2xl font-bold text-white mt-0.5 sm:mt-1 block">{loading ? '...' : jobs.length}</span>
+            <span className="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5 sm:mt-1 block">{loading ? '...' : jobs.length}</span>
           </div>
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-800">
+          <div className="bg-slate-50/80 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-200">
             <span className="text-[11px] sm:text-xs text-slate-400 font-medium block">Tracked Companies</span>
-            <span className="text-xl sm:text-2xl font-bold text-cyan-400 mt-0.5 sm:mt-1 block">{loading ? '...' : totalCompanies}</span>
+            <span className="text-xl sm:text-2xl font-bold text-cyan-600 mt-0.5 sm:mt-1 block">{loading ? '...' : totalCompanies}</span>
           </div>
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-800">
+          <div className="bg-slate-50/80 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-200">
             <span className="text-[11px] sm:text-xs text-slate-400 font-medium block">Remote / Worldwide</span>
-            <span className="text-xl sm:text-2xl font-bold text-emerald-400 mt-0.5 sm:mt-1 block">{loading ? '...' : remoteJobsCount}</span>
+            <span className="text-xl sm:text-2xl font-bold text-emerald-600 mt-0.5 sm:mt-1 block">{loading ? '...' : remoteJobsCount}</span>
           </div>
-          <div className="bg-slate-900/60 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-800">
+          <div className="bg-slate-50/80 backdrop-blur-md rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 border border-slate-200">
             <span className="text-[11px] sm:text-xs text-slate-400 font-medium block">Experience Filter</span>
-            <span className="text-xl sm:text-2xl font-bold text-indigo-400 mt-0.5 sm:mt-1 block">0-1 Year</span>
+            <span className="text-xl sm:text-2xl font-bold text-indigo-600 mt-0.5 sm:mt-1 block">0-1 Year</span>
           </div>
         </div>
       </div>
 
       {/* Answer Callout: "Kl Nayi Job Aayegi Toh Kya Hoga?" */}
       {showInfoBanner && (
-        <div className="relative bg-slate-900/80 rounded-xl border border-indigo-500/30 p-3.5 sm:p-5 text-slate-200">
+        <div className="relative bg-white rounded-xl border border-indigo-200 p-3.5 sm:p-5 text-slate-600">
           <button 
             onClick={() => setShowInfoBanner(false)}
-            className="absolute top-2 right-2 sm:top-3 sm:right-3 text-slate-500 hover:text-slate-300 text-xs p-1 z-10"
+            className="absolute top-2 right-2 sm:top-3 sm:right-3 text-slate-500 hover:text-slate-500 text-xs p-1 z-10"
             title="Dismiss notification"
           >
             ✕
           </button>
           
           <div className="flex items-start gap-2.5 sm:gap-3">
-            <div className="p-1.5 sm:p-2 rounded-lg bg-indigo-500/10 text-indigo-400 shrink-0 mt-0.5">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-indigo-50 text-indigo-600 shrink-0 mt-0.5">
               <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div className="space-y-2 text-xs min-w-0 pr-4 sm:pr-0">
               <h3 className="font-bold text-white text-sm sm:text-base flex items-start sm:items-center gap-2">
                 <span>❓ Suppose kl kisi company me nyi job post hui, toh kya hoga?</span>
               </h3>
-              <p className="text-slate-300 leading-relaxed">
+              <p className="text-slate-500 leading-relaxed">
                 Aapko bilkul tension lene ki zarurat nahi hai! Humari system mein <strong>2-way Automated Job Tracking</strong> integrated hai:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-2">
-                <div className="bg-slate-950/60 p-2.5 sm:p-3 rounded-lg border border-slate-800 flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div className="bg-slate-50/50 p-2.5 sm:p-3 rounded-lg border border-slate-200 flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <strong className="text-emerald-300 block text-xs">1. Automated Daily Cron Background Sync</strong>
+                    <strong className="text-emerald-700 block text-xs">1. Automated Daily Cron Background Sync</strong>
                     <span className="text-slate-400 text-xs">Python script daily raat ko saari 600+ companies ko scan karke nayi jobs auto-add kar deti hai.</span>
                   </div>
                 </div>
-                <div className="bg-slate-950/60 p-2.5 sm:p-3 rounded-lg border border-slate-800 flex items-start gap-2">
-                  <Zap className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="bg-slate-50/50 p-2.5 sm:p-3 rounded-lg border border-slate-200 flex items-start gap-2">
+                  <Zap className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                   <div className="min-w-0">
-                    <strong className="text-amber-300 block text-xs">2. On-Demand "Sync & Fetch" Button</strong>
+                    <strong className="text-amber-700 block text-xs">2. On-Demand "Sync & Fetch" Button</strong>
                     <span className="text-slate-400 text-xs">"Sync & Fetch New Jobs" button click karo, Python script turant fresh postings UI par dikha dega.</span>
                   </div>
                 </div>
@@ -288,7 +288,7 @@ export const JobExplorer: React.FC = () => {
       )}
 
       {/* Filter and Search Bar Controls */}
-      <div className="bg-slate-900/60 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-slate-800 space-y-3 sm:space-y-4">
+      <div className="bg-slate-50/80 backdrop-blur-md rounded-xl p-3 sm:p-4 border border-slate-200 space-y-3 sm:space-y-4">
         <div className="flex flex-col gap-3 sm:gap-4">
           {/* Search Input */}
           <div className="relative w-full">
@@ -298,7 +298,7 @@ export const JobExplorer: React.FC = () => {
               placeholder="Search job title, company, tech stack..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 bg-slate-950/80 border border-slate-800 rounded-lg text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 bg-slate-50/80 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
             />
           </div>
 
@@ -308,7 +308,7 @@ export const JobExplorer: React.FC = () => {
             <select
               value={selectedSource}
               onChange={(e) => setSelectedSource(e.target.value)}
-              className="w-full sm:w-auto bg-slate-950/80 border border-slate-800 text-slate-300 text-xs rounded-lg px-2.5 sm:px-3 py-2 sm:py-2.5 focus:outline-none focus:border-indigo-500"
+              className="w-full sm:w-auto bg-slate-50/80 border border-slate-200 text-slate-500 text-xs rounded-lg px-2.5 sm:px-3 py-2 sm:py-2.5 focus:outline-none focus:border-indigo-500"
             >
               <option value="all">All Sources ({jobs.length})</option>
               <option value="ats">Company ATS APIs (Greenhouse / Lever)</option>
@@ -323,13 +323,13 @@ export const JobExplorer: React.FC = () => {
         <div className="space-y-2.5 sm:space-y-3 pt-1">
           <div className="flex items-center justify-between gap-2">
             <span className="text-slate-400 text-xs font-semibold flex items-center gap-1.5 shrink-0">
-              <Filter className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <Filter className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
               <span className="hidden sm:inline">Filter by Role & Location:</span>
               <span className="sm:hidden">Filters:</span>
             </span>
             <button
               onClick={() => setIsFiltersExpanded(!isFiltersExpanded)}
-              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-md bg-slate-800/80 hover:bg-slate-800 text-indigo-300 text-[11px] sm:text-xs font-medium border border-slate-700/60 transition-colors shrink-0"
+              className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-md bg-slate-100/80 hover:bg-slate-100 text-indigo-700 text-[11px] sm:text-xs font-medium border border-slate-200 transition-colors shrink-0"
             >
               <span>{isFiltersExpanded ? 'Collapse' : 'Expand'}</span>
               {isFiltersExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -353,8 +353,8 @@ export const JobExplorer: React.FC = () => {
                 onClick={() => setSelectedRole(role.id)}
                 className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium transition-all text-[11px] sm:text-xs ${
                   selectedRole === role.id
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'bg-slate-950/60 text-slate-400 hover:text-slate-200 border border-slate-800/80 hover:border-slate-700'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+                    : 'bg-slate-50/50 text-slate-400 hover:text-slate-600 border border-slate-200 hover:border-slate-200'
                 }`}
               >
                 {role.label}
@@ -364,7 +364,7 @@ export const JobExplorer: React.FC = () => {
             {!isFiltersExpanded && (
               <button
                 onClick={() => setIsFiltersExpanded(true)}
-                className="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 font-medium text-[11px] sm:text-xs border border-indigo-500/20"
+                className="px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-500/20 font-medium text-[11px] sm:text-xs border border-indigo-200"
               >
                 +4 More...
               </button>
@@ -372,7 +372,7 @@ export const JobExplorer: React.FC = () => {
           </div>
 
           {/* Location Filter Pills - separate row on mobile */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-slate-950/90 p-1 rounded-lg border border-slate-800 text-xs w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-1.5 bg-slate-50/90 p-1 rounded-lg border border-slate-200 text-xs w-full sm:w-auto">
             <span className="text-slate-500 font-medium px-1.5 text-[11px] sm:text-xs">Loc:</span>
             {[
               { id: 'all', label: 'All' },
@@ -385,7 +385,7 @@ export const JobExplorer: React.FC = () => {
                 className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded font-medium transition-all text-[11px] sm:text-xs ${
                   selectedLocation === loc.id
                     ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200'
+                    : 'text-slate-400 hover:text-slate-600'
                 }`}
               >
                 {loc.label}
@@ -397,25 +397,25 @@ export const JobExplorer: React.FC = () => {
 
       {/* Results Count Summary */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 px-1 gap-1">
-        <span>Showing <strong className="text-white">{filteredJobs.length}</strong> of {jobs.length} jobs</span>
-        <span className="text-indigo-400 font-medium text-[11px] sm:text-xs">0-1 yr experience filter active</span>
+        <span>Showing <strong className="text-slate-900">{filteredJobs.length}</strong> of {jobs.length} jobs</span>
+        <span className="text-indigo-600 font-medium text-[11px] sm:text-xs">0-1 yr experience filter active</span>
       </div>
 
       {/* Job Grid Cards */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div key={n} className="bg-slate-900/40 border border-slate-800 rounded-xl p-4 sm:p-5 animate-pulse space-y-3">
-              <div className="h-4 bg-slate-800 rounded w-2/3" />
-              <div className="h-3 bg-slate-800 rounded w-1/2" />
-              <div className="h-12 bg-slate-800/50 rounded mt-4" />
+            <div key={n} className="bg-white/40 border border-slate-200 rounded-xl p-4 sm:p-5 animate-pulse space-y-3">
+              <div className="h-4 bg-slate-100 rounded w-2/3" />
+              <div className="h-3 bg-slate-100 rounded w-1/2" />
+              <div className="h-12 bg-slate-100 rounded mt-4" />
             </div>
           ))}
         </div>
       ) : filteredJobs.length === 0 ? (
-        <div className="bg-slate-900/40 rounded-xl border border-slate-800 p-12 text-center space-y-3">
+        <div className="bg-white/40 rounded-xl border border-slate-200 p-12 text-center space-y-3">
           <Briefcase className="w-10 h-10 text-slate-600 mx-auto" />
-          <h3 className="text-lg font-semibold text-slate-300">No matching jobs found</h3>
+          <h3 className="text-lg font-semibold text-slate-500">No matching jobs found</h3>
           <p className="text-slate-500 text-sm max-w-md mx-auto">
             Try adjusting your search keyword or clearing the role/source filters.
           </p>
@@ -425,7 +425,7 @@ export const JobExplorer: React.FC = () => {
               setSelectedRole('all');
               setSelectedSource('all');
             }}
-            className="px-4 py-2 bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 rounded-lg text-xs font-semibold hover:bg-indigo-600/30"
+            className="px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-semibold hover:bg-indigo-600/30"
           >
             Reset Filters
           </button>
@@ -437,18 +437,18 @@ export const JobExplorer: React.FC = () => {
             return (
               <div
                 key={`${job.company}-${job.title}-${index}`}
-                className="group relative bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800 hover:border-indigo-500/40 rounded-xl p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-xl hover:shadow-indigo-500/5"
+                className="group relative bg-slate-50/80 hover:bg-slate-50 border border-slate-200 hover:border-indigo-500/40 rounded-xl p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:shadow-indigo-500/5"
               >
                 <div>
                   {/* Top Header Row */}
                   <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2.5 sm:mb-3">
                     <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-bold text-indigo-400 shrink-0 text-sm sm:text-base">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center font-bold text-indigo-600 shrink-0 text-sm sm:text-base">
                         {job.company.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <h4 className="text-xs font-semibold text-indigo-400 truncate flex items-center gap-1.5">
-                          <Building2 className="w-3 h-3 text-indigo-400/70 shrink-0" />
+                        <h4 className="text-xs font-semibold text-indigo-600 truncate flex items-center gap-1.5">
+                          <Building2 className="w-3 h-3 text-indigo-600/70 shrink-0" />
                           <span className="truncate">{job.company}</span>
                         </h4>
                         <span className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
@@ -460,27 +460,27 @@ export const JobExplorer: React.FC = () => {
 
                     <span className={`text-[10px] px-1.5 sm:px-2 py-0.5 rounded-full font-medium shrink-0 border whitespace-nowrap ${
                       isGreenhouseOrLever 
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                        : 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
+                        ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                        : 'bg-indigo-50 text-indigo-700 border-indigo-200'
                     }`}>
                       {job.source}
                     </span>
                   </div>
 
                   {/* Job Title */}
-                  <h3 className="text-sm sm:text-base font-bold text-slate-100 group-hover:text-indigo-300 transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-800 group-hover:text-indigo-700 transition-colors line-clamp-2 leading-snug">
                     {job.title}
                   </h3>
 
                   {/* Experience & Tags */}
                   <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-2.5 sm:mt-3">
-                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold border border-emerald-500/20">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-50 text-emerald-600 text-[10px] font-semibold border border-emerald-500/20">
                       🌱 0-1 Yr (Entry)
                     </span>
                     {job.tags && job.tags.split(',').slice(0, 2).map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className="px-1.5 sm:px-2 py-0.5 rounded bg-slate-950/80 text-slate-400 text-[10px] border border-slate-800 truncate max-w-[100px] sm:max-w-none"
+                        className="px-1.5 sm:px-2 py-0.5 rounded bg-slate-50/80 text-slate-400 text-[10px] border border-slate-200 truncate max-w-[100px] sm:max-w-none"
                       >
                         {tag.trim()}
                       </span>
@@ -489,7 +489,7 @@ export const JobExplorer: React.FC = () => {
                 </div>
 
                 {/* Footer Action */}
-                <div className="mt-3.5 sm:mt-5 pt-2.5 sm:pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                <div className="mt-3.5 sm:mt-5 pt-2.5 sm:pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
                   <span className="text-[10px] sm:text-[11px] text-slate-400 flex items-center gap-1 min-w-0 truncate">
                     <Clock className="w-3 h-3 text-slate-400 shrink-0" />
                     <span className="truncate">{job.date || 'Active'}</span>
@@ -499,7 +499,7 @@ export const JobExplorer: React.FC = () => {
                     href={job.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 text-[11px] sm:text-xs font-semibold transition-all group-hover:bg-indigo-600 group-hover:text-white shadow-sm shrink-0 whitespace-nowrap"
+                    className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white border border-indigo-200 text-[11px] sm:text-xs font-semibold transition-all group-hover:bg-indigo-600 group-hover:text-white shadow-sm shrink-0 whitespace-nowrap"
                   >
                     <span>Apply</span>
                     <ExternalLink className="w-3 h-3" />

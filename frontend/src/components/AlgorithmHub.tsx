@@ -159,17 +159,17 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
     activeStepText.toLowerCase().includes('result');
 
   return (
-    <div className="space-y-3 pt-3 border-t border-slate-800/80">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-slate-800/80">
+    <div className="space-y-3 pt-3 border-t border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2.5 border-b border-slate-200">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600 font-bold shrink-0">
             <Terminal size={16} />
           </div>
           <div>
             <h4 className="text-xs sm:text-sm font-black text-white tracking-tight flex items-center gap-2">
               <span>🧪 Interactive Step-by-Step Dry Run</span>
               {isPlaying && (
-                <span className="flex items-center gap-1.5 text-[10px] text-emerald-400 font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 animate-pulse">
+                <span className="flex items-center gap-1.5 text-[10px] text-emerald-600 font-mono px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 animate-pulse">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   Auto Playing
                 </span>
@@ -180,16 +180,16 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[11px] font-mono font-extrabold px-2.5 py-1 rounded-lg bg-slate-950 text-cyan-300 border border-slate-800">
+          <span className="text-[11px] font-mono font-extrabold px-2.5 py-1 rounded-lg bg-slate-50 text-cyan-700 border border-slate-200">
             Step {currentStepIdx + 1} / {totalSteps}
           </span>
 
-          <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-bold">
+          <div className="flex items-center bg-slate-50 p-1 rounded-xl border border-slate-200 text-[11px] font-bold">
             <button
               onClick={() => setTraceMode('stepper')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
                 traceMode === 'stepper'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-extrabold'
+                  ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40 font-extrabold'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -199,7 +199,7 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
               onClick={() => setTraceMode('grid')}
               className={`px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
                 traceMode === 'grid'
-                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-extrabold'
+                  ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40 font-extrabold'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -209,22 +209,22 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
         </div>
       </div>
 
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#090E1A] via-[#0D1527] to-[#080C17] border border-cyan-500/30 shadow-2xl space-y-4">
+      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#090E1A] via-[#0D1527] to-[#080C17] border border-cyan-200 shadow-lg space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="p-3 rounded-xl bg-slate-950/90 border border-cyan-500/40 space-y-1">
-            <div className="text-[10px] font-black uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-              <Play size={12} className="text-cyan-400" /> Sample Input
+          <div className="p-3 rounded-xl bg-slate-50/90 border border-cyan-500/40 space-y-1">
+            <div className="text-[10px] font-black uppercase tracking-wider text-cyan-600 flex items-center gap-1.5">
+              <Play size={12} className="text-cyan-600" /> Sample Input
             </div>
-            <div className="text-xs font-mono font-bold text-cyan-100 bg-slate-900/90 px-3 py-2 rounded-lg border border-cyan-500/20 break-all select-all shadow-inner">
+            <div className="text-xs font-mono font-bold text-cyan-100 bg-slate-50 px-3 py-2 rounded-lg border border-cyan-500/20 break-all select-all shadow-sm">
               {exampleTrace.input}
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-slate-950/90 border border-emerald-500/40 space-y-1">
-            <div className="text-[10px] font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-              <CheckCircle2 size={12} className="text-emerald-400" /> Final Output
+          <div className="p-3 rounded-xl bg-slate-50/90 border border-emerald-500/40 space-y-1">
+            <div className="text-[10px] font-black uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
+              <CheckCircle2 size={12} className="text-emerald-600" /> Final Output
             </div>
-            <div className="text-xs font-mono font-bold text-emerald-200 bg-slate-900/90 px-3 py-2 rounded-lg border border-emerald-500/20 break-all select-all shadow-inner">
+            <div className="text-xs font-mono font-bold text-emerald-200 bg-slate-50 px-3 py-2 rounded-lg border border-emerald-500/20 break-all select-all shadow-sm">
               {exampleTrace.output}
             </div>
           </div>
@@ -232,12 +232,12 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
 
         {traceMode === 'stepper' && (
           <div className="space-y-3.5 pt-1">
-            <div className="p-2.5 rounded-xl bg-[#060A14] border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleJumpStep(0)}
                   disabled={currentStepIdx === 0}
-                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 border border-slate-800 transition-all text-xs"
+                  className="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 disabled:opacity-40 border border-slate-200 transition-all text-xs"
                   title="First Step"
                 >
                   <SkipBack size={14} />
@@ -245,7 +245,7 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                 <button
                   onClick={handlePrevStep}
                   disabled={currentStepIdx === 0}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs disabled:opacity-40 border border-slate-800 transition-all"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs disabled:opacity-40 border border-slate-200 transition-all"
                 >
                   <ChevronRight size={14} className="rotate-180" /> Prev
                 </button>
@@ -254,8 +254,8 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                   onClick={toggleAutoPlay}
                   className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-extrabold text-xs transition-all ${
                     isPlaying
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse'
-                      : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
+                      ? 'bg-rose-500/20 text-rose-700 border border-rose-500/40 animate-pulse'
+                      : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-200'
                   }`}
                 >
                   {isPlaying ? (
@@ -272,14 +272,14 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                 <button
                   onClick={handleNextStep}
                   disabled={currentStepIdx === totalSteps - 1}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-xs disabled:opacity-40 border border-slate-800 transition-all"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs disabled:opacity-40 border border-slate-200 transition-all"
                 >
                   Next <ChevronRight size={14} />
                 </button>
                 <button
                   onClick={() => handleJumpStep(totalSteps - 1)}
                   disabled={currentStepIdx === totalSteps - 1}
-                  className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 border border-slate-800 transition-all text-xs"
+                  className="p-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-500 disabled:opacity-40 border border-slate-200 transition-all text-xs"
                   title="Last Step"
                 >
                   <SkipForward size={14} />
@@ -288,14 +288,14 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
 
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 text-xs font-medium transition-all"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-white text-slate-400 hover:text-slate-900 border border-slate-200 text-xs font-medium transition-all"
               >
                 <RotateCcw size={13} /> Reset
               </button>
             </div>
 
             <div className="space-y-1">
-              <div className="h-2 w-full bg-slate-950 rounded-full overflow-hidden border border-slate-800/80">
+              <div className="h-2 w-full bg-slate-50 rounded-full overflow-hidden border border-slate-200">
                 <div
                   className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 transition-all duration-300 rounded-full shadow-md shadow-cyan-500/30"
                   style={{ width: `${((currentStepIdx + 1) / totalSteps) * 100}%` }}
@@ -319,8 +319,8 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                           ? 'bg-emerald-500 text-slate-950 font-black shadow-lg shadow-emerald-500/30 scale-105'
                           : 'bg-cyan-500 text-slate-950 font-black shadow-lg shadow-cyan-500/30 scale-105'
                         : isPassed
-                        ? 'bg-slate-900 text-cyan-400 border border-cyan-500/30'
-                        : 'bg-slate-950 text-slate-500 border border-slate-800/80 hover:text-slate-300'
+                        ? 'bg-white text-cyan-600 border border-cyan-200'
+                        : 'bg-slate-50 text-slate-500 border border-slate-200 hover:text-slate-500'
                     }`}
                   >
                     Step {idx + 1}
@@ -332,26 +332,26 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
             <div
               className={`p-4 sm:p-5 rounded-2xl border transition-all animate-fadeIn ${
                 isFinalStep
-                  ? 'bg-gradient-to-br from-[#061D15] via-[#0A261C] to-[#05140F] border-emerald-500/60 shadow-2xl shadow-emerald-500/10'
-                  : 'bg-gradient-to-br from-[#060D1A] via-[#0A1428] to-[#070D19] border-cyan-500/50 shadow-2xl shadow-cyan-500/10'
+                  ? 'bg-gradient-to-br from-[#061D15] via-[#0A261C] to-[#05140F] border-emerald-500/60 shadow-lg shadow-emerald-500/10'
+                  : 'bg-gradient-to-br from-[#060D1A] via-[#0A1428] to-[#070D19] border-cyan-500/50 shadow-lg shadow-cyan-500/10'
               }`}
             >
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span
                   className={`text-xs font-extrabold px-3 py-1 rounded-lg flex items-center gap-1.5 font-mono ${
                     isFinalStep
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-500/40'
+                      : 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40'
                   }`}
                 >
                   {isFinalStep ? (
                     <>
-                      <CheckCircle2 size={13} className="text-emerald-400" />
+                      <CheckCircle2 size={13} className="text-emerald-600" />
                       <span>Step {currentStepIdx + 1}: Final Execution Result</span>
                     </>
                   ) : (
                     <>
-                      <Zap size={13} className="text-cyan-400" />
+                      <Zap size={13} className="text-cyan-600" />
                       <span>Step {currentStepIdx + 1} of {totalSteps}</span>
                     </>
                   )}
@@ -362,7 +362,7 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                 </span>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-xs sm:text-sm font-mono text-slate-100 leading-relaxed tracking-wide shadow-inner select-all">
+              <div className="p-4 rounded-xl bg-slate-50/90 border border-slate-200 text-xs sm:text-sm font-mono text-slate-800 leading-relaxed tracking-wide shadow-sm select-all">
                 {activeStepText}
               </div>
             </div>
@@ -379,12 +379,12 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
                   className={`p-3 rounded-xl border flex items-start gap-2.5 transition-all ${
                     isFinal
                       ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-200 border-l-4 border-l-emerald-400'
-                      : 'bg-[#060A14]/90 border-slate-800/90 border-l-4 border-l-cyan-500/60 text-slate-200'
+                      : 'bg-slate-50/90 border-slate-200/90 border-l-4 border-l-cyan-500/60 text-slate-600'
                   }`}
                 >
                   <span
                     className={`px-2 py-0.5 rounded-md font-mono text-[10px] font-extrabold shrink-0 mt-0.5 ${
-                      isFinal ? 'bg-emerald-500/20 text-emerald-300' : 'bg-cyan-500/20 text-cyan-300'
+                      isFinal ? 'bg-emerald-50 text-emerald-700' : 'bg-cyan-500/20 text-cyan-700'
                     }`}
                   >
                     Step {tIdx + 1}
@@ -403,25 +403,25 @@ export const InteractiveTraceVisualizer: React.FC<InteractiveTraceVisualizerProp
 const renderCategoryIcon = (iconName?: string, size: number = 14) => {
   switch (iconName) {
     case 'Layers':
-      return <Layers size={size} className="shrink-0 text-cyan-400" />;
+      return <Layers size={size} className="shrink-0 text-cyan-600" />;
     case 'Terminal':
-      return <Terminal size={size} className="shrink-0 text-emerald-400" />;
+      return <Terminal size={size} className="shrink-0 text-emerald-600" />;
     case 'Target':
-      return <Target size={size} className="shrink-0 text-rose-400" />;
+      return <Target size={size} className="shrink-0 text-rose-600" />;
     case 'SlidersHorizontal':
-      return <SlidersHorizontal size={size} className="shrink-0 text-amber-400" />;
+      return <SlidersHorizontal size={size} className="shrink-0 text-amber-600" />;
     case 'FolderTree':
-      return <FolderTree size={size} className="shrink-0 text-indigo-400" />;
+      return <FolderTree size={size} className="shrink-0 text-indigo-600" />;
     case 'Cpu':
-      return <Cpu size={size} className="shrink-0 text-blue-400" />;
+      return <Cpu size={size} className="shrink-0 text-blue-600" />;
     case 'Zap':
-      return <Zap size={size} className="shrink-0 text-amber-300" />;
+      return <Zap size={size} className="shrink-0 text-amber-700" />;
     case 'RotateCcw':
       return <RotateCcw size={size} className="shrink-0 text-pink-400" />;
     case 'Building':
-      return <Building size={size} className="shrink-0 text-purple-400" />;
+      return <Building size={size} className="shrink-0 text-purple-600" />;
     default:
-      return <Sparkles size={size} className="shrink-0 text-cyan-400" />;
+      return <Sparkles size={size} className="shrink-0 text-cyan-600" />;
   }
 };
 
@@ -655,14 +655,14 @@ export const AlgorithmHub: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-slate-400 space-y-4">
         <div className="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
-        <p className="text-sm font-semibold text-slate-300">Loading Master Algorithms Encyclopedia...</p>
+        <p className="text-sm font-semibold text-slate-500">Loading Master Algorithms Encyclopedia...</p>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="p-8 text-center text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-2xl">
+      <div className="p-8 text-center text-rose-600 bg-rose-50 border border-rose-500/20 rounded-2xl">
         Failed to load `algorithms_master.json`. Ensure the JSON file exists in `/data/`.
       </div>
     );
@@ -671,17 +671,17 @@ export const AlgorithmHub: React.FC = () => {
   return (
     <div className="space-y-6 animate-fadeIn pb-12">
       {/* 1. Sleek Compact Header & View Switcher Bar */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#0D1527] via-[#0B0F1B] to-[#141C36] border border-slate-800/90 relative overflow-hidden shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="absolute -right-10 -top-10 w-60 h-60 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-10 -bottom-10 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#0D1527] via-[#0B0F1B] to-[#141C36] border border-slate-200/90 relative overflow-hidden shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="absolute -right-10 -top-10 w-60 h-60 bg-cyan-50 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-10 -bottom-10 w-60 h-60 bg-indigo-50 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 space-y-1.5 max-w-2xl">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[11px] font-extrabold">
-              <Sparkles size={13} className="text-cyan-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-700 text-[11px] font-extrabold">
+              <Sparkles size={13} className="text-cyan-600 animate-pulse" />
               <span>Master Algorithm Encyclopedia</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-md bg-slate-950 text-cyan-300 border border-slate-800 font-mono text-[11px] font-bold">
+            <span className="px-2.5 py-0.5 rounded-md bg-slate-50 text-cyan-700 border border-slate-200 font-mono text-[11px] font-bold">
               {totalAlgorithmsCount} Algorithms
             </span>
           </div>
@@ -689,19 +689,19 @@ export const AlgorithmHub: React.FC = () => {
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
             Algorithm Workbench & W-Guide
           </h1>
-          <p className="text-xs text-slate-300">
+          <p className="text-xs text-slate-500">
             Explore algorithms with intuition, step-by-step logic, multi-language code templates, and 4 W-Answers (What, When, Where, Why).
           </p>
         </div>
 
         {/* View Mode Switcher */}
-        <div className="relative z-10 flex items-center gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800/90 shrink-0 self-start md:self-auto">
+        <div className="relative z-10 flex items-center gap-2 bg-slate-50 p-1.5 rounded-2xl border border-slate-200/90 shrink-0 self-start md:self-auto">
           <button
             onClick={() => setViewMode('split')}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all ${
               viewMode === 'split'
                 ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25 scale-[1.02]'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-400 hover:text-slate-900'
             }`}
           >
             <SlidersHorizontal size={14} />
@@ -712,7 +712,7 @@ export const AlgorithmHub: React.FC = () => {
             className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all ${
               viewMode === 'accordion'
                 ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25 scale-[1.02]'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-400 hover:text-slate-900'
             }`}
           >
             <FolderTree size={14} />
@@ -725,16 +725,16 @@ export const AlgorithmHub: React.FC = () => {
       <BigOComplexityChart />
 
       {/* 2. Topic Category Filter Pill Buttons */}
-      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0D1322]/90 border border-slate-800/90 backdrop-blur-xl shadow-xl space-y-2.5">
-        <div className="flex items-center justify-between text-xs text-slate-300 font-bold px-1">
-          <span className="flex items-center gap-1.5 text-cyan-400">
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 border border-slate-200/90 backdrop-blur-xl shadow-md space-y-2.5">
+        <div className="flex items-center justify-between text-xs text-slate-500 font-bold px-1">
+          <span className="flex items-center gap-1.5 text-cyan-600">
             <FolderTree size={14} />
             <span>Filter by Topic Category:</span>
           </span>
           {selectedTopicFilter !== 'all' && (
             <button
               onClick={() => setSelectedTopicFilter('all')}
-              className="text-[11px] text-cyan-400 hover:underline font-semibold"
+              className="text-[11px] text-cyan-600 hover:underline font-semibold"
             >
               Reset to All Topics
             </button>
@@ -747,12 +747,12 @@ export const AlgorithmHub: React.FC = () => {
             onClick={() => setSelectedTopicFilter('all')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
               selectedTopicFilter === 'all'
-                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20 scale-[1.02] border border-cyan-400/40'
-                : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-200 scale-[1.02] border border-cyan-400/40'
+                : 'bg-slate-50 text-slate-400 hover:text-slate-900 border border-slate-200'
             }`}
           >
             <span>🌐 All Topics</span>
-            <span className="px-1.5 py-0.2 rounded bg-slate-950 text-[10px] font-mono border border-slate-700">
+            <span className="px-1.5 py-0.2 rounded bg-slate-50 text-[10px] font-mono border border-slate-200">
               {categoryCounts.all || 0}
             </span>
           </button>
@@ -774,14 +774,14 @@ export const AlgorithmHub: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all ${
                   isSelected
                     ? 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-md shadow-cyan-500/25 scale-[1.02] border border-cyan-400/40'
-                    : 'bg-slate-950/90 text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800/90'
+                    : 'bg-slate-50/90 text-slate-500 hover:text-slate-900 hover:bg-white border border-slate-200/90'
                 }`}
               >
                 {renderCategoryIcon(cat.icon, 14)}
                 <span>{cat.title}</span>
                 <span
                   className={`px-1.5 py-0.2 rounded text-[10px] font-mono border font-bold ${
-                    isSelected ? 'bg-slate-950 text-cyan-300 border-cyan-500/40' : 'bg-slate-950 text-slate-400 border-slate-800'
+                    isSelected ? 'bg-slate-50 text-cyan-700 border-cyan-500/40' : 'bg-slate-50 text-slate-400 border-slate-200'
                   }`}
                 >
                   {count}
@@ -796,9 +796,9 @@ export const AlgorithmHub: React.FC = () => {
       {viewMode === 'split' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Algorithm Selector Navigation Menu (Width: 5/12 on lg, 4/12 on xl) */}
-          <div className={`lg:col-span-5 xl:col-span-4 bg-[#0D1322]/90 border border-slate-800/90 rounded-2xl p-4 sm:p-4.5 space-y-3.5 shadow-xl sticky top-20 max-h-[82vh] flex-col overflow-hidden ${mobileShowDetail ? 'hidden lg:flex' : 'flex'}`}>
+          <div className={`lg:col-span-5 xl:col-span-4 bg-white/90 border border-slate-200/90 rounded-2xl p-4 sm:p-4.5 space-y-3.5 shadow-md sticky top-20 max-h-[82vh] flex-col overflow-hidden ${mobileShowDetail ? 'hidden lg:flex' : 'flex'}`}>
             {/* Search & Difficulty Filter Header */}
-            <div className="space-y-2 pb-2.5 border-b border-slate-800 shrink-0">
+            <div className="space-y-2 pb-2.5 border-b border-slate-200 shrink-0">
               <div className="relative">
                 <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
@@ -806,12 +806,12 @@ export const AlgorithmHub: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search algorithm or concept..."
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500/80 rounded-xl pl-9 pr-7 py-2 text-xs text-white placeholder-slate-400 outline-none transition-all shadow-inner"
+                  className="w-full bg-slate-50 border border-slate-200 focus:border-cyan-500/80 rounded-xl pl-9 pr-7 py-2 text-xs text-slate-900 placeholder-slate-400 outline-none transition-all shadow-sm"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-900"
                   >
                     ✕
                   </button>
@@ -824,8 +824,8 @@ export const AlgorithmHub: React.FC = () => {
                   onClick={() => setSelectedDifficulty('all')}
                   className={`flex-1 py-1 rounded-lg text-center transition-all ${
                     selectedDifficulty === 'all'
-                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800'
+                      ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200'
                   }`}
                 >
                   All
@@ -834,8 +834,8 @@ export const AlgorithmHub: React.FC = () => {
                   onClick={() => setSelectedDifficulty('Easy')}
                   className={`flex-1 py-1 rounded-lg text-center transition-all ${
                     selectedDifficulty === 'Easy'
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-500/40'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200'
                   }`}
                 >
                   Easy
@@ -844,8 +844,8 @@ export const AlgorithmHub: React.FC = () => {
                   onClick={() => setSelectedDifficulty('Medium')}
                   className={`flex-1 py-1 rounded-lg text-center transition-all ${
                     selectedDifficulty === 'Medium'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800'
+                      ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200'
                   }`}
                 >
                   Med
@@ -854,8 +854,8 @@ export const AlgorithmHub: React.FC = () => {
                   onClick={() => setSelectedDifficulty('Hard')}
                   className={`flex-1 py-1 rounded-lg text-center transition-all ${
                     selectedDifficulty === 'Hard'
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800'
+                      ? 'bg-rose-500/20 text-rose-700 border border-rose-500/40'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200'
                   }`}
                 >
                   Hard
@@ -883,29 +883,29 @@ export const AlgorithmHub: React.FC = () => {
                       }}
                       className={`w-full p-3 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 group box-border ${
                         isSelected
-                          ? 'bg-gradient-to-r from-[#0F1D38] via-[#102447] to-[#0F1D38] border-2 border-cyan-400/90 text-white shadow-md shadow-cyan-500/20'
-                          : 'bg-slate-950/80 hover:bg-slate-900 border border-slate-800/90 text-slate-300 hover:text-white'
+                          ? 'bg-gradient-to-r from-[#0F1D38] via-[#102447] to-[#0F1D38] border-2 border-cyan-400/90 text-white shadow-md shadow-cyan-200'
+                          : 'bg-slate-50/80 hover:bg-white border border-slate-200/90 text-slate-500 hover:text-slate-900'
                       }`}
                     >
                       <div className="min-w-0 flex items-center gap-2.5 flex-1">
                         {renderCategoryIcon(catObj?.icon, 15)}
                         <div className="min-w-0 flex-1">
-                          <h4 className="text-xs font-bold truncate group-hover:text-cyan-300 transition-colors">
+                          <h4 className="text-xs font-bold truncate group-hover:text-cyan-700 transition-colors">
                             {algo.title}
                           </h4>
                           <div className="flex items-center gap-2 mt-1 flex-wrap">
                             <span
                               className={`text-[9px] font-bold px-1.5 py-0.2 rounded border shrink-0 ${
                                 algo.difficulty === 'Easy'
-                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                                   : algo.difficulty === 'Medium'
-                                  ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                                  : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                                  ? 'bg-amber-50 text-amber-600 border-amber-200'
+                                  : 'bg-rose-50 text-rose-600 border-rose-200'
                               }`}
                             >
                               {algo.difficulty}
                             </span>
-                            <span className="text-[10px] font-mono text-cyan-300 truncate max-w-[140px]">
+                            <span className="text-[10px] font-mono text-cyan-700 truncate max-w-[140px]">
                               ⏱️ {algo.timeComplexity}
                             </span>
                           </div>
@@ -914,7 +914,7 @@ export const AlgorithmHub: React.FC = () => {
 
                       <ChevronRight
                         size={15}
-                        className={`shrink-0 transition-transform ${isSelected ? 'text-cyan-400 translate-x-0.5' : 'text-slate-600'}`}
+                        className={`shrink-0 transition-transform ${isSelected ? 'text-cyan-600 translate-x-0.5' : 'text-slate-600'}`}
                       />
                     </button>
                   );
@@ -929,7 +929,7 @@ export const AlgorithmHub: React.FC = () => {
             <div className="lg:hidden mb-1">
               <button
                 onClick={() => setMobileShowDetail(false)}
-                className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 font-bold text-xs border border-slate-800 shadow-md transition-all active:scale-95"
+                className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-cyan-700 font-bold text-xs border border-slate-200 shadow-md transition-all active:scale-95"
               >
                 <ArrowLeft size={16} />
                 <span>← Back to Algorithms List</span>
@@ -937,11 +937,11 @@ export const AlgorithmHub: React.FC = () => {
             </div>
 
             {activeAlgorithm ? (
-              <div className="bg-[#0D1322]/90 border border-slate-800/90 rounded-3xl overflow-hidden shadow-2xl space-y-6 p-4 sm:p-6 md:p-8 animate-fadeIn">
+              <div className="bg-white/90 border border-slate-200/90 rounded-3xl overflow-hidden shadow-lg space-y-6 p-4 sm:p-6 md:p-8 animate-fadeIn">
                 {/* Algorithm Stage Header */}
-                <div className="pb-5 border-b border-slate-800/90 space-y-3">
+                <div className="pb-5 border-b border-slate-200/90 space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5 shrink-0">
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 flex items-center gap-1.5 shrink-0">
                       {renderCategoryIcon(data.categories.find((c) => c.id === activeAlgorithm.categoryId)?.icon, 14)}
                       <span>{activeAlgorithm.categoryTitle}</span>
                     </span>
@@ -950,54 +950,54 @@ export const AlgorithmHub: React.FC = () => {
                       <span
                         className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${
                           activeAlgorithm.difficulty === 'Easy'
-                            ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                            ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                             : activeAlgorithm.difficulty === 'Medium'
-                            ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                            : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                            ? 'bg-amber-50 text-amber-600 border-amber-200'
+                            : 'bg-rose-50 text-rose-600 border-rose-200'
                         }`}
                       >
                         {activeAlgorithm.difficulty}
                       </span>
-                      <span className="px-2.5 py-1 rounded-lg bg-slate-950 text-cyan-300 border border-slate-800 font-bold">
+                      <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-cyan-700 border border-slate-200 font-bold">
                         ⏱️ Time: {activeAlgorithm.timeComplexity}
                       </span>
-                      <span className="px-2.5 py-1 rounded-lg bg-slate-950 text-purple-300 border border-slate-800 font-bold">
+                      <span className="px-2.5 py-1 rounded-lg bg-slate-50 text-purple-700 border border-slate-200 font-bold">
                         💾 Space: {activeAlgorithm.spaceComplexity}
                       </span>
                     </div>
                   </div>
 
-                  <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight flex items-center gap-2.5 break-words">
-                    <Code2 className="text-cyan-400 shrink-0" size={24} />
+                  <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2.5 break-words">
+                    <Code2 className="text-cyan-600 shrink-0" size={24} />
                     <span className="break-words min-w-0">{activeAlgorithm.title}</span>
                   </h2>
                 </div>
 
                 {/* Core Intuition Box */}
-                <div className="p-4 rounded-2xl border-l-4 border-l-cyan-400 bg-gradient-to-r from-cyan-950/40 via-slate-900/90 to-[#0A0F1D] border-y border-r border-cyan-500/20 shadow-xl space-y-1.5">
-                  <span className="font-extrabold text-cyan-300 flex items-center gap-2 text-xs uppercase tracking-wider">
-                    <Lightbulb size={16} className="text-amber-400 animate-pulse" />
+                <div className="p-4 rounded-2xl border-l-4 border-l-cyan-400 bg-gradient-to-r from-cyan-950/40 via-slate-900/90 to-[#0A0F1D] border-y border-r border-cyan-500/20 shadow-md space-y-1.5">
+                  <span className="font-extrabold text-cyan-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                    <Lightbulb size={16} className="text-amber-600 animate-pulse" />
                     <span>Core Intuition & Key Overview</span>
                   </span>
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">{activeAlgorithm.summary}</p>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">{activeAlgorithm.summary}</p>
                 </div>
 
                 {/* Step-by-Step Logic */}
                 <div className="space-y-3">
-                  <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                    <Zap size={15} className="text-cyan-400" />
+                  <h3 className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                    <Zap size={15} className="text-cyan-600" />
                     <span>Step-by-Step Logic</span>
                   </h3>
                   <div className="grid grid-cols-1 gap-2.5 text-xs">
                     {activeAlgorithm.explanation.map((step, idx) => (
                       <div
                         key={idx}
-                        className="p-3.5 rounded-xl bg-[#0B1120] border-l-2 border-l-cyan-500/60 border border-slate-800/90 flex items-start gap-3 text-slate-200 leading-relaxed hover:border-slate-700 transition-all shadow-sm"
+                        className="p-3.5 rounded-xl bg-slate-50 border-l-2 border-l-cyan-500/60 border border-slate-200/90 flex items-start gap-3 text-slate-600 leading-relaxed hover:border-slate-200 transition-all shadow-sm"
                       >
-                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-black text-[11px] flex items-center justify-center shadow-md shadow-cyan-500/20 shrink-0 mt-0.5">
+                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-slate-900 font-black text-[11px] flex items-center justify-center shadow-md shadow-cyan-200 shrink-0 mt-0.5">
                           {idx + 1}
                         </span>
-                        <span className="font-medium text-slate-200">{step}</span>
+                        <span className="font-medium text-slate-600">{step}</span>
                       </div>
                     ))}
                   </div>
@@ -1013,38 +1013,38 @@ export const AlgorithmHub: React.FC = () => {
 
                 {/* 4 W-Answers Cards */}
                 <div className="space-y-3">
-                  <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                    <HelpCircle size={15} className="text-purple-400" />
+                  <h3 className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                    <HelpCircle size={15} className="text-purple-600" />
                     <span>All W-Answers (What, When, Where, Why)</span>
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-950/40 via-[#0B132B] to-[#080D1A] border border-blue-500/30 space-y-2 shadow-xl hover:border-blue-400/60 transition-all">
-                      <span className="font-extrabold text-blue-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-950/40 via-[#0B132B] to-[#080D1A] border border-blue-200 space-y-2 shadow-md hover:border-blue-400/60 transition-all">
+                      <span className="font-extrabold text-blue-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                         <Target size={14} /> 1. What Problem Does It Solve?
                       </span>
-                      <p className="text-slate-200 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whatItSolves}</p>
+                      <p className="text-slate-600 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whatItSolves}</p>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-950/40 via-[#1F180A] to-[#080D1A] border border-amber-500/30 space-y-2 shadow-xl hover:border-amber-400/60 transition-all">
-                      <span className="font-extrabold text-amber-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-950/40 via-[#1F180A] to-[#080D1A] border border-amber-200 space-y-2 shadow-md hover:border-amber-400/60 transition-all">
+                      <span className="font-extrabold text-amber-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                         <Sparkles size={14} /> 2. When to Use It? (Pattern Triggers)
                       </span>
-                      <p className="text-slate-200 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whenToUse}</p>
+                      <p className="text-slate-600 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whenToUse}</p>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[#0A1F18] to-[#080D1A] border border-emerald-500/30 space-y-2 shadow-xl hover:border-emerald-400/60 transition-all">
-                      <span className="font-extrabold text-emerald-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[#0A1F18] to-[#080D1A] border border-emerald-200 space-y-2 shadow-md hover:border-emerald-400/60 transition-all">
+                      <span className="font-extrabold text-emerald-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                         <Building size={14} /> 3. Where is it Used in Production?
                       </span>
-                      <p className="text-slate-200 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whereUsed}</p>
+                      <p className="text-slate-600 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whereUsed}</p>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-950/40 via-[#1A0B2B] to-[#080D1A] border border-purple-500/30 space-y-2 shadow-xl hover:border-purple-400/60 transition-all">
-                      <span className="font-extrabold text-purple-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-950/40 via-[#1A0B2B] to-[#080D1A] border border-purple-200 space-y-2 shadow-md hover:border-purple-400/60 transition-all">
+                      <span className="font-extrabold text-purple-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                         <Clock size={14} /> 4. Why is it Optimal? (Big-O Analysis)
                       </span>
-                      <p className="text-slate-200 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whyOptimal}</p>
+                      <p className="text-slate-600 leading-relaxed font-normal">{activeAlgorithm.wAnswers.whyOptimal}</p>
                     </div>
                   </div>
                 </div>
@@ -1052,13 +1052,13 @@ export const AlgorithmHub: React.FC = () => {
                 {/* VS Code IDE Editor Block */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <h3 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                      <Code2 size={15} className="text-emerald-400" />
+                    <h3 className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                      <Code2 size={15} className="text-emerald-600" />
                       <span>Code Implementation</span>
                     </h3>
 
                     {/* Language Switcher */}
-                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-[11px] font-bold shadow-inner">
+                    <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200 text-[11px] font-bold shadow-sm">
                       {activeAlgorithm.codeTemplates.map((tmpl) => {
                         const curLang = getCodeLang(activeAlgorithm.id);
                         return (
@@ -1068,7 +1068,7 @@ export const AlgorithmHub: React.FC = () => {
                             className={`px-3 py-1.5 rounded-lg transition-all ${
                               curLang === tmpl.language
                                 ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md font-extrabold scale-[1.02]'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                                : 'text-slate-400 hover:text-slate-900 hover:bg-white'
                             }`}
                           >
                             {tmpl.language === 'python' && '🐍 Python'}
@@ -1088,9 +1088,9 @@ export const AlgorithmHub: React.FC = () => {
                     if (!activeCodeObj) return null;
 
                     return (
-                      <div className="relative rounded-2xl bg-[#04060E] border border-slate-800/90 overflow-hidden shadow-2xl">
+                      <div className="relative rounded-2xl bg-slate-50 border border-slate-200/90 overflow-hidden shadow-lg">
                         {/* IDE Window Header */}
-                        <div className="flex items-center justify-between px-4 py-2.5 bg-[#0A0E1A] border-b border-slate-800 text-xs font-mono">
+                        <div className="flex items-center justify-between px-4 py-2.5 bg-white border-b border-slate-200 text-xs font-mono">
                           <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1.5">
                               <div className="w-3 h-3 rounded-full bg-rose-500/80" />
@@ -1110,7 +1110,7 @@ export const AlgorithmHub: React.FC = () => {
                                 initialCode: activeCodeObj.code,
                                 initialLanguage: activeCodeObj.language
                               })}
-                              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs transition shadow-md cursor-pointer"
+                              className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-slate-900 font-bold text-xs transition shadow-md cursor-pointer"
                             >
                               <Code2 size={13} />
                               <span>Run in Workspace</span>
@@ -1118,12 +1118,12 @@ export const AlgorithmHub: React.FC = () => {
 
                             <button
                               onClick={() => handleCopyCode(activeAlgorithm.id, activeCodeObj.code)}
-                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white transition-all border border-slate-800 text-xs font-sans font-bold"
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-all border border-slate-200 text-xs font-sans font-bold"
                             >
                               {copiedCodeId === activeAlgorithm.id ? (
                                 <>
-                                  <Check size={13} className="text-emerald-400" />
-                                  <span className="text-emerald-400 font-bold">Copied!</span>
+                                  <Check size={13} className="text-emerald-600" />
+                                  <span className="text-emerald-600 font-bold">Copied!</span>
                                 </>
                               ) : (
                                 <>
@@ -1137,7 +1137,7 @@ export const AlgorithmHub: React.FC = () => {
 
                         {/* Code Gutter & Block */}
                         <div className="p-4 overflow-x-auto text-xs font-mono leading-relaxed flex items-start">
-                          <div className="flex flex-col text-slate-600 select-none pr-4 border-r border-slate-800/80 text-right font-bold text-[11px]">
+                          <div className="flex flex-col text-slate-600 select-none pr-4 border-r border-slate-200 text-right font-bold text-[11px]">
                             {activeCodeObj.code.split('\n').map((_, i) => (
                               <span key={i}>{i + 1}</span>
                             ))}
@@ -1153,9 +1153,9 @@ export const AlgorithmHub: React.FC = () => {
 
                 {/* Practice Problems */}
                 {activeAlgorithm.practiceProblems && activeAlgorithm.practiceProblems.length > 0 && (
-                  <div className="pt-3 border-t border-slate-800/80 space-y-3">
-                    <span className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                      <ExternalLink size={13} className="text-amber-400" />
+                  <div className="pt-3 border-t border-slate-200 space-y-3">
+                    <span className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                      <ExternalLink size={13} className="text-amber-600" />
                       <span>Practice Problems & Verification</span>
                     </span>
                     <div className="flex items-center gap-2.5 flex-wrap text-xs">
@@ -1165,16 +1165,16 @@ export const AlgorithmHub: React.FC = () => {
                           href={prob.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#090D18] hover:bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-200 hover:text-cyan-300 transition-all text-xs font-medium shadow-md hover:-translate-y-0.5"
+                          className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-cyan-500/50 text-slate-600 hover:text-cyan-700 transition-all text-xs font-medium shadow-md hover:-translate-y-0.5"
                         >
-                          <span className="font-bold text-white">{prob.title}</span>
+                          <span className="font-bold text-slate-900">{prob.title}</span>
                           <span
                             className={`text-[9px] font-black px-2 py-0.5 rounded-md border ${
                               prob.difficulty === 'Easy'
-                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                                 : prob.difficulty === 'Medium'
-                                ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                                : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                                ? 'bg-amber-50 text-amber-600 border-amber-200'
+                                : 'bg-rose-50 text-rose-600 border-rose-200'
                             }`}
                           >
                             {prob.difficulty}
@@ -1187,7 +1187,7 @@ export const AlgorithmHub: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="p-8 text-center bg-[#0D1322]/80 border border-slate-800 rounded-2xl text-slate-400">
+              <div className="p-8 text-center bg-white/80 border border-slate-200 rounded-2xl text-slate-400">
                 Select an algorithm from the left navigation panel to view details.
               </div>
             )}
@@ -1199,9 +1199,9 @@ export const AlgorithmHub: React.FC = () => {
       {viewMode === 'accordion' && (
         <div className="space-y-4">
           {categoryGroupedData.length === 0 ? (
-            <div className="p-8 text-center bg-[#0D1322]/80 border border-slate-800 rounded-2xl text-slate-400 space-y-2">
+            <div className="p-8 text-center bg-white/80 border border-slate-200 rounded-2xl text-slate-400 space-y-2">
               <HelpCircle size={32} className="mx-auto text-slate-500" />
-              <p className="font-bold text-slate-300">No algorithms found matching criteria.</p>
+              <p className="font-bold text-slate-500">No algorithms found matching criteria.</p>
             </div>
           ) : (
             categoryGroupedData.map(({ cat, algorithms }) => {
@@ -1210,20 +1210,20 @@ export const AlgorithmHub: React.FC = () => {
               return (
                 <div
                   key={cat.id}
-                  className="bg-[#0D1322]/90 border border-slate-800/90 rounded-2xl overflow-hidden shadow-xl transition-all hover:border-slate-700"
+                  className="bg-white/90 border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all hover:border-slate-200"
                 >
                   <button
                     onClick={() => toggleCategoryExpand(cat.id)}
-                    className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-[#0D1322] via-[#0F172A] to-[#0D1322] hover:bg-slate-800/60 transition-all text-left group"
+                    className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-[#0D1322] via-[#0F172A] to-[#0D1322] hover:bg-slate-50 transition-all text-left group"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-all shadow-md">
+                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-200 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-all shadow-md">
                         {renderCategoryIcon(cat.icon, 20)}
                       </div>
                       <div>
-                        <h3 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2">
+                        <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex items-center gap-2">
                           <span>{cat.title}</span>
-                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-950 text-cyan-300 border border-slate-800">
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-50 text-cyan-700 border border-slate-200">
                             {algorithms.length} Algorithms
                           </span>
                         </h3>
@@ -1232,14 +1232,14 @@ export const AlgorithmHub: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0">
-                      <div className="w-9 h-9 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-center text-slate-400 group-hover:text-cyan-300">
+                      <div className="w-9 h-9 rounded-xl bg-slate-50/80 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-cyan-700">
                         {isCatExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                       </div>
                     </div>
                   </button>
 
                   {isCatExpanded && (
-                    <div className="p-4 sm:p-5 border-t border-slate-800/80 bg-[#0A0E1A] space-y-4 animate-fadeIn">
+                    <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-4 animate-fadeIn">
                       {algorithms.map((algo) => {
                         const isAlgoExpanded = !!expandedAlgos[algo.id] || !!searchQuery.trim();
                         const currentLang = getCodeLang(algo.id);
@@ -1248,28 +1248,28 @@ export const AlgorithmHub: React.FC = () => {
                         return (
                           <div
                             key={algo.id}
-                            className="bg-[#0D1322] border border-slate-800/90 rounded-2xl overflow-hidden shadow-lg transition-all hover:border-slate-700"
+                            className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-lg transition-all hover:border-slate-200"
                           >
                             <button
                               onClick={() => toggleAlgoExpand(algo.id)}
-                              className="w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0E1526] hover:bg-slate-800/50 transition-all text-left group"
+                              className="w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 hover:bg-slate-100/50 transition-all text-left group"
                             >
                               <div className="flex items-center gap-3 min-w-0">
-                                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shrink-0">
+                                <div className="w-9 h-9 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-700 shrink-0">
                                   <Code2 size={17} />
                                 </div>
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <h4 className="text-xs sm:text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
+                                    <h4 className="text-xs sm:text-sm font-bold text-white group-hover:text-cyan-700 transition-colors">
                                       {algo.title}
                                     </h4>
                                     <span
                                       className={`text-[9px] font-bold px-2 py-0.5 rounded-md border ${
                                         algo.difficulty === 'Easy'
-                                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                          ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
                                           : algo.difficulty === 'Medium'
-                                          ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                                          : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                                          ? 'bg-amber-50 text-amber-600 border-amber-200'
+                                          : 'bg-rose-50 text-rose-600 border-rose-200'
                                       }`}
                                     >
                                       {algo.difficulty}
@@ -1280,42 +1280,42 @@ export const AlgorithmHub: React.FC = () => {
                               </div>
 
                               <div className="flex items-center gap-3 shrink-0">
-                                <span className="px-2 py-0.5 rounded-md bg-slate-950 text-cyan-300 border border-slate-800 font-bold text-[11px] font-mono">
+                                <span className="px-2 py-0.5 rounded-md bg-slate-50 text-cyan-700 border border-slate-200 font-bold text-[11px] font-mono">
                                   ⏱️ {algo.timeComplexity}
                                 </span>
-                                <div className="w-7 h-7 rounded-lg bg-slate-950/80 border border-slate-800 flex items-center justify-center text-slate-400 group-hover:text-cyan-300">
+                                <div className="w-7 h-7 rounded-lg bg-slate-50/80 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-cyan-700">
                                   {isAlgoExpanded ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
                                 </div>
                               </div>
                             </button>
 
                             {isAlgoExpanded && (
-                              <div className="p-4 sm:p-6 border-t border-slate-800/80 bg-[#060913] space-y-6 animate-fadeIn">
+                              <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50 space-y-6 animate-fadeIn">
                                 {/* Summary Box */}
                                 <div className="p-4 rounded-r-2xl border-l-4 border-l-cyan-400 bg-gradient-to-r from-cyan-950/40 via-slate-900/80 to-[#0A0F1D] border-y border-r border-cyan-500/20 shadow-lg space-y-1.5">
-                                  <span className="font-extrabold text-cyan-300 flex items-center gap-2 text-xs uppercase tracking-wider">
-                                    <Lightbulb size={15} className="text-amber-400 animate-pulse" />
+                                  <span className="font-extrabold text-cyan-700 flex items-center gap-2 text-xs uppercase tracking-wider">
+                                    <Lightbulb size={15} className="text-amber-600 animate-pulse" />
                                     <span>Core Intuition & Key Overview</span>
                                   </span>
-                                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">{algo.summary}</p>
+                                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">{algo.summary}</p>
                                 </div>
 
                                 {/* Step-by-Step Logic */}
                                 <div className="space-y-3">
-                                  <h5 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                                    <Zap size={14} className="text-cyan-400" />
+                                  <h5 className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                                    <Zap size={14} className="text-cyan-600" />
                                     <span>Step-by-Step Logic</span>
                                   </h5>
                                   <div className="grid grid-cols-1 gap-2 text-xs">
                                     {algo.explanation.map((step, idx) => (
                                       <div
                                         key={idx}
-                                        className="p-3.5 rounded-xl bg-[#0B1120] border-l-2 border-l-cyan-500/60 border border-slate-800/90 flex items-start gap-3 text-slate-200 leading-relaxed hover:border-slate-700 transition-all shadow-sm"
+                                        className="p-3.5 rounded-xl bg-slate-50 border-l-2 border-l-cyan-500/60 border border-slate-200/90 flex items-start gap-3 text-slate-600 leading-relaxed hover:border-slate-200 transition-all shadow-sm"
                                       >
-                                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-black text-[11px] flex items-center justify-center shadow-md shadow-cyan-500/20 shrink-0 mt-0.5">
+                                        <span className="w-5 h-5 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-slate-900 font-black text-[11px] flex items-center justify-center shadow-md shadow-cyan-200 shrink-0 mt-0.5">
                                           {idx + 1}
                                         </span>
-                                        <span className="font-medium text-slate-200">{step}</span>
+                                        <span className="font-medium text-slate-600">{step}</span>
                                       </div>
                                     ))}
                                   </div>
@@ -1331,50 +1331,50 @@ export const AlgorithmHub: React.FC = () => {
 
                                 {/* 4 W-Answers Cards */}
                                 <div className="space-y-3">
-                                  <h5 className="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                                    <HelpCircle size={14} className="text-purple-400" />
+                                  <h5 className="text-xs font-black text-slate-600 uppercase tracking-wider flex items-center gap-2">
+                                    <HelpCircle size={14} className="text-purple-600" />
                                     <span>All W-Answers (What, When, Where, Why)</span>
                                   </h5>
 
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
-                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-950/40 via-[#0B132B] to-[#080D1A] border border-blue-500/30 space-y-2 shadow-xl hover:border-blue-400/60 transition-all">
-                                      <span className="font-extrabold text-blue-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-950/40 via-[#0B132B] to-[#080D1A] border border-blue-200 space-y-2 shadow-md hover:border-blue-400/60 transition-all">
+                                      <span className="font-extrabold text-blue-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                                         <Target size={14} /> 1. What Problem Does It Solve?
                                       </span>
-                                      <p className="text-slate-200 leading-relaxed font-normal">{algo.wAnswers.whatItSolves}</p>
+                                      <p className="text-slate-600 leading-relaxed font-normal">{algo.wAnswers.whatItSolves}</p>
                                     </div>
 
-                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-950/40 via-[#1F180A] to-[#080D1A] border border-amber-500/30 space-y-2 shadow-xl hover:border-amber-400/60 transition-all">
-                                      <span className="font-extrabold text-amber-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-950/40 via-[#1F180A] to-[#080D1A] border border-amber-200 space-y-2 shadow-md hover:border-amber-400/60 transition-all">
+                                      <span className="font-extrabold text-amber-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                                         <Sparkles size={14} /> 2. When to Use It? (Pattern Triggers)
                                       </span>
-                                      <p className="text-slate-200 leading-relaxed font-normal">{algo.wAnswers.whenToUse}</p>
+                                      <p className="text-slate-600 leading-relaxed font-normal">{algo.wAnswers.whenToUse}</p>
                                     </div>
 
-                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[#0A1F18] to-[#080D1A] border border-emerald-500/30 space-y-2 shadow-xl hover:border-emerald-400/60 transition-all">
-                                      <span className="font-extrabold text-emerald-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-[#0A1F18] to-[#080D1A] border border-emerald-200 space-y-2 shadow-md hover:border-emerald-400/60 transition-all">
+                                      <span className="font-extrabold text-emerald-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                                         <Building size={14} /> 3. Where is it Used in Production?
                                       </span>
-                                      <p className="text-slate-200 leading-relaxed font-normal">{algo.wAnswers.whereUsed}</p>
+                                      <p className="text-slate-600 leading-relaxed font-normal">{algo.wAnswers.whereUsed}</p>
                                     </div>
 
-                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-950/40 via-[#1A0B2B] to-[#080D1A] border border-purple-500/30 space-y-2 shadow-xl hover:border-purple-400/60 transition-all">
-                                      <span className="font-extrabold text-purple-400 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+                                    <div className="p-4 rounded-2xl bg-gradient-to-br from-purple-950/40 via-[#1A0B2B] to-[#080D1A] border border-purple-200 space-y-2 shadow-md hover:border-purple-400/60 transition-all">
+                                      <span className="font-extrabold text-purple-600 flex items-center gap-1.5 text-xs uppercase tracking-wider">
                                         <Clock size={14} /> 4. Why is it Optimal? (Big-O Analysis)
                                       </span>
-                                      <p className="text-slate-200 leading-relaxed font-normal">{algo.wAnswers.whyOptimal}</p>
+                                      <p className="text-slate-600 leading-relaxed font-normal">{algo.wAnswers.whyOptimal}</p>
                                     </div>
                                   </div>
                                 </div>
 
                                 {/* Code Editor Block */}
                                 {activeCodeObj && (
-                                  <div className="relative rounded-2xl bg-[#04060E] border border-slate-800/90 overflow-hidden shadow-2xl">
-                                    <div className="flex items-center justify-between px-4 py-2.5 bg-[#0A0E1A] border-b border-slate-800 text-xs font-mono">
+                                  <div className="relative rounded-2xl bg-slate-50 border border-slate-200/90 overflow-hidden shadow-lg">
+                                    <div className="flex items-center justify-between px-4 py-2.5 bg-white border-b border-slate-200 text-xs font-mono">
                                       <span>solution.{activeCodeObj.language}</span>
                                       <button
                                         onClick={() => handleCopyCode(algo.id, activeCodeObj.code)}
-                                        className="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs"
+                                        className="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-slate-500 border border-slate-200 text-xs"
                                       >
                                         Copy Code
                                       </button>

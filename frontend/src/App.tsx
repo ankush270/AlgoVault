@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ProgressProvider } from './context/ProgressContext';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
+import { BottomNav } from './components/BottomNav';
 import { Dashboard } from './components/Dashboard';
 import { KnowledgeHub } from './components/KnowledgeHub';
 import { SqlPlayground } from './components/SqlPlayground';
@@ -192,8 +193,8 @@ export const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-[#0B0F19] text-slate-100 flex flex-col font-['Inter',sans-serif] overflow-hidden">
-      {/* Top Sticky Navbar */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+      {/* Top Navbar */}
       <Navbar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -206,7 +207,7 @@ export const AppContent: React.FC = () => {
 
       {/* Main Body */}
       <div className="flex-1 flex w-full overflow-hidden min-h-0">
-        {/* Left Sidebar */}
+        {/* Left Sidebar — Desktop Only */}
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -216,8 +217,8 @@ export const AppContent: React.FC = () => {
           setMobileMenuOpen={setMobileMenuOpen}
         />
 
-        {/* Main Content View (Independently Scrollable) */}
-        <main className="flex-1 overflow-y-auto px-3 sm:px-5 lg:px-6 py-3 sm:py-4 lg:py-5 min-w-0 max-w-[1720px] mx-auto w-full h-full">
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-y-auto px-4 sm:px-5 lg:px-8 py-4 sm:py-5 lg:py-6 min-w-0 max-w-[1720px] mx-auto w-full h-full pb-safe-nav">
           {activeTab === 'dashboard' && (
             <Dashboard
               setActiveTab={setActiveTab}
@@ -275,6 +276,9 @@ export const AppContent: React.FC = () => {
           )}
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation — visible only on mobile */}
+      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Detail Reader Modal */}
       <TopicDetailModal

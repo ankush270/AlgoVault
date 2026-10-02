@@ -16,12 +16,12 @@ export const BigOComplexityChart: React.FC = () => {
   const [hoveredCurve, setHoveredCurve] = useState<string | null>(null);
 
   const curves: CurveDef[] = [
-    { label: 'O(1)', name: 'Constant Time', color: '#10b981', calc: () => 1, rating: 'Excellent', ratingColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
-    { label: 'O(log N)', name: 'Logarithmic', color: '#06b6d4', calc: (n) => Math.log2(Math.max(1, n)), rating: 'Excellent', ratingColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30' },
-    { label: 'O(N)', name: 'Linear Time', color: '#3b82f6', calc: (n) => n, rating: 'Good', ratingColor: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
-    { label: 'O(N log N)', name: 'Linearithmic', color: '#f59e0b', calc: (n) => n * Math.log2(Math.max(1, n)), rating: 'Fair', ratingColor: 'text-amber-400 bg-amber-500/10 border-amber-500/30' },
-    { label: 'O(N^2)', name: 'Quadratic', color: '#f97316', calc: (n) => n * n, rating: 'Poor', ratingColor: 'text-orange-400 bg-orange-500/10 border-orange-500/30' },
-    { label: 'O(2^N)', name: 'Exponential', color: '#ef4444', calc: (n) => Math.pow(2, Math.min(n, 20)), rating: 'Horrible', ratingColor: 'text-rose-400 bg-rose-500/10 border-rose-500/30' },
+    { label: 'O(1)', name: 'Constant Time', color: '#10b981', calc: () => 1, rating: 'Excellent', ratingColor: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
+    { label: 'O(log N)', name: 'Logarithmic', color: '#06b6d4', calc: (n) => Math.log2(Math.max(1, n)), rating: 'Excellent', ratingColor: 'text-cyan-600 bg-cyan-50 border-cyan-200' },
+    { label: 'O(N)', name: 'Linear Time', color: '#3b82f6', calc: (n) => n, rating: 'Good', ratingColor: 'text-blue-600 bg-blue-50 border-blue-200' },
+    { label: 'O(N log N)', name: 'Linearithmic', color: '#f59e0b', calc: (n) => n * Math.log2(Math.max(1, n)), rating: 'Fair', ratingColor: 'text-amber-600 bg-amber-50 border-amber-200' },
+    { label: 'O(N^2)', name: 'Quadratic', color: '#f97316', calc: (n) => n * n, rating: 'Poor', ratingColor: 'text-orange-600 bg-orange-50 border-orange-500/30' },
+    { label: 'O(2^N)', name: 'Exponential', color: '#ef4444', calc: (n) => Math.pow(2, Math.min(n, 20)), rating: 'Horrible', ratingColor: 'text-rose-600 bg-rose-50 border-rose-200' },
   ];
 
   // Graph Canvas Dimensions
@@ -58,11 +58,11 @@ export const BigOComplexityChart: React.FC = () => {
   };
 
   return (
-    <div className="glass-panel p-6 rounded-3xl border border-slate-800 space-y-6 animate-fadeIn">
+    <div className="card-surface p-6 rounded-3xl border border-slate-200 space-y-6 animate-fadeIn">
       {/* Header Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+          <div className="p-2.5 rounded-xl bg-cyan-50 border border-cyan-500/20 text-cyan-600">
             <Activity size={22} />
           </div>
           <div>
@@ -73,10 +73,10 @@ export const BigOComplexityChart: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-900/80 p-2 rounded-2xl border border-slate-800">
+        <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-slate-200">
           {/* Input N Slider */}
           <div className="flex items-center gap-2 px-2">
-            <span className="text-xs font-bold text-slate-300">Input Size N = <strong className="text-cyan-400 font-extrabold">{inputN}</strong></span>
+            <span className="text-xs font-bold text-slate-500">Input Size N = <strong className="text-cyan-600 font-extrabold">{inputN}</strong></span>
             <input
               type="range"
               min="2"
@@ -88,7 +88,7 @@ export const BigOComplexityChart: React.FC = () => {
           </div>
 
           {/* Scale Toggle */}
-          <div className="flex bg-slate-800 rounded-xl p-0.5 text-xs font-semibold">
+          <div className="flex bg-slate-100 rounded-xl p-0.5 text-xs font-semibold">
             <button
               onClick={() => setScaleMode('linear')}
               className={`px-3 py-1 rounded-lg transition-all ${
@@ -110,7 +110,7 @@ export const BigOComplexityChart: React.FC = () => {
       </div>
 
       {/* SVG Growth Graph */}
-      <div className="relative overflow-hidden bg-slate-950/80 p-4 rounded-2xl border border-slate-800 flex justify-center">
+      <div className="relative overflow-hidden bg-slate-50/80 p-4 rounded-2xl border border-slate-200 flex justify-center">
         <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full max-w-3xl overflow-visible">
           {/* Grid lines */}
           {[0, 0.25, 0.5, 0.75, 1].map((pct, idx) => {
@@ -171,7 +171,7 @@ export const BigOComplexityChart: React.FC = () => {
               onMouseEnter={() => setHoveredCurve(c.label)}
               onMouseLeave={() => setHoveredCurve(null)}
               className={`p-3 rounded-2xl border transition-all cursor-pointer space-y-1.5 ${
-                isHovered ? 'bg-slate-800/90 border-slate-600 scale-105 shadow-xl' : 'bg-slate-900/50 border-slate-800/80'
+                isHovered ? 'bg-slate-100/90 border-slate-600 scale-105 shadow-md' : 'bg-white border-slate-200'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -181,7 +181,7 @@ export const BigOComplexityChart: React.FC = () => {
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 truncate">{c.name}</p>
-              <div className="text-xs font-bold text-white pt-1 border-t border-slate-800">
+              <div className="text-xs font-bold text-slate-900 pt-1 border-t border-slate-200">
                 {ops >= 1000000 ? `${(ops / 1000000).toFixed(1)}M` : ops.toLocaleString()} ops
               </div>
             </div>

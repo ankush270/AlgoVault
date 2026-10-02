@@ -98,21 +98,21 @@ const cleanCompanyName = (name: string): string => {
 const getSubjectTag = (qText: string) => {
   const t = qText.toLowerCase();
   if (t.includes('os') || t.includes('process') || t.includes('thread') || t.includes('paging') || t.includes('deadlock') || t.includes('semaphore') || t.includes('mutex') || t.includes('virtual memory')) {
-    return { name: 'Operating System', color: 'bg-amber-500/10 text-amber-400 border-amber-500/30' };
+    return { name: 'Operating System', color: 'bg-amber-50 text-amber-600 border-amber-200' };
   }
   if (t.includes('sql') || t.includes('database') || t.includes('index') || t.includes('acid') || t.includes('query') || t.includes('join') || t.includes('normalization')) {
-    return { name: 'DBMS & SQL', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' };
+    return { name: 'DBMS & SQL', color: 'bg-blue-50 text-blue-600 border-blue-200' };
   }
   if (t.includes('tcp') || t.includes('udp') || t.includes('http') || t.includes('dns') || t.includes('ip') || t.includes('network') || t.includes('socket')) {
-    return { name: 'Computer Networks', color: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' };
+    return { name: 'Computer Networks', color: 'bg-cyan-50 text-cyan-600 border-cyan-200' };
   }
   if (t.includes('system design') || t.includes('cache') || t.includes('oops') || t.includes('design pattern') || t.includes('rate limit') || t.includes('lru')) {
-    return { name: 'System Design', color: 'bg-purple-500/10 text-purple-400 border-purple-500/30' };
+    return { name: 'System Design', color: 'bg-purple-50 text-purple-600 border-purple-200' };
   }
   if (t.includes('tell me') || t.includes('conflict') || t.includes('leadership') || t.includes('challenge') || t.includes('why company')) {
-    return { name: 'HR & Behavioral', color: 'bg-rose-500/10 text-rose-400 border-rose-500/30' };
+    return { name: 'HR & Behavioral', color: 'bg-rose-50 text-rose-600 border-rose-200' };
   }
-  return { name: 'DSA & Problem Solving', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' };
+  return { name: 'DSA & Problem Solving', color: 'bg-emerald-50 text-emerald-600 border-emerald-200' };
 };
 
 const formatDate = (dateStr: string): string => {
@@ -182,15 +182,15 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#0F172A]/90 border border-slate-800 text-xs shadow-xl my-4">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/90 border border-slate-200 text-xs shadow-md my-4">
       <div className="flex items-center gap-3 text-slate-400 flex-wrap">
         <span>
-          Showing <strong className="text-white">{itemsPerPage >= 9999 ? 1 : (currentPage - 1) * itemsPerPage + 1}</strong> to{' '}
-          <strong className="text-white">{itemsPerPage >= 9999 ? totalItems : Math.min(currentPage * itemsPerPage, totalItems)}</strong> of{' '}
-          <strong className="text-white">{totalItems}</strong> {itemLabel}
+          Showing <strong className="text-slate-900">{itemsPerPage >= 9999 ? 1 : (currentPage - 1) * itemsPerPage + 1}</strong> to{' '}
+          <strong className="text-slate-900">{itemsPerPage >= 9999 ? totalItems : Math.min(currentPage * itemsPerPage, totalItems)}</strong> of{' '}
+          <strong className="text-slate-900">{totalItems}</strong> {itemLabel}
         </span>
 
-        <div className="flex items-center gap-1.5 ml-2 border-l border-slate-800 pl-3">
+        <div className="flex items-center gap-1.5 ml-2 border-l border-slate-200 pl-3">
           <span className="text-[11px] font-medium text-slate-400">Show:</span>
           <CustomDropdown
             options={perPageOptions}
@@ -210,14 +210,14 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           <button
             onClick={() => handlePageClick(1)}
             disabled={currentPage === 1}
-            className="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-700 hover:text-white transition-all text-xs font-semibold"
+            className="px-2.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 hover:text-slate-900 transition-all text-xs font-semibold"
           >
             First
           </button>
           <button
             onClick={() => handlePageClick(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-700 hover:text-white transition-all flex items-center gap-1 text-xs font-semibold"
+            className="px-2.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center gap-1 text-xs font-semibold"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
             <span>Prev</span>
@@ -230,8 +230,8 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
                 onClick={() => handlePageClick(p)}
                 className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
                   currentPage === p
-                    ? 'bg-blue-600 text-white border border-blue-400 shadow-md shadow-blue-500/20'
-                    : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                    ? 'bg-blue-600 text-white border border-blue-400 shadow-md shadow-blue-200'
+                    : 'bg-slate-100/80 text-slate-400 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                 }`}
               >
                 {p}
@@ -242,7 +242,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           <button
             onClick={() => handlePageClick(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-700 hover:text-white transition-all flex items-center gap-1 text-xs font-semibold"
+            className="px-2.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 hover:text-slate-900 transition-all flex items-center gap-1 text-xs font-semibold"
           >
             <span>Next</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -250,7 +250,7 @@ const PaginationControl: React.FC<PaginationControlProps> = ({
           <button
             onClick={() => handlePageClick(totalPages)}
             disabled={currentPage === totalPages}
-            className="px-2.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-700 hover:text-white transition-all text-xs font-semibold"
+            className="px-2.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 hover:text-slate-900 transition-all text-xs font-semibold"
           >
             Last
           </button>
@@ -679,17 +679,17 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     <div className="space-y-6 animate-fadeIn pb-12">
       {/* Header Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-purple-900/40 border border-blue-500/20 p-6 sm:p-8 backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full filter blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full filter blur-3xl pointer-events-none" />
         <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
             <span>GeeksforGeeks Verified Company Archives & Subject Analytics</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-                <Building2 className="w-8 h-8 text-blue-400" />
+                <Building2 className="w-8 h-8 text-blue-600" />
                 <span>
                   {viewMode === 'company_vault' && selectedCompany
                     ? `${selectedCompany} Interview Vault`
@@ -700,7 +700,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     : 'Company Interview Vaults'}
                 </span>
               </h1>
-              <p className="text-slate-300 text-sm mt-1 max-w-2xl">
+              <p className="text-slate-500 text-sm mt-1 max-w-2xl">
                 {viewMode === 'subject_questions'
                   ? 'Browse 1,995 extracted questions tagged by core subjects (OS, DBMS, CN, System Design, DSA, HR) and see which companies asked each question.'
                   : viewMode === 'subject_matrix'
@@ -713,25 +713,25 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
             {/* Metrics Badges */}
             <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-              <div className="px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
-                <div className="text-xl font-bold text-blue-400">{masterIndex?.metadata.total_companies || '448'}</div>
+              <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-center">
+                <div className="text-xl font-bold text-blue-600">{masterIndex?.metadata.total_companies || '448'}</div>
                 <div className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Companies</div>
               </div>
-              <div className="px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
-                <div className="text-xl font-bold text-emerald-400">{masterIndex?.metadata.total_experiences || '920'}</div>
+              <div className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-center">
+                <div className="text-xl font-bold text-emerald-600">{masterIndex?.metadata.total_experiences || '920'}</div>
                 <div className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Experiences</div>
               </div>
             </div>
           </div>
 
           {/* Primary Navigation Modes Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200">
             {viewMode === 'company_vault' ? (
               <button
                 onClick={handleBackToDirectory}
-                className="px-4 py-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-white font-semibold text-xs transition-all flex items-center gap-2 shadow-sm border border-slate-700"
+                className="px-4 py-2 rounded-xl bg-slate-100/90 hover:bg-slate-100 text-slate-900 font-semibold text-xs transition-all flex items-center gap-2 shadow-sm border border-slate-200"
               >
-                <ArrowLeft className="w-4 h-4 text-blue-400" />
+                <ArrowLeft className="w-4 h-4 text-blue-600" />
                 <span>← Back to All Companies Directory</span>
               </button>
             ) : (
@@ -741,10 +741,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                     viewMode === 'companies_directory'
                       ? 'bg-blue-600 text-white border border-blue-500 shadow-md'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                   }`}
                 >
-                  <Grid className="w-3.5 h-3.5 text-blue-400" />
+                  <Grid className="w-3.5 h-3.5 text-blue-600" />
                   <span>Company Directory (448)</span>
                 </button>
 
@@ -753,10 +753,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                     viewMode === 'subject_questions'
                       ? 'bg-emerald-600 text-white border border-emerald-500 shadow-md'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                   }`}
                 >
-                  <BrainCircuit className="w-3.5 h-3.5 text-emerald-400" />
+                  <BrainCircuit className="w-3.5 h-3.5 text-emerald-600" />
                   <span>🧠 Subject Questions Index</span>
                 </button>
 
@@ -765,10 +765,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                     viewMode === 'subject_matrix'
                       ? 'bg-amber-600 text-white border border-amber-500 shadow-md'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                   }`}
                 >
-                  <BarChart3 className="w-3.5 h-3.5 text-amber-400" />
+                  <BarChart3 className="w-3.5 h-3.5 text-amber-600" />
                   <span>📊 Company Subject Matrix</span>
                 </button>
 
@@ -780,10 +780,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
                     viewMode === 'all_experiences'
                       ? 'bg-purple-600 text-white border border-purple-500 shadow-md'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                   }`}
                 >
-                  <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+                  <BookOpen className="w-3.5 h-3.5 text-purple-600" />
                   <span>Browse All 920 Cards</span>
                 </button>
               </div>
@@ -799,7 +799,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                     selectedCompany?.toLowerCase() === c.company.toLowerCase()
                       ? 'bg-blue-600 text-white font-bold'
-                      : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      : 'bg-white text-slate-500 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
                   }`}
                 >
                   {c.company} ({c.total_experiences})
@@ -808,7 +808,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
               <button
                 onClick={() => setShowAllPopularCompanies(!showAllPopularCompanies)}
-                className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-blue-400 hover:text-blue-300 bg-blue-500/10 border border-blue-500/30 transition-all flex items-center gap-1"
+                className="px-2.5 py-1 rounded-lg text-[11px] font-bold text-blue-600 hover:text-blue-700 bg-blue-50 border border-blue-200 transition-all flex items-center gap-1"
               >
                 <span>{showAllPopularCompanies ? 'Show Less' : `+${topCompanies.length - 5} More`}</span>
                 <ChevronDown className={`w-3 h-3 transition-transform ${showAllPopularCompanies ? 'rotate-180' : ''}`} />
@@ -822,10 +822,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
       {viewMode === 'companies_directory' && (
         <div className="space-y-5 animate-fadeIn">
           {/* Company Search Bar */}
-          <div className="p-4 rounded-2xl bg-[#0F172A]/80 border border-slate-800/80 space-y-3">
+          <div className="p-4 rounded-2xl bg-white/80 border border-slate-200 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-                <FolderOpen className="w-4 h-4 text-blue-400" />
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <FolderOpen className="w-4 h-4 text-blue-600" />
                 <span>Browse Companies Vault Directory ({masterIndex?.metadata.total_companies || 448} Total)</span>
               </div>
               <span className="text-xs text-slate-400">Click any company to open its complete interview experiences & questions</span>
@@ -838,12 +838,12 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                 value={companySearchQuery}
                 onChange={(e) => setCompanySearchQuery(e.target.value)}
                 placeholder="Search 448 companies (e.g. Amazon, Microsoft, Swiggy, Atlassian, Uber, DE Shaw, Paytm)..."
-                className="w-full pl-10 pr-10 py-2.5 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               />
               {companySearchQuery && (
                 <button
                   onClick={() => setCompanySearchQuery('')}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white text-xs"
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-900 text-xs"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -857,24 +857,24 @@ export const InterviewExperiencesExplorer: React.FC = () => {
               <div
                 key={c.company}
                 onClick={() => openCompanyVault(c.company)}
-                className="group relative cursor-pointer p-4 rounded-2xl bg-[#0F172A]/90 border border-slate-800 hover:border-blue-500/50 hover:bg-[#131C35] transition-all duration-300 shadow-md flex items-center justify-between gap-3"
+                className="group relative cursor-pointer p-4 rounded-2xl bg-white/90 border border-slate-200 hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-300 shadow-md flex items-center justify-between gap-3"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-blue-400 font-bold text-base transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-500/20 group-hover:bg-blue-600 group-hover:text-white flex items-center justify-center text-blue-600 font-bold text-base transition-colors">
                     {c.company[0]}
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">
+                    <h3 className="text-sm font-bold text-white group-hover:text-blue-700 transition-colors">
                       {c.company}
                     </h3>
                     <p className="text-[11px] text-slate-400 flex items-center gap-1">
-                      <BookOpen className="w-3 h-3 text-emerald-400" />
+                      <BookOpen className="w-3 h-3 text-emerald-600" />
                       <span><strong>{c.total_experiences}</strong> Experiences</span>
                     </p>
                   </div>
                 </div>
 
-                <div className="p-2 rounded-xl bg-slate-800/60 group-hover:bg-blue-600 group-hover:text-white text-slate-400 transition-colors">
+                <div className="p-2 rounded-xl bg-slate-100 group-hover:bg-blue-600 group-hover:text-white text-slate-400 transition-colors">
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
@@ -903,13 +903,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
       {/* VIEW 2: SUBJECT-WISE QUESTION INDEX (OS, DBMS, CN, System Design, DSA, HR) */}
       {viewMode === 'subject_questions' && (
         <div className="space-y-6 animate-fadeIn">
-          <div className="p-5 rounded-2xl bg-[#0F172A]/90 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-2xl bg-white/90 border border-slate-200 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
-                  <BrainCircuit className="w-5 h-5 text-emerald-400" />
+                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                  <BrainCircuit className="w-5 h-5 text-emerald-600" />
                   <span>Subject-Wise Interview Question Bank</span>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-600 border border-emerald-200">
                     1,995 Questions Tagged
                   </span>
                 </h2>
@@ -926,7 +926,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   value={globalQuestionSearch}
                   onChange={(e) => setGlobalQuestionSearch(e.target.value)}
                   placeholder="Search questions or companies (e.g. Page Fault, LRU, Amazon)..."
-                  className="w-full pl-9 pr-8 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
                 {globalQuestionSearch && (
                   <button onClick={() => setGlobalQuestionSearch('')} className="absolute right-3 top-2 text-slate-400 text-xs">
@@ -937,7 +937,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
             </div>
 
             {/* Subject Selector Tabs (Wrapped Flex Grid - No Scrollbars) */}
-            <div className="flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3">
+            <div className="flex flex-wrap items-center gap-2 border-t border-slate-200 pt-3">
               {[
                 { name: 'Data Structures & Algorithms', icon: '⚡', color: 'emerald' },
                 { name: 'System Design & Architecture', icon: '🏗️', color: 'purple' },
@@ -961,12 +961,12 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
                       isActive
                         ? 'bg-emerald-600 text-white border-emerald-500 shadow-md'
-                        : 'bg-slate-950 text-slate-300 hover:bg-slate-900 border-slate-800'
+                        : 'bg-slate-50 text-slate-500 hover:bg-white border-slate-200'
                     }`}
                   >
                     <span>{sub.icon}</span>
                     <span>{sub.name}</span>
-                    <span className="px-1.5 py-0.5 text-[10px] rounded-md bg-slate-800 text-slate-300 font-extrabold">
+                    <span className="px-1.5 py-0.5 text-[10px] rounded-md bg-slate-100 text-slate-500 font-extrabold">
                       {count}
                     </span>
                   </button>
@@ -982,20 +982,20 @@ export const InterviewExperiencesExplorer: React.FC = () => {
               return (
                 <div
                   key={idx}
-                  className="p-5 rounded-2xl bg-[#0F172A]/90 border border-slate-800 hover:border-emerald-500/40 transition-all space-y-3 flex flex-col justify-between shadow-lg"
+                  className="p-5 rounded-2xl bg-white/90 border border-slate-200 hover:border-emerald-500/40 transition-all space-y-3 flex flex-col justify-between shadow-lg"
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 border border-emerald-200 text-emerald-600">
                         {activeSubjectTab}
                       </span>
                       <div className="flex items-center gap-1.5">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 border border-blue-500/30 text-blue-300">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 border border-blue-200 text-blue-700">
                           Asked in {qItem.total_companies_asked} {qItem.total_companies_asked === 1 ? 'Company' : 'Companies'}
                         </span>
                         <button
                           onClick={() => handleDeleteQuestion(qItem.question)}
-                          className="p-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                          className="p-1 rounded-lg bg-rose-50 border border-rose-500/20 text-rose-600 hover:bg-rose-500/20 hover:text-rose-700 transition-all"
                           title="Delete Question"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1009,16 +1009,16 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   </div>
 
                   {/* Asked in Companies List Pills */}
-                  <div className="pt-3 border-t border-slate-800/80 space-y-2">
+                  <div className="pt-3 border-t border-slate-200 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                        <Building2 className="w-3 h-3 text-blue-400" />
+                        <Building2 className="w-3 h-3 text-blue-600" />
                         <span>Companies Asking this Question:</span>
                       </span>
                       {qItem.asked_in_companies.length > 5 && (
                         <button
                           onClick={() => setExpandedCompaniesQuestion(isExpandedCompanies ? null : qItem.question)}
-                          className="text-[10px] font-bold text-blue-400 hover:underline"
+                          className="text-[10px] font-bold text-blue-600 hover:underline"
                         >
                           {isExpandedCompanies ? 'Show Less' : `+${qItem.asked_in_companies.length - 5} More`}
                         </button>
@@ -1030,7 +1030,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                         <button
                           key={cIdx}
                           onClick={() => openCompanyVault(cleanCompanyName(comp))}
-                          className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-900 border border-slate-700/80 text-slate-200 hover:border-blue-500 hover:text-white transition-all"
+                          className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-white border border-slate-200 text-slate-600 hover:border-blue-500 hover:text-slate-900 transition-all"
                         >
                           {cleanCompanyName(comp)}
                         </button>
@@ -1065,13 +1065,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
       {viewMode === 'subject_matrix' && (
         <div className="space-y-6 animate-fadeIn">
           {/* Matrix Header & Search */}
-          <div className="p-5 rounded-2xl bg-[#0F172A]/90 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-2xl bg-white/90 border border-slate-200 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-extrabold text-white flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-amber-400" />
+                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-amber-600" />
                   <span>Company Subject Question Breakdown Matrix</span>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200">
                     {companySubjectMatrix?.length || 322} Companies Analyzed
                   </span>
                 </h2>
@@ -1087,7 +1087,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   value={matrixSearchQuery}
                   onChange={(e) => setMatrixSearchQuery(e.target.value)}
                   placeholder="Search company in matrix (e.g. Amazon, Swiggy, DE Shaw)..."
-                  className="w-full pl-9 pr-8 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
                 {matrixSearchQuery && (
                   <button onClick={() => setMatrixSearchQuery('')} className="absolute right-3 top-2 text-slate-400 text-xs">
@@ -1103,12 +1103,12 @@ export const InterviewExperiencesExplorer: React.FC = () => {
             {paginatedMatrixCompanies.map((item) => (
               <div
                 key={item.company}
-                className="p-5 rounded-2xl bg-[#0F172A]/90 border border-slate-800 hover:border-amber-500/40 transition-all space-y-4 flex flex-col justify-between shadow-lg"
+                className="p-5 rounded-2xl bg-white/90 border border-slate-200 hover:border-amber-200 transition-all space-y-4 flex flex-col justify-between shadow-lg"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 font-bold text-sm">
+                      <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-500/20 flex items-center justify-center text-amber-600 font-bold text-sm">
                         {item.company[0]}
                       </div>
                       <div>
@@ -1123,9 +1123,9 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     {Object.entries(item.subject_breakdown || {}).map(([sName, sCount]) => {
                       if (!sCount || sCount === 0) return null;
                       return (
-                        <div key={sName} className="p-2 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 flex items-center justify-between">
+                        <div key={sName} className="p-2 rounded-xl bg-white border border-slate-200 text-slate-500 flex items-center justify-between">
                           <span className="text-[11px] font-medium truncate max-w-[110px]">{sName}:</span>
-                          <strong className="font-bold text-xs text-amber-400">{sCount}</strong>
+                          <strong className="font-bold text-xs text-amber-600">{sCount}</strong>
                         </div>
                       );
                     })}
@@ -1134,10 +1134,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                 <button
                   onClick={() => openCompanyVault(item.company)}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-100 text-slate-900 font-semibold text-xs border border-slate-200 transition-all"
                 >
                   <span>Open Company Vault</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+                  <ChevronRight className="w-3.5 h-3.5 text-amber-600" />
                 </button>
               </div>
             ))}
@@ -1166,18 +1166,18 @@ export const InterviewExperiencesExplorer: React.FC = () => {
       {(viewMode === 'company_vault' || viewMode === 'all_experiences') && (
         <div className="space-y-6 animate-fadeIn">
           {/* Company Vault Header & Tab Bar */}
-          <div className="p-5 rounded-2xl bg-[#0F172A]/80 border border-slate-800/80 space-y-4">
+          <div className="p-5 rounded-2xl bg-white/80 border border-slate-200 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 {selectedCompany && (
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-xl shadow-lg shadow-blue-500/20">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-extrabold text-xl shadow-lg shadow-blue-200">
                     {selectedCompany[0]}
                   </div>
                 )}
                 <div>
                   <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
                     <span>{selectedCompany ? `${selectedCompany} Interview Vault` : 'All Interview Experiences'}</span>
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-200">
                       {companyExperiences.length} Experiences
                     </span>
                   </h2>
@@ -1191,7 +1191,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
               {/* Sub-View Tabs inside Company Vault */}
               {selectedCompany && (
-                <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-950 border border-slate-800">
+                <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-50 border border-slate-200">
                   <button
                     onClick={() => setCompanyTab('experiences')}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
@@ -1231,7 +1231,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
             {/* Search & Sorting bar when viewing Experiences */}
             {companyTab === 'experiences' && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
                 <div className="relative w-full sm:w-80">
                   <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400 pointer-events-none" />
                   <input
@@ -1239,7 +1239,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={selectedCompany ? `Search in ${selectedCompany}...` : "Search questions or roles..."}
-                    className="w-full pl-9 pr-8 py-2 bg-slate-950 border border-slate-700/80 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   {searchQuery && (
                     <button onClick={() => setSearchQuery('')} className="absolute right-3 top-2 text-slate-400 text-xs">
@@ -1251,7 +1251,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-3.5 w-full sm:w-auto justify-between sm:justify-end">
                   {/* Year Filter */}
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                    <Calendar className="w-3.5 h-3.5 text-emerald-600" />
                     <span className="text-xs text-slate-400 font-medium">Year:</span>
                     <CustomDropdown
                       options={[
@@ -1275,7 +1275,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                   {/* Sort Selector */}
                   <div className="flex items-center gap-2">
-                    <ArrowUpDown className="w-3.5 h-3.5 text-blue-400" />
+                    <ArrowUpDown className="w-3.5 h-3.5 text-blue-600" />
                     <span className="text-xs text-slate-400 font-medium">Sort:</span>
                     <CustomDropdown
                       options={[
@@ -1320,13 +1320,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
             <>
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                  <Loader2 className="w-10 h-10 text-blue-400 animate-spin" />
+                  <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
                   <p className="text-slate-400 text-sm font-medium">Loading interview experiences...</p>
                 </div>
               ) : paginatedExperiences.length === 0 ? (
-                <div className="text-center py-16 px-4 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-3">
+                <div className="text-center py-16 px-4 rounded-2xl bg-white/40 border border-slate-200 space-y-3">
                   <HelpCircle className="w-12 h-12 text-slate-500 mx-auto" />
-                  <h3 className="text-lg font-bold text-white">No experiences match your query</h3>
+                  <h3 className="text-lg font-bold text-slate-900">No experiences match your query</h3>
                   <p className="text-slate-400 text-xs max-w-md mx-auto">
                     Try clearing your search query or choosing another company.
                   </p>
@@ -1340,21 +1340,21 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     return (
                       <div
                         key={exp.id}
-                        className={`group relative flex flex-col justify-between rounded-2xl bg-[#0F172A]/90 border transition-all duration-300 shadow-lg ${
+                        className={`group relative flex flex-col justify-between rounded-2xl bg-white/90 border transition-all duration-300 shadow-lg ${
                           isExpanded
-                            ? 'border-blue-500 bg-[#111A33] md:col-span-2 lg:col-span-3'
-                            : 'border-slate-800 hover:border-blue-500/40 hover:bg-[#131C35]'
+                            ? 'border-blue-500 bg-blue-50 md:col-span-2 lg:col-span-3'
+                            : 'border-slate-200 hover:border-blue-200 hover:bg-slate-50'
                         } p-5`}
                       >
                         <div className="space-y-3.5">
                           {/* Company & Role Header */}
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-2.5">
-                              <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">
+                              <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-500/20 flex items-center justify-center text-blue-600 font-bold text-sm">
                                 {exp.company[0]}
                               </div>
                               <div>
-                                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                                   {exp.company}
                                 </span>
                                 <div className="flex items-center gap-2 text-[11px] text-slate-400">
@@ -1369,8 +1369,8 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                                 onClick={() => toggleSaveExperience(exp.id)}
                                 className={`p-1.5 rounded-lg border transition-colors ${
                                   isSaved
-                                    ? 'bg-amber-500/20 border-amber-500/40 text-amber-400'
-                                    : 'bg-slate-800/60 border-slate-700/60 text-slate-400 hover:text-white'
+                                    ? 'bg-amber-50 border-amber-200 text-amber-600'
+                                    : 'bg-slate-100 border-slate-200 text-slate-400 hover:text-white'
                                 }`}
                                 title={isSaved ? 'Remove from Saved' : 'Save Experience'}
                               >
@@ -1378,7 +1378,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                               </button>
                               <button
                                 onClick={() => handleDeleteExperience(exp.id, exp.title)}
-                                className="p-1.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                                className="p-1.5 rounded-lg bg-rose-50 border border-rose-500/20 text-rose-600 hover:bg-rose-500/20 hover:text-rose-700 transition-all"
                                 title="Delete Experience"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -1387,13 +1387,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors">
+                          <h3 className="text-sm font-bold text-white group-hover:text-blue-700 transition-colors">
                             {exp.title}
                           </h3>
 
                           {/* Published Date Badge */}
-                          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-lg border border-slate-800/80 w-fit">
-                            <Clock className="w-3 h-3 text-blue-400" />
+                          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 bg-white px-2.5 py-1 rounded-lg border border-slate-200 w-fit">
+                            <Clock className="w-3 h-3 text-blue-600" />
                             <span>Published: <strong>{formatDate(exp.published_date)}</strong></span>
                           </div>
 
@@ -1403,9 +1403,9 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                               {exp.rounds_identified.slice(0, 4).map((r, idx) => (
                                 <span
                                   key={idx}
-                                  className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-800/80 border border-slate-700 text-slate-300 flex items-center gap-1"
+                                  className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100/80 border border-slate-200 text-slate-500 flex items-center gap-1"
                                 >
-                                  <Layers className="w-2.5 h-2.5 text-purple-400" />
+                                  <Layers className="w-2.5 h-2.5 text-purple-600" />
                                   <span>{r}</span>
                                 </span>
                               ))}
@@ -1414,15 +1414,15 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                           {/* Extracted Questions Preview */}
                           {exp.extracted_questions.length > 0 && !isExpanded && (
-                            <div className="pt-2 border-t border-slate-800/60 space-y-1.5">
+                            <div className="pt-2 border-t border-slate-100 space-y-1.5">
                               <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-                                <HelpCircle className="w-3 h-3 text-emerald-400" />
+                                <HelpCircle className="w-3 h-3 text-emerald-600" />
                                 <span>Key Questions Asked:</span>
                               </div>
-                              <ul className="space-y-1 text-xs text-slate-300">
+                              <ul className="space-y-1 text-xs text-slate-500">
                                 {exp.extracted_questions.slice(0, 2).map((q, idx) => (
                                   <li key={idx} className="line-clamp-1 flex items-start gap-1.5">
-                                    <span className="text-blue-400">•</span>
+                                    <span className="text-blue-600">•</span>
                                     <span>{cleanQuestionText(q)}</span>
                                   </li>
                                 ))}
@@ -1432,18 +1432,18 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                           {/* INLINE EXPANDED CONTENT */}
                           {isExpanded && (
-                            <div className="pt-4 border-t border-slate-700/80 space-y-5 animate-fadeIn">
+                            <div className="pt-4 border-t border-slate-200 space-y-5 animate-fadeIn">
                               {/* Extracted Questions */}
                               {exp.extracted_questions.length > 0 && (
-                                <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
-                                  <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-200 space-y-2">
+                                  <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-2">
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                                     <span>Extracted Key Questions & Problems ({exp.extracted_questions.length})</span>
                                   </h4>
-                                  <ul className="space-y-1.5 text-xs text-slate-200">
+                                  <ul className="space-y-1.5 text-xs text-slate-600">
                                     {exp.extracted_questions.map((q, idx) => (
                                       <li key={idx} className="flex items-start gap-2">
-                                        <span className="text-emerald-400 font-bold">•</span>
+                                        <span className="text-emerald-600 font-bold">•</span>
                                         <span>{cleanQuestionText(q)}</span>
                                       </li>
                                     ))}
@@ -1453,10 +1453,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                               {/* Full Experience Content Text */}
                               <div className="space-y-2">
-                                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                                   Full Experience Transcript:
                                 </h4>
-                                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 text-xs leading-relaxed whitespace-pre-wrap max-h-96 overflow-y-auto">
+                                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-xs leading-relaxed whitespace-pre-wrap max-h-96 overflow-y-auto">
                                   {exp.full_content}
                                 </div>
                               </div>
@@ -1465,13 +1465,13 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                         </div>
 
                         {/* Footer Card Actions */}
-                        <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                        <div className="pt-4 mt-4 border-t border-slate-200 flex items-center justify-between gap-3">
                           <button
                             onClick={() => setExpandedExperienceId(isExpanded ? null : exp.id)}
                             className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
                               isExpanded
                                 ? 'bg-blue-600 text-white border-blue-500'
-                                : 'bg-slate-800/80 hover:bg-slate-700 text-slate-200 border-slate-700'
+                                : 'bg-slate-100/80 hover:bg-slate-100 text-slate-600 border-slate-200'
                             }`}
                           >
                             {isExpanded ? (
@@ -1489,7 +1489,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
                           <button
                             onClick={() => setActiveModalExperience(exp)}
-                            className="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition-all text-xs font-semibold flex items-center gap-1"
+                            className="p-2 rounded-xl bg-slate-100 hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-900 transition-all text-xs font-semibold flex items-center gap-1"
                             title="Open Fullscreen Modal"
                           >
                             <Maximize2 className="w-3.5 h-3.5" />
@@ -1528,10 +1528,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
           {/* TAB 2: EXTRACTED QUESTION BANK FOR COMPANY */}
           {companyTab === 'questions' && (
             <div className="space-y-4 animate-fadeIn">
-              <div className="p-4 rounded-2xl bg-[#0F172A]/80 border border-slate-800 space-y-3">
+              <div className="p-4 rounded-2xl bg-white/80 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <ListCheck className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <ListCheck className="w-4 h-4 text-emerald-600" />
                     <span>All Extracted Questions Asked at {selectedCompany || 'Company'} ({companyQuestionBank.length})</span>
                   </h3>
                   <span className="text-xs text-slate-400">Unique coding & interview questions</span>
@@ -1543,7 +1543,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                     value={questionSearchQuery}
                     onChange={(e) => setQuestionSearchQuery(e.target.value)}
                     placeholder={`Search within ${selectedCompany || 'company'} question bank (e.g. tree, DP, LRU, graph, behavioral)...`}
-                    className="w-full pl-9 pr-9 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    className="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                   />
                   {questionSearchQuery && (
                     <button onClick={() => setQuestionSearchQuery('')} className="absolute right-3 top-2.5 text-slate-400 text-xs">
@@ -1561,11 +1561,11 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   return (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-[#0F172A]/90 border border-slate-800 hover:border-emerald-500/40 transition-all space-y-2.5 flex flex-col justify-between"
+                      className="p-4 rounded-xl bg-white/90 border border-slate-200 hover:border-emerald-500/40 transition-all space-y-2.5 flex flex-col justify-between"
                     >
                       <div className="space-y-2">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-[11px] flex items-center justify-center shrink-0">
+                          <span className="w-5 h-5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 font-bold text-[11px] flex items-center justify-center shrink-0">
                             {globalIdx}
                           </span>
                           <div className="flex items-center gap-1.5">
@@ -1574,18 +1574,18 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                             </span>
                             <button
                               onClick={() => handleDeleteQuestion(item.question)}
-                              className="p-1 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-all"
+                              className="p-1 rounded-lg bg-rose-50 border border-rose-500/20 text-rose-600 hover:bg-rose-500/20 hover:text-rose-700 transition-all"
                               title="Delete Question"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
                         </div>
-                        <p className="text-xs font-semibold text-slate-100 leading-relaxed">
+                        <p className="text-xs font-semibold text-slate-800 leading-relaxed">
                           {cleanQuestionText(item.question)}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-800/60">
+                      <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-100">
                         <span className="truncate max-w-[200px] text-slate-400">{item.role}</span>
                         <span className="text-slate-500">{formatDate(item.date)}</span>
                       </div>
@@ -1616,10 +1616,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
           {/* TAB 3: ROUNDS STATS FOR COMPANY */}
           {companyTab === 'rounds' && (
             <div className="space-y-4 animate-fadeIn">
-              <div className="p-5 rounded-2xl bg-[#0F172A]/80 border border-slate-800 space-y-4">
+              <div className="p-5 rounded-2xl bg-white/80 border border-slate-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <PieChart className="w-4 h-4 text-purple-400" />
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <PieChart className="w-4 h-4 text-purple-600" />
                     <span>Interview Round Types Frequency for {selectedCompany}</span>
                   </h3>
                   <span className="text-xs text-slate-400">Based on {companyExperiences.length} experiences</span>
@@ -1629,10 +1629,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   {companyRoundsStats.map(([roundName, count], idx) => (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-3"
+                      className="p-4 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                        <div className="p-2.5 rounded-lg bg-purple-50 text-purple-600 border border-purple-500/20">
                           <Layers className="w-4 h-4" />
                         </div>
                         <div>
@@ -1640,7 +1640,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                           <span className="text-[11px] text-slate-400">Interview Round</span>
                         </div>
                       </div>
-                      <div className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 font-extrabold text-xs">
+                      <div className="px-3 py-1 rounded-full bg-purple-50 text-purple-700 font-extrabold text-xs">
                         {count} times
                       </div>
                     </div>
@@ -1654,19 +1654,19 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
       {/* Full Experience Detail Modal */}
       {activeModalExperience && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#0F172A] border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-50/80 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-white border border-slate-200 rounded-2xl shadow-lg flex flex-col overflow-hidden">
             {/* Modal Header */}
-            <div className="p-6 border-b border-slate-800 bg-slate-900/80 flex items-start justify-between gap-4">
+            <div className="p-6 border-b border-slate-200 bg-white flex items-start justify-between gap-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400 uppercase">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 border border-blue-200 text-blue-600 uppercase">
                     {activeModalExperience.company}
                   </span>
                   <span className="text-xs text-slate-400">{formatDate(activeModalExperience.published_date)}</span>
                 </div>
                 <h2 className="text-xl font-bold text-white leading-tight">{activeModalExperience.title}</h2>
-                <div className="flex items-center gap-4 text-xs text-slate-300">
+                <div className="flex items-center gap-4 text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
                     <Briefcase className="w-3.5 h-3.5 text-slate-400" />
                     <span>Role: <strong>{activeModalExperience.role}</strong></span>
@@ -1681,7 +1681,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => handleDeleteExperience(activeModalExperience.id, activeModalExperience.title)}
-                  className="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition-colors flex items-center gap-1 text-xs font-medium"
+                  className="p-2 rounded-xl bg-rose-50 border border-rose-500/20 text-rose-600 hover:bg-rose-500/20 hover:text-rose-700 transition-colors flex items-center gap-1 text-xs font-medium"
                   title="Delete Experience"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -1691,14 +1691,14 @@ export const InterviewExperiencesExplorer: React.FC = () => {
                   href={activeModalExperience.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors flex items-center gap-1 text-xs font-medium"
+                  className="p-2 rounded-xl bg-slate-100 text-slate-500 hover:text-white hover:bg-slate-100 transition-colors flex items-center gap-1 text-xs font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span className="hidden sm:inline">GFG Article</span>
                 </a>
                 <button
                   onClick={() => setActiveModalExperience(null)}
-                  className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+                  className="p-2 rounded-xl bg-slate-100 text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1706,17 +1706,17 @@ export const InterviewExperiencesExplorer: React.FC = () => {
             </div>
 
             {/* Modal Body */}
-            <div className="flex-1 p-6 overflow-y-auto space-y-6 text-slate-200">
+            <div className="flex-1 p-6 overflow-y-auto space-y-6 text-slate-600">
               {/* Rounds Identified Section */}
               {activeModalExperience.rounds_identified.length > 0 && (
-                <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
+                <div className="p-4 rounded-xl bg-slate-50/80 border border-slate-200 space-y-2">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-purple-400" />
+                    <Layers className="w-4 h-4 text-purple-600" />
                     <span>Rounds Conducted</span>
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {activeModalExperience.rounds_identified.map((r, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg text-xs font-semibold bg-purple-500/10 border border-purple-500/30 text-purple-300">
+                      <span key={i} className="px-3 py-1 rounded-lg text-xs font-semibold bg-purple-50 border border-purple-200 text-purple-700">
                         {r}
                       </span>
                     ))}
@@ -1726,15 +1726,15 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
               {/* Extracted Questions Section */}
               {activeModalExperience.extracted_questions.length > 0 && (
-                <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
-                  <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-200 space-y-2">
+                  <h4 className="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     <span>Extracted Key Questions & Problems</span>
                   </h4>
-                  <ul className="space-y-1.5 text-xs text-slate-200">
+                  <ul className="space-y-1.5 text-xs text-slate-600">
                     {activeModalExperience.extracted_questions.map((q, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <span className="text-emerald-400 font-bold">•</span>
+                        <span className="text-emerald-600 font-bold">•</span>
                         <span>{cleanQuestionText(q)}</span>
                       </li>
                     ))}
@@ -1744,10 +1744,10 @@ export const InterviewExperiencesExplorer: React.FC = () => {
 
               {/* Full Content Markdown Text */}
               <div className="space-y-3 pt-2">
-                <h4 className="text-sm font-bold text-white border-b border-slate-800 pb-2">
+                <h4 className="text-sm font-bold text-white border-b border-slate-200 pb-2">
                   Complete Experience & Transcript
                 </h4>
-                <div className="whitespace-pre-wrap font-sans text-sm text-slate-300 leading-relaxed font-normal">
+                <div className="whitespace-pre-wrap font-sans text-sm text-slate-500 leading-relaxed font-normal">
                   {activeModalExperience.full_content}
                 </div>
               </div>

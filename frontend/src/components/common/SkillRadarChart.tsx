@@ -72,10 +72,10 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
     .join(' ');
 
   return (
-    <div className={`glass-panel p-5 rounded-3xl border border-slate-800 flex flex-col items-center relative overflow-hidden ${compact ? '' : 'w-full'}`}>
+    <div className={`card-surface p-5 rounded-3xl border border-slate-200 flex flex-col items-center relative overflow-hidden ${compact ? '' : 'w-full'}`}>
       <div className="w-full flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+          <div className="p-2 rounded-xl bg-blue-50 border border-blue-500/20 text-blue-600">
             <Brain size={18} />
           </div>
           <div>
@@ -232,7 +232,7 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
       </div>
 
       {/* Hover Info Card / Domain Details */}
-      <div className="w-full mt-2 pt-3 border-t border-slate-800/80">
+      <div className="w-full mt-2 pt-3 border-t border-slate-200">
         {hoveredIdx !== null ? (
           <div className="flex items-center justify-between text-xs animate-fadeIn">
             <div className="flex items-center gap-2">
@@ -240,9 +240,9 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
                 className="w-2.5 h-2.5 rounded-full"
                 style={{ backgroundColor: metrics[hoveredIdx].color }}
               />
-              <span className="font-bold text-white">{metrics[hoveredIdx].label}</span>
+              <span className="font-bold text-slate-900">{metrics[hoveredIdx].label}</span>
             </div>
-            <span className="font-black text-slate-200">
+            <span className="font-black text-slate-600">
               {metrics[hoveredIdx].mastered} / {metrics[hoveredIdx].total} ({metrics[hoveredIdx].pct}%)
             </span>
           </div>
@@ -251,7 +251,7 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
             {metrics.map((m) => (
               <div key={m.id} className="flex items-center gap-1.5 text-slate-400">
                 <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: m.color }} />
-                <span className="truncate">{m.shortLabel}: <strong className="text-slate-200">{m.pct}%</strong></span>
+                <span className="truncate">{m.shortLabel}: <strong className="text-slate-600">{m.pct}%</strong></span>
               </div>
             ))}
           </div>

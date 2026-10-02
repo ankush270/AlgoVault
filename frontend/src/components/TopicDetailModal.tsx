@@ -96,13 +96,13 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     const parts = text.split(/(\*\*.*?\*\*|\*.*?\*|`.*?`)/g);
     return parts.map((part, index) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={index} className="font-extrabold text-white">{part.slice(2, -2)}</strong>;
+        return <strong key={index} className="font-extrabold text-slate-900">{part.slice(2, -2)}</strong>;
       }
       if (part.startsWith('*') && part.endsWith('*')) {
-        return <em key={index} className="italic text-slate-200">{part.slice(1, -1)}</em>;
+        return <em key={index} className="italic text-slate-600">{part.slice(1, -1)}</em>;
       }
       if (part.startsWith('`') && part.endsWith('`')) {
-        return <code key={index} className="px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800/90 font-mono text-cyan-300 text-xs sm:text-sm font-semibold">{part.slice(1, -1)}</code>;
+        return <code key={index} className="px-2 py-0.5 rounded-md bg-white border border-slate-200/90 font-mono text-cyan-700 text-xs sm:text-sm font-semibold">{part.slice(1, -1)}</code>;
       }
       return part;
     });
@@ -114,13 +114,13 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     const body = rows.slice(1).filter(r => !r.every(c => c.trim().match(/^:?-+:?$/)));
 
     return (
-      <div key={`table-${tableIdx}`} className="my-6 overflow-hidden rounded-2xl border border-slate-800 bg-[#090D18] shadow-2xl">
+      <div key={`table-${tableIdx}`} className="my-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-lg">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm border-collapse">
             <thead>
-              <tr className="bg-[#0F172A] border-b border-slate-800 text-slate-200">
+              <tr className="bg-white border-b border-slate-200 text-slate-600">
                 {header.map((col, cIdx) => (
-                  <th key={cIdx} className="px-5 py-3.5 font-extrabold uppercase tracking-wider text-cyan-400 bg-slate-900/90">
+                  <th key={cIdx} className="px-5 py-3.5 font-extrabold uppercase tracking-wider text-cyan-600 bg-slate-50">
                     {processInlineFormatting(col)}
                   </th>
                 ))}
@@ -128,14 +128,14 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-medium">
               {body.map((row, rIdx) => (
-                <tr key={rIdx} className="hover:bg-slate-900/60 transition-colors">
+                <tr key={rIdx} className="hover:bg-slate-50/80 transition-colors">
                   {row.map((cell, cIdx) => {
                     const cellText = cleanMathAndFormatting(cell);
                     const isMathEquation = cellText.includes('×') || cellText.includes('⁰') || cellText.includes('¹') || cellText.includes('²') || cellText.includes('³') || cellText.includes('⁴') || cellText.includes('→') || cellText.includes('==') || cellText.includes('!=') || cellText.includes('₂');
                     return (
-                      <td key={cIdx} className="px-5 py-3.5 text-slate-200 text-xs sm:text-sm leading-relaxed">
+                      <td key={cIdx} className="px-5 py-3.5 text-slate-600 text-xs sm:text-sm leading-relaxed">
                         {isMathEquation ? (
-                          <span className="font-mono text-cyan-300 bg-slate-950/90 px-2.5 py-1 rounded-lg border border-slate-800/90 inline-block font-semibold">
+                          <span className="font-mono text-cyan-700 bg-slate-50/90 px-2.5 py-1 rounded-lg border border-slate-200/90 inline-block font-semibold">
                             {processInlineFormatting(cell)}
                           </span>
                         ) : (
@@ -172,7 +172,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     if (trimmed.startsWith('```')) {
       if (inCodeBlock) {
         elements.push(
-          <div key={`code-${index}`} className="my-4 p-5 rounded-2xl bg-slate-950 border border-slate-800/90 font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto leading-relaxed shadow-xl">
+          <div key={`code-${index}`} className="my-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/90 font-mono text-xs sm:text-sm text-cyan-700 overflow-x-auto leading-relaxed shadow-md">
             <pre>{codeBuffer.join('\n')}</pre>
           </div>
         );
@@ -202,7 +202,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     // Headings
     if (trimmed.startsWith('#### ')) {
       elements.push(
-        <h4 key={index} className="text-base sm:text-lg font-extrabold text-cyan-300 mt-6 mb-2.5">
+        <h4 key={index} className="text-base sm:text-lg font-extrabold text-cyan-700 mt-6 mb-2.5">
           {processInlineFormatting(trimmed.slice(5))}
         </h4>
       );
@@ -210,7 +210,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     }
     if (trimmed.startsWith('### ')) {
       elements.push(
-        <h3 key={index} className="text-lg sm:text-xl font-black text-white mt-7 mb-3 pb-1.5 border-b border-slate-800/80">
+        <h3 key={index} className="text-lg sm:text-xl font-black text-slate-900 mt-7 mb-3 pb-1.5 border-b border-slate-200">
           {processInlineFormatting(trimmed.slice(4))}
         </h3>
       );
@@ -218,7 +218,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     }
     if (trimmed.startsWith('## ')) {
       elements.push(
-        <h2 key={index} className="text-xl sm:text-2xl font-black text-white mt-8 mb-4">
+        <h2 key={index} className="text-xl sm:text-2xl font-black text-slate-900 mt-8 mb-4">
           {processInlineFormatting(trimmed.slice(3))}
         </h2>
       );
@@ -230,7 +230,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
       elements.push(
         <div key={index} className="flex items-start gap-3 my-2 ml-2">
           <span className="w-2 h-2 rounded-full bg-cyan-400 mt-2 shrink-0 shadow-sm" />
-          <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             {processInlineFormatting(trimmed.slice(2))}
           </p>
         </div>
@@ -243,8 +243,8 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
     if (numberedMatch) {
       elements.push(
         <div key={index} className="flex items-start gap-3 my-2 ml-2">
-          <span className="text-sm font-extrabold text-cyan-400 shrink-0 mt-0.5 font-mono">{numberedMatch[1]}.</span>
-          <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
+          <span className="text-sm font-extrabold text-cyan-600 shrink-0 mt-0.5 font-mono">{numberedMatch[1]}.</span>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
             {processInlineFormatting(numberedMatch[2])}
           </p>
         </div>
@@ -260,7 +260,7 @@ const FormattedMarkdown: React.FC<{ content: string }> = ({ content }) => {
 
     // Normal Paragraph Text
     elements.push(
-      <p key={index} className="text-sm sm:text-base text-slate-200 leading-relaxed my-2.5 font-normal">
+      <p key={index} className="text-sm sm:text-base text-slate-600 leading-relaxed my-2.5 font-normal">
         {processInlineFormatting(line)}
       </p>
     );
@@ -330,13 +330,13 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0B0F19] text-slate-100 flex flex-col overflow-hidden animate-fadeIn">
+    <div className="fixed inset-0 z-50 bg-slate-50 text-slate-800 flex flex-col overflow-hidden animate-fadeIn">
       {/* Top sticky navbar */}
-      <header className="h-auto min-h-16 py-2.5 bg-[#0F172A] border-b border-slate-800 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 shrink-0 z-20">
+      <header className="h-auto min-h-16 py-2.5 bg-white border-b border-slate-200 px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2 shrink-0 z-20">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-wrap">
           <button
             onClick={onClose}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all shrink-0"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-100 text-slate-600 text-xs font-bold border border-slate-200 transition-all shrink-0"
           >
             <ArrowLeft size={15} />
             <span className="inline sm:inline">Back</span>
@@ -344,7 +344,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-1.5 sm:p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5 text-xs font-semibold"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-100/80 hover:bg-slate-100 text-slate-500 border border-slate-200 flex items-center gap-1.5 text-xs font-semibold"
             title="Toggle Curriculum Sidebar"
           >
             <List size={15} />
@@ -352,10 +352,10 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           </button>
 
           {/* Breadcrumb */}
-          <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 min-w-0 truncate pl-2 border-l border-slate-800">
-            <span className="uppercase font-extrabold text-blue-400">{topic.domain}</span>
+          <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 min-w-0 truncate pl-2 border-l border-slate-200">
+            <span className="uppercase font-extrabold text-blue-600">{topic.domain}</span>
             <ChevronRight size={14} />
-            <span className="font-semibold text-slate-300">{topic.category}</span>
+            <span className="font-semibold text-slate-500">{topic.category}</span>
           </div>
         </div>
 
@@ -363,18 +363,18 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <button
             onClick={() => toggleStar(topic.id)}
-            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-amber-400 border border-slate-700 transition-all"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-100 text-slate-400 hover:text-amber-600 border border-slate-200 transition-all"
             title="Star Topic"
           >
-            <Star size={16} className={isStarred ? 'fill-amber-400 text-amber-400' : ''} />
+            <Star size={16} className={isStarred ? 'fill-amber-500 text-amber-600' : ''} />
           </button>
 
           <button
             onClick={() => onOpenNote(topic.id, topic.title)}
             className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
               hasNote
-                ? 'bg-purple-600/20 text-purple-300 border-purple-500/40'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
+                ? 'bg-purple-50 text-purple-700 border-purple-200'
+                : 'bg-slate-100 text-slate-500 border-slate-200 hover:text-white'
             }`}
           >
             <FileText size={14} />
@@ -383,7 +383,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
           <button
             onClick={() => setShowRatingModal(true)}
-            className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-600/20 flex items-center gap-1.5"
+            className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-lg shadow-purple-200 flex items-center gap-1.5"
           >
             <Sparkles size={14} />
             <span className="hidden sm:inline">Rate Understanding</span>
@@ -391,7 +391,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-all ml-0.5"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-100 hover:bg-slate-100 text-slate-400 hover:text-white border border-slate-200 transition-all ml-0.5"
           >
             <X size={16} />
           </button>
@@ -404,10 +404,10 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         {!sidebarOpen && (
           <button
             onClick={() => setSidebarOpen(true)}
-            className="absolute top-4 left-4 z-30 px-3 py-2 rounded-xl bg-slate-900/95 hover:bg-blue-600 text-slate-300 hover:text-white shadow-xl border border-slate-700/80 transition-all flex items-center gap-2 text-xs font-bold animate-fadeIn group"
+            className="absolute top-4 left-4 z-30 px-3 py-2 rounded-xl bg-white hover:bg-blue-600 text-slate-500 hover:text-white shadow-md border border-slate-200 transition-all flex items-center gap-2 text-xs font-bold animate-fadeIn group"
             title="Expand Module Index Sidebar"
           >
-            <ChevronRight size={16} className="text-blue-400 group-hover:text-white" />
+            <ChevronRight size={16} className="text-blue-600 group-hover:text-white" />
             <span>Show Index ({categoryTopics.length})</span>
           </button>
         )}
@@ -422,19 +422,19 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
         {/* Left Sidebar: Topics Navigation Panel */}
         {sidebarOpen && (
-          <aside className="fixed md:relative inset-y-0 left-0 w-80 max-w-[85vw] h-full bg-[#0F172A] border-r border-slate-800 flex flex-col shrink-0 z-40 md:z-10 animate-slideRight shadow-2xl">
-            <div className="p-4 border-b border-slate-800/80 bg-slate-900/60 flex items-center justify-between">
+          <aside className="fixed md:relative inset-y-0 left-0 w-80 max-w-[85vw] h-full bg-white border-r border-slate-200 flex flex-col shrink-0 z-40 md:z-10 animate-slideRight shadow-lg">
+            <div className="p-4 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <BookMarked size={16} className="text-blue-400" />
-                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Module Index</h3>
+                <BookMarked size={16} className="text-blue-600" />
+                <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider">Module Index</h3>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200">
                   {categoryTopics.length} Topics
                 </span>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="p-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700 transition-all"
+                  className="p-1 rounded-lg bg-slate-100/80 hover:bg-slate-100 text-slate-400 hover:text-white border border-slate-200 transition-all"
                   title="Collapse Sidebar"
                 >
                   <ChevronLeft size={16} />
@@ -459,22 +459,22 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                     className={`w-full text-left p-3 rounded-xl border transition-all flex items-start gap-3 group ${
                       active
                         ? 'bg-blue-600/15 border-blue-500/50 text-white shadow-lg shadow-blue-500/10'
-                        : 'bg-slate-900/40 border-slate-800/80 text-slate-400 hover:bg-slate-900 hover:text-slate-200'
+                        : 'bg-white/40 border-slate-200 text-slate-400 hover:bg-white hover:text-slate-600'
                     }`}
                   >
                     <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5 ${
-                      active ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700'
+                      active ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-100'
                     }`}>
                       {idx + 1}
                     </span>
                     <div className="flex-1 min-w-0 space-y-1">
-                      <p className={`text-xs font-bold leading-snug line-clamp-2 ${active ? 'text-white' : 'text-slate-300'}`}>
+                      <p className={`text-xs font-bold leading-snug line-clamp-2 ${active ? 'text-slate-900' : 'text-slate-500'}`}>
                         {t.title}
                       </p>
                       <div className="flex items-center gap-2 text-[10px]">
                         <span className={`font-semibold ${
-                          t.difficulty === 'Easy' ? 'text-emerald-400' :
-                          t.difficulty === 'Medium' ? 'text-amber-400' : 'text-rose-400'
+                          t.difficulty === 'Easy' ? 'text-emerald-600' :
+                          t.difficulty === 'Medium' ? 'text-amber-600' : 'text-rose-600'
                         }`}>
                           {t.difficulty}
                         </span>
@@ -490,31 +490,31 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
         )}
 
         {/* Right Reader Container */}
-        <main className="flex-1 flex flex-col min-w-0 bg-[#0B0F19] overflow-y-auto">
+        <main className="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-y-auto">
           {/* Top Banner & Topic Title */}
-          <div className="border-b border-slate-800/80 bg-slate-900/40 px-6 sm:px-10 py-6">
+          <div className="border-b border-slate-200 bg-white/40 px-6 sm:px-10 py-6">
             <div className="max-w-6xl mx-auto space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-extrabold uppercase px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                  <span className="text-xs font-extrabold uppercase px-3 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-600">
                     {topic.category}
                   </span>
                   <span className={`text-xs font-bold px-3 py-1 rounded-lg border ${
-                    topic.difficulty === 'Easy' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' :
-                    topic.difficulty === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
-                    'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                    topic.difficulty === 'Easy' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
+                    topic.difficulty === 'Medium' ? 'bg-amber-50 text-amber-600 border-amber-200' :
+                    'bg-rose-50 text-rose-600 border-rose-200'
                   }`}>
                     {topic.difficulty}
                   </span>
                   {revRecord && (
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200">
                       Next Revision: {revRecord.nextRevisionDateFormatted}
                     </span>
                   )}
                 </div>
 
                 {/* Status Switcher Buttons */}
-                <div className="flex items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-xl border border-slate-800">
+                <div className="flex items-center gap-1.5 bg-slate-50/80 p-1.5 rounded-xl border border-slate-200">
                   <span className="text-[11px] font-semibold text-slate-400 px-2">Status:</span>
                   {(['todo', 'in-progress', 'mastered', 'needs-revision'] as ItemStatus[]).map((statusOption) => {
                     const active = currentStatus === statusOption;
@@ -527,7 +527,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                           active && statusOption === 'in-progress' ? 'bg-amber-600 text-white shadow' :
                           active && statusOption === 'needs-revision' ? 'bg-purple-600 text-white shadow' :
                           active && statusOption === 'todo' ? 'bg-slate-700 text-white' :
-                          'text-slate-400 hover:text-white hover:bg-slate-900'
+                          'text-slate-400 hover:text-slate-900 hover:bg-white'
                         }`}
                       >
                         {statusOption.replace('-', ' ')}
@@ -537,7 +537,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                 </div>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight tracking-tight">
                 {topic.title}
               </h1>
 
@@ -547,7 +547,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                   <Building2 size={14} className="text-slate-500" />
                   <span className="font-semibold text-slate-400">Asked in:</span>
                   {topic.companyTags.map((c, idx) => (
-                    <span key={idx} className="bg-slate-900/90 px-2.5 py-1 rounded-md border border-slate-800 text-slate-300 font-medium">
+                    <span key={idx} className="bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200 text-slate-500 font-medium">
                       {c}
                     </span>
                   ))}
@@ -557,12 +557,12 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           </div>
 
           {/* Navigation Tab Bar */}
-          <div className="border-b border-slate-800 bg-[#0F172A]/40 px-6 sm:px-10 sticky top-0 z-10 backdrop-blur-md">
+          <div className="border-b border-slate-200 bg-white/40 px-6 sm:px-10 sticky top-0 z-10 backdrop-blur-md">
             <div className="max-w-6xl mx-auto flex items-center gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
               <button
                 onClick={() => setActiveTab('content')}
                 className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
-                  activeTab === 'content' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                  activeTab === 'content' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                 }`}
               >
                 <Sparkles size={16} />
@@ -572,7 +572,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               <button
                 onClick={() => setActiveTab('overview')}
                 className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
-                  activeTab === 'overview' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                  activeTab === 'overview' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                 }`}
               >
                 <BookOpen size={16} />
@@ -583,7 +583,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                 <button
                   onClick={() => setActiveTab('code')}
                   className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
-                    activeTab === 'code' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                    activeTab === 'code' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                   }`}
                 >
                   <Code2 size={16} />
@@ -595,7 +595,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                 <button
                   onClick={() => setActiveTab('qa')}
                   className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
-                    activeTab === 'qa' ? 'border-blue-500 text-blue-400' : 'border-transparent text-slate-400 hover:text-white'
+                    activeTab === 'qa' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                   }`}
                 >
                   <HelpCircle size={16} />
@@ -609,30 +609,30 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           <div className="flex-1 px-6 sm:px-10 py-8">
             <div className="max-w-6xl mx-auto space-y-8">
               {activeTab === 'content' && (
-                <div className="p-6 sm:p-8 rounded-2xl bg-slate-900/60 border border-slate-800/80 text-slate-200 shadow-xl space-y-4">
+                <div className="p-6 sm:p-8 rounded-2xl bg-slate-50/80 border border-slate-200 text-slate-600 shadow-md space-y-4">
                   <FormattedMarkdown content={topic.detailedContent} />
                 </div>
               )}
 
               {activeTab === 'overview' && (
                 <div className="space-y-6">
-                  <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3">
-                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">Executive Summary</h4>
-                    <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">{topic.summary}</p>
+                  <div className="p-6 rounded-2xl bg-white border border-slate-200 space-y-3">
+                    <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wider">Executive Summary</h4>
+                    <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">{topic.summary}</p>
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                      <Sparkles size={16} className="text-blue-400" />
+                    <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                      <Sparkles size={16} className="text-blue-600" />
                       <span>Key Concepts & Invariants</span>
                     </h4>
                     <div className="grid grid-cols-1 gap-3">
                       {topic.keyConcepts.map((concept, idx) => (
-                        <div key={idx} className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-start gap-3.5">
-                          <div className="w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 border border-blue-500/20">
+                        <div key={idx} className="p-4 rounded-xl bg-slate-50/80 border border-slate-200 flex items-start gap-3.5">
+                          <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 border border-blue-500/20">
                             {idx + 1}
                           </div>
-                          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             {cleanMathAndFormatting(concept)}
                           </p>
                         </div>
@@ -645,7 +645,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               {activeTab === 'code' && (
                 <div className="space-y-4">
                   {/* Language Selector */}
-                  <div className="flex items-center justify-between bg-slate-900 p-2 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between bg-white p-2 rounded-xl border border-slate-200">
                     <div className="flex gap-1.5">
                       {topic.codeTemplates?.map((c) => (
                         <button
@@ -654,7 +654,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                           className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
                             selectedLang === c.language
                               ? 'bg-blue-600 text-white shadow-lg'
-                              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                              : 'text-slate-400 hover:text-white hover:bg-slate-100'
                           }`}
                         >
                           {c.language}
@@ -665,7 +665,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setShowCodeWorkspace(true)}
-                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition-all shadow-md cursor-pointer"
+                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-slate-900 text-xs font-bold transition-all shadow-md cursor-pointer"
                         >
                           <Code2 size={14} />
                           <span>Run in Workspace</span>
@@ -673,9 +673,9 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
                         <button
                           onClick={() => handleCopyCode(getActiveCodeTemplate()!.code)}
-                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all cursor-pointer"
+                          className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-slate-100 hover:bg-slate-100 text-slate-600 text-xs font-semibold border border-slate-200 transition-all cursor-pointer"
                         >
-                          {copiedCode ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                          {copiedCode ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                           <span>{copiedCode ? 'Copied Code!' : 'Copy Snippet'}</span>
                         </button>
                       </div>
@@ -684,7 +684,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
 
                   {/* Code Editor Box */}
                   {getActiveCodeTemplate() && (
-                    <div className="rounded-2xl bg-[#080C14] border border-slate-800 p-5 font-mono text-xs sm:text-sm overflow-x-auto text-cyan-300 leading-relaxed shadow-2xl">
+                    <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 font-mono text-xs sm:text-sm overflow-x-auto text-cyan-700 leading-relaxed shadow-lg">
                       <pre>{getActiveCodeTemplate()!.code}</pre>
                     </div>
                   )}
@@ -694,14 +694,14 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               {activeTab === 'qa' && (
                 <div className="space-y-4">
                   {topic.interviewQuestions?.map((q, idx) => (
-                    <div key={idx} className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3 shadow-lg">
+                    <div key={idx} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-lg">
                       <div className="flex items-start gap-3">
-                        <span className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-bold shrink-0">
+                        <span className="px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold shrink-0">
                           Q{idx + 1}
                         </span>
                         <h4 className="font-bold text-white text-sm sm:text-base leading-snug">{q.question}</h4>
                       </div>
-                      <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-500 leading-relaxed">
                         {cleanMathAndFormatting(q.answer)}
                       </div>
                     </div>
@@ -710,14 +710,14 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               )}
 
               {/* Bottom Pagination / Sequential Reader Controls */}
-              <div className="pt-8 pb-4 pr-48 sm:pr-56 border-t border-slate-800/80 flex items-center justify-between gap-4">
+              <div className="pt-8 pb-4 pr-48 sm:pr-56 border-t border-slate-200 flex items-center justify-between gap-4">
                 {prevTopic ? (
                   <button
                     onClick={() => {
                       setCurrentTopic(prevTopic);
                       setSelectedLang(prevTopic.codeTemplates && prevTopic.codeTemplates.length > 0 ? prevTopic.codeTemplates[0].language : 'cpp');
                     }}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold border border-slate-800 transition-all"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-500 text-xs font-bold border border-slate-200 transition-all"
                   >
                     <ChevronLeft size={16} />
                     <div className="text-left hidden sm:block">
@@ -733,7 +733,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                       setCurrentTopic(nextTopic);
                       setSelectedLang(nextTopic.codeTemplates && nextTopic.codeTemplates.length > 0 ? nextTopic.codeTemplates[0].language : 'cpp');
                     }}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-600/20 ml-auto"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-lg shadow-blue-200 ml-auto"
                   >
                     <div className="text-right hidden sm:block">
                       <span className="block text-[10px] text-blue-200 uppercase font-semibold">Next Topic</span>
@@ -744,7 +744,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                 ) : (
                   <button
                     onClick={onClose}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-600/20 ml-auto"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-200 ml-auto"
                   >
                     <CheckCircle2 size={16} />
                     <span>Finish Module</span>

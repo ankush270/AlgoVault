@@ -32,10 +32,10 @@ export const DomainDonutChart: React.FC = () => {
   const masteredPct = Math.round((masteredCount / total) * 100);
 
   return (
-    <div className="glass-panel p-5 rounded-3xl border border-slate-800 flex flex-col justify-between relative overflow-hidden">
+    <div className="card-surface p-5 rounded-3xl border border-slate-200 flex flex-col justify-between relative overflow-hidden">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+          <div className="p-2 rounded-xl bg-purple-50 border border-purple-500/20 text-purple-600">
             <PieChart size={18} />
           </div>
           <div>
@@ -77,7 +77,7 @@ export const DomainDonutChart: React.FC = () => {
 
           {/* Central Donut Text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-            <span className="text-2xl font-black text-white">{masteredPct}%</span>
+            <span className="text-2xl font-black text-slate-900">{masteredPct}%</span>
             <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Mastered</span>
           </div>
         </div>
@@ -95,15 +95,15 @@ export const DomainDonutChart: React.FC = () => {
                 onMouseEnter={() => setActiveIdx(i)}
                 onMouseLeave={() => setActiveIdx(null)}
                 className={`flex items-center justify-between gap-4 p-2 rounded-xl transition-all cursor-pointer border ${
-                  isHovered ? 'bg-slate-800/80 border-slate-700' : 'bg-slate-900/40 border-transparent'
+                  isHovered ? 'bg-slate-100/80 border-slate-200' : 'bg-white/40 border-transparent'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: seg.color }} />
                   <Icon size={14} className="text-slate-400" />
-                  <span className="text-xs font-semibold text-slate-300">{seg.label}</span>
+                  <span className="text-xs font-semibold text-slate-500">{seg.label}</span>
                 </div>
-                <span className="text-xs font-bold text-white">
+                <span className="text-xs font-bold text-slate-900">
                   {seg.count} <span className="text-[10px] text-slate-400 font-normal">({pct}%)</span>
                 </span>
               </div>

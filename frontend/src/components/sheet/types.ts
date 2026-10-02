@@ -2,13 +2,21 @@ export interface StriverProblem {
   id: string;
   title: string;
   difficulty: 'Easy' | 'Medium' | 'Hard' | string;
+  striver_level?: 'Basic' | 'Core' | 'Pro' | string;
   url: string;
   tags: string[];
   source?: string;
 }
 
+export interface StriverContest {
+  title?: string;
+  problemCount: number;
+  duration: string;
+}
+
 export interface StriverTopic {
   topic_name: string;
+  contest?: StriverContest;
   problems: StriverProblem[];
 }
 

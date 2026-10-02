@@ -63,10 +63,10 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', showText = true }) => {
 
       {showText && (
         <div className="flex items-center gap-1.5">
-          <span className={`${textSize} font-black text-white tracking-tight font-mono`}>
+          <span className={`${textSize} font-black text-slate-900 tracking-tight font-mono`}>
             Tech<span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-emerald-400">Switch</span>
           </span>
-          <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">
+          <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-700 border border-cyan-200 font-mono">
             PRO
           </span>
         </div>

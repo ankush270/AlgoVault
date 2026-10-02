@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronDown, ChevronRight, CheckCircle2, Flame } from 'lucide-react';
+import { ChevronDown, ChevronRight, CheckCircle2, Flame, Trophy } from 'lucide-react';
 import { StriverProblem, TopicCategory } from './types';
 import { ProblemCard } from './ProblemCard';
+import { ContestModal } from './ContestModal';
 
 interface TopicAccordionProps {
   cat: TopicCategory;
@@ -23,6 +24,7 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
   activeSheetTab,
 }) => {
   const [internalDiffFilter, setInternalDiffFilter] = useState<'all' | 'Easy' | 'Medium' | 'Hard' | 'unsolved'>('all');
+  const [isContestOpen, setIsContestOpen] = useState(false);
 
   // Compute breakdown stats for this topic
   const topicStats = useMemo(() => {
@@ -66,21 +68,21 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
   }, [problems, internalDiffFilter, solvedStatus]);
 
   return (
-    <div className="bg-[#0D1322]/90 border border-slate-800/90 rounded-2xl overflow-hidden transition-all duration-200 shadow-xl hover:border-slate-700">
+    <div className="bg-white/90 border border-slate-200/90 rounded-2xl overflow-hidden transition-all duration-200 shadow-md hover:border-slate-200">
       {/* Topic Header Accordion Button */}
       <button
         onClick={onToggleExpand}
-        className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-[#0D1322] via-[#0F172A] to-[#0D1322] hover:bg-slate-800/60 transition-all text-left group"
+        className="w-full p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-[#0D1322] via-[#0F172A] to-[#0D1322] hover:bg-slate-50 transition-all text-left group"
       >
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-500/30 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 group-hover:border-cyan-400/50 transition-all shadow-md">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/10 border border-cyan-200 flex items-center justify-center text-xl shrink-0 group-hover:scale-105 group-hover:border-cyan-400/50 transition-all shadow-md">
             {cat.icon}
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-white tracking-tight flex items-center gap-2 flex-wrap">
+            <h3 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight flex items-center gap-2 flex-wrap">
               <span>{cat.title}</span>
               {activeSheetTab !== 'all' && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-800 text-cyan-300 border border-slate-700/80">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-cyan-700 border border-slate-200">
                   {activeSheetTab === 'striver' && 'Striver'}
                   {activeSheetTab === 'love_babbar' && 'Love Babbar'}
                   {activeSheetTab === 'fraz' && 'Fraz'}
@@ -92,15 +94,15 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
 
             {/* Breakdown Subtitle Badges */}
             <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-400 font-medium flex-wrap">
-              <span className="font-bold text-slate-200">{problems.length} Problems</span>
+              <span className="font-bold text-slate-600">{problems.length} Problems</span>
               <span className="text-slate-600">•</span>
-              <span className="flex items-center gap-1 text-emerald-400 text-[10px] font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              <span className="flex items-center gap-1 text-emerald-600 text-[10px] font-semibold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" /> {topicStats.easy} Easy
               </span>
-              <span className="flex items-center gap-1 text-amber-400 text-[10px] font-semibold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+              <span className="flex items-center gap-1 text-amber-600 text-[10px] font-semibold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]" /> {topicStats.medium} Med
               </span>
-              <span className="flex items-center gap-1 text-rose-400 text-[10px] font-semibold bg-rose-500/10 px-2 py-0.5 rounded-md border border-rose-500/20">
+              <span className="flex items-center gap-1 text-rose-600 text-[10px] font-semibold bg-rose-50 px-2 py-0.5 rounded-md border border-rose-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.8)]" /> {topicStats.hard} Hard
               </span>
             </div>
@@ -110,10 +112,10 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
         {/* Right Stats & Expand Arrow */}
         <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0">
           <div className="flex items-center gap-3 text-xs">
-            <span className="font-black text-cyan-300 font-mono text-xs sm:text-sm">
+            <span className="font-black text-cyan-700 font-mono text-xs sm:text-sm">
               {topicStats.groupSolved}/{problems.length} ({topicStats.percent}%)
             </span>
-            <div className="w-24 h-2.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800 hidden sm:block">
+            <div className="w-24 h-2.5 bg-slate-50 rounded-full overflow-hidden p-0.5 border border-slate-200 hidden sm:block">
               <div
                 className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                 style={{ width: `${topicStats.percent}%` }}
@@ -121,7 +123,7 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
             </div>
           </div>
 
-          <div className="w-9 h-9 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-center text-slate-400 group-hover:text-cyan-300 group-hover:border-cyan-500/40 transition-all">
+          <div className="w-9 h-9 rounded-xl bg-slate-50/80 border border-slate-200 flex items-center justify-center text-slate-400 group-hover:text-cyan-700 group-hover:border-cyan-500/40 transition-all">
             {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
           </div>
         </div>
@@ -129,16 +131,16 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
 
       {/* Expanded Topic Section */}
       {isExpanded && (
-        <div className="p-4 sm:p-5 border-t border-slate-800/80 bg-[#0A0E1A] space-y-4 animate-fadeIn">
+        <div className="p-4 sm:p-5 border-t border-slate-200 bg-white space-y-4 animate-fadeIn">
           {/* Internal Topic Filter Pills */}
-          <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-slate-800/60 text-xs">
+          <div className="flex items-center justify-between gap-2 flex-wrap pb-2 border-b border-slate-100 text-xs">
             <div className="flex flex-wrap items-center gap-2 py-1">
               <button
                 onClick={() => setInternalDiffFilter('all')}
                 className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all ${
                   internalDiffFilter === 'all'
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-                    : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                    ? 'bg-cyan-500/20 text-cyan-700 border border-cyan-500/40 shadow-sm'
+                    : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-white'
                 }`}
               >
                 All ({problems.length})
@@ -149,8 +151,8 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
                   onClick={() => setInternalDiffFilter('Easy')}
                   className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ${
                     internalDiffFilter === 'Easy'
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-emerald-400'
+                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-500/40 shadow-sm'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-emerald-600'
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Easy ({topicStats.easy})
@@ -162,8 +164,8 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
                   onClick={() => setInternalDiffFilter('Medium')}
                   className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ${
                     internalDiffFilter === 'Medium'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-amber-400'
+                      ? 'bg-amber-50 text-amber-700 border border-amber-200 shadow-sm'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-amber-600'
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Medium ({topicStats.medium})
@@ -175,8 +177,8 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
                   onClick={() => setInternalDiffFilter('Hard')}
                   className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ${
                     internalDiffFilter === 'Hard'
-                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
-                      : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-rose-400'
+                      ? 'bg-rose-500/20 text-rose-700 border border-rose-500/40 shadow-sm'
+                      : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-rose-600'
                   }`}
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-400" /> Hard ({topicStats.hard})
@@ -187,23 +189,23 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
                 onClick={() => setInternalDiffFilter('unsolved')}
                 className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ${
                   internalDiffFilter === 'unsolved'
-                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40 shadow-sm'
-                    : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-purple-300'
+                    ? 'bg-purple-50 text-purple-700 border border-purple-200 shadow-sm'
+                    : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-purple-700'
                 }`}
               >
-                <Flame size={12} className="text-purple-400" /> Unsolved ({problems.length - topicStats.groupSolved})
+                <Flame size={12} className="text-purple-600" /> Unsolved ({problems.length - topicStats.groupSolved})
               </button>
             </div>
 
             <div className="text-xs font-semibold text-slate-400 font-mono">
-              Showing <span className="text-white">{displayedProblems.length}</span> of {problems.length}
+              Showing <span className="text-slate-900">{displayedProblems.length}</span> of {problems.length}
             </div>
           </div>
 
           {/* Grid of Cards */}
           {displayedProblems.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-400 bg-slate-950/60 border border-slate-800/80 rounded-2xl space-y-1">
-              <p className="font-semibold text-slate-300">No problems match the selected filter.</p>
+            <div className="p-8 text-center text-xs text-slate-400 bg-slate-50/50 border border-slate-200 rounded-2xl space-y-1">
+              <p className="font-semibold text-slate-500">No problems match the selected filter.</p>
               <p className="text-[11px] text-slate-500">Try changing your difficulty or search query.</p>
             </div>
           ) : (
@@ -218,8 +220,42 @@ export const TopicAccordion: React.FC<TopicAccordionProps> = ({
               ))}
             </div>
           )}
+
+          {/* Striver Official Topic Contest Banner */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center font-bold shrink-0 shadow-lg shadow-amber-500/10">
+                <Trophy size={22} />
+              </div>
+              <div>
+                <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2 flex-wrap">
+                  <span>{cat.title} Contest</span>
+                  <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200 font-mono">
+                    • 3 Problems • 2 hours
+                  </span>
+                </h4>
+                <p className="text-xs text-slate-400 font-medium">Test your problem-solving speed & timed accuracy on {cat.title}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setIsContestOpen(true)}
+              className="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-200 transition-all hover:scale-105 shrink-0 uppercase tracking-wider"
+            >
+              Start Contest
+            </button>
+          </div>
         </div>
       )}
+
+      {/* Topic Contest Modal */}
+      <ContestModal
+        isOpen={isContestOpen}
+        onClose={() => setIsContestOpen(false)}
+        topicTitle={cat.title}
+        problems={problems}
+        solvedStatus={solvedStatus}
+        toggleSolved={toggleSolved}
+      />
     </div>
   );
 };
