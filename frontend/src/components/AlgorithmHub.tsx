@@ -796,7 +796,7 @@ export const AlgorithmHub: React.FC = () => {
       {viewMode === 'split' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column: Algorithm Selector Navigation Menu (Width: 5/12 on lg, 4/12 on xl) */}
-          <div className={`lg:col-span-5 xl:col-span-4 bg-white/90 border border-slate-200/90 rounded-2xl p-4 sm:p-4.5 space-y-3.5 shadow-md sticky top-20 max-h-[82vh] flex-col overflow-hidden ${mobileShowDetail ? 'hidden lg:flex' : 'flex'}`}>
+          <div className={`lg:col-span-5 xl:col-span-4 bg-white/90 border border-slate-200/90 rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-md sticky top-20 max-h-[82vh] flex-col overflow-hidden ${mobileShowDetail ? 'hidden lg:flex' : 'flex'}`}>
             {/* Search & Difficulty Filter Header */}
             <div className="space-y-2 pb-2.5 border-b border-slate-200 shrink-0">
               <div className="relative">

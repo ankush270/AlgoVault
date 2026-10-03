@@ -103,49 +103,49 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
       {/* Difficulty Breakdown Informative Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Easy Card */}
-        <div className="p-4.5 rounded-2xl bg-white/90 border border-emerald-500/25 hover:border-emerald-500/50 transition-all flex items-center justify-between shadow-md group">
+        <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-emerald-500/25 hover:border-emerald-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.8)] shrink-0" />
               <span className="text-xs font-black text-emerald-700 uppercase tracking-wider">Easy Problems</span>
             </div>
             <div className="text-xl font-black text-slate-900 font-mono">
               {difficultyStats.easySolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.easy}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center font-black text-emerald-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center font-black text-emerald-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm shrink-0">
             {difficultyStats.easy > 0 ? Math.round((difficultyStats.easySolved / difficultyStats.easy) * 100) : 0}%
           </div>
         </div>
 
         {/* Medium Card */}
-        <div className="p-4.5 rounded-2xl bg-white/90 border border-amber-500/25 hover:border-amber-500/50 transition-all flex items-center justify-between shadow-md group">
+        <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-amber-500/25 hover:border-amber-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.8)] shrink-0" />
               <span className="text-xs font-black text-amber-700 uppercase tracking-wider">Medium Problems</span>
             </div>
             <div className="text-xl font-black text-slate-900 font-mono">
               {difficultyStats.mediumSolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.medium}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center font-black text-amber-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center font-black text-amber-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm shrink-0">
             {difficultyStats.medium > 0 ? Math.round((difficultyStats.mediumSolved / difficultyStats.medium) * 100) : 0}%
           </div>
         </div>
 
         {/* Hard Card */}
-        <div className="p-4.5 rounded-2xl bg-white/90 border border-rose-500/25 hover:border-rose-500/50 transition-all flex items-center justify-between shadow-md group">
+        <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-rose-500/25 hover:border-rose-500/50 transition-all flex items-center justify-between shadow-md group">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(251,113,133,0.8)]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(251,113,133,0.8)] shrink-0" />
               <span className="text-xs font-black text-rose-700 uppercase tracking-wider">Hard Problems</span>
             </div>
             <div className="text-xl font-black text-slate-900 font-mono">
               {difficultyStats.hardSolved} <span className="text-xs font-normal text-slate-500">/ {difficultyStats.hard}</span>
             </div>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center font-black text-rose-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center font-black text-rose-700 text-xs font-mono group-hover:scale-105 transition-transform shadow-sm shrink-0">
             {difficultyStats.hard > 0 ? Math.round((difficultyStats.hardSolved / difficultyStats.hard) * 100) : 0}%
           </div>
         </div>
