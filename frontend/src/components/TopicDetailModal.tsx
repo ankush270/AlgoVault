@@ -41,7 +41,8 @@ import {
   Palette,
   Undo2,
   Redo2,
-  Keyboard
+  Keyboard,
+  RotateCcw
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus, CodeTemplate } from '../types';
@@ -536,11 +537,19 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   const [editorMode, setEditorMode] = useState<'visual' | 'split' | 'edit' | 'preview'>('split');
   const [selectionRange, setSelectionRange] = useState<{ start: number; end: number; text: string } | null>(null);
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+  const [showOriginalGuide, setShowOriginalGuide] = useState(false);
   const visualRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (initialTopic) {
-      setNoteDraft(progress.notes[initialTopic.id] || '');
+      const saved = progress.notes[initialTopic.id];
+      if (saved) {
+        setNoteDraft(saved);
+      } else if (initialTab === 'edit' && initialTopic.detailedContent) {
+        setNoteDraft(initialTopic.detailedContent);
+      } else {
+        setNoteDraft('');
+      }
       if (initialTab) {
         setActiveTab(initialTab);
       }
@@ -567,6 +576,29 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
     saveNote(currentTopic.id, noteDraft);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleStartEditing = () => {
+    if (!currentTopic) return;
+    if (!noteDraft.trim()) {
+      const initialContent = currentTopic.detailedContent || currentTopic.summary || '';
+      setNoteDraft(initialContent);
+      if (editorMode === 'visual' && visualRef.current) {
+        visualRef.current.innerHTML = markdownToHtml(initialContent);
+      }
+    }
+    setActiveTab('edit');
+  };
+
+  const handleResetToOriginalGuide = () => {
+    if (!currentTopic) return;
+    if (window.confirm('Reset editor to official curriculum content? Any unsaved edits will be replaced.')) {
+      const original = currentTopic.detailedContent || '';
+      setNoteDraft(original);
+      if (editorMode === 'visual' && visualRef.current) {
+        visualRef.current.innerHTML = markdownToHtml(original);
+      }
+    }
   };
 
   const handleCopyStudyGuide = () => {
@@ -959,20 +991,20 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <span className="hidden sm:inline">{copiedLink ? 'Copied!' : 'Share'}</span>
           </button>
 
-          {/* In-Modal Quick Edit Notes Button */}
+          {/* In-Modal Quick Edit / Study Guide Toggle */}
           <button
-            onClick={() => setActiveTab(activeTab === 'edit' ? 'content' : 'edit')}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+            onClick={activeTab === 'edit' ? () => setActiveTab('content') : handleStartEditing}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               activeTab === 'edit'
                 ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
                 : hasNote
                 ? 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100 shadow-2xs'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+                : 'bg-purple-600 hover:bg-purple-500 text-white border-purple-600 shadow-sm shadow-purple-200'
             }`}
-            title="Edit notes directly inside this study guide"
+            title="Edit study guide directly with visual Docs formatting"
           >
-            <Edit3 size={14} className={activeTab === 'edit' ? 'text-white' : 'text-purple-600'} />
-            <span className="inline">{activeTab === 'edit' ? 'Read Guide' : 'Edit Notes'}</span>
+            <Edit3 size={14} className={activeTab === 'edit' || !hasNote ? 'text-white' : 'text-purple-600'} />
+            <span className="inline">{activeTab === 'edit' ? 'Read Guide' : 'Edit Content'}</span>
           </button>
 
           <button
@@ -1162,18 +1194,21 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               >
                 <Sparkles size={16} />
                 <span>Deep Dive Study Guide</span>
+                {hasNote && (
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700">Customized</span>
+                )}
               </button>
 
               <button
-                onClick={() => setActiveTab('edit')}
+                onClick={handleStartEditing}
                 className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                   activeTab === 'edit' ? 'border-purple-600 text-purple-700 font-bold' : 'border-transparent text-slate-400 hover:text-slate-900'
                 }`}
               >
                 <Edit3 size={16} className={activeTab === 'edit' ? 'text-purple-600' : 'text-slate-400'} />
-                <span>Notes & Edit</span>
+                <span>✏️ Notes & Edit</span>
                 {hasNote && (
-                  <span className="w-2 h-2 rounded-full bg-purple-500" title="Personal notes saved" />
+                  <span className="w-2 h-2 rounded-full bg-purple-500" title="Personal edits saved" />
                 )}
               </button>
 
@@ -1218,49 +1253,55 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <div className="max-w-6xl mx-auto space-y-8">
               {activeTab === 'content' && (
                 <div className="space-y-6">
-                  {/* Personal Notes Display & In-Place Edit Trigger */}
-                  {progress.notes[topic.id] ? (
-                    <div className="p-5 sm:p-6 rounded-2xl bg-purple-50/70 border border-purple-200 shadow-sm space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <Edit3 size={16} className="text-purple-600" />
-                          <h3 className="text-xs sm:text-sm font-extrabold text-purple-950 uppercase tracking-wide">
-                            Your Personal Notes & Edits
-                          </h3>
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200/80 text-purple-800">
-                            Saved
+                  {/* Study Guide Content Card with Direct Edit Button */}
+                  <div className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200 text-slate-700 shadow-sm space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <Sparkles size={16} className="text-blue-600" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                          {hasNote && !showOriginalGuide ? 'Your Customized Study Guide' : 'Curriculum Study Guide'}
+                        </span>
+                        {hasNote && !showOriginalGuide ? (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                            Custom Edits Active
                           </span>
-                        </div>
+                        ) : (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                            Official Curriculum
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {hasNote && (
+                          <button
+                            onClick={() => setShowOriginalGuide(!showOriginalGuide)}
+                            className="text-xs font-bold text-slate-500 hover:text-purple-700 underline cursor-pointer px-2 py-1 transition-colors"
+                          >
+                            {showOriginalGuide ? 'Show My Edited Version' : 'View Original Curriculum'}
+                          </button>
+                        )}
                         <button
-                          onClick={() => setActiveTab('edit')}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                          onClick={handleStartEditing}
+                          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-md shadow-purple-200 cursor-pointer"
+                          title="Click here to edit this guide directly (Bold, Bullets, Headings, Visual Editor)"
                         >
                           <Edit3 size={13} />
-                          <span>Edit Notes</span>
+                          <span>✏️ Edit this Guide</span>
                         </button>
                       </div>
-                      <div className="p-4 rounded-xl bg-white border border-purple-100 shadow-2xs">
-                        <FormattedMarkdown content={progress.notes[topic.id]} />
-                      </div>
                     </div>
-                  ) : (
-                    <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-50/70 to-purple-50/70 border border-blue-200/80 shadow-2xs">
-                      <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700">
-                        <Edit3 size={16} className="text-purple-600 shrink-0" />
-                        <span>Add custom notes, key insights, code snippets, or edit content for this topic.</span>
-                      </div>
-                      <button
-                        onClick={() => setActiveTab('edit')}
-                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
-                      >
-                        <Edit3 size={13} />
-                        <span>✏️ Write Study Notes</span>
-                      </button>
-                    </div>
-                  )}
 
-                  <div className="p-6 sm:p-8 rounded-2xl bg-slate-50/80 border border-slate-200 text-slate-600 shadow-md space-y-4">
-                    <FormattedMarkdown content={topic.detailedContent} />
+                    {/* Render Content: Either custom saved version or original curriculum */}
+                    <div className="prose prose-slate max-w-none">
+                      <FormattedMarkdown
+                        content={
+                          hasNote && !showOriginalGuide
+                            ? progress.notes[topic.id]
+                            : topic.detailedContent
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -1285,12 +1326,21 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                       {/* Right Control Actions */}
                       <div className="flex items-center gap-2 flex-wrap">
                         <button
+                          onClick={handleResetToOriginalGuide}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer"
+                          title="Reset editor to original curriculum guide text"
+                        >
+                          <RotateCcw size={13} className="text-amber-600" />
+                          <span className="hidden sm:inline">Reset to Original</span>
+                        </button>
+
+                        <button
                           onClick={handleCopyStudyGuide}
                           className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer"
-                          title="Import study guide text into your notes draft"
+                          title="Append study guide text into your notes draft"
                         >
                           <Copy size={13} className="text-blue-600" />
-                          <span>Copy Guide</span>
+                          <span>Append Guide</span>
                         </button>
 
                         {/* View Mode Switcher */}
