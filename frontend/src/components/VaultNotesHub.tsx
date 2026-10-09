@@ -363,7 +363,7 @@ export const VaultNotesHub: React.FC<VaultNotesHubProps> = ({
               setShowIngestRawModal(true);
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-xs font-bold transition shadow-2xs"
-            title="Quickly Paste Raw Notes (e.g. graph.txt) directly into AlgoVault"
+            title="Quickly Paste Raw Notes (e.g. graph.txt) directly into DevForge"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Paste Raw Notes</span>
@@ -566,7 +566,7 @@ export const VaultNotesHub: React.FC<VaultNotesHubProps> = ({
                 <BookOpen className="w-8 h-8" />
               </div>
               <div className="max-w-md space-y-1">
-                <h3 className="text-lg font-black text-slate-900">AlgoVault Notes & Study Engine</h3>
+                <h3 className="text-lg font-black text-slate-900">DevForge Notes & Study Engine</h3>
                 <p className="text-xs sm:text-sm text-slate-500">
                   Select any topic or subtopic from the left sidebar to revise, write notes, attach LeetCode problems, and embed video lectures.
                 </p>

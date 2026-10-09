@@ -101,7 +101,7 @@ const startServer = async () => {
     await connectDB();
 
     httpServer.listen(PORT, () => {
-      console.log(`🚀 AlgoVault API & Socket.io Server running on http://localhost:${PORT}`);
+      console.log(`🚀 DevForge API & Socket.io Server running on http://localhost:${PORT}`);
       // Start Automatic Job Scraping Scheduler
       startAutomaticJobScheduler();
       // Initialize Piston runtime packages

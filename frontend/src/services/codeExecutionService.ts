@@ -19,16 +19,16 @@ export const languageMap: Record<string, { language: string; version: string; de
 using namespace std;
 
 int main() {
-    cout << "AlgoVault C++ Runner Ready!" << endl;
+    cout << "DevForge C++ Runner Ready!" << endl;
     return 0;
 }`
   },
   python: {
     language: 'python',
     version: '3.10.0',
-    defaultBoilerplate: `# AlgoVault Python Runner
+    defaultBoilerplate: `# DevForge Python Runner
 def solution():
-    print("AlgoVault Python Runner Ready!")
+    print("DevForge Python Runner Ready!")
 
 if __name__ == "__main__":
     solution()`
@@ -38,16 +38,16 @@ if __name__ == "__main__":
     version: '15.0.2',
     defaultBoilerplate: `public class Main {
     public static void main(String[] args) {
-        System.out.println("AlgoVault Java Runner Ready!");
+        System.out.println("DevForge Java Runner Ready!");
     }
 }`
   },
   javascript: {
     language: 'javascript',
     version: '18.15.0',
-    defaultBoilerplate: `// AlgoVault JavaScript Runner
+    defaultBoilerplate: `// DevForge JavaScript Runner
 function solution() {
-    console.log("AlgoVault JS Runner Ready!");
+    console.log("DevForge JS Runner Ready!");
 }
 
 solution();`

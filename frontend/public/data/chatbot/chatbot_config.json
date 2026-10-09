@@ -1,5 +1,5 @@
 {
-  "welcomeMessage": "👋 Hi! I'm **AlgoVault AI Assistant**, powered by **Sarvam AI (105B)**.\n\nAsk me anything about **DSA, Operating Systems, DBMS/SQL, Computer Networks, System Design, or JavaScript**!",
+  "welcomeMessage": "👋 Hi! I'm **DevForge AI Assistant**, powered by **Sarvam AI (105B)**.\n\nAsk me anything about **DSA, Operating Systems, DBMS/SQL, Computer Networks, System Design, or JavaScript**!",
   "suggestions": [
     "⚡ Explain Closures & Scope Chain in JS",
     "🛡️ What are ACID Properties in DBMS?",

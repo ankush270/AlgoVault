@@ -321,14 +321,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Footer Info Card */}
+      {/* Footer DevForge Pro Card */}
       <div className="mt-auto pt-3 border-t border-slate-100">
-        <div className="p-3.5 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200/60 text-sm space-y-1">
-          <div className="flex items-center justify-between text-slate-700">
-            <span className="font-semibold text-slate-900">Target Switch</span>
-            <span className="text-emerald-600 font-bold text-xs bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">2026 Tier 1</span>
+        <div className="p-3 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-sm border border-slate-700/50 space-y-2">
+          <div className="flex items-center gap-2.5">
+            <img src="/logo.svg" alt="DevForge" className="w-7 h-7 rounded-lg shrink-0 border border-slate-700 shadow-2xs" />
+            <div className="leading-tight">
+              <span className="font-extrabold text-xs tracking-tight text-white flex items-center gap-1.5">
+                DevForge
+                <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">PRO</span>
+              </span>
+              <p className="text-[10px] text-slate-400">Engineering Interview Cockpit</p>
+            </div>
           </div>
-          <p className="text-xs text-slate-500">FAANG & Top Tech Ready</p>
+          <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-300">
+            <span>Tier 1 Readiness</span>
+            <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Active
+            </span>
+          </div>
         </div>
       </div>
     </aside>

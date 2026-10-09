@@ -58,9 +58,11 @@ export function useMongoSync() {
 
     // 5. Restore 1v1 Arena History and ELO
     if (Array.isArray(data.arenaHistory)) {
+      localStorage.setItem('devforge_match_history', JSON.stringify(data.arenaHistory));
       localStorage.setItem('algovault_match_history', JSON.stringify(data.arenaHistory));
     }
     if (typeof data.arenaElo === 'number') {
+      localStorage.setItem('devforge_elo', data.arenaElo.toString());
       localStorage.setItem('algovault_elo', data.arenaElo.toString());
     }
 
@@ -99,13 +101,13 @@ export function useMongoSync() {
 
     let arenaHistory = [];
     try {
-      const saved = localStorage.getItem('algovault_match_history');
+      const saved = localStorage.getItem('devforge_match_history') || localStorage.getItem('algovault_match_history');
       if (saved) arenaHistory = JSON.parse(saved);
     } catch (e) {}
 
     let arenaElo = 1500;
     try {
-      const saved = localStorage.getItem('algovault_elo');
+      const saved = localStorage.getItem('devforge_elo') || localStorage.getItem('algovault_elo');
       if (saved) arenaElo = parseInt(saved, 10);
     } catch (e) {}
 

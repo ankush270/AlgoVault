@@ -4,7 +4,7 @@ import { chatRateLimiter } from '../middleware/rateLimiter.js';
 
 const router = express.Router();
 
-const SYSTEM_PROMPT = `You are AlgoVault AI Assistant, an expert computer science, DSA, DBMS, OS, Networks, System Design, and JavaScript interview preparation tutor.
+const SYSTEM_PROMPT = `You are DevForge AI Assistant, an expert computer science, DSA, DBMS, OS, Networks, System Design, and JavaScript interview preparation tutor.
 
 CRITICAL FORMATTING RULES:
 1. Write clean, direct, concise, and easy-to-read text in simple natural language.

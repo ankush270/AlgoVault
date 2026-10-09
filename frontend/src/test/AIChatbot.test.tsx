@@ -51,7 +51,7 @@ describe('AIChatbot & Code Review Unauthenticated 401 Handling Tests', () => {
         return Promise.resolve({
           json: () =>
             Promise.resolve({
-              welcomeMessage: 'Welcome to AlgoVault AI Assistant!',
+              welcomeMessage: 'Welcome to DevForge AI Assistant!',
               suggestions: ['Explain QuickSort vs MergeSort'],
             }),
         });
@@ -88,7 +88,7 @@ describe('AIChatbot & Code Review Unauthenticated 401 Handling Tests', () => {
     // Verify friendly prompt is displayed instead of error
     await waitFor(() => {
       expect(
-        screen.getByText(/Please log in or register to chat with AlgoVault AI Tutor/i)
+        screen.getByText(/Please log in or register to chat with (?:DevForge|AlgoVault) AI Tutor/i)
       ).toBeInTheDocument();
     });
 
@@ -125,7 +125,7 @@ describe('AIChatbot & Code Review Unauthenticated 401 Handling Tests', () => {
 
     // Open chat
     fireEvent.click(screen.getByTitle('Open AI Assistant'));
-    await screen.findByText('Welcome to AlgoVault AI Assistant!');
+    await screen.findByText(/Welcome to (?:DevForge|AlgoVault) AI Assistant!/);
 
     // Send message
     const input = screen.getByPlaceholderText(/Ask Sarvam AI/i);
@@ -139,7 +139,7 @@ describe('AIChatbot & Code Review Unauthenticated 401 Handling Tests', () => {
     // Verify friendly auth prompt is shown, NOT "Could not connect to Sarvam AI"
     await waitFor(() => {
       expect(
-        screen.getByText(/Please log in or register to chat with AlgoVault AI Tutor/i)
+        screen.getByText(/Please log in or register to chat with (?:DevForge|AlgoVault) AI Tutor/i)
       ).toBeInTheDocument();
     });
 
@@ -168,7 +168,7 @@ describe('AIChatbot & Code Review Unauthenticated 401 Handling Tests', () => {
     );
 
     fireEvent.click(screen.getByTitle('Open AI Assistant'));
-    await screen.findByText('Welcome to AlgoVault AI Assistant!');
+    await screen.findByText(/Welcome to (?:DevForge|AlgoVault) AI Assistant!/);
 
     const input = screen.getByPlaceholderText(/Ask Sarvam AI/i);
     fireEvent.change(input, { target: { value: 'Explain Binary Search complexity' } });

@@ -112,7 +112,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           <div className="text-center space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
               <ShieldCheck size={14} className="text-blue-600" />
-              <span>AlgoVault Account Access</span>
+              <span>DevForge Account Access</span>
             </div>
             <h2 className="text-2xl font-black text-slate-900 tracking-tight">
               {activeTab === 'login' ? 'Welcome Back!' : 'Create Pro Account'}

@@ -118,7 +118,7 @@ export const CheatSheetReadinessHub: React.FC = () => {
       ]);
 
       const doc = React.createElement(RevisionPdfDocument, {
-        candidateName: 'AlgoVault Candidate',
+        candidateName: 'DevForge Candidate',
         targetCompany: selectedCompany.name,
         readinessScore: readiness.score,
         readinessStatus: readiness.statusLabel,
@@ -131,7 +131,7 @@ export const CheatSheetReadinessHub: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `AlgoVault_${selectedCompany.name}_CheatSheet.pdf`;
+      link.download = `DevForge_${selectedCompany.name}_CheatSheet.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

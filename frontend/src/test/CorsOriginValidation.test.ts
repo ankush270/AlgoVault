@@ -4,6 +4,9 @@ import { vercelPreviewRegex, getCorsOptions } from '../../../backend/config/cors
 describe('CORS Allowed Origins and Vercel Deployment Regex Validation', () => {
   it('correctly validates genuine AlgoVault & TechSwitch Vercel deployment URLs', () => {
     const validOrigins = [
+      'https://devforge.vercel.app',
+      'https://dev-forge.vercel.app',
+      'https://devforge-git-main.vercel.app',
       'https://algovault.vercel.app',
       'https://algo-vault.vercel.app',
       'https://algovault-git-main-user.vercel.app',
@@ -13,7 +16,8 @@ describe('CORS Allowed Origins and Vercel Deployment Regex Validation', () => {
       'https://techswitch-git-dev.vercel.app',
       'https://techswitch-pro-preview-5.vercel.app',
       'https://AlgoVault.vercel.app',
-      'https://TechSwitch-Pro.vercel.app'
+      'https://TechSwitch-Pro.vercel.app',
+      'https://DevForge.vercel.app'
     ];
 
     validOrigins.forEach((origin) => {

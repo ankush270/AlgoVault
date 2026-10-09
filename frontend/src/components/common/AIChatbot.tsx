@@ -93,7 +93,7 @@ export const AIChatbot: React.FC = () => {
       const authPromptMessage: Message = {
         id: `auth-${Date.now()}`,
         role: 'assistant',
-        content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**\n\nAuthentication is required to ensure secure and personalized interview assistance.',
+        content: '🔒 **Please log in or register to chat with DevForge AI Tutor.**\n\nAuthentication is required to ensure secure and personalized interview assistance.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isAuthPrompt: true,
       };
@@ -115,7 +115,7 @@ export const AIChatbot: React.FC = () => {
         const authErrorMessage: Message = {
           id: `auth-err-${Date.now()}`,
           role: 'assistant',
-          content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**\n\nYour session may have expired or authentication is missing.',
+          content: '🔒 **Please log in or register to chat with DevForge AI Tutor.**\n\nYour session may have expired or authentication is missing.',
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           isAuthPrompt: true,
         };
@@ -147,7 +147,7 @@ export const AIChatbot: React.FC = () => {
         const authErrorMessage: Message = {
           id: `auth-err-${Date.now()}`,
           role: 'assistant',
-          content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**',
+          content: '🔒 **Please log in or register to chat with DevForge AI Tutor.**',
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           isAuthPrompt: true,
         };
@@ -277,7 +277,7 @@ export const AIChatbot: React.FC = () => {
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <h3 className="font-bold text-sm text-white tracking-tight">AlgoVault AI</h3>
+                  <h3 className="font-bold text-sm text-white tracking-tight">DevForge AI</h3>
                   <span className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 rounded-full">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
                     Sarvam 105B

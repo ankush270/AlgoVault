@@ -424,7 +424,7 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
                   {analyzingAI && (
                     <div className="h-64 flex flex-col items-center justify-center text-purple-600">
                       <div className="w-8 h-8 border-3 border-purple-200 border-t-purple-400 rounded-full animate-spin mb-3" />
-                      <p className="text-xs font-semibold text-slate-500">AlgoVault AI is evaluating your solution...</p>
+                      <p className="text-xs font-semibold text-slate-500">DevForge AI is evaluating your solution...</p>
                     </div>
                   )}
 

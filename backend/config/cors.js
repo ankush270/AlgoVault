@@ -1,5 +1,5 @@
-// Regex specifically for AlgoVault & TechSwitch project deployments on Vercel (NOT all vercel apps)
-export const vercelPreviewRegex = /^https:\/\/(?:algo-?vault|techswitch(?:-pro)?)(?:-[a-z0-9-]+)?\.vercel\.app$/i;
+// Regex specifically for DevForge, AlgoVault & TechSwitch project deployments on Vercel (NOT all vercel apps)
+export const vercelPreviewRegex = /^https:\/\/(?:dev-?forge|algo-?vault|techswitch(?:-pro)?)(?:-[a-z0-9-]+)?\.vercel\.app$/i;
 
 export function getCorsOptions() {
   const envFrontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : '';
@@ -31,7 +31,7 @@ export function getCorsOptions() {
       return callback(null, true);
     }
 
-    // 2. Strict AlgoVault & TechSwitch project preview/production deployments on Vercel
+    // 2. Strict DevForge, AlgoVault & TechSwitch project preview/production deployments on Vercel
     if (vercelPreviewRegex.test(cleanOrigin)) {
       return callback(null, true);
     }

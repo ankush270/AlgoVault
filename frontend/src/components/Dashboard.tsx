@@ -99,15 +99,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/60 to-purple-50/40 p-5 sm:p-6 lg:p-8 border border-blue-200/60 shadow-sm">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
           <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs font-bold">
-              <Target size={13} className="text-blue-600" />
-              <span>Interview Preparation Dashboard</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold shadow-2xs">
+              <img src="/logo.svg" alt="DevForge" className="w-3.5 h-3.5 rounded-xs" />
+              <span>DevForge Engineering Cockpit</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
-              Your Engineering Interview Roadmap
+              Master System Design, CS & DSA
             </h1>
             <p className="text-sm text-slate-600 leading-relaxed max-w-lg">
-              Track your progress across DSA, System Design, OS, DBMS, Networks, and Gen AI with structured revision and problem benchmarks.
+              Track your progress across Core CS subjects, interactive roadmaps, live 1v1 coding arena, and your personal Study Vault.
             </p>
           </div>
 

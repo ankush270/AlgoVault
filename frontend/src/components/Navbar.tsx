@@ -177,24 +177,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="relative shrink-0"
               >
                 <img
-                  src="/logo.png"
-                  alt="AlgoVault Logo"
-                  className="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-xs group-hover:scale-105 transition-transform duration-200"
+                  src="/logo.svg"
+                  alt="DevForge Logo"
+                  className="w-9 h-9 rounded-xl object-contain border border-slate-200/90 shadow-xs group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
               </div>
 
               <div className="flex flex-col justify-center">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors leading-none">
-                    AlgoVault
+                  <span className="font-black text-lg sm:text-xl tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors leading-none">
+                    DevForge
                   </span>
-                  <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-2xs tracking-wider uppercase leading-none">
-                    PRO
+                  <span className="text-[10px] font-black px-1.5 py-0.5 rounded-md bg-gradient-to-r from-orange-500 via-amber-500 to-indigo-600 text-white shadow-2xs tracking-wider uppercase leading-none">
+                    FORGE
                   </span>
                 </div>
                 <span className="text-[10px] text-slate-400 font-medium hidden sm:block tracking-wide mt-0.5 leading-none">
-                  DSA & System Design Vault
+                  Engineering Mastery & Study Cockpit
                 </span>
               </div>
             </a>

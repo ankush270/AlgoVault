@@ -140,7 +140,7 @@ describe('CodeRunnerModal Guest Experience & 401 Auth CTA Tests', () => {
 
   it('does NOT display sign-in CTA banner when code execution succeeds', async () => {
     mockExecuteCode.mockResolvedValueOnce({
-      output: 'AlgoVault Python Runner Ready!\n',
+      output: 'DevForge Python Runner Ready!\n',
       stderr: '',
       status: 'SUCCESS',
       executionTime: 42,
@@ -164,7 +164,7 @@ describe('CodeRunnerModal Guest Experience & 401 Auth CTA Tests', () => {
       expect(screen.getByText('SUCCESS')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('AlgoVault Python Runner Ready!')).toBeInTheDocument();
+    expect(screen.getByText('DevForge Python Runner Ready!')).toBeInTheDocument();
     expect(screen.queryByTestId('login-cta-btn')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Sign In to Run Code/i })).not.toBeInTheDocument();
   });

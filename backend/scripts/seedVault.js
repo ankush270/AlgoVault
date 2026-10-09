@@ -70,7 +70,7 @@ const buildMarkdownContent = (item) => {
 };
 
 const seedJsonFiles = async () => {
-  console.log('🚀 Starting AlgoVault JSON to MongoDB Seed Script...');
+  console.log('🚀 Starting DevForge JSON to MongoDB Seed Script...');
   await connectDB();
 
   if (!fs.existsSync(JSON_DIR)) {

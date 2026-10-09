@@ -127,7 +127,7 @@ export const RevisionPdfDocument: React.FC<RevisionPdfProps> = ({
     <Page size="A4" style={styles.page}>
       {/* Header Banner */}
       <View style={styles.headerBanner}>
-        <Text style={styles.headerTitle}>AlgoVault — Interview Cheat Sheet</Text>
+        <Text style={styles.headerTitle}>DevForge — Interview Cheat Sheet</Text>
         <Text style={styles.headerSubtitle}>
           Generated for {candidateName} • Target Company: {targetCompany} • Date: {new Date().toLocaleDateString()}
         </Text>
@@ -186,7 +186,7 @@ export const RevisionPdfDocument: React.FC<RevisionPdfProps> = ({
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Text>AlgoVault Pro Technical Interview Accelerator • Keep practicing & stay relentless!</Text>
+        <Text>DevForge Technical Interview Cockpit • Keep practicing & stay relentless!</Text>
       </View>
     </Page>
   </Document>

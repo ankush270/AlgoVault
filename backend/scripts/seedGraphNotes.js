@@ -15,7 +15,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const GRAPH_FILE = path.resolve(__dirname, '../../graph.txt');
 
 const seedGraphNotes = async () => {
-  console.log('🌱 Seeding graph.txt into AlgoVault MongoDB...');
+  console.log('🌱 Seeding graph.txt into DevForge MongoDB...');
   await connectDB();
 
   if (!fs.existsSync(GRAPH_FILE)) {

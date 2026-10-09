@@ -46,7 +46,7 @@ describe('Navbar Component UI Unit Tests', () => {
 
   it('renders logo and search input', () => {
     render(<Navbar {...defaultProps} />);
-    expect(screen.getByAltText(/AlgoVault Logo|TechSwitch Logo/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/DevForge Logo|AlgoVault Logo|TechSwitch Logo/i)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/search topics, questions, tags/i)
     ).toBeInTheDocument();
@@ -96,7 +96,7 @@ describe('Navbar Component UI Unit Tests', () => {
     const setActiveTab = vi.fn();
     render(<Navbar {...defaultProps} setActiveTab={setActiveTab} />);
 
-    const logoContainer = screen.getByAltText(/AlgoVault Logo|TechSwitch Logo/i).closest('div');
+    const logoContainer = screen.getByAltText(/DevForge Logo|AlgoVault Logo|TechSwitch Logo/i).closest('div');
     if (logoContainer) {
       fireEvent.click(logoContainer);
       expect(setActiveTab).toHaveBeenCalledWith('dashboard');

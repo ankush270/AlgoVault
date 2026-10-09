@@ -2,7 +2,7 @@
  * Microsoft Azure Loader
  * 
  * Reads the raw azure.json (concatenated JSON objects) and transforms them into
- * TopicItem[] format compatible with the AlgoVault / TopicDetailModal system.
+ * TopicItem[] format compatible with the DevForge / TopicDetailModal system.
  */
 
 import { TopicItem, Difficulty } from '../types';

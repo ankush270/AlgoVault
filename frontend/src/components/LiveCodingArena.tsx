@@ -70,16 +70,16 @@ export const LiveCodingArena: React.FC = () => {
   const [matchState, setMatchState] = useState<'lobby' | 'searching' | 'in_battle' | 'match_ended'>('lobby');
 
   const [eloRating, setEloRating] = useState<number>(() => {
-    const saved = localStorage.getItem('algovault_elo');
+    const saved = localStorage.getItem('devforge_elo') || localStorage.getItem('algovault_elo');
     return saved ? parseInt(saved, 10) : 1500;
   });
 
   const [username, setUsername] = useState<string>(() => {
-    return user?.name || localStorage.getItem('algovault_username') || 'Candidate';
+    return user?.name || localStorage.getItem('devforge_username') || localStorage.getItem('algovault_username') || 'Candidate';
   });
 
   const [matchHistory, setMatchHistory] = useState<MatchHistoryItem[]>(() => {
-    const saved = localStorage.getItem('algovault_match_history');
+    const saved = localStorage.getItem('devforge_match_history') || localStorage.getItem('algovault_match_history');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -187,10 +187,12 @@ export const LiveCodingArena: React.FC = () => {
       if (data?.profile) {
         if (typeof data.profile.elo === 'number') {
           setEloRating(data.profile.elo);
+          localStorage.setItem('devforge_elo', data.profile.elo.toString());
           localStorage.setItem('algovault_elo', data.profile.elo.toString());
         }
         if (Array.isArray(data.profile.recentMatches) && data.profile.recentMatches.length > 0) {
           setMatchHistory(data.profile.recentMatches);
+          localStorage.setItem('devforge_match_history', JSON.stringify(data.profile.recentMatches));
           localStorage.setItem('algovault_match_history', JSON.stringify(data.profile.recentMatches));
         }
       }
@@ -312,6 +314,7 @@ export const LiveCodingArena: React.FC = () => {
       let newElo = 1500;
       setEloRating((prev) => {
         newElo = Math.max(1000, prev + delta);
+        localStorage.setItem('devforge_elo', newElo.toString());
         localStorage.setItem('algovault_elo', newElo.toString());
         return newElo;
       });
@@ -343,6 +346,7 @@ export const LiveCodingArena: React.FC = () => {
 
       setMatchHistory((prev) => {
         const updated = [newHistoryItem, ...prev].slice(0, 20);
+        localStorage.setItem('devforge_match_history', JSON.stringify(updated));
         localStorage.setItem('algovault_match_history', JSON.stringify(updated));
         return updated;
       });
