@@ -85,6 +85,7 @@ export const AppContent: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   const [selectedTopicModal, setSelectedTopicModal] = useState<TopicItem | null>(() => routeState.topic);
+  const [modalInitialTab, setModalInitialTab] = useState<'overview' | 'content' | 'code' | 'qa' | 'edit'>('content');
   const [noteModalTarget, setNoteModalTarget] = useState<{ topicId: string; title: string } | null>(null);
 
   // Sync routeState topic with selectedTopicModal on route changes
@@ -117,8 +118,9 @@ export const AppContent: React.FC = () => {
     }
   };
 
-  const handleSelectTopic = (topic: TopicItem) => {
+  const handleSelectTopic = (topic: TopicItem, initialTab: 'overview' | 'content' | 'code' | 'qa' | 'edit' = 'content') => {
     setSelectedTopicModal(topic);
+    setModalInitialTab(initialTab);
     const targetTab = activeTab === '404' ? 'knowledge' : activeTab;
     const targetDomain = (selectedDomain === 'all' && topic.domain) ? topic.domain : selectedDomain;
     const targetPath = getPathForState(targetTab, targetDomain, topic.id);
@@ -282,6 +284,7 @@ export const AppContent: React.FC = () => {
         topic={selectedTopicModal}
         onClose={handleCloseTopicModal}
         onOpenNote={handleOpenNote}
+        initialTab={modalInitialTab}
       />
 
       {/* Personal Notes Modal */}

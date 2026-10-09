@@ -6,12 +6,14 @@ import { TopicItem } from '../types';
 
 const mockToggleStar = vi.fn();
 const mockUpdateStatus = vi.fn();
+const mockSaveNote = vi.fn();
 
 vi.mock('../context/ProgressContext', () => ({
   useProgress: () => ({
     progress: { completed: [], bookmarks: [], notes: {}, starred: {}, statuses: {} },
     toggleStar: mockToggleStar,
     updateStatus: mockUpdateStatus,
+    saveNote: mockSaveNote,
     getRevisionRecord: () => null,
   }),
 }));
@@ -94,5 +96,25 @@ describe('TopicDetailModal Component UI Unit Tests', () => {
     fireEvent.click(noteBtn);
 
     expect(onOpenNote).toHaveBeenCalledWith('os-cpu-scheduling', 'CPU Scheduling Algorithms');
+  });
+
+  it('opens in-modal note editor, enters text, and saves note', () => {
+    render(<TopicDetailModal {...defaultProps} />);
+
+    // Click on Notes & Edit tab
+    const editTab = screen.getByRole('button', { name: /notes & edit/i });
+    fireEvent.click(editTab);
+
+    // Textarea should be visible
+    const textarea = screen.getByPlaceholderText(/type your notes, code snippets/i);
+    expect(textarea).toBeInTheDocument();
+
+    fireEvent.change(textarea, { target: { value: 'My custom scheduling note #important' } });
+
+    // Click Save button
+    const saveBtns = screen.getAllByRole('button', { name: /save notes/i });
+    fireEvent.click(saveBtns[0]);
+
+    expect(mockSaveNote).toHaveBeenCalledWith('os-cpu-scheduling', 'My custom scheduling note #important');
   });
 });

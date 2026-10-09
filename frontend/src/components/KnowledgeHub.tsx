@@ -21,7 +21,8 @@ import {
   Database,
   Globe2,
   Bot,
-  Boxes
+  Boxes,
+  Edit3
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { allTopics } from '../data/allData';
@@ -33,7 +34,7 @@ interface KnowledgeHubProps {
   setSelectedDomain: (d: DomainType | 'all') => void;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
-  onSelectTopic: (topic: TopicItem) => void;
+  onSelectTopic: (topic: TopicItem, initialTab?: 'overview' | 'content' | 'code' | 'qa' | 'edit') => void;
   onOpenNote: (topicId: string, topicTitle: string) => void;
 }
 
@@ -625,29 +626,30 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({
                             </div>
 
                             <div className="flex items-center gap-2">
-                              {/* Personal Notes Trigger */}
+                              {/* Quick Edit Note Button */}
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  onOpenNote(topic.id, topic.title);
+                                  onSelectTopic(topic, 'edit');
                                 }}
-                                className={`p-2 rounded-xl border transition-all ${
+                                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                                   hasNote
-                                    ? 'bg-purple-50 text-purple-600 border-purple-200'
-                                    : 'bg-white text-slate-400 border-slate-200 hover:text-slate-700 hover:bg-slate-50'
+                                    ? 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 shadow-2xs'
+                                    : 'bg-slate-50 text-slate-600 border-slate-200 hover:text-slate-900 hover:bg-slate-100'
                                 }`}
-                                title="Personal Note"
+                                title={hasNote ? "Edit Notes for this topic" : "Add Note for this topic"}
                               >
-                                <FileText size={16} />
+                                <Edit3 size={13} className={hasNote ? "text-purple-600" : "text-slate-400"} />
+                                <span>{hasNote ? 'Edit' : 'Note'}</span>
                               </button>
 
                               {/* Open Full Topic Details */}
                               <button
-                                onClick={() => onSelectTopic(topic)}
-                                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition-all text-xs sm:text-sm font-bold shrink-0"
+                                onClick={() => onSelectTopic(topic, 'content')}
+                                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition-all text-xs sm:text-sm font-bold shrink-0 cursor-pointer"
                               >
                                 <span>Study</span>
-                                <ChevronRight size={16} />
+                                <ChevronRight size={15} />
                               </button>
                             </div>
                           </div>

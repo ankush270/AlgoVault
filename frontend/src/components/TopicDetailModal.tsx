@@ -19,7 +19,11 @@ import {
   List,
   Menu,
   BookMarked,
-  Share2
+  Share2,
+  Edit3,
+  Save,
+  Eye,
+  Columns
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus, CodeTemplate } from '../types';
@@ -31,6 +35,7 @@ interface TopicDetailModalProps {
   topic: TopicItem | null;
   onClose: () => void;
   onOpenNote: (topicId: string, topicTitle: string) => void;
+  initialTab?: 'overview' | 'content' | 'code' | 'qa' | 'edit';
 }
 
 // Clean LaTeX / Math Expressions & Superscripts/Subscripts helper
@@ -379,19 +384,35 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   topic: initialTopic,
   onClose,
   onOpenNote,
+  initialTab,
 }) => {
-  const { progress, updateStatus, toggleStar, getRevisionRecord } = useProgress();
+  const { progress, updateStatus, toggleStar, getRevisionRecord, saveNote } = useProgress();
 
   const [currentTopic, setCurrentTopic] = useState<TopicItem | null>(initialTopic);
   const [sidebarOpen, setSidebarOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 768);
-  const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'code' | 'qa'>('content');
+  const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'code' | 'qa' | 'edit'>(initialTab || 'content');
   const [selectedLang, setSelectedLang] = useState<string>('cpp');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showCodeWorkspace, setShowCodeWorkspace] = useState(false);
 
+  // In-modal note editing states
+  const [noteDraft, setNoteDraft] = useState<string>('');
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [editorMode, setEditorMode] = useState<'split' | 'edit' | 'preview'>('split');
+
+  useEffect(() => {
+    if (initialTopic) {
+      setNoteDraft(progress.notes[initialTopic.id] || '');
+      if (initialTab) {
+        setActiveTab(initialTab);
+      }
+    }
+  }, [initialTopic?.id, initialTab]);
+
   const handleShareLink = () => {
+    if (!topic) return;
     const shareUrl = `${window.location.origin}/topic/${topic.id}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(shareUrl).then(() => {
@@ -403,6 +424,40 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
     } else {
       window.prompt('Copy topic link:', shareUrl);
     }
+  };
+
+  const handleSaveNote = () => {
+    if (!topic) return;
+    saveNote(topic.id, noteDraft);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleCopyStudyGuide = () => {
+    if (!topic) return;
+    if (noteDraft && !window.confirm('Append current study guide content into your notes draft?')) {
+      return;
+    }
+    const updated = noteDraft ? `${noteDraft}\n\n---\n\n${topic.detailedContent}` : topic.detailedContent;
+    setNoteDraft(updated);
+  };
+
+  const insertFormatting = (prefix: string, suffix: string, defaultText: string) => {
+    const textarea = document.getElementById('topic-note-editor-textarea') as HTMLTextAreaElement | null;
+    if (!textarea) {
+      setNoteDraft(prev => (prev ? prev + '\n' : '') + prefix + defaultText + suffix);
+      return;
+    }
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end) || defaultText;
+    const replacement = prefix + selected + suffix;
+    const newText = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+    setNoteDraft(newText);
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + prefix.length, start + prefix.length + selected.length);
+    }, 0);
   };
 
   useEffect(() => {
@@ -507,6 +562,22 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <span className="hidden sm:inline">{copiedLink ? 'Copied!' : 'Share'}</span>
           </button>
 
+          {/* In-Modal Quick Edit Notes Button */}
+          <button
+            onClick={() => setActiveTab(activeTab === 'edit' ? 'content' : 'edit')}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+              activeTab === 'edit'
+                ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                : hasNote
+                ? 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100 shadow-2xs'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+            }`}
+            title="Edit notes directly inside this study guide"
+          >
+            <Edit3 size={14} className={activeTab === 'edit' ? 'text-white' : 'text-purple-600'} />
+            <span className="inline">{activeTab === 'edit' ? 'Read Guide' : 'Edit Notes'}</span>
+          </button>
+
           <button
             onClick={() => onOpenNote(topic.id, topic.title)}
             className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
@@ -514,6 +585,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
                 ? 'bg-purple-50 text-purple-700 border-purple-200'
                 : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
             }`}
+            title="Open floating notes popup"
           >
             <FileText size={14} />
             <span className="hidden sm:inline">{hasNote ? 'Edit Note' : 'Add Note'}</span>
@@ -687,7 +759,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             <div className="max-w-6xl mx-auto flex items-center gap-6 text-xs sm:text-sm font-bold overflow-x-auto">
               <button
                 onClick={() => setActiveTab('content')}
-                className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
+                className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                   activeTab === 'content' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                 }`}
               >
@@ -696,8 +768,21 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               </button>
 
               <button
+                onClick={() => setActiveTab('edit')}
+                className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
+                  activeTab === 'edit' ? 'border-purple-600 text-purple-700 font-bold' : 'border-transparent text-slate-400 hover:text-slate-900'
+                }`}
+              >
+                <Edit3 size={16} className={activeTab === 'edit' ? 'text-purple-600' : 'text-slate-400'} />
+                <span>Notes & Edit</span>
+                {hasNote && (
+                  <span className="w-2 h-2 rounded-full bg-purple-500" title="Personal notes saved" />
+                )}
+              </button>
+
+              <button
                 onClick={() => setActiveTab('overview')}
-                className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
+                className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                   activeTab === 'overview' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                 }`}
               >
@@ -708,7 +793,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               {topic.codeTemplates && topic.codeTemplates.length > 0 && (
                 <button
                   onClick={() => setActiveTab('code')}
-                  className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
+                  className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                     activeTab === 'code' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                   }`}
                 >
@@ -720,7 +805,7 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
               {topic.interviewQuestions && topic.interviewQuestions.length > 0 && (
                 <button
                   onClick={() => setActiveTab('qa')}
-                  className={`py-3.5 flex items-center gap-2 border-b-2 transition-all ${
+                  className={`py-3.5 flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                     activeTab === 'qa' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-900'
                   }`}
                 >
@@ -735,8 +820,270 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
           <div className="flex-1 px-6 sm:px-10 py-8">
             <div className="max-w-6xl mx-auto space-y-8">
               {activeTab === 'content' && (
-                <div className="p-6 sm:p-8 rounded-2xl bg-slate-50/80 border border-slate-200 text-slate-600 shadow-md space-y-4">
-                  <FormattedMarkdown content={topic.detailedContent} />
+                <div className="space-y-6">
+                  {/* Personal Notes Display & In-Place Edit Trigger */}
+                  {progress.notes[topic.id] ? (
+                    <div className="p-5 sm:p-6 rounded-2xl bg-purple-50/70 border border-purple-200 shadow-sm space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <Edit3 size={16} className="text-purple-600" />
+                          <h3 className="text-xs sm:text-sm font-extrabold text-purple-950 uppercase tracking-wide">
+                            Your Personal Notes & Edits
+                          </h3>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200/80 text-purple-800">
+                            Saved
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setActiveTab('edit')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                        >
+                          <Edit3 size={13} />
+                          <span>Edit Notes</span>
+                        </button>
+                      </div>
+                      <div className="p-4 rounded-xl bg-white border border-purple-100 shadow-2xs">
+                        <FormattedMarkdown content={progress.notes[topic.id]} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-50/70 to-purple-50/70 border border-blue-200/80 shadow-2xs">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-700">
+                        <Edit3 size={16} className="text-purple-600 shrink-0" />
+                        <span>Add custom notes, key insights, code snippets, or edit content for this topic.</span>
+                      </div>
+                      <button
+                        onClick={() => setActiveTab('edit')}
+                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
+                      >
+                        <Edit3 size={13} />
+                        <span>✏️ Write Study Notes</span>
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="p-6 sm:p-8 rounded-2xl bg-slate-50/80 border border-slate-200 text-slate-600 shadow-md space-y-4">
+                    <FormattedMarkdown content={topic.detailedContent} />
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'edit' && (
+                <div className="space-y-4">
+                  {/* Editor Header Toolbar */}
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-xl bg-purple-100 text-purple-700">
+                          <Edit3 size={18} />
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-extrabold text-slate-900">Personal Notes & Content Editor</h3>
+                          <p className="text-xs text-slate-500">Edit and annotate &ldquo;{topic.title}&rdquo; — persists locally and syncs to MongoDB.</p>
+                        </div>
+                      </div>
+
+                      {/* Right Control Actions */}
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <button
+                          onClick={handleCopyStudyGuide}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all cursor-pointer"
+                          title="Import study guide text into your notes draft"
+                        >
+                          <Copy size={13} className="text-blue-600" />
+                          <span>Copy Guide to Notes</span>
+                        </button>
+
+                        {/* View Mode Switcher */}
+                        <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+                          <button
+                            onClick={() => setEditorMode('edit')}
+                            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                              editorMode === 'edit' ? 'bg-white text-purple-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            Write
+                          </button>
+                          <button
+                            onClick={() => setEditorMode('split')}
+                            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer hidden md:block ${
+                              editorMode === 'split' ? 'bg-white text-purple-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            Split
+                          </button>
+                          <button
+                            onClick={() => setEditorMode('preview')}
+                            className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                              editorMode === 'preview' ? 'bg-white text-purple-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                            }`}
+                          >
+                            Preview
+                          </button>
+                        </div>
+
+                        {/* Save Notes Button */}
+                        <button
+                          onClick={handleSaveNote}
+                          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+                            saveSuccess
+                              ? 'bg-emerald-600 text-white shadow-emerald-200'
+                              : 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-200'
+                          }`}
+                        >
+                          {saveSuccess ? <Check size={14} /> : <Save size={14} />}
+                          <span>{saveSuccess ? 'Saved!' : 'Save Notes'}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Quick Formatting Bar */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100 text-xs">
+                      <span className="text-[11px] font-bold text-slate-400 mr-1">Insert:</span>
+                      <button
+                        onClick={() => insertFormatting('**', '**', 'bold text')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 cursor-pointer"
+                        title="Bold"
+                      >
+                        B
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('*', '*', 'italic text')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 italic font-serif text-slate-700 cursor-pointer"
+                        title="Italic"
+                      >
+                        I
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('## ', '', 'Section Heading')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 cursor-pointer"
+                        title="Heading 2"
+                      >
+                        H2
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('### ', '', 'Subsection Heading')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 cursor-pointer"
+                        title="Heading 3"
+                      >
+                        H3
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('- ', '', 'Key point')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+                        title="Bullet List"
+                      >
+                        • List
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('```cpp\n', '\n```', '// Code snippet here')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 font-mono text-slate-700 cursor-pointer"
+                        title="Code Block"
+                      >
+                        &lt;/&gt; Code
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('> ', '', 'Important takeaway rule')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+                        title="Callout Box"
+                      >
+                        &quot; Callout
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('$', '$', 'x \\oplus y')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 font-mono text-cyan-700 cursor-pointer"
+                        title="Math Equation"
+                      >
+                        ∑ Math
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('![Diagram Title](', ')', 'https://images.unsplash.com/photo-1516116211227-bbc80b3967bf')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+                        title="Image"
+                      >
+                        🖼️ Image
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('🎥 [Video Explanation](', ')', 'https://youtube.com/...')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+                        title="Video link"
+                      >
+                        🎥 Video
+                      </button>
+                      <button
+                        onClick={() => insertFormatting('| Concept | Description |\n|---|---|\n| Item 1 | Value 1 |\n', '', '')}
+                        className="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+                        title="Table"
+                      >
+                        ⊞ Table
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Editor & Preview Panels */}
+                  <div className={`grid gap-4 ${editorMode === 'split' ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1'}`}>
+                    {/* Textarea Editor */}
+                    {(editorMode === 'edit' || editorMode === 'split') && (
+                      <div className="flex flex-col rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm">
+                        <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500 font-semibold">
+                          <span>Markdown Notes</span>
+                          <span>{noteDraft.length} chars • {noteDraft.split(/\s+/).filter(Boolean).length} words</span>
+                        </div>
+                        <textarea
+                          id="topic-note-editor-textarea"
+                          value={noteDraft}
+                          onChange={(e) => setNoteDraft(e.target.value)}
+                          placeholder="Type your notes, code snippets, memory tricks, or formula here..."
+                          className="w-full h-[520px] p-4 text-xs sm:text-sm font-mono text-slate-800 bg-white border-0 resize-none focus:outline-none focus:ring-0 leading-relaxed custom-scrollbar selection:bg-purple-100"
+                        />
+                      </div>
+                    )}
+
+                    {/* Live Preview Panel */}
+                    {(editorMode === 'preview' || editorMode === 'split') && (
+                      <div className="flex flex-col rounded-2xl bg-white border border-slate-200 overflow-hidden shadow-sm">
+                        <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500 font-semibold">
+                          <span className="flex items-center gap-1.5">
+                            <Eye size={13} className="text-purple-600" />
+                            <span>Live Markdown Preview</span>
+                          </span>
+                          <span className="text-[11px] text-purple-600 font-bold">Auto-Rendering</span>
+                        </div>
+                        <div className="p-5 h-[520px] overflow-y-auto custom-scrollbar bg-slate-50/50">
+                          {noteDraft.trim() ? (
+                            <FormattedMarkdown content={noteDraft} />
+                          ) : (
+                            <div className="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
+                              <Edit3 size={32} className="text-slate-300 mb-2" />
+                              <p className="text-sm font-medium">Your preview will render here in real-time.</p>
+                              <p className="text-xs text-slate-400 mt-1">
+                                Click &ldquo;Copy Guide to Notes&rdquo; above to start annotating the curriculum guide!
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Save Footer Bar */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-purple-50/80 border border-purple-200">
+                    <div className="flex items-center gap-2 text-xs text-purple-900 font-semibold">
+                      <Sparkles size={14} className="text-purple-600 shrink-0" />
+                      <span>Saved notes are securely retained in your browser and synced across your devices.</span>
+                    </div>
+                    <button
+                      onClick={handleSaveNote}
+                      className={`flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer ${
+                        saveSuccess
+                          ? 'bg-emerald-600 text-white shadow-emerald-200'
+                          : 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-200'
+                      }`}
+                    >
+                      {saveSuccess ? <Check size={14} /> : <Save size={14} />}
+                      <span>{saveSuccess ? 'Saved Successfully!' : 'Save Notes'}</span>
+                    </button>
+                  </div>
                 </div>
               )}
 
