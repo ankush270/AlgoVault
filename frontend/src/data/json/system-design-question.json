@@ -25,27 +25,45 @@
             "level": "Read Uncommitted",
             "mechanism": "No locking or verification. Transactions read uncommitted data directly.",
             "prevents": "Nothing",
-            "suffers_from": ["Dirty Read", "Non-Repeatable Read", "Phantom Read"],
+            "suffers_from": [
+              "Dirty Read",
+              "Non-Repeatable Read",
+              "Phantom Read"
+            ],
             "real_tech_example": "YouTube Video View Counter or Live Stream Viewer Count: It doesn't matter if the count is slightly off by 2-3 views due to uncommitted writes, as speed is prioritized over 100% precision."
           },
           {
             "level": "Read Committed",
             "mechanism": "Transactions can only read data that has been permanently saved (committed).",
-            "prevents": ["Dirty Read"],
-            "suffers_from": ["Non-Repeatable Read", "Phantom Read"],
+            "prevents": [
+              "Dirty Read"
+            ],
+            "suffers_from": [
+              "Non-Repeatable Read",
+              "Phantom Read"
+            ],
             "real_tech_example": "Social Media Feeds (Instagram/Twitter): You won't see a drafted or discarded post. Default setting in PostgreSQL and SQL Server."
           },
           {
             "level": "Repeatable Read",
             "mechanism": "Locks the rows involved in a read operation so no other transaction can modify them until the transaction finishes.",
-            "prevents": ["Dirty Read", "Non-Repeatable Read"],
-            "suffers_from": ["Phantom Read (prevented in MySQL InnoDB using Next-Key Locking)"],
+            "prevents": [
+              "Dirty Read",
+              "Non-Repeatable Read"
+            ],
+            "suffers_from": [
+              "Phantom Read (prevented in MySQL InnoDB using Next-Key Locking)"
+            ],
             "real_tech_example": "E-commerce Inventory Stock Checkout (Amazon): When you add the last laptop to your cart, another buyer cannot change its stock status while your transaction is running."
           },
           {
             "level": "Serializable",
             "mechanism": "Completely isolates transactions by running them sequentially (one after another).",
-            "prevents": ["Dirty Read", "Non-Repeatable Read", "Phantom Read"],
+            "prevents": [
+              "Dirty Read",
+              "Non-Repeatable Read",
+              "Phantom Read"
+            ],
             "suffers_from": [],
             "real_tech_example": "Banking Core Account Transfer (HDFC/Chase) or Flight Seat Booking (BookMyShow/Airline): Ensures two people sitting on different sides of the world cannot buy the exact same seat at the same millisecond."
           }
@@ -63,22 +81,48 @@
           "iaas": {
             "full_form": "Infrastructure as a Service",
             "explanation": "You rent raw physical or virtual machines, storage, and networking. You install the OS, setup databases, and handle security patches yourself.",
-            "you_manage": ["Operating System (Ubuntu/Windows)", "Middleware", "Runtime", "Data", "Application Code"],
-            "provider_manages": ["Physical Servers", "Hard Drives", "Data Center Cooling", "Networking Cables", "Virtualization Layer"],
+            "you_manage": [
+              "Operating System (Ubuntu/Windows)",
+              "Middleware",
+              "Runtime",
+              "Data",
+              "Application Code"
+            ],
+            "provider_manages": [
+              "Physical Servers",
+              "Hard Drives",
+              "Data Center Cooling",
+              "Networking Cables",
+              "Virtualization Layer"
+            ],
             "real_tech_example": "Netflix hosting its custom video encoding infrastructure on AWS EC2 instances, giving them total control over OS-level performance tuning."
           },
           "paas": {
             "full_form": "Platform as a Service",
             "explanation": "The provider handles hardware, OS, and software runtimes. You simply upload your application code and config files.",
-            "you_manage": ["Application Code", "Database Data"],
-            "provider_manages": ["OS Patches", "Server Provisioning", "Runtime Execution", "Virtualization", "Hardware"],
+            "you_manage": [
+              "Application Code",
+              "Database Data"
+            ],
+            "provider_manages": [
+              "OS Patches",
+              "Server Provisioning",
+              "Runtime Execution",
+              "Virtualization",
+              "Hardware"
+            ],
             "real_tech_example": "A startup deploying a Node.js API to Heroku or AWS Elastic Beanstalk using `git push heroku main` without worrying about Ubuntu security patches or server setup."
           },
           "saas": {
             "full_form": "Software as a Service",
             "explanation": "Fully built, web-accessible software. You just log in and use it.",
-            "you_manage": ["User Permissions", "Profile Settings"],
-            "provider_manages": ["Everything (Code, Hardware, Security, Scaling, Database, Upgrades)"],
+            "you_manage": [
+              "User Permissions",
+              "Profile Settings"
+            ],
+            "provider_manages": [
+              "Everything (Code, Hardware, Security, Scaling, Database, Upgrades)"
+            ],
             "real_tech_example": "Companies using Google Workspace (Gmail/Docs) or Figma for team design, where zero code or infrastructure setup is required."
           }
         }
@@ -502,7 +546,7 @@
             "resource_usage": "Ultra-lightweight process isolation.",
             "real_tech_example": "Deploying hundreds of lightweight microservice containers onto a single Kubernetes worker node."
           }
-        ]
+        }
       },
       {
         "id": "cloud_provider_for_big_data",
@@ -511,13 +555,21 @@
           {
             "provider": "Google Cloud Platform (GCP)",
             "strengths": "Native home of Big Data tools (Spanner, MapReduce, Kubernetes were created at Google).",
-            "flagship_tools": ["BigQuery (Serverless petabyte SQL warehouse)", "Pub/Sub", "Dataflow"],
+            "flagship_tools": [
+              "BigQuery (Serverless petabyte SQL warehouse)",
+              "Pub/Sub",
+              "Dataflow"
+            ],
             "real_tech_example": "Spotify using GCP BigQuery to run analytics on billions of user music streams daily."
           },
           {
             "provider": "Amazon Web Services (AWS)",
             "strengths": "Most extensive catalog of integrated big data tools and vendor integrations.",
-            "flagship_tools": ["Amazon EMR (Managed Spark/Hadoop)", "Redshift", "Kinesis"],
+            "flagship_tools": [
+              "Amazon EMR (Managed Spark/Hadoop)",
+              "Redshift",
+              "Kinesis"
+            ],
             "real_tech_example": "Airbnb running data lakes on AWS S3 coupled with EMR processing clusters."
           }
         ]
@@ -549,7 +601,7 @@
         "title": "Why is a Solid-State Drive (SSD) Fast?",
         "key_term_definitions": {
           "seek_time": "The time required for a traditional hard drive read head to physically move to the disk platter track location.",
-          "nvme": "Non-Volatile Memory Express — a high-speed interface protocol designed specifically for SSDs running over PCIe lines."
+          "nvme": "Non-Volatile Memory Express  -  a high-speed interface protocol designed specifically for SSDs running over PCIe lines."
         },
         "architectural_advantages": [
           {
@@ -589,19 +641,13 @@
           "cold_start": "The initialization delay experienced when a serverless function is invoked for the first time or after sitting idle."
         },
         "internal_architecture": {
-          "firecracker_microvm": "AWS developed Firecracker — an open-source, lightweight Virtual Machine monitor written in Rust that creates lightweight secure microVMs in 5 milliseconds.",
+          "firecracker_microvm": "AWS developed Firecracker  -  an open-source, lightweight Virtual Machine monitor written in Rust that creates lightweight secure microVMs in 5 milliseconds.",
           "cold_start_vs_warm_start": {
             "cold_start": "Request hits API Gateway -> Lambda control plane provisions Firecracker microVM -> Downloads code zip from S3 -> Starts runtime (e.g., Python) -> Executes function. Latency: 200ms-1s.",
             "warm_start": "Subsequent requests reuse existing initialized, running Firecracker microVM instance directly. Latency: 5ms."
           }
         }
-      }
-    ]
-  }
-}
-{
-  "system_design_handbook": {
-    "topics": [
+      },
       {
         "id": "http_evolution",
         "title": "Evolution of HTTP Protocols: HTTP/1.0 to HTTP/3 (QUIC)",
@@ -769,14 +815,14 @@
             "cons": "Not natively supported in standard web browser JavaScript without proxy bridges.",
             "real_tech_example": "Internal microservice-to-microservice communication in Google, Netflix, and Uber backends."
           }
-        ]
+        }
       },
       {
         "id": "how_browsers_work",
         "title": "How Do Modern Browsers Work (Inside the Rendering Engine)?",
         "overview": "Browsers translate raw HTML, CSS, and JS network byte streams into interactive multi-threaded visual pixels rendered on screen.",
         "key_term_definitions": {
-          "dom": "Document Object Model — a tree structure representation of HTML element nodes in browser memory.",
+          "dom": "Document Object Model  -  a tree structure representation of HTML element nodes in browser memory.",
           "reflow_layout": "The browser phase where physical pixel dimensions and screen positions of each visible element are calculated."
         },
         "rendering_pipeline_steps": [
@@ -815,7 +861,7 @@
             "redis": "Leaderboard systems using Sorted Sets, Session Caching, Rate Limiters, Real-time location tracking.",
             "memcached": "High-throughput static web object caching (e.g., caching rendered HTML fragments at Facebook scale)."
           }
-        ]
+        }
       },
       {
         "id": "optimistic_locking",
@@ -1033,7 +1079,7 @@
             "example": "Shard 1 stores User IDs 1-1000000; Shard 2 stores User IDs 1000001-2000000.",
             "benefits": "Unlimited horizontal scale for write and storage throughput across physical server clusters."
           }
-        ]
+        }
       },
       {
         "id": "cdn_content_delivery_network",
@@ -1112,7 +1158,7 @@
             "latency": "Moderate latency (higher initial TTFB), practically infinite horizontal scale.",
             "real_tech_example": "AWS S3, Google Cloud Storage storing images, video files, static backups, and data lakes."
           }
-        ]
+        }
       },
       {
         "id": "dns_lookup_flow",
@@ -1183,15 +1229,9 @@
             "solution_sticky_sessions": "Route user's reads to Primary DB for 5 seconds immediately following any write operation before reverting back to Read Replica pool."
           }
         }
-      }
-    ]
-  }
-}
-{
-  "system_design_handbook_part_2": {
-    "topics": [
+      },
       {
-        "id": "read_replica_pattern",
+        "id": "read_replica_architecture_pattern",
         "title": "Read Replica Pattern",
         "overview": "A database scaling strategy where write operations are directed to a Primary database node, while read queries are offloaded across read-only copies to scale throughput.",
         "key_term_definitions": {
@@ -1228,8 +1268,8 @@
         "title": "Email Sending Flow Architecture",
         "overview": "The pipeline responsible for validating, queueing, signing, and delivering outbound emails at scale.",
         "key_term_definitions": {
-          "dkim": "DomainKeys Identified Mail — cryptographic signature added to email headers to verify sender authenticity.",
-          "spf": "Sender Policy Framework — DNS record listing authorized IP addresses permitted to send email for a domain."
+          "dkim": "DomainKeys Identified Mail  -  cryptographic signature added to email headers to verify sender authenticity.",
+          "spf": "Sender Policy Framework  -  DNS record listing authorized IP addresses permitted to send email for a domain."
         },
         "workflow_steps": [
           "1. Client issues HTTP POST or SMTP request to Web API / Outbound Mail Service with recipient, subject, and body.",
@@ -1322,7 +1362,7 @@
           "hybrid_model": {
             "real_tech_example": "Twitter/X uses Push model for standard users (pushing posts directly to followers' feeds) and Pull model for high-follower accounts (celebrity posts fetched on demand at feed refresh)."
           }
-        ]
+        }
       },
       {
         "id": "money_movement",
@@ -1411,7 +1451,7 @@
             "significance": "Introduced wide-column NoSQL storage model. Inspired Apache HBase and Cassandra."
           },
           {
-            "title": "Spanner: Google’s Globally-Distributed Database - 2012",
+            "title": "Spanner: Google's Globally-Distributed Database - 2012",
             "significance": "Showed how to build a globally distributed SQL database with external consistency using TrueTime atomic clock hardware."
           }
         ]
@@ -1434,7 +1474,7 @@
         "title": "Payment System Security Fundamentals",
         "overview": "Essential security architectures required to handle sensitive payment information safely and satisfy regulatory compliance standards.",
         "key_term_definitions": {
-          "pci_dss": "Payment Card Industry Data Security Standard — mandatory security requirements for handling credit card data.",
+          "pci_dss": "Payment Card Industry Data Security Standard  -  mandatory security requirements for handling credit card data.",
           "tokenization": "Replacing credit card numbers (PAN) with non-sensitive surrogate tokens."
         },
         "security_measures": [
@@ -1491,7 +1531,7 @@
         "how_it_works": [
           "1. Root node represents the entire geographic boundary box.",
           "2. When the number of points inside a boundary exceeds node capacity threshold (e.g., 100 points), the region splits into 4 sub-quadrants: North-West (NW), North-East (NE), South-West (SW), and South-East (SE).",
-          "3. Querying: Locating nearby items requires traversing only the relevant sub-quadrant branches, pruning irrelevant spatial branches instantly (Logarithmic \(O(\\log N)\) time complexity)."
+          "3. Querying: Locating nearby items requires traversing only the relevant sub-quadrant branches, pruning irrelevant spatial branches instantly (Logarithmic (O(\\log N)) time complexity)."
         ]
       },
       {
@@ -1542,7 +1582,7 @@
         "data_structure_design": {
           "order_book": "Bids sorted descending (highest price first); Asks sorted ascending (lowest price first).",
           "implementation": "Red-Black Tree or Hash Map of Price Levels, where each Price Level holds a Doubly-Linked List of FIFO orders.",
-          "matching_complexity": "Constant time \(O(1)\) lookup for top of book match, \(O(1)\) order insertion/cancellation within double-linked list."
+          "matching_complexity": "Constant time (O(1)) lookup for top of book match, (O(1)) order insertion/cancellation within double-linked list."
         }
       },
       {
@@ -1577,7 +1617,7 @@
         "useful_latency_numbers": {
           "l1_cache_reference": "0.5 ns",
           "main_memory_ram_read": "100 ns",
-          "ssd_random_read": "150 µs (0.15 ms)",
+          "ssd_random_read": "150 us (0.15 ms)",
           "datacenter_round_trip": "0.5 ms",
           "cross_ocean_network_round_trip": "150 ms"
         },
@@ -1589,8 +1629,8 @@
         },
         "throughput_estimation_shortcut": {
           "seconds_per_day": "86,400 seconds (~100,000 for mental math).",
-          "qps_formula": "1 Million requests per day ≈ 12 Requests Per Second (RPS).",
-          "peak_qps_rule_of_thumb": "Peak QPS = Average QPS × 2 (or ×5 depending on domain traffic spikes)."
+          "qps_formula": "1 Million requests per day ~ 12 Requests Per Second (RPS).",
+          "peak_qps_rule_of_thumb": "Peak QPS = Average QPS x 2 (or x5 depending on domain traffic spikes)."
         }
       }
     ]
