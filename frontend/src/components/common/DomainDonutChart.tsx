@@ -39,8 +39,8 @@ export const DomainDonutChart: React.FC = () => {
             <PieChart size={18} />
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-white">Mastery Breakdown</h3>
-            <p className="text-[11px] text-slate-400">Status distribution gauge</p>
+            <h3 className="text-sm sm:text-base font-bold text-slate-900">Mastery Breakdown</h3>
+            <p className="text-[11px] text-slate-500">Status distribution gauge</p>
           </div>
         </div>
       </div>

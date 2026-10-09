@@ -29,12 +29,12 @@ export const WeeklyActivityChart: React.FC = () => {
             <Calendar size={18} />
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-white">Weekly Momentum</h3>
-            <p className="text-[11px] text-slate-400">7-Day Study Activity & Streak</p>
+            <h3 className="text-sm sm:text-base font-bold text-slate-900">Weekly Momentum</h3>
+            <p className="text-[11px] text-slate-500">7-Day Study Activity & Streak</p>
           </div>
         </div>
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-600 text-xs font-bold">
-          <Flame size={14} className="animate-bounce" />
+          <Flame size={14} className="fill-amber-500 text-amber-500" />
           <span>{progress.streak} Day Streak</span>
         </div>
       </div>

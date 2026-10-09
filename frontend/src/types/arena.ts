@@ -46,7 +46,7 @@ export interface ArenaChatMessage {
 export interface MatchHistoryItem {
   id: string;
   opponentName: string;
-  result: 'WIN' | 'LOSS';
+  result: 'WIN' | 'LOSS' | 'DRAW';
   eloDelta: number;
   timeTakenSeconds: number;
   problemTitle: string;

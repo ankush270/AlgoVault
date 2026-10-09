@@ -12,8 +12,16 @@ export type { StriverProblem, StriverTopic, StriverStep, StriverSheetData } from
 
 const STORAGE_KEY = 'striver_a2z_solved_status_v1';
 
-export const StriverSheetView: React.FC = () => {
-  const { progress } = useProgress();
+interface StriverSheetViewProps {
+  searchQuery?: string;
+  setSearchQuery?: (q: string) => void;
+}
+
+export const StriverSheetView: React.FC<StriverSheetViewProps> = ({
+  searchQuery: propSearchQuery,
+  setSearchQuery: propSetSearchQuery,
+}) => {
+  const { progress, updateStatus } = useProgress();
   const [sheetData, setSheetData] = useState<StriverSheetData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [solvedStatus, setSolvedStatus] = useState<Record<string, boolean>>(() => {
@@ -22,7 +30,9 @@ export const StriverSheetView: React.FC = () => {
   });
 
   const [expandedTopics, setExpandedTopics] = useState<Record<string, boolean>>({ arrays: true, dp: true, trees: true });
-  const [searchQuery, setSearchQuery] = useState('');
+  const [internalSearchQuery, setInternalSearchQuery] = useState('');
+  const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
+  const setSearchQuery = propSetSearchQuery || setInternalSearchQuery;
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'solved' | 'unsolved' | 'starred' | 'notes'>('all');
   const [selectedTopicFilter, setSelectedTopicFilter] = useState<string>('all');
@@ -51,11 +61,36 @@ export const StriverSheetView: React.FC = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(solvedStatus));
   }, [solvedStatus]);
 
+  // Listen for cloud sync restore events to instantly update state
+  useEffect(() => {
+    const handleSyncRestore = () => {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          setSolvedStatus(JSON.parse(saved));
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener('storage', handleSyncRestore);
+    window.addEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    return () => {
+      window.removeEventListener('storage', handleSyncRestore);
+      window.removeEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    };
+  }, []);
+
   const toggleSolved = (id: string) => {
+    const nextSolved = !solvedStatus[id];
     setSolvedStatus((prev) => ({
       ...prev,
-      [id]: !prev[id]
+      [id]: nextSolved
     }));
+    if (nextSolved) {
+      updateStatus(id, 'mastered');
+    } else {
+      updateStatus(id, 'todo');
+    }
   };
 
   const toggleTopicExpand = (topicId: string) => {

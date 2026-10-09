@@ -102,4 +102,60 @@ describe('Navbar Component UI Unit Tests', () => {
       expect(setActiveTab).toHaveBeenCalledWith('dashboard');
     }
   });
+
+  it('switches to knowledge tab when typing search on non-searchable tabs', () => {
+    const setActiveTab = vi.fn();
+    const setSearchQuery = vi.fn();
+    render(
+      <Navbar
+        {...defaultProps}
+        activeTab="dashboard"
+        setActiveTab={setActiveTab}
+        setSearchQuery={setSearchQuery}
+      />
+    );
+
+    const input = screen.getByPlaceholderText(/search topics, questions, tags/i);
+    fireEvent.change(input, { target: { value: 'react hooks' } });
+
+    expect(setSearchQuery).toHaveBeenCalledWith('react hooks');
+    expect(setActiveTab).toHaveBeenCalledWith('knowledge');
+  });
+
+  it('does NOT switch tab away when typing search on searchable tabs like jobs or striver', () => {
+    const setActiveTab = vi.fn();
+    const setSearchQuery = vi.fn();
+    render(
+      <Navbar
+        {...defaultProps}
+        activeTab="jobs"
+        setActiveTab={setActiveTab}
+        setSearchQuery={setSearchQuery}
+      />
+    );
+
+    const input = screen.getByPlaceholderText(/search jobs by role, company, skills/i);
+    fireEvent.change(input, { target: { value: 'frontend' } });
+
+    expect(setSearchQuery).toHaveBeenCalledWith('frontend');
+    expect(setActiveTab).not.toHaveBeenCalled();
+  });
+
+  it('toggles mobile search bar when mobile search button is clicked', () => {
+    render(<Navbar {...defaultProps} activeTab="striver-a2z" />);
+
+    const toggleBtn = screen.getByRole('button', { name: /toggle mobile search/i });
+    expect(toggleBtn).toBeInTheDocument();
+
+    // Click toggle to open mobile search
+    fireEvent.click(toggleBtn);
+
+    // Mobile search input should now be visible with striver placeholder
+    const mobileInputs = screen.getAllByPlaceholderText(/search striver dsa sheet/i);
+    expect(mobileInputs.length).toBeGreaterThanOrEqual(1);
+
+    // Close button should be present
+    const closeBtn = screen.getByRole('button', { name: /close mobile search/i });
+    fireEvent.click(closeBtn);
+  });
 });

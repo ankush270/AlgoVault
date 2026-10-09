@@ -1,3 +1,5 @@
+import { getBackendBaseUrl } from './api';
+
 export interface CodeReviewResult {
   timeComplexity: string;
   spaceComplexity: string;
@@ -5,6 +7,9 @@ export interface CodeReviewResult {
   codeQualityScore: number;
   suggestions: string[];
   optimalSnippet: string;
+  isUnauthenticated?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
 }
 
 export async function analyzeCodeWithAI(
@@ -13,14 +18,35 @@ export async function analyzeCodeWithAI(
   problemTitle?: string,
   problemDescription?: string
 ): Promise<CodeReviewResult> {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+  const backendUrl = getBackendBaseUrl();
+  const token = typeof window !== 'undefined' ? localStorage.getItem('techswitch_token') : null;
+
+  // Pre-check authentication: unauthenticated users receive friendly offline estimation
+  if (!token) {
+    return {
+      timeComplexity: 'O(N)',
+      spaceComplexity: 'O(1)',
+      isOptimal: true,
+      codeQualityScore: 82,
+      isUnauthenticated: true,
+      suggestions: [
+        '🔒 Authentication Required: Please log in or register to get real-time AI code reviews powered by Sarvam AI.',
+        'Showing offline algorithmic estimation based on common DSA patterns.',
+        'Consider boundary conditions such as empty collections or negative values.'
+      ],
+      optimalSnippet: code,
+    };
+  }
 
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+
     const response = await fetch(`${backendUrl}/api/chat/code-review`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({
         code,
         language,
@@ -29,8 +55,24 @@ export async function analyzeCodeWithAI(
       }),
     });
 
+    if (response.status === 401 || response.status === 403) {
+      return {
+        timeComplexity: 'O(N)',
+        spaceComplexity: 'O(1)',
+        isOptimal: true,
+        codeQualityScore: 82,
+        isUnauthenticated: true,
+        suggestions: [
+          '🔒 Session Expired: Please log in or register to get real-time AI code reviews powered by Sarvam AI.',
+          'Showing offline algorithmic estimation based on common DSA patterns.'
+        ],
+        optimalSnippet: code,
+      };
+    }
+
     if (!response.ok) {
-      throw new Error(`Server returned ${response.status}`);
+      const errData = await response.json().catch(() => null);
+      throw new Error(errData?.message || `AI service returned error status ${response.status}`);
     }
 
     const data = await response.json();
@@ -41,23 +83,28 @@ export async function analyzeCodeWithAI(
     return {
       timeComplexity: data.timeComplexity || 'O(N)',
       spaceComplexity: data.spaceComplexity || 'O(1)',
-      isOptimal: data.isOptimal ?? true,
-      codeQualityScore: data.codeQualityScore ?? 85,
+      isOptimal: data.isOptimal ?? false,
+      codeQualityScore: data.codeQualityScore ?? 75,
       suggestions: data.suggestions || ['Review input validations and edge cases.'],
       optimalSnippet: data.optimalSnippet || code,
+      isUnauthenticated: false,
     };
   } catch (err: any) {
-    console.warn('Fallback to client AI analysis estimation:', err);
+    console.warn('AI Code Review Error:', err);
     return {
-      timeComplexity: 'O(N)',
-      spaceComplexity: 'O(1)',
-      isOptimal: true,
-      codeQualityScore: 82,
+      timeComplexity: 'N/A',
+      spaceComplexity: 'N/A',
+      isOptimal: false,
+      codeQualityScore: 0,
+      isError: true,
+      errorMessage: err?.message || 'Failed to connect to AI Code Review service.',
       suggestions: [
-        'Logic appears sound. Verify performance under maximum constraint size.',
-        'Consider boundary conditions such as empty collections or negative values.'
+        `⚠️ AI Review Error: ${err?.message || 'The AI service encountered an error.'}`,
+        'Please verify that your network/backend is online and try analyzing again.'
       ],
       optimalSnippet: code,
+      isUnauthenticated: false
     };
   }
 }
+

@@ -26,21 +26,17 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
   return (
     <div className="space-y-4">
       {/* Main Hero Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#0D1527] via-[#0B0F19] to-[#121B35] border border-slate-200/90 relative overflow-hidden shadow-lg">
-        {/* Glow ambient background circles */}
-        <div className="absolute -right-10 -top-10 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-10 -bottom-10 w-72 h-72 bg-purple-500/15 rounded-full blur-3xl pointer-events-none" />
-        
+      <div className="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200 relative overflow-hidden shadow-sm">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-3.5 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-700 text-xs font-bold shadow-sm">
-              <Sparkles size={14} className="text-cyan-600 animate-pulse" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-700 text-xs font-bold">
+              <Layers size={13} className="text-cyan-600" />
               <span>Structured Master DSA Roadmap</span>
             </div>
             
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3 flex-wrap">
               <span>Master DSA Sheet</span>
-              <span className="text-xs sm:text-sm px-3.5 py-1 rounded-full bg-gradient-to-r from-cyan-500/20 via-purple-500/20 via-emerald-500/20 to-amber-500/20 text-cyan-700 border border-cyan-200 font-bold shadow-sm">
+              <span className="text-xs sm:text-sm px-3.5 py-1 rounded-full bg-white text-slate-700 border border-slate-200 font-bold shadow-2xs">
                 {activeSheetTab === 'all' && '🌐 All Sheets Combined (806)'}
                 {activeSheetTab === 'striver' && '⚡ Striver A2Z (661)'}
                 {activeSheetTab === 'love_babbar' && '🔥 Love Babbar 450 (424)'}
@@ -50,40 +46,40 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
               </span>
             </h1>
             
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Zero duplicates. Master Arrays, Dynamic Programming, Trees & Graphs across Striver, Love Babbar, Fraz & NeetCode 150!
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+              Zero duplicates. Master Arrays, Dynamic Programming, Trees & Graphs across Striver, Love Babbar, Fraz & NeetCode 150.
             </p>
 
             {/* Quick Stats Badges */}
-            <div className="flex items-center gap-3 pt-1 flex-wrap text-xs text-slate-300">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
-                <Layers size={14} className="text-cyan-400" />
-                <span className="font-bold text-white">{totalProblemsCount}</span> Total Problems
+            <div className="flex items-center gap-2.5 pt-1 flex-wrap text-xs text-slate-600">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-700 shadow-2xs">
+                <Layers size={14} className="text-cyan-600" />
+                <span className="font-bold text-slate-900">{totalProblemsCount}</span> Total Problems
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
-                <Award size={14} className="text-emerald-400" />
-                <span className="font-bold text-white">14</span> Core Categories
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-700 shadow-2xs">
+                <Award size={14} className="text-emerald-600" />
+                <span className="font-bold text-slate-900">14</span> Core Categories
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 border border-white/15 font-medium text-white backdrop-blur-sm">
-                <BarChart2 size={14} className="text-purple-400" />
-                <span className="font-bold text-white">0</span> Duplicates
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 font-medium text-slate-700 shadow-2xs">
+                <BarChart2 size={14} className="text-purple-600" />
+                <span className="font-bold text-slate-900">0</span> Duplicates
               </span>
             </div>
           </div>
 
           {/* Progress Card */}
-          <div className="w-full lg:w-auto min-w-[270px] p-5 rounded-2xl bg-white/95 border border-white/20 space-y-3.5 shrink-0 shadow-lg backdrop-blur-xl">
+          <div className="w-full lg:w-auto min-w-[270px] p-5 rounded-2xl bg-white border border-slate-200 space-y-3.5 shrink-0 shadow-sm">
             <div className="flex items-center justify-between text-xs">
               <span className="font-bold text-slate-700 flex items-center gap-1.5">
-                <Flame size={15} className="text-amber-600" />
+                <Flame size={15} className="text-amber-500 fill-amber-500" />
                 <span>Completion Status</span>
               </span>
               <span className="font-black text-cyan-700 font-mono text-sm">{solvedCount} / {totalProblemsCount} ({progressPercentage}%)</span>
             </div>
             
-            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200 shadow-sm">
+            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
               <div 
-                className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-500"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
@@ -93,7 +89,7 @@ export const SheetHeader: React.FC<SheetHeaderProps> = ({
                 <CheckCircle2 size={13} /> {solvedCount} Solved
               </span>
               <span className="flex items-center gap-1 text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                <Flame size={13} /> {totalProblemsCount - solvedCount} Left
+                <Flame size={13} className="text-amber-500 fill-amber-500" /> {totalProblemsCount - solvedCount} Left
               </span>
             </div>
           </div>

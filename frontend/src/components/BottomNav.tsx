@@ -16,6 +16,7 @@ import {
   PieChart,
   FileText,
   X,
+  Cloud,
 } from 'lucide-react';
 
 interface BottomNavProps {
@@ -35,7 +36,9 @@ const moreTabs = [
   { id: 'dsa-tricks', label: 'DSA Tricks', icon: Sparkles },
   { id: 'interview-experiences', label: 'Interviews', icon: Briefcase },
   { id: 'live-arena', label: '1v1 Arena', icon: Swords },
-  { id: 'system-design-canvas', label: 'System Design', icon: Layers },
+  { id: 'system-design-canvas', label: 'System Design Studio', icon: Layers },
+  { id: 'system-design-hub', label: 'System Design Hub', icon: Layers },
+  { id: 'azure-hub', label: 'Azure Hub', icon: Cloud },
   { id: 'leetcode-explorer', label: 'LeetCode', icon: Building2 },
   { id: 'algorithms', label: 'Algorithms', icon: BookOpen },
   { id: 'sql-sandbox', label: 'SQL Sandbox', icon: Terminal },

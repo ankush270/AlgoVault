@@ -20,8 +20,8 @@ import {
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
 import { useMongoSync } from '../hooks/useMongoSync';
-import { AuthModal } from './AuthModal';
 import { SyncModal } from '../features/sync/components/SyncModal';
+import { getPathForState } from '../utils/routing';
 
 interface NavbarProps {
   searchQuery: string;
@@ -53,24 +53,63 @@ export const Navbar: React.FC<NavbarProps> = ({
     syncSuccessMsg,
     handleMongoPush,
     handleMongoPull,
+    lastSyncTime,
+    isAutoSyncActive
   } = useMongoSync();
 
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null);
+
+  const SEARCHABLE_TABS = ['knowledge', 'striver-a2z', 'jobs', 'leetcode-explorer', 'dsa-tricks'];
+
+  const getSearchPlaceholder = (tab: string) => {
+    switch (tab) {
+      case 'striver-a2z':
+        return 'Search Striver DSA sheet...';
+      case 'leetcode-explorer':
+        return 'Search 400+ LeetCode problems...';
+      case 'jobs':
+        return 'Search jobs by role, company, skills...';
+      case 'dsa-tricks':
+        return 'Search DSA tricks & techniques...';
+      case 'knowledge':
+      default:
+        return 'Search topics, questions, tags...';
+    }
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (value.trim() && !SEARCHABLE_TABS.includes(activeTab)) {
+      setActiveTab('knowledge');
+    }
+  };
 
   // Keyboard shortcut (Ctrl+K or Cmd+K) to focus search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        searchInputRef.current?.focus();
+        if (window.innerWidth < 768) {
+          setMobileSearchOpen(true);
+          setTimeout(() => mobileSearchInputRef.current?.focus(), 50);
+        } else {
+          searchInputRef.current?.focus();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (mobileSearchOpen) {
+      mobileSearchInputRef.current?.focus();
+    }
+  }, [mobileSearchOpen]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -101,7 +140,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-[1800px] mx-auto px-3 sm:px-5 lg:px-6 h-16 flex items-center justify-between gap-3 sm:gap-4 lg:gap-6">
           
           {/* ================= LEFT SECTION: Brand & Quick Tabs ================= */}
-          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -112,17 +151,35 @@ export const Navbar: React.FC<NavbarProps> = ({
               {mobileMenuOpen ? <X size={19} /> : <Menu size={19} />}
             </button>
 
+            {/* Mobile Search Toggle Button */}
+            <button
+              onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+              className="md:hidden flex items-center justify-center p-2 rounded-xl text-slate-600 hover:text-blue-600 bg-slate-100/90 hover:bg-blue-50 transition-colors shadow-2xs"
+              title="Toggle Search"
+              aria-label="Toggle Mobile Search"
+            >
+              <Search size={18} />
+            </button>
+
             {/* Brand Logo & Title */}
-            <div 
-              onClick={() => setActiveTab('dashboard')}
+            <a 
+              href="/"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                  e.preventDefault();
+                  setActiveTab('dashboard');
+                }
+              }}
               className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
             >
-              <div className="relative shrink-0">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-xs opacity-50 group-hover:opacity-100 transition duration-300" />
+              <div 
+                onClick={() => setActiveTab('dashboard')}
+                className="relative shrink-0"
+              >
                 <img
                   src="/logo.png"
                   alt="AlgoVault Logo"
-                  className="relative w-9 h-9 rounded-xl object-cover border border-white/80 shadow-xs group-hover:scale-105 transition-transform duration-300"
+                  className="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-xs group-hover:scale-105 transition-transform duration-200"
                 />
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
               </div>
@@ -140,18 +197,25 @@ export const Navbar: React.FC<NavbarProps> = ({
                   DSA & System Design Vault
                 </span>
               </div>
-            </div>
+            </a>
 
             {/* Desktop Quick Nav Pill Links */}
             <nav className="hidden 2xl:flex items-center gap-1 pl-3 ml-2 border-l border-slate-200">
               {quickNavItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
+                const itemPath = getPathForState(item.id);
                 return (
-                  <button
+                  <a
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    href={itemPath}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                        e.preventDefault();
+                        setActiveTab(item.id);
+                      }
+                    }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       isActive
                         ? 'bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -159,7 +223,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   >
                     <Icon size={14} className={isActive ? 'text-blue-600' : 'text-slate-400'} />
                     <span>{item.label}</span>
-                  </button>
+                  </a>
                 );
               })}
             </nav>
@@ -173,8 +237,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ref={searchInputRef}
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search topics, questions, tags..."
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder={getSearchPlaceholder(activeTab)}
                 className="w-full bg-slate-100/70 hover:bg-slate-100 focus:bg-white border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/15 text-sm text-slate-900 placeholder-slate-400 rounded-xl pl-10 pr-16 py-2 outline-none transition-all shadow-2xs"
               />
               {searchQuery ? (
@@ -197,16 +261,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             
             {/* Streak Counter Pill */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-300/60 text-amber-900 font-black text-xs shadow-2xs">
-              <Flame className="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse shrink-0" />
-              <span className="hidden sm:inline font-mono">{progress.streak || 1} Day Streak</span>
-              <span className="sm:hidden font-mono">{progress.streak || 1}d</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-800 font-bold text-xs shadow-2xs">
+              <Flame className="w-4 h-4 text-amber-500 fill-amber-500 shrink-0" />
+              <span className="hidden sm:inline font-mono">{progress.streak ?? 0} Day Streak</span>
+              <span className="sm:hidden font-mono">{progress.streak ?? 0}d</span>
             </div>
 
             {/* Quick Revision Button */}
-            <button
-              onClick={() => setActiveTab('revision')}
-              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+            <a
+              href="/revision"
+              onClick={(e) => {
+                if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                  e.preventDefault();
+                  setActiveTab('revision');
+                }
+              }}
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                 activeTab === 'revision'
                   ? 'bg-purple-600 text-white border-purple-600 shadow-xs'
                   : 'bg-white hover:bg-purple-50 text-slate-700 hover:text-purple-700 border-slate-200 hover:border-purple-300 shadow-2xs'
@@ -214,7 +284,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <Bookmark className={`w-3.5 h-3.5 ${activeTab === 'revision' ? 'text-white' : 'text-purple-600'}`} />
               <span>Revision</span>
-            </button>
+            </a>
 
             {/* Cloud Sync Button */}
             <button
@@ -247,8 +317,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <p className="text-sm font-black text-slate-900 truncate">{user.name}</p>
                       <p className="text-xs text-slate-500 truncate font-mono">{user.email}</p>
                       <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 font-semibold">
-                        <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
-                        <span>MongoDB Auto-Sync Active</span>
+                        <ShieldCheck size={14} className={`text-emerald-600 shrink-0 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <span>
+                          {isSyncing
+                            ? 'Syncing changes...'
+                            : isAutoSyncActive
+                              ? `MongoDB Auto-Sync Active${lastSyncTime ? ` (${lastSyncTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})` : ''}`
+                              : 'Cloud Sync Ready'}
+                        </span>
                       </div>
                     </div>
 
@@ -280,13 +356,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             ) : (
               <button
-                onClick={() => {
-                  if (onOpenAuth) {
-                    onOpenAuth('login');
-                  } else {
-                    setShowAuthModal(true);
-                  }
-                }}
+                onClick={() => onOpenAuth?.('login')}
                 className="flex items-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white shadow-sm shadow-blue-500/25 hover:shadow-md hover:shadow-blue-500/35 transition-all transform active:scale-95 shrink-0"
               >
                 <User className="w-3.5 h-3.5 shrink-0" />
@@ -296,12 +366,49 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
         </div>
+
+        {/* Mobile Expandable Search Bar Strip */}
+        {mobileSearchOpen && (
+          <div className="md:hidden border-t border-slate-200/90 bg-slate-50/95 backdrop-blur-md px-3 py-2.5 transition-all">
+            <div className="relative flex items-center w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                ref={mobileSearchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder={getSearchPlaceholder(activeTab)}
+                className="w-full bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm text-slate-900 placeholder-slate-400 rounded-xl pl-9 pr-16 py-2 outline-none shadow-xs"
+              />
+              {searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-9 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded-lg transition-colors"
+                >
+                  Clear
+                </button>
+              ) : null}
+              <button
+                onClick={() => setMobileSearchOpen(false)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                title="Close Search"
+                aria-label="Close Mobile Search"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Backup & Import Modal */}
       <SyncModal
         isOpen={showSyncModal}
         onClose={() => setShowSyncModal(false)}
+        isAuthenticated={isAuthenticated}
+        userEmail={user?.email}
+        userName={user?.name}
+        onOpenAuth={onOpenAuth}
         mongoUserKey={mongoUserKey}
         setMongoUserKey={setMongoUserKey}
         isSyncing={isSyncing}
@@ -311,9 +418,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         onImportJSON={importProgressJSON}
         syncSuccessMsg={syncSuccessMsg}
       />
-
-      {/* Auth Modal */}
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   );
 };

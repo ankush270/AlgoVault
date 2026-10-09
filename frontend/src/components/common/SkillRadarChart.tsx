@@ -79,10 +79,10 @@ export const SkillRadarChart: React.FC<{ compact?: boolean }> = ({ compact = fal
             <Brain size={18} />
           </div>
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-1.5">
+            <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5">
               Domain Skill Matrix
             </h3>
-            <p className="text-[11px] text-slate-400">Multi-axis proficiency radar chart</p>
+            <p className="text-[11px] text-slate-500">Multi-axis proficiency radar chart</p>
           </div>
         </div>
         <div className="text-right">

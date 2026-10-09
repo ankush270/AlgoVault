@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Editor from '@monaco-editor/react';
 import confetti from 'canvas-confetti';
 import { io, Socket } from 'socket.io-client';
@@ -25,9 +25,12 @@ import {
   ChevronRight,
   FileCode,
   Flame,
-  UserCheck
+  UserCheck,
+  Lock
 } from 'lucide-react';
 import { executeCode } from '../services/codeExecutionService';
+import { getBackendBaseUrl, apiArena } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import {
   LanguageType,
   AiDifficulty,
@@ -50,6 +53,19 @@ const SAMPLE_LEADERBOARD: LeaderboardEntry[] = [
 const PRESET_EMOJIS = ['👋 Good luck!', '🤝 GG!', '🚀 Speed demon!', '🔥 On fire!', '💡 Almost there!'];
 
 export const LiveCodingArena: React.FC = () => {
+  const { user, token } = useAuth();
+  const currentUserId = useMemo(() => {
+    if (user?.id || (user as any)?._id) {
+      return String(user?.id || (user as any)?._id);
+    }
+    let stored = localStorage.getItem('algovault_uid');
+    if (!stored) {
+      stored = 'guest_' + Math.random().toString(36).slice(2, 8);
+      localStorage.setItem('algovault_uid', stored);
+    }
+    return stored;
+  }, [user]);
+
   const [socket, setSocket] = useState<Socket | null>(null);
   const [matchState, setMatchState] = useState<'lobby' | 'searching' | 'in_battle' | 'match_ended'>('lobby');
 
@@ -59,13 +75,16 @@ export const LiveCodingArena: React.FC = () => {
   });
 
   const [username, setUsername] = useState<string>(() => {
-    return localStorage.getItem('algovault_username') || 'Candidate';
+    return user?.name || localStorage.getItem('algovault_username') || 'Candidate';
   });
 
   const [matchHistory, setMatchHistory] = useState<MatchHistoryItem[]>(() => {
     const saved = localStorage.getItem('algovault_match_history');
     return saved ? JSON.parse(saved) : [];
   });
+
+  const [leaderboardList, setLeaderboardList] = useState<LeaderboardEntry[]>(SAMPLE_LEADERBOARD);
+  const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState<boolean>(false);
 
   const [roomId, setRoomId] = useState<string | null>(null);
   const [isAiMatch, setIsAiMatch] = useState<boolean>(false);
@@ -78,6 +97,7 @@ export const LiveCodingArena: React.FC = () => {
 
   const [testsPassed, setTestsPassed] = useState<number>(0);
   const [executing, setExecuting] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [stdout, setStdout] = useState<string>('');
 
   const [activeTabLeft, setActiveTabLeft] = useState<'problem' | 'console'>('problem');
@@ -98,15 +118,120 @@ export const LiveCodingArena: React.FC = () => {
   const [disconnectedMessage, setDisconnectedMessage] = useState<string | null>(null);
 
   const timerRef = useRef<any>(null);
+  const socketRef = useRef<Socket | null>(null);
+
+  // References to keep event handlers synced without resetting the socket connection
+  const usernameRef = useRef(username);
+  const languageRef = useRef(language);
+  const currentProblemRef = useRef(currentProblem);
+  const roomIdRef = useRef(roomId);
+  const testsPassedRef = useRef(testsPassed);
+  const currentUserIdRef = useRef(currentUserId);
+  const matchStateRef = useRef(matchState);
 
   useEffect(() => {
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    currentUserIdRef.current = currentUserId;
+  }, [currentUserId]);
+
+  useEffect(() => {
+    matchStateRef.current = matchState;
+  }, [matchState]);
+
+  useEffect(() => {
+    usernameRef.current = username;
+  }, [username]);
+
+  useEffect(() => {
+    if (user?.name) {
+      if (user.name !== username) {
+        setUsername(user.name);
+        localStorage.setItem('algovault_username', user.name);
+      }
+    }
+  }, [user, username]);
+
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
+
+  useEffect(() => {
+    currentProblemRef.current = currentProblem;
+  }, [currentProblem]);
+
+  useEffect(() => {
+    roomIdRef.current = roomId;
+  }, [roomId]);
+
+  useEffect(() => {
+    testsPassedRef.current = testsPassed;
+  }, [testsPassed]);
+
+  // Load persistent leaderboard & user profile from backend
+  const loadLeaderboardData = async () => {
+    setIsLoadingLeaderboard(true);
+    try {
+      const data = await apiArena.fetchLeaderboard();
+      if (data?.leaderboard && Array.isArray(data.leaderboard) && data.leaderboard.length > 0) {
+        setLeaderboardList(data.leaderboard);
+      }
+    } catch (err) {
+      console.warn('Failed to load online leaderboard, using cached:', err);
+    } finally {
+      setIsLoadingLeaderboard(false);
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      const data = await apiArena.fetchProfile(currentUserId, usernameRef.current);
+      if (data?.profile) {
+        if (typeof data.profile.elo === 'number') {
+          setEloRating(data.profile.elo);
+          localStorage.setItem('algovault_elo', data.profile.elo.toString());
+        }
+        if (Array.isArray(data.profile.recentMatches) && data.profile.recentMatches.length > 0) {
+          setMatchHistory(data.profile.recentMatches);
+          localStorage.setItem('algovault_match_history', JSON.stringify(data.profile.recentMatches));
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to load arena profile:', err);
+    }
+  };
+
+  useEffect(() => {
+    loadLeaderboardData();
+    loadUserProfile();
+  }, [currentUserId]);
+
+  useEffect(() => {
+    const backendUrl = getBackendBaseUrl();
+    const currentToken = token || localStorage.getItem('techswitch_token');
     const newSocket = io(backendUrl, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
+      auth: {
+        token: currentToken || undefined
+      }
     });
 
     setSocket(newSocket);
+    socketRef.current = newSocket;
+
+    newSocket.on('authenticated', (data) => {
+      if (data?.user?.name) {
+        setUsername(data.user.name);
+      }
+      if (typeof data?.elo === 'number') {
+        setEloRating(data.elo);
+        localStorage.setItem('algovault_elo', data.elo.toString());
+      }
+    });
+
+    newSocket.on('arena_error', (data: { message: string }) => {
+      setMatchState('lobby');
+      alert(`⚠️ ${data.message || 'Arena matchmaking error.'}`);
+    });
 
     newSocket.on('waiting_for_opponent', () => {
       setMatchState('searching');
@@ -117,10 +242,10 @@ export const LiveCodingArena: React.FC = () => {
       setIsAiMatch(!!data.isAiMatch);
       setCurrentProblem(data.problem);
 
-      const initial = data.problem?.initialCode?.[language] || data.problem?.initialCode?.python || '# Write code here';
+      const initial = data.problem?.initialCode?.[languageRef.current] || data.problem?.initialCode?.python || '# Write code here';
       setUserCode(initial);
 
-      const opponentName = data.players.find((p: string) => p !== username) || (data.isAiMatch ? 'AlgoBot AI' : 'Opponent');
+      const opponentName = data.players.find((p: string) => p !== usernameRef.current) || (data.isAiMatch ? 'AlgoBot AI' : 'Opponent');
       setOpponent({
         username: opponentName,
         codeLength: 0,
@@ -131,13 +256,14 @@ export const LiveCodingArena: React.FC = () => {
       setMatchState('in_battle');
       setTimerSeconds(900);
       setTestsPassed(0);
+      setSubmitting(false);
       setWinnerInfo(null);
       setDisconnectedMessage(null);
       setChatMessages([
         {
           id: 'welcome',
           sender: 'System',
-          text: `Battle started against ${opponentName}! First to pass 5 test cases wins.`,
+          text: `Battle started against ${opponentName}! First to verify all 5 test cases and submit wins.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -162,9 +288,26 @@ export const LiveCodingArena: React.FC = () => {
       setDisconnectedMessage(data.message || 'Opponent left the room.');
     });
 
+    // Anti-cheat verification feedback
+    newSocket.on('submission_rejected', (data) => {
+      setSubmitting(false);
+      const errorMsg = data.error || 'Submission failed test verification.';
+      setStdout(data.output || `❌ ${errorMsg}`);
+      setActiveTabLeft('console');
+      if (typeof data.testsPassed === 'number') {
+        setTestsPassed(data.testsPassed);
+      }
+    });
+
     newSocket.on('match_ended', (data) => {
-      const isWinner = data.winnerUsername === username || data.winnerSocketId === newSocket.id;
-      const delta = isWinner ? 25 : -15;
+      setSubmitting(false);
+      // Strictly verify winner by socket ID or unique user ID
+      const isWinner = data.winnerSocketId
+        ? (data.winnerSocketId === socketRef.current?.id || data.winnerSocketId === newSocket.id)
+        : (data.winnerUserId ? (data.winnerUserId === currentUserIdRef.current) : false);
+
+      const isDraw = !!data.isDraw;
+      const delta = isDraw ? 0 : (isWinner ? (data.eloDelta || 25) : (data.loserEloDelta || -15));
 
       let newElo = 1500;
       setEloRating((prev) => {
@@ -174,23 +317,27 @@ export const LiveCodingArena: React.FC = () => {
       });
 
       const winInfo: MatchWinnerInfo = {
-        winnerUsername: data.winnerUsername || 'Candidate',
+        winnerUsername: isDraw ? 'Match Draw (Timeout)' : (data.winnerUsername || 'Candidate'),
         timeTakenSeconds: data.timeTakenSeconds || 120,
         eloDelta: delta,
-        problemTitle: currentProblem?.title || 'Coding Duel'
+        problemTitle: currentProblemRef.current?.title || 'Coding Duel'
       };
 
       setWinnerInfo(winInfo);
       setMatchState('match_ended');
 
       // Record History
+      const opponentDisplay = isWinner
+        ? (data.loserUsername || (data.isAiMatch ? 'AlgoBot AI' : 'Opponent'))
+        : (data.winnerUsername || (data.isAiMatch ? 'AlgoBot AI' : 'Opponent'));
+
       const newHistoryItem: MatchHistoryItem = {
         id: `match_${Date.now()}`,
-        opponentName: opponent.username,
-        result: isWinner ? 'WIN' : 'LOSS',
+        opponentName: opponentDisplay,
+        result: isDraw ? 'DRAW' : (isWinner ? 'WIN' : 'LOSS'),
         eloDelta: delta,
         timeTakenSeconds: winInfo.timeTakenSeconds,
-        problemTitle: currentProblem?.title || 'Coding Challenge',
+        problemTitle: currentProblemRef.current?.title || 'Coding Challenge',
         date: new Date().toLocaleDateString()
       };
 
@@ -200,24 +347,50 @@ export const LiveCodingArena: React.FC = () => {
         return updated;
       });
 
-      if (isWinner) {
+      if (isWinner && !isDraw) {
         confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
       }
+
+      // Refresh real leaderboard and profile from MongoDB
+      loadLeaderboardData();
+      loadUserProfile();
     });
 
     return () => {
       newSocket.disconnect();
     };
-  }, [username, language, currentProblem]);
+  }, []);
 
-  // Battle Countdown Timer
+  // Synchronize Socket.io handshake and authentication whenever auth token changes
+  useEffect(() => {
+    if (!socketRef.current) return;
+
+    socketRef.current.auth = {
+      token: token || undefined
+    };
+
+    // If socket is connected, emit explicit re-authentication event and reconnect if outside active battle
+    if (socketRef.current.connected) {
+      socketRef.current.emit('authenticate', { token: token || undefined });
+      if (matchStateRef.current !== 'in_battle') {
+        if (matchStateRef.current === 'searching') {
+          setMatchState('lobby');
+        }
+        socketRef.current.disconnect().connect();
+      }
+    } else {
+      socketRef.current.connect();
+    }
+  }, [token]);
+
+  // Battle Countdown Timer with safe timeout emission
   useEffect(() => {
     if (matchState === 'in_battle') {
       timerRef.current = setInterval(() => {
         setTimerSeconds((prev) => {
           if (prev <= 1) {
             clearInterval(timerRef.current!);
-            handleSurrender();
+            handleTimeout();
             return 0;
           }
           return prev - 1;
@@ -245,48 +418,48 @@ export const LiveCodingArena: React.FC = () => {
     const codeVal = val || '';
     setUserCode(codeVal);
 
-    if (socket && roomId) {
-      socket.emit('code_progress', {
-        roomId,
+    if (socketRef.current && roomIdRef.current) {
+      socketRef.current.emit('code_progress', {
+        roomId: roomIdRef.current,
         codeLength: codeVal.length,
-        testsPassed,
+        testsPassed: testsPassedRef.current,
         totalTests: 5,
       });
     }
   };
 
   const handleJoinPvP = () => {
-    if (!socket) return;
+    if (!socketRef.current) return;
     setMatchState('searching');
-    socket.emit('join_matchmaking', { userId: socket.id, username });
+    socketRef.current.emit('join_matchmaking', { userId: currentUserIdRef.current, username });
   };
 
   const handleStartAiBattle = (diff: AiDifficulty) => {
-    if (!socket) return;
+    if (!socketRef.current) return;
     setShowAiModal(false);
     setMatchState('searching');
-    socket.emit('start_ai_battle', { userId: socket.id, username, aiDifficulty: diff });
+    socketRef.current.emit('start_ai_battle', { userId: currentUserIdRef.current, username, aiDifficulty: diff });
   };
 
+  // Execute genuine test cases through backend arena validator
   const handleRunTests = async () => {
+    if (!currentProblemRef.current) return;
     setExecuting(true);
     setActiveTabLeft('console');
     try {
-      const res = await executeCode(language, userCode);
-      setStdout(res.output || res.stderr || 'Code executed successfully with zero syntax errors.');
+      const res = await apiArena.runTests(currentProblemRef.current.id, languageRef.current, userCode);
+      setStdout(res.output || res.stderr || 'Execution finished.');
 
-      if (res.status === 'SUCCESS') {
-        const passed = Math.min(5, testsPassed + 1);
-        setTestsPassed(passed);
+      const passed = typeof res.testsPassed === 'number' ? res.testsPassed : 0;
+      setTestsPassed(passed);
 
-        if (socket && roomId) {
-          socket.emit('code_progress', {
-            roomId,
-            codeLength: userCode.length,
-            testsPassed: passed,
-            totalTests: 5,
-          });
-        }
+      if (socketRef.current && roomIdRef.current) {
+        socketRef.current.emit('code_progress', {
+          roomId: roomIdRef.current,
+          codeLength: userCode.length,
+          testsPassed: passed,
+          totalTests: res.totalTests || 5,
+        });
       }
     } catch (err: any) {
       setStdout(err?.message || 'Execution error');
@@ -295,20 +468,27 @@ export const LiveCodingArena: React.FC = () => {
     }
   };
 
+  // Submit Solution with server-side validation check
   const handleSubmitSolution = () => {
-    if (!socket || !roomId) return;
-    socket.emit('submit_solution', {
-      roomId,
-      isCorrect: true,
-      timeTakenSeconds: 900 - timerSeconds,
+    if (!socketRef.current || !roomIdRef.current) return;
+    if (testsPassed < 5) {
+      setActiveTabLeft('console');
+      setStdout('⚠️ You must pass all 5 test cases before submitting! Click "Run Tests" to test your solution.');
+      return;
+    }
+    setSubmitting(true);
+    socketRef.current.emit('submit_solution', {
+      roomId: roomIdRef.current,
+      language: languageRef.current,
+      userCode
     });
   };
 
   const handleSendChat = (textToSend?: string) => {
     const text = textToSend || chatInput;
-    if (!text.trim() || !socket || !roomId) return;
-    socket.emit('send_arena_chat', {
-      roomId,
+    if (!text.trim() || !socketRef.current || !roomIdRef.current) return;
+    socketRef.current.emit('send_arena_chat', {
+      roomId: roomIdRef.current,
       text,
       isEmoji: !!textToSend
     });
@@ -316,8 +496,20 @@ export const LiveCodingArena: React.FC = () => {
   };
 
   const handleSurrender = () => {
+    if (socketRef.current && roomIdRef.current) {
+      socketRef.current.emit('surrender_match', { roomId: roomIdRef.current });
+    }
     setMatchState('lobby');
     if (timerRef.current) clearInterval(timerRef.current);
+  };
+
+  const handleTimeout = () => {
+    if (socketRef.current && roomIdRef.current) {
+      socketRef.current.emit('match_timeout', {
+        roomId: roomIdRef.current,
+        testsPassed: testsPassedRef.current
+      });
+    }
   };
 
   const formatTime = (secs: number) => {
@@ -509,8 +701,16 @@ export const LiveCodingArena: React.FC = () => {
                     <Trophy className="w-5 h-5 text-amber-600" />
                     Global 1v1 Arena Leaderboard
                   </h3>
-                  <p className="text-xs text-slate-400">Top ranked speed programmers in AlgoVault.</p>
+                  <p className="text-xs text-slate-400">Live competitive rankings persisted in MongoDB.</p>
                 </div>
+                <button
+                  onClick={loadLeaderboardData}
+                  disabled={isLoadingLeaderboard}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition cursor-pointer disabled:opacity-50"
+                >
+                  <RotateCcw className={`w-3.5 h-3.5 ${isLoadingLeaderboard ? 'animate-spin' : ''}`} />
+                  <span>Refresh</span>
+                </button>
               </div>
 
               <div className="overflow-x-auto">
@@ -526,22 +726,30 @@ export const LiveCodingArena: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60 font-mono text-slate-600">
-                    {SAMPLE_LEADERBOARD.map((item) => (
-                      <tr key={item.rank} className="hover:bg-slate-100/40 transition">
-                        <td className="py-3 px-4 font-bold text-amber-600">#{item.rank}</td>
-                        <td className="py-3 px-4 font-bold text-slate-900 font-sans flex items-center gap-2">
-                          {item.username}
+                    {isLoadingLeaderboard ? (
+                      <tr>
+                        <td colSpan={6} className="py-8 text-center text-slate-400 font-mono">
+                          Loading online leaderboard rankings...
                         </td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 rounded bg-purple-50 text-purple-600 border border-purple-500/20 text-[10px] font-bold">
-                            {item.badge}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-amber-600 font-bold">{item.elo} ELO</td>
-                        <td className="py-3 px-4 text-slate-500">{item.wins} / {item.losses}</td>
-                        <td className="py-3 px-4 text-emerald-600 font-bold">{item.winRate}%</td>
                       </tr>
-                    ))}
+                    ) : (
+                      leaderboardList.map((item) => (
+                        <tr key={item.rank} className="hover:bg-slate-100/40 transition">
+                          <td className="py-3 px-4 font-bold text-amber-600">#{item.rank}</td>
+                          <td className="py-3 px-4 font-bold text-slate-900 font-sans flex items-center gap-2">
+                            {item.username}
+                          </td>
+                          <td className="py-3 px-4">
+                            <span className="px-2 py-0.5 rounded bg-purple-50 text-purple-600 border border-purple-500/20 text-[10px] font-bold">
+                              {item.badge}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-amber-600 font-bold">{item.elo} ELO</td>
+                          <td className="py-3 px-4 text-slate-500">{item.wins} / {item.losses}</td>
+                          <td className="py-3 px-4 text-emerald-600 font-bold">{item.winRate}%</td>
+                        </tr>
+                      ))
+                    )}
 
                     {/* Current User Row */}
                     <tr className="bg-purple-950/30 border-t-2 border-purple-200 font-mono text-slate-600">
@@ -840,19 +1048,39 @@ export const LiveCodingArena: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleRunTests}
-                      disabled={executing}
+                      disabled={executing || submitting}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow cursor-pointer disabled:opacity-50"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>{executing ? 'Executing...' : 'Run Tests'}</span>
+                      <span>{executing ? 'Evaluating Tests...' : 'Run Tests'}</span>
                     </button>
 
                     <button
                       onClick={handleSubmitSolution}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition shadow cursor-pointer"
+                      disabled={testsPassed < 5 || executing || submitting}
+                      title={testsPassed < 5 ? "Pass all 5 test cases before submitting" : "Submit solution for victory verification"}
+                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition shadow ${
+                        testsPassed >= 5 && !submitting
+                          ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-500/30 cursor-pointer animate-pulse'
+                          : 'bg-slate-200 text-slate-400 cursor-not-allowed border border-slate-300'
+                      }`}
                     >
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Submit Solution</span>
+                      {testsPassed < 5 ? (
+                        <>
+                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <span>Submit ({testsPassed}/5 Passed)</span>
+                        </>
+                      ) : submitting ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Verifying...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Submit Solution</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>

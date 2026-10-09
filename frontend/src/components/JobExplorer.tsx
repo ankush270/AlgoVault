@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
+import { getApiBaseUrl } from '../services/api';
 
 export interface JobPosting {
   company: string;
@@ -30,11 +31,21 @@ export interface JobPosting {
   date?: string;
 }
 
-export const JobExplorer: React.FC = () => {
+interface JobExplorerProps {
+  searchQuery?: string;
+  setSearchQuery?: (q: string) => void;
+}
+
+export const JobExplorer: React.FC<JobExplorerProps> = ({
+  searchQuery: propSearchQuery,
+  setSearchQuery: propSetSearchQuery,
+}) => {
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [syncing, setSyncing] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [internalSearchQuery, setInternalSearchQuery] = useState<string>('');
+  const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
+  const setSearchQuery = propSetSearchQuery || setInternalSearchQuery;
   const [selectedRole, setSelectedRole] = useState<string>('all');
   const [selectedSource, setSelectedSource] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
@@ -47,7 +58,7 @@ export const JobExplorer: React.FC = () => {
     setLoading(true);
     try {
       // First try backend API, fallback to public/data/jobs.json
-      const apiRes = await fetch('http://localhost:5000/api/jobs').catch(() => null);
+      const apiRes = await fetch(`${getApiBaseUrl()}/jobs`).catch(() => null);
       if (apiRes && apiRes.ok) {
         const data = await apiRes.json();
         if (data.jobs && data.jobs.length > 0) {
@@ -82,15 +93,38 @@ export const JobExplorer: React.FC = () => {
 
   // Trigger Live Python Scraping via Backend
   const handleSyncJobs = async () => {
+    const token = localStorage.getItem('techswitch_token');
+    if (!token) {
+      setSyncStatusMsg('🔒 Please log in to manually trigger a live job sync.');
+      setTimeout(() => setSyncStatusMsg(null), 4000);
+      return;
+    }
+
     setSyncing(true);
-    setSyncStatusMsg('🤖 Python Scraper is scanning 600+ company ATS APIs (Greenhouse, Lever, RemoteOK)...');
+    setSyncStatusMsg('🤖 Scraper is scanning company ATS APIs (Greenhouse, Lever, RemoteOK)...');
     try {
-      const res = await fetch('http://localhost:5000/api/jobs/sync', { method: 'POST' });
-      if (res.ok) {
-        setSyncStatusMsg('✅ Sync complete! Latest jobs fetched successfully.');
-        await fetchJobs();
+      const res = await fetch(`${getApiBaseUrl()}/jobs/sync`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data) {
+        if (data.status === 'fresh') {
+          setSyncStatusMsg(`⚡ ${data.message}`);
+        } else if (data.status === 'rate_limited') {
+          setSyncStatusMsg(`⏳ ${data.message}`);
+        } else {
+          setSyncStatusMsg('✅ Sync complete! Latest jobs fetched successfully.');
+          await fetchJobs();
+        }
+      } else if (res.status === 401) {
+        setSyncStatusMsg('🔒 Please log in to trigger a live job sync.');
       } else {
-        setSyncStatusMsg('⚡ Sync request triggered! Updating job listings...');
+        setSyncStatusMsg('⚡ Sync request sent! Updating job listings...');
         setTimeout(fetchJobs, 2000);
       }
     } catch (err) {
@@ -103,6 +137,7 @@ export const JobExplorer: React.FC = () => {
       }, 1000);
     }
   };
+
 
   // Filter & Sort Logic (Newest Jobs Always First on TOP)
   const filteredJobs = useMemo(() => {

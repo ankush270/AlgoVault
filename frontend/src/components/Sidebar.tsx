@@ -26,6 +26,7 @@ import {
   Cloud
 } from 'lucide-react';
 import { DomainType } from '../types';
+import { getPathForState } from '../utils/routing';
 
 interface SidebarProps {
   activeTab: string;
@@ -139,6 +140,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span>All Tech Modules</span>
             </button>
           </li>
+
+          <li>
+            <button
+              onClick={() => handleToolClick('vault')}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all ${
+                activeTab === 'vault' || activeTab === 'notes'
+                  ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
+              }`}
+            >
+              <FileText className={`w-[18px] h-[18px] ${activeTab === 'vault' || activeTab === 'notes' ? 'text-indigo-600' : 'text-slate-400'}`} />
+              <div className="flex items-center justify-between flex-1">
+                <span>Study Vault & Notes</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-700">NEW</span>
+              </div>
+            </button>
+          </li>
         </ul>
 
         {/* Core CS Subjects Accordion */}
@@ -164,11 +182,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {coreDomains.map((d) => {
                 const Icon = d.icon;
                 const isSelected = activeTab === 'knowledge' && selectedDomain === d.id;
+                const domainPath = getPathForState('knowledge', d.id);
                 return (
                   <li key={d.id}>
-                    <button
-                      onClick={() => handleDomainClick(d.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                    <a
+                      href={domainPath}
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                          e.preventDefault();
+                          handleDomainClick(d.id);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                         isSelected
                           ? `${d.activeBg} border font-semibold shadow-sm`
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
@@ -178,7 +203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <Icon className={`w-4 h-4 ${isSelected ? '' : d.color}`} />
                         <span>{d.label}</span>
                       </div>
-                    </button>
+                    </a>
                   </li>
                 );
               })}
@@ -209,11 +234,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {devDomains.map((d) => {
                 const Icon = d.icon;
                 const isSelected = activeTab === 'knowledge' && selectedDomain === d.id;
+                const domainPath = getPathForState('knowledge', d.id);
                 return (
                   <li key={d.id}>
-                    <button
-                      onClick={() => handleDomainClick(d.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                    <a
+                      href={domainPath}
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                          e.preventDefault();
+                          handleDomainClick(d.id);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                         isSelected
                           ? `${d.activeBg} border font-semibold shadow-sm`
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
@@ -223,7 +255,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         <Icon className={`w-4 h-4 ${isSelected ? '' : d.color}`} />
                         <span>{d.label}</span>
                       </div>
-                    </button>
+                    </a>
                   </li>
                 );
               })}
@@ -254,11 +286,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {tools.map((t) => {
                 const Icon = t.icon;
                 const isSelected = activeTab === t.id;
+                const toolPath = getPathForState(t.id);
                 return (
                   <li key={t.id}>
-                    <button
-                      onClick={() => handleToolClick(t.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                    <a
+                      href={toolPath}
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && e.button === 0) {
+                          e.preventDefault();
+                          handleToolClick(t.id);
+                        }
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-amber-50 text-amber-700 border border-amber-200 font-semibold shadow-sm'
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'
@@ -273,7 +312,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                           {t.badge}
                         </span>
                       )}
-                    </button>
+                    </a>
                   </li>
                 );
               })}

@@ -6,7 +6,7 @@
  */
 
 import { TopicItem, CodeTemplate, Difficulty } from '../types';
-import rawLldJson from '../../../lld.json?raw';
+import lldData from './json/lld.json';
 
 interface RawLLDProblem {
   id: string;
@@ -110,8 +110,9 @@ function buildLLDMarkdown(problem: RawLLDProblem, language: string = 'C++'): str
   return parts.join('\n\n');
 }
 
-function transformLLDSetsToTopics(sets: RawLLDSet[]): TopicItem[] {
+export function transformLLDSetsToTopics(sets: RawLLDSet[]): TopicItem[] {
   const items: TopicItem[] = [];
+  const seenIds = new Set<string>();
 
   for (const set of sets) {
     const rawSetName = set.setName || 'Low Level Design Problems';
@@ -121,6 +122,11 @@ function transformLLDSetsToTopics(sets: RawLLDSet[]): TopicItem[] {
     if (!set.problems || !Array.isArray(set.problems)) continue;
 
     for (const prob of set.problems) {
+      if (!prob || !prob.id) continue;
+      const topicId = prob.id.startsWith('lld-') ? prob.id : `lld-${prob.id}`;
+      if (seenIds.has(topicId)) continue;
+      seenIds.add(topicId);
+
       const difficulty: Difficulty = rawSetName.toLowerCase().includes('warm-up') ? 'Medium' : 'Hard';
 
       const keyConcepts: string[] = [
@@ -139,7 +145,7 @@ function transformLLDSetsToTopics(sets: RawLLDSet[]): TopicItem[] {
       const detailedContent = buildLLDMarkdown(prob, language);
 
       items.push({
-        id: prob.id.startsWith('lld-') ? prob.id : `lld-${prob.id}`,
+        id: topicId,
         title: prob.title,
         domain: 'system-design',
         category: cleanCategory,
@@ -157,7 +163,7 @@ function transformLLDSetsToTopics(sets: RawLLDSet[]): TopicItem[] {
   return items;
 }
 
-const parsedSets = parseRawLLDJSON(rawLldJson);
+const parsedSets: RawLLDSet[] = (Array.isArray(lldData) ? lldData : [lldData]) as unknown as RawLLDSet[];
 export const lldTopics: TopicItem[] = transformLLDSetsToTopics(parsedSets);
 
 export interface LLDSetMetadata {

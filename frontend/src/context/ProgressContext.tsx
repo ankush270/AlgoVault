@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { UserProgressState, ItemStatus, RatingDifficulty, AlgorithmType, RevisionRecord, TopicItem } from '../types';
-import { calculateNextRevision, getTodayISO, calculateRetentionScore } from '../utils/spacedRepetition';
+import { calculateNextRevision, getTodayISO, addDaysISO } from '../utils/spacedRepetition';
+import { allTopics } from '../data/allData';
 
 interface ProgressContextType {
   progress: UserProgressState;
@@ -13,33 +14,103 @@ interface ProgressContextType {
   updateDailyGoal: (goal: number) => void;
   exportProgressJSON: () => void;
   importProgressJSON: (jsonString: string) => boolean;
+  restoreProgressState: (incomingState: Partial<UserProgressState>) => void;
   resetProgress: () => void;
   getMasteredCount: (domain?: string) => number;
   getTotalCount: (domain?: string) => number;
+  getReadinessPercentage: (domain?: string) => number;
   getDueRevisionsCount: () => number;
   getRevisionRecord: (topicId: string) => RevisionRecord | undefined;
 }
 
 const STORAGE_KEY = 'techswitch_pro_progress_v1';
 
+/**
+ * Calculates updated todayCompletedCount, streak, and completedDates.
+ * Note: A date is ONLY added to completedDates when dailyGoal is actually achieved.
+ */
+export const calculateStreakProgress = (
+  prev: UserProgressState,
+  todayStr: string = getTodayISO()
+): {
+  todayCompletedCount: number;
+  streak: number;
+  completedDates: string[];
+  lastActiveDate: string;
+} => {
+  const isSameDay = prev.lastActiveDate === todayStr;
+  const currentTodayCount = isSameDay ? prev.todayCompletedCount : 0;
+  const newTodayCount = currentTodayCount + 1;
+
+  let newStreak = prev.streak;
+  const updatedDates = new Set(prev.completedDates);
+
+  // A day's goal is genuinely completed only if current count ALREADY reached daily goal AND today was in completedDates
+  const alreadyCompletedToday = isSameDay && currentTodayCount >= prev.dailyGoal && prev.completedDates.includes(todayStr);
+
+  // Check if daily goal is satisfied for the first time today
+  if (newTodayCount >= prev.dailyGoal && !alreadyCompletedToday) {
+    updatedDates.add(todayStr);
+
+    const yesterdayStr = addDaysISO(todayStr, -1);
+    const yesterdayCompleted = prev.completedDates.includes(yesterdayStr);
+
+    if (yesterdayCompleted && prev.streak > 0) {
+      newStreak = prev.streak + 1;
+    } else {
+      // First day meeting daily goal, or fresh streak after break
+      newStreak = 1;
+    }
+
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    } catch (e) {
+      // Fallback if confetti fails
+    }
+  } else if (!alreadyCompletedToday && newTodayCount < prev.dailyGoal) {
+    // Crucial safeguard: Ensure today is NOT in completedDates until daily goal is reached
+    updatedDates.delete(todayStr);
+  }
+
+  return {
+    todayCompletedCount: newTodayCount,
+    streak: newStreak,
+    completedDates: Array.from(updatedDates),
+    lastActiveDate: todayStr
+  };
+};
+
 const getInitialState = (): UserProgressState => {
   const saved = localStorage.getItem(STORAGE_KEY);
-  const todayStr = getTodayISO();
 
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
+      const today = getTodayISO();
+      let completedDates = Array.isArray(parsed.completedDates) ? parsed.completedDates : [];
+      const todayCount = typeof parsed.todayCompletedCount === 'number' ? parsed.todayCompletedCount : 0;
+      const dailyGoal = typeof parsed.dailyGoal === 'number' ? parsed.dailyGoal : 3;
+
+      // Clean up corrupt completedDates from previous versions where today was added prematurely before goal was met
+      if (completedDates.includes(today) && (parsed.lastActiveDate !== today || todayCount < dailyGoal)) {
+        completedDates = completedDates.filter((d: string) => d !== today);
+      }
+
       return {
         statuses: parsed.statuses || {},
         starred: parsed.starred || {},
         notes: parsed.notes || {},
         revisions: parsed.revisions || {},
         activeAlgorithm: parsed.activeAlgorithm || 'smart-adaptive',
-        streak: parsed.streak || 1,
-        lastActiveDate: parsed.lastActiveDate || todayStr,
-        dailyGoal: parsed.dailyGoal || 3,
-        todayCompletedCount: parsed.todayCompletedCount || 0,
-        completedDates: parsed.completedDates || [todayStr]
+        streak: typeof parsed.streak === 'number' ? parsed.streak : 0,
+        lastActiveDate: parsed.lastActiveDate || '',
+        dailyGoal: dailyGoal,
+        todayCompletedCount: todayCount,
+        completedDates
       };
     } catch (e) {
       console.error('Failed to parse saved progress', e);
@@ -52,11 +123,11 @@ const getInitialState = (): UserProgressState => {
     notes: {},
     revisions: {},
     activeAlgorithm: 'smart-adaptive',
-    streak: 1,
-    lastActiveDate: todayStr,
+    streak: 0,
+    lastActiveDate: '',
     dailyGoal: 3,
     todayCompletedCount: 0,
-    completedDates: [todayStr]
+    completedDates: []
   };
 };
 
@@ -73,24 +144,49 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Streak check on initial mount
   useEffect(() => {
     const today = getTodayISO();
-    if (progress.lastActiveDate !== today) {
-      const lastDate = new Date(progress.lastActiveDate);
-      const currentDate = new Date(today);
-      const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (!progress.lastActiveDate) {
+      setProgress(prev => ({
+        ...prev,
+        lastActiveDate: today,
+        todayCompletedCount: 0,
+        completedDates: prev.completedDates.filter(d => d !== today)
+      }));
+      return;
+    }
 
-      if (diffDays === 1) {
+    if (progress.lastActiveDate !== today) {
+      const lastDate = new Date(progress.lastActiveDate + 'T00:00:00');
+      const currentDate = new Date(today + 'T00:00:00');
+      const diffTime = currentDate.getTime() - lastDate.getTime();
+      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+      const yesterdayStr = addDaysISO(today, -1);
+      const yesterdayGoalMet = progress.completedDates.includes(yesterdayStr);
+
+      if (diffDays === 1 && yesterdayGoalMet) {
+        // Preserved streak from yesterday, reset today's completed counter
         setProgress(prev => ({
           ...prev,
           lastActiveDate: today,
-          todayCompletedCount: 0
+          todayCompletedCount: 0,
+          completedDates: prev.completedDates.filter(d => d !== today)
         }));
-      } else if (diffDays > 1) {
+      } else {
+        // Missed yesterday's goal or missed more than 1 day
         setProgress(prev => ({
           ...prev,
-          streak: 1,
+          streak: 0,
           lastActiveDate: today,
-          todayCompletedCount: 0
+          todayCompletedCount: 0,
+          completedDates: prev.completedDates.filter(d => d !== today)
+        }));
+      }
+    } else {
+      // Same day check: if today's goal was not met yet, ensure today is not in completedDates
+      if (progress.todayCompletedCount < progress.dailyGoal && progress.completedDates.includes(today)) {
+        setProgress(prev => ({
+          ...prev,
+          completedDates: prev.completedDates.filter(d => d !== today)
         }));
       }
     }
@@ -101,37 +197,18 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const prevStatus = prev.statuses[topicId];
       const newStatuses = { ...prev.statuses, [topicId]: status };
 
-      let todayCount = prev.todayCompletedCount;
-      let newStreak = prev.streak;
-      const todayStr = getTodayISO();
-      const updatedDates = new Set(prev.completedDates);
-
       if (status === 'mastered' && prevStatus !== 'mastered') {
-        todayCount += 1;
-        updatedDates.add(todayStr);
-
-        try {
-          confetti({
-            particleCount: 80,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-        } catch (e) {
-          // Fallback if confetti fails
-        }
-
-        if (todayCount >= prev.dailyGoal && !prev.completedDates.includes(todayStr)) {
-          newStreak += 1;
-        }
+        const streakData = calculateStreakProgress(prev);
+        return {
+          ...prev,
+          statuses: newStatuses,
+          ...streakData
+        };
       }
 
       return {
         ...prev,
-        statuses: newStatuses,
-        todayCompletedCount: todayCount,
-        streak: newStreak,
-        lastActiveDate: todayStr,
-        completedDates: Array.from(updatedDates)
+        statuses: newStatuses
       };
     });
   };
@@ -162,36 +239,20 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const newStatuses = { ...prev.statuses, [topicId]: newStatus };
       const newRevisions = { ...prev.revisions, [topicId]: newRecord };
 
-      let todayCount = prev.todayCompletedCount;
-      let newStreak = prev.streak;
-      const todayStr = getTodayISO();
-      const updatedDates = new Set(prev.completedDates);
-
       if ((rating === 'easy' || rating === 'medium') && prev.statuses[topicId] !== 'mastered') {
-        todayCount += 1;
-        updatedDates.add(todayStr);
-
-        try {
-          confetti({
-            particleCount: 70,
-            spread: 60,
-            origin: { y: 0.6 }
-          });
-        } catch (e) {}
-
-        if (todayCount >= prev.dailyGoal && !prev.completedDates.includes(todayStr)) {
-          newStreak += 1;
-        }
+        const streakData = calculateStreakProgress(prev);
+        return {
+          ...prev,
+          statuses: newStatuses,
+          revisions: newRevisions,
+          ...streakData
+        };
       }
 
       return {
         ...prev,
         statuses: newStatuses,
-        revisions: newRevisions,
-        todayCompletedCount: todayCount,
-        streak: newStreak,
-        lastActiveDate: todayStr,
-        completedDates: Array.from(updatedDates)
+        revisions: newRevisions
       };
     });
 
@@ -251,10 +312,27 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const updateDailyGoal = (goal: number) => {
-    setProgress(prev => ({
-      ...prev,
-      dailyGoal: Math.max(1, goal)
-    }));
+    const validGoal = Math.max(1, goal);
+    setProgress(prev => {
+      const todayStr = getTodayISO();
+      const alreadyCompleted = prev.completedDates.includes(todayStr);
+      let newStreak = prev.streak;
+      let newCompletedDates = prev.completedDates;
+
+      if (prev.todayCompletedCount >= validGoal && !alreadyCompleted) {
+        newCompletedDates = [...prev.completedDates, todayStr];
+        const yesterdayStr = addDaysISO(todayStr, -1);
+        const yesterdayCompleted = prev.completedDates.includes(yesterdayStr);
+        newStreak = yesterdayCompleted && prev.streak > 0 ? prev.streak + 1 : 1;
+      }
+
+      return {
+        ...prev,
+        dailyGoal: validGoal,
+        streak: newStreak,
+        completedDates: newCompletedDates
+      };
+    });
   };
 
   const exportProgressJSON = () => {
@@ -280,29 +358,81 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return false;
   };
 
+  const restoreProgressState = (incomingState: Partial<UserProgressState>) => {
+    if (!incomingState || typeof incomingState !== 'object') return;
+    setProgress(prev => {
+      const merged: UserProgressState = {
+        statuses: { ...prev.statuses, ...(incomingState.statuses || {}) },
+        starred: { ...prev.starred, ...(incomingState.starred || {}) },
+        notes: { ...prev.notes, ...(incomingState.notes || {}) },
+        revisions: { ...prev.revisions, ...(incomingState.revisions || {}) },
+        activeAlgorithm: incomingState.activeAlgorithm || prev.activeAlgorithm || 'smart-adaptive',
+        streak: typeof incomingState.streak === 'number' ? incomingState.streak : prev.streak,
+        lastActiveDate: incomingState.lastActiveDate || prev.lastActiveDate,
+        dailyGoal: incomingState.dailyGoal || prev.dailyGoal || 3,
+        todayCompletedCount: typeof incomingState.todayCompletedCount === 'number' ? incomingState.todayCompletedCount : prev.todayCompletedCount,
+        completedDates: Array.isArray(incomingState.completedDates)
+          ? Array.from(new Set([...prev.completedDates, ...incomingState.completedDates]))
+          : prev.completedDates
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      return merged;
+    });
+  };
+
   const resetProgress = () => {
-    const todayStr = getTodayISO();
     const initial: UserProgressState = {
       statuses: {},
       starred: {},
       notes: {},
       revisions: {},
       activeAlgorithm: 'smart-adaptive',
-      streak: 1,
-      lastActiveDate: todayStr,
+      streak: 0,
+      lastActiveDate: '',
       dailyGoal: 3,
       todayCompletedCount: 0,
-      completedDates: [todayStr]
+      completedDates: []
     };
     setProgress(initial);
   };
 
+  const normalizeDomain = (domain: string): string => {
+    const d = domain.trim().toLowerCase();
+    if (d === 'object-oriented-programming') return 'oops';
+    if (d === 'dbms' || d === 'sql') return 'dbms-sql';
+    if (d === 'networks') return 'computer-networks';
+    if (d === 'genai' || d === 'ai' || d === 'ml') return 'genai-ml';
+    return d;
+  };
+
   const getMasteredCount = (domain?: string): number => {
-    return Object.entries(progress.statuses).filter(([_, status]) => status === 'mastered').length;
+    if (!domain || domain === 'all') {
+      return Object.values(progress.statuses).filter((status) => status === 'mastered').length;
+    }
+    const normDomain = normalizeDomain(domain);
+    const domainTopicIds = new Set(
+      allTopics
+        .filter((t) => normalizeDomain(t.domain) === normDomain)
+        .map((t) => t.id)
+    );
+    return Object.entries(progress.statuses).filter(
+      ([id, status]) => status === 'mastered' && domainTopicIds.has(id)
+    ).length;
   };
 
   const getTotalCount = (domain?: string): number => {
-    return 18;
+    if (!domain || domain === 'all') {
+      return allTopics.length;
+    }
+    const normDomain = normalizeDomain(domain);
+    return allTopics.filter((t) => normalizeDomain(t.domain) === normDomain).length;
+  };
+
+  const getReadinessPercentage = (domain?: string): number => {
+    const total = getTotalCount(domain);
+    if (total === 0) return 0;
+    const mastered = getMasteredCount(domain);
+    return Math.min(100, Math.round((mastered / total) * 100));
   };
 
   return (
@@ -317,9 +447,11 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateDailyGoal,
         exportProgressJSON,
         importProgressJSON,
+        restoreProgressState,
         resetProgress,
         getMasteredCount,
         getTotalCount,
+        getReadinessPercentage,
         getDueRevisionsCount,
         getRevisionRecord
       }}

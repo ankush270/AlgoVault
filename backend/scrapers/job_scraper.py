@@ -1,10 +1,33 @@
 import urllib.request
 import json
 import os
+import sys
 import datetime
 
-# Target file path
-PUBLIC_JOBS_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../frontend/public/data/jobs.json'))
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
+
+def resolve_jobs_file():
+    candidates = [
+        os.environ.get('JOBS_FILE_PATH'),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), '../../frontend/public/data/jobs.json')),
+        os.path.abspath(os.path.join(os.getcwd(), '../frontend/public/data/jobs.json')),
+        os.path.abspath(os.path.join(os.path.dirname(__file__), '../data/jobs.json')),
+        os.path.abspath(os.path.join(os.getcwd(), 'data/jobs.json')),
+    ]
+    for c in candidates:
+        if c and os.path.exists(c):
+            return c
+    for c in candidates:
+        if c and os.path.exists(os.path.dirname(c)):
+            return c
+    fallback = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data/jobs.json'))
+    os.makedirs(os.path.dirname(fallback), exist_ok=True)
+    return fallback
+
+PUBLIC_JOBS_FILE = resolve_jobs_file()
 
 def fetch_remoteok_jobs():
     print("🔍 [Scraper] Fetching live jobs from RemoteOK API...")

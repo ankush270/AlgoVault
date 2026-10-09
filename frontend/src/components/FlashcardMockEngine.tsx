@@ -72,9 +72,9 @@ export const FlashcardMockEngine: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">MOCK SIMULATOR</span>
-            <span className="text-xs text-slate-400">Card {currentIndex + 1} of {cards.length}</span>
+            <span className="text-xs text-slate-500">Card {currentIndex + 1} of {cards.length}</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-white mt-1">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
             Flashcard Interview Practice
           </h1>
         </div>

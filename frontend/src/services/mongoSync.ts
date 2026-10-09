@@ -1,23 +1,21 @@
-const getSyncServerUrl = (): string => {
-  const syncUrl = import.meta.env.VITE_SYNC_SERVER_URL as string;
-  const apiUrl = import.meta.env.VITE_API_URL as string;
-  if (syncUrl) return syncUrl.replace(/\/$/, '');
-  if (apiUrl) return apiUrl.replace(/\/api\/?$/, '');
-  return 'http://localhost:5000';
-};
+import { getBackendBaseUrl } from './api';
 
-const SERVER_URL = getSyncServerUrl();
+const getServerUrl = (): string => getBackendBaseUrl();
 
 export interface MongoSyncData {
   userId: string;
   leetcodeSolvedStatus: Record<string, 'solved' | 'review' | undefined>;
   progressState: any;
+  striverSolvedStatus?: Record<string, boolean>;
+  savedInterviews?: any[];
+  arenaHistory?: any[];
+  arenaElo?: number;
   updatedAt?: string;
 }
 
 export const checkMongoHealth = async (): Promise<{ ok: boolean; dbConnected: boolean }> => {
   try {
-    const res = await fetch(`${SERVER_URL}/api/health`);
+    const res = await fetch(`${getServerUrl()}/api/health`);
     if (!res.ok) return { ok: false, dbConnected: false };
     const data = await res.json();
     return { ok: true, dbConnected: data.mongoConnected };
@@ -26,9 +24,23 @@ export const checkMongoHealth = async (): Promise<{ ok: boolean; dbConnected: bo
   }
 };
 
-export const fetchFromMongo = async (userId: string): Promise<MongoSyncData | null> => {
+const getAuthToken = (): string | null => {
+  return localStorage.getItem('techswitch_token') || null;
+};
+
+export const fetchFromMongo = async (userId?: string): Promise<MongoSyncData | null> => {
   try {
-    const res = await fetch(`${SERVER_URL}/api/sync/${encodeURIComponent(userId.toLowerCase().trim())}`);
+    const token = getAuthToken();
+    if (!token) {
+      console.warn('Sync fetch skipped: No authentication token found.');
+      return null;
+    }
+
+    const res = await fetch(`${getServerUrl()}/api/sync`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     if (!res.ok) return null;
     const json = await res.json();
     if (json.success) {
@@ -36,6 +48,10 @@ export const fetchFromMongo = async (userId: string): Promise<MongoSyncData | nu
         userId: json.userId,
         leetcodeSolvedStatus: json.leetcodeSolvedStatus || {},
         progressState: json.progressState || {},
+        striverSolvedStatus: json.striverSolvedStatus || {},
+        savedInterviews: json.savedInterviews || [],
+        arenaHistory: json.arenaHistory || [],
+        arenaElo: json.arenaElo || 1500,
         updatedAt: json.updatedAt
       };
     }
@@ -46,19 +62,35 @@ export const fetchFromMongo = async (userId: string): Promise<MongoSyncData | nu
   }
 };
 
+/**
+ * Push full or partial user progress state to MongoDB.
+ * Accepts either:
+ * - pushToMongo(snapshot: Partial<MongoSyncData>)
+ * - pushToMongo(userIdOrKey: string, snapshot: Partial<MongoSyncData>) [legacy signature]
+ */
 export const pushToMongo = async (
-  userId: string,
-  leetcodeSolvedStatus: Record<string, any>,
-  progressState: any
+  dataOrKey: string | Partial<MongoSyncData>,
+  dataSnapshot?: Partial<MongoSyncData>
 ): Promise<boolean> => {
   try {
-    const res = await fetch(`${SERVER_URL}/api/sync/${encodeURIComponent(userId.toLowerCase().trim())}`, {
+    const token = getAuthToken();
+    if (!token) {
+      console.warn('Sync push skipped: No authentication token found.');
+      return false;
+    }
+
+    const bodyPayload: Partial<MongoSyncData> =
+      typeof dataOrKey === 'object' && dataOrKey !== null
+        ? dataOrKey
+        : (dataSnapshot && typeof dataSnapshot === 'object' ? dataSnapshot : {});
+
+    const res = await fetch(`${getServerUrl()}/api/sync`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        leetcodeSolvedStatus,
-        progressState
-      })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(bodyPayload)
     });
     const json = await res.json();
     return json.success === true;

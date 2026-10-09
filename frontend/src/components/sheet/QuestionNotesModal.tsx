@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Save, Star, Trash2, ExternalLink, Sparkles, BookOpen, Clock, AlertTriangle, Code2, Check } from 'lucide-react';
 import { StriverProblem } from './types';
 import { useProgress } from '../../context/ProgressContext';
@@ -23,6 +24,25 @@ export const QuestionNotesModal: React.FC<QuestionNotesModalProps> = ({
       setNoteText(progress.notes[problem.id] || '');
     }
   }, [problem, progress.notes]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen || !problem) return null;
 
@@ -51,9 +71,17 @@ export const QuestionNotesModal: React.FC<QuestionNotesModalProps> = ({
     });
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl relative space-y-4 flex flex-col max-h-[90vh]">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 backdrop-blur-sm animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="bg-white border border-slate-200 rounded-3xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl relative flex flex-col max-h-[92vh] my-auto gap-3 sm:gap-4 overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 shrink-0">
           <div className="space-y-1.5 min-w-0 flex-1">
@@ -135,7 +163,7 @@ export const QuestionNotesModal: React.FC<QuestionNotesModalProps> = ({
               <Sparkles size={12} />
               <span>Quick Revision Templates:</span>
             </span>
-            <span>Click to add structured section</span>
+            <span className="text-[10px] text-slate-400 hidden xs:inline">Click to add structured section</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
@@ -174,12 +202,12 @@ export const QuestionNotesModal: React.FC<QuestionNotesModalProps> = ({
         </div>
 
         {/* Textarea Editor */}
-        <div className="relative flex-1 min-h-[180px]">
+        <div className="relative flex-1 min-h-[140px] flex flex-col">
           <textarea
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
             placeholder="Write personal revision notes, key logic tricks, corner cases, or optimal pattern reminders for this question..."
-            className="w-full h-full min-h-[220px] bg-slate-50/90 border border-slate-200 focus:border-purple-500/80 focus:ring-2 focus:ring-purple-100 rounded-2xl p-4 text-xs sm:text-sm font-mono text-slate-800 placeholder-slate-400 outline-none leading-relaxed resize-none shadow-inner transition-all"
+            className="w-full flex-1 min-h-[140px] sm:min-h-[180px] bg-slate-50/90 border border-slate-200 focus:border-purple-500/80 focus:ring-2 focus:ring-purple-100 rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm font-mono text-slate-800 placeholder-slate-400 outline-none leading-relaxed resize-none shadow-inner transition-all overflow-y-auto"
             autoFocus
           />
         </div>
@@ -238,4 +266,8 @@ export const QuestionNotesModal: React.FC<QuestionNotesModalProps> = ({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : null;
 };

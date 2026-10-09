@@ -34,10 +34,10 @@ export const AnalyticsCharts: React.FC = () => {
               <BarChart3 size={14} /> VISUAL ANALYTICS & METRICS HUB
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-white mt-1">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
             Performance & Skill Matrix Breakdown
           </h1>
-          <p className="text-xs text-slate-400 mt-1">Real-time spider radar, donut distribution, and weekly activity tracker</p>
+          <p className="text-xs text-slate-600 mt-1">Real-time spider radar, donut distribution, and weekly activity tracker</p>
         </div>
       </div>
 

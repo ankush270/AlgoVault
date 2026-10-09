@@ -22,10 +22,20 @@ import {
 import { TrickItem, TrickProblem, CodeTemplateItem } from '../types';
 import { parseTrickJsonText } from '../utils/tricksParser';
 
-export const TricksExplorer: React.FC = () => {
+interface TricksExplorerProps {
+  searchQuery?: string;
+  setSearchQuery?: (q: string) => void;
+}
+
+export const TricksExplorer: React.FC<TricksExplorerProps> = ({
+  searchQuery: propSearchQuery,
+  setSearchQuery: propSetSearchQuery,
+}) => {
   const [tricks, setTricks] = useState<TrickItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [internalSearchQuery, setInternalSearchQuery] = useState('');
+  const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
+  const setSearchQuery = propSetSearchQuery || setInternalSearchQuery;
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedRating, setSelectedRating] = useState<number | 'All'>('All');
   const [activeTrick, setActiveTrick] = useState<TrickItem | null>(null);

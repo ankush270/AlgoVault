@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Trophy, Timer, CheckCircle2, Circle, Flame, ArrowRight } from 'lucide-react';
 import { StriverProblem } from './types';
 
@@ -62,9 +63,17 @@ export const ContestModal: React.FC<ContestModalProps> = ({
   const solvedInContest = contestProblems.filter((p) => solvedStatus[p.id]).length;
   const contestScore = Math.round((solvedInContest / Math.max(1, contestProblems.length)) * 100);
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-50/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-2xl bg-white border border-cyan-200 rounded-3xl shadow-lg overflow-hidden text-slate-800 flex flex-col max-h-[90vh]">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-2xl bg-white border border-cyan-200 rounded-3xl shadow-2xl overflow-hidden text-slate-800 flex flex-col max-h-[90vh] my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Top Header */}
         <div className="p-6 bg-gradient-to-r from-cyan-950/40 via-blue-950/40 to-slate-900 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -215,4 +224,8 @@ export const ContestModal: React.FC<ContestModalProps> = ({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : null;
 };

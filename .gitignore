@@ -46,3 +46,4 @@ coverage/
 .eslintcache
 .vite/
 .turbo/
+*.mp4

@@ -7,7 +7,7 @@
  */
 
 import { TopicItem, CodeTemplate, Difficulty } from '../types';
-import rawExamplesJson from '../../../system-design-example.json?raw';
+import examplesData from './json/system-design-example.json';
 
 interface RawExample {
   title?: string;
@@ -599,5 +599,5 @@ function transformExamplesToTopics(examples: RawExample[]): TopicItem[] {
   return items;
 }
 
-const parsedExamples = parseExamplesJSON(rawExamplesJson);
+const parsedExamples: RawExample[] = (Array.isArray(examplesData) ? examplesData : [examplesData]) as RawExample[];
 export const systemDesignExampleTopics: TopicItem[] = transformExamplesToTopics(parsedExamples);

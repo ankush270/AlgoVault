@@ -14,20 +14,28 @@ export const formatDisplayDate = (dateInput: Date | string): string => {
   return `${day} ${month}`;
 };
 
-/**
- * Returns today's ISO date string (YYYY-MM-DD)
- */
 export const getTodayISO = (): string => {
-  return new Date().toISOString().split('T')[0];
+  const dt = new Date();
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const d = String(dt.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 };
 
 /**
- * Helper to add N days to ISO date string
+ * Helper to add N days to ISO date string (timezone-safe)
  */
 export const addDaysISO = (startDateStr: string, days: number): string => {
-  const dt = new Date(startDateStr + 'T00:00:00');
-  dt.setDate(dt.getDate() + days);
-  return dt.toISOString().split('T')[0];
+  const parts = startDateStr.split('-').map(Number);
+  const year = parts[0] || new Date().getFullYear();
+  const month = (parts[1] || 1) - 1;
+  const day = parts[2] || 1;
+
+  const dt = new Date(year, month, day + days);
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const d = String(dt.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
 };
 
 /**

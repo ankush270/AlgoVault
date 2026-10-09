@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useProgress } from '../../context/ProgressContext';
 import { RatingDifficulty, TopicItem, RevisionRecord } from '../../types';
 import { X, Sparkles, Calendar, CheckCircle2, Clock, Brain, RefreshCw, Zap } from 'lucide-react';
@@ -19,6 +20,25 @@ export const DifficultyRatingModal: React.FC<DifficultyRatingModalProps> = ({
   const { recordRevision, progress } = useProgress();
   const [ratedRecord, setRatedRecord] = useState<RevisionRecord | null>(null);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleRate = (rating: RatingDifficulty) => {
@@ -37,9 +57,17 @@ export const DifficultyRatingModal: React.FC<DifficultyRatingModalProps> = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white border border-purple-200 rounded-3xl max-w-lg w-full p-6 shadow-lg relative overflow-hidden space-y-6">
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="bg-white border border-purple-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative overflow-hidden space-y-6 my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Glow Header */}
         <div className="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-amber-500" />
 
@@ -50,14 +78,14 @@ export const DifficultyRatingModal: React.FC<DifficultyRatingModalProps> = ({
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 uppercase tracking-wider">
                 Question Evaluation
               </span>
-              <span className="text-[10px] text-slate-400 font-semibold bg-white px-2 py-0.5 rounded border border-slate-200">
+              <span className="text-[10px] text-slate-500 font-semibold bg-white px-2 py-0.5 rounded border border-slate-200">
                 {getAlgoName()}
               </span>
             </div>
-            <h2 className="text-xl font-black text-white mt-1.5 leading-snug">
+            <h2 className="text-xl font-black text-slate-900 mt-1.5 leading-snug">
               How difficult was this question?
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Select your level of understanding for <span className="text-purple-700 font-semibold">{topic.title}</span>.
             </p>
           </div>
@@ -204,4 +232,8 @@ export const DifficultyRatingModal: React.FC<DifficultyRatingModalProps> = ({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : null;
 };

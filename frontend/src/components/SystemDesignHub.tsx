@@ -29,7 +29,8 @@ import {
   Trophy,
   BookMarked,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Activity
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus } from '../types';
@@ -37,6 +38,7 @@ import { systemDesignConceptTopics } from '../data/systemDesignConceptsLoader';
 import { systemDesignExampleTopics } from '../data/systemDesignExamplesLoader';
 import { systemDesignQuestionTopics } from '../data/systemDesignQuestionsLoader';
 import { lldTopics } from '../data/lldLoader';
+import { InteractiveSystemFlowSimulator } from './common/InteractiveSystemFlowSimulator';
 
 // ──────────────────── Module Definitions ────────────────────
 interface SDModule {
@@ -147,6 +149,7 @@ export const SystemDesignHub: React.FC<SystemDesignHubProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [showLiveSimulator, setShowLiveSimulator] = useState<boolean>(true);
 
   const activeModule = useMemo(
     () => SD_MODULES.find(m => m.id === activeModuleId) || null,
@@ -258,6 +261,44 @@ export const SystemDesignHub: React.FC<SystemDesignHubProps> = ({
               })()}
             </div>
           </div>
+        </div>
+
+        {/* Interactive Architecture Simulator Showcase Banner */}
+        <div className="bg-gradient-to-r from-[#0a0d14] via-[#0f1422] to-[#0a0d14] border border-purple-500/30 rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="p-3 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-purple-400 shrink-0">
+                <Activity className="w-6 h-6 animate-pulse" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base sm:text-lg font-black text-white">
+                    Interactive System Architecture & Traffic Flow Simulator
+                  </h2>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold border border-emerald-500/30">
+                    60 FPS LIVE
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Real-time interactive packet flow: Test Load Balancers, Redis Caching, Kafka Buffers, Auto-Scaling & Chaos server crashes.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowLiveSimulator(!showLiveSimulator)}
+              className="px-4 py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition shadow-lg shadow-purple-900/50 flex items-center gap-2 self-start md:self-auto cursor-pointer"
+            >
+              <Activity className="w-4 h-4" />
+              <span>{showLiveSimulator ? 'Collapse Simulator' : 'Expand Simulator'}</span>
+            </button>
+          </div>
+
+          {showLiveSimulator && (
+            <div className="mt-5 pt-5 border-t border-slate-800">
+              <InteractiveSystemFlowSimulator />
+            </div>
+          )}
         </div>
 
         {/* Module Cards Grid */}

@@ -183,7 +183,15 @@ function CustomDropdown<T extends string = string>({
   );
 }
 
-export const LeetCodeExplorer: React.FC = () => {
+interface LeetCodeExplorerProps {
+  searchQuery?: string;
+  setSearchQuery?: (q: string) => void;
+}
+
+export const LeetCodeExplorer: React.FC<LeetCodeExplorerProps> = ({
+  searchQuery: propSearchQuery,
+  setSearchQuery: propSetSearchQuery,
+}) => {
   const [allQuestions, setAllQuestions] = useState<LeetCodeQuestion[]>([]);
   const [isLoadingDataset, setIsLoadingDataset] = useState<boolean>(true);
   const [codeModalProblem, setCodeModalProblem] = useState<{ title: string; description: string } | null>(null);
@@ -219,7 +227,9 @@ export const LeetCodeExplorer: React.FC = () => {
   const [isTagsExpanded, setIsTagsExpanded] = useState<boolean>(false);
 
   // Filter States
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [internalSearchQuery, setInternalSearchQuery] = useState<string>('');
+  const searchQuery = propSearchQuery !== undefined ? propSearchQuery : internalSearchQuery;
+  const setSearchQuery = propSetSearchQuery || setInternalSearchQuery;
   const [selectedCompany, setSelectedCompany] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [selectedTag, setSelectedTag] = useState<string>('all');
@@ -253,6 +263,25 @@ export const LeetCodeExplorer: React.FC = () => {
       console.error(e);
     }
   }, [solvedStatus]);
+
+  // Listen for cloud sync restore events to instantly update state
+  useEffect(() => {
+    const handleSyncRestore = () => {
+      try {
+        const saved = localStorage.getItem('leetcode_solved_status');
+        if (saved) {
+          setSolvedStatus(JSON.parse(saved));
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener('storage', handleSyncRestore);
+    window.addEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    return () => {
+      window.removeEventListener('storage', handleSyncRestore);
+      window.removeEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    };
+  }, []);
 
   // Aggregate Company Analytics
   const companyAnalytics = useMemo(() => {
@@ -449,26 +478,21 @@ export const LeetCodeExplorer: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-16 font-['Inter',sans-serif]">
-      {/* 🚀 Header Hero Banner with Glowing Accent */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-50 border border-slate-200 p-6 sm:p-8 shadow-[0_0_60px_-15px_rgba(99,102,241,0.15)]">
-        {/* Ambient Gradient Orbs */}
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-indigo-600/15 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 -mb-12 w-80 h-80 bg-cyan-500/15 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-1/2 left-2/3 w-64 h-64 bg-purple-50 rounded-full blur-[80px] pointer-events-none" />
-
+      {/* Header Hero Banner */}
+      <div className="relative overflow-hidden rounded-3xl bg-slate-50 border border-slate-200 p-6 sm:p-8 shadow-sm">
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-indigo-500/10 to-cyan-500/10 border border-indigo-200 text-indigo-700 text-xs font-semibold tracking-wide backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-600 animate-pulse" />
-              <span>LeetCode Companywise Interview Vault (2026 Edition)</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
+              <Building2 className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Companywise Interview Vault</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Interview Questions <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600">Explorer</span>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+              LeetCode Problem Explorer
             </h1>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              Target top tech interviews with <strong className="text-slate-900 font-semibold">3,399+ LeetCode problems</strong> categorized across <strong className="text-cyan-700 font-semibold">659 companies</strong> with AI-powered solving intuition, algorithmic patterns, and complexity tags.
+              Target top tech interviews with <strong className="text-slate-900 font-semibold">3,399+ LeetCode problems</strong> categorized across <strong className="text-indigo-700 font-semibold">659 companies</strong> with structured problem intuition, algorithmic patterns, and complexity tags.
             </p>
           </div>
 
@@ -1208,10 +1232,10 @@ export const LeetCodeExplorer: React.FC = () => {
                         {c.name.substring(0, 2)}
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-white capitalize group-hover:text-cyan-600 transition-colors">
+                        <h3 className="text-base font-bold text-slate-900 capitalize group-hover:text-indigo-600 transition-colors">
                           {c.name}
                         </h3>
-                        <p className="text-xs text-slate-400">{c.total} Interview Questions</p>
+                        <p className="text-xs text-slate-500">{c.total} Interview Questions</p>
                       </div>
                     </div>
 
@@ -1264,7 +1288,7 @@ export const LeetCodeExplorer: React.FC = () => {
                     <div className="p-2 rounded-lg bg-purple-50 text-purple-600 border border-purple-500/20">
                       <BrainCircuit className="w-4 h-4" />
                     </div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-purple-700 transition-colors">
+                    <h3 className="text-sm font-bold text-slate-900 group-hover:text-purple-700 transition-colors">
                       {patternName}
                     </h3>
                   </div>
@@ -1272,8 +1296,8 @@ export const LeetCodeExplorer: React.FC = () => {
                     {count} Qs
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">
-                  Click to filter questions tagged with <strong className="text-white">{patternName}</strong> pattern.
+                <p className="text-xs text-slate-500">
+                  Click to filter questions tagged with <strong className="text-slate-900 font-semibold">{patternName}</strong> pattern.
                 </p>
               </div>
             ))}
@@ -1292,10 +1316,10 @@ export const LeetCodeExplorer: React.FC = () => {
                   <Building2 className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-white capitalize">
+                  <h3 className="text-xl font-extrabold text-slate-900 capitalize">
                     {selectedCompanyDetail} Interview Sheet
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600">
                     Showing top LeetCode questions asked at {selectedCompanyDetail.toUpperCase()}
                   </p>
                 </div>

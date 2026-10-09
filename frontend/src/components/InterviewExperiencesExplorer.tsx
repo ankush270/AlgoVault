@@ -34,6 +34,7 @@ import {
   Trash2
 } from 'lucide-react';
 import { CustomDropdown } from './common/CustomDropdown';
+import { getBackendBaseUrl } from '../services/api';
 
 interface ExperienceItem {
   id: string;
@@ -357,9 +358,34 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     }
   });
 
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const API_BASE = getBackendBaseUrl();
+
+  // Listen for cloud sync restore events to instantly update saved experiences
+  useEffect(() => {
+    const handleSyncRestore = () => {
+      try {
+        const saved = localStorage.getItem('saved_interview_experiences');
+        if (saved) {
+          setSavedExperienceIds(JSON.parse(saved));
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener('storage', handleSyncRestore);
+    window.addEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    return () => {
+      window.removeEventListener('storage', handleSyncRestore);
+      window.removeEventListener('techswitch_cloud_sync_restored', handleSyncRestore);
+    };
+  }, []);
 
   const handleDeleteExperience = async (expId: string, _title?: string) => {
+    const token = localStorage.getItem('techswitch_token');
+    if (!token) {
+      alert('🔒 Please log in to manage or delete interview experiences.');
+      return;
+    }
+
     const updated = [...deletedExperienceIds, expId];
     setDeletedExperienceIds(updated);
     try {
@@ -372,15 +398,27 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     }
 
     try {
-      await fetch(`${API_BASE}/api/dataset/experience/${expId}`, {
+      const headers: Record<string, string> = { Authorization: `Bearer ${token}` };
+
+      const res = await fetch(`${API_BASE}/api/dataset/experience/${expId}`, {
         method: 'DELETE',
+        headers,
       });
+      if (!res.ok) {
+        console.warn(`Dataset experience delete failed with status ${res.status}`);
+      }
     } catch (err) {
-      console.error('Failed to delete experience from backend JSON files:', err);
+      console.error('Failed to delete experience from backend:', err);
     }
   };
 
   const handleDeleteQuestion = async (qText: string) => {
+    const token = localStorage.getItem('techswitch_token');
+    if (!token) {
+      alert('🔒 Please log in to delete questions.');
+      return;
+    }
+
     const updated = [...deletedQuestionTexts, qText];
     setDeletedQuestionTexts(updated);
     try {
@@ -390,19 +428,52 @@ export const InterviewExperiencesExplorer: React.FC = () => {
     }
 
     try {
-      await fetch(`${API_BASE}/api/dataset/question`, {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      };
+
+      const res = await fetch(`${API_BASE}/api/dataset/question`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ questionText: qText }),
       });
+      if (!res.ok) {
+        console.warn(`Dataset question delete failed with status ${res.status}`);
+      }
     } catch (err) {
-      console.error('Failed to delete question from backend JSON files:', err);
+      console.error('Failed to delete question from backend:', err);
     }
   };
 
-  // Load Master Index, 4 Dataset Chunks, and Analytics JSONs on Mount
+
+  // Load Master Index, 4 Dataset Chunks, Analytics JSONs, and Synced Deletions on Mount
   useEffect(() => {
     setLoading(true);
+
+    // Fetch deleted items from MongoDB backend
+    fetch(`${API_BASE}/api/dataset/deleted`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          if (Array.isArray(data.deletedExperienceIds) && data.deletedExperienceIds.length > 0) {
+            setDeletedExperienceIds((prev) => {
+              const merged = Array.from(new Set([...prev, ...data.deletedExperienceIds]));
+              localStorage.setItem('deleted_interview_experience_ids', JSON.stringify(merged));
+              return merged;
+            });
+          }
+          if (Array.isArray(data.deletedQuestionTexts) && data.deletedQuestionTexts.length > 0) {
+            setDeletedQuestionTexts((prev) => {
+              const merged = Array.from(new Set([...prev, ...data.deletedQuestionTexts]));
+              localStorage.setItem('deleted_interview_question_texts', JSON.stringify(merged));
+              return merged;
+            });
+          }
+        }
+      })
+      .catch(() => {});
+
     Promise.all([
       fetch('/data/interview-experiences/interview_dataset_master_index.json').then((res) => res.json()),
       fetch('/data/interview-experiences/interview_dataset_part1_A_to_D.json').then((res) => res.json()),
@@ -430,7 +501,7 @@ export const InterviewExperiencesExplorer: React.FC = () => {
         console.error('Failed to load full interview datasets:', err);
         setLoading(false);
       });
-  }, []);
+  }, [API_BASE]);
 
   // Open Company Vault Mode (e.g. Amazon, Microsoft, Swiggy)
   const openCompanyVault = (compName: string) => {

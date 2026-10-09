@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import {
   X,
@@ -16,7 +17,9 @@ import {
   Brain,
   Sliders,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Lock,
+  LogIn,
 } from 'lucide-react';
 import { executeCode, languageMap, ExecutionResult } from '../../services/codeExecutionService';
 import { analyzeCodeWithAI, CodeReviewResult } from '../../services/aiReviewService';
@@ -38,6 +41,7 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
   initialCode,
   initialLanguage = 'python',
 }) => {
+  const navigate = useNavigate();
   const [language, setLanguage] = useState<string>(initialLanguage);
   const [code, setCode] = useState<string>('');
   const [stdin, setStdin] = useState<string>('');
@@ -51,6 +55,11 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
 
   const [copiedOptimal, setCopiedOptimal] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+
+  const isUnauthorized = Boolean(
+    execResult?.isUnauthorized ||
+    (execResult?.stderr && /log in to run code|unauthorized|401/i.test(execResult.stderr))
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -77,12 +86,17 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
       const result = await executeCode(language, code, stdin);
       setExecResult(result);
     } catch (err: any) {
+      const isUnauth = Boolean(
+        err?.status === 401 ||
+        (typeof err?.message === 'string' && /401|log in|unauthorized/i.test(err.message))
+      );
       setExecResult({
         output: '',
         stderr: err?.message || 'Execution error',
         executionTime: 0,
         memory: 0,
-        status: 'ERROR'
+        status: 'ERROR',
+        isUnauthorized: isUnauth,
       });
     } finally {
       setExecuting(false);
@@ -326,6 +340,34 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
                         )}
                       </div>
 
+                      {/* Unauthorized Guest Sign-In Notice */}
+                      {isUnauthorized && (
+                        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between text-xs text-amber-900 shadow-2xs font-sans">
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 bg-amber-100 rounded-lg text-amber-700 shrink-0">
+                              <Lock className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <p className="font-bold text-amber-900">Authentication Required</p>
+                              <p className="text-amber-800 text-[11px] mt-0.5">
+                                Cloud code sandbox execution requires an active session. Please sign in or register to test your solution.
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            data-testid="login-cta-btn"
+                            onClick={() => {
+                              onClose();
+                              navigate('/login');
+                            }}
+                            className="ml-3 px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shrink-0 transition shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                          >
+                            <LogIn className="w-3.5 h-3.5" />
+                            <span>Sign In to Run Code</span>
+                          </button>
+                        </div>
+                      )}
+
                       {/* Standard Output */}
                       {execResult.output && (
                         <div>
@@ -388,35 +430,85 @@ export const CodeRunnerModal: React.FC<CodeRunnerModalProps> = ({
 
                   {aiResult && !analyzingAI && (
                     <div className="space-y-4">
-                      {/* Metric Badges */}
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                          <div className="text-[10px] uppercase font-bold text-slate-500">Time Complexity</div>
-                          <div className="text-sm font-extrabold text-indigo-600 mt-0.5">{aiResult.timeComplexity}</div>
+                      {/* Unauthenticated Login Notice */}
+                      {aiResult.isUnauthenticated && (
+                        <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between text-xs text-amber-900 shadow-2xs">
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 bg-amber-100 rounded-lg text-amber-700 shrink-0">
+                              <Lock className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <p className="font-bold text-amber-900">Login Required for Live AI Analysis</p>
+                              <p className="text-amber-800 text-[11px] mt-0.5">
+                                Showing offline estimation. Log in or create an account to unlock real-time Sarvam AI code evaluation.
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => {
+                              onClose();
+                              navigate('/login');
+                            }}
+                            className="ml-3 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg shrink-0 transition shadow-xs cursor-pointer"
+                          >
+                            Sign In
+                          </button>
                         </div>
+                      )}
 
-                        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                          <div className="text-[10px] uppercase font-bold text-slate-500">Space Complexity</div>
-                          <div className="text-sm font-extrabold text-purple-600 mt-0.5">{aiResult.spaceComplexity}</div>
+                      {/* Error State Notice */}
+                      {aiResult.isError ? (
+                        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl space-y-2 text-rose-900 shadow-2xs">
+                          <div className="flex items-center gap-2.5 font-bold text-sm text-rose-800">
+                            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+                            <span>AI Code Review Unavailable</span>
+                          </div>
+                          <p className="text-xs text-rose-700">
+                            {aiResult.errorMessage || 'The AI service encountered an error while evaluating your code.'}
+                          </p>
+                          <div className="pt-1">
+                            <button
+                              onClick={handleAIAnalysis}
+                              className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg transition cursor-pointer"
+                            >
+                              Retry AI Review
+                            </button>
+                          </div>
                         </div>
+                      ) : (
+                        <>
+                          {/* Metric Badges */}
+                          <div className="grid grid-cols-3 gap-2">
+                            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                              <div className="text-[10px] uppercase font-bold text-slate-500">Time Complexity</div>
+                              <div className="text-sm font-extrabold text-indigo-600 mt-0.5">{aiResult.timeComplexity}</div>
+                            </div>
 
-                        <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                          <div className="text-[10px] uppercase font-bold text-slate-500">Quality Score</div>
-                          <div className="text-sm font-extrabold text-emerald-600 mt-0.5">{aiResult.codeQualityScore} / 100</div>
-                        </div>
-                      </div>
+                            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                              <div className="text-[10px] uppercase font-bold text-slate-500">Space Complexity</div>
+                              <div className="text-sm font-extrabold text-purple-600 mt-0.5">{aiResult.spaceComplexity}</div>
+                            </div>
 
-                      {/* Optimality Indicator */}
-                      <div className={`p-3 rounded-xl border flex items-center justify-between text-xs font-semibold ${
-                        aiResult.isOptimal
-                          ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-700'
-                          : 'bg-amber-950/20 border-amber-800/40 text-amber-700'
-                      }`}>
-                        <span className="flex items-center gap-2">
-                          <Zap className="w-4 h-4 fill-current" />
-                          {aiResult.isOptimal ? 'Optimal Time & Space Solution' : 'Sub-Optimal Solution (Can be improved)'}
-                        </span>
-                      </div>
+                            <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                              <div className="text-[10px] uppercase font-bold text-slate-500">Quality Score</div>
+                              <div className="text-sm font-extrabold text-emerald-600 mt-0.5">{aiResult.codeQualityScore} / 100</div>
+                            </div>
+                          </div>
+
+                          {/* Optimality Indicator */}
+                          <div className={`p-3 rounded-xl border flex items-center justify-between text-xs font-semibold ${
+                            aiResult.isOptimal
+                              ? 'bg-emerald-950/20 border-emerald-800/40 text-emerald-700'
+                              : 'bg-amber-950/20 border-amber-800/40 text-amber-700'
+                          }`}>
+                            <span className="flex items-center gap-2">
+                              <Zap className="w-4 h-4 fill-current" />
+                              {aiResult.isOptimal ? 'Optimal Time & Space Solution' : 'Sub-Optimal Solution (Can be improved)'}
+                            </span>
+                          </div>
+                        </>
+                      )}
+
 
                       {/* AI Suggestions */}
                       <div>

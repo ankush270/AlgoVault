@@ -18,7 +18,8 @@ import {
   ArrowLeft,
   List,
   Menu,
-  BookMarked
+  BookMarked,
+  Share2
 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { TopicItem, ItemStatus, CodeTemplate } from '../types';
@@ -386,8 +387,23 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
   const [activeTab, setActiveTab] = useState<'overview' | 'content' | 'code' | 'qa'>('content');
   const [selectedLang, setSelectedLang] = useState<string>('cpp');
   const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showCodeWorkspace, setShowCodeWorkspace] = useState(false);
+
+  const handleShareLink = () => {
+    const shareUrl = `${window.location.origin}/topic/${topic.id}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2000);
+      }).catch(() => {
+        window.prompt('Copy topic link:', shareUrl);
+      });
+    } else {
+      window.prompt('Copy topic link:', shareUrl);
+    }
+  };
 
   useEffect(() => {
     setCurrentTopic(initialTopic);
@@ -476,6 +492,19 @@ export const TopicDetailModal: React.FC<TopicDetailModalProps> = ({
             title="Star Topic"
           >
             <Star size={16} className={isStarred ? 'fill-amber-500 text-amber-500' : ''} />
+          </button>
+
+          <button
+            onClick={handleShareLink}
+            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+              copiedLink
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-300 shadow-sm'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
+            }`}
+            title="Copy shareable link to this topic"
+          >
+            {copiedLink ? <Check size={14} className="text-emerald-600" /> : <Share2 size={14} />}
+            <span className="hidden sm:inline">{copiedLink ? 'Copied!' : 'Share'}</span>
           </button>
 
           <button

@@ -370,10 +370,9 @@ function transformModulesToTopicItems(modules: RawModule[]): TopicItem[] {
 }
 
 // ---------- Load & Export ----------
-// Import the raw JSON text via Vite's ?raw import
-import rawSystemDesignJson from '../../../system-design.json?raw';
+import systemDesignData from './json/system-design.json';
 
-const parsedModules = parseRawSystemDesignJSON(rawSystemDesignJson);
+const parsedModules: RawModule[] = (Array.isArray(systemDesignData) ? systemDesignData : [systemDesignData]) as unknown as RawModule[];
 export const systemDesignConceptTopics: TopicItem[] = transformModulesToTopicItems(parsedModules);
 
 // Also export the module structure for the KnowledgeHub category display

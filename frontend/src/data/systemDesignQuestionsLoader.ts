@@ -4,14 +4,17 @@
  * Loads and parses system-design-question.json (System Design interview handbook questions)
  * and transforms them into TopicItem[] format for the SystemDesignHub.
  * 
- * Structure: { system_design_handbook: { topics: [...] } }
- * Each topic has: id, title, overview, key_term_definitions, plus various deeply nested content.
+ * Robust loader featuring:
+ * 1. Direct structured JSON support
+ * 2. Top-level brace-matching chunk parser for multi-root concatenated JSON blocks
+ * 3. Sanitizer for non-ASCII/corrupted characters (mojibake prevention)
+ * 4. Deduplication by topic ID and title
  */
 
 import { TopicItem } from '../types';
-import rawQuestionsJson from '../../../system-design-question.json?raw';
+import questionsData from './json/system-design-question.json';
 
-interface RawSDQuestion {
+export interface RawSDQuestion {
   id: string;
   title: string;
   overview?: string;
@@ -19,10 +22,122 @@ interface RawSDQuestion {
   [key: string]: any;
 }
 
-interface RawQuestionsData {
-  system_design_handbook: {
-    topics: RawSDQuestion[];
+export function sanitizeRawJson(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/\s*—\s*/g, ' - ')
+    .replace(/’/g, "'")
+    .replace(/µs/g, 'us')
+    .replace(/≈/g, '~')
+    .replace(/×/g, 'x');
+}
+
+export function extractTopicsFromObject(obj: any): RawSDQuestion[] {
+  if (!obj || typeof obj !== 'object') return [];
+
+  const found: RawSDQuestion[] = [];
+
+  const addTopic = (t: any) => {
+    if (t && typeof t === 'object' && t.title) {
+      const key = `${t.id || ''}::${t.title}`;
+      if (!found.some(existing => `${existing.id || ''}::${existing.title}` === key)) {
+        found.push(t);
+      }
+    }
   };
+
+  if (Array.isArray(obj)) {
+    obj.forEach(addTopic);
+  }
+  if (obj.topics && Array.isArray(obj.topics)) {
+    obj.topics.forEach(addTopic);
+  }
+  if (obj.system_design_handbook?.topics && Array.isArray(obj.system_design_handbook.topics)) {
+    obj.system_design_handbook.topics.forEach(addTopic);
+  }
+  if (obj.system_design_handbook_part_2?.topics && Array.isArray(obj.system_design_handbook_part_2.topics)) {
+    obj.system_design_handbook_part_2.topics.forEach(addTopic);
+  }
+
+  // Also scan any nested handbook-like keys
+  for (const [key, val] of Object.entries(obj)) {
+    if (key.includes('handbook') && typeof val === 'object' && val !== null) {
+      const sub = (val as any).topics;
+      if (Array.isArray(sub)) {
+        sub.forEach(addTopic);
+      }
+    }
+  }
+
+  return found;
+}
+
+export function parseRawQuestionsChunked(rawText: string): RawSDQuestion[] {
+  const sanitized = sanitizeRawJson(rawText);
+  if (!sanitized.trim()) return [];
+
+  // 1. Try direct parse first in case the text is a single valid JSON document
+  try {
+    const parsed = JSON.parse(sanitized);
+    const extracted = extractTopicsFromObject(parsed);
+    if (extracted.length > 0) {
+      return extracted;
+    }
+  } catch {
+    // If direct parse fails (e.g. concatenated root objects), proceed to chunk parser
+  }
+
+  // 2. Robust chunk-by-chunk brace-matching parser
+  const allTopics: RawSDQuestion[] = [];
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escape = false;
+
+  for (let i = 0; i < sanitized.length; i++) {
+    const ch = sanitized[i];
+
+    if (inString) {
+      if (escape) {
+        escape = false;
+      } else if (ch === '\\') {
+        escape = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = true;
+      continue;
+    }
+
+    if (ch === '{') {
+      if (depth === 0) start = i;
+      depth++;
+    } else if (ch === '}') {
+      depth--;
+      if (depth === 0 && start !== -1) {
+        const chunk = sanitized.substring(start, i + 1);
+        try {
+          const parsedChunk = JSON.parse(chunk);
+          const chunkTopics = extractTopicsFromObject(parsedChunk);
+          for (const t of chunkTopics) {
+            const key = `${t.id || ''}::${t.title}`;
+            if (!allTopics.some(existing => `${existing.id || ''}::${existing.title}` === key)) {
+              allTopics.push(t);
+            }
+          }
+        } catch (e) {
+          console.warn('[SystemDesignQuestionsLoader] Failed to parse question chunk at position', start, e);
+        }
+        start = -1;
+      }
+    }
+  }
+
+  return allTopics;
 }
 
 function formatKeyLabel(key: string): string {
@@ -144,32 +259,29 @@ function buildQuestionMarkdown(topic: RawSDQuestion): string {
   return parts.join('\n\n');
 }
 
-function parseAndTransform(rawText: string): TopicItem[] {
-  try {
-    const data: RawQuestionsData = JSON.parse(rawText);
-    const topics = data.system_design_handbook?.topics || [];
+export function transformQuestions(topics: RawSDQuestion[]): TopicItem[] {
+  return topics.map((topic, idx) => {
+    const keyConcepts = extractKeyConcepts(topic);
+    const detailedContent = buildQuestionMarkdown(topic);
 
-    return topics.map((topic, idx) => {
-      const keyConcepts = extractKeyConcepts(topic);
-      const detailedContent = buildQuestionMarkdown(topic);
-
-      return {
-        id: `sd-question-${topic.id || idx}`,
-        title: topic.title,
-        domain: 'system-design' as const,
-        category: 'System Design: Interview Questions',
-        difficulty: 'Medium' as const,
-        companyTags: ['Google', 'Amazon', 'Microsoft', 'Meta', 'Uber'],
-        importanceRating: 5,
-        summary: topic.overview || `Deep-dive into ${topic.title} for system design interviews.`,
-        keyConcepts,
-        detailedContent,
-      };
-    });
-  } catch (err) {
-    console.warn('[SystemDesignQuestionsLoader] Failed to parse questions JSON:', err);
-    return [];
-  }
+    return {
+      id: `sd-question-${topic.id || idx}`,
+      title: topic.title,
+      domain: 'system-design' as const,
+      category: 'System Design: Interview Questions',
+      difficulty: 'Medium' as const,
+      companyTags: ['Google', 'Amazon', 'Microsoft', 'Meta', 'Uber'],
+      importanceRating: 5,
+      summary: topic.overview || `Deep-dive into ${topic.title} for system design interviews.`,
+      keyConcepts,
+      detailedContent,
+    };
+  });
 }
 
-export const systemDesignQuestionTopics: TopicItem[] = parseAndTransform(rawQuestionsJson);
+function loadAllQuestions(): TopicItem[] {
+  const rawList = extractTopicsFromObject(questionsData);
+  return transformQuestions(rawList);
+}
+
+export const systemDesignQuestionTopics: TopicItem[] = loadAllQuestions();

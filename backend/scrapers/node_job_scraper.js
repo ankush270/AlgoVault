@@ -1,10 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import { getJobsFilePath } from '../utils/jobPathResolver.js';
+import Job from '../models/Job.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const JOBS_FILE_PATH = path.resolve(__dirname, '../../frontend/public/data/jobs.json');
 
 export const runNodeJobScraper = async () => {
   console.log('🤖 [NODE-SCRAPER] Starting automatic background tech job fetching across RemoteOK & Remotive APIs...');
@@ -62,10 +64,13 @@ export const runNodeJobScraper = async () => {
   }
 
   if (newJobs.length > 0) {
+    const readPath = getJobsFilePath(false);
+    const writePath = getJobsFilePath(true);
+
     let existingJobs = [];
-    if (fs.existsSync(JOBS_FILE_PATH)) {
+    if (fs.existsSync(readPath)) {
       try {
-        existingJobs = JSON.parse(fs.readFileSync(JOBS_FILE_PATH, 'utf-8'));
+        existingJobs = JSON.parse(fs.readFileSync(readPath, 'utf-8'));
       } catch (e) {
         existingJobs = [];
       }
@@ -82,10 +87,39 @@ export const runNodeJobScraper = async () => {
       }
     });
 
-    fs.mkdirSync(path.dirname(JOBS_FILE_PATH), { recursive: true });
-    fs.writeFileSync(JOBS_FILE_PATH, JSON.stringify(existingJobs, null, 2), 'utf-8');
+    // Write to resolved target path (works on local monorepo & isolated cloud instances)
+    fs.mkdirSync(path.dirname(writePath), { recursive: true });
+    fs.writeFileSync(writePath, JSON.stringify(existingJobs, null, 2), 'utf-8');
+    console.log(`✅ [NODE-SCRAPER] Updated ${writePath}! (${addedCount} new jobs added, total ${existingJobs.length} listings)`);
 
-    console.log(`✅ [NODE-SCRAPER] Updated ${JOBS_FILE_PATH}! (${addedCount} new jobs added, total ${existingJobs.length} listings)`);
+    // Keep backend/data/jobs.json mirrored if writing elsewhere
+    const backendDataPath = path.resolve(__dirname, '../data/jobs.json');
+    if (path.resolve(writePath) !== backendDataPath) {
+      try {
+        fs.mkdirSync(path.dirname(backendDataPath), { recursive: true });
+        fs.writeFileSync(backendDataPath, JSON.stringify(existingJobs, null, 2), 'utf-8');
+      } catch (e) {
+        // Non-critical mirror write
+      }
+    }
+
+    // Persist to MongoDB if connected
+    if (mongoose.connection && mongoose.connection.readyState === 1) {
+      try {
+        const ops = newJobs.map((job) => ({
+          updateOne: {
+            filter: { url: job.url },
+            update: { $set: job },
+            upsert: true,
+          },
+        }));
+        await Job.bulkWrite(ops, { ordered: false });
+        console.log(`💾 [NODE-SCRAPER] Synced ${ops.length} job postings to MongoDB collection.`);
+      } catch (mongoErr) {
+        console.warn('⚠️ [NODE-SCRAPER] MongoDB job sync warning:', mongoErr.message);
+      }
+    }
+
     return { status: 'success', addedCount, total: existingJobs.length };
   }
 

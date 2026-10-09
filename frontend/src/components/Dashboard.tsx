@@ -61,14 +61,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
   setSelectedDomain,
   setSelectedTopicId,
 }) => {
-  const { progress, updateDailyGoal, getDueRevisionsCount } = useProgress();
+  const { progress, updateDailyGoal, getDueRevisionsCount, getMasteredCount, getTotalCount, getReadinessPercentage } = useProgress();
 
-  const masteredCount = Object.values(progress.statuses).filter(s => s === 'mastered').length;
+  const masteredCount = getMasteredCount();
   const inProgressCount = Object.values(progress.statuses).filter(s => s === 'in-progress').length;
   const needsRevisionCount = Object.values(progress.statuses).filter(s => s === 'needs-revision').length;
   const dueCount = getDueRevisionsCount();
-  const totalTopics = allTopics.length;
-  const overallPercentage = Math.round((masteredCount / totalTopics) * 100);
+  const totalTopics = getTotalCount();
+  const overallPercentage = getReadinessPercentage();
 
   const domainStats = dashboardConfig.domains.map((d) => ({
     id: d.id as DomainType,
@@ -79,12 +79,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
   }));
 
   const getDomainProgress = (domainId: DomainType) => {
-    const domainTopics = allTopics.filter(t => t.domain === domainId);
-    const domainMastered = domainTopics.filter(t => progress.statuses[t.id] === 'mastered').length;
+    const domainMastered = getMasteredCount(domainId);
+    const total = getTotalCount(domainId);
     return {
       mastered: domainMastered,
-      total: domainTopics.length,
-      pct: Math.round((domainMastered / domainTopics.length) * 100)
+      total,
+      pct: getReadinessPercentage(domainId)
     };
   };
 
@@ -96,30 +96,27 @@ export const Dashboard: React.FC<DashboardProps> = ({
   return (
     <div className="space-y-5 sm:space-y-6 animate-fadeIn">
       {/* 1. Hero Welcome & Daily Goal Banner */}
-      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-5 sm:p-6 lg:p-8 border border-blue-200/50 shadow-sm">
-        {/* Decorative gradient blob */}
-        <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-200/30 via-purple-200/20 to-transparent pointer-events-none" />
-        
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-50/80 via-indigo-50/60 to-purple-50/40 p-5 sm:p-6 lg:p-8 border border-blue-200/60 shadow-sm">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
           <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-xs font-semibold">
-              <Sparkles size={14} />
-              <span>Target Switch Preparation Mode</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-700 text-xs font-bold">
+              <Target size={13} className="text-blue-600" />
+              <span>Interview Preparation Dashboard</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Ready to Ace Product Company Interviews?
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+              Your Engineering Interview Roadmap
             </h1>
             <p className="text-sm text-slate-600 leading-relaxed max-w-lg">
-              Track your progress across DSA, System Design, OS, DBMS, Networks, and Gen AI.
+              Track your progress across DSA, System Design, OS, DBMS, Networks, and Gen AI with structured revision and problem benchmarks.
             </p>
           </div>
 
           {/* Daily Goal & Streak Summary Widget */}
-          <div className="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm w-full sm:min-w-[260px] sm:max-w-[320px] space-y-3 sm:space-y-4">
+          <div className="bg-white/90 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-sm w-full sm:min-w-[260px] sm:max-w-[320px] space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Daily Goal</span>
-              <div className="flex items-center gap-1.5 text-amber-600 font-bold text-sm bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
-                <Flame size={16} className="animate-bounce" />
+              <div className="flex items-center gap-1.5 text-amber-700 font-bold text-sm bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                <Flame size={16} className="text-amber-500 fill-amber-500" />
                 <span>{progress.streak} Day Streak</span>
               </div>
             </div>
@@ -212,20 +209,20 @@ export const Dashboard: React.FC<DashboardProps> = ({
       >
         <div className="flex items-start sm:items-center gap-3 sm:gap-4 min-w-0">
           <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-100 border border-amber-200 text-amber-600 flex items-center justify-center shrink-0">
-            <Flame size={22} className="animate-bounce" />
+            <Flame size={22} className="text-amber-500 fill-amber-500" />
           </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="text-[11px] sm:text-xs font-black uppercase px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-amber-100 text-amber-700 border border-amber-200">
                 Spaced Repetition
               </span>
-              <span className="text-xs font-semibold text-slate-500 hidden sm:inline">Memory Decay Alert</span>
+              <span className="text-xs font-semibold text-slate-500 hidden sm:inline">Retention Schedule</span>
             </div>
             <h3 className="text-base sm:text-lg font-extrabold text-slate-900 mt-1 group-hover:text-amber-700 transition-colors">
               🔥 {dueCount > 0 ? dueCount : 7} questions due today
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium leading-normal hidden sm:block">
-              Calculated using Smart Adaptive Ebbinghaus Forgetting Curve. Start your daily 5-minute review session.
+              Spaced repetition intervals: review questions due today to reinforce memory retention before your interviews.
             </p>
           </div>
         </div>

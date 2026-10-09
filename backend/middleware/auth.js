@@ -1,18 +1,22 @@
 import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'techswitch_super_secret_jwt_key_2026';
+import { JWT_SECRET } from '../config/jwt.js';
 
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ success: false, message: 'Access token required' });
+    return res.status(401).json({ success: false, message: 'Access denied. No token provided.' });
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ success: false, message: 'Invalid or expired token' });
+      const isExpired = err.name === 'TokenExpiredError';
+      return res.status(401).json({
+        success: false,
+        code: isExpired ? 'TOKEN_EXPIRED' : 'TOKEN_INVALID',
+        message: isExpired ? 'Session expired. Please refresh your token.' : 'Invalid token.'
+      });
     }
     req.user = user;
     next();

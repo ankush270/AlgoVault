@@ -1,0 +1,16 @@
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston:latest
+    container_name: algovault-piston
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "2000:2000"
+    volumes:
+      - piston_data:/piston
+    tmpfs:
+      - /tmp:exec
+
+volumes:
+  piston_data:
+

@@ -8,9 +8,10 @@ interface AuthModalProps {
   onClose: () => void;
   onSuccessSync?: (userEmail: string) => void;
   initialTab?: 'login' | 'signup';
+  onTabChange?: (tab: 'login' | 'signup') => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessSync, initialTab = 'login' }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccessSync, initialTab = 'login', onTabChange }) => {
   const { login } = useAuth();
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(initialTab);
 
@@ -24,7 +25,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setActiveTab(tab);
     setErrorMessage('');
     setSuccessMessage('');
-    if (window.location.pathname.toLowerCase() === '/login' || window.location.pathname.toLowerCase() === '/signup') {
+    if (onTabChange) {
+      onTabChange(tab);
+    } else if (typeof window !== 'undefined' && (window.location.pathname.toLowerCase() === '/login' || window.location.pathname.toLowerCase() === '/signup')) {
       window.history.replaceState(null, '', `/${tab}`);
     }
   };
@@ -62,7 +65,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         }
         const res = await registerUser(name, email, password);
         if (res.success && res.token && res.user) {
-          login(res.token, res.user);
+          login(res.token, res.user, res.refreshToken);
           setSuccessMessage('Account created successfully! Auto-syncing...');
           if (onSuccessSync) onSuccessSync(res.user.email);
           setTimeout(() => {
@@ -74,7 +77,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       } else {
         const res = await loginUser(email, password);
         if (res.success && res.token && res.user) {
-          login(res.token, res.user);
+          login(res.token, res.user, res.refreshToken);
           setSuccessMessage('Logged in successfully! Auto-syncing progress...');
           if (onSuccessSync) onSuccessSync(res.user.email);
           setTimeout(() => {
@@ -92,14 +95,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-slate-50 border border-slate-200 rounded-3xl max-w-md w-full shadow-[0_0_50px_-12px_rgba(59,130,246,0.3)] relative overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full shadow-2xl relative overflow-hidden">
         {/* Decorative Top Accent Bar */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 to-indigo-600" />
 
         <button
           onClick={onClose}
-          className="absolute right-4 top-5 text-slate-400 hover:text-slate-900 p-1 rounded-xl bg-slate-50/80 hover:bg-slate-100 border border-slate-200 transition-all"
+          className="absolute right-4 top-5 text-slate-400 hover:text-slate-700 p-1 rounded-xl bg-slate-100/80 hover:bg-slate-200 border border-slate-200 transition-all"
         >
           <X size={18} />
         </button>
@@ -107,55 +110,55 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         <div className="p-6 sm:p-8 space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-500/20 text-blue-600 text-xs font-semibold">
-              <Sparkles size={14} className="animate-pulse text-cyan-600" />
-              <span>AlgoVault Pro Member Access</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
+              <ShieldCheck size={14} className="text-blue-600" />
+              <span>AlgoVault Account Access</span>
             </div>
-            <h2 className="text-2xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
               {activeTab === 'login' ? 'Welcome Back!' : 'Create Pro Account'}
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               {activeTab === 'login'
                 ? 'Sign in to access your cross-device bookmarks & revision progress.'
-                : 'Register to enable automatic MongoDB cloud backup across Mobile & PC.'}
+                : 'Register to enable automatic cloud backup across your devices.'}
             </p>
           </div>
 
           {/* User Perks Banner */}
-          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-blue-950/40 border border-slate-200 space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
               <ShieldCheck size={14} className="text-emerald-600" />
-              <span>What you get by logging in:</span>
+              <span>Account Features & Sync:</span>
             </p>
-            <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+            <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-cyan-600 shrink-0" />
+                <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
                 <span>Auto Cloud Sync</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-cyan-600 shrink-0" />
+                <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
                 <span>PC ↔ Mobile Sync</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-cyan-600 shrink-0" />
+                <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
                 <span>Saved Bookmarks</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={13} className="text-cyan-600 shrink-0" />
+                <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
                 <span>Streak Protection</span>
               </div>
             </div>
           </div>
 
           {/* Login / Signup Tabs */}
-          <div className="flex p-1 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold">
+          <div className="flex p-1 bg-slate-100 border border-slate-200 rounded-2xl text-xs font-bold">
             <button
               type="button"
               onClick={() => handleTabChange('login')}
               className={`flex-1 py-2.5 rounded-xl transition-all ${
                 activeTab === 'login'
-                  ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-600/25'
-                  : 'text-slate-400 hover:text-slate-900'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Sign In
@@ -165,8 +168,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
               onClick={() => handleTabChange('signup')}
               className={`flex-1 py-2.5 rounded-xl transition-all ${
                 activeTab === 'signup'
-                  ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-600/25'
-                  : 'text-slate-400 hover:text-slate-900'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Create Account
@@ -192,7 +195,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
           <form onSubmit={handleSubmit} className="space-y-4">
             {activeTab === 'signup' && (
               <div>
-                <label className="text-xs font-bold text-slate-500 block mb-1.5">Full Name</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5">Full Name</label>
                 <div className="relative">
                   <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
@@ -201,14 +204,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Ankush Kumar"
-                    className="w-full bg-slate-50/90 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="text-xs font-bold text-slate-500 block mb-1.5">Email Address</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5">Email Address</label>
               <div className="relative">
                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -217,13 +220,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full bg-slate-50/90 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-500 block mb-1.5">Password</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5">Password</label>
               <div className="relative">
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -232,12 +235,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-50/90 border border-slate-200 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-900 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-10 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -247,7 +250,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 transition-all transform active:scale-[0.99] disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all transform active:scale-[0.99] disabled:opacity-50"
             >
               <span>{isSubmitting ? 'Processing...' : activeTab === 'login' ? 'Sign In to My Account' : 'Create Free Account'}</span>
               <ArrowRight size={15} />

@@ -1,0 +1,393 @@
+Graph: Basics
+1. Intuition
+
+Graph ek aisa structure hai jisme cheezein (vertices) aur unke beech ke connections (edges) hote hain.
+
+Real life examples:
+
+Facebook / Instagram: har insaan ek vertex, friendship ek edge
+Google Maps: har shehar/chauraha ek vertex, road ek edge
+Internet: har computer/router ek vertex, cable/link ek edge
+HFT mein: currency exchange rates (USD → EUR → INR), yahan arbitrage dhundhna ek graph problem hai
+
+Formally: G = (V, E), jahan V = vertices ka set, E = edges ka set.
+
+2. Basic Terms
+Vertex (Node)
+
+Graph ka ek point. Jaise A, B, C ya 0, 1, 2, 3.
+
+Edge
+
+Do vertices ko jodne wali line. (u, v) likhte hain.
+
+Undirected edge: dono taraf jaa sakte ho. A — B matlab A se B bhi, B se A bhi.
+Directed edge: sirf ek taraf. A → B matlab sirf A se B.
+
+Undirected:        Directed:
+  A --- B            A ---> B
+  |     |            ^      |
+  C --- D            |      v
+                     C <--- D
+
+Degree
+Ek vertex se kitni edges judi hain.
+Undirected graph mein:
+
+    A --- B
+    |   / |
+    |  /  |
+    C --- D
+Degree(A) = 2 (A-B, A-C)
+Degree(B) = 3 (B-A, B-C, B-D)
+Degree(C) = 3
+Degree(D) = 2
+
+Directed graph mein degree do tarah ki hoti hai:
+
+In-degree: kitni edges is vertex mein aa rahi hain
+Out-degree: kitni edges is vertex se ja rahi hain
+A → B, A → C, C → B
+
+in-degree(B)  = 2  (A se aur C se)
+out-degree(A) = 2  (B aur C ki taraf)
+
+Handshaking Lemma (interview mein kaam aata hai):
+
+Undirected graph mein sum of all degrees = 2 × (number of edges)
+
+Kyunki har edge do vertices ki degree mein count hoti hai. Upar wale example mein: 2+3+3+2 = 10 = 2 × 5 edges.
+
+
+Path
+
+Vertices ka ek sequence jahan har consecutive pair ke beech edge ho.
+
+A → B → D ek path hai (agar A-B aur B-D edges hain).
+
+Path length = path mein edges ki sankhya (vertices ki nahi)
+Simple path: koi vertex repeat nahi hota
+Do vertices ke beech shortest path wo hai jisme sabse kam edges ho (BFS yahi nikalta hai)
+
+Cycle
+
+Ek path jo usi vertex pe wapas aa jaaye jahan se shuru hua tha.
+
+A → B → D → C → A ek cycle hai.
+
+Simple cycle: start/end vertex ke alawa koi vertex repeat nahi hota
+Self-loop: ek vertex se khud tak edge (A → A), ye length 1 ki cycle hai
+Acyclic graph: jisme koi cycle na ho
+
+Important Extra Terms 
+Term	                       Matlab
+Adjacent	                   Do vertices jinke beech seedhi edge ho
+Connected graph	             Kisi bhi vertex se kisi bhi doosre vertex tak path ho (undirected mein)
+Connected component	         Graph ka ek maximal connected hissa
+Weighted graph	             Har edge pe ek cost/weight (distance, time, price)
+Tree	                       Connected + acyclic graph. n vertices to exactly n-1 edges
+DAG	                         Directed Acyclic Graph (task scheduling, dependencies)
+Complete graph	             Har vertex doosre har vertex se juda. Edges = n(n-1)/2
+Sparse graph	               E bahut kam (E ≈ V)
+Dense graph	                 E bahut zyada (E ≈ V²)
+Multigraph	                 Do vertices ke beech ek se zyada edges allowed
+
+Maximum Edges (formula yaad rakho)
+Undirected, no self-loop, no multi-edge: V(V-1)/2
+Directed, no self-loop: V(V-1)
+
+Isse tum bata sakte ho ki graph sparse hai ya dense, aur ye representation choose karne mein kaam aata hai
+
+
+
+TREE 🌳
+Real life se samjho
+
+Tumhari company ka structure socho:
+
+          CEO
+         /    \
+    Manager1  Manager2
+     /   \        \
+   Emp1  Emp2     Emp3
+Sab log kisi na kisi tarah jude hue hain
+Koi gol chakkar nahi hai (Emp1 se upar jao to wapas Emp1 pe nahi aa sakte bina wahi raasta dobara liye)
+
+Bas, ye hi tree hai.
+
+Definition (2 rules)
+
+Tree wo graph hai jo:
+
+Connected ho (koi bhi node kisi bhi node tak pahunch sake)
+Cycle na ho (gol chakkar nahi)
+
+Edges = Nodes - 1
+
+Tree ki 3 aur pehchaan
+Do nodes ke beech exactly 1 hi raasta hota hai (do raaste hote to cycle ban jaata)
+
+Problem mein “n nodes aur n-1 edges” likha ho → tree ka hint
+
+
+DAG (Directed Acyclic Graph)
+
+Naam todo to samajh aa jaata hai:
+
+Directed = edges mein arrow hai (ek hi direction)
+Acyclic = cycle nahi hai
+Graph = graph
+
+Topological Order (DAG ki jaan)
+
+Ye ek aisa order hai jisme har arrow aage ki taraf jaaye, yaani jo cheez pehle chahiye wo pehle aaye.
+
+   A → B → D
+   ↓       ↑
+   C ──────┘
+
+Valid orders: A, B, C, D ya A, C, B, D.
+Dono mein dekho: A hamesha B aur C se pehle, aur D hamesha sabke baad.
+
+Dhyaan do: order unique nahi hota, ek se zyada sahi order ho sakte hain.
+
+DAG mein kam se kam ek node aisa hoga jisme koi arrow andar nahi aa raha (in-degree = 0). Ise source bolte hain.
+
+Ye words dikhein to DAG / topological sort socho:
+
+“prerequisites”, “dependencies”
+“order of tasks”, “build order”, “compile order”
+“kya saare courses complete ho sakte hain?” → matlab cycle hai ya nahi check karo
+
+
+BIPARTITE GRAPH
+Graph ke saare nodes ko 2 teams mein baanta ja sake, aise ki har edge do alag teams ke beech ho, to wo bipartite hai.
+Kaun sa graph bipartite hai? Seedha rule
+
+Graph bipartite hai ⟺ usme koi ODD length ka cycle nahi hai.
+Ab isko samjho, ratna mat.
+
+Triangle (3 nodes, odd cycle) try karo:
+
+      A
+     / \
+    B---C
+A ko Laal diya
+B, A se juda hai → B ko Neela
+C, A se juda hai → C ko Neela
+Lekin C, B se bhi juda hai, aur dono Neela! ❌ Fail
+
+Square (4 nodes, even cycle) try karo:
+
+    A --- B
+    |     |
+    D --- C
+A = Laal
+B = Neela (A se juda)
+C = Laal (B se juda)
+D = Neela (C se juda), aur D, A se bhi juda hai (A Laal, D Neela) ✅ Pass
+
+Pattern dekho: colours Laal, Neela, Laal, Neela... alternate hote hain.
+
+Even cycle mein ghoom ke wapas aate waqt colour sahi baithta hai ✅
+Odd cycle mein wapas aate waqt colour takrata hai ❌
+
+Isliye odd cycle = bipartite nahi.
+
+Bonus: Tree mein cycle hi nahi hota, to har tree bipartite hota hai.
+
+“Log ko 2 groups mein baanto jaise ki...”
+“Dislikes”, “enemies”, “conflicts” (jo ek doosre ko pasand nahi karte, unhe alag group mein rakho)
+“Matching”: jobs ↔ workers, students ↔ projects
+
+
+
+COMPLETE GRAPH (K_n)
+K4 (4 log):
+   A ───── B
+   │ ╲   ╱ │
+   │   ╳   │
+   │ ╱   ╲ │
+   C ───── D
+
+Har node baaki sab se juda hua hai.
+
+Edges kitni?
+Har insaan (n-1) logon se haath milata hai (khud se nahi)
+n insaan × (n-1) = n(n-1) hand-shakes count hue
+Lekin ek handshake mein 2 log hote hain, to har handshake 2 baar gina gaya (A ne B se, aur B ne A se)
+To asli handshakes = n(n-1) / 2
+
+Example: 4 log → 4×3/2 = 6 edges. Upar K4 mein gin lo: AB, AC, AD, BC, BD, CD = 6 ✅
+
+Yaad rakho:
+
+Undirected complete graph: n(n-1)/2 edges
+Directed complete graph (A→B aur B→A dono alag): n(n-1) edges
+Har node ki degree = n-1
+
+
+Graph Representation: 
+0. Problem kya hai?
+
+Graph ko drawing ki tarah paper pe banana aasaan hai, lekin code mein store kaise karein? Iske 3 standard tareeke hain:
+
+Adjacency Matrix: V × V ki 2D table
+Adjacency List: har node ke saath uske padosiyon ki list
+Edge List: sirf saari edges ki ek list
+
+Teeno mein same graph store hota hai. Fark ye hai ki kaunsa operation kitna tez/dheema hai aur kitni memory lagti hai.
+
+Notation: V = vertices ki sankhya, E = edges ki sankhya, deg(u) = u ki degree.
+
+Example Graph 
+Undirected, 4 vertices (0-3), 5 edges:
+
+    0 ─── 1
+    │   ╱ │
+    │  ╱  │
+    2 ─── 3
+
+Edges: 0-1, 0-2, 1-2, 1-3, 2-3
+
+Adjacency Matrix
+Idea
+
+V × V ki table mat. Agar u aur v ke beech edge hai to mat[u][v] = 1, warna 0.
+
+Example
+      0  1  2  3
+  0 [ 0  1  1  0 ]
+  1 [ 1  0  1  1 ]
+  2 [ 1  1  0  1 ]
+  3 [ 0  1  1  0 ]
+Properties
+Undirected graph: matrix symmetric hota hai (mat[u][v] == mat[v][u])
+Directed graph: symmetric hona zaroori nahi. mat[u][v] = 1 matlab u → v
+Weighted graph: 1 ki jagah weight store karo. “Edge nahi hai” dikhane ke liye INF ya -1 use karo (agar 0 weight valid ho to 0 mat use karo)
+Diagonal (mat[i][i]) self-loop dikhata hai
+Row sum = out-degree, column sum = in-degree
+Code
+cpp
+int n = 4;
+vector<vector<int>> mat(n, vector<int>(n, 0));
+
+auto addEdge = [&](int u, int v) {
+    mat[u][v] = 1;
+    mat[v][u] = 1;          // undirected, directed mein ye line hata do
+};
+
+addEdge(0,1); addEdge(0,2); addEdge(1,2); addEdge(1,3); addEdge(2,3);
+
+// edge check: O(1)
+bool has = mat[1][3];
+
+// u ke saare neighbours: O(V)
+for (int v = 0; v < n; v++)
+    if (mat[u][v]) { /* v neighbour hai */ }
+Pros
+Edge check O(1): “u aur v ke beech edge hai?” turant pata
+Edge add/remove O(1)
+Implementation simple
+Dense graph mein efficient
+Floyd-Warshall jaise algorithms ke liye natural
+Cons
+Space O(V²), edges kam hon tab bhi
+Neighbours nikalne mein O(V), chahe degree 2 ho
+BFS/DFS O(V²) ho jaata hai
+Multi-edges (do nodes ke beech ek se zyada edges) store nahi kar sakta
+Vertex add karna mahanga hai (poori table resize)
+Kab kaam nahi karta
+
+V = 10⁵ ho to matrix = 10¹⁰ cells = int ke hisaab se ~40 GB. Impossible. Isliye V ≤ ~1000-5000 ho tabhi matrix socho.
+
+Adjacency List
+Idea
+
+Har vertex u ke liye ek list rakho jisme u ke saare neighbours hon.
+
+Example
+  0 → [1, 2]
+  1 → [0, 2, 3]
+  2 → [0, 1, 3]
+  3 → [1, 2]
+Properties
+Undirected graph mein har edge 2 baar store hoti hai (u ki list mein v, v ki list mein u). Total entries = 2E
+Directed mein har edge 1 baar (sirf source ki list mein)
+List ki length = us vertex ki (out-)degree
+Weighted graph mein list mein {neighbour, weight} ka pair rakho
+Code (unweighted)
+cpp
+int n = 4;
+vector<vector<int>> adj(n);
+
+auto addEdge = [&](int u, int v) {
+    adj[u].push_back(v);
+    adj[v].push_back(u);    // undirected, directed mein hata do
+};
+
+addEdge(0,1); addEdge(0,2); addEdge(1,2); addEdge(1,3); addEdge(2,3);
+
+// u ke saare neighbours: O(deg(u))
+for (int v : adj[u]) { /* kaam */ }
+Code (weighted)
+cpp
+vector<vector<pair<int,int>>> adj(n);   // {neighbour, weight}
+
+adj[u].push_back({v, w});
+adj[v].push_back({u, w});               // undirected
+
+for (auto [v, w] : adj[u]) { /* v neighbour, w weight */ }
+Pros
+Space O(V + E), sparse graph mein bahut kam
+Neighbours iterate karna O(deg(u)), sirf jo hain wahi milte hain
+BFS/DFS O(V + E)
+Multi-edges aur weights aasaani se
+Dijkstra, Prim, Topological sort sab isi pe natural
+Cons
+Edge check O(deg(u)), list scan karni padti hai
+Edge delete karna O(deg(u)) (dhundna padta hai)
+Dense graph mein E ≈ V², to list bhi matrix jitni heavy ho jaati hai, upar se pointer overhead
+Edge check tez karna ho to
+
+vector<unordered_set<int>> use karo (O(1) average), ya list sorted rakho aur binary search (O(log deg)).
+
+Edge List
+Idea
+
+Sirf saari edges ki ek flat list. Koi vertex-wise structure nahi.
+
+Example
+  [(0,1), (0,2), (1,2), (1,3), (2,3)]
+
+Weighted: [(u, v, w), ...]
+
+Code
+cpp
+struct Edge { int u, v, w; };
+vector<Edge> edges;
+
+edges.push_back({0, 1, 5});
+edges.push_back({0, 2, 3});
+// ...
+Pros
+Space O(E), sabse kam
+Banana/input lena sabse aasaan (problems aksar isi format mein input deti hain)
+Sort karna aasaan (weight ke hisaab se)
+Iterate over all edges aasaan
+Cons
+Edge check O(E)
+Kisi vertex ke neighbours nikalna O(E), poori list scan
+BFS/DFS ke liye bekar, isliye pehle adjacency list mein convert karte hain
+Kahan use hota hai
+Kruskal’s MST: edges ko weight se sort karo, DSU lagao
+Bellman-Ford: V-1 baar saari edges relax karo
+Input store karna, phir adjacency list banana
+
+Constraints dekh ke decide karo:
+
+V ≤ 10⁵, E ≤ 2×10⁵ → list (matrix 40 GB lega)
+V ≤ 400-500, “all pairs” → matrix + Floyd-Warshall
+V ≤ 10³ → dono chalenge
+
+

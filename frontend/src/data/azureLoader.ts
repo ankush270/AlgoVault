@@ -6,7 +6,7 @@
  */
 
 import { TopicItem, Difficulty } from '../types';
-import rawAzureJson from '../../../azure.json?raw';
+import azureData from './json/azure.json';
 
 // Module metadata mapping
 export interface AzureModuleMeta {
@@ -296,34 +296,7 @@ function buildDetailedContent(topicTitle: string, topicObj: any, category: strin
   return parts.join('\n\n');
 }
 
-// Parse concatenated JSON
-function parseRawAzureJSON(rawText: string): Record<string, any>[] {
-  const objects: Record<string, any>[] = [];
-  let depth = 0;
-  let start = -1;
 
-  for (let i = 0; i < rawText.length; i++) {
-    const ch = rawText[i];
-    if (ch === '{') {
-      if (depth === 0) start = i;
-      depth++;
-    } else if (ch === '}') {
-      depth--;
-      if (depth === 0 && start !== -1) {
-        const chunk = rawText.substring(start, i + 1);
-        try {
-          const parsed = JSON.parse(chunk);
-          objects.push(parsed);
-        } catch (e) {
-          console.warn('[AzureLoader] Failed to parse JSON chunk:', e);
-        }
-        start = -1;
-      }
-    }
-  }
-
-  return objects;
-}
 
 // Unpack nested topics recursively into TopicItems
 function extractTopicsFromModule(moduleKey: string, moduleContent: Record<string, any>): TopicItem[] {
@@ -386,7 +359,7 @@ function extractTopicsFromModule(moduleKey: string, moduleContent: Record<string
 }
 
 // Main execution
-const rawParsedObjects = parseRawAzureJSON(rawAzureJson);
+const rawParsedObjects: Record<string, any>[] = Array.isArray(azureData) ? (azureData as Record<string, any>[]) : [azureData as Record<string, any>];
 
 const allAzureTopicsList: TopicItem[] = [];
 const azureModulesMap: Map<string, AzureModuleMeta> = new Map();

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   FileText,
   Download,
@@ -17,8 +16,9 @@ import {
   CheckSquare
 } from 'lucide-react';
 import { COMPANY_BENCHMARKS, calculateCompanyReadiness, CompanyBenchmark } from '../utils/readinessMath';
-import { RevisionPdfDocument, PdfNoteItem, PdfTrickItem } from './RevisionPdfDocument';
+import type { PdfNoteItem, PdfTrickItem } from './RevisionPdfDocument';
 import { useProgress } from '../context/ProgressContext';
+import { allTopics } from '../data/allData';
 
 const DEFAULT_DSA_TRICKS: PdfTrickItem[] = [
   {
@@ -55,13 +55,27 @@ export const CheatSheetReadinessHub: React.FC = () => {
   const [includeNotes, setIncludeNotes] = useState<boolean>(true);
   const [includeTricks, setIncludeTricks] = useState<boolean>(true);
   const [includeWeakConcepts, setIncludeWeakConcepts] = useState<boolean>(true);
+  const [generatingPdf, setGeneratingPdf] = useState<boolean>(false);
 
   const selectedCompany = COMPANY_BENCHMARKS.find((c) => c.id === selectedCompanyId) || COMPANY_BENCHMARKS[0];
 
   // Calculate actual user metrics from progress context
   const masteredCount = getMasteredCount ? getMasteredCount() : 0;
-  const totalStatusesCount = Object.keys(progress?.statuses || {}).length;
-  const solvedCount = Math.max(15, masteredCount || totalStatusesCount);
+  
+  // Check company-tagged topics mastered
+  const companyTopics = allTopics.filter((t) =>
+    t.companyTags?.some(
+      (c) =>
+        c.toLowerCase() === selectedCompany.id.toLowerCase() ||
+        c.toLowerCase() === selectedCompany.name.toLowerCase()
+    )
+  );
+  const companyMastered = companyTopics.filter(
+    (t) => progress?.statuses?.[t.id] === 'mastered'
+  ).length;
+
+  // Use company-specific mastered topics if user solved company problems, otherwise total mastered count
+  const solvedCount = companyMastered > 0 ? companyMastered : masteredCount;
   const starredNotesCount = Object.keys(progress?.notes || {}).length || 0;
   const accuracyRate = 85; // Simulated baseline accuracy
 
@@ -95,30 +109,65 @@ export const CheatSheetReadinessHub: React.FC = () => {
     'PostgreSQL Indexing & B-Tree vs Hash Index Performance'
   ];
 
+  const handleDownloadPdf = async () => {
+    try {
+      setGeneratingPdf(true);
+      const [{ pdf }, { RevisionPdfDocument }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('./RevisionPdfDocument'),
+      ]);
+
+      const doc = React.createElement(RevisionPdfDocument, {
+        candidateName: 'AlgoVault Candidate',
+        targetCompany: selectedCompany.name,
+        readinessScore: readiness.score,
+        readinessStatus: readiness.statusLabel,
+        notes: includeNotes ? pdfNotes : [],
+        dsaTricks: includeTricks ? DEFAULT_DSA_TRICKS : [],
+        weakConcepts: includeWeakConcepts ? weakConceptsList : [],
+      });
+
+      const blob = await pdf(doc as any).toBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `AlgoVault_${selectedCompany.name}_CheatSheet.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to compile PDF:', err);
+      alert('Could not compile PDF cheat sheet. Please try again.');
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Top Banner Header */}
-      <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="card-surface p-6 rounded-3xl border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600">
             <FileText className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-black text-white flex items-center gap-2">
+            <h1 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-2">
               PDF Cheat Sheet & Company Readiness Predictor
-              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-600 border border-indigo-200">
+              <span className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                 FAANG Target Engine
               </span>
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-600 mt-0.5">
               Calculate your readiness score per company and generate a custom printable PDF cheat sheet for last-minute revision.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-200 text-xs font-mono">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
-          <span className="text-slate-500">AlgoVault AI Analytics</span>
+        <div className="flex items-center gap-2 bg-slate-50 px-3.5 py-2 rounded-2xl border border-slate-200 text-xs">
+          <Target className="w-4 h-4 text-indigo-600" />
+          <span className="text-slate-600 font-medium">Readiness Benchmark</span>
         </div>
       </div>
 
@@ -126,13 +175,13 @@ export const CheatSheetReadinessHub: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left 7 Cols: Target Company Readiness Predictor */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-lg space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
+          <div className="card-surface rounded-3xl p-6 border border-slate-200 space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <Target className="w-5 h-5 text-indigo-600" />
                 Target Company Selection
               </h2>
-              <span className="text-xs text-slate-400 font-mono">Select target company</span>
+              <span className="text-xs text-slate-500 font-mono">Select target company</span>
             </div>
 
             {/* Company Selector Buttons */}
@@ -216,9 +265,9 @@ export const CheatSheetReadinessHub: React.FC = () => {
 
               {/* Actionable Tips */}
               <div className="space-y-2 pt-2">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
                   <Zap className="w-4 h-4 text-amber-600" />
-                  AI Improvement Recommendations for {selectedCompany.name}:
+                  Targeted Recommendations for {selectedCompany.name}:
                 </h4>
                 <ul className="space-y-1.5">
                   {readiness.actionableTips.map((tip, idx) => (
@@ -299,32 +348,15 @@ export const CheatSheetReadinessHub: React.FC = () => {
               </div>
             </div>
 
-            {/* One-Click Download Button using PDFDownloadLink */}
-            <PDFDownloadLink
-              document={
-                <RevisionPdfDocument
-                  candidateName="AlgoVault Candidate"
-                  targetCompany={selectedCompany.name}
-                  readinessScore={readiness.score}
-                  readinessStatus={readiness.statusLabel}
-                  notes={includeNotes ? pdfNotes : []}
-                  dsaTricks={includeTricks ? DEFAULT_DSA_TRICKS : []}
-                  weakConcepts={includeWeakConcepts ? weakConceptsList : []}
-                />
-              }
-              fileName={`AlgoVault_${selectedCompany.name}_CheatSheet.pdf`}
-              className="w-full"
+            {/* On-Demand Download Button using dynamic @react-pdf/renderer */}
+            <button
+              onClick={handleDownloadPdf}
+              disabled={generatingPdf}
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-slate-900 text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-emerald-200 cursor-pointer disabled:opacity-50"
             >
-              {({ loading }) => (
-                <button
-                  disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-slate-900 text-xs font-bold px-4 py-4 rounded-2xl transition shadow-lg shadow-emerald-200 cursor-pointer disabled:opacity-50"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>{loading ? 'Compiling Vector PDF...' : `Download ${selectedCompany.name} PDF Cheat Sheet`}</span>
-                </button>
-              )}
-            </PDFDownloadLink>
+              <Download className="w-4 h-4" />
+              <span>{generatingPdf ? 'Compiling Vector PDF Engine...' : `Download ${selectedCompany.name} PDF Cheat Sheet`}</span>
+            </button>
           </div>
         </div>
       </div>

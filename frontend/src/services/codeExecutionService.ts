@@ -1,12 +1,14 @@
+import { apiExecute } from './api';
+
 export interface ExecutionResult {
   output: string;
   stderr: string;
   executionTime: number;
   memory: number;
   status: 'SUCCESS' | 'ERROR' | 'COMPILE_ERROR';
+  engine?: string;
+  isUnauthorized?: boolean;
 }
-
-const PISTON_API_URL = 'https://emkc.org/api/v2/piston/execute';
 
 export const languageMap: Record<string, { language: string; version: string; defaultBoilerplate: string }> = {
   cpp: {
@@ -53,45 +55,41 @@ solution();`
 };
 
 export async function executeCode(language: string, code: string, stdin = ''): Promise<ExecutionResult> {
-  const langConfig = languageMap[language] || languageMap.javascript;
-  
   try {
-    const response = await fetch(PISTON_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        language: langConfig.language,
-        version: langConfig.version,
-        files: [{ content: code }],
-        stdin,
-      }),
-    });
+    const data = await apiExecute.runCode(language, code, stdin);
 
-    if (!response.ok) {
-      throw new Error(`Execution service error (${response.status})`);
+    if (!data) {
+      throw new Error('No response received from code execution service.');
     }
 
-    const data = await response.json();
-    const run = data.run || {};
-
-    const stdout = run.stdout || '';
-    const stderr = run.stderr || '';
-    const codeStatus = run.code === 0 ? 'SUCCESS' : 'ERROR';
+    const isUnauthorized = Boolean(
+      data.isUnauthorized ||
+      (typeof data.stderr === 'string' && /log in to run code|unauthorized/i.test(data.stderr))
+    );
 
     return {
-      output: stdout,
-      stderr: stderr,
-      executionTime: run.time ? Math.round(run.time * 1000) : 0,
-      memory: run.memory || 0,
-      status: codeStatus,
+      output: data.output || '',
+      stderr: data.stderr || '',
+      executionTime: typeof data.executionTime === 'number' ? data.executionTime : 0,
+      memory: typeof data.memory === 'number' ? data.memory : 0,
+      status: data.status || (data.stderr ? 'ERROR' : 'SUCCESS'),
+      engine: data.engine,
+      isUnauthorized
     };
   } catch (err: any) {
+    const isUnauthorized = Boolean(
+      err?.status === 401 ||
+      (typeof err?.message === 'string' && /401|log in|unauthorized/i.test(err.message))
+    );
+
     return {
       output: '',
-      stderr: err?.message || 'Failed to connect to execution provider.',
+      stderr: err?.message || 'Failed to connect to backend execution engine. Ensure backend server is running.',
       executionTime: 0,
       memory: 0,
       status: 'ERROR',
+      isUnauthorized
     };
   }
 }
+

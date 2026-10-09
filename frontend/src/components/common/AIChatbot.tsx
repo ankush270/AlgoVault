@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Sparkles,
   Bot,
@@ -11,17 +12,23 @@ import {
   Loader2,
   Code2,
   Zap,
+  LogIn,
+  Lock,
 } from 'lucide-react';
 import { apiChat } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  isAuthPrompt?: boolean;
 }
 
 export const AIChatbot: React.FC = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, token } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');
@@ -35,14 +42,18 @@ export const AIChatbot: React.FC = () => {
       .then((data) => {
         if (data.suggestions) setSuggestions(data.suggestions);
         if (data.welcomeMessage) {
-          setMessages([
-            {
-              id: 'welcome-1',
-              role: 'assistant',
-              content: data.welcomeMessage,
-              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            },
-          ]);
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === 'welcome-1')) return prev;
+            return [
+              {
+                id: 'welcome-1',
+                role: 'assistant',
+                content: data.welcomeMessage,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              },
+              ...prev,
+            ];
+          });
         }
       })
       .catch((err) => console.error('Error loading chatbot_config.json:', err));
@@ -51,7 +62,9 @@ export const AIChatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof messagesEndRef.current?.scrollIntoView === 'function') {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -73,6 +86,21 @@ export const AIChatbot: React.FC = () => {
 
     setMessages((prev) => [...prev, userMessage]);
     if (!textToSend) setInput('');
+
+    // Pre-check authentication: verify user token exists
+    const currentToken = token || (typeof window !== 'undefined' ? localStorage.getItem('techswitch_token') : null);
+    if (!isAuthenticated && !currentToken) {
+      const authPromptMessage: Message = {
+        id: `auth-${Date.now()}`,
+        role: 'assistant',
+        content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**\n\nAuthentication is required to ensure secure and personalized interview assistance.',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        isAuthPrompt: true,
+      };
+      setMessages((prev) => [...prev, authPromptMessage]);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -82,6 +110,18 @@ export const AIChatbot: React.FC = () => {
       }));
 
       const res = await apiChat.sendMessage(payloadMessages);
+
+      if (res.status === 401 || res.status === 403 || res.message?.toLowerCase().includes('token') || res.message?.toLowerCase().includes('access denied')) {
+        const authErrorMessage: Message = {
+          id: `auth-err-${Date.now()}`,
+          role: 'assistant',
+          content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**\n\nYour session may have expired or authentication is missing.',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isAuthPrompt: true,
+        };
+        setMessages((prev) => [...prev, authErrorMessage]);
+        return;
+      }
 
       if (res.success && res.reply) {
         const assistantMessage: Message = {
@@ -95,13 +135,32 @@ export const AIChatbot: React.FC = () => {
         throw new Error(res.message || 'Failed to get response');
       }
     } catch (err: any) {
-      const errorMessage: Message = {
-        id: `err-${Date.now()}`,
-        role: 'assistant',
-        content: `⚠️ **Error**: Could not connect to Sarvam AI. ${err.message || 'Please try again.'}`,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+      const errMsg = err?.message || '';
+      const isAuthError =
+        errMsg.toLowerCase().includes('token') ||
+        errMsg.toLowerCase().includes('access denied') ||
+        errMsg.toLowerCase().includes('unauthorized') ||
+        errMsg.includes('401') ||
+        errMsg.includes('403');
+
+      if (isAuthError) {
+        const authErrorMessage: Message = {
+          id: `auth-err-${Date.now()}`,
+          role: 'assistant',
+          content: '🔒 **Please log in or register to chat with AlgoVault AI Tutor.**',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isAuthPrompt: true,
+        };
+        setMessages((prev) => [...prev, authErrorMessage]);
+      } else {
+        const errorMessage: Message = {
+          id: `err-${Date.now()}`,
+          role: 'assistant',
+          content: `⚠️ **Error**: Could not connect to Sarvam AI. ${errMsg || 'Please try again.'}`,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+        setMessages((prev) => [...prev, errorMessage]);
+      }
     } finally {
       setLoading(false);
     }
@@ -187,19 +246,18 @@ export const AIChatbot: React.FC = () => {
             setIsOpen(true);
             setIsMinimized(false);
           }}
-          className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] group flex items-center gap-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-lg hover:shadow-cyan-500/25 border border-cyan-400/30 backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95 animate-bounce-subtle"
-          title="Open Sarvam AI Assistant"
+          className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] group flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-full shadow-lg border border-slate-700/80 transition-all duration-200 hover:scale-105 active:scale-95"
+          title="Open AI Assistant"
         >
           <div className="relative">
-            <Bot size={20} className="text-white drop-shadow" />
-            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-300"></span>
+            <Bot size={19} className="text-white" />
+            <span className="absolute -bottom-0.5 -right-0.5 flex h-2 w-2">
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
           </div>
-          <span className="font-bold text-xs tracking-wide text-white hidden sm:inline-block">AlgoVault AI</span>
-          <span className="px-2 py-0.5 text-[10px] font-extrabold bg-black/30 backdrop-blur-md rounded-full text-cyan-200 border border-white/10 uppercase tracking-wider">
-            Sarvam 105B
+          <span className="font-bold text-xs tracking-wide text-white hidden sm:inline-block">AI Assistant</span>
+          <span className="px-2 py-0.5 text-[10px] font-extrabold bg-slate-800 rounded-full text-slate-300 border border-slate-700 uppercase tracking-wider">
+            Sarvam
           </span>
         </button>
       )}
@@ -207,21 +265,21 @@ export const AIChatbot: React.FC = () => {
       {/* Expanded Chat Window */}
       {isOpen && (
         <div
-          className={`fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[9999] w-[calc(100vw-24px)] sm:w-[420px] bg-white border border-slate-200 rounded-3xl shadow-2xl backdrop-blur-2xl transition-all duration-300 flex flex-col overflow-hidden ${
+          className={`fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[9999] w-[calc(100vw-24px)] sm:w-[420px] bg-white border border-slate-200 rounded-3xl shadow-2xl transition-all duration-300 flex flex-col overflow-hidden ${
             isMinimized ? 'h-16' : 'h-[500px] sm:h-[580px] max-h-[78vh]'
           }`}
         >
           {/* Top Bar Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border-b border-slate-800 shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800 shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="relative p-2 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-xl shadow-md border border-cyan-400/30">
-                <Sparkles size={16} className="text-white animate-pulse" />
+              <div className="p-2 bg-slate-800 rounded-xl border border-slate-700">
+                <Bot size={16} className="text-cyan-400" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-bold text-sm text-white tracking-tight">AlgoVault AI</h3>
                   <span className="flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 rounded-full">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
                     Sarvam 105B
                   </span>
                 </div>
@@ -287,6 +345,17 @@ export const AIChatbot: React.FC = () => {
                           }`}
                         >
                           {renderFormattedMessage(msg.content)}
+                          {msg.isAuthPrompt && (
+                            <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center gap-2">
+                              <button
+                                onClick={() => navigate('/login')}
+                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-xs transition transform active:scale-95 cursor-pointer"
+                              >
+                                <LogIn size={13} />
+                                <span>Log In / Register</span>
+                              </button>
+                            </div>
+                          )}
                         </div>
                         <span className="text-[9px] text-slate-400 block px-1">
                           {msg.timestamp}
@@ -353,9 +422,25 @@ export const AIChatbot: React.FC = () => {
                     {loading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                   </button>
                 </div>
-                <div className="mt-1.5 flex items-center justify-between text-[9.5px] text-slate-400 px-1">
-                  <span>Powered by Sarvam 105B</span>
-                  <span>Press Enter to send</span>
+                <div className="mt-1.5 flex items-center justify-between text-[9.5px] px-1">
+                  {!isAuthenticated && !token ? (
+                    <>
+                      <span className="text-amber-600 font-medium flex items-center gap-1">
+                        <Lock size={10} /> Login required to chat
+                      </span>
+                      <button
+                        onClick={() => navigate('/login')}
+                        className="text-blue-600 hover:text-blue-700 font-bold hover:underline cursor-pointer"
+                      >
+                        Sign In
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-slate-400">Powered by Sarvam 105B</span>
+                      <span className="text-slate-400">Press Enter to send</span>
+                    </>
+                  )}
                 </div>
               </div>
             </>

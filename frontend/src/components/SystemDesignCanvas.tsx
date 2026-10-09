@@ -31,9 +31,11 @@ import {
   Share2,
   Shield,
   Zap,
-  Info
+  Info,
+  Activity
 } from 'lucide-react';
 import { EstimationEnginePanel } from './common/EstimationEnginePanel';
+import { InteractiveSystemFlowSimulator } from './common/InteractiveSystemFlowSimulator';
 
 // Architecture Blueprint Presets
 const PRESET_BLUEPRINTS: Record<string, { title: string; description: string; nodes: Node[]; edges: Edge[] }> = {
@@ -95,7 +97,7 @@ const PRESET_BLUEPRINTS: Record<string, { title: string; description: string; no
 };
 
 export const SystemDesignCanvas: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'canvas' | 'calculator'>('canvas');
+  const [activeTab, setActiveTab] = useState<'simulator' | 'canvas' | 'calculator'>('simulator');
 
   const [nodes, setNodes] = useState<Node[]>(PRESET_BLUEPRINTS.tinyurl.nodes);
   const [edges, setEdges] = useState<Edge[]>(PRESET_BLUEPRINTS.tinyurl.edges);
@@ -172,7 +174,22 @@ export const SystemDesignCanvas: React.FC = () => {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex items-center bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm flex-wrap gap-1">
+          <button
+            onClick={() => setActiveTab('simulator')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+              activeTab === 'simulator'
+                ? 'bg-purple-600 text-white shadow-md shadow-purple-200'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Activity className="w-4 h-4 text-emerald-400" />
+            <span>Live Traffic Simulator</span>
+            <span className="px-1.5 py-0.5 rounded-md bg-white/20 text-white text-[10px] font-extrabold uppercase">
+              LIVE
+            </span>
+          </button>
+
           <button
             onClick={() => setActiveTab('canvas')}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
@@ -321,6 +338,31 @@ export const SystemDesignCanvas: React.FC = () => {
               </p>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* SIMULATOR TAB */}
+      {activeTab === 'simulator' && (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-purple-900/10 via-cyan-900/10 to-transparent border border-purple-500/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-purple-100 text-purple-700">
+                <Activity className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">
+                  Interactive High-Load Architecture Simulator
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Simulate real-time traffic flow, server crashes, auto-scaling, Redis caching, and Kafka async buffers.
+                </p>
+              </div>
+            </div>
+            <div className="text-xs font-mono text-purple-700 font-bold bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200 self-start sm:self-auto">
+              60 FPS Packet Stream
+            </div>
+          </div>
+          <InteractiveSystemFlowSimulator />
         </div>
       )}
 
